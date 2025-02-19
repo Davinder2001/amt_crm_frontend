@@ -3,31 +3,38 @@ import React, { useState } from 'react';
 import { useLoginMutation } from '@/slices/users/userApi'; 
 
 const Page = () => {
-  const [username, setUsername] = useState('');
+  const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const [login, { isLoading: isLoggingIn, error: loginError }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   const handleLogin = async () => {
-    try {
-      setErrorMessage('');
-      const response = await login({ username, password }).unwrap();
-      console.log('Logged in:', response);
+    
+    let resp = await login({ email, password });
 
-    } catch (error) {
-      console.log('Login failed:', error);
-      setErrorMessage('Login failed. Please try again.');
+    let getToken = resp?.data?.token; 
+    let getUser = resp?.data?.user; 
+
+    if (getToken) {
+      localStorage.setItem('authToken', getToken);
+      localStorage.setItem('user', JSON.stringify(getUser));
+      alert('Login successful');
+    } else {
+      alert('Login failed');
     }
+
+    return resp;
   };
 
+
+
   return (
-    <div>
-      <div>
+    <div className='' >
+      <div className=''>
         <input
           type="text"
           placeholder="Username"
-          value={username}
+          value={email}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
@@ -36,11 +43,9 @@ const Page = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLogin} disabled={isLoggingIn}>
-          {isLoggingIn ? 'Logging in...' : 'Login'}
+        <button onClick={handleLogin}>
+          Login
         </button>
-
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       </div>
     </div>
   );

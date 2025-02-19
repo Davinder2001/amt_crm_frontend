@@ -5,6 +5,7 @@ const store = configureStore({
   reducer: {
 
     [userCreateApiSlice.reducerPath]: userCreateApiSlice.reducer,
+    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(userCreateApiSlice.middleware),  

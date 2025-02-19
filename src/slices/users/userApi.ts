@@ -1,32 +1,41 @@
- // Import the API slice from your store/apiSlice.js
-
 import userCreateApiSlice from "./userCreateSlice";
+
 
 const userCreateApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    fetchUsers: builder.query({
+      query: () => 'api/users',
+      providesTags: ['Auth'],
+    }),
+
+      
+
     login: builder.mutation({
       query: (credentials) => ({
-        url: '/login', // relative to the base URL (http://localhost:8000/api/)
+        url: 'api/login',  
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: credentials, // Pass user credentials to the request body
+        body: credentials,  
+        credentials: 'include'
       }),
       invalidatesTags: ['Auth'],
     }),
+
+    
+
     logout: builder.mutation({
       query: () => ({
-        url: '/logout', // relative to the base URL (http://localhost:8000/api/)
+        url: 'api/logout',  
         method: 'POST',
       }),
       invalidatesTags: ['Auth'],
+       
     }),
+     
   }),
-  overrideExisting: false, // Ensures no conflict with existing endpoints
+  
 });
 
-export const { useLoginMutation, useLogoutMutation } = userCreateApi;
+export const { useFetchUsersQuery, useLoginMutation, useLogoutMutation } = userCreateApi;
 
-// Export the API reducer for integration into the Redux store
+ 
 export default userCreateApi;

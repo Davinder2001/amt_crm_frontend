@@ -20,6 +20,11 @@ const Sidebar = () => {
                         Settings
                     </Link>
                 </li>
+                <li>
+                    <Link href="/hr">
+                        hr
+                    </Link>
+                </li>
             </ul>
         </div>
     );

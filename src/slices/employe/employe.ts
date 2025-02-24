@@ -14,7 +14,7 @@ interface Employee {
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
     endpoints: (builder) => ({
       fetchEmployes: builder.query<EmployeesResponse, void>({
-        query: () => 'api/v1/employees',
+        query: () => 'api/v1/users',
         providesTags: ['Employe'],
       }),
     }),

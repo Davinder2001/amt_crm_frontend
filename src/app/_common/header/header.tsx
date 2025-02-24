@@ -19,16 +19,12 @@ const Header = () => {
 
   return (
     <div className="flex justify-between p-4 bg-gray-100 shadow-md">
-      <h1 className="text-xl font-bold">My App</h1>
       
       <div>
         {isAuthenticated ? (
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
+          <Link href="/login" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            My Account
+          </Link>
         ) : (
           <Link href="/login" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Login

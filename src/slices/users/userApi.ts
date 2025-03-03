@@ -1,57 +1,46 @@
 import userCreateApiSlice from "./userCreateSlice";
 
+interface Role {
+  id: number;
+  name: string;
+}
+
+// For fetching, include the business ID field.
+interface FetchUser {
+  id: number;
+  name: string;
+  email: string;
+  buisness_id: number;
+  roles: Role[];
+}
+
+// For creating/updating, the client does not send the business ID.
 interface User {
   id: number;
   name: string;
   email: string;
+  roles: Role[];
 }
 
 interface CreateUserRequest {
   name: string;
   email: string;
-  role_id: string;
+  role: string;
   password: string;
 }
 
-interface Profile {
-  id: number;
-  name: string;
-  email: string;
-}
-
 interface UsersResponse {
-  users: User[];
-  profile: Profile[];
+  users: FetchUser[];
 }
 
-const userCreateApi = userCreateApiSlice.injectEndpoints({
+const userApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchUsers: builder.query<UsersResponse, void>({
-      query: () => "api/v1/users",
-      providesTags: ["Auth"],
-    }),
-
-    fetchProfile: builder.query<UsersResponse, void>({
-      query: () => "api/v1/my-profile",
-      providesTags: ["Auth"],
-    }),
-
-    login: builder.mutation({
-      query: (credentials) => ({
-        url: "api/v1/login",
-        method: "POST",
-        body: credentials,
+      query: () => ({
+        url: "api/v1/users",
         credentials: "include",
       }),
-      invalidatesTags: ["Auth"],
-    }),
-
-    logout: builder.mutation({
-      query: () => ({
-        url: "api/v1/logout",
-        method: "POST",
-      }),
-      invalidatesTags: ["Auth"],
+      providesTags: ["Auth"],
     }),
 
     createUser: builder.mutation<User, CreateUserRequest>({
@@ -59,18 +48,40 @@ const userCreateApi = userCreateApiSlice.injectEndpoints({
         url: "api/v1/users",
         method: "POST",
         body: newUser,
+        credentials: "include",
       }),
       invalidatesTags: ["Auth"],
-    }),    
+    }),
+
+    deleteUser: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `api/v1/users/${id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+
+    updateUser: builder.mutation<
+      User,
+      { id: number; name: string; email: string; role: string }
+    >({
+      query: ({ id, ...data }) => ({
+        url: `api/v1/users/${id}`,
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
 export const {
   useFetchUsersQuery,
-  useFetchProfileQuery,
-  useLoginMutation,
-  useLogoutMutation,
-  useCreateUserMutation, // Hook for creating a user
-} = userCreateApi;
+  useCreateUserMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+} = userApi;
 
-export default userCreateApi;
+export default userApi;

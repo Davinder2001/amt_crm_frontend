@@ -5,12 +5,14 @@ import Header from "./_common/header/header";
 import Sidebar from "./_common/sidebar/sidebar";
 import Footer from "./_common/footer/footer";
 
+// ✅ Import React Toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "AMT CRM",
-  description: "By Spark web Solutions",
+  description: "By Spark Web Solutions",
 };
-
 
 export default function RootLayout({
   children,
@@ -31,6 +33,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </div>
+          <ToastContainer autoClose={2000} />
         </Provider>
       </body>
     </html>

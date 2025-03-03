@@ -1,16 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userCreateApiSlice from '@/slices/users/userCreateSlice';
-import employeCreateApiSlice from '@/slices/employe/employeeCreateSlice'; 
+import authApiSlice from '@/slices/auth/authCreateSlice';
+import userApiSlice from '@/slices/users/userCreateSlice';
+import employeCreateApiSlice from '@/slices/employe/employeeCreateSlice';
+import storeApiSlice from '@/slices/store/storeCreateSlice';
+import roleApiSlice from '@/slices/roles/rolesCreateSlice'; 
 
 const store = configureStore({
   reducer: {
-    [userCreateApiSlice.reducerPath]: userCreateApiSlice.reducer,
+    [authApiSlice.reducerPath]: authApiSlice.reducer,
+    [userApiSlice.reducerPath]: userApiSlice.reducer,
     [employeCreateApiSlice.reducerPath]: employeCreateApiSlice.reducer,
+    [storeApiSlice.reducerPath]: storeApiSlice.reducer,
+    [roleApiSlice.reducerPath]: roleApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(userCreateApiSlice.middleware)
-      .concat(employeCreateApiSlice.middleware),
+      .concat(authApiSlice.middleware)
+      .concat(userApiSlice.middleware)
+      .concat(employeCreateApiSlice.middleware)
+      .concat(storeApiSlice.middleware)
+      .concat(roleApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

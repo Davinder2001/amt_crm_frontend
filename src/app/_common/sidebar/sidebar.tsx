@@ -16,13 +16,18 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/settings">
-                        Settings
+                    <Link href="/hr">
+                        hr
                     </Link>
                 </li>
                 <li>
-                    <Link href="/hr">
-                        hr
+                    <Link href="/permissions">
+                       Permissions
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/settings">
+                        Settings
                     </Link>
                 </li>
             </ul>

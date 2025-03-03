@@ -1,87 +1,95 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useLoginMutation } from "@/slices/users/userApi";
+import { useLoginMutation, useFetchProfileQuery } from "@/slices/auth/authApi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
-  const [login] = useLoginMutation();
+  // We remove the skip so the profile is fetched on mount.
+  const { data: profile, isFetching } = useFetchProfileQuery();
+  const [login, { isLoading }] = useLoginMutation();
 
+  // When the profile query returns, update user state.
   useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogin = async () => {
-    let resp = await login({ email, password });
-
-    let getToken = resp?.data?.token;
-    let getUser = resp?.data?.user;
-
-    if (getToken) {
-      localStorage.setItem("authToken", getToken);
-      localStorage.setItem("user", JSON.stringify(getUser));
-      setIsLoggedIn(true);
-      alert("Login successful");
+    if (profile && profile.profile) {
+      setUser(profile.profile[0]);
     } else {
-      alert("Login failed");
+      setUser(null);
     }
+  }, [profile]);
 
-    return resp;
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // On login, Sanctum sets the session cookie.
+      const result = await login({ email, password }).unwrap();
+
+      console.log('result', result)
+      // Set the access token as a cookie.
+      toast.success("Login successful");
+      document.cookie = `access_token=${result.access_token}; path=/;`;
+    } catch (err: any) {
+      const errorMessage = err?.data?.message || "Login failed";
+      toast.error(errorMessage);
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    alert("Logged out successfully!");
+    // You may call a logout endpoint if needed.
+    setUser(null);
+    toast.success("Logged out successfully!");
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-white p-6 shadow-md rounded-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          {isLoggedIn ? "Welcome!" : "Login"}
-        </h2>
+  const isLoggedIn = !!user;
 
-        {!isLoggedIn ? (
-          <>
-            <input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 mb-3 border rounded-md"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 mb-3 border rounded-md"
-            />
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="bg-white p-6 shadow-md rounded-md w-96">
+          <h2 className="text-2xl font-bold mb-4 text-center">
+            {isLoggedIn ? `Welcome, ${user?.name || "User"}!` : "Login"}
+          </h2>
+          {isLoggedIn ? (
             <button
-              onClick={handleLogin}
-              className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+              onClick={handleLogout}
+              className="w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition"
             >
-              Login
+              Logout
             </button>
-          </>
-        ) : (
-          <button
-            onClick={handleLogout}
-            className="w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        )}
+          ) : (
+            <form onSubmit={handleLogin}>
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-2 mb-3 border rounded-md"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 mb-3 border rounded-md"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

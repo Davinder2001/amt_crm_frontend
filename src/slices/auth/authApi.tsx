@@ -3,34 +3,38 @@ import userCreateApiSlice from "./authCreateSlice";
 interface Profile {
   id: number;
   name: string;
-  email: string;
+  number: number; // updated from email to number
+  company_id: number;
+  company_name: string;
+  company_slug: string;
 }
 
 interface UsersResponse {
-  profile: Profile[];
+  user: Profile; // Ensure the API returns an object with a "user" key
 }
 
 const authApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchProfile: builder.query<UsersResponse, void>({
       query: () => ({
-        url: "api/v1/my-profile",
+        url: "api/v1/user",
+        method: "GET",
         credentials: "include",
       }),
       providesTags: ["Auth"],
     }),
 
-    login: builder.mutation({
+    login: builder.mutation<{ access_token: string; user: Profile }, { number: number; password: string }>({
       query: (credentials) => ({
         url: "api/v1/login",
         method: "POST",
-        body: credentials,
+        body: credentials, // now sends { number, password }
         credentials: "include",
       }),
       invalidatesTags: ["Auth"],
     }),
 
-    logout: builder.mutation({
+    logout: builder.mutation<void, void>({
       query: () => ({
         url: "api/v1/logout",
         method: "POST",

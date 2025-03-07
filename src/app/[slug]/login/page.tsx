@@ -1,37 +1,57 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useLoginMutation, useFetchProfileQuery } from "@/slices/auth/authApi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Page = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState<any>(null);
+interface UserProfile {
+  id: number;
+  name: string;
+  number: number;
+  company_id: number;
+  company_name: string;
+  company_slug: string;
+}
 
-  // We remove the skip so the profile is fetched on mount.
-  const { data: profile, isFetching } = useFetchProfileQuery();
+const Page = () => {
+  const router = useRouter();
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  // Fetch authenticated user profile
+  const { data: profile } = useFetchProfileQuery();
   const [login, { isLoading }] = useLoginMutation();
 
-  // When the profile query returns, update user state.
+  // Update user state when profile data is fetched
   useEffect(() => {
-    if (profile && profile.profile) {
-      setUser(profile.profile[0]);
+    if (profile?.user) {
+      setUser(profile.user);
+      console.log("Authenticated User:", profile.user);
+
+      // Redirect to user's company_slug URL if present
+      if (profile.user.company_slug) {
+        router.push(`/${profile.user.company_slug}`);
+      }
     } else {
       setUser(null);
     }
-  }, [profile]);
+  }, [profile, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // On login, Sanctum sets the session cookie.
-      const result = await login({ email, password }).unwrap();
-
-      console.log('result', result)
-      // Set the access token as a cookie.
+      const result = await login({ number, password }).unwrap();
       toast.success("Login successful");
+
+      // Store session token
       document.cookie = `access_token=${result.access_token}; path=/;`;
+
+      // Redirect to user's company_slug URL
+      if (result?.user?.company_slug) {
+        router.push(`/${result.user.company_slug}`);
+      }
     } catch (err: any) {
       const errorMessage = err?.data?.message || "Login failed";
       toast.error(errorMessage);
@@ -39,7 +59,6 @@ const Page = () => {
   };
 
   const handleLogout = () => {
-    // You may call a logout endpoint if needed.
     setUser(null);
     toast.success("Logged out successfully!");
   };
@@ -64,9 +83,9 @@ const Page = () => {
             <form onSubmit={handleLogin}>
               <input
                 type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Phone Number"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
                 className="w-full p-2 mb-3 border rounded-md"
                 required
               />
@@ -89,6 +108,7 @@ const Page = () => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

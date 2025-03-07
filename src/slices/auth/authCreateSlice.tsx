@@ -6,18 +6,24 @@ const userCreateApiSlice = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers: Headers) => {
-      // Extract the access_token from document.cookie
-      const cookieString = document.cookie;
-      const token = cookieString
-        .split('; ')
-        .find((row) => row.startsWith('access_token='))
-        ?.split('=')[1] || null;
+      const cookies = document.cookie.split('; ').reduce((acc, current) => {
+        const [key, value] = current.split('=');
+        acc[key] = decodeURIComponent(value);
+        return acc;
+      }, {} as Record<string, string>);
+
+      const token = cookies['access_token'];
+      const csrfToken = cookies['XSRF-TOKEN'];
 
       headers.set('Accept', 'application/json');
       headers.set('Content-Type', 'application/json');
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
+      }
+
+      if (csrfToken) {
+        headers.set('X-XSRF-TOKEN', csrfToken);
       }
 
       return headers;

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/global.scss";
 import Provider from "@/provider/Provider";
-import Header from "./_common/header/header";
-import Sidebar from "./_common/sidebar/sidebar";
-import Footer from "./_common/footer/footer";
+// import Header from "./_common/header/header";
+import Header from "./[slug]/_common/header/header";
+import Sidebar from "./[slug]/_common/sidebar/sidebar";
+import Footer from "./[slug]/_common/footer/footer";
 
 // ✅ Import React Toastify
 import { ToastContainer } from "react-toastify";

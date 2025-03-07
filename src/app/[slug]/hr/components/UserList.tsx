@@ -15,7 +15,7 @@ interface FetchUser {
   id: number;
   name: string;
   email: string;
-  buisness_id: number;
+  company_id: number;
   roles: Role[];
 }
 
@@ -76,7 +76,7 @@ const UserList: React.FC = () => {
                   ? user.roles.map((role) => capitalize(role.name)).join(', ')
                   : 'N/A'}
               </td>
-                  <td style={{ border: '1px solid black', padding: '4px' }}>{user.buisness_id}</td>
+                  <td style={{ border: '1px solid black', padding: '4px' }}>{user.company_id}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>
                 <button onClick={() => update(user.id)}>Edit</button>
                 &nbsp;

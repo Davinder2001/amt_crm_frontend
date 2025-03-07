@@ -3,7 +3,8 @@ import authApiSlice from '@/slices/auth/authCreateSlice';
 import userApiSlice from '@/slices/users/userCreateSlice';
 import employeCreateApiSlice from '@/slices/employe/employeeCreateSlice';
 import storeApiSlice from '@/slices/store/storeCreateSlice';
-import roleApiSlice from '@/slices/roles/rolesCreateSlice'; 
+import roleApiSlice from '@/slices/roles/rolesCreateSlice';
+import permissionApiSlice from '@/slices/permissions/permissionCreateSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     [employeCreateApiSlice.reducerPath]: employeCreateApiSlice.reducer,
     [storeApiSlice.reducerPath]: storeApiSlice.reducer,
     [roleApiSlice.reducerPath]: roleApiSlice.reducer,
+    [permissionApiSlice.reducerPath]: permissionApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -19,7 +21,8 @@ const store = configureStore({
       .concat(userApiSlice.middleware)
       .concat(employeCreateApiSlice.middleware)
       .concat(storeApiSlice.middleware)
-      .concat(roleApiSlice.middleware),
+      .concat(roleApiSlice.middleware)
+      .concat(permissionApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

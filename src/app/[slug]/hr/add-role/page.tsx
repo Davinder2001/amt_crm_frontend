@@ -2,20 +2,23 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
+import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 
 interface Permission {
   id: number;
   name: string;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
 }
 
-// Manually defined available permissions.
-const availablePermissions: Permission[] = [
-  { id: 1, name: "create articles" },
-  { id: 2, name: "edit articles" },
-  { id: 3, name: "delete articles" },
-];
-
 const Page: React.FC = () => {
+  // Fetch permissions using the RTK Query hook.
+  const { data, isLoading: isFetching, error } = useFetchPermissionsQuery();
+  // Data is now assumed to be an array of permissions
+  const fetchedPermissions: Permission[] = data || [];
+
+
   const [createRole, { isLoading }] = useCreateRoleMutation();
 
   // State for new role inputs.
@@ -45,6 +48,14 @@ const Page: React.FC = () => {
     }
   };
 
+  if (isFetching) {
+    return <div>Loading permissions...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading permissions</div>;
+  }
+
   return (
     <div className="max-w-md mx-auto bg-white p-6 shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-4">Create a Role</h2>
@@ -63,7 +74,7 @@ const Page: React.FC = () => {
         {/* Permissions Selection */}
         <label className="block mb-2 font-medium">Select Permissions:</label>
         <div className="mb-4">
-          {availablePermissions.map((perm) => (
+          {fetchedPermissions.map((perm) => (
             <label key={perm.id} className="flex items-center space-x-2 mb-2">
               <input
                 type="checkbox"

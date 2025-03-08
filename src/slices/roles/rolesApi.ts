@@ -1,17 +1,16 @@
-// roleEndpoints.ts
 import userCreateApiSlice from './rolesCreateSlice';
 
 export const roleApi = userCreateApiSlice.injectEndpoints({
+
   endpoints: (builder) => ({
-    // GET /roles endpoint to fetch roles list
     getRoles: builder.query({
-      query: () => 'api/v1/roles',
+      query: () => 'roles',
       providesTags: ['Auth'],
     }),
-    // Additional endpoints (create, update, delete) can be added here
+
     createRole: builder.mutation({
       query: (newRole) => ({
-        url: 'api/v1/roles',
+        url: 'roles',
         method: 'POST',
         body: newRole,
       }),
@@ -19,7 +18,7 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
     }),
     updateRole: builder.mutation({
       query: ({ id, ...roleData }) => ({
-        url: `api/v1/roles/${id}`,
+        url: `roles/${id}`,
         method: 'PUT',
         body: roleData,
       }),
@@ -27,7 +26,7 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
     }),
     deleteRole: builder.mutation({
       query: (id) => ({
-        url: `api/v1/roles/${id}`,
+        url: `roles/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Auth'],
@@ -36,7 +35,6 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
   overrideExisting: false,
 });
 
-// Export hooks for usage in functional components
 export const {
   useGetRolesQuery,
   useCreateRoleMutation,

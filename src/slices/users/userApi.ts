@@ -5,7 +5,6 @@ interface Role {
   name: string;
 }
 
-// For fetching, include the business ID field.
 interface FetchUser {
   id: number;
   name: string;
@@ -15,7 +14,6 @@ interface FetchUser {
   roles: Role[];
 }
 
-// For creating/updating, the client does not send the business ID.
 interface User {
   id: number;
   name: string;
@@ -38,7 +36,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchUsers: builder.query<UsersResponse, void>({
       query: () => ({
-        url: "api/v1/users",
+        url: "users",
         credentials: "include",
       }),
       providesTags: ["Auth"],
@@ -46,7 +44,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
 
     createUser: builder.mutation<User, CreateUserRequest>({
       query: (newUser) => ({
-        url: "api/v1/users",
+        url: "users",
         method: "POST",
         body: newUser,
         credentials: "include",
@@ -56,7 +54,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
 
     deleteUser: builder.mutation<{ message: string }, number>({
       query: (id) => ({
-        url: `api/v1/users/${id}`,
+        url: `users/${id}`,
         method: "DELETE",
         credentials: "include",
       }),
@@ -68,7 +66,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
       { id: number; name: string; email: string; role: string }
     >({
       query: ({ id, ...data }) => ({
-        url: `api/v1/users/${id}`,
+        url: `users/${id}`,
         method: "PUT",
         body: data,
         credentials: "include",

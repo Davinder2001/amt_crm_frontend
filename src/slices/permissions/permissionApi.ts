@@ -13,7 +13,7 @@ const permissionApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchPermissions: builder.query<PermissionsResponse, void>({
       query: () => ({
-        url: "api/v1/permissions",
+        url: "permissions",
         method: "GET",
         credentials: "include",
       }),

@@ -17,7 +17,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchProfile: builder.query<UsersResponse, void>({
       query: () => ({
-        url: "api/v1/user",
+        url: "user",
         method: "GET",
         credentials: "include",
       }),
@@ -26,7 +26,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
 
     login: builder.mutation<{ access_token: string; user: Profile }, { number: number; password: string }>({
       query: (credentials) => ({
-        url: "api/v1/login",
+        url: "login",
         method: "POST",
         body: credentials, // now sends { number, password }
         credentials: "include",
@@ -36,7 +36,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
 
     logout: builder.mutation<void, void>({
       query: () => ({
-        url: "api/v1/logout",
+        url: "logout",
         method: "POST",
         credentials: "include",
       }),

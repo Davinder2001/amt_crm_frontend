@@ -19,36 +19,36 @@ interface CreateStoreItemRequest {
 }
 interface OcrResponse {
   message: string;
-  imageUrl?: string; // ✅ API provides an image URL instead of a Blob
+  imageUrl?: string; 
 }
 
 const storeApi = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchStore: builder.query<StoreResponse, void>({
-      query: () => "api/v1/store",
+      query: () => "store",
       providesTags: ["Store"],
     }),
 
     createStoreItem: builder.mutation<StoreItem, CreateStoreItemRequest>({
       query: (newItem) => ({
-        url: "api/v1/store",
+        url: "store",
         method: "POST",
         body: newItem,
       }),
-      invalidatesTags: ["Store"], // Refresh store data after creation
+      invalidatesTags: ["Store"], 
     }),
 
     deleteStoreItem: builder.mutation<void, number>({
       query: (id) => ({
-        url: `api/v1/store/${id}`,
+        url: `store/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Store"], // Refresh store data after deletion
+      invalidatesTags: ["Store"], 
     }),
 
     ocrProcess: builder.mutation<OcrResponse, FormData>({
       query: (formData) => ({
-        url: "api/v1/ocr-process",
+        url: "ocr-process",
         method: "POST",
         body: formData,
       }),
@@ -59,7 +59,7 @@ const storeApi = storeApiSlice.injectEndpoints({
 export const {
   useFetchStoreQuery,
   useCreateStoreItemMutation,
-  useDeleteStoreItemMutation, // ✅ New DELETE mutation
+  useDeleteStoreItemMutation, 
   useOcrProcessMutation,
 } = storeApi;
 

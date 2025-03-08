@@ -14,7 +14,7 @@ interface UserProfile {
   company_slug: string;
 }
 
-const Page = () => {
+const LoginForm = () => {
   const router = useRouter();
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -61,6 +61,7 @@ const Page = () => {
   const handleLogout = () => {
     setUser(null);
     toast.success("Logged out successfully!");
+    router.push("/");
   };
 
   const isLoggedIn = !!user;
@@ -113,4 +114,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default LoginForm;

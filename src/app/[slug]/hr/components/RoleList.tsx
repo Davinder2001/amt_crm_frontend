@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import Link from 'next/link';
+import Link from "next/link"; // Use Link for navigation
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 
 interface Role {
@@ -63,6 +63,11 @@ const RoleList: React.FC = () => {
                 </td>
                 <td>{role.company_id}</td>
                 <td>
+                  {/* Edit button with Link */}
+                  <Link href={`/hr/edit-role/${role.id}`}>
+                    <button>Edit</button>
+                  </Link>
+                  {/* Delete button */}
                   <button onClick={() => handleDeleteRole(role.id)}>Delete</button>
                 </td>
               </tr>

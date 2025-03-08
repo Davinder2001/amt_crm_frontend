@@ -16,6 +16,7 @@ interface FetchUser {
   name: string;
   email: string;
   company_id: number;
+  company_slug: string;
   roles: Role[];
 }
 
@@ -23,31 +24,30 @@ const UserList: React.FC = () => {
   const router = useRouter();
   const { data: usersData, error, isLoading } = useFetchUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
-
   const users: FetchUser[] = usersData?.users ?? [];
 
   if (isLoading) return <p>Loading users...</p>;
   if (error) return <p>Error fetching users.</p>;
   if (users.length === 0) return <p>No users found.</p>;
 
-  const update = (id: number) => {
-    router.push(`/hr/update/${id}`);
+  const update = (user: FetchUser) => {
+    if (!user.company_slug) {
+      toast.error("Company slug not found for user");
+      return;
+    }
+    router.push(`/${user.company_slug}/hr/update/${user.id}`);
   };
-  
 
-  // Helper function to capitalize first letter
-  const capitalize = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1);
+  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await deleteUser(id).unwrap();
-        toast.success("User deleted successfully!");
-      } catch (error) {
-        console.error("Failed to delete user", error);
-        toast.error("Failed to delete user. Please try again.");
-      }
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await deleteUser(id).unwrap();
+      toast.success("User deleted successfully!");
+    } catch (err: any) {
+      console.error("Failed to delete user", err);
+      toast.error("Failed to delete user. Please try again.");
     }
   };
 
@@ -72,14 +72,11 @@ const UserList: React.FC = () => {
               <td style={{ border: '1px solid black', padding: '4px' }}>{user.name}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>{user.email}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>
-                {user.roles && user.roles.length > 0
-                  ? user.roles.map((role) => capitalize(role.name)).join(', ')
-                  : 'N/A'}
+                {user.roles?.length ? user.roles.map((role) => capitalize(role.name)).join(', ') : 'N/A'}
               </td>
-                  <td style={{ border: '1px solid black', padding: '4px' }}>{user.company_id}</td>
+              <td style={{ border: '1px solid black', padding: '4px' }}>{user.company_id}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>
-                <button onClick={() => update(user.id)}>Edit</button>
-                &nbsp;
+                <button onClick={() => update(user)}>Edit</button>&nbsp;
                 <button onClick={() => handleDelete(user.id)}>Delete</button>
               </td>
             </tr>

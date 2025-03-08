@@ -1,9 +1,11 @@
-"use client";
+'use client';
+
 import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import Link from "next/link"; // Use Link for navigation
+import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
+import { useFetchProfileQuery } from "@/slices/auth/authApi";
 
 interface Role {
   id: number;
@@ -14,10 +16,13 @@ interface Role {
 
 const RoleList: React.FC = () => {
   const router = useRouter();
-
-  const { data: roles, isLoading, error } = useGetRolesQuery(undefined);
-
+  const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
+  const { companySlug } = useFetchProfileQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      companySlug: data?.user?.company_slug,
+    }),
+  });
 
   const handleDeleteRole = async (id: number) => {
     try {
@@ -39,9 +44,8 @@ const RoleList: React.FC = () => {
     <div>
       <div>
         <h2>Role List</h2>
-        <Link href="hr/add-role">Add Role</Link>
+        <Link href={`/${companySlug}/hr/add-role`}>Add Role</Link>
       </div>
-
       <table>
         <thead>
           <tr>
@@ -52,8 +56,8 @@ const RoleList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {roles && roles.length > 0 ? (
-            roles.map((role: Role & { company_id: string }) => (
+          {rolesData && rolesData.length > 0 ? (
+            rolesData.map((role: Role) => (
               <tr key={role.id}>
                 <td>{role.name}</td>
                 <td>
@@ -63,12 +67,12 @@ const RoleList: React.FC = () => {
                 </td>
                 <td>{role.company_id}</td>
                 <td>
-                  {/* Edit button with Link */}
-                  <Link href={`/hr/edit-role/${role.id}`}>
+                  <Link href={`/${companySlug}/hr/edit-role/${role.id}`}>
                     <button>Edit</button>
                   </Link>
-                  {/* Delete button */}
-                  <button onClick={() => handleDeleteRole(role.id)}>Delete</button>
+                  <button onClick={() => handleDeleteRole(role.id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))

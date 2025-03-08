@@ -11,6 +11,7 @@ interface FetchUser {
   name: string;
   email: string;
   company_id: number;
+  company_slug: string;
   roles: Role[];
 }
 

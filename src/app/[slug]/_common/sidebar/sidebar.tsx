@@ -24,7 +24,7 @@ const Sidebar = () => {
             { name: "HR", path: "hr" },
             { name: "Permissions", path: "permissions" },
             { name: "Settings", path: "settings" },
-            { name: "Task", path: "task" },
+            { name: "Task", path: "tasks" },
           ].map(({ name, path }) => (
             <li key={path}>
               <Link

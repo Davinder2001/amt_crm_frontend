@@ -2,7 +2,9 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div>Page</div>
+    <>
+    <h1>Edit task</h1>
+    </>
   )
 }
 

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCreateUserMutation } from '@/slices/users/userApi';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
+import HrNavigation from '../components/hrNavigation';
 
 interface Role {
   id: number;
@@ -48,6 +49,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="p-4 border rounded-md shadow-md">
+      <HrNavigation/>
       <Link href="/hr">Back</Link>
       <h2 className="text-lg font-semibold mb-2">Create New User</h2>
 

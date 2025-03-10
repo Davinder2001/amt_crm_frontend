@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUsersQuery, useUpdateUserMutation } from '@/slices/users/userApi';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
+import HrNavigation from '../../components/hrNavigation';
 
 interface Role {
   id: number;
@@ -59,6 +60,7 @@ const EditUserPage: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
+      <HrNavigation/>
       <h1>Edit User</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '12px' }}>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
+import HrNavigation from "../components/hrNavigation";
 
 interface Permission {
   id: number;
@@ -58,6 +59,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 shadow-md rounded-md">
+      <HrNavigation/>
       <h2 className="text-2xl font-bold mb-4">Create a Role</h2>
       <form onSubmit={handleCreateRole}>
         {/* Role Name Input */}

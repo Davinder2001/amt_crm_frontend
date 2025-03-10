@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
 import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
+import HrNavigation from '../../components/hrNavigation';
 
 interface Role {
     id: number;
@@ -69,6 +70,7 @@ const EditRolePage: React.FC = () => {
 
     return (
         <div style={{ padding: '24px' }}>
+            <HrNavigation/>
             <h1>Edit Role</h1>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '12px' }}>

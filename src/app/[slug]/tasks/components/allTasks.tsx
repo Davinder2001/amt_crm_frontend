@@ -7,11 +7,9 @@ import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { Task } from '@/slices/tasks/taskApi';
 
 const AllTasks: React.FC = () => {
-  // Fetch tasks
+  
   const { data: tasks, error: tasksError, isLoading: tasksLoading } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-
-  // Fetch user profile to get company slug
   const { data: profile, isLoading: profileLoading, error: profileError } = useFetchProfileQuery();
 
   const handleDelete = async (id: number) => {

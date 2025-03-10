@@ -4,28 +4,23 @@ import React, { useState } from 'react';
 import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 
 const Page: React.FC = () => {
-  // Local state for form inputs
   const [name, setName] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
   const [deadline, setDeadline] = useState('');
 
-  // Create Task mutation hook
   const [createTask, { isLoading, error }] = useCreateTaskMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Prepare the new task data (assigned_by is set in the backend via auth)
     const newTask = {
       name,
-      assigned_to: Number(assignedTo), // assuming a numeric user id
-      deadline, // Should be in YYYY-MM-DD format
+      assigned_to: Number(assignedTo), 
+      deadline, 
     };
 
     try {
       const result = await createTask(newTask).unwrap();
-      console.log('Task created:', result);
-      // Optionally clear the form after successful creation
       setName('');
       setAssignedTo('');
       setDeadline('');

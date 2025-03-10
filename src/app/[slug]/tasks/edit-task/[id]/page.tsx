@@ -1,43 +1,36 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useGetTasksQuery, useUpdateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import for fetching users
 import { Task } from '@/slices/tasks/taskApi';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditTask: React.FC = () => {
   const { id } = useParams();
-  const router = useRouter();
 
-  const {
-    data: profile,
-    isLoading: profileLoading,
-    error: profileError,
-  } = useFetchProfileQuery();
+  const { data: profile, isLoading: profileLoading, error: profileError } = useFetchProfileQuery();
+  const { data: tasks, isLoading: tasksLoading, error: tasksError } = useGetTasksQuery();
+  const { data: usersData, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
 
-  const {
-    data: tasks,
-    isLoading: tasksLoading,
-    error: tasksError,
-  } = useGetTasksQuery();
-
-  const [updateTask, { isLoading: isUpdating, error: updateError }] =
-    useUpdateTaskMutation();
+  const [updateTask, { isLoading: isUpdating, error: updateError }] = useUpdateTaskMutation();
 
   const [taskData, setTaskData] = useState<Partial<Task>>({
     name: '',
-    assigned_to: undefined,
+    assigned_to_name: '',
     deadline: '',
   });
 
   useEffect(() => {
-    if (tasks) {
-      const taskToEdit = tasks.find((t: Task) => t.id === Number(id));
+    if (tasks && tasks.data) {
+      const taskToEdit = tasks.data.find((t: Task) => t.id === Number(id));
       if (taskToEdit) {
         setTaskData({
           name: taskToEdit.name,
-          assigned_to: taskToEdit.assigned_to,
+          assigned_to_name: taskToEdit.assigned_to_name,
           deadline: taskToEdit.deadline,
         });
       }
@@ -52,22 +45,40 @@ const EditTask: React.FC = () => {
     }));
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = e.target.value;
+    console.log("Selected user:", newValue);
+    setTaskData((prev) => ({
+      ...prev,
+      assigned_to_name: newValue,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await updateTask({ id: Number(id), ...taskData }).unwrap();
-      router.push(`/${profile?.user?.company_slug}/tasks`);
+      const updatedTask = await updateTask({ id: Number(id), ...taskData }).unwrap();
+      console.log("Updated Task:", updatedTask);
+      setTaskData({
+        name: updatedTask.name,
+        assigned_to_name: updatedTask.assigned_to_name,
+        deadline: updatedTask.deadline,
+      });
+      toast.success('Task updated successfully');
     } catch (err) {
       console.error('Error updating task:', err);
+      toast.error('Error updating task');
     }
   };
 
-  if (profileLoading || tasksLoading) return <p>Loading...</p>;
+  if (profileLoading || tasksLoading || usersLoading) return <p>Loading...</p>;
   if (profileError) return <p>Error loading profile.</p>;
   if (tasksError) return <p>Error loading task details.</p>;
+  if (usersError) return <p>Error loading users.</p>;
 
   return (
     <>
+      <ToastContainer />
       <h1>Edit Task</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -82,15 +93,21 @@ const EditTask: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="assigned_to">Assigned To (User ID):</label>
-          <input
-            id="assigned_to"
-            name="assigned_to"
-            type="number"
-            value={taskData.assigned_to || ''}
-            onChange={handleChange}
+          <label htmlFor="assigned_to_name">Assigned To:</label>
+          <select
+            id="assigned_to_name"
+            name="assigned_to_name"
+            value={taskData.assigned_to_name || ''}
+            onChange={handleSelectChange}
             required
-          />
+          >
+            <option value="">Select a user</option>
+            {usersData?.users.map((user) => (
+              <option key={user.id} value={user.name}>
+                {user.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label htmlFor="deadline">Deadline:</label>

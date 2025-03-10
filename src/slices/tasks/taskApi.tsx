@@ -3,14 +3,19 @@ import apiSlice from './taskApiCreateSlice';
 export interface Task {
   id: number;
   name: string;
-  assigned_by: number;
-  assigned_to: number;
+  company_name:string;
+  assigned_by_name: string;
+  assigned_to_name: string;
   deadline: string;
+}
+
+export interface TasksResponse {
+  data: Task[];
 }
 
 export const tasksApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getTasks: builder.query<Task[], void>({
+    getTasks: builder.query<TasksResponse, void>({
       query: () => 'tasks',
       providesTags: ['Task'],
     }),

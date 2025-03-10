@@ -28,8 +28,6 @@ const LoginForm = () => {
   useEffect(() => {
     if (profile?.user) {
       setUser(profile.user);
-      console.log("Authenticated User:", profile.user);
-
       // Redirect to user's company_slug URL if present
       if (profile.user.company_slug) {
         router.push(`/${profile.user.company_slug}`);

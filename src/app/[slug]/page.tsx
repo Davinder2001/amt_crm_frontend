@@ -9,7 +9,7 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
   const router = useRouter();
   const { slug } = params;
   const [user, setUser] = useState<any>(null);
-  const [email, setEmail] = useState("");
+  const [number, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { data: profile, isFetching } = useFetchProfileQuery();
@@ -28,7 +28,7 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await login({ email, password }).unwrap();
+      const result = await login({ number, password }).unwrap();
       toast.success("Login successful");
 
       document.cookie = `access_token=${result.access_token}; path=/;`;
@@ -56,7 +56,7 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
             <input
               type="text"
               placeholder="Email"
-              value={email}
+              value={number}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 mb-3 border rounded-md"
               required

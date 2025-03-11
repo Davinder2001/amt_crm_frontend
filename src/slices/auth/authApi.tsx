@@ -1,16 +1,21 @@
 import userCreateApiSlice from "./authCreateSlice";
 
+interface Meta {
+  [key: string]: string;
+}
+
 interface Profile {
   id: number;
   name: string;
-  number: number; // updated from email to number
+  number: string;
   company_id: number;
   company_name: string;
   company_slug: string;
+  meta: Meta;
 }
 
 interface UsersResponse {
-  user: Profile; // Ensure the API returns an object with a "user" key
+  user: Profile;
 }
 
 const authApi = userCreateApiSlice.injectEndpoints({
@@ -24,11 +29,14 @@ const authApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    login: builder.mutation<{ access_token: string; user: Profile }, { number: number; password: string }>({
+    login: builder.mutation<
+      { access_token: string; user: Profile },
+      { number: string; password: string }
+    >({
       query: (credentials) => ({
         url: "login",
         method: "POST",
-        body: credentials, // now sends { number, password }
+        body: credentials,
         credentials: "include",
       }),
       invalidatesTags: ["Auth"],
@@ -45,10 +53,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useFetchProfileQuery,
-  useLoginMutation,
-  useLogoutMutation,
-} = authApi;
+export const { useFetchProfileQuery, useLoginMutation, useLogoutMutation } = authApi;
 
 export default authApi;

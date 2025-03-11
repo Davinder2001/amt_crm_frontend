@@ -4,9 +4,9 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get("access_token");
 
-  if (!laravelSession) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  // if (!laravelSession) {
+  //   return NextResponse.redirect(new URL('/login', request.url));
+  // }
 
   return NextResponse.next();
 }

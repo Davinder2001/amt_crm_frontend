@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useFetchProfileQuery } from "@/slices/auth/authApi";
-import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks } from "react-icons/fa";
+import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks, FaCar, FaCheck } from "react-icons/fa";
 
 const Sidebar = () => {
   const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
@@ -19,13 +19,15 @@ const Sidebar = () => {
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
     { name: "Store", path: "store", icon: <FaStore /> },
     { name: "HR", path: "hr", icon: <FaUserTie /> },
+    { name: "Task", path: "tasks", icon: <FaTasks /> },
     { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
     { name: "Settings", path: "settings", icon: <FaCog /> },
-    { name: "Task", path: "tasks", icon: <FaTasks /> },
+    { name: "Vehicle", path: "vehicle", icon: <FaCar /> }, 
+    { name: "Quality Control", path: "quality-control", icon: <FaCheck /> }, 
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar-inner">
       <nav>
         <ul className="menu-list">
           {menuItems.map(({ name, path, icon }) => (

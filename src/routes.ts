@@ -1,4 +1,4 @@
-export const authRoutes = ['/'];
+export const authRoutes = ['/', '/forget-password'];
 
 //  Dynamic routes for admin and employee
 export const adminEmployeeRoutes = (slug?: string) => [

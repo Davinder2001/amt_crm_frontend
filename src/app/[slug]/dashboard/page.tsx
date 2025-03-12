@@ -1,9 +1,29 @@
-import React from 'react'
+"use client";
+import React from 'react';
+import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import the hook
 
 const Page = () => {
-  return (
-    <div>admin dashboard</div>
-  )
-}
+  // Fetch users data from the API
+  const { data, error, isLoading } = useFetchUsersQuery();
 
-export default Page
+  // Check if data is fetched and count the number of users
+  const userCount = data ? data.users.length : 0;
+
+  return (
+    <div>
+      <h2>Admin Dashboard</h2>
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p style={{ color: 'red' }}>Error fetching users.</p>
+      ) : (
+        <div>
+          <p>Total Users: {userCount}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Page;

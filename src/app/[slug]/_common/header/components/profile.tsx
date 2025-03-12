@@ -1,13 +1,24 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { toast } from "react-toastify";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
+import { useFetchProfileQuery } from "@/slices/auth/authApi"; // Assuming the API slice is correct
 
 const Profile: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  // Fetch company slug
+  const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
+    selectFromResult: ({ data, isFetching }) => ({
+      companySlug: data?.user?.company_slug,
+      isFetching,
+    }),
+  });
+
+  // Handle authentication and cookie check
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const cookies = document.cookie
@@ -28,6 +39,10 @@ const Profile: React.FC = () => {
     toast.success("✅ Logged out successfully!");
   };
 
+  // Handle loading state or missing companySlug
+  if (isFetching) return <p>Loading...</p>;
+  if (!companySlug) return <p>No company data found</p>;
+
   return (
     <div className="account">
       {isAuthenticated ? (
@@ -41,10 +56,10 @@ const Profile: React.FC = () => {
 
           {isOpen && (
             <div className="dropdown-content">
-              <Link href="/profile" onClick={() => setIsOpen(false)}>
+              <Link href={`/${companySlug}/profile`} onClick={() => setIsOpen(false)}>
                 <FaUser className="icon" /> Profile
               </Link>
-              <Link href="/settings" onClick={() => setIsOpen(false)}>
+              <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)}>
                 <FaCog className="icon" /> Settings
               </Link>
               <button className="logout-btn" onClick={handleLogout}>

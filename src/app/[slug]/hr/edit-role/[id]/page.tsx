@@ -29,6 +29,9 @@ const EditRolePage: React.FC = () => {
     const [name, setName] = useState('');
     const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
     const [companyId, setCompanyId] = useState('');
+    
+    // For managing tabs
+    const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
 
     useEffect(() => {
         if (rolesData) {
@@ -56,7 +59,6 @@ const EditRolePage: React.FC = () => {
         e.preventDefault();
         try {
             await updateRole({
-                id: parseInt(id, 10),
                 name,
                 permissions: selectedPermissions,
                 company_id: companyId,
@@ -70,7 +72,7 @@ const EditRolePage: React.FC = () => {
 
     return (
         <div style={{ padding: '24px' }}>
-            <HrNavigation/>
+            <HrNavigation />
             <h1>Edit Role</h1>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '12px' }}>
@@ -91,25 +93,71 @@ const EditRolePage: React.FC = () => {
                         style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
                     />
                 </div>
+
+                {/* Tab Navigation */}
                 <div style={{ marginBottom: '12px' }}>
-                    <label>Permissions:</label>
-                    <div>
-                        {permissionsData ? (
-                            ((permissionsData as unknown) as Permission[]).map((permission: Permission) => (
-                                <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedPermissions.includes(permission.name)}
-                                        onChange={() => handlePermissionChange(permission.name)}
-                                    />
-                                    {permission.name}
-                                </label>
-                            ))
-                        ) : (
-                            <p>No permissions available</p>
-                        )}
-                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setSelectedTab('user')}
+                        style={{
+                            padding: '10px',
+                            marginRight: '10px',
+                            backgroundColor: selectedTab === 'user' ? '#0070f3' : '#ccc',
+                            color: '#fff',
+                            border: 'none',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        User Permissions
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setSelectedTab('other')}
+                        style={{
+                            padding: '10px',
+                            backgroundColor: selectedTab === 'other' ? '#0070f3' : '#ccc',
+                            color: '#fff',
+                            border: 'none',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Other Permissions
+                    </button>
                 </div>
+
+                {/* Conditional Rendering Based on Tab */}
+                {selectedTab === 'user' && (
+                    <div style={{ marginBottom: '12px' }}>
+                        <label>User Permissions:</label>
+                        <div>
+                            {permissionsData ? (
+                                ((permissionsData as unknown) as Permission[]).map((permission: Permission) => (
+                                    <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedPermissions.includes(permission.name)}
+                                            onChange={() => handlePermissionChange(permission.name)}
+                                        />
+                                        {permission.name}
+                                    </label>
+                                ))
+                            ) : (
+                                <p>No user permissions available</p>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {selectedTab === 'other' && (
+                    <div style={{ marginBottom: '12px' }}>
+                        <label>Other Permissions:</label>
+                        <div>
+                            {/* Empty for now, can add future functionality */}
+                            <p>No other permissions available yet</p>
+                        </div>
+                    </div>
+                )}
+
                 <button
                     type="submit"
                     disabled={isUpdating}

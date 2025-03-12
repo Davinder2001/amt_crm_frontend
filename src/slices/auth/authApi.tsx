@@ -13,6 +13,7 @@ interface Profile {
   company_slug: string;
   meta: Meta;
   user_type: string;
+  password: string;
 }
 
 interface UsersResponse {
@@ -48,9 +49,46 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+
+    // Updated Forgot Password API to accept email
+    forgotPassword: builder.mutation<void, { email: string }>({
+      query: (data) => ({
+        url: "password/forgot",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    // Updated Verify OTP API to accept email
+    verifyOtp: builder.mutation<void, { email: string; otp: string; password: string; password_confirmation: string }>({
+      query: (data) => ({
+        url: "password/verify-otp",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    // New endpoint for Change Password
+    changePassword: builder.mutation<void, { oldPassword: string; newPassword: string }>({
+      query: (data) => ({
+        url: "password/change",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useFetchProfileQuery, useLoginMutation, useLogoutMutation } = authApi;
+export const { 
+  useFetchProfileQuery, 
+  useLoginMutation, 
+  useLogoutMutation, 
+  useForgotPasswordMutation, 
+  useVerifyOtpMutation, 
+  useChangePasswordMutation 
+} = authApi;
 
 export default authApi;

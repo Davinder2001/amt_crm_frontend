@@ -1,5 +1,6 @@
 'use client'
 import React from "react";
+import ChangePassword from "./components/changePassword";
 import { useFetchProfileQuery } from "@/slices/auth/authApi";
 
 const Page = () => {
@@ -24,7 +25,19 @@ const Page = () => {
           ))}
         </div>
       )}
+
+
+
+<>
+<ChangePassword/>
+</>
+
+
     </div>
+
+      
+
+
   );
 };
 

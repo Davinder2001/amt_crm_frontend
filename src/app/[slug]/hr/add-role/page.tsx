@@ -16,15 +16,16 @@ interface Permission {
 const Page: React.FC = () => {
   // Fetch permissions using the RTK Query hook.
   const { data, isLoading: isFetching, error } = useFetchPermissionsQuery();
-  // Data is now assumed to be an array of permissions
   const fetchedPermissions: Permission[] = data || [];
-
 
   const [createRole, { isLoading }] = useCreateRoleMutation();
 
   // State for new role inputs.
   const [newRoleName, setNewRoleName] = useState<string>("");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+
+  // State for managing tabs.
+  const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
 
   // Handle creating a new role.
   const handleCreateRole = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +60,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 shadow-md rounded-md">
-      <HrNavigation/>
+      <HrNavigation />
       <h2 className="text-2xl font-bold mb-4">Create a Role</h2>
       <form onSubmit={handleCreateRole}>
         {/* Role Name Input */}
@@ -73,28 +74,73 @@ const Page: React.FC = () => {
           required
         />
 
-        {/* Permissions Selection */}
-        <label className="block mb-2 font-medium">Select Permissions:</label>
-        <div className="mb-4">
-          {fetchedPermissions.map((perm) => (
-            <label key={perm.id} className="flex items-center space-x-2 mb-2">
-              <input
-                type="checkbox"
-                value={perm.name}
-                checked={selectedPermissions.includes(perm.name)}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSelectedPermissions((prev) =>
-                    prev.includes(value)
-                      ? prev.filter((p) => p !== value)
-                      : [...prev, value]
-                  );
-                }}
-              />
-              <span>{perm.name}</span>
-            </label>
-          ))}
+        {/* Tab Navigation */}
+        <div style={{ marginBottom: '12px' }}>
+          <button
+            type="button"
+            onClick={() => setSelectedTab('user')}
+            style={{
+              padding: '10px',
+              marginRight: '10px',
+              backgroundColor: selectedTab === 'user' ? '#0070f3' : '#ccc',
+              color: '#fff',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            User Permissions
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedTab('other')}
+            style={{
+              padding: '10px',
+              backgroundColor: selectedTab === 'other' ? '#0070f3' : '#ccc',
+              color: '#fff',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            Other Permissions
+          </button>
         </div>
+
+        {/* Conditional Rendering Based on Tab */}
+        {selectedTab === 'user' && (
+          <div style={{ marginBottom: '12px' }}>
+            <label>User Permissions:</label>
+            <div className="mb-4">
+              {fetchedPermissions.map((perm) => (
+                <label key={perm.id} className="flex items-center space-x-2 mb-2">
+                  <input
+                    type="checkbox"
+                    value={perm.name}
+                    checked={selectedPermissions.includes(perm.name)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSelectedPermissions((prev) =>
+                        prev.includes(value)
+                          ? prev.filter((p) => p !== value)
+                          : [...prev, value]
+                      );
+                    }}
+                  />
+                  <span>{perm.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {selectedTab === 'other' && (
+          <div style={{ marginBottom: '12px' }}>
+            <label>Other Permissions:</label>
+            <div className="mb-4">
+              {/* Empty for now, can add future functionality */}
+              <p>No other permissions available yet.</p>
+            </div>
+          </div>
+        )}
 
         {/* Submit Button */}
         <button

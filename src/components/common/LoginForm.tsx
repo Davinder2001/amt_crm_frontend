@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useLoginMutation, useFetchProfileQuery } from "@/slices/auth/authApi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 interface UserProfile {
     id: number;
@@ -102,6 +103,8 @@ const LoginForm = () => {
                         </form>
                     )}
                 </div>
+                    <Link href='/forget-password'>Forget Password</Link>
+
             </div>
             <ToastContainer />
         </>

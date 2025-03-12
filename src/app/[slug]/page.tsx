@@ -5,9 +5,9 @@ import { useFetchProfileQuery, useLoginMutation } from "@/slices/auth/authApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CompanyPage = ({ params }: { params: { slug: string } }) => {
+const CompanyPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const router = useRouter();
-  const { slug } = params;
+  const [slug, setSlug] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
   const [number, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,11 +16,18 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
   const [login, { isLoading }] = useLoginMutation();
 
   useEffect(() => {
-    if (profile?.user) {
+    (async () => {
+      const resolvedParams = await params;
+      setSlug(resolvedParams.slug);
+    })();
+  }, [params]);
+
+  useEffect(() => {
+    if (profile?.user && slug) {
       if (profile.user.company_slug === slug) {
-        setUser(profile.user); 
+        setUser(profile.user);
       } else {
-        setUser(null); 
+        setUser(null);
       }
     }
   }, [profile, slug]);
@@ -45,7 +52,7 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
       {user ? (
         <>
           <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
-          <p>Email: {user.email}</p>
+          <p>Number: {user.number}</p>
           <p>Company: {user.company_name}</p>
           <p>Slug: {user.company_slug}</p>
         </>
@@ -55,7 +62,7 @@ const CompanyPage = ({ params }: { params: { slug: string } }) => {
           <form onSubmit={handleLogin}>
             <input
               type="text"
-              placeholder="Email"
+              placeholder="Number"
               value={number}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 mb-3 border rounded-md"

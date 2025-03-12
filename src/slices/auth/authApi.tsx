@@ -12,6 +12,7 @@ interface Profile {
   company_name: string;
   company_slug: string;
   meta: Meta;
+  user_type: string;
 }
 
 interface UsersResponse {
@@ -29,10 +30,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    login: builder.mutation<
-      { access_token: string; user: Profile },
-      { number: string; password: string }
-    >({
+    login: builder.mutation<{ access_token: string; user: Profile }, { number: string; password: string }>({
       query: (credentials) => ({
         url: "login",
         method: "POST",

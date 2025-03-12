@@ -13,7 +13,6 @@ const userCreateApiSlice = createApi({
       }, {} as Record<string, string>);
 
       const token = cookies['access_token'];
-      const csrfToken = cookies['XSRF-TOKEN'];
 
       headers.set('Accept', 'application/json');
       headers.set('Content-Type', 'application/json');
@@ -21,11 +20,6 @@ const userCreateApiSlice = createApi({
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
-
-      if (csrfToken) {
-        headers.set('X-XSRF-TOKEN', csrfToken);
-      }
-
       return headers;
     },
   }),

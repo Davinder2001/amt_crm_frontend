@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/global.scss";
 import Provider from "@/provider/Provider";
-import UserLayout from "./UserLayout";
+import LayoutWrapper from "./LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "AMT CRM",
@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Provider>
-          <UserLayout>{children}</UserLayout>
+          <LayoutWrapper>{children}</LayoutWrapper>
         </Provider>
       </body>
     </html>

@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useFetchProfileQuery } from "@/slices/auth/authApi";
+import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks } from "react-icons/fa";
 
 const Sidebar = () => {
   const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
@@ -11,27 +12,26 @@ const Sidebar = () => {
     }),
   });
 
-  if (isFetching) return <p className="text-gray-500">Loading...</p>;
-  if (!companySlug) return <p className="text-red-500">No company data found</p>;
+  if (isFetching) return <p className="loading-text">Loading...</p>;
+  if (!companySlug) return <p className="error-text">No company data found</p>;
+
+  const menuItems = [
+    { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
+    { name: "Store", path: "store", icon: <FaStore /> },
+    { name: "HR", path: "hr", icon: <FaUserTie /> },
+    { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
+    { name: "Settings", path: "settings", icon: <FaCog /> },
+    { name: "Task", path: "tasks", icon: <FaTasks /> },
+  ];
 
   return (
-    <aside className="w-64 bg-gray-800 text-white min-h-screen p-4">
+    <aside className="sidebar">
       <nav>
-        <ul className="space-y-2">
-          {[
-            { name: "Dashboard", path: "dashboard" },
-            { name: "Store", path: "store" },
-            { name: "HR", path: "hr" },
-            { name: "Permissions", path: "permissions" },
-            { name: "Settings", path: "settings" },
-            { name: "Task", path: "tasks" },
-            { name: "Profile", path: "profile" },
-          ].map(({ name, path }) => (
-            <li key={path}>
-              <Link
-                href={`/${companySlug}/${path}`}
-                className="block p-2 rounded hover:bg-gray-700"
-              >
+        <ul className="menu-list">
+          {menuItems.map(({ name, path, icon }) => (
+            <li key={path} className="menu-item">
+              <Link href={`/${companySlug}/${path}`} className="menu-link">
+                <span className="menu-icon">{icon}</span>
                 {name}
               </Link>
             </li>

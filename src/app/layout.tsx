@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/global.scss";
 import Provider from "@/provider/Provider";
-import LayoutWrapper from "./LayoutWrapper";
+import LayoutWrapper from "../layouts/LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "AMT CRM",

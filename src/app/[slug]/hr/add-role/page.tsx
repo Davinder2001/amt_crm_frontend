@@ -1,9 +1,21 @@
-"use client";
+'use client';
+
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 import HrNavigation from "../components/hrNavigation";
+
+// Define a more specific error response structure
+interface ErrorResponse {
+  data?: {
+    message?: string;
+    errors?: {
+      [key: string]: string[];
+    };
+  };
+  message?: string;
+}
 
 interface Permission {
   id: number;
@@ -13,10 +25,14 @@ interface Permission {
   updated_at: string;
 }
 
+interface PermissionsResponse {
+  permissions: Permission[];
+}
+
 const Page: React.FC = () => {
-  // Fetch permissions using the RTK Query hook.
+  // Fetch permissions using the RTK Query hook
   const { data, isLoading: isFetching, error } = useFetchPermissionsQuery();
-  const fetchedPermissions: Permission[] = data || [];
+  const fetchedPermissions: Permission[] = (data as PermissionsResponse)?.permissions || []; // Safely extract permissions
 
   const [createRole, { isLoading }] = useCreateRoleMutation();
 
@@ -36,17 +52,23 @@ const Page: React.FC = () => {
     }
 
     try {
-      await createRole({
+      // Sending the new role to the API
+      const response = await createRole({
         name: newRoleName,
         permissions: selectedPermissions,
       }).unwrap();
 
-      toast.success("Role created successfully");
+      toast.success(response.message || 'Role created successfully');
       setNewRoleName(""); // Reset role name input
       setSelectedPermissions([]); // Reset permissions selection
-    } catch (err: any) {
-      console.error("Error creating role:", err);
-      toast.error(err?.data?.message || "Error creating role");
+    } catch (err: unknown) {
+      // Handle error and check for type
+      if (err && typeof err === 'object' && 'data' in err) {
+        const error = err as ErrorResponse; // Type assertion
+        toast.error(error?.data?.message || "Error creating role");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 

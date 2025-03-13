@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useGetTasksQuery, useUpdateTaskMutation } from '@/slices/tasks/taskApi';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import for fetching users
 import { Task } from '@/slices/tasks/taskApi';
 import { toast, ToastContainer } from 'react-toastify';
@@ -12,7 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const EditTask: React.FC = () => {
   const { id } = useParams();
 
-  const { data: profile, isLoading: profileLoading, error: profileError } = useFetchProfileQuery();
   const { data: tasks, isLoading: tasksLoading, error: tasksError } = useGetTasksQuery();
   const { data: usersData, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
 
@@ -71,8 +69,7 @@ const EditTask: React.FC = () => {
     }
   };
 
-  if (profileLoading || tasksLoading || usersLoading) return <p>Loading...</p>;
-  if (profileError) return <p>Error loading profile.</p>;
+  if (tasksLoading || usersLoading) return <p>Loading...</p>;
   if (tasksError) return <p>Error loading task details.</p>;
   if (usersError) return <p>Error loading users.</p>;
 

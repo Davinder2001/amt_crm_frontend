@@ -5,6 +5,16 @@ import { useForgotPasswordMutation, useVerifyOtpMutation } from "@/slices/auth/a
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Define the error response structure
+interface ErrorResponse {
+  data?: {
+    errors?: {
+      [key: string]: string[]; // For example, email or otp error fields
+    };
+  };
+  message?: string;
+}
+
 const Page = () => {
   const router = useRouter();
 
@@ -27,8 +37,10 @@ const Page = () => {
       await forgotPassword({ email }).unwrap();
       toast.success("OTP sent to your email.");
       setStage("otp"); // Switch to OTP verification step
-    } catch (err: any) {
-      const errorMessage = err?.data?.errors?.email?.[0] || "Failed to send OTP.";
+    } catch (err) {
+      // Use type assertion to assert 'err' as ErrorResponse
+      const error = err as ErrorResponse;
+      const errorMessage = error?.data?.errors?.email?.[0] || "Failed to send OTP.";
       toast.error(errorMessage);
     }
   };
@@ -55,8 +67,10 @@ const Page = () => {
       toast.success("OTP verified successfully. Your password is now reset.");
       setStage("reset");
       router.push("/login");
-    } catch (err: any) {
-      const errorMessage = err?.data?.errors?.otp?.[0] || "Failed to verify OTP.";
+    } catch (err) {
+      // Use type assertion to assert 'err' as ErrorResponse
+      const error = err as ErrorResponse;
+      const errorMessage = error?.data?.errors?.otp?.[0] || "Failed to verify OTP.";
       toast.error(errorMessage);
     }
   };

@@ -1,16 +1,22 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useFetchProfileQuery, useLoginMutation } from "@/slices/auth/authApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+interface User {
+  name: string;
+  number: string;
+  company_name: string;
+  company_slug: string;
+}
+
 const CompanyPage = ({ params }: { params: Promise<{ slug: string }> }) => {
-  const router = useRouter();
   const [slug, setSlug] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [number, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const { data: profile, isFetching } = useFetchProfileQuery();
   const [login, { isLoading }] = useLoginMutation();
@@ -34,14 +40,25 @@ const CompanyPage = ({ params }: { params: Promise<{ slug: string }> }) => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!password.trim()) {
+      setError("Password is required");
+      return;
+    }
+
     try {
       const result = await login({ number, password }).unwrap();
       toast.success("Login successful");
 
       document.cookie = `access_token=${result.access_token}; path=/;`;
       window.location.reload();
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Login failed");
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "data" in err) {
+        const error = err as { data: { message: string } };
+        toast.error(error?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
     }
   };
 
@@ -76,6 +93,7 @@ const CompanyPage = ({ params }: { params: Promise<{ slug: string }> }) => {
               className="w-full p-2 mb-3 border rounded-md"
               required
             />
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"

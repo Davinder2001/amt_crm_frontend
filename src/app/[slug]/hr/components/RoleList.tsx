@@ -1,12 +1,12 @@
 'use client';
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchProfileQuery } from "@/slices/auth/authApi";
 
+// Define the Role type
 interface Role {
   id: number;
   name: string;
@@ -15,7 +15,7 @@ interface Role {
 }
 
 const RoleList: React.FC = () => {
-  const router = useRouter();
+  // Remove the router variable since it's not being used
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
   const { companySlug } = useFetchProfileQuery(undefined, {
@@ -24,13 +24,19 @@ const RoleList: React.FC = () => {
     }),
   });
 
+  // Handle delete role logic
   const handleDeleteRole = async (id: number) => {
     try {
       await deleteRole(id).unwrap();
       toast.success("Role deleted successfully");
-    } catch (err: any) {
-      console.error("Error deleting role:", err);
-      toast.error(err?.data?.message || "Error deleting role");
+    } catch (err: unknown) {
+      // Type narrowing to safely handle the error
+      if (err && typeof err === 'object' && 'data' in err) {
+        const error = err as { data: { message: string } };
+        toast.error(error?.data?.message || "Error deleting role");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 
@@ -56,12 +62,12 @@ const RoleList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {rolesData && rolesData.length > 0 ? (
-            rolesData.map((role: Role) => (
+          {rolesData && rolesData.total > 0 ? (
+            rolesData?.roles.map((role: Role) => (
               <tr key={role.id}>
                 <td>{role.name}</td>
                 <td>
-                  {role.permissions.length
+                  {role.permissions
                     ? role.permissions.map((perm) => perm.name).join(", ")
                     : "None"}
                 </td>

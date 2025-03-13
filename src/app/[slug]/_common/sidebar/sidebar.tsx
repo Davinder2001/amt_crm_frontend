@@ -20,10 +20,10 @@ const Sidebar = () => {
     { name: "Store", path: "store", icon: <FaStore /> },
     { name: "HR", path: "hr", icon: <FaUserTie /> },
     { name: "Task", path: "tasks", icon: <FaTasks /> },
-    { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
-    { name: "Settings", path: "settings", icon: <FaCog /> },
     { name: "Vehicle", path: "vehicle", icon: <FaCar /> }, 
     { name: "Quality Control", path: "quality-control", icon: <FaCheck /> }, 
+    { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
+    { name: "Settings", path: "settings", icon: <FaCog /> },
   ];
 
   return (

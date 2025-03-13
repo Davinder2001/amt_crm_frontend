@@ -3,6 +3,7 @@ import { useChangePasswordMutation } from '@/slices/auth/authApi'; // Import the
 
 const ChangePassword = () => {
   // Local state for form inputs
+  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,8 +21,8 @@ const ChangePassword = () => {
       return;
     }
 
-    // Call the changePassword mutation, sending both newPassword and confirmPassword as password and password_confirmation
-    changePassword({ password: newPassword, password_confirmation: confirmPassword })
+    // Call the changePassword mutation, sending oldPassword, newPassword
+    changePassword({ oldPassword, newPassword })
       .unwrap()
       .then(() => {
         // Handle success
@@ -38,6 +39,15 @@ const ChangePassword = () => {
     <div>
       <h2>Change Password</h2>
       <form onSubmit={handleSubmit}>
+        <div>
+          <label>Old Password</label>
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            required
+          />
+        </div>
         <div>
           <label>New Password</label>
           <input

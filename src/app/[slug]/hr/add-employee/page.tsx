@@ -1,121 +1,67 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useCreateUserMutation } from '@/slices/users/userApi';
+import { useCreateEmployeMutation } from '@/slices/employe/employe';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
-import HrNavigation from '../components/hrNavigation';
-
-interface Role {
-  id: number;
-  name: string;
-}
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const Page: React.FC = () => {
-  const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
+  const router = useRouter();
+  const [createEmployee, { isLoading }] = useCreateEmployeMutation();
+  const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
 
-  // State for new user form
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [position, setPosition] = useState('');
+  const [number, setNumber] = useState('');
+  const [salary, setSalary] = useState('');
+  const [role_id, setRoleId] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<string>('');
-  const [number, setNumber] = useState(''); // New state for number field
 
-  // Fetch roles from API
-  const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(undefined);
-
-  const handleCreateUser = async () => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      // Include the new "number" field in the payload
-      await createUser({ name, email, password, role, number }).unwrap();
-      toast.success('User Created Successfully!');
-      // Reset input fields
-      setName('');
-      setEmail('');
-      setPassword('');
-      setRole('');
-      setNumber('');
-    } catch (err: any) {
-      console.error('Failed to create user:', err);
-      let errorMessage = 'User creation failed.';
-      if (err?.data?.errors) {
-        errorMessage = Object.values(err.data.errors).flat().join(' ');
-      }
-      toast.error(errorMessage);
-    }
+      await createEmployee({ name, email, position, number, salary, role_id, password }).unwrap();
+      toast.success('Employee created successfully!');
+      router.push('/employee');
+    } catch {
+      toast.error('Failed to create employee. Please try again.');
+    }    
   };
 
   return (
-    <div className="p-4 border rounded-md shadow-md">
-      <HrNavigation/>
-      <Link href="/hr">Back</Link>
-      <h2 className="text-lg font-semibold mb-2">Create New User</h2>
+    <div>
+      <h2>Create Employee</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" placeholder="Position" value={position} onChange={(e) => setPosition(e.target.value)} />
+        <input type="text" placeholder="Phone Number" value={number} onChange={(e) => setNumber(e.target.value)} />
+        <input type="number" placeholder="Salary" value={salary} onChange={(e) => setSalary(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full p-2 mb-3 border rounded-md"
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full p-2 mb-3 border rounded-md"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full p-2 mb-3 border rounded-md"
-      />
-      
-      {/* New Number Field */}
-      <input
-        type="number"
-        placeholder="Enter number"
-        value={number}
-        onChange={(e) => setNumber(e.target.value)}
-        className="w-full p-2 mb-3 border rounded-md"
-      />
-
-      {/* Role Selection */}
-      <label className="block text-sm font-medium text-gray-700">Select Role:</label>
-      {rolesLoading ? (
-        <div>Loading roles...</div>
-      ) : rolesError ? (
-        <div>Error loading roles</div>
-      ) : (
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="w-full p-2 mb-3 border rounded-md"
-        >
-          <option value="">Select a role</option>
-          {rolesData && rolesData.length > 0 ? (
-            rolesData.map((roleItem: Role) => (
-              <option key={roleItem.id} value={roleItem.name}>
-                {roleItem.name}
+        {/* Role Dropdown */}
+        <select value={role_id} onChange={(e) => setRoleId(e.target.value)}>
+          <option value="">Select Role</option>
+          {rolesLoading ? (
+            <option disabled>Loading...</option>
+          ) : rolesError ? (
+            <option disabled>Error loading roles</option>
+          ) : (
+            rolesData?.roles?.map((role: { id: string; name: string }) => (
+              <option key={role.id} value={role.id}>
+                {role.name}
               </option>
             ))
-          ) : (
-            <option value="">No roles available</option>
           )}
         </select>
-      )}
 
-      <button
-        onClick={handleCreateUser}
-        disabled={isCreating}
-        className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 transition"
-      >
-        {isCreating ? 'Creating...' : 'Create User'}
-      </button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Create Employee'}
+        </button>
+      </form>
     </div>
   );
 };

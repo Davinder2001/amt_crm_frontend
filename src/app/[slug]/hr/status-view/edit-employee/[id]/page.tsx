@@ -1,44 +1,53 @@
 'use client';
+
 import React, { useEffect, useState, FormEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchUsersQuery, useUpdateUserMutation } from '@/slices/users/userApi';
+import { useFetchEmployesQuery, useUpdateEmployeMutation } from '@/slices/employe/employe';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
-import HrNavigation from '../../components/hrNavigation';
+import HrNavigation from '../../../components/hrNavigation';
 
 interface Role {
   id: number;
   name: string;
 }
 
+interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  number: string;
+  company_name: string;
+  roles: Role[];
+}
+
 const EditUserPage: React.FC = () => {
   const { id } = useParams() as { id: string };
-  const { data: usersData, error: usersError, isLoading: usersLoading } = useFetchUsersQuery();
-  const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(undefined);
-  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
-  const router = useRouter();
+  const { data: usersData, error: usersError, isLoading: usersLoading } = useFetchEmployesQuery();
+  const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
+  
+  const [updateUser, { isLoading: isUpdating }] = useUpdateEmployeMutation();
+  const router = useRouter();  // Only used if you navigate after the update
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  // Initialize role as an empty string.
-  const [role, setRole] = useState('');
+  const [number, setNumber] = useState('');
+  const [role, setRole] = useState<Role | null>(null);
+  const [companyName, setCompanyName] = useState('');
 
-  // When user data is fetched, populate the fields
   useEffect(() => {
     if (usersData) {
-      const user = usersData.users.find((user: any) => user.id.toString() === id);
+      const user = usersData.employees.find((user: Employee) => user.id.toString() === id);
       if (user) {
         setName(user.name || '');
         setEmail(user.email || '');
-        // If user has roles, use the first role's name; otherwise, default to an empty string.
-        setRole(user.roles && user.roles.length > 0 ? user.roles[0].name : '');
+        setNumber(user.number || '');
+        setCompanyName(user.company_name || ''); 
+        setRole(user.roles?.[0] || null);
       }
     }
   }, [usersData, id]);
-
-  if (usersLoading) return <p>Loading user data...</p>;
-  if (usersError) return <p>Error fetching user data.</p>;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,20 +56,28 @@ const EditUserPage: React.FC = () => {
         id: parseInt(id, 10),
         name,
         email,
-        role, // sending role name from the dropdown
+        number,
+        company_name: companyName,
+        roles: role ? [role] : [], 
       }).unwrap();
       toast.success('User updated successfully!');
-      // Optionally, navigate back or refresh the page
-      // router.push('/somepath');
-    } catch (err: any) {
-      console.error('Failed to update user', err);
-      toast.error('Failed to update user. Please try again.');
+      router.push('/users');  // Navigate to the users page after successful update
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'data' in err) {
+        const error = err as { data: { message: string } };
+        toast.error(error?.data?.message || 'Failed to update user. Please try again.');
+      } else {
+        toast.error('An unexpected error occurred.');
+      }
     }
   };
 
+  if (usersLoading) return <p>Loading user data...</p>;
+  if (usersError) return <p>Error fetching user data.</p>;
+
   return (
     <div style={{ padding: '24px' }}>
-      <HrNavigation/>
+      <HrNavigation />
       <h1>Edit User</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '12px' }}>
@@ -82,20 +99,33 @@ const EditUserPage: React.FC = () => {
           />
         </div>
         <div style={{ marginBottom: '12px' }}>
+          <input
+            type="text"
+            placeholder="Phone Number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '12px' }}>
           <label>Select Role:</label>
           <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+            value={role?.name || ''}
+            onChange={(e) => {
+              const selectedRole = rolesData?.roles.find((r: Role) => r.name === e.target.value);
+              setRole(selectedRole || null);
+            }}
             style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
           >
             {rolesLoading ? (
               <option>Loading roles...</option>
             ) : rolesError ? (
               <option>Error loading roles</option>
-            ) : rolesData && rolesData.length > 0 ? (
+            ) : rolesData && rolesData.total > 0 ? (
               <>
                 <option value="">Select a role</option>
-                {rolesData.map((roleItem: Role) => (
+                {rolesData.roles.map((roleItem: Role) => (
                   <option key={roleItem.id} value={roleItem.name}>
                     {roleItem.name}
                   </option>

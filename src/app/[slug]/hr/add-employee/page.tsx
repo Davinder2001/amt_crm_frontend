@@ -16,14 +16,15 @@ const Page: React.FC = () => {
   const [position, setPosition] = useState('');
   const [number, setNumber] = useState('');
   const [salary, setSalary] = useState('');
-  const [role_id, setRoleId] = useState('');
+  const [role, setRoleId] = useState('');
   const [password, setPassword] = useState('');
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createEmployee({ name, email, position, number, salary, role_id, password }).unwrap();
+
+      await createEmployee({ name, email, position, number, salary, role, password }).unwrap();
       toast.success('Employee created successfully!');
       router.push('/employee');
     } catch {
@@ -43,7 +44,7 @@ const Page: React.FC = () => {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
         {/* Role Dropdown */}
-        <select value={role_id} onChange={(e) => setRoleId(e.target.value)}>
+        <select value={role} onChange={(e) => setRoleId(e.target.value)}>
           <option value="">Select Role</option>
           {rolesLoading ? (
             <option disabled>Loading...</option>
@@ -51,7 +52,7 @@ const Page: React.FC = () => {
             <option disabled>Error loading roles</option>
           ) : (
             rolesData?.roles?.map((role: { id: string; name: string }) => (
-              <option key={role.id} value={role.id}>
+              <option key={role.id} value={role.name}>
                 {role.name}
               </option>
             ))

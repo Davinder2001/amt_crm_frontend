@@ -7,7 +7,7 @@ interface Employee {
   position: string;
   number: string;
   salary: string;
-  role_id: string;
+  role: string;
   password: string;
   company_id: string; 
   company_name: string;

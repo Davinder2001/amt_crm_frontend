@@ -184,3 +184,18 @@
         border-radius: 5px;
     }
 }
+
+
+
+
+
+.add-employee-form form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 31px;
+}
+
+.add-employee-form form input {
+    padding:10px;
+    font-size:16px;
+}

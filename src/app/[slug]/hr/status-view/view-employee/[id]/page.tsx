@@ -19,6 +19,12 @@ interface Employee {
   number: string;
   company_name: string;
   roles: Role[];
+  // Add the meta data as an optional property
+  meta?: {
+    dateOfHire?: string;
+    joiningDate?: string;
+    shiftTimings?: string;
+  };
 }
 
 const ViewUserPage: React.FC = () => {
@@ -30,11 +36,11 @@ const ViewUserPage: React.FC = () => {
       toast.error('Failed to fetch user data');
     }
   }, [usersError]);
-
+  
   if (usersLoading) return <p>Loading user data...</p>;
-
+  
   const user = usersData?.employees.find((user: Employee) => user.id.toString() === id);
-
+  
   if (!user) {
     return <p>User not found</p>;
   }
@@ -42,7 +48,7 @@ const ViewUserPage: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <HrNavigation />
-      <h1>View User</h1>
+      <h1>View Employee</h1>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -73,6 +79,28 @@ const ViewUserPage: React.FC = () => {
               {user.roles?.[0]?.name || 'No role assigned'}
             </td>
           </tr>
+          {user.meta && (
+            <>
+              <tr>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>Date Of Hire</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                  {user.meta.dateOfHire || 'N/A'}
+                </td>
+              </tr>
+              <tr>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>Joining Date</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                  {user.meta.joiningDate || 'N/A'}
+                </td>
+              </tr>
+              <tr>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>Shift Timings</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                  {user.meta.shiftTimings || 'N/A'}
+                </td>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </div>

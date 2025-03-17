@@ -33,7 +33,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
 
     login: builder.mutation<{ access_token: string; user: Profile }, { number: string; password: string }>({
       query: (credentials) => ({
-        url: "login",
+        url: "c-login",
         method: "POST",
         body: credentials,
         credentials: "include",

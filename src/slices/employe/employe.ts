@@ -4,7 +4,6 @@ interface Employee {
   id: number;
   name: string;
   email: string;
-  position: string;
   number: string;
   salary: string;
   role: string;
@@ -14,7 +13,16 @@ interface Employee {
   company_slug: string;
   user_status: string;
   roles: Role[]; 
+  meta?: {
+    dateOfHire?: string;
+    joiningDate?: string;
+    shiftTimings?: string;
+  };
+  dateOfHire: string;
+  joiningDate: string;
+  shiftTimings: string;
 }
+
 
 interface Role {
   id: number;
@@ -24,7 +32,6 @@ interface Role {
 interface EmployeesResponse {
   employees: Employee[];
 }
-
 
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -44,7 +51,7 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Employe"],
     }),
-    updateEmploye: builder.mutation<Employee, Partial<Employee>>({
+    updateEmploye: builder.mutation<Employee, { id: number } & Partial<Employee>>({
       query: ({ id, ...rest }) => ({
         url: `employee/${id}`,
         method: "PUT",

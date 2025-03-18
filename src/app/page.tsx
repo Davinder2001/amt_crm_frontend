@@ -1,10 +1,15 @@
-import LoginForm from '@/components/common/LoginForm'
+//src/app/page.tsx
+'use client'
+import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import React from 'react'
 
 const Page = () => {
+   const { data: profile } = useFetchProfileQuery();
+   console.log('profile.........', profile);
+   
   return (
     <>
-    <LoginForm/>
+    werwerwer4353454
     </>
   )
 }

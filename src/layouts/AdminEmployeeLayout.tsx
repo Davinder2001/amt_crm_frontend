@@ -5,12 +5,17 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/app/[slug]/_common/sidebar/sidebar";
 import Header from "@/app/[slug]/_common/header/header";
 import Footer from "@/app/[slug]/_common/footer/footer";
+import { usePathname } from "next/navigation";
 
 export default function AdminEmployeeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  if (pathname === "/") {
+    return <>{children} </>
+  }
     return (
       <div className="main">
         <div className="sidebar">

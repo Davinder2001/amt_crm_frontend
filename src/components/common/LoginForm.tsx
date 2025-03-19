@@ -1,47 +1,32 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useLoginMutation, useFetchProfileQuery } from "@/slices/auth/authApi";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
+'use client';
 
-interface UserProfile {
-  id: number;
-  name: string;
-  number: string;
-  company_id: number;
-  company_name: string;
-  company_slug: string;
-  user_type: string;
-}
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLoginMutation } from '@/slices/auth/authApi';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
+import Cookies from 'js-cookie';
+import { useUser } from '@/provider/UserContext';
 
 const LoginForm = () => {
   const router = useRouter();
-  const [number, setNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState<UserProfile | null>(null);
-
-  // Fetch authenticated user profile
-  const { data: profile } = useFetchProfileQuery();
+  const { setUser, user } = useUser();
+  const [number, setNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [login, { isLoading }] = useLoginMutation();
-
-  useEffect(() => {
-    if (profile?.user) {
-      setUser(profile.user);
-    }
-  }, [profile]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const result = await login({ number, password }).unwrap();
-      toast.success("Login successful");
+      toast.success('Login successful');
 
-      // Store session token, user type, and company slug
-      document.cookie = `access_token=${result.access_token}; path=/;`;
-      document.cookie = `user_type=${result.user.user_type}; path=/;`;
-      document.cookie = `company_slug=${result.user.company_slug}; path=/;`;
+      // Set cookies
+      Cookies.set('access_token', result.access_token, { path: '/' });
+      Cookies.set('user_type', result.user.user_type, { path: '/' });
+      Cookies.set('company_slug', result.user.company_slug, { path: '/' });
 
       // Redirect to user's company_slug URL
       if (result?.user?.company_slug) {
@@ -57,15 +42,18 @@ const LoginForm = () => {
   };
 
   const handleLogout = () => {
+    Cookies.remove('access_token');
+    Cookies.remove('user_type');
+    Cookies.remove('company_slug');
     setUser(null);
-    router.push("/");
-    toast.success("Logged out successfully!");
+    router.push('/');
+    toast.success('Logged out successfully!');
   };
 
   const isLoggedIn = !!user;
 
   return (
-    <div className="company-login-page">
+    <div className=''>
       <div className="login-container">
         <div className="login-card">
           <h2 className="login-header">

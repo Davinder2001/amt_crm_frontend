@@ -26,7 +26,6 @@ const LoginForm = () => {
       // Set cookies
       Cookies.set('access_token', result.access_token, { path: '/' });
       Cookies.set('user_type', result.user.user_type, { path: '/' });
-      Cookies.set('company_slug', result.user.company_slug, { path: '/' });
 
       // Redirect to user's company_slug URL
       if (result?.user?.company_slug) {

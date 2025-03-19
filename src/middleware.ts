@@ -60,7 +60,6 @@
 
 
 
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { authRoutes, adminEmployeeRoutes, superAdminRoutes } from '@/routes';
@@ -94,7 +93,8 @@ export function middleware(request: NextRequest) {
     if (userType === 'superadmin') {
       if (
         adminEmployeeRoutes(companySlug || '').some((route) => pathname.startsWith(route)) ||
-        authRoutes.includes(pathname) || !pathname.startsWith('/superadmin')
+        authRoutes.includes(pathname) || 
+        !pathname.startsWith('/superadmin')
       ) {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
@@ -106,12 +106,15 @@ export function middleware(request: NextRequest) {
       // 👉 Redirect to "/" if:
       // - `companySlug` is null/undefined/empty
       // - OR pathname doesn't start with `/${companySlug}`
-      if (
-        !companySlug || 
-        !pathname.startsWith(`/${companySlug}`)
-      ) {
+      if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));
       }
+
+      // 👉 Redirect to `/${companySlug}/dashboard` if the path is exactly `/${companySlug}`
+      if (pathname === `/${companySlug}`) {
+        return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
+      }
+
       return NextResponse.next();
     }
   }

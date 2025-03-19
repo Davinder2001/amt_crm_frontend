@@ -1,17 +1,67 @@
 //src/app/page.tsx
 'use client'
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
-import React from 'react'
+import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
+import Link from 'next/link';
+import React from 'react';
+import Cookies from 'js-cookie';
 
 const Page = () => {
-   const { data: profile } = useFetchProfileQuery();
-   console.log('profile.........', profile);
-   
-  return (
-    <>
-    werwerwer4353454
-    </>
-  )
-}
+  const { data: profile } = useFetchProfileQuery();
+  const [sendCompanyId] = useSelectedCompanyMutation(); // Initialize the mutation hook
 
-export default Page
+  const companies = profile?.user?.companies;
+  const handleClick = async (companySlug: string, id: number) => {
+    Cookies.set('company_slug', companySlug, { path: '/' });
+  
+    try {
+      await sendCompanyId({ id }).unwrap();
+      alert('Company selected successfully!');
+    } catch (error) {
+      alert('Failed to select company. Please try again.');
+    }
+  };
+  
+
+  return (
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+      <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '20px' }}>Companies</h1>
+      {Array.isArray(companies) && companies.map((company, index) => (
+        <div
+          key={index}
+          style={{
+            backgroundColor: '#f9f9f9',
+            padding: '15px',
+            borderRadius: '8px',
+            marginBottom: '10px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h2 style={{ margin: '0', color: '#555', fontSize: '18px' }}>{company.company_name}</h2>
+          <span><strong>company Id:</strong> {company.company_id}</span>
+          <Link
+            href={`/${company.company_slug}/dashboard`}
+            style={{
+              textDecoration: 'none',
+              backgroundColor: '#0070f3',
+              color: '#fff',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontSize: '14px',
+              transition: 'background-color 0.3s ease',
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#005bb5')}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#0070f3')}
+            onClick={() => handleClick(company.company_slug, company.id)} // Set company_slug and send company_id
+          >
+            {company.company_name}
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Page;

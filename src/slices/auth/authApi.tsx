@@ -1,7 +1,20 @@
 import userCreateApiSlice from "./authCreateSlice";
 
 interface Meta {
-  [key: string]: string;
+  [key: string]: string | number | boolean | object; // Allow for flexible meta data
+}
+
+interface Company {
+  id: number; // Updated to number
+  admin_id: number;
+  company_id: string;
+  company_name: string;
+  company_slug: string;
+  created_at: string;
+  payment_status: string;
+  updated_at: string;
+  verification_status: string;
+  [key: string]: string | number; // Allow for additional fields
 }
 
 interface Profile {
@@ -12,8 +25,9 @@ interface Profile {
   company_name: string;
   company_slug: string;
   meta: Meta;
-  user_type: string;
+  user_type: "admin" | "employee" | "user" | "superadmin"; // Union type for user_type
   password: string;
+  companies: Company[]; // Updated to array of Company objects
 }
 
 interface UsersResponse {
@@ -79,6 +93,24 @@ const authApi = userCreateApiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    // send company id to selectedCompanies/{id}
+    selectedCompany: builder.mutation<void, { id: number }>({
+      query: ({ id }) => ({
+        url: `selectedCompanies/${id}`,
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
+
+    fetchSelectedCompany: builder.query<UsersResponse, void>({
+      query: () => ({
+        url: "selectedCompanies",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Auth"],
+    }),
+
   }),
 });
 
@@ -88,7 +120,9 @@ export const {
   useLogoutMutation, 
   useForgotPasswordMutation, 
   useVerifyOtpMutation, 
-  useChangePasswordMutation 
+  useChangePasswordMutation,
+  useSelectedCompanyMutation,
+  useFetchSelectedCompanyQuery
 } = authApi;
 
 export default authApi;

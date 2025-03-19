@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useFetchProfileQuery } from "@/slices/auth/authApi";
+import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks, FaCar, FaCheck } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -12,7 +12,13 @@ const Sidebar = () => {
     }),
   });
 
+
+  const { data: selectedCompany } = useFetchSelectedCompanyQuery(); // Initialize the mutation hook
+
+  console.log('selectedCompanies.....', selectedCompany);
   console.log('companySlug', companySlug)
+
+
 
 
   if (isFetching) return <p className="loading-text">Loading...</p>;
@@ -23,8 +29,8 @@ const Sidebar = () => {
     { name: "Store", path: "store", icon: <FaStore /> },
     { name: "HR", path: "hr", icon: <FaUserTie /> },
     { name: "Task", path: "tasks", icon: <FaTasks /> },
-    { name: "Vehicle", path: "vehicle", icon: <FaCar /> }, 
-    { name: "Quality Control", path: "quality-control", icon: <FaCheck /> }, 
+    { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
+    { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
     { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
     { name: "Settings", path: "settings", icon: <FaCog /> },
   ];

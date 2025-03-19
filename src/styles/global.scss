@@ -199,3 +199,33 @@
     padding:10px;
     font-size:16px;
 }
+
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.login-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-card form {
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+
+
+    input {
+        padding: 10px;
+        font-size: 18px;
+    }
+
+    button {
+        padding:  10px;
+        cursor: pointer;
+    }
+
+}

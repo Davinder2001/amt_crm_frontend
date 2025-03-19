@@ -48,7 +48,6 @@ const LoginForm = () => {
         router.push(`/${result.user.company_slug}/dashboard`);
       }
     } catch (err: unknown) {
-      // Use type assertion to safely handle the error
       if (err instanceof Error) {
         toast.error(err.message || "Login failed");
       } else {
@@ -66,27 +65,24 @@ const LoginForm = () => {
   const isLoggedIn = !!user;
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="bg-white p-6 shadow-md rounded-md w-96">
-          <h2 className="text-2xl font-bold mb-4 text-center">
+    <div className="company-login-page">
+      <div className="login-container">
+        <div className="login-card">
+          <h2 className="login-header">
             {isLoggedIn ? `Welcome, ${user?.name || "User"}!` : "Login"}
           </h2>
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition"
-            >
+            <button onClick={handleLogout} className="logout-button">
               Logout
             </button>
           ) : (
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} className="login-form">
               <input
                 type="text"
                 placeholder="Phone Number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
-                className="w-full p-2 mb-3 border rounded-md"
+                className="login-input"
                 required
               />
               <input
@@ -94,12 +90,12 @@ const LoginForm = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2 mb-3 border rounded-md"
+                className="login-input"
                 required
               />
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+                className="login-button"
                 disabled={isLoading}
               >
                 {isLoading ? "Logging in..." : "Login"}
@@ -107,10 +103,12 @@ const LoginForm = () => {
             </form>
           )}
         </div>
-        <Link href='/forget-password'>Forget Password</Link>
+        <Link href="/forget-password" className="forgot-password-link">
+          Forget Password
+        </Link>
       </div>
       <ToastContainer />
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import React from 'react'
+import SalaryView from './components/salaryView'
 
 const Page = () => {
   return (
     <>
-    <Link href="/hr">Back</Link>
-    <div>Page</div>
+      <SalaryView/>
     </>
   )
 }

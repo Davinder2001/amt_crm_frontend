@@ -1,5 +1,10 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
+interface Role {
+  id: number;
+  name: string;
+}
+
 interface Employee {
   id: number;
   name: string;
@@ -21,12 +26,6 @@ interface Employee {
   dateOfHire: string;
   joiningDate: string;
   shiftTimings: string;
-}
-
-
-interface Role {
-  id: number;
-  name: string;
 }
 
 interface EmployeesResponse {

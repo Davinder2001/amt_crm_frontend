@@ -1,25 +1,17 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
+import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks, FaCar, FaCheck } from "react-icons/fa";
 
 const Sidebar = () => {
-  const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
-    selectFromResult: ({ data, isFetching }) => ({
-      companySlug: data?.user?.company_slug,
-      isFetching,
-    }),
-  });
+  const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
 
+  // Extract companySlug from selectedCompany
+  const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery(); // Initialize the mutation hook
-
-  console.log('selectedCompanies.....', selectedCompany);
-  console.log('companySlug', companySlug)
-
-
-
+  console.log('selectedCompanies:', selectedCompany);
+  console.log('companySlug:', companySlug);
 
   if (isFetching) return <p className="loading-text">Loading...</p>;
   if (!companySlug) return <p className="error-text">No company data found</p>;

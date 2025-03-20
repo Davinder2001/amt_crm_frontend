@@ -5,13 +5,16 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { Task } from '@/slices/tasks/taskApi';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-  const { data: profile, isLoading: profileLoading, error: profileError } = useFetchProfileQuery();
+  // Fetch company slug
+  const { data: selectedCompany, isFetching , isLoading : profileLoading, error: profileError} = useFetchSelectedCompanyQuery();
+  // Extract companySlug from selectedCompany
+  const companySlug = selectedCompany?.selected_company?.company_slug;
 
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -29,7 +32,6 @@ const AllTasks: React.FC = () => {
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
 
-  const companySlug = profile?.user?.company_slug;
   if (!companySlug) return <p>Company slug not found.</p>;
 
   return (

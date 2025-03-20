@@ -34,6 +34,13 @@ interface UsersResponse {
   user: Profile;
 }
 
+// Response type for fetching selected company
+interface SelectedCompanyResponse {
+  company_user_role: "admin" | "employee" | "user" | "superadmin";
+  selected_company: Profile
+}
+
+
 const authApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchProfile: builder.query<UsersResponse, void>({
@@ -102,7 +109,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
-    fetchSelectedCompany: builder.query<UsersResponse, void>({
+    fetchSelectedCompany: builder.query<SelectedCompanyResponse, void>({
       query: () => ({
         url: "selectedCompanies",
         method: "GET",

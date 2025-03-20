@@ -4,7 +4,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
-import { useFetchProfileQuery } from "@/slices/auth/authApi";
+import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 
 // Define the Role type
 interface Role {
@@ -18,11 +18,10 @@ const RoleList: React.FC = () => {
   // Remove the router variable since it's not being used
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
-  const { companySlug } = useFetchProfileQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      companySlug: data?.user?.company_slug,
-    }),
-  });
+  // Fetch company slug
+    const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+    // Extract companySlug from selectedCompany
+    const companySlug = selectedCompany?.selected_company?.company_slug;
 
   // Handle delete role logic
   const handleDeleteRole = async (id: number) => {

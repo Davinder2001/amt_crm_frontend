@@ -2,15 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const Navigation: React.FC = () => {
-  const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
-    selectFromResult: ({ data, isFetching }) => ({
-      companySlug: data?.user?.company_slug,
-      isFetching,
-    }),
-  });
+  // Fetch company slug
+    const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+    // Extract companySlug from selectedCompany
+    const companySlug = selectedCompany?.selected_company?.company_slug;
 
   if (isFetching) return <p>Loading...</p>;
   if (!companySlug) return <p>No company data found</p>;

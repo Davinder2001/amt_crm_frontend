@@ -4,19 +4,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
-import { useFetchProfileQuery } from "@/slices/auth/authApi"; // Assuming the API slice is correct
+import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi"; // Assuming the API slice is correct
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // Fetch company slug
-  const { companySlug, isFetching } = useFetchProfileQuery(undefined, {
-    selectFromResult: ({ data, isFetching }) => ({
-      companySlug: data?.user?.company_slug,
-      isFetching,
-    }),
-  });
-
+  const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+  // Extract companySlug from selectedCompany
+  const companySlug = selectedCompany?.selected_company?.company_slug;
+  
   // Handle authentication and cookie check
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 

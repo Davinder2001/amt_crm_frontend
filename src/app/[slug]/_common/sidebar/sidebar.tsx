@@ -10,9 +10,6 @@ const Sidebar = () => {
   // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  console.log('selectedCompanies:', selectedCompany);
-  console.log('companySlug:', companySlug);
-
   if (isFetching) return <p className="loading-text">Loading...</p>;
   if (!companySlug) return <p className="error-text">No company data found</p>;
 

@@ -21,7 +21,10 @@ const Page = () => {
         <div>
           <h2>Additional Info</h2>
           {Object.entries(data.user.meta).map(([key, value]) => (
-            <p key={key}><strong>{key.replace("_", " ")}:</strong> {value}</p>
+            <p key={key}>
+              <strong>{key.replace("_", " ")}:</strong>{" "}
+              {typeof value === "object" ? JSON.stringify(value) : value}
+            </p>
           ))}
         </div>
       )}

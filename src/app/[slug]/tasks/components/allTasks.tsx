@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { Task } from '@/slices/tasks/taskApi';
 
 const AllTasks: React.FC = () => {

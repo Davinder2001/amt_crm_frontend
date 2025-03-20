@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link';
-import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const HrNavigation = () => {
 

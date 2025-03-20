@@ -1,4 +1,3 @@
-//src/app/page.tsx
 'use client'
 import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
 import Link from 'next/link';
@@ -7,8 +6,7 @@ import Cookies from 'js-cookie';
 
 const Page = () => {
   const { data: profile } = useFetchProfileQuery();
-  const [sendCompanyId] = useSelectedCompanyMutation(); // Initialize the mutation hook
-
+  const [sendCompanyId] = useSelectedCompanyMutation(); 
   const companies = profile?.user?.companies;
   const handleClick = async (companySlug: string, id: number) => {
     Cookies.set('company_slug', companySlug, { path: '/' });
@@ -17,8 +15,9 @@ const Page = () => {
       await sendCompanyId({ id }).unwrap();
       alert('Company selected successfully!');
     } catch (error) {
+      console.error(error);
       alert('Failed to select company. Please try again.');
-    }
+    }    
   };
   
 
@@ -54,7 +53,7 @@ const Page = () => {
             }}
             onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#005bb5')}
             onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#0070f3')}
-            onClick={() => handleClick(company.company_slug, company.id)} // Set company_slug and send company_id
+            onClick={() => handleClick(company.company_slug, company.id)}
           >
             {company.company_name}
           </Link>

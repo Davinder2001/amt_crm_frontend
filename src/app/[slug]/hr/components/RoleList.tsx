@@ -4,9 +4,8 @@ import React from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
-import { useFetchProfileQuery, useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
+import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 
-// Define the Role type
 interface Role {
   id: number;
   name: string;
@@ -15,21 +14,16 @@ interface Role {
 }
 
 const RoleList: React.FC = () => {
-  // Remove the router variable since it's not being used
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
-  // Fetch company slug
-    const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
-    // Extract companySlug from selectedCompany
+    const { data: selectedCompany } = useFetchSelectedCompanyQuery();
     const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  // Handle delete role logic
   const handleDeleteRole = async (id: number) => {
     try {
       await deleteRole(id).unwrap();
       toast.success("Role deleted successfully");
     } catch (err: unknown) {
-      // Type narrowing to safely handle the error
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };
         toast.error(error?.data?.message || "Error deleting role");

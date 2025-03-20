@@ -1,68 +1,6 @@
-// import { NextResponse } from 'next/server';
-// import type { NextRequest } from 'next/server';
-// import { authRoutes, adminEmployeeRoutes, superAdminRoutes } from '@/routes';
-
-// export function middleware(request: NextRequest) {
-//   const laravelSession = request.cookies.get('access_token');
-//   const userType = request.cookies.get('user_type')?.value;
-//   const companySlug = request.cookies.get('company_slug')?.value;
-//   const { pathname } = request.nextUrl;
-
-//   // If not logged in → Only allow access to auth routes
-//   if (!laravelSession) {
-//     if (!authRoutes.includes(pathname)) {
-//       return NextResponse.redirect(new URL('/', request.url));
-//     }
-//     return NextResponse.next();
-//   }
-
-//   if (laravelSession) {
-//     // Handle admin/employee/user redirection
-//     if (['admin', 'employee', 'user'].includes(userType || '')) {
-//       if (
-//         superAdminRoutes.some((route) => pathname.startsWith(route)) ||
-//         authRoutes.includes(pathname) || !pathname.startsWith(`/${companySlug}`)
-//       ) {
-//         if (companySlug) {
-//           return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
-//         }
-//       }
-//       return NextResponse.next();
-//     }
-
-//     // Handle superadmin redirection
-//     if (userType === 'superadmin') {
-//       if (
-//         adminEmployeeRoutes(companySlug || '').some((route) => pathname.startsWith(route)) ||
-//         authRoutes.includes(pathname) || !pathname.startsWith('/superadmin')
-//       ) {
-//         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-//       }
-//       return NextResponse.next();
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: ['/((?!.*\\..*|_next).*)', '/'],
-// };
-
-
-
-
-
-
-
-
-
-
-
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { authRoutes, adminEmployeeRoutes, superAdminRoutes } from '@/routes';
+import { authRoutes, adminEmployeeRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get('access_token');

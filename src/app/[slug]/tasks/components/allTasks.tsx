@@ -11,9 +11,7 @@ import { Task } from '@/slices/tasks/taskApi';
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-  // Fetch company slug
-  const { data: selectedCompany, isFetching , isLoading : profileLoading, error: profileError} = useFetchSelectedCompanyQuery();
-  // Extract companySlug from selectedCompany
+  const { data: selectedCompany , isLoading : profileLoading, error: profileError} = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
   const handleDelete = async (id: number) => {

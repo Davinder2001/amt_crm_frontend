@@ -37,9 +37,8 @@ interface UsersResponse {
 // Response type for fetching selected company
 interface SelectedCompanyResponse {
   company_user_role: "admin" | "employee" | "user" | "superadmin";
-  selected_company: Profile
+  selected_company: Profile;
 }
-
 
 const authApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -100,7 +99,8 @@ const authApi = userCreateApiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
-    // send company id to selectedCompanies/{id}
+
+    // Send company id to selectedCompanies/{id}
     selectedCompany: builder.mutation<void, { id: number }>({
       query: ({ id }) => ({
         url: `selectedCompanies/${id}`,
@@ -117,7 +117,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
       providesTags: ["Auth"],
     }),
-
   }),
 });
 

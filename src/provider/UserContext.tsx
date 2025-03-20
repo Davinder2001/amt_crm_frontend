@@ -1,18 +1,22 @@
-'use client';
-
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+interface User {
+  id: number;
+  name: string;
+  number: string;
+  company_name: string;
+  company_slug: string;
+  // add other properties as needed
+}
 
 type UserContextType = {
-  user: any;
-  setUser: (user: any) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { data } = useFetchProfileQuery();
-  const [user, setUser] = useState(data?.user || null);
+  const [user, setUser] = useState<User | null>(data?.user || null);
 
   useEffect(() => {
     if (data?.user) {

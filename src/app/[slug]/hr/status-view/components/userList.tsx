@@ -10,6 +10,9 @@ import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 const UserList: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
+
+  console.log('employeesData', employeesData)
+  
   const [deleteEmployee] = useDeleteEmployeMutation();
   const {currentData} = useFetchSelectedCompanyQuery();
 

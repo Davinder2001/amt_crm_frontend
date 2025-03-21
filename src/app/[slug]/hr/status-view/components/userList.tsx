@@ -57,7 +57,7 @@ const UserList: React.FC = () => {
   return (
     <div>
       <h2>Employees List</h2>
-      <table style={{ border: '1px solid black', borderCollapse: 'collapse' }}>
+      <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr>
             <th style={{ border: '1px solid black', padding: '4px' }}>Sr. No</th>

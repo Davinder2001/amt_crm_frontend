@@ -49,7 +49,8 @@ const Profile: React.FC = () => {
         <div className="dropdown">
           {/* Profile Icon as Dropdown Trigger */}
           <FaUserCircle
-            size={35}
+            size={30}
+            color='#009693'
             className="profile-icon"
             onClick={() => setIsOpen(!isOpen)}
           />

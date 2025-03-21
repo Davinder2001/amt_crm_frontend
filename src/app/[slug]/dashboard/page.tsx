@@ -1,8 +1,14 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import the hook
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const Page = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Overview'); // Update breadcrumb title
+  }, []);
   // Fetch users data from the API
   const { data, error, isLoading } = useFetchUsersQuery();
 
@@ -11,8 +17,6 @@ const Page = () => {
 
   return (
     <div>
-      <h2>Admin Dashboard</h2>
-
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (

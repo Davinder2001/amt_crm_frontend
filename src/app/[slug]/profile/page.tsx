@@ -1,10 +1,16 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import ChangePassword from "./components/changePassword";
 import { useFetchProfileQuery } from "@/slices/auth/authApi";
+import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 
 const Page = () => {
   const { data, isLoading, isError } = useFetchProfileQuery();
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Profile'); // Update breadcrumb title
+  }, []);
 
   if (isLoading) return <p>Loading profile...</p>;
   if (isError) return <p>Failed to load profile.</p>;

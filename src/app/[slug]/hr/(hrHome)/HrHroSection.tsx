@@ -54,7 +54,7 @@ const HrHeroSection = () => {
           display: flex;
           justify-content: space-between;
           gap: 20px;
-          padding: 20px;
+          padding: 20px 0px;
           background: #f7f9fc;
           border-radius: 10px;
         }

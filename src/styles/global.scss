@@ -3,62 +3,60 @@
     src: url("/Fonts/Dm_Sans/static/DMSans-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: "DMSans";
     src: url("/Fonts/Dm_Sans/static/DMSans-Medium.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: "DMSans";
     src: url("/Fonts/Dm_Sans/static/DMSans-SemiBold.ttf") format("truetype");
     font-weight: 600;
     font-style: normal;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: "DMSans";
     src: url("/Fonts/Dm_Sans/static/DMSans-Bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: "DMSans";
     src: url("/Fonts/Dm_Sans/static/DMSans-ExtraBold.ttf") format("truetype");
     font-weight: 800;
     font-style: normal;
-  }
-  
-  @font-face {
+}
+
+@font-face {
     font-family: "DMSans";
     src: url("/Fonts/Dm_Sans/static/DMSans-Black.ttf") format("truetype");
     font-weight: 900;
     font-style: normal;
-  }
-  
-  
+}
 
-  
-  body {
+
+
+
+body {
     margin: 0;
     padding: 0;
     font-family: "DMSans", sans-serif;
     font-weight: 400;
-  }
-  
+    background-color: #F1F9F9;
+}
+
 
 
 
 .account {
     display: flex;
     justify-content: flex-end;
-    padding: 10px 20px;
-    background-color: #f3f4f6;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 
     .profile-icon {
         cursor: pointer;
@@ -130,19 +128,40 @@
 
 // ********* Sidebar css ********* //
 .sidebar {
-    ul {
+    max-width: 15%;
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background-color: #fff;
 
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;
+        border-bottom: 1px solid #e5e7eb;
+        height: 100px;
+        padding: 0px 20px;
+        a{
+            text-decoration: none;
+            color: #222222;
+        }
+    }
+
+    ul {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 20px;
+        padding: 20px;
 
         li {
+            font-size: 18px;
             a {
                 text-decoration: none;
                 display: flex;
-                gap: 10px;
-                font-size: 20px;
+                gap: 20px;
+                font-size: 18px;
             }
         }
     }
@@ -158,13 +177,11 @@
 
 .main {
     display: flex;
-
-    .sidebar {
-        width: 20%;
-    }
+    gap: 20px;
+    overflow: auto;
 
     .main-content {
-       flex: 1;
+        flex: 1;
     }
 }
 
@@ -172,16 +189,17 @@
 .hr_navigation {
     display: flex;
     gap: 15px;
-}
-
-.hr_navigation {
-
+    justify-content: flex-end;
+    align-items: center;
     a {
         text-decoration: none;
+        display: flex;
+        gap: 10px;
         color: white;
         background-color: #009693;
         padding: 5px 10px;
         border-radius: 5px;
+        border-radius: 50px;
     }
 }
 
@@ -196,8 +214,8 @@
 }
 
 .add-employee-form form input {
-    padding:10px;
-    font-size:16px;
+    padding: 10px;
+    font-size: 16px;
 }
 
 
@@ -207,15 +225,16 @@
     align-items: center;
     gap: 20px;
 }
+
 .login-card {
     display: flex;
     flex-direction: column;
 }
 
 .login-card form {
-    display:flex;
-    flex-direction:column;
-    gap:20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 
 
     input {
@@ -224,7 +243,7 @@
     }
 
     button {
-        padding:  10px;
+        padding: 10px;
         cursor: pointer;
     }
 

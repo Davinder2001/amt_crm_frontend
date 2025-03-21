@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import InviteEmployeeForm from './InviteEmployeeForm';
+import { FaPlus } from 'react-icons/fa';
 
 const HrNavigation = () => {
   // State to control modal visibility
@@ -17,13 +18,14 @@ const HrNavigation = () => {
   return (
     <>
       <div className="hr_navigation">
-        <Link href={`/${companySlug}/hr/add-employee`}>Add Employee</Link>
+        <Link href={`/${companySlug}/hr/add-employee`}><FaPlus/><span>Add Employee</span></Link>
         <a href="#" onClick={(e) => { e.preventDefault(); setInviteModalOpen(true); }}>
-          Invite Employee
+          <FaPlus/>
+          <span>Invite Employee</span>
         </a>
-        <Link href={`/${companySlug}/hr/status-view`}>Status View</Link>
-        <Link href={`/${companySlug}/hr/employee-salary`}>Employee Salary</Link>
-        <Link href={`/${companySlug}/hr/attendence`}>Attendence</Link>
+        <Link href={`/${companySlug}/hr/status-view`}><FaPlus/><span>Status View</span></Link>
+        <Link href={`/${companySlug}/hr/employee-salary`}><FaPlus/><span>Employee Salary</span></Link>
+        <Link href={`/${companySlug}/hr/attendence`}><FaPlus/><span>Attendence</span></Link>
       </div>
 
       {/* Render InviteEmployeeForm as a popup when state is true */}

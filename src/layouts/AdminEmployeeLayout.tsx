@@ -24,7 +24,7 @@ export default function AdminEmployeeLayout({
         <div className="main-content">
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </div>
         <ToastContainer autoClose={2000} />
       </div>

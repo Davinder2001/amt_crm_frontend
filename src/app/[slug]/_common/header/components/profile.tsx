@@ -2,18 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { toast } from "react-toastify";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi"; // Assuming the API slice is correct
+import Cookies from "js-cookie";
+import {useRouter} from 'next/navigation'
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   // Fetch company slug
   const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
   // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
-  
+
   // Handle authentication and cookie check
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -30,10 +32,11 @@ const Profile: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    document.cookie =
-      "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    Cookies.remove('access_token');
+    Cookies.remove('user_type');
+    Cookies.remove('company_slug');
     setIsAuthenticated(false);
-    toast.success("✅ Logged out successfully!");
+    router.push('/login')
   };
 
   // Handle loading state or missing companySlug

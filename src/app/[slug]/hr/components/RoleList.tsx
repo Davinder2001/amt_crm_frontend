@@ -6,13 +6,6 @@ import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 
-interface Role {
-  id: number;
-  name: string;
-  company_id: string;
-  permissions: { id: number; name: string }[];
-}
-
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();

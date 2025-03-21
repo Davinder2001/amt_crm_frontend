@@ -1,37 +1,5 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
-interface Role {
-  id: number;
-  name: string;
-}
-
-interface Employee {
-  id: number;
-  name: string;
-  email: string;
-  number: string;
-  salary: string;
-  role: string;
-  password: string;
-  company_id: string; 
-  company_name: string;
-  company_slug: string;
-  user_status: string;
-  roles: Role[]; 
-  meta?: {
-    dateOfHire?: string;
-    joiningDate?: string;
-    shiftTimings?: string;
-  };
-  dateOfHire: string;
-  joiningDate: string;
-  shiftTimings: string;
-}
-
-interface EmployeesResponse {
-  employees: Employee[];
-}
-
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchEmployes: builder.query<EmployeesResponse, void>({

@@ -6,22 +6,6 @@ import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface Role {
-  id: number;
-  name: string;
-}
-
-interface FetchEmployee {
-  id: number;
-  name: string;
-  email: string;
-  company_id: string;
-  user_status: string;
-  company_slug: string;
-  roles: Role[];
-  number: string;
-  company_name: string;
-}
 
 const UserList: React.FC = () => {
   const router = useRouter();
@@ -29,7 +13,7 @@ const UserList: React.FC = () => {
   const [deleteEmployee] = useDeleteEmployeMutation();
 
   // Use type assertion for employeesData
-  const employees: FetchEmployee[] = employeesData?.employees.map((emp) => ({
+  const employees: Employee[] = employeesData?.employees.map((emp) => ({
     ...emp,
     company_id: emp.company_id || 'Unknown',
     company_slug: emp.company_slug || 'unknown-slug',
@@ -42,7 +26,7 @@ const UserList: React.FC = () => {
   if (error) return <p>Error fetching employees.</p>;
   if (employees.length === 0) return <p>No employees found.</p>;
 
-  const update = (employee: FetchEmployee) => {
+  const update = (employee: Employee) => {
     if (!employee.company_slug) {
       toast.error('Company slug not found for employee');
       return;

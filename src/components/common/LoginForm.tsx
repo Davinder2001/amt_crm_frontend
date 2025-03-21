@@ -21,16 +21,14 @@ const LoginForm = () => {
 
     try {
       const result = await login({ number, password }).unwrap();
-      toast.success('Login successful');
-
+      toast.success(result.message);
       // Set cookies
       Cookies.set('access_token', result.access_token, { path: '/' });
       Cookies.set('user_type', result.user.user_type, { path: '/' });
 
-      // Redirect to user's company_slug URL
-      if (result?.user?.company_slug) {
-        router.push(`/${result.user.company_slug}/dashboard`);
-      }
+      // Redirect to home
+      router.push('/');
+      router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Login failed");
@@ -45,8 +43,8 @@ const LoginForm = () => {
     Cookies.remove('user_type');
     Cookies.remove('company_slug');
     setUser(null);
-    router.push('/');
-    toast.success('Logged out successfully!');
+    router.push('/login');
+    router.refresh();
   };
 
   const isLoggedIn = !!user;

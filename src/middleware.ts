@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
 
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
-    if (pathname !== '/login') {
+    if (pathname !== '/login' && pathname!== '/forget-password') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();

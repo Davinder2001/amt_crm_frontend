@@ -13,7 +13,6 @@ const Page = () => {
   
     try {
       await sendCompanyId({ id }).unwrap();
-      alert('Company selected successfully!');
     } catch (error) {
       console.error(error);
       alert('Failed to select company. Please try again.');

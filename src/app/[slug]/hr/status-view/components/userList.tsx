@@ -5,57 +5,35 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
-
-interface Role {
-  id: number;
-  name: string;
-}
-
-interface FetchEmployee {
-  id: number;
-  name: string;
-  email: string;
-  company_id: string;
-  user_status: string;
-  company_slug: string;
-  roles: Role[];
-  number: string;
-  company_name: string;
-}
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const UserList: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
+  const {currentData} = useFetchSelectedCompanyQuery();
 
   // Use type assertion for employeesData
-  const employees: FetchEmployee[] = employeesData?.employees.map((emp) => ({
-    ...emp,
-    company_id: emp.company_id || 'Unknown',
-    company_slug: emp.company_slug || 'unknown-slug',
-    roles: emp.roles || [],
-    number: emp.number || 'N/A',
-    company_name: emp.company_name || 'Unknown',
-  })) ?? [];
+  const employees: Employee[] = employeesData?.employees ?? [];
 
   if (isLoading) return <p>Loading employees...</p>;
   if (error) return <p>Error fetching employees.</p>;
   if (employees.length === 0) return <p>No employees found.</p>;
 
-  const update = (employee: FetchEmployee) => {
-    if (!employee.company_slug) {
+  const update = (employee: Employee) => {
+    if (!currentData?.selected_company.company_slug) {
       toast.error('Company slug not found for employee');
       return;
     }
-    router.push(`/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`);
+    router.push(`/${currentData?.selected_company.company_slug}/hr/status-view/edit-employee/${employee.id}`);
   };
 
-  const view = (employee: FetchEmployee) => {
-    if (!employee.company_slug) {
+  const view = (employee: Employee) => {
+    if (!currentData?.selected_company.company_slug) {
       toast.error('Company slug not found for employee');
       return;
     }
-    router.push(`/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`);
+    router.push(`/${currentData?.selected_company.company_slug}/hr/status-view/view-employee/${employee.id}`);
   };
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

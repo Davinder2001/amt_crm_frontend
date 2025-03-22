@@ -162,6 +162,7 @@ body {
                 display: flex;
                 gap: 20px;
                 font-size: 18px;
+                color: black;
             }
         }
     }
@@ -191,6 +192,7 @@ body {
     gap: 15px;
     justify-content: flex-end;
     align-items: center;
+    padding: 40px 0;
     a {
         text-decoration: none;
         display: flex;
@@ -200,6 +202,7 @@ body {
         padding: 5px 10px;
         border-radius: 5px;
         border-radius: 50px;
+        padding: 12px 30px;
     }
 }
 

@@ -6,44 +6,16 @@ import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 import HrNavigation from "../components/hrNavigation";
 
-// Define a more specific error response structure
-interface ErrorResponse {
-  data?: {
-    message?: string;
-    errors?: {
-      [key: string]: string[];
-    };
-  };
-  message?: string;
-}
-
-interface Permission {
-  id: number;
-  name: string;
-  guard_name: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface PermissionsResponse {
-  permissions: Permission[];
-}
-
 const Page: React.FC = () => {
-  // Fetch permissions using the RTK Query hook
   const { data, isLoading: isFetching, error } = useFetchPermissionsQuery();
-  const fetchedPermissions: Permission[] = (data as PermissionsResponse)?.permissions || []; // Safely extract permissions
-
+  const permissions = data || [];
   const [createRole, { isLoading }] = useCreateRoleMutation();
 
-  // State for new role inputs.
+  
   const [newRoleName, setNewRoleName] = useState<string>("");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-
-  // State for managing tabs.
   const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
 
-  // Handle creating a new role.
   const handleCreateRole = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newRoleName.trim() === "") {
@@ -52,62 +24,83 @@ const Page: React.FC = () => {
     }
 
     try {
-      // Sending the new role to the API
       const response = await createRole({
         name: newRoleName,
         permissions: selectedPermissions,
       }).unwrap();
 
       toast.success(response.message || 'Role created successfully');
-      setNewRoleName(""); // Reset role name input
-      setSelectedPermissions([]); // Reset permissions selection
-    } catch (err: unknown) {
-      // Handle error and check for type
-      if (err && typeof err === 'object' && 'data' in err) {
-        const error = err as ErrorResponse; // Type assertion
-        toast.error(error?.data?.message || "Error creating role");
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+      setNewRoleName("");
+      setSelectedPermissions([]);
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Error creating role");
     }
   };
 
-  if (isFetching) {
-    return <div>Loading permissions...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading permissions</div>;
-  }
+  if (isFetching) return <div style={{ textAlign: 'center', padding: '40px' }}>Loading permissions...</div>;
+  if (error) return <div style={{ textAlign: 'center', color: 'red', padding: '40px' }}>Error loading permissions</div>;
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 shadow-md rounded-md">
+    <div
+      className="max-w-2xl mx-auto"
+      style={{
+        background: '#ffffff',
+        padding: '40px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+        marginTop: '40px',
+      }}
+    >
       <HrNavigation />
-      <h2 className="text-2xl font-bold mb-4">Create a Role</h2>
+
+      <h2
+        style={{
+          fontSize: '30px',
+          fontWeight: '700',
+          textAlign: 'center',
+          marginBottom: '30px',
+          color: '#333',
+        }}
+      >
+        Create a Role
+      </h2>
+
       <form onSubmit={handleCreateRole}>
-        {/* Role Name Input */}
-        <label className="block mb-2 font-medium">Role Name:</label>
-        <input
-          type="text"
-          value={newRoleName}
-          onChange={(e) => setNewRoleName(e.target.value)}
-          placeholder="Enter role name"
-          className="w-full p-2 mb-3 border rounded-md"
-          required
-        />
+
+        {/* Role Name */}
+        <div style={{ marginBottom: '25px' }}>
+          <label style={{ fontSize: '18px', fontWeight: '600', marginBottom: '10px', display: 'block' }}>Role Name:</label>
+          <input
+            type="text"
+            value={newRoleName}
+            onChange={(e) => setNewRoleName(e.target.value)}
+            placeholder="Enter role name"
+            style={{
+              width: '100%',
+              padding: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              fontSize: '16px',
+              outline: 'none',
+            }}
+            required
+          />
+        </div>
 
         {/* Tab Navigation */}
-        <div style={{ marginBottom: '12px' }}>
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '30px' }}>
           <button
             type="button"
             onClick={() => setSelectedTab('user')}
             style={{
-              padding: '10px',
-              marginRight: '10px',
-              backgroundColor: selectedTab === 'user' ? '#0070f3' : '#ccc',
-              color: '#fff',
-              border: 'none',
+              flex: 1,
+              padding: '14px 0',
+              borderRadius: '8px',
+              backgroundColor: selectedTab === 'user' ? '#2563EB' : '#E5E7EB',
+              color: selectedTab === 'user' ? '#fff' : '#333',
+              fontWeight: '600',
               cursor: 'pointer',
+              border: 'none',
             }}
           >
             User Permissions
@@ -116,24 +109,27 @@ const Page: React.FC = () => {
             type="button"
             onClick={() => setSelectedTab('other')}
             style={{
-              padding: '10px',
-              backgroundColor: selectedTab === 'other' ? '#0070f3' : '#ccc',
-              color: '#fff',
-              border: 'none',
+              flex: 1,
+              padding: '14px 0',
+              borderRadius: '8px',
+              backgroundColor: selectedTab === 'other' ? '#2563EB' : '#E5E7EB',
+              color: selectedTab === 'other' ? '#fff' : '#333',
+              fontWeight: '600',
               cursor: 'pointer',
+              border: 'none',
             }}
           >
             Other Permissions
           </button>
         </div>
 
-        {/* Conditional Rendering Based on Tab */}
+        {/* Permissions List */}
         {selectedTab === 'user' && (
-          <div style={{ marginBottom: '12px' }}>
-            <label>User Permissions:</label>
-            <div className="mb-4">
-              {fetchedPermissions.map((perm) => (
-                <label key={perm.id} className="flex items-center space-x-2 mb-2">
+          <div style={{ marginBottom: '30px' }}>
+            <label style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px', display: 'block' }}>User Permissions:</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {permissions?.map((perm: any) => (
+                <label key={perm.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <input
                     type="checkbox"
                     value={perm.name}
@@ -146,8 +142,9 @@ const Page: React.FC = () => {
                           : [...prev, value]
                       );
                     }}
+                    style={{ width: '18px', height: '18px' }}
                   />
-                  <span>{perm.name}</span>
+                  <span style={{ fontSize: '16px', color: '#333' }}>{perm.name}</span>
                 </label>
               ))}
             </div>
@@ -155,20 +152,30 @@ const Page: React.FC = () => {
         )}
 
         {selectedTab === 'other' && (
-          <div style={{ marginBottom: '12px' }}>
-            <label>Other Permissions:</label>
-            <div className="mb-4">
-              {/* Empty for now, can add future functionality */}
-              <p>No other permissions available yet.</p>
-            </div>
+          <div style={{ marginBottom: '30px' }}>
+            <label style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px', display: 'block' }}>Other Permissions:</label>
+            <p style={{ color: '#555', fontSize: '16px' }}>No other permissions available yet.</p>
           </div>
         )}
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+          style={{
+            width: '100%',
+            backgroundColor: '#2563EB',
+            color: '#fff',
+            padding: '16px',
+            borderRadius: '8px',
+            fontSize: '18px',
+            fontWeight: '600',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            border: 'none',
+            transition: 'background 0.3s ease',
+          }}
           disabled={isLoading}
+          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#1E40AF')}
+          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#2563EB')}
         >
           {isLoading ? "Creating..." : "Create Role"}
         </button>

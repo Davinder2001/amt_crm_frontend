@@ -207,10 +207,15 @@ body {
 
 
 
-.add-employee-form form {
+.add-employee-form form .employee-fields-wrapper{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 31px;
+    .employee-field{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 .add-employee-form form input {

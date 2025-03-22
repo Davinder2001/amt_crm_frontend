@@ -1,8 +1,16 @@
 import userCreateApiSlice from "./permissionCreateSlice";
 
+export interface Permission {
+  id: number;
+  name: string;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 const permissionApi = userCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchPermissions: builder.query<PermissionsResponse, void>({
+    fetchPermissions: builder.query<Permission[], void>({
       query: () => ({
         url: "permissions",
         method: "GET",
@@ -14,5 +22,4 @@ const permissionApi = userCreateApiSlice.injectEndpoints({
 });
 
 export const { useFetchPermissionsQuery } = permissionApi;
-
 export default permissionApi;

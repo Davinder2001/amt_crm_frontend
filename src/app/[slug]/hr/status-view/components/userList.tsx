@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const UserList: React.FC = () => {
   const router = useRouter();
@@ -14,7 +13,6 @@ const UserList: React.FC = () => {
   console.log('employeesData', employeesData)
   
   const [deleteEmployee] = useDeleteEmployeMutation();
-  const {currentData} = useFetchSelectedCompanyQuery();
 
   // Use type assertion for employeesData
   const employees: Employee[] = employeesData?.employees ?? [];
@@ -24,19 +22,19 @@ const UserList: React.FC = () => {
   if (employees.length === 0) return <p>No employees found.</p>;
 
   const update = (employee: Employee) => {
-    if (!currentData?.selected_company.company_slug) {
+    if (!employee.company_slug) {
       toast.error('Company slug not found for employee');
       return;
     }
-    router.push(`/${currentData?.selected_company.company_slug}/hr/status-view/edit-employee/${employee.id}`);
+    router.push(`/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`);
   };
 
   const view = (employee: Employee) => {
-    if (!currentData?.selected_company.company_slug) {
+    if (!employee.company_slug) {
       toast.error('Company slug not found for employee');
       return;
     }
-    router.push(`/${currentData?.selected_company.company_slug}/hr/status-view/view-employee/${employee.id}`);
+    router.push(`/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`);
   };
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

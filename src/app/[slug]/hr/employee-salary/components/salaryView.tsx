@@ -9,14 +9,11 @@ import {
 } from "@/slices/employe/employe";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEnvelope } from "react-icons/fa";
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
-
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
-  const {currentData} = useFetchSelectedCompanyQuery();
 
   const employees: Employee[] = employeesData?.employees ?? [];
 
@@ -43,6 +40,14 @@ const SalaryView: React.FC = () => {
           : "Failed to delete employee.";
       toast.error(errorMessage);
     }
+  };
+
+  const view = (employee: Employee) => {
+    if (!employee.company_slug) {
+      toast.error('Company slug not found for employee');
+      return;
+    }
+    router.push(`/${employee.company_slug}/hr/employee-salary/pay-slip/${employee.id}`);
   };
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -85,13 +90,13 @@ const SalaryView: React.FC = () => {
                   ? employee.roles.map((role) => capitalize(role.name)).join(", ")
                   : "N/A"}
               </td>
-              <td> <FaEnvelope/> slip</td>
+              <td onClick={() => view(employee)}> <button><FaEnvelope /> slip</button> </td>
               <td>{employee.user_status || "N/A"}</td>
               <td>
                 <button
                   onClick={() =>
                     navigateTo(
-                      `/${currentData?.selected_company.company_slug}/hr/status-view/view-employee/${employee.id}`,
+                      `/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`,
                       "Company slug not found"
                     )
                   }
@@ -102,7 +107,7 @@ const SalaryView: React.FC = () => {
                 <button
                   onClick={() =>
                     navigateTo(
-                      `/${currentData?.selected_company.company_slug}/hr/status-view/edit-employee/${employee.id}`,
+                      `/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`,
                       "Company slug not found"
                     )
                   }

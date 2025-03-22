@@ -6,7 +6,7 @@ function page() {
     const { setTitle } = useBreadcrumb();
 
     useEffect(() => {
-        setTitle('Store'); // Update breadcrumb title
+        setTitle('Services'); // Update breadcrumb title
     }, []);
     return (
         <>

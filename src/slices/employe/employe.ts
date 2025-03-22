@@ -33,6 +33,14 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Employe"],
     }),
+    fetchPaySlipById: builder.query<Employee, number>({
+      query: (id) => `/employee/slip/view/${id}`,
+      providesTags: ["Employe"],
+    }),
+    downloadPaySlipById: builder.query<Employee, number>({
+      query: (id) => `/employee/slip/download/${id}`,
+      providesTags: ["Employe"],
+    }),
   }),
 });
 
@@ -42,6 +50,8 @@ export const {
   useCreateEmployeMutation,
   useUpdateEmployeMutation,
   useDeleteEmployeMutation,
+  useFetchPaySlipByIdQuery,
+  useDownloadPaySlipByIdQuery,
 } = employeCreateApi;
 
 export default employeCreateApi;

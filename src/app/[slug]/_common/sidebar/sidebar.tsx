@@ -27,7 +27,7 @@ const Sidebar = () => {
     { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
     { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
     { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
-    { name: "Order", path: "order", icon: <FaBox /> },
+    { name: "Orders", path: "orders", icon: <FaBox /> },
     { name: "Settings", path: "settings", icon: <FaCog /> },
   ];
 

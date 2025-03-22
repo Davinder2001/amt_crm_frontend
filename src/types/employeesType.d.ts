@@ -9,7 +9,6 @@ interface Employee {
     email: string;
     number: string;
     salary: string;
-    role: string;
     password: string;
     profile_picture: string;
     company_id: string;
@@ -21,6 +20,8 @@ interface Employee {
         dateOfHire?: string;
         joiningDate?: string;
         shiftTimings?: string;
+        address?: string;
+        invoive?: string;
         city?: string;
         nationality?: string;
         religion?: string;

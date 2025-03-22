@@ -1,6 +1,13 @@
-import React from 'react'
+'use client';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import React, { useEffect } from 'react'
 
 const Page = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Vehicle'); // Update breadcrumb title
+  }, []);
   return (
     <div>Page</div>
   )

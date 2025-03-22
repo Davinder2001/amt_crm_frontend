@@ -1,11 +1,16 @@
-import React from 'react'
+'use client';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import React, { useEffect } from 'react'
 
-const Page = () => {
-    return (
-        <div>
-            Settings
-        </div>
-    )
+const page = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Settings'); // Update breadcrumb title
+  }, []);
+  return (
+    <div>Settings page here</div>
+  )
 }
 
-export default Page
+export default page

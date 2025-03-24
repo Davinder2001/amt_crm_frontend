@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const Page = () => {
-  const { data: profile } = useFetchProfileQuery();
+  const { data: profile, refetch} = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation(); 
   const companies = profile?.user?.companies;
 
@@ -15,6 +15,7 @@ const Page = () => {
       const firstCompany = companies[0];
       Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
     }
+    refetch();
   }, [companies]);
 
   const handleClick = async (companySlug: string, id: number) => {

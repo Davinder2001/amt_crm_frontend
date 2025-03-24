@@ -43,18 +43,21 @@ const LoginForm = () => {
     }
   };
 
-  const handleLogout = () => {
-    // Clear cookies
-    Cookies.remove('access_token');
-    Cookies.remove('user_type');
-    Cookies.remove('company_slug');
-    
-    // Clear the user context
-    setUser(null);
+  const handleLogout = async () => {
+    try {
+      // Clear cookies
+      Cookies.remove('access_token');
+      Cookies.remove('user_type');
+      Cookies.remove('company_slug');
 
-    // Redirect to login page and force a page refresh
-    router.push('/login');
-    router.refresh(); // Ensure the UI is updated and logged-out state is reflected
+      // Clear the user context
+      setUser(null);
+      // Redirect to login page and force a page refresh
+      router.push('/login');
+      router.refresh(); // Ensure the UI is updated and logged-out state is reflected
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   const isLoggedIn = !!user;

@@ -3,16 +3,17 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi"; // Assuming the API slice is correct
+import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; // Assuming the API slice is correct
 import Cookies from "js-cookie";
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
+  const [logout] = useLogoutMutation();
 
   // Fetch company slug
-  const { data: selectedCompany} = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
@@ -31,13 +32,27 @@ const Profile: React.FC = () => {
     setIsAuthenticated(!!cookies.access_token);
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('user_type');
-    Cookies.remove('company_slug');
-    setIsAuthenticated(false);
-    router.push('/login')
+  const handleLogout = async () => {
+    try {
+      await logout();
+      Cookies.remove('access_token');
+      Cookies.remove('user_type');
+      Cookies.remove('company_slug');
+      setIsAuthenticated(false);
+      router.push('/login')
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
+
+  // Automatically update UI based on cookies (after logout)
+  useEffect(() => {
+    const accessToken = Cookies.get('access_token');
+    const userType = Cookies.get('user_type');
+    if (!accessToken || !userType) {
+      setIsAuthenticated(false); // Ensure context is cleared if cookies are missing
+    }
+  }, []);
 
   // Handle loading state or missing companySlug
   // if (isFetching) return <p>Loading...</p>;

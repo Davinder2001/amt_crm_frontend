@@ -1,16 +1,25 @@
 'use client'
 import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const Page = () => {
   const { data: profile } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation(); 
   const companies = profile?.user?.companies;
+
+  // Set the first company's slug in cookies when the component mounts
+  useEffect(() => {
+    if (Array.isArray(companies) && companies.length > 0) {
+      const firstCompany = companies[0];
+      Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+    }
+  }, [companies]);
+
   const handleClick = async (companySlug: string, id: number) => {
     Cookies.set('company_slug', companySlug, { path: '/' });
-  
+
     try {
       await sendCompanyId({ id }).unwrap();
     } catch (error) {
@@ -18,7 +27,6 @@ const Page = () => {
       alert('Failed to select company. Please try again.');
     }    
   };
-  
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>

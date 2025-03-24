@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';
@@ -28,6 +28,9 @@ const LoginForm = () => {
       Cookies.set('access_token', result.access_token, { path: '/' });
       Cookies.set('user_type', result.user.user_type, { path: '/' });
 
+      // Set user in context
+      setUser(result.user);
+
       // Redirect to home
       router.push('/');
       router.refresh();
@@ -40,16 +43,33 @@ const LoginForm = () => {
     }
   };
 
-  const handleLogout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('user_type');
-    Cookies.remove('company_slug');
-    setUser(null);
-    router.push('/login');
-    router.refresh();
+  const handleLogout = async () => {
+    try {
+      // Clear cookies
+      Cookies.remove('access_token');
+      Cookies.remove('user_type');
+      Cookies.remove('company_slug');
+
+      // Clear the user context
+      setUser(null);
+      // Redirect to login page and force a page refresh
+      router.push('/login');
+      router.refresh(); // Ensure the UI is updated and logged-out state is reflected
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   const isLoggedIn = !!user;
+
+  // Automatically update UI based on cookies (after logout)
+  useEffect(() => {
+    const accessToken = Cookies.get('access_token');
+    const userType = Cookies.get('user_type');
+    if (!accessToken || !userType) {
+      setUser(null); // Ensure context is cleared if cookies are missing
+    }
+  }, []);
 
   return (
     <div className=''>

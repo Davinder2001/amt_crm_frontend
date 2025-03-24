@@ -15,7 +15,6 @@ const Page = () => {
       const firstCompany = companies[0];
       Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
     }
-    refetch();
   }, [companies]);
 
   const handleClick = async (companySlug: string, id: number) => {

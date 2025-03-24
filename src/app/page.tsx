@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const Page = () => {
-  const { data: profile, refetch} = useFetchProfileQuery();
+  const { data: profile } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation(); 
   const companies = profile?.user?.companies;
 

@@ -2,12 +2,12 @@
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
 
-function page() {
+function Page() {
     const { setTitle } = useBreadcrumb();
 
     useEffect(() => {
         setTitle('Catalogue'); // Update breadcrumb title
-    }, []);
+    }, [setTitle]);
     return (
         <>
             Catalogue page here
@@ -15,4 +15,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

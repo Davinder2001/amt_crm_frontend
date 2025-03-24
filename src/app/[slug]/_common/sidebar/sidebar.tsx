@@ -3,18 +3,17 @@ import React from "react";
 import Link from "next/link";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import {
-  FaTachometerAlt, FaStore, FaUserTie, FaUserShield, 
-  FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, 
-  FaShoppingCart, FaCogs, FaClipboardList, FaBox, FaKey 
+  FaTachometerAlt, FaStore, FaUserTie, FaUserShield,
+  FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, FaClipboardList, FaBox
 } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu"; // Services Icon
 
 const Sidebar = () => {
-  const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany} = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  if (isFetching) return <p className="loading-text">Loading...</p>;
-  if (!companySlug) return <p className="error-text">No company data found</p>;
+  // if (isFetching) return <p className="loading-text">Loading...</p>;
+  // if (!companySlug) return <p className="error-text">No company data found</p>;
 
   const menuItems = [
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
@@ -35,7 +34,7 @@ const Sidebar = () => {
     <aside>
       <div className="sidebar-header">
         <Link href={'/'}>AMT CRM</Link>
-        </div>
+      </div>
       <nav>
         <ul className="menu-list">
           {menuItems.map(({ name, path, icon, hasSubmenu }) => (

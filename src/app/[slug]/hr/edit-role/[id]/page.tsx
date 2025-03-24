@@ -85,7 +85,7 @@ const EditRolePage: React.FC = () => {
   };
 
   // Safely access permissions data
-  const permissionsList: Permission[] = permissionsData?.permissions || [];
+  const permissionsList: Permission[] = permissionsData || [];
 
   return (
     <div style={{ padding: '24px' }}>

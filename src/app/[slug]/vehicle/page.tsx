@@ -7,7 +7,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Vehicle'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
   return (
     <div>Page</div>
   )

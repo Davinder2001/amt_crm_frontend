@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useGetTasksQuery, useUpdateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import for fetching users
-import { Task } from '@/slices/tasks/taskApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

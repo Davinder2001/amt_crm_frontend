@@ -3,35 +3,20 @@ import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useDownloadPaySlipByIdQuery, useFetchPaySlipByIdQuery } from '@/slices/employe/employe';
+import { useFetchPaySlipByIdQuery } from '@/slices/employe/employe';
 
 function Page() {
     const { setTitle } = useBreadcrumb();
     const { id } = useParams() as { id: string };
     const { currentData: user } = useFetchPaySlipByIdQuery(Number(id));
-    const { currentData: downloadData } = useDownloadPaySlipByIdQuery(Number(id));
 
     useEffect(() => {
         setTitle('Pay Slip'); // Update breadcrumb title
-    }, []);
+    }, [setTitle]);
 
     // Function to print the pay slip
     const handlePrint = () => {
         window.print();
-    };
-
-    // Function to download the pay slip
-    const handleSave = () => {
-        if (downloadData?.file_url) {
-            const link = document.createElement("a");
-            link.href = downloadData.file_url;
-            link.download = `PaySlip_${id}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            alert("Download failed: File not found.");
-        }
     };
 
     return (
@@ -63,15 +48,15 @@ function Page() {
                         </tr>
                     </thead>
                     <tbody>
-                        {user?.earnings?.map((earning, index) => (
+                        {/* {user?.earnings?.map((earning, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{earning.name}</td>
                                 <td>{earning.amount}</td>
-                                <td>{user.deductions[index]?.name || '-'}</td>
-                                <td>{user.deductions[index]?.amount || '-'}</td>
+                                <td>{user?.deductions?.[index]?.name || '-'}</td>
+                                <td>{user?.deductions?.[index]?.amount || '-'}</td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </table>
             </div>
@@ -79,7 +64,7 @@ function Page() {
                 <button onClick={handlePrint} className="print-button">
                     Print
                 </button>
-                <button onClick={handleSave} className="download-button">
+                <button className="download-button">
                     Save
                 </button>
             </div>

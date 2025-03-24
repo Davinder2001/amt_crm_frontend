@@ -4,7 +4,7 @@ import Profile from './components/profile'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import SearchBar from '../search/SearchBar';
 import Link from 'next/link';
-import { FaBell, FaRegBell } from 'react-icons/fa';
+import {FaRegBell } from 'react-icons/fa';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const Header = () => {

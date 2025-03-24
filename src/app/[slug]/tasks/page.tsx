@@ -9,7 +9,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Tasks Details of Employees'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
   return (
     <>
       <Navigation />

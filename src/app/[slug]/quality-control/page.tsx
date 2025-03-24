@@ -7,7 +7,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Quality Control'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
   return (
     <div>Quality Control</div>
   )

@@ -10,7 +10,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Profile'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
 
   if (isLoading) return <p>Loading profile...</p>;
   if (isError) return <p>Failed to load profile.</p>;

@@ -6,12 +6,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { Task } from '@/slices/tasks/taskApi';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-  const { data: selectedCompany , isLoading : profileLoading, error: profileError} = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
   const handleDelete = async (id: number) => {
@@ -60,11 +60,14 @@ const AllTasks: React.FC = () => {
                 <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.deadline}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                   <Link href={`/${companySlug}/tasks/edit-task/${task.id}`}>
-                    <button style={{ marginRight: '8px' }}>Edit</button>
+                    <FaEdit color='#222' />
                   </Link>
                   <button onClick={() => handleDelete(task.id)} disabled={isDeleting}>
-                    Delete
+                    <FaTrash color='#222' />
                   </button>
+                  <Link href={`/${companySlug}/tasks/view-task/${task.id}`}>
+                    <FaEye color='#222' />
+                  </Link>
                 </td>
               </tr>
             ))}

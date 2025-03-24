@@ -9,11 +9,11 @@ const HrNavigation = () => {
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
 
   // Fetch company slug
-  const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany} = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  if (isFetching) return <p>Loading...</p>;
-  if (!companySlug) return <p>No company data found</p>;
+  // if (isFetching) return <p>Loading...</p>;
+  // if (!companySlug) return <p>No company data found</p>;
 
   return (
     <>

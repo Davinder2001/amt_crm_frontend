@@ -21,7 +21,7 @@ interface Employee {
         joiningDate?: string;
         shiftTimings?: string;
         address?: string;
-        invoive?: string;
+        invoice?: string;
         city?: string;
         nationality?: string;
         religion?: string;

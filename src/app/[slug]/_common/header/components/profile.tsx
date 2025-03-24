@@ -12,7 +12,7 @@ const Profile: React.FC = () => {
   const router = useRouter();
 
   // Fetch company slug
-  const { data: selectedCompany, isFetching } = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany} = useFetchSelectedCompanyQuery();
   // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
@@ -40,8 +40,8 @@ const Profile: React.FC = () => {
   };
 
   // Handle loading state or missing companySlug
-  if (isFetching) return <p>Loading...</p>;
-  if (!companySlug) return <p>No company data found</p>;
+  // if (isFetching) return <p>Loading...</p>;
+  // if (!companySlug) return <p>No company data found</p>;
 
   return (
     <div className="account">

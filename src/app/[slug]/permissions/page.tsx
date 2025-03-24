@@ -8,7 +8,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Permissions'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
   return (
     <>
       <RoleList />

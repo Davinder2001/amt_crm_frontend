@@ -8,7 +8,7 @@ const Page = () => {
 
   useEffect(() => {
     setTitle('Overview'); // Update breadcrumb title
-  }, []);
+  }, [setTitle]);
   // Fetch users data from the API
   const { data, error, isLoading } = useFetchUsersQuery();
 

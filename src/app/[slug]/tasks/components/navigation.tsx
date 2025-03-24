@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import { FaPlus } from 'react-icons/fa';
 
 const Navigation: React.FC = () => {
   // Fetch company slug
@@ -15,7 +16,8 @@ const Navigation: React.FC = () => {
 
   return (
     <div>
-      <Link href={`/${companySlug}/tasks/add-task`}>Add Task</Link>
+      <Link href={`/${companySlug}/tasks/add-task`}> <FaPlus/> Add Task</Link>
+      <Link href={`/${companySlug}/tasks/task-timeline`}> <FaPlus/> Task Timeline</Link>
     </div>
   );
 };

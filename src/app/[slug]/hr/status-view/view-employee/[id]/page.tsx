@@ -115,6 +115,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchEmployesQuery } from '@/slices/employe/employe';
 import HrNavigation from '../../../components/hrNavigation';
+import Image from 'next/image';
 
 const ViewUserPage: React.FC = () => {
   const { id } = useParams() as { id: string };
@@ -144,10 +145,12 @@ const ViewUserPage: React.FC = () => {
           {firstLetter ?
             <h1>{firstLetter}</h1>
             :
-            <img
+            <Image
               src={user.profile_picture || 'https://via.placeholder.com/100'}
               alt={user.name}
               className="profile-image"
+              width={100}
+              height={100}
             />
           }
         </div>

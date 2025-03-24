@@ -2,8 +2,9 @@
 
 import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+// import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaCamera } from 'react-icons/fa';
+import Image from 'next/image';
 
 const videoConstraints = {
   width: 320,
@@ -12,9 +13,9 @@ const videoConstraints = {
 };
 
 const Page = () => {
-  const { currentData: company } = useFetchSelectedCompanyQuery();
-  const webcamRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState(null);
+  // const { currentData: company } = useFetchSelectedCompanyQuery();
+  const webcamRef = useRef<Webcam>(null);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [responseMsg, setResponseMsg] = useState('');
   const [showWebcam, setShowWebcam] = useState(false);
 
@@ -25,7 +26,7 @@ const Page = () => {
   };
 
   const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
+    const imageSrc = webcamRef.current ? webcamRef.current.getScreenshot() : null;
     setCapturedImage(imageSrc);
     setResponseMsg('Photo captured successfully ✅');
     setShowWebcam(false); // Close webcam after capture
@@ -82,7 +83,7 @@ const Page = () => {
       {capturedImage && (
         <div className="mt-4">
           <h2 className="font-semibold">Preview:</h2>
-          <img src={capturedImage} alt="Captured" className="border rounded mt-2" />
+          <Image src={capturedImage} alt="Captured" className="border rounded mt-2" width={100} height={100} />
         </div>
       )}
 

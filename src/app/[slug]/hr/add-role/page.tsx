@@ -1,17 +1,24 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 import HrNavigation from "../components/hrNavigation";
+import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 
 const Page: React.FC = () => {
-  const { data, isLoading: isFetching, error } = useFetchPermissionsQuery();
+
+  const { setTitle } = useBreadcrumb();
+  useEffect(() => {
+    setTitle('Add Role'); // Update breadcrumb title
+  }, [setTitle]);
+
+  const { data} = useFetchPermissionsQuery();
   const permissions = data || [];
   const [createRole, { isLoading }] = useCreateRoleMutation();
 
-  
+
   const [newRoleName, setNewRoleName] = useState<string>("");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
@@ -32,13 +39,17 @@ const Page: React.FC = () => {
       toast.success(response.message || 'Role created successfully');
       setNewRoleName("");
       setSelectedPermissions([]);
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Error creating role");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message || "Error creating role");
+      } else {
+        toast.error("Unknown error occurred");
+      }
     }
   };
 
-  if (isFetching) return <div style={{ textAlign: 'center', padding: '40px' }}>Loading permissions...</div>;
-  if (error) return <div style={{ textAlign: 'center', color: 'red', padding: '40px' }}>Error loading permissions</div>;
+  // if (isFetching) return <div style={{ textAlign: 'center', padding: '40px' }}>Loading permissions...</div>;
+  // if (error) return <div style={{ textAlign: 'center', color: 'red', padding: '40px' }}>Error loading permissions</div>;
 
   return (
     <div
@@ -128,7 +139,7 @@ const Page: React.FC = () => {
           <div style={{ marginBottom: '30px' }}>
             <label style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px', display: 'block' }}>User Permissions:</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {permissions?.map((perm: any) => (
+              {permissions?.map((perm) => (
                 <label key={perm.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <input
                     type="checkbox"

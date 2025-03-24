@@ -8,20 +8,6 @@ import { useFetchEmployesQuery, useUpdateEmployeMutation } from '@/slices/employ
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
 import HrNavigation from '../../../components/hrNavigation';
 
-interface Role {
-  id: number;
-  name: string;
-}
-
-interface Employee {
-  id: number;
-  name: string;
-  email: string;
-  number: string;
-  company_name: string;
-  roles: Role[];
-}
-
 const EditUserPage: React.FC = () => {
   const { id } = useParams() as { id: string };
   const { data: usersData, error: usersError, isLoading: usersLoading } = useFetchEmployesQuery();

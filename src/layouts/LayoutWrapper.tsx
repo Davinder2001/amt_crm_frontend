@@ -11,7 +11,7 @@ type LayoutWrapperProps = {
 };
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const { isFetching, error } = useFetchSelectedCompanyQuery();
+  const { isFetching} = useFetchSelectedCompanyQuery();
   const { user } = useUser();
   const role = user?.user_type;
 
@@ -21,11 +21,6 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
   if (isFetching) {
     return <Loader/>;  // You can replace this with a spinner or placeholder
   }
-
-  if (error) {
-    return <div>Error loading data</div>;  // Display some error message
-  }
-
   return <SelectedLayout>{children}</SelectedLayout>;
 };
 

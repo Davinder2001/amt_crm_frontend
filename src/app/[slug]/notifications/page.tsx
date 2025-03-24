@@ -5,6 +5,7 @@ const Page = () => {
     <div>
         <h2>
             Notifications
+            
         </h2>
     </div>
   )

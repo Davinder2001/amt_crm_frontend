@@ -13,6 +13,10 @@ import { FaEnvelope } from "react-icons/fa";
 const SalaryView: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployeesSalaryQuery();
+
+  console.log('employeesData', employeesData)
+
+
   const [deleteEmployee] = useDeleteEmployeMutation();
 
   const employees: Employee[] = employeesData?.employees ?? [];
@@ -65,7 +69,6 @@ const SalaryView: React.FC = () => {
             <th>Contact Number</th>
             <th>Join Date</th>
             <th>Salary</th>
-            <th>Extra Working Hours</th>
             <th>Shift Timings</th>
             <th>Roles</th>
             <th>Salary Slip</th>

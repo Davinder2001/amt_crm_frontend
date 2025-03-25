@@ -7,7 +7,7 @@ const Page: React.FC = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    setTitle('Add Employees'); // Update breadcrumb title
+    setTitle('Add Employee'); // Update breadcrumb title
   }, [setTitle]);
 
   return (

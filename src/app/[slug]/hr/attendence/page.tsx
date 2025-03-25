@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 // import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaCamera } from 'react-icons/fa';
 import Image from 'next/image';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const videoConstraints = {
   width: 320,
@@ -13,6 +14,12 @@ const videoConstraints = {
 };
 
 const Page = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Attendance'); // Update breadcrumb title
+  }, [setTitle]);
+
   // const { currentData: company } = useFetchSelectedCompanyQuery();
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);

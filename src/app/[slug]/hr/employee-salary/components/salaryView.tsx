@@ -39,7 +39,7 @@ const SalaryView: React.FC = () => {
     }
   };
 
-  const view = (employee: any) => {
+  const view = (employee: Employee) => {
     if (!employee.company_slug) {
       toast.error("Company slug not found for employee");
       return;
@@ -72,7 +72,7 @@ const SalaryView: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {employeesData.data.map((employee: any, index: number) => (
+          {employeesData.data.map((employee: Employee, index: number) => (
             <tr key={employee.id}>
               <td>{index + 1}</td>
               <td>{employee.name}</td>

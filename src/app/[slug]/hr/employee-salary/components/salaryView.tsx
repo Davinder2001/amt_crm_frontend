@@ -72,7 +72,7 @@ const SalaryView: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {employeesData.data.map((employee: Employee, index: number) => (
+          {employeesData.data.map((employee, index: number) => (
             <tr key={employee.id}>
               <td>{index + 1}</td>
               <td>{employee.name}</td>
@@ -82,7 +82,7 @@ const SalaryView: React.FC = () => {
               <td>{employee.employee_salary?.current_salary ?? "N/A"}</td>
               <td>
                 {employee.roles?.length
-                  ? employee.roles.map((role: any) => capitalize(role.name)).join(", ")
+                  ? employee.roles.map((role) => capitalize(role.name)).join(", ")
                   : "N/A"}
               </td>
               <td>

@@ -21,7 +21,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Auth"],
     }),
 
-    logout: builder.mutation<void, void>({
+    logout: builder.mutation<{message: string}, void>({
       query: () => ({
         url: "logout",
         method: "POST",

@@ -7,12 +7,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFetchEmployesQuery, useUpdateEmployeMutation } from '@/slices/employe/employe';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
 import HrNavigation from '../../../components/hrNavigation';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const EditUserPage: React.FC = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Edit Employee Profile'); // Update breadcrumb title
+  }, [setTitle]);
   const { id } = useParams() as { id: string };
   const { data: usersData, error: usersError, isLoading: usersLoading } = useFetchEmployesQuery();
   const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
-  
+
   const [updateUser, { isLoading: isUpdating }] = useUpdateEmployeMutation();
   const router = useRouter();  // Only used if you navigate after the update
 
@@ -29,7 +35,7 @@ const EditUserPage: React.FC = () => {
         setName(user.name || '');
         setEmail(user.email || '');
         setNumber(user.number || '');
-        setCompanyName(user.company_name || ''); 
+        setCompanyName(user.company_name || '');
         setRole(user.roles?.[0] || null);
       }
     }
@@ -44,10 +50,10 @@ const EditUserPage: React.FC = () => {
         email,
         number,
         company_name: companyName,
-        roles: role ? [role] : [], 
+        roles: role ? [role] : [],
       }).unwrap();
       toast.success('User updated successfully!');
-      router.push('/users');  // Navigate to the users page after successful update
+      router.push('/hr/status-view');  // Navigate to the users page after successful update
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };

@@ -9,7 +9,7 @@ const Page = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    setTitle('Profile'); // Update breadcrumb title
+    setTitle('My Profile'); // Update breadcrumb title
   }, [setTitle]);
 
   if (isLoading) return <p>Loading profile...</p>;

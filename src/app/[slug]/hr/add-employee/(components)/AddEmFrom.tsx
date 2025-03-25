@@ -221,6 +221,10 @@ const AddEmployeeForm: React.FC = () => {
                   <label htmlFor="addressProof">Address Proof (e.g. Aadhar Number)</label>
                   <input type="text" name="addressProof" value={formData.addressProof} onChange={handleChange} placeholder="Address Proof" />
                 </div>
+                <div className="employee-field">
+                  <label htmlFor="profilePicture">Profile Picture</label>
+                  <input type="file" name="profilePicture" onChange={handleChange} />
+                </div>
               </div>
             </>
           )}

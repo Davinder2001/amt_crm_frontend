@@ -47,5 +47,6 @@ interface Employee {
 
 interface EmployeesResponse {
     employees: Employee[];
+    data: Employee[];
     total: number;
 }

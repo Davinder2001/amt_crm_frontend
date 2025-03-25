@@ -17,9 +17,6 @@ const SalaryView: React.FC = () => {
 
   const employees: Employee[] = employeesData?.employees ?? [];
 
-  console.log('employees....', employees);
-
-
   const navigateTo = (path: string, message: string) => {
     if (!path) {
       toast.error(message);
@@ -44,7 +41,7 @@ const SalaryView: React.FC = () => {
 
   const view = (employee: Employee) => {
     if (!employee.company_slug) {
-      toast.error('Company slug not found for employee');
+      toast.error("Company slug not found for employee");
       return;
     }
     router.push(`/${employee.company_slug}/hr/employee-salary/pay-slip/${employee.id}`);
@@ -69,6 +66,7 @@ const SalaryView: React.FC = () => {
             <th>Join Date</th>
             <th>Salary</th>
             <th>Extra Working Hours</th>
+            <th>Shift Timings</th>
             <th>Roles</th>
             <th>Salary Slip</th>
             <th>Status</th>
@@ -82,15 +80,20 @@ const SalaryView: React.FC = () => {
               <td>{employee.name}</td>
               <td>{employee.email}</td>
               <td>{employee.number || "N/A"}</td>
-              <td>{employee.joiningDate || "N/A"}</td>
+              <td>{employee.meta?.joiningDate || "N/A"}</td>
               <td>{employee.salary ?? "N/A"}</td>
-              <td>{employee.dateOfHire ?? "N/A"}</td>
+              <td>{employee.meta?.dateOfHire || "N/A"}</td>
+              <td>{employee.meta?.shiftTimings || "N/A"}</td>
               <td>
                 {employee.roles?.length
                   ? employee.roles.map((role) => capitalize(role.name)).join(", ")
                   : "N/A"}
               </td>
-              <td onClick={() => view(employee)}> <button><FaEnvelope /> slip</button> </td>
+              <td>
+                <button onClick={() => view(employee)}>
+                  <FaEnvelope /> slip
+                </button>
+              </td>
               <td>{employee.user_status || "N/A"}</td>
               <td>
                 <button
@@ -103,7 +106,6 @@ const SalaryView: React.FC = () => {
                 >
                   View
                 </button>
-                &nbsp;
                 <button
                   onClick={() =>
                     navigateTo(
@@ -114,7 +116,6 @@ const SalaryView: React.FC = () => {
                 >
                   Edit
                 </button>
-                &nbsp;
                 <button onClick={() => handleDelete(employee.id)}>Delete</button>
               </td>
             </tr>
@@ -136,6 +137,9 @@ const SalaryView: React.FC = () => {
         }
         .employee-table th {
           background-color: #f4f4f4;
+        }
+        .employee-table button {
+          margin-right: 5px;
         }
       `}</style>
     </div>

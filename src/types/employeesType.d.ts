@@ -6,7 +6,6 @@ interface Role {
 
 interface EmployeeSalary {
     current_salary: number;
-    salary_history: any[];
 }
 interface Employee {
     id: number;

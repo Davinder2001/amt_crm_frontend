@@ -19,12 +19,7 @@ const Page = () => {
       alert('Failed to select company. Please try again.');
     }
   };
-  useEffect(() => {
-    if (companies && companies.length === 0) {
-      refetch();  // Trigger a re-fetch if necessary
-    }
-  }, [companies, refetch]);
-  
+
   // Set the first company's slug in cookies when the component mounts
   useEffect(() => {
     if (Array.isArray(companies) && companies.length > 0) {
@@ -32,6 +27,22 @@ const Page = () => {
       Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
     }
   }, [companies]);
+
+  // Set the first company's slug in cookies when the component mounts
+  useEffect(() => {
+    if (companies && companies.length > 0) {
+      const firstCompany = companies[0];
+      Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+    }
+  }, [companies]);
+
+  // Handle refetching if companies array is empty
+  useEffect(() => {
+    if (!companies || companies.length === 0) {
+      refetch();
+    }
+  }, [companies, refetch]);
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '20px' }}>Companies</h1>

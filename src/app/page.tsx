@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const Page = () => {
-  const { data: profile } = useFetchProfileQuery();
+  const { data: profile, refetch } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation();
   const companies = profile?.user?.companies;
 
@@ -19,6 +19,11 @@ const Page = () => {
       alert('Failed to select company. Please try again.');
     }
   };
+  useEffect(() => {
+    if (companies && companies.length === 0) {
+      refetch();  // Trigger a re-fetch if necessary
+    }
+  }, [companies, refetch]);
 
   // Set the first company's slug in cookies when the component mounts
   useEffect(() => {

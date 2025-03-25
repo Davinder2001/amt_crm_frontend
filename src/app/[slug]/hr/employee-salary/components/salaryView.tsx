@@ -4,15 +4,15 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
-  useFetchEmployesQuery,
   useDeleteEmployeMutation,
+  useFetchEmployeesSalaryQuery,
 } from "@/slices/employe/employe";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEnvelope } from "react-icons/fa";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
-  const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
+  const { data: employeesData, error, isLoading } = useFetchEmployeesSalaryQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
 
   const employees: Employee[] = employeesData?.employees ?? [];
@@ -80,10 +80,9 @@ const SalaryView: React.FC = () => {
               <td>{employee.name}</td>
               <td>{employee.email}</td>
               <td>{employee.number || "N/A"}</td>
-              <td>{employee.meta?.joiningDate || "N/A"}</td>
+              <td>{employee.joiningDate || "N/A"}</td>
               <td>{employee.salary ?? "N/A"}</td>
-              <td>{employee.meta?.dateOfHire || "N/A"}</td>
-              <td>{employee.meta?.shiftTimings || "N/A"}</td>
+              <td>{employee.dateOfHire ?? "N/A"}</td>
               <td>
                 {employee.roles?.length
                   ? employee.roles.map((role) => capitalize(role.name)).join(", ")

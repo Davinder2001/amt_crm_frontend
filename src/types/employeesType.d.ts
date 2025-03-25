@@ -3,6 +3,11 @@ interface Role {
     id: number;
     name: string;
 }
+
+interface EmployeeSalary {
+    current_salary: number;
+    salary_history: any[];
+}
 interface Employee {
     id: number;
     name: string;
@@ -32,8 +37,9 @@ interface Employee {
         accountNumber?: string;
         ifscCode?: string;
         panNumber?: string;
-        upiId?: string; 
+        upiId?: string;
     };
+    employee_salary: EmployeeSalary;
     dateOfHire: string;
     joiningDate: string;
     shiftTimings: string;

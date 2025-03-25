@@ -3,17 +3,21 @@ import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const { data: profile, refetch } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation();
+  const router = useRouter();
   const companies = profile?.user?.companies;
 
-  const handleClick = async (companySlug: string, id: number) => {
+  const handleClick = async (e: React.MouseEvent, companySlug: string, id: number) => {
+    e.preventDefault();
     Cookies.set('company_slug', companySlug, { path: '/' });
 
     try {
       await sendCompanyId({ id }).unwrap();
+      router.push(`/${companySlug}/dashboard`);
     } catch (error) {
       console.error(error);
       alert('Failed to select company. Please try again.');
@@ -64,7 +68,7 @@ const Page = () => {
             }}
             onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#005bb5')}
             onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#0070f3')}
-            onClick={() => handleClick(company.company_slug, company.id)}
+            onClick={(e) => handleClick(e, company.company_slug, company.id)}
           >
             {company.company_name}
           </Link>

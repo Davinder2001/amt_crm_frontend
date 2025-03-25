@@ -5,9 +5,6 @@ import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 const HrHeroSection = () => {
   const { data: employeesData} = useFetchEmployesQuery();
 
-  // if (isLoading) return <p>Loading employees...</p>;
-  // if (error) return <p>Error fetching employees.</p>;
-
   const employees = employeesData?.employees || [];
   const totalEmployees = employeesData?.total || 0;
   const activeEmployees = employees.filter((emp) => emp.user_status === "active");

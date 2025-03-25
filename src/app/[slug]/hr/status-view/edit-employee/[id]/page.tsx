@@ -53,7 +53,7 @@ const EditUserPage: React.FC = () => {
         roles: role ? [role] : [],
       }).unwrap();
       toast.success('User updated successfully!');
-      router.push('/users');  // Navigate to the users page after successful update
+      router.push('/hr/status-view');  // Navigate to the users page after successful update
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };

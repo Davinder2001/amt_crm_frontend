@@ -52,7 +52,7 @@ const AddEmployeeForm: React.FC = () => {
     try {
       await createEmployee(formData).unwrap();
       toast.success("Employee created successfully!");
-      router.push("/employee");
+      router.push("/hr/status-view");
     } catch {
       toast.error("Failed to create employee. Please try again.");
     }

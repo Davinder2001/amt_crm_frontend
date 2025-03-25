@@ -218,7 +218,7 @@ const AddEmployeeForm: React.FC = () => {
                 </div>
                 {/* Medical Info, Address Proof, Previous Employer */}
                 <div className="employee-field">
-                  <label htmlFor="addressProof">Address Proof (e.g. Aadhar/PAN Number)</label>
+                  <label htmlFor="addressProof">Address Proof (e.g. Aadhar Number)</label>
                   <input type="text" name="addressProof" value={formData.addressProof} onChange={handleChange} placeholder="Address Proof" />
                 </div>
               </div>

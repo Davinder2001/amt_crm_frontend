@@ -1,15 +1,21 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
+  
   endpoints: (builder) => ({
+
     fetchEmployes: builder.query<EmployeesResponse, void>({
       query: () => "employee",
       providesTags: ["Employe"],
     }),
+
+
     fetchEmployeById: builder.query<Employee, number>({
       query: (id) => `employee/${id}`,
       providesTags: ["Employe"],
     }),
+
+
     createEmploye: builder.mutation<Employee, Partial<Employee>>({
       query: (newEmploye) => ({
         url: "employee",
@@ -18,6 +24,8 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Employe"],
     }),
+
+
     updateEmploye: builder.mutation<Employee, { id: number } & Partial<Employee>>({
       query: ({ id, ...rest }) => ({
         url: `employee/${id}`,
@@ -26,6 +34,8 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Employe"],
     }),
+
+
     deleteEmploye: builder.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
         url: `employee/${id}`,
@@ -33,18 +43,25 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Employe"],
     }),
+
+
     fetchPaySlipById: builder.query<Employee, number>({
       query: (id) => `/employee/slip/view/${id}`,
       providesTags: ["Employe"],
     }),
+
+
     downloadPaySlipById: builder.query<Employee, number>({
       query: (id) => `/employee/slip/download/${id}`,
       providesTags: ["Employe"],
     }),
+
+
     fetchEmployeesSalary: builder.query<EmployeesResponse, void>({
-      query: () => "employee",
+      query: () => "employees/salary",
       providesTags: ["Employe"],
     }),
+
   }),
 });
 

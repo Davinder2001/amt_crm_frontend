@@ -13,13 +13,9 @@ import { FaEnvelope } from "react-icons/fa";
 const SalaryView: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployeesSalaryQuery();
-
-  console.log('employeesData', employeesData)
-
-
   const [deleteEmployee] = useDeleteEmployeMutation();
 
-  const employees: Employee[] = employeesData?.employees ?? [];
+  console.log("employeesData", employeesData);
 
   const navigateTo = (path: string, message: string) => {
     if (!path) {
@@ -43,7 +39,7 @@ const SalaryView: React.FC = () => {
     }
   };
 
-  const view = (employee: Employee) => {
+  const view = (employee: any) => {
     if (!employee.company_slug) {
       toast.error("Company slug not found for employee");
       return;
@@ -55,7 +51,7 @@ const SalaryView: React.FC = () => {
 
   if (isLoading) return <p>Loading employees...</p>;
   if (error) return <p>Error fetching employees.</p>;
-  if (!employees.length) return <p>No employees found.</p>;
+  if (!employeesData?.data?.length) return <p>No employees found.</p>;
 
   return (
     <div>
@@ -67,9 +63,8 @@ const SalaryView: React.FC = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Contact Number</th>
-            <th>Join Date</th>
-            <th>Salary</th>
-            <th>Shift Timings</th>
+            <th>Company</th>
+            <th>Current Salary</th>
             <th>Roles</th>
             <th>Salary Slip</th>
             <th>Status</th>
@@ -77,18 +72,17 @@ const SalaryView: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee, index) => (
+          {employeesData.data.map((employee: any, index: number) => (
             <tr key={employee.id}>
               <td>{index + 1}</td>
               <td>{employee.name}</td>
               <td>{employee.email}</td>
               <td>{employee.number || "N/A"}</td>
-              <td>{employee.joiningDate || "N/A"}</td>
-              <td>{employee.salary ?? "N/A"}</td>
-              <td>{employee.dateOfHire ?? "N/A"}</td>
+              <td>{employee.company_name || "N/A"}</td>
+              <td>{employee.employee_salary?.current_salary ?? "N/A"}</td>
               <td>
                 {employee.roles?.length
-                  ? employee.roles.map((role) => capitalize(role.name)).join(", ")
+                  ? employee.roles.map((role: any) => capitalize(role.name)).join(", ")
                   : "N/A"}
               </td>
               <td>
@@ -107,7 +101,7 @@ const SalaryView: React.FC = () => {
                   }
                 >
                   View
-                </button>
+                </button>{" "}
                 <button
                   onClick={() =>
                     navigateTo(
@@ -117,7 +111,7 @@ const SalaryView: React.FC = () => {
                   }
                 >
                   Edit
-                </button>
+                </button>{" "}
                 <button onClick={() => handleDelete(employee.id)}>Delete</button>
               </td>
             </tr>

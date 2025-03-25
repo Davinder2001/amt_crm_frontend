@@ -23,16 +23,19 @@ const AddEmployeeForm: React.FC = () => {
     maritalStatus: "",
     passportNo: "",
     emergencyContact: "",
+    emergencyContactRelation: "", // Added relation
 
     // Employment Details
     email: "",
     password: "",
     salary: "",
     role: "",
+    department: "", // Added department
     currentSalary: "",
     shiftTimings: "",
     dateOfHire: "",
     joiningDate: "",
+    joiningType: "", // Added joining type (e.g. full-time, part-time)
 
     // Bank Information
     bankName: "",
@@ -40,6 +43,12 @@ const AddEmployeeForm: React.FC = () => {
     ifscCode: "",
     panNo: "",
     upiId: "",
+
+    // Additional Information
+    addressProof: "", // Added address proof (e.g. Aadhar number)
+    previousEmployer: "", // Added previous employer
+    medicalInfo: "", // Added medical info (blood group, allergies, etc.)
+    profilePicture: "", // Added profile picture upload
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -104,6 +113,10 @@ const AddEmployeeForm: React.FC = () => {
                   <label htmlFor="emergencyContact">Emergency Contact</label>
                   <input type="text" name="emergencyContact" value={formData.emergencyContact} onChange={handleChange} placeholder="Emergency Contact" />
                 </div>
+                <div className="employee-field">
+                  <label htmlFor="emergencyContactRelation">Emergency Contact Relation</label>
+                  <input type="text" name="emergencyContactRelation" value={formData.emergencyContactRelation} onChange={handleChange} placeholder="Emergency Contact Relation" />
+                </div>
               </div>
             </>
           )}
@@ -148,6 +161,19 @@ const AddEmployeeForm: React.FC = () => {
                     {rolesLoading ? <option disabled>Loading...</option> : rolesError ? <option disabled>Error loading roles</option> : rolesData?.roles?.map((role: { id: string; name: string }) => <option key={role.id} value={role.name}>{role.name}</option>)}
                   </select>
                 </div>
+                <div className="employee-field">
+                  <label htmlFor="department">Department</label>
+                  <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="Department" />
+                </div>
+                <div className="employee-field">
+                  <label htmlFor="joiningType">Joining Type</label>
+                  <select name="joiningType" value={formData.joiningType} onChange={handleChange}>
+                    <option value="">Select Joining Type</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="contract">Contract</option>
+                  </select>
+                </div>
               </div>
             </>
           )}
@@ -176,6 +202,19 @@ const AddEmployeeForm: React.FC = () => {
                 <div className="employee-field">
                   <label htmlFor="upiId">UPI ID</label>
                   <input type="text" name="upiId" value={formData.upiId} onChange={handleChange} placeholder="UPI ID" />
+                </div>
+                {/* Medical Info, Address Proof, Previous Employer */}
+                <div className="employee-field">
+                  <label htmlFor="addressProof">Address Proof (e.g. Aadhar Number)</label>
+                  <input type="text" name="addressProof" value={formData.addressProof} onChange={handleChange} placeholder="Address Proof" />
+                </div>
+                <div className="employee-field">
+                  <label htmlFor="previousEmployer">Previous Employer</label>
+                  <input type="text" name="previousEmployer" value={formData.previousEmployer} onChange={handleChange} placeholder="Previous Employer" />
+                </div>
+                <div className="employee-field">
+                  <label htmlFor="medicalInfo">Medical Info (e.g., Blood Group)</label>
+                  <input type="text" name="medicalInfo" value={formData.medicalInfo} onChange={handleChange} placeholder="Medical Info" />
                 </div>
               </div>
             </>

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import {
   FaTachometerAlt, FaStore, FaUserTie, FaUserShield,
@@ -9,11 +10,11 @@ import {
 import { LuClipboardList } from "react-icons/lu"; // Services Icon
 
 const Sidebar = () => {
-  const { data: selectedCompany} = useFetchSelectedCompanyQuery();
+  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  // if (isFetching) return <p className="loading-text">Loading...</p>;
-  // if (!companySlug) return <p className="error-text">No company data found</p>;
+  // Using useRouter to get the current route
+  const asPath = usePathname();
 
   const menuItems = [
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
@@ -37,15 +38,43 @@ const Sidebar = () => {
       </div>
       <nav>
         <ul className="menu-list">
-          {menuItems.map(({ name, path, icon, hasSubmenu }) => (
-            <li key={path} className={`menu-item ${hasSubmenu ? "has-submenu" : ""}`}>
-              <Link href={`/${companySlug}/${path}`} className="menu-link">
-                <span className="menu-icon">{icon}</span>
-                <span className="menu-text">{name}</span>
-                {hasSubmenu && <span className="submenu-icon">+</span>}
-              </Link>
-            </li>
-          ))}
+          {menuItems.map(({ name, path, icon, hasSubmenu }) => {
+            // Check if the current path matches the route
+            const isActive = asPath.includes(path);
+
+            return (
+              <li
+                key={path}
+                className={`menu-item ${hasSubmenu ? "has-submenu" : ""}`}
+                style={{
+                  backgroundColor: isActive ? "#F1F9F9" : "",
+                  position: "relative",
+                }}
+              >
+                <Link href={`/${companySlug}/${path}`} className="menu-link">
+                  <span className="menu-icon"
+                    style={{
+                      color: isActive ? "#009693" : "#222",
+                    }}>{icon}</span>
+                  <span className="menu-text">{name}</span>
+                  {hasSubmenu && <span className="submenu-icon">+</span>}
+                </Link>
+                {isActive && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      width: "3px",
+                      height: "100%",
+                      backgroundColor: "#009693",
+                      borderRadius: '2px'
+                    }}
+                  />
+                )}
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </aside>

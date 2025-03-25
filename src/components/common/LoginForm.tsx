@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLoginMutation } from '@/slices/auth/authApi';
+import { useLoginMutation, useLogoutMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false)
   const [login, { isLoading }] = useLoginMutation();
+  const [logout] = useLogoutMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,16 +46,27 @@ const LoginForm = () => {
 
   const handleLogout = async () => {
     try {
-      // Clear cookies
-      Cookies.remove('access_token');
-      Cookies.remove('user_type');
-      Cookies.remove('company_slug');
+      // Attempt to log out
+      const response = await logout();
 
-      // Clear the user context
-      setUser(null);
-      // Redirect to login page and force a page refresh
-      router.push('/login');
-      router.refresh(); // Ensure the UI is updated and logged-out state is reflected
+      // Check if the logout response indicates success (assuming `logout` returns a success message or status)
+      if (response?.data?.message) {
+        toast.success(response?.data?.message);
+        // Only remove cookies if logout was successful
+        Cookies.remove('access_token');
+        Cookies.remove('user_type');
+        Cookies.remove('company_slug');
+
+        // Clear the user context
+        setUser(null);
+
+        // Redirect to login page
+        router.push('/login');
+        router.refresh();
+      } else {
+        // Handle logout failure (you can also display a message or alert if necessary)
+        toast.error(response?.data?.message)
+      }
     } catch (error) {
       console.error("Logout failed", error);
     }

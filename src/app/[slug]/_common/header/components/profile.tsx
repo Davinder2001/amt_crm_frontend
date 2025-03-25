@@ -6,6 +6,7 @@ import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // I
 import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; // Assuming the API slice is correct
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
+import { toast } from "react-toastify";
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -34,12 +35,27 @@ const Profile: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      Cookies.remove('access_token');
-      Cookies.remove('user_type');
-      Cookies.remove('company_slug');
-      setIsAuthenticated(false);
-      router.push('/login')
+      // Attempt to log out
+      const response = await logout();
+
+      // Check if the logout response indicates success (assuming `logout` returns a success message or status)
+      if (response?.data?.message) {
+        toast.success(response?.data?.message);
+        // Only remove cookies if logout was successful
+        Cookies.remove('access_token');
+        Cookies.remove('user_type');
+        Cookies.remove('company_slug');
+
+        // Update authentication state
+        setIsAuthenticated(false);
+
+        // Redirect to login page
+        router.push('/login');
+        router.refresh();
+      } else {
+        // Handle logout failure (you can also display a message or alert if necessary)
+        toast.error(response?.data?.message)
+      }
     } catch (error) {
       console.error("Logout failed", error);
     }

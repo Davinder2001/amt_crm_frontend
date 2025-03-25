@@ -6,16 +6,8 @@ import Cookies from 'js-cookie';
 
 const Page = () => {
   const { data: profile } = useFetchProfileQuery();
-  const [sendCompanyId] = useSelectedCompanyMutation(); 
+  const [sendCompanyId] = useSelectedCompanyMutation();
   const companies = profile?.user?.companies;
-
-  // Set the first company's slug in cookies when the component mounts
-  useEffect(() => {
-    if (Array.isArray(companies) && companies.length > 0) {
-      const firstCompany = companies[0];
-      Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
-    }
-  }, [companies]);
 
   const handleClick = async (companySlug: string, id: number) => {
     Cookies.set('company_slug', companySlug, { path: '/' });
@@ -25,9 +17,16 @@ const Page = () => {
     } catch (error) {
       console.error(error);
       alert('Failed to select company. Please try again.');
-    }    
+    }
   };
 
+  // Set the first company's slug in cookies when the component mounts
+  useEffect(() => {
+    if (Array.isArray(companies) && companies.length > 0) {
+      const firstCompany = companies[0];
+      Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+    }
+  }, [companies]);
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '20px' }}>Companies</h1>

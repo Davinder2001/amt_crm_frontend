@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaPlus } from 'react-icons/fa';

@@ -49,7 +49,7 @@ const AllTasks: React.FC = () => {
             </tr>
           </thead>
           <tbody className="tasks-tbody">
-            {tasks.data.map((task: any) => (
+            {tasks.data.map((task) => (
               <tr key={task.id} className="tasks-tr">
                 <td className="tasks-td">{task.id}</td>
                 <td className="tasks-td">{task.name}</td>

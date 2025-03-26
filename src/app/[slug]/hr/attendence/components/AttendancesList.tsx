@@ -1,6 +1,6 @@
 'use client';
 import { useFetchAttenancesQuery } from '@/slices/attendance/attendance';
-import Image from 'next/image';
+// import Image from 'next/image';
 import React from 'react';
 
 function AttendancesList() {

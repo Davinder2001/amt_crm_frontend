@@ -29,44 +29,43 @@ const AllTasks: React.FC = () => {
   if (profileLoading || tasksLoading) return <p>Loading...</p>;
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
-
   if (!companySlug) return <p>Company slug not found.</p>;
 
   return (
     <>
       <ToastContainer />
-      <h1>All Tasks</h1>
+      <h1 className="tasks-heading">All Tasks</h1>
       {tasks?.data && tasks.data.length > 0 ? (
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Company Name</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Assigned By Name</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Assigned To Name</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Deadline</th>
-              <th style={{ border: '1px solid #ddd', padding: '8px' }}>Action</th>
+        <table className="tasks-table">
+          <thead className="tasks-thead">
+            <tr className="tasks-tr">
+              <th className="tasks-th">ID</th>
+              <th className="tasks-th">Name</th>
+              <th className="tasks-th">Company Name</th>
+              <th className="tasks-th">Assigned By Name</th>
+              <th className="tasks-th">Assigned To Name</th>
+              <th className="tasks-th">Deadline</th>
+              <th className="tasks-th">Action</th>
             </tr>
           </thead>
-          <tbody>
-            {tasks.data.map((task: Task) => (
-              <tr key={task.id}>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.id}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.name}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.company_name}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.assigned_by_name}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.assigned_to_name}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{task.deadline}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+          <tbody className="tasks-tbody">
+            {tasks.data.map((task: any) => (
+              <tr key={task.id} className="tasks-tr">
+                <td className="tasks-td">{task.id}</td>
+                <td className="tasks-td">{task.name}</td>
+                <td className="tasks-td">{task.company_name}</td>
+                <td className="tasks-td">{task.assigned_by_name}</td>
+                <td className="tasks-td">{task.assigned_to_name}</td>
+                <td className="tasks-td">{task.deadline}</td>
+                <td className="tasks-td">
                   <Link href={`/${companySlug}/tasks/edit-task/${task.id}`}>
-                    <FaEdit color='#222' />
+                    <FaEdit className="tasks-icon" color="#222" />
                   </Link>
-                  <button onClick={() => handleDelete(task.id)} disabled={isDeleting}>
-                    <FaTrash color='#222' />
+                  <button onClick={() => handleDelete(task.id)} disabled={isDeleting} className="tasks-delete-button">
+                    <FaTrash className="tasks-icon" color="#222" />
                   </button>
                   <Link href={`/${companySlug}/tasks/view-task/${task.id}`}>
-                    <FaEye color='#222' />
+                    <FaEye className="tasks-icon" color="#222" />
                   </Link>
                 </td>
               </tr>
@@ -74,7 +73,7 @@ const AllTasks: React.FC = () => {
           </tbody>
         </table>
       ) : (
-        <p>No tasks available.</p>
+        <p className="no-tasks">No tasks available.</p>
       )}
     </>
   );

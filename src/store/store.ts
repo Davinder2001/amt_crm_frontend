@@ -6,6 +6,7 @@ import storeApiSlice from '@/slices/store/storeCreateSlice';
 import roleApiSlice from '@/slices/roles/rolesCreateSlice';
 import permissionApiSlice from '@/slices/permissions/permissionCreateSlice';
 import tasksApi from '@/slices/tasks/taskApiCreateSlice';
+import attendanceApiSlice from '@/slices/attendance/attendance';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     [storeApiSlice.reducerPath]: storeApiSlice.reducer,
     [roleApiSlice.reducerPath]: roleApiSlice.reducer,
     [permissionApiSlice.reducerPath]: permissionApiSlice.reducer,
-    [tasksApi.reducerPath]: tasksApi.reducer, 
+    [tasksApi.reducerPath]: tasksApi.reducer,
+    [attendanceApiSlice.reducerPath]: attendanceApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -25,7 +27,8 @@ const store = configureStore({
       .concat(storeApiSlice.middleware)
       .concat(roleApiSlice.middleware)
       .concat(permissionApiSlice.middleware)
-      .concat(tasksApi.middleware), 
+      .concat(tasksApi.middleware)
+      .concat(attendanceApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

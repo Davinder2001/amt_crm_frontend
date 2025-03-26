@@ -7,3 +7,4 @@ export * from "./permissionsTypes";
 export * from "./tasksTypes";
 export * from "./storeTypes";
 export * from "./rolesTypes";
+export * from "./attendanceTypes";

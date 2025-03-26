@@ -7,9 +7,9 @@ interface SuperAdminLayoutProps {
   children: React.ReactNode;
 }
 
-const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) => {
+export const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) => {
     return (
-      <div className="">
+      <div className="super-admin-layout-wrapper">
         <div className="side-bar">
           <SideBar/>
         </div>
@@ -18,5 +18,3 @@ const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) => {
       </div>
     );
 }
-
-export default SuperAdminLayout

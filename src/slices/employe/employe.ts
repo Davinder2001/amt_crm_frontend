@@ -1,7 +1,7 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
-  
+
   endpoints: (builder) => ({
 
     fetchEmployes: builder.query<EmployeesResponse, void>({
@@ -46,19 +46,24 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
 
 
     fetchPaySlipById: builder.query<Employee, number>({
-      query: (id) => `/employee/slip/view/${id}`,
+      query: (id) => `employee/slip/view/${id}`,
       providesTags: ["Employe"],
     }),
 
 
     downloadPaySlipById: builder.query<Employee, number>({
-      query: (id) => `/employee/slip/download/${id}`,
+      query: (id) => `employee/slip/download/${id}`,
       providesTags: ["Employe"],
     }),
 
 
     fetchEmployeesSalary: builder.query<EmployeesResponse, void>({
       query: () => "employees/salary",
+      providesTags: ["Employe"],
+    }),
+
+    fetchEmployeesSalaryById: builder.query<Employee, number>({
+      query: (id) => `employee/${id}/salary`,
       providesTags: ["Employe"],
     }),
 
@@ -74,6 +79,7 @@ export const {
   useFetchPaySlipByIdQuery,
   useDownloadPaySlipByIdQuery,
   useFetchEmployeesSalaryQuery,
+  useFetchEmployeesSalaryByIdQuery,
 } = employeCreateApi;
 
 export default employeCreateApi;

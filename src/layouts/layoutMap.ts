@@ -1,10 +1,10 @@
-import AdminEmployeeLayout from "@/layouts/AdminEmployeeLayout";
-import SuperAdminLayout from "@/layouts/SuperAdminLayout";
+import { AdminEmployeeLayout } from "@/layouts/AdminEmployeeLayout";
+import { SuperAdminLayout } from "@/layouts/SuperAdminLayout";
 
 const layoutMap: Record<string, React.ComponentType<{ children: React.ReactNode }>> = {
-  superadmin: SuperAdminLayout,
-  admin: AdminEmployeeLayout,
-  employee: AdminEmployeeLayout,
+  'super-admin': SuperAdminLayout,
+  'admin': AdminEmployeeLayout,
+  'employee': AdminEmployeeLayout,
 };
 
 export default layoutMap;

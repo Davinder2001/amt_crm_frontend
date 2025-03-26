@@ -11,15 +11,15 @@ type LayoutWrapperProps = {
 };
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const { isFetching} = useFetchSelectedCompanyQuery();
+  const { isFetching } = useFetchSelectedCompanyQuery();
   const { user } = useUser();
   const role = user?.user_type;
 
   // Fallback layout in case role is not defined or there is an error
-  const SelectedLayout = role ? layoutMap[role] || AuthLayout : AuthLayout;
+  const SelectedLayout = role ? layoutMap[role] : AuthLayout;
 
   if (isFetching) {
-    return <Loader/>;  // You can replace this with a spinner or placeholder
+    return <Loader />;  // You can replace this with a spinner or placeholder
   }
   return <SelectedLayout>{children}</SelectedLayout>;
 };

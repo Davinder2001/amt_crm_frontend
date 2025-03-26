@@ -1,7 +1,7 @@
 "use client";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import React, { useEffect } from "react";
-import AddEmployeeForm from "./(components)/AddEmFrom";
+import AddEmployeeForm from "./components/AddEmFrom";
 
 const Page: React.FC = () => {
   const { setTitle } = useBreadcrumb();

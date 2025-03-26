@@ -5,6 +5,19 @@
 // task-details-section
 @use './tasks/task_details.scss' as *;
 
+
+// hr statusview section
+@use './Hr/status_view.scss' as *;
+@use './Hr/employees_sallery.scss' as *;
+
+// tables section
+@use './tables/tables.scss' as *;
+
+
+// bars section
+@use './bars/navbar.scss' as *;
+@use './bars/navigation.scss' as *;
+
 body {
     margin: 0;
     padding: 0;

@@ -1,0 +1,55 @@
+@use '../variables' as *;
+
+table{
+width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+
+  
+  tr {
+    border: 1px solid #ddd;
+  }
+
+  th
+  {
+    background-color:$primary-color;
+    color: $white;
+    font-weight: $font-weight-semi-bold;
+    font-size: $font-size-large;
+    font-family: $font-family;
+  }
+
+  th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: $font-size;
+    font-weight: $font-weight-medium;
+    
+
+    .table-e-d-v-buttons {
+        border: unset;
+    }
+
+    
+  }
+
+td{
+  &:last-child{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: unset;
+
+  }
+}
+  
+
+}
+
+
+
+
+

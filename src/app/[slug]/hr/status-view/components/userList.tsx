@@ -10,7 +10,7 @@ const UserList: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
 
-  console.log('employeesData', employeesData)
+  console.log('employeesData', employeesData);
   
   const [deleteEmployee] = useDeleteEmployeMutation();
 
@@ -56,42 +56,40 @@ const UserList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Employees List</h2>
-      <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
-          <tr>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Sr. No</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Name</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Email</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Roles</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Phone Number</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Company</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Status</th>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Action</th>
+    <div className="user-list-container">
+      <h2 className="user-heading">Employees List</h2>
+      <table className="user-table">
+        <thead className="user-thead">
+          <tr className="user-tr">
+            <th className="user-th">Sr. No</th>
+            <th className="user-th">Name</th>
+            <th className="user-th">Email</th>
+            <th className="user-th">Roles</th>
+            <th className="user-th">Phone Number</th>
+            <th className="user-th">Company</th>
+            <th className="user-th">Status</th>
+            <th className="user-th">Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="user-tbody">
           {employees.map((employee, index) => (
-            <tr key={employee.id}>
-              <td style={{ border: '1px solid black', padding: '4px' }}>
-                {index + 1}
-              </td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>{employee.name}</td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>{employee.email}</td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>
+            <tr key={employee.id} className="user-tr">
+              <td className="user-td">{index + 1}</td>
+              <td className="user-td">{employee.name}</td>
+              <td className="user-td">{employee.email}</td>
+              <td className="user-td">
                 {employee.roles?.length ? 
                   employee.roles.map((role) => capitalize(role.name)).join(', ') : 
                   'N/A'
                 }
               </td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>{employee.number}</td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>{employee.company_name}</td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>{employee.user_status}</td>
-              <td style={{ border: '1px solid black', padding: '4px' }}>
-                <button onClick={() => view(employee)}>View</button>&nbsp;
-                <button onClick={() => update(employee)}>Edit</button>&nbsp;
-                <button onClick={() => handleDelete(employee.id)}>Delete</button>
+              <td className="user-td">{employee.number}</td>
+              <td className="user-td">{employee.company_name}</td>
+              <td className="user-td">{employee.user_status}</td>
+              <td className="user-td">
+                <button onClick={() => view(employee)} className="user-btn">View</button>&nbsp;
+                <button onClick={() => update(employee)} className="user-btn">Edit</button>&nbsp;
+                <button onClick={() => handleDelete(employee.id)} className="user-btn">Delete</button>
               </td>
             </tr>
           ))}

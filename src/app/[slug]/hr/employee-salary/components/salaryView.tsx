@@ -8,7 +8,7 @@ import {
   useFetchEmployeesSalaryQuery,
 } from "@/slices/employe/employe";
 import "react-toastify/dist/ReactToastify.css";
-import { FaEnvelope } from "react-icons/fa";
+import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
@@ -55,7 +55,6 @@ const SalaryView: React.FC = () => {
 
   return (
     <div>
-      <h2>Employees List</h2>
       <table className="employee-table">
         <thead>
           <tr>
@@ -86,13 +85,13 @@ const SalaryView: React.FC = () => {
                   : "N/A"}
               </td>
               <td>
-                <button onClick={() => view(employee)}>
-                  <FaEnvelope /> slip
-                </button>
+                <span onClick={() => view(employee)} className="salary-slip">
+                  <FaEnvelope /> <span>slip</span>
+                </span>
               </td>
               <td>{employee.user_status || "N/A"}</td>
               <td>
-                <button
+                <span
                   onClick={() =>
                     navigateTo(
                       `/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`,
@@ -100,9 +99,9 @@ const SalaryView: React.FC = () => {
                     )
                   }
                 >
-                  View
-                </button>{" "}
-                <button
+                  <FaTrash color='#222' />
+                </span>{" "}
+                <span
                   onClick={() =>
                     navigateTo(
                       `/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`,
@@ -110,34 +109,16 @@ const SalaryView: React.FC = () => {
                     )
                   }
                 >
-                  Edit
-                </button>{" "}
-                <button onClick={() => handleDelete(employee.id)}>Delete</button>
+                <FaEdit color='#222' />
+                </span>{" "}
+                <span onClick={() => handleDelete(employee.id)}>    <FaEye color='#222' /></span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <style jsx>{`
-        .employee-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-        }
-        .employee-table th,
-        .employee-table td {
-          border: 1px solid black;
-          padding: 8px;
-          text-align: left;
-        }
-        .employee-table th {
-          background-color: #f4f4f4;
-        }
-        .employee-table button {
-          margin-right: 5px;
-        }
-      `}</style>
+
     </div>
   );
 };

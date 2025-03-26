@@ -29,43 +29,45 @@ const AllTasks: React.FC = () => {
   if (profileLoading || tasksLoading) return <p>Loading...</p>;
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
+
   if (!companySlug) return <p>Company slug not found.</p>;
 
   return (
     <>
       <ToastContainer />
-      <h1 className="tasks-heading">All Tasks</h1>
       {tasks?.data && tasks.data.length > 0 ? (
-        <table className="tasks-table">
-          <thead className="tasks-thead">
-            <tr className="tasks-tr">
-              <th className="tasks-th">ID</th>
-              <th className="tasks-th">Name</th>
-              <th className="tasks-th">Company Name</th>
-              <th className="tasks-th">Assigned By Name</th>
-              <th className="tasks-th">Assigned To Name</th>
-              <th className="tasks-th">Deadline</th>
-              <th className="tasks-th">Action</th>
+        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Company Name</th>
+              <th>Assigned By Name</th>
+              <th>Assigned To Name</th>
+              <th>Deadline</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody className="tasks-tbody">
-            {tasks.data.map((task: any) => (
-              <tr key={task.id} className="tasks-tr">
-                <td className="tasks-td">{task.id}</td>
-                <td className="tasks-td">{task.name}</td>
-                <td className="tasks-td">{task.company_name}</td>
-                <td className="tasks-td">{task.assigned_by_name}</td>
-                <td className="tasks-td">{task.assigned_to_name}</td>
-                <td className="tasks-td">{task.deadline}</td>
-                <td className="tasks-td">
-                  <Link href={`/${companySlug}/tasks/edit-task/${task.id}`}>
-                    <FaEdit className="tasks-icon" color="#222" />
-                  </Link>
-                  <button onClick={() => handleDelete(task.id)} disabled={isDeleting} className="tasks-delete-button">
-                    <FaTrash className="tasks-icon" color="#222" />
+          <tbody>
+            {tasks.data.map((task: Task) => (
+              <tr key={task.id}>
+                <td>{task.id}</td>
+                <td>{task.name}</td>
+                <td>{task.company_name}</td>
+                <td>{task.assigned_by_name}</td>
+                <td>{task.assigned_to_name}</td>
+                <td>{task.deadline}</td>
+                <td >
+                  
+                <button className='table-e-d-v-buttons' onClick={() => handleDelete(task.id)} disabled={isDeleting}>
+                    <FaTrash color='#222' />
                   </button>
-                  <Link href={`/${companySlug}/tasks/view-task/${task.id}`}>
-                    <FaEye className="tasks-icon" color="#222" />
+                  <Link className='table-e-d-v-buttons'  href={`/${companySlug}/tasks/edit-task/${task.id}`}>
+                    <FaEdit color='#222' />
+                  </Link>
+                  
+                  <Link className='table-e-d-v-buttons' href={`/${companySlug}/tasks/view-task/${task.id}`}>
+                    <FaEye color='#222' />
                   </Link>
                 </td>
               </tr>
@@ -73,7 +75,7 @@ const AllTasks: React.FC = () => {
           </tbody>
         </table>
       ) : (
-        <p className="no-tasks">No tasks available.</p>
+        <p>No tasks available.</p>
       )}
     </>
   );

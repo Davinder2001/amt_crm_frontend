@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 const UserList: React.FC = () => {
   const router = useRouter();
@@ -57,7 +58,6 @@ const UserList: React.FC = () => {
 
   return (
     <div className="user-list-container">
-      <h2 className="user-heading">Employees List</h2>
       <table className="user-table">
         <thead className="user-thead">
           <tr className="user-tr">
@@ -87,9 +87,11 @@ const UserList: React.FC = () => {
               <td className="user-td">{employee.company_name}</td>
               <td className="user-td">{employee.user_status}</td>
               <td className="user-td">
-                <button onClick={() => view(employee)} className="user-btn">View</button>&nbsp;
-                <button onClick={() => update(employee)} className="user-btn">Edit</button>&nbsp;
-                <button onClick={() => handleDelete(employee.id)} className="user-btn">Delete</button>
+              <span onClick={() => handleDelete(employee.id)} className="user-btn"><FaTrash color='#222' /></span>
+              <span onClick={() => update(employee)} className="user-btn"><FaEdit color='#222' /></span>
+                <span onClick={() => view(employee)} className="user-btn">                                        <FaEye color='#222' /></span>
+
+
               </td>
             </tr>
           ))}

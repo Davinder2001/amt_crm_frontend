@@ -10,8 +10,8 @@ const Navigation = () => {
 
     return (
         <>
-            <div className="navigation_container">
-                <Link href={`/${companySlug}/hr/attendence/add`}><FaPlus /><span>Add Attendence</span></Link>
+            <div className="navigation-buttons">
+                <Link className="navigation-button" href={`/${companySlug}/hr/attendence/add`}><FaPlus /><span>Add Attendence</span></Link>
             </div>
         </>
     );

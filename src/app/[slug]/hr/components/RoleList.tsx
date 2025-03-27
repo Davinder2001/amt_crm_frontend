@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
+import { FaEdit, FaPlug, FaPlus, FaTrash } from "react-icons/fa";
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
@@ -34,9 +35,8 @@ const RoleList: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <h2>Role List</h2>
-        <Link href={`/${companySlug}/hr/add-role`}>Add Role</Link>
+      <div className="navigation-buttons">
+        <Link className="navigation-button" href={`/${companySlug}/hr/add-role`}><FaPlus/>Add Role</Link>
       </div>
       <table>
         <thead>
@@ -59,12 +59,12 @@ const RoleList: React.FC = () => {
                 </td>
                 <td>{role.company_id}</td>
                 <td>
-                  <Link href={`/${companySlug}/hr/edit-role/${role.id}`}>
-                    <button>Edit</button>
+                  <Link  href={`/${companySlug}/hr/edit-role/${role.id}`}>
+                    <span><FaEdit color='#222' /></span>
                   </Link>
-                  <button onClick={() => handleDeleteRole(role.id)}>
-                    Delete
-                  </button>
+                  <span onClick={() => handleDeleteRole(role.id)}>
+                     <FaTrash color='#222' />
+                  </span>
                 </td>
               </tr>
             ))

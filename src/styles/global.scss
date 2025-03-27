@@ -18,12 +18,30 @@
 @use './bars/navbar.scss' as *;
 @use './bars/navigation.scss' as *;
 
-body {
+
+// forms section
+@use './forms/add_employes_form.scss' as *;
+@use './forms/role_form.scss' as *;
+
+* {
     margin: 0;
     padding: 0;
-    font-family: "DMSans", sans-serif;
-    font-weight: 400;
+    font-family: $font-family;
+}
+
+body {
     background-color: #F1F9F9;
+}
+
+input,
+select,
+textarea {
+
+    &:focus {
+        border: 1px solid $primary-color;
+        outline: none;
+        transition: 0.2s ease-in-out;
+    }
 }
 
 
@@ -117,7 +135,8 @@ body {
         border-bottom: 1px solid #e5e7eb;
         height: 100px;
         padding: 0px 20px;
-        a{
+
+        a {
             text-decoration: none;
             color: #222222;
         }
@@ -133,6 +152,7 @@ body {
         li {
             font-size: 18px;
             padding: 5px 20px;
+
             a {
                 text-decoration: none;
                 display: flex;
@@ -154,7 +174,7 @@ body {
 
 .main {
     display: flex;
-    gap: 20px;
+    gap: 19px;
     overflow: auto;
 
     .main-content {
@@ -169,6 +189,7 @@ body {
     justify-content: flex-end;
     align-items: center;
     padding: 40px 0;
+
     a {
         text-decoration: none;
         display: flex;
@@ -182,25 +203,6 @@ body {
     }
 }
 
-
-
-
-
-.add-employee-form form .employee-fields-wrapper{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 31px;
-    .employee-field{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-.add-employee-form form input {
-    padding: 10px;
-    font-size: 16px;
-}
 
 
 .login-container {

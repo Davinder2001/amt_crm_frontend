@@ -12,7 +12,6 @@ function AttendancesList() {
 
     return (
         <div>
-            <h1>Attendance List</h1>
             {attendanceList ? (
                 <table border={1} cellPadding="10" cellSpacing="0">
                     <thead>

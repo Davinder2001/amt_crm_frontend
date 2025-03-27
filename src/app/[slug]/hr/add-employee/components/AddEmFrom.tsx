@@ -70,13 +70,11 @@ const AddEmployeeForm: React.FC = () => {
 
   return (
     <div>
-      <h2>Create Employee - Step {step}</h2>
       <div className="add-employee-form">
         <form onSubmit={handleSubmit}>
           {/* Step 1: Personal Information */}
           {step === 1 && (
             <>
-              <h3>Personal Information</h3>
               <div className="employee-fields-wrapper">
                 <div className="employee-field">
                   <label htmlFor="name">Name</label>
@@ -125,7 +123,7 @@ const AddEmployeeForm: React.FC = () => {
           {/* Step 2: Employment Details */}
           {step === 2 && (
             <>
-              <h3>Employment Details</h3>
+              
               <div className="employee-fields-wrapper">
                 <div className="employee-field">
                   <label htmlFor="email">Email</label>
@@ -194,7 +192,7 @@ const AddEmployeeForm: React.FC = () => {
           {/* Step 3: Bank Information */}
           {step === 3 && (
             <>
-              <h3>Bank Information</h3>
+
               <div className="employee-fields-wrapper">
                 <div className="employee-field">
                   <label htmlFor="bankName">Bank Name</label>
@@ -231,9 +229,9 @@ const AddEmployeeForm: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="create-employess-action">
-            {step > 1 && <button type="button" onClick={() => setStep(step - 1)}>Back</button>}
-            {step < 3 && <button type="button" onClick={() => setStep(step + 1)}>Next</button>}
-            {step === 3 && <button type="submit" disabled={isLoading}>{isLoading ? "Creating..." : "Submit"}</button>}
+            {step > 1 && <button className="form-button" type="button" onClick={() => setStep(step - 1)}>Back</button>}
+            {step < 3 && <button className="form-button" type="button" onClick={() => setStep(step + 1)}>Next</button>}
+            {step === 3 && <button className="form-button" type="submit" disabled={isLoading}>{isLoading ? "Creating..." : "Submit"}</button>}
           </div>
         </form>
       </div>

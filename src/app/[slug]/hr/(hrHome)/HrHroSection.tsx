@@ -1,16 +1,18 @@
 import React from "react";
 import { useFetchEmployesQuery } from "@/slices/employe/employe";
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
+import Link from "next/link";
 
 const HrHeroSection = () => {
   const { data: employeesData} = useFetchEmployesQuery();
+    const { data: selectedCompany} = useFetchSelectedCompanyQuery();
+    const companySlug = selectedCompany?.selected_company?.company_slug;
 
   const employees = employeesData?.employees || [];
   const totalEmployees = employeesData?.total || 0;
   const activeEmployees = employees.filter((emp) => emp.user_status === "active");
-
-  console.log('employees.....', employees);
-  
+ 
 
   return (
     <div className="hr-hero-section">
@@ -18,7 +20,8 @@ const HrHeroSection = () => {
       <div className="time-section">
         <p className="time">8:02:09 AM</p>
         <p className="date">Today: 18th November 2024</p>
-        <button className="attendance-btn">View Attendance</button>
+        <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendence`}>View Attendance</Link>
+
       </div>
 
       {/* Middle Section - Stats Overview */}

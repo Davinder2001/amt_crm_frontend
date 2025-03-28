@@ -12,6 +12,7 @@ import { LuClipboardList } from "react-icons/lu"; // Services Icon
 const Sidebar = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
+  console.log(selectedCompany);
 
   // Using useRouter to get the current route
   const asPath = usePathname();

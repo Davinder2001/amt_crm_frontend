@@ -1,5 +1,19 @@
 import userCreateApiSlice from './rolesCreateSlice';
 
+export interface Permission {
+  id: number;
+  name: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  permissions: Permission[];
+  company_id: string;
+}
+
+
+
 export const roleApi = userCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({

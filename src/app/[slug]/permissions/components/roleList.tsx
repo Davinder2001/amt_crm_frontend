@@ -7,28 +7,12 @@ import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 
-interface Permission {
-  id: number;
-  name: string;
-}
-
-interface Role {
-  id: number;
-  name: string;
-  permissions: Permission[];
-  company_id: string;
-}
-
 const RoleList: React.FC = () => {
-  // 1) Fetch roles
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
-  // 2) Prepare to delete roles
   const [deleteRole] = useDeleteRoleMutation();
-  // 3) Fetch selected company for building the slug
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
+    const { data: selectedCompany } = useFetchSelectedCompanyQuery();
+    const companySlug = selectedCompany?.selected_company?.company_slug;
 
-  // Handler for deleting a role
   const handleDeleteRole = async (id: number) => {
     try {
       await deleteRole(id).unwrap();
@@ -43,21 +27,16 @@ const RoleList: React.FC = () => {
     }
   };
 
-  // Handle loading/error states
   if (isLoading) return <div>Loading roles...</div>;
   if (error) {
     toast.error("Error loading roles");
     return <div>Error loading roles.</div>;
   }
 
-  // Render
   return (
     <div>
       <div className="navigation-buttons">
-        <Link className="navigation-button" href={`/${companySlug}/hr/add-role`}>
-          <FaPlus />
-          Add Role
-        </Link>
+        <Link className="navigation-button" href={`/${companySlug}/permissions/add-role`}><FaPlus/>Add Role</Link>
       </div>
       <table>
         <thead>
@@ -70,23 +49,21 @@ const RoleList: React.FC = () => {
         </thead>
         <tbody>
           {rolesData && rolesData.total > 0 ? (
-            rolesData.roles.map((role: Role) => (
+            rolesData?.roles.map((role: Role) => (
               <tr key={role.id}>
                 <td>{role.name}</td>
                 <td>
                   {role.permissions
-                    ? role.permissions.map((perm: Permission) => perm.name).join(", ")
+                    ? role.permissions.map((perm) => perm.name).join(", ")
                     : "None"}
                 </td>
                 <td>{role.company_id}</td>
                 <td>
-                  <Link href={`/${companySlug}/hr/edit-role/${role.id}`}>
-                    <span>
-                      <FaEdit color="#222" />
-                    </span>
+                  <Link  href={`/${companySlug}/permissions/edit-role/${role.id}`}>
+                    <span><FaEdit color='#222' /></span>
                   </Link>
                   <span onClick={() => handleDeleteRole(role.id)}>
-                    <FaTrash color="#222" />
+                     <FaTrash color='#222' />
                   </span>
                 </td>
               </tr>

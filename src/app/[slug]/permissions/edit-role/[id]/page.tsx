@@ -6,7 +6,11 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
 import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
-import HrNavigation from '../../components/hrNavigation';
+
+interface Permission {
+  id: number;
+  name: string;
+}
 
 interface Role {
   id: number;
@@ -15,18 +19,21 @@ interface Role {
   company_id: string;
 }
 
-interface Permission {
-  id: number;
-  name: string;
-}
-
 const EditRolePage: React.FC = () => {
   const params = useParams();
   const id = params?.id as string;
   const router = useRouter();
 
-  const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(undefined);
-  const { data: permissionsData, isLoading: permissionsLoading, error: permissionsError } = useFetchPermissionsQuery();
+  // If getRoles returns Role[] (no param):
+  const { data: rolesApiResponse, isLoading: rolesLoading, error: rolesError } =
+    useGetRolesQuery(id);
+
+  const {
+    data: permissionsApiResponse,
+    isLoading: permissionsLoading,
+    error: permissionsError,
+  } = useFetchPermissionsQuery();
+
   const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
 
   const [name, setName] = useState<string>('');
@@ -34,24 +41,36 @@ const EditRolePage: React.FC = () => {
   const [companyId, setCompanyId] = useState<string>('');
   const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
 
+  // Once roles are loaded, find the matching ID
   useEffect(() => {
-    if (rolesData) {
-      const role = rolesData.find((role: Role) => role.id.toString() === id);
-      if (role) {
-        setName(role.name);
-        setCompanyId(role.company_id);
-        setSelectedPermissions(role.permissions.map((perm: Permission) => perm.name));
-      }
+    if (!rolesApiResponse) return;
+
+    const foundRole = rolesApiResponse.find((role: Role) => role.id.toString() === id);
+    if (foundRole) {
+      setName(foundRole.name);
+      setCompanyId(foundRole.company_id);
+
+      // Here we define (perm: Permission) so TS knows param type:
+      setSelectedPermissions(foundRole.permissions.map((perm: Permission) => perm.name));
     }
-  }, [rolesData, id]);
+  }, [rolesApiResponse, id]);
 
-  if (rolesLoading || permissionsLoading) return <p>Loading role and permissions...</p>;
-  if (rolesError || permissionsError) return <p>Error fetching role or permissions data.</p>;
+  // If permissionApi returns Permission[] | undefined:
+  const permissionsList: Permission[] = permissionsApiResponse ?? [];
 
+  if (rolesLoading || permissionsLoading) {
+    return <p>Loading role and permissions...</p>;
+  }
+
+  if (rolesError || permissionsError) {
+    return <p>Error fetching role or permissions data.</p>;
+  }
+
+  // Add type annotation for 'permissionName'
   const handlePermissionChange = (permissionName: string) => {
-    setSelectedPermissions((prevSelected) =>
+    setSelectedPermissions((prevSelected: string[]) =>
       prevSelected.includes(permissionName)
-        ? prevSelected.filter((name) => name !== permissionName)
+        ? prevSelected.filter((name: string) => name !== permissionName)
         : [...prevSelected, permissionName]
     );
   };
@@ -66,30 +85,26 @@ const EditRolePage: React.FC = () => {
 
     try {
       await updateRole({
-        id: Number(id),  // Ensure ID is passed as a number
+        id: Number(id),
         name,
         permissions: selectedPermissions,
         company_id: companyId,
       }).unwrap();
+
       toast.success('Role updated successfully!');
       router.push('/roles');
-    } catch (err: unknown) {
-      // Type narrowing to safely handle the error
+    } catch (err) {
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };
-        toast.error(error?.data?.message || 'Failed to update role. Please try again.');
+        toast.error(error.data.message || 'Failed to update role. Please try again.');
       } else {
         toast.error('An unexpected error occurred.');
       }
     }
   };
 
-  // Safely access permissions data
-  const permissionsList: Permission[] = permissionsData || [];
-
   return (
     <div style={{ padding: '24px' }}>
-      <HrNavigation />
       <h1>Edit Role</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '12px' }}>

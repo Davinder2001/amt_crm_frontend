@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect } from 'react'
-import RoleList from '../hr/components/RoleList'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import RoleList from './components/roleList';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
@@ -11,7 +11,7 @@ const Page = () => {
   }, [setTitle]);
   return (
     <>
-      <RoleList />
+      <RoleList/>
     </>
   )
 }

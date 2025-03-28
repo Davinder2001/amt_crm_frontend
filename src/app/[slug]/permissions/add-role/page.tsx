@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
-import HrNavigation from "../components/hrNavigation";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 
 const Page: React.FC = () => {
@@ -53,7 +52,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="add-role-form">
-      <HrNavigation />
+
 
       <h2>
         Create a Role

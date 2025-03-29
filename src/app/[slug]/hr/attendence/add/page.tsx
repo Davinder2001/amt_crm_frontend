@@ -1,26 +1,26 @@
-"use client"; // If you're in Next.js 13 with app router
+// src/components/AddAttendancePage.tsx
+"use client"; // For Next.js 13 app router
 import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
+import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
 
-  // Replace this with your real token (in practice, you’d retrieve it from state, context, or cookies).
-  const access_token =
-    "Bearer 46|jCwJsu5HMnhSLwRIWyTJ02WkXKcRELVZfWziX609f8868685";
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setSelectedFile(file || null);
   };
 
+  const [recordAttendance] = useRecordAttendanceMutation();
+
   const captureFromWebcam = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       const blob = dataURLtoBlob(imageSrc);
-      // Create a File object so it mimics an uploaded file
+      // Create a File object that mimics an uploaded file
       const file = new File([blob], "webcam.jpg", { type: blob.type });
       setSelectedFile(file);
       setShowWebcam(false);
@@ -41,29 +41,14 @@ function AddAttendancePage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!selectedFile) {
       alert("No file selected");
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append("image", selectedFile);
-
-      const response = await fetch("http://localhost:8000/api/v1/attendance", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-          Authorization: access_token,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("File upload failed");
-      }
-
+      // Pass the file directly (raw binary data will be sent)
+      await recordAttendance(selectedFile).unwrap();
       alert("Attendance uploaded successfully!");
     } catch (err) {
       console.error("Error:", err);
@@ -74,12 +59,8 @@ function AddAttendancePage() {
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Add Attendance</h1>
-
       <div style={{ marginBottom: "1rem" }}>
-        <button
-          onClick={() => setShowWebcam(true)}
-          style={{ marginRight: "1rem" }}
-        >
+        <button onClick={() => setShowWebcam(true)} style={{ marginRight: "1rem" }}>
           Use Webcam
         </button>
         <button
@@ -122,11 +103,7 @@ function AddAttendancePage() {
       {selectedFile && (
         <div style={{ marginTop: "1rem" }}>
           <p>Preview:</p>
-          <img
-            alt="Preview"
-            src={URL.createObjectURL(selectedFile)}
-            style={{ width: 200, height: "auto" }}
-          />
+          <img alt="Preview" src={URL.createObjectURL(selectedFile)} style={{ width: 200, height: "auto" }} />
         </div>
       )}
 

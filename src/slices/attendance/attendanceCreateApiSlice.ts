@@ -6,7 +6,7 @@ const attendanceCreateApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     credentials: 'include',
-    prepareHeaders: (headers: Headers) => {
+    prepareHeaders: (headers, { endpoint }) => {
       const cookies = document.cookie.split('; ').reduce((acc, current) => {
         const [key, value] = current.split('=');
         acc[key] = decodeURIComponent(value);
@@ -16,7 +16,10 @@ const attendanceCreateApiSlice = createApi({
       const token = cookies['access_token'];
 
       headers.set('Accept', 'application/json');
-      headers.set('Content-Type', 'application/json');
+      // Only set Content-Type for non-file endpoints.
+      if (endpoint !== 'recordAttendance') {
+        headers.set('Content-Type', 'application/json');
+      }
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);

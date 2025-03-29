@@ -1,5 +1,4 @@
-// src/components/AddAttendancePage.tsx
-"use client"; // For Next.js 13 app router
+"use client"; // If you're in Next.js 13 with app router
 import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
@@ -9,18 +8,16 @@ function AddAttendancePage() {
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
 
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     setSelectedFile(file || null);
   };
 
-  const [recordAttendance] = useRecordAttendanceMutation();
-
   const captureFromWebcam = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       const blob = dataURLtoBlob(imageSrc);
-      // Create a File object that mimics an uploaded file
       const file = new File([blob], "webcam.jpg", { type: blob.type });
       setSelectedFile(file);
       setShowWebcam(false);
@@ -39,16 +36,20 @@ function AddAttendancePage() {
     return new Blob([u8arr], { type: mime });
   };
 
+  const [recordAttendance] = useRecordAttendanceMutation();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!selectedFile) {
       alert("No file selected");
       return;
     }
 
     try {
-      // Pass the file directly (raw binary data will be sent)
-      await recordAttendance(selectedFile).unwrap();
+      // Send selectedFile inside an object { image: selectedFile }
+      const response = await recordAttendance({ image: selectedFile }).unwrap();
+      console.log('response', response);
       alert("Attendance uploaded successfully!");
     } catch (err) {
       console.error("Error:", err);
@@ -59,8 +60,12 @@ function AddAttendancePage() {
   return (
     <div style={{ padding: "1rem" }}>
       <h1>Add Attendance</h1>
+
       <div style={{ marginBottom: "1rem" }}>
-        <button onClick={() => setShowWebcam(true)} style={{ marginRight: "1rem" }}>
+        <button
+          onClick={() => setShowWebcam(true)}
+          style={{ marginRight: "1rem" }}
+        >
           Use Webcam
         </button>
         <button
@@ -91,7 +96,6 @@ function AddAttendancePage() {
         </div>
       )}
 
-      {/* Hidden file input for uploading an image */}
       <input
         id="uploadInput"
         type="file"
@@ -103,7 +107,11 @@ function AddAttendancePage() {
       {selectedFile && (
         <div style={{ marginTop: "1rem" }}>
           <p>Preview:</p>
-          <img alt="Preview" src={URL.createObjectURL(selectedFile)} style={{ width: 200, height: "auto" }} />
+          <img
+            alt="Preview"
+            src={URL.createObjectURL(selectedFile)}
+            style={{ width: 200, height: "auto" }}
+          />
         </div>
       )}
 

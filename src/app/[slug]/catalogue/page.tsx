@@ -10,7 +10,7 @@ function Page() {
     }, [setTitle]);
     return (
         <>
-            Catalogue page here
+            Catalogue 
         </>
     )
 }

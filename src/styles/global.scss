@@ -44,7 +44,46 @@ textarea {
     }
 }
 
-
+.hr-attendence-table {
+    .user-status {
+        .status {
+            text-transform:capitalize;
+            padding:5px 12px;
+            color:white;
+            border-radius:50px;
+            text-align: center;
+        }
+    } 
+    .approval-status {
+        .status {
+            text-transform:capitalize;
+            padding:5px 12px;
+            color:white;
+            border-radius:50px;
+            text-align: center;
+        }
+    } 
+} 
+.employee-attendence-view {
+    .user-status {
+        .status {
+            text-transform:capitalize;
+            padding:5px 12px;
+            color:white;
+            border-radius:50px;
+            text-align: center;
+        }
+    } 
+    .approval-status {
+        .status {
+            text-transform:capitalize;
+            padding:5px 12px;
+            color:white;
+            border-radius:50px;
+            text-align: center;
+        }
+    } 
+} 
 
 
 .account {

@@ -1,5 +1,6 @@
 import attendanceCreateApiSlice from "./attendanceCreateApiSlice";
 
+
 interface Attendance {
     id: number;
     user_id: number;
@@ -10,13 +11,26 @@ interface Attendance {
     clock_out: string | null;
     clock_out_image: string | null;
     status: string | null;
+    approval_status: string | null;
     created_at: string;
     updated_at: string;
+    user: User;
   }
+
+  
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    number: string;
+    uid: string;
+}
+  
 
   interface AttendanceResponse {
     attendances: Attendance[]; 
     attendance: Attendance[]; 
+    User: Attendance[]; 
   }
 
 const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({

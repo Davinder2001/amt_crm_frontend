@@ -24,9 +24,7 @@ const EditRolePage: React.FC = () => {
   const id = params?.id as string;
   const router = useRouter();
 
-  // If getRoles returns Role[] (no param):
-  const { data: rolesApiResponse, isLoading: rolesLoading, error: rolesError } =
-    useGetRolesQuery(id);
+  const { data: role, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(id);
 
   const {
     data: permissionsApiResponse,
@@ -41,36 +39,28 @@ const EditRolePage: React.FC = () => {
   const [companyId, setCompanyId] = useState<string>('');
   const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
 
-  // Once roles are loaded, find the matching ID
   useEffect(() => {
-    if (!rolesApiResponse) return;
-
-    const foundRole = rolesApiResponse.find((role: Role) => role.id.toString() === id);
-    if (foundRole) {
-      setName(foundRole.name);
-      setCompanyId(foundRole.company_id);
-
-      // Here we define (perm: Permission) so TS knows param type:
-      setSelectedPermissions(foundRole.permissions.map((perm: Permission) => perm.name));
+    if (role) {
+      setName(role.name);
+      setCompanyId(role.company_id);
+      setSelectedPermissions(role.permissions?.map((perm: Permission) => perm.name) || []);
     }
-  }, [rolesApiResponse, id]);
+  }, [role]);
 
-  // If permissionApi returns Permission[] | undefined:
   const permissionsList: Permission[] = permissionsApiResponse ?? [];
 
   if (rolesLoading || permissionsLoading) {
     return <p>Loading role and permissions...</p>;
   }
 
-  if (rolesError || permissionsError) {
+  if (rolesError || permissionsError || !role) {
     return <p>Error fetching role or permissions data.</p>;
   }
 
-  // Add type annotation for 'permissionName'
   const handlePermissionChange = (permissionName: string) => {
-    setSelectedPermissions((prevSelected: string[]) =>
+    setSelectedPermissions((prevSelected) =>
       prevSelected.includes(permissionName)
-        ? prevSelected.filter((name: string) => name !== permissionName)
+        ? prevSelected.filter((name) => name !== permissionName)
         : [...prevSelected, permissionName]
     );
   };
@@ -151,20 +141,16 @@ const EditRolePage: React.FC = () => {
           <div style={{ marginBottom: '12px' }}>
             <label>User Permissions:</label>
             <div>
-              {permissionsList.length > 0 ? (
-                permissionsList.map((permission: Permission) => (
-                  <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedPermissions.includes(permission.name)}
-                      onChange={() => handlePermissionChange(permission.name)}
-                    />
-                    {permission.name}
-                  </label>
-                ))
-              ) : (
-                <p>No user permissions available</p>
-              )}
+              {permissionsList.map((permission) => (
+                <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
+                  <input
+                    type="checkbox"
+                    checked={selectedPermissions.includes(permission.name)}
+                    onChange={() => handlePermissionChange(permission.name)}
+                  />
+                  {permission.name}
+                </label>
+              ))}
             </div>
           </div>
         )}
@@ -172,9 +158,7 @@ const EditRolePage: React.FC = () => {
         {selectedTab === 'other' && (
           <div style={{ marginBottom: '12px' }}>
             <label>Other Permissions:</label>
-            <div>
-              <p>No other permissions available yet</p>
-            </div>
+            <p>No other permissions available yet</p>
           </div>
         )}
 

@@ -53,14 +53,14 @@ function ViewAttendence() {
     };
 
     return (
-        <div>
+        <div className='hr-attendence-table'>
             {attendanceList.length > 0 ? (
                 <table border={1} cellPadding="10" cellSpacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Sr No</th>
+                            <th>Name</th>
                             <th>User Id</th>
-                            <th>Company Id</th>
                             <th>Attendance Date</th>
                             <th>Clock In</th>
                             <th>Clock In Image</th>
@@ -68,17 +68,15 @@ function ViewAttendence() {
                             <th>Clock Out Image</th>
                             <th>Status</th>
                             <th>Approval Status</th> 
-                            <th>Created At</th>
-                            <th>Updated At</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody>
-                        {attendanceList.map((attendance: Attendance) => (
+                        {attendanceList.map((attendance: Attendance, index: number) => (
                             <tr key={attendance.id}>
-                                <td>{attendance.id}</td>
-                                <td>{attendance.user_id}</td>
-                                <td>{attendance.company_id}</td>
+                                <td>{index + 1}</td>
+                                <td>{attendance.user.name}</td>
+                                <td>{attendance.user.uid}</td>
                                 <td>{attendance.attendance_date}</td>
                                 <td>{attendance.clock_in}</td>
                                 <td>
@@ -102,12 +100,37 @@ function ViewAttendence() {
                                         />
                                     )}
                                 </td>
-                                <td>{attendance.status}</td>
-                                <td>{attendance.approval_status}</td> {/* Show approval status */}
-                                <td>{new Date(attendance.created_at).toLocaleString()}</td>
-                                <td>{new Date(attendance.updated_at).toLocaleString()}</td>
+                                <td className='user-status'>
+                                    <div
+                                        className="status"
+                                        style={{
+                                            backgroundColor:
+                                                attendance.status === 'present' ? '#009693' :
+                                                attendance.status === 'leave' ? 'yellow' :
+                                                attendance.status === 'absent' ? 'red' :
+                                                'gray',
+                                            color: attendance.status === 'leave' ? 'black' : 'white'
+                                        }}
+                                    >
+                                        {attendance.status}
+                                    </div>
+                                </td>
+                                <td className='approval-status'>
+                                    <div
+                                        className="status"
+                                        style={{
+                                            backgroundColor:
+                                                attendance.approval_status === 'approved' ? '#009693' :
+                                                attendance.approval_status === 'pending' ? 'yellow' :
+                                                attendance.approval_status === 'unapproved' ? 'red' :
+                                                'gray',
+                                            color: attendance.approval_status === 'pending' ? 'black' : 'white'
+                                        }}
+                                    >
+                                        {attendance.approval_status}
+                                    </div>
+                                </td>
                                 <td>
-                                    {/* Add approve/reject buttons */}
                                     <button 
                                         onClick={() => handleApprove(attendance.id)} 
                                         style={{ marginRight: '10px' }}>

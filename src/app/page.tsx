@@ -3,12 +3,14 @@ import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const { data: profile, refetch } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation();
   const companies = profile?.user?.companies;
   const userType = profile?.user?.user_type;
+  const router = useRouter(); 
 
   const handleClick = async (companySlug: string, id: number) => {
 
@@ -16,7 +18,7 @@ const Page = () => {
 
     try {
       await sendCompanyId({ id }).unwrap();
-      window.location.href = `/${companySlug}/dashboard`; 
+      router.push(`/${companySlug}/dashboard`)
     } catch (error) {
       console.error(error);
       alert('Failed to select company. Please try again.');

@@ -14,7 +14,6 @@ interface User {
   uid: string;
 }
 
-// Define the type you expect for mutation responses
 interface MutationResponse {
   message: string;
 }
@@ -44,7 +43,6 @@ function ViewAttendence() {
 
   const handleApprove = async (attendanceId: number) => {
     try {
-      // Use type assertion to force the response to be of type MutationResponse
       const response = (await approveAttendance(attendanceId).unwrap()) as unknown as MutationResponse;
       toast.success(response.message);
       refetch();

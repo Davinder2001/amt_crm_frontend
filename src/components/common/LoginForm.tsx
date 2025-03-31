@@ -2,24 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLoginMutation, useLogoutMutation } from '@/slices/auth/authApi';
+import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useCompany } from '@/utils/Company';
 
 const LoginForm = () => {
   const router = useRouter();
   const { setUser, user } = useUser();
-
+  const {userType} = useCompany();
   const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const [login, { isLoading }] = useLoginMutation();
-  const [logout] = useLogoutMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,8 +35,11 @@ const LoginForm = () => {
       // Update user in context
       setUser(result.user);
 
-      // Navigate
-      router.push('/');
+      if (userType === 'super-admin') {
+        router.push('/superadmin/dashboard')
+      } else {
+        router.push('/');
+      }
       router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -44,31 +47,6 @@ const LoginForm = () => {
       } else {
         toast.error('An unknown error occurred');
       }
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await logout();
-      if (response && 'data' in response && response.data?.message) {
-        toast.success(response.data.message);
-
-        // Clear cookies
-        Cookies.remove('access_token');
-        Cookies.remove('user_type');
-        Cookies.remove('company_slug');
-
-        // Clear context
-        setUser(null);
-
-        // Redirect
-        router.push('/login');
-        router.refresh();
-      } else {
-        toast.error(response?.data?.message || 'Logout failed');
-      }
-    } catch (error) {
-      console.error('Logout failed', error);
     }
   };
 
@@ -87,14 +65,9 @@ const LoginForm = () => {
     <div>
       <div className="login-container">
         <div className="login-card">
-          <h2 className="login-header">
-            {isLoggedIn ? `Welcome, ${user?.name || 'User'}!` : 'Login'}
-          </h2>
 
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="logout-button">
-              Logout
-            </button>
+            ''
           ) : (
             <form onSubmit={handleLogin} className="login-form">
               <input

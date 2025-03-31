@@ -15,24 +15,20 @@ export function middleware(request: NextRequest) {
 
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
-    if (pathname !== '/login' && pathname!== '/forget-password') {
+    if (!authRoutes.includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();
   }
 
   if (laravelSession) {
-    // ✅ Allow access to "/" after login
-    if (pathname === '/') {
-      return NextResponse.next();
-    }
 
     // ✅ Handle superadmin redirection separately
-    if (userType === 'superadmin') {
+    if (userType === 'super-admin') {
       if (
         adminEmployeeRoutes(companySlug || '').some((route) => pathname.startsWith(route)) ||
-        authRoutes.includes(pathname) || 
-        !pathname.startsWith('/superadmin')
+        authRoutes.includes(pathname) ||
+        !pathname.startsWith('/superadmin') || pathname === '/' || pathname === '/superadmin'
       ) {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
@@ -41,6 +37,10 @@ export function middleware(request: NextRequest) {
 
     // ✅ Handle admin/employee/user redirection
     if (['admin', 'employee', 'user'].includes(userType || '')) {
+      // ✅ Allow access to "/" after login
+      if (pathname === '/') {
+        return NextResponse.next();
+      }
       // 👉 Redirect to "/" if:
       // - `companySlug` is null/undefined/empty
       // - OR pathname doesn't start with `/${companySlug}`

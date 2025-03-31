@@ -38,7 +38,7 @@ function AttendancesList() {
                 <td>{attendance.clock_in}</td>
                 <td>
                   {attendance.clock_in_image && (
-                    <img
+                    <Image
                       src={`${attendance.clock_in_image}`}
                       alt="Clock In"
                       width={50}

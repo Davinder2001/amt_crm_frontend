@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
-import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; // Assuming the API slice is correct
+import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; 
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
@@ -13,12 +13,8 @@ const Profile: React.FC = () => {
   const router = useRouter();
   const [logout] = useLogoutMutation();
 
-  // Fetch company slug
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
-
-  // Handle authentication and cookie check
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,25 +31,19 @@ const Profile: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      // Attempt to log out
       const response = await logout();
 
-      // Check if the logout response indicates success (assuming `logout` returns a success message or status)
       if (response?.data?.message) {
         toast.success(response?.data?.message);
-        // Only remove cookies if logout was successful
         Cookies.remove('access_token');
         Cookies.remove('user_type');
         Cookies.remove('company_slug');
 
-        // Update authentication state
         setIsAuthenticated(false);
 
-        // Redirect to login page
         router.push('/login');
         router.refresh();
       } else {
-        // Handle logout failure (you can also display a message or alert if necessary)
         toast.error(response?.data?.message)
       }
     } catch (error) {
@@ -61,24 +51,20 @@ const Profile: React.FC = () => {
     }
   };
 
-  // Automatically update UI based on cookies (after logout)
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
     const userType = Cookies.get('user_type');
     if (!accessToken || !userType) {
-      setIsAuthenticated(false); // Ensure context is cleared if cookies are missing
+      setIsAuthenticated(false);
     }
   }, []);
 
-  // Handle loading state or missing companySlug
-  // if (isFetching) return <p>Loading...</p>;
-  // if (!companySlug) return <p>No company data found</p>;
-
+ 
   return (
     <div className="account">
       {isAuthenticated ? (
         <div className="dropdown">
-          {/* Profile Icon as Dropdown Trigger */}
+ 
           <FaUserCircle
             size={30}
             color='#009693'

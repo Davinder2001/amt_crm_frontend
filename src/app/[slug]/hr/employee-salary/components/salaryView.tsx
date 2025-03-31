@@ -12,7 +12,7 @@ import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
-  const { data: employeesData, error, isLoading } = useFetchEmployeesSalaryQuery();
+  const { data: employeesData, error, isLoading, refetch } = useFetchEmployeesSalaryQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
 
   console.log("employeesData", employeesData);
@@ -30,6 +30,7 @@ const SalaryView: React.FC = () => {
     try {
       await deleteEmployee(id).unwrap();
       toast.success("Employee deleted successfully!");
+      refetch();
     } catch (err) {
       const errorMessage =
         err && typeof err === "object" && "data" in err

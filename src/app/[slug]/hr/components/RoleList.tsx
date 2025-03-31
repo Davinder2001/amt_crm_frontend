@@ -7,21 +7,9 @@ import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 
-interface Permission {
-  id: number;
-  name: string;
-}
-
-interface Role {
-  id: number;
-  name: string;
-  permissions: Permission[];
-  company_id: string;
-}
-
 const RoleList: React.FC = () => {
   // 1) Fetch roles
-  const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
+  const { data: rolesData, isLoading, error, refetch } = useGetRolesQuery(undefined);
   // 2) Prepare to delete roles
   const [deleteRole] = useDeleteRoleMutation();
   // 3) Fetch selected company for building the slug
@@ -33,6 +21,7 @@ const RoleList: React.FC = () => {
     try {
       await deleteRole(id).unwrap();
       toast.success("Role deleted successfully");
+      refetch();
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };

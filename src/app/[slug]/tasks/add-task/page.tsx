@@ -5,11 +5,15 @@ import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchUsersQuery } from '@/slices/users/userApi'; // Adjust the import path as needed
+import { useRouter } from 'next/navigation';
+import { useCompany } from '@/utils/Company';
 
 const Page: React.FC = () => {
   const [name, setName] = useState('');
   const [assignedTo, setAssignedTo] = useState(''); // Will store user id as string
   const [deadline, setDeadline] = useState('');
+  const router = useRouter();
+  const {companySlug} = useCompany();
 
   const [createTask, { isLoading, error }] = useCreateTaskMutation();
   const { data: usersData, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
@@ -29,6 +33,7 @@ const Page: React.FC = () => {
       setName('');
       setAssignedTo('');
       setDeadline('');
+      router.push(`/${companySlug}/tasks`)
     } catch (err) {
       console.error('Failed to create task:', err);
       toast.error('Error creating task');

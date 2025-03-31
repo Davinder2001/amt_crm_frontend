@@ -9,7 +9,7 @@ import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 const AllTasks: React.FC = () => {
-  const { data: tasks, error: tasksError, isLoading: tasksLoading } = useGetTasksQuery();
+  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch} = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
@@ -19,6 +19,7 @@ const AllTasks: React.FC = () => {
       try {
         await deleteTask(id).unwrap();
         toast.success('Task deleted successfully');
+        refetch();
       } catch (err) {
         console.error('Error deleting task:', err);
         toast.error('Error deleting task');

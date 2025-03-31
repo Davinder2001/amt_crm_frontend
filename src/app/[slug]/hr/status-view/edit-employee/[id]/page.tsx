@@ -8,6 +8,7 @@ import { useFetchEmployesQuery, useUpdateEmployeMutation } from '@/slices/employ
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
 import HrNavigation from '../../../components/hrNavigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import { useCompany } from '@/utils/Company';
 
 const EditUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -21,6 +22,7 @@ const EditUserPage: React.FC = () => {
 
   const [updateUser, { isLoading: isUpdating }] = useUpdateEmployeMutation();
   const router = useRouter();  // Only used if you navigate after the update
+  const {companySlug} = useCompany();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -53,7 +55,7 @@ const EditUserPage: React.FC = () => {
         roles: role ? [role] : [],
       }).unwrap();
       toast.success('User updated successfully!');
-      router.push('/hr/status-view');  // Navigate to the users page after successful update
+      router.push(`/${companySlug}/hr/status-view`);  // Navigate to the users page after successful update
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'data' in err) {
         const error = err as { data: { message: string } };

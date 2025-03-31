@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
+import { useRouter } from "next/navigation";
+import { useCompany } from "@/utils/Company";
 
 const Page: React.FC = () => {
 
@@ -16,6 +18,8 @@ const Page: React.FC = () => {
   const { data} = useFetchPermissionsQuery();
   const permissions = data || [];
   const [createRole, { isLoading }] = useCreateRoleMutation();
+  const router = useRouter();
+  const {companySlug} = useCompany();
 
 
   const [newRoleName, setNewRoleName] = useState<string>("");
@@ -38,6 +42,7 @@ const Page: React.FC = () => {
       toast.success(response.message || 'Role created successfully');
       setNewRoleName("");
       setSelectedPermissions([]);
+      router.push(`/${companySlug}/permissions`)
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Error creating role");

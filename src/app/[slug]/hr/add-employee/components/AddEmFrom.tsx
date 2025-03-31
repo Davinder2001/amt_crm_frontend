@@ -5,11 +5,13 @@ import { useCreateEmployeMutation } from "@/slices/employe/employe";
 import { useGetRolesQuery } from "@/slices/roles/rolesApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useCompany } from "@/utils/Company";
 
 const AddEmployeeForm: React.FC = () => {
   const router = useRouter();
   const [createEmployee, { isLoading }] = useCreateEmployeMutation();
   const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
+  const {companySlug} = useCompany();
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -62,7 +64,7 @@ const AddEmployeeForm: React.FC = () => {
     try {
       await createEmployee(formData).unwrap();
       toast.success("Employee created successfully!");
-      router.push("/hr/status-view");
+      router.push(`/${companySlug}/hr/status-view`);
     } catch {
       toast.error("Failed to create employee. Please try again.");
     }

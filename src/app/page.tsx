@@ -11,10 +11,12 @@ const Page = () => {
   const userType = profile?.user?.user_type;
 
   const handleClick = async (companySlug: string, id: number) => {
+
     Cookies.set('company_slug', companySlug, { path: '/' });
 
     try {
       await sendCompanyId({ id }).unwrap();
+      window.location.href = `/${companySlug}/dashboard`; 
     } catch (error) {
       console.error(error);
       alert('Failed to select company. Please try again.');

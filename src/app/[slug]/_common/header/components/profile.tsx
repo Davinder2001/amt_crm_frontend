@@ -88,8 +88,8 @@ const Profile: React.FC = () => {
 
           {isOpen && (
             <div className="dropdown-content">
-              <Link href={`/${companySlug}/profile`} onClick={() => setIsOpen(false)}>
-                <FaUser className="icon" /> Profile
+              <Link href={`/${companySlug}/my-account`} onClick={() => setIsOpen(false)}>
+                <FaUser className="icon" /> My Account
               </Link>
               <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)}>
                 <FaCog className="icon" /> Settings

@@ -2,6 +2,7 @@
 import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
+import Image from "next/image";
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -107,11 +108,14 @@ function AddAttendancePage() {
       {selectedFile && (
         <div style={{ marginTop: "1rem" }}>
           <p>Preview:</p>
-          <img
+          <Image
             alt="Preview"
             src={URL.createObjectURL(selectedFile)}
-            style={{ width: 200, height: "auto" }}
+            width={100}
+            height={100}
+            unoptimized
           />
+  
         </div>
       )}
 

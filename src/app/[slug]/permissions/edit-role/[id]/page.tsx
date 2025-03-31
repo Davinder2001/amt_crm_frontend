@@ -12,12 +12,6 @@ interface Permission {
   name: string;
 }
 
-interface Role {
-  id: number;
-  name: string;
-  permissions: Permission[];
-  company_id: string;
-}
 
 const EditRolePage: React.FC = () => {
   const params = useParams();

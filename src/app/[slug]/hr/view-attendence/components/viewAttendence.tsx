@@ -2,6 +2,7 @@
 import { useFetchAttenancesQuery } from '@/slices/attendance/attendance';
 import React from 'react';
 import { useApproveAttendanceMutation, useRejectAttendanceMutation } from '@/slices/attendance/attendance';
+import Image from 'next/image';
 
 interface User {
     id: number;
@@ -65,7 +66,7 @@ function ViewAttendence() {
                             <th>Clock In</th>
                             <th>Clock In Image</th>
                             <th>Clock Out</th>
-                            <th>Clock Out Image</th>
+                            <th>Clock Out </th>
                             <th>Status</th>
                             <th>Approval Status</th> 
                             <th>Action</th> 
@@ -81,11 +82,12 @@ function ViewAttendence() {
                                 <td>{attendance.clock_in}</td>
                                 <td>
                                     {attendance.clock_in_image && (
-                                        <img
-                                            src={`${attendance.clock_in_image}`}
-                                            alt="Clock In"
-                                            width={100}
-                                            height={100}
+                                    <Image
+                                        alt="Preview"
+                                        src={`${attendance.clock_out_image}`}
+                                        width={100}
+                                        height={100}
+                                        unoptimized
                                         />
                                     )}
                                 </td>

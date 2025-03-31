@@ -1,5 +1,6 @@
 'use client';
 import { useFetchAttenancesQuery } from '@/slices/attendance/attendance';
+import Image from 'next/image';
 import React from 'react';
 
 
@@ -48,13 +49,14 @@ function AttendancesList() {
                 <td>{attendance.clock_out}</td>
                 <td>
                   {attendance.clock_out_image && (
-                    <img
-                      src={`${attendance.clock_out_image}`}
-                      alt="Clock Out"
-                      width={50}
-                      height={50}
-                    />
-                  )}
+                  <Image
+                    alt="Preview"
+                    src={`${attendance.clock_out_image}`}
+                    width={100}
+                    height={100}
+                    unoptimized
+                  />
+                )}
                 </td>
                 <td className='user-status'>
                 <div

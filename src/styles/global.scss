@@ -206,6 +206,38 @@ textarea {
 
 
 
+.company-inneer-main {
+    .company-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+        padding: 20px;
+        .company-inner {
+            background-color:#019693;
+            padding: 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            
+            &:hover {
+                background-color: #019677;
+                transform: scale(1.1);
+              }
+
+            .company-link {
+                color: white;
+                text-decoration: none;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+
+
+            }            
+        }
+        
+    }
+}
+
 
 
 

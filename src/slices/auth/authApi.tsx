@@ -30,7 +30,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Auth"],
     }),
 
-    // Updated Forgot Password API to accept email
     forgotPassword: builder.mutation<void, { email: string }>({
       query: (data) => ({
         url: "password/forgot",
@@ -40,7 +39,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
-    // Updated Verify OTP API to accept email
     verifyOtp: builder.mutation<void, { email: string; otp: string; password: string; password_confirmation: string }>({
       query: (data) => ({
         url: "password/verify-otp",
@@ -50,7 +48,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
-    // New endpoint for Change Password
     changePassword: builder.mutation<void, { oldPassword: string; newPassword: string }>({
       query: (data) => ({
         url: "password/change",
@@ -60,7 +57,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
-    // Send company id to selectedCompanies/{id}
     selectedCompany: builder.mutation<void, { id: number }>({
       query: ({ id }) => ({
         url: `selectedCompanies/${id}`,

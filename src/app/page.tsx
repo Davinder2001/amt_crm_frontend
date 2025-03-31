@@ -9,8 +9,6 @@ const Page = () => {
   const [sendCompanyId] = useSelectedCompanyMutation();
   const companies = profile?.user?.companies;
 
-  console.log('companies', companies)
-
   const handleClick = async (companySlug: string, id: number) => {
     Cookies.set('company_slug', companySlug, { path: '/' });
 

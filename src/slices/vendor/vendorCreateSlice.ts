@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const attendanceCreateApiSlice = createApi({
-  reducerPath: 'vendorApiSlice',
+const storeApiSlice = createApi({
+  reducerPath: 'vendorApi',
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     credentials: 'include',
@@ -14,6 +14,9 @@ const attendanceCreateApiSlice = createApi({
 
       const token = cookies['access_token'];
 
+      headers.set('Accept', 'application/json');
+      headers.set('Content-Type', 'application/json');
+
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -21,8 +24,8 @@ const attendanceCreateApiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Store'],
+  tagTypes: ['Vendor'],
   endpoints: () => ({}),
 });
 
-export default attendanceCreateApiSlice;
+export default storeApiSlice;

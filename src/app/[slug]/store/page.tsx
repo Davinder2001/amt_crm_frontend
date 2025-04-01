@@ -1,15 +1,20 @@
 'use client';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
+import Items from './components/items';
+import StoreNavigation from './components/storeNavigation';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    setTitle('Store'); // Update breadcrumb title
+    setTitle('Store');
   }, [setTitle]);
   return (
-    <div>page</div>
+    <>
+      <StoreNavigation/>
+      <Items/>
+    </>
   )
 }
 

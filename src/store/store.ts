@@ -3,6 +3,7 @@ import authApiSlice from '@/slices/auth/authCreateSlice';
 import userApiSlice from '@/slices/users/userCreateSlice';
 import employeCreateApiSlice from '@/slices/employe/employeeCreateSlice';
 import storeApiSlice from '@/slices/store/storeCreateSlice';
+import vendorApiSlice from '@/slices/vendor/vendorCreateSlice';
 import roleApiSlice from '@/slices/roles/rolesCreateSlice';
 import permissionApiSlice from '@/slices/permissions/permissionCreateSlice';
 import tasksApi from '@/slices/tasks/taskApiCreateSlice';
@@ -14,6 +15,7 @@ const store = configureStore({
     [userApiSlice.reducerPath]: userApiSlice.reducer,
     [employeCreateApiSlice.reducerPath]: employeCreateApiSlice.reducer,
     [storeApiSlice.reducerPath]: storeApiSlice.reducer,
+    [vendorApiSlice.reducerPath]: vendorApiSlice.reducer,
     [roleApiSlice.reducerPath]: roleApiSlice.reducer,
     [permissionApiSlice.reducerPath]: permissionApiSlice.reducer,
     [tasksApi.reducerPath]: tasksApi.reducer,
@@ -25,10 +27,11 @@ const store = configureStore({
       .concat(userApiSlice.middleware)
       .concat(employeCreateApiSlice.middleware)
       .concat(storeApiSlice.middleware)
+      .concat(vendorApiSlice.middleware)
       .concat(roleApiSlice.middleware)
       .concat(permissionApiSlice.middleware)
       .concat(tasksApi.middleware)
-      .concat(attendanceApiSlice.middleware)
+      .concat(attendanceApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

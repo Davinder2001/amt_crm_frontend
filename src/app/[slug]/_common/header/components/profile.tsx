@@ -7,7 +7,7 @@ import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/a
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
-import { useCompany } from "@/utils/Company";
+// import { useCompany } from "@/utils/Company";
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

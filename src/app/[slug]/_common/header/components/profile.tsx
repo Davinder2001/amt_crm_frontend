@@ -2,19 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
-import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; 
+import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa"; // Importing Icons
+import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi"; // Assuming the API slice is correct
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
+import { useCompany } from "@/utils/Company";
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const [logout] = useLogoutMutation();
 
+  // Fetch company slug
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
+  // Extract companySlug from selectedCompany
   const companySlug = selectedCompany?.selected_company?.company_slug;
+
+  // Handle authentication and cookie check
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {

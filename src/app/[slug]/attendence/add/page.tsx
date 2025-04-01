@@ -3,11 +3,16 @@ import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useCompany } from "@/utils/Company";
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
+  const router = useRouter();
+  const {companySlug} = useCompany();
 
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +48,7 @@ function AddAttendancePage() {
     e.preventDefault();
 
     if (!selectedFile) {
-      alert("No file selected");
+      toast.error("No file selected");
       return;
     }
 
@@ -51,10 +56,11 @@ function AddAttendancePage() {
       // Send selectedFile inside an object { image: selectedFile }
       const response = await recordAttendance({ image: selectedFile }).unwrap();
       console.log('response', response);
-      alert("Attendance uploaded successfully!");
+      toast.success("Attendance uploaded successfully!");
+      router.push(`${companySlug}/attendence`)
     } catch (err) {
       console.error("Error:", err);
-      alert("Failed to upload attendance");
+      toast.error("Failed to upload attendance");
     }
   };
 
@@ -115,7 +121,7 @@ function AddAttendancePage() {
             height={100}
             unoptimized
           />
-  
+
         </div>
       )}
 

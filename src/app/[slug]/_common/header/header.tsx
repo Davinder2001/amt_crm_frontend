@@ -5,18 +5,18 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import SearchBar from '../search/SearchBar';
 import Link from 'next/link';
 import {FaRegBell } from 'react-icons/fa';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import { useCompany } from '@/utils/Company';
 
 const Header = () => {
   const { title } = useBreadcrumb();
-  const {currentData} = useFetchSelectedCompanyQuery();
+  const {companySlug} = useCompany();
 
   return (
     <div className='header'>
       <h1 >{title}</h1>
       <div className="nav-container">
         <SearchBar/>
-        <Link href={`/${currentData?.selected_company.company_slug}/notifications`}> <FaRegBell size={20} color='#009693'/> </Link>
+        <Link href={`/${companySlug}/notifications`}> <FaRegBell size={20} color='#009693'/> </Link>
         <Profile />
       </div>
 

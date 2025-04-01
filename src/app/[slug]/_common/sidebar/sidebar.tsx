@@ -2,17 +2,15 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import {
   FaTachometerAlt, FaStore, FaUserTie, FaUserShield,
   FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, FaClipboardList, FaBox
 } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu"; // Services Icon
-
+import { useCompany } from "@/utils/Company";
 const Sidebar = () => {
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
-  console.log(selectedCompany);
+
+  const {companySlug} = useCompany();
 
   // Using useRouter to get the current route
   const asPath = usePathname();

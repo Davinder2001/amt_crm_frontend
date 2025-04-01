@@ -35,7 +35,7 @@ interface Attendance {
 }
 
 function ViewAttendence() {
-  const { data: attendancesResponse, refetch } = useFetchAttenancesQuery(); 
+  const { data: attendancesResponse, refetch } = useFetchAttenancesQuery();
   const [approveAttendance] = useApproveAttendanceMutation();
   const [rejectAttendance] = useRejectAttendanceMutation();
 
@@ -45,9 +45,9 @@ function ViewAttendence() {
     try {
       const response = (await approveAttendance(attendanceId).unwrap()) as unknown as MutationResponse;
       toast.success(response.message);
-      refetch(); 
-    } catch (error: any) {
-      toast.error(error.data?.message || 'Error approving attendance.');
+      refetch();
+    } catch {
+      toast.error('Error approving attendance.');
     }
   };
 
@@ -56,8 +56,8 @@ function ViewAttendence() {
       const response = (await rejectAttendance(attendanceId).unwrap()) as unknown as MutationResponse;
       toast.success(response.message);
       refetch();
-    } catch (error: any) {
-      toast.error(error.data?.message || 'Error rejecting attendance.');
+    } catch {
+      toast.error('Error rejecting attendance.');
     }
   };
 
@@ -76,8 +76,8 @@ function ViewAttendence() {
               <th>Clock Out</th>
               <th>Clock Out Image</th>
               <th>Status</th>
-              <th>Approval Status</th> 
-              <th>Action</th> 
+              <th>Approval Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@ function ViewAttendence() {
                 <td>{attendance.clock_out}</td>
                 <td>
                   {attendance.clock_out_image && (
-                    <img
+                    <Image
                       src={attendance.clock_out_image}
                       alt="Clock Out"
                       width={100}
@@ -118,10 +118,10 @@ function ViewAttendence() {
                         attendance.status === 'present'
                           ? '#009693'
                           : attendance.status === 'leave'
-                          ? 'yellow'
-                          : attendance.status === 'absent'
-                          ? 'red'
-                          : 'gray',
+                            ? 'yellow'
+                            : attendance.status === 'absent'
+                              ? 'red'
+                              : 'gray',
                       color: attendance.status === 'leave' ? 'black' : 'white'
                     }}
                   >
@@ -136,10 +136,10 @@ function ViewAttendence() {
                         attendance.approval_status === 'approved'
                           ? '#009693'
                           : attendance.approval_status === 'pending'
-                          ? 'yellow'
-                          : attendance.approval_status === 'unapproved'
-                          ? 'red'
-                          : 'gray',
+                            ? 'yellow'
+                            : attendance.approval_status === 'unapproved'
+                              ? 'red'
+                              : 'gray',
                       color: attendance.approval_status === 'pending' ? 'black' : 'white'
                     }}
                   >
@@ -147,14 +147,14 @@ function ViewAttendence() {
                   </div>
                 </td>
                 <td>
-                  <button 
-                    onClick={() => handleApprove(attendance.id)} 
+                  <button
+                    onClick={() => handleApprove(attendance.id)}
                     style={{ marginRight: '10px' }}
                   >
                     Approve
                   </button>
-                  <button 
-                    onClick={() => handleReject(attendance.id)} 
+                  <button
+                    onClick={() => handleReject(attendance.id)}
                     style={{ marginRight: '10px' }}
                   >
                     Reject

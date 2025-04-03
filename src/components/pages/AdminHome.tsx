@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify'; // Import toastify for showing toast messages
 import 'react-toastify/dist/ReactToastify.css'; // Import styles for toastify
-import Logout from '../common/Logout';
 
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
@@ -63,7 +62,6 @@ const AdminHome = () => {
                     ) : (
                         <>
                             <h1>Companies</h1>
-                            {/* <Logout /> */}
                             <div className="company-grid">
                                 {Array.isArray(companies) && companies.length > 0 ? (
                                     companies.map((company, index) => (

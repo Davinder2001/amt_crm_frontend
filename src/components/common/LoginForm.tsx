@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';

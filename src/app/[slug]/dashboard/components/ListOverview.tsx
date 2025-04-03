@@ -201,10 +201,11 @@ import {
   FaUserFriends,
   FaSpinner,
 } from "react-icons/fa";
+import { useFetchEmployesQuery } from "@/slices/employe/employe";
 
 const ListOverview = () => {
-  const { data, error, isLoading } = useFetchUsersQuery();
-  const EmployeeCount = data ? data.users.length : 0;
+  const { data, error, isLoading } = useFetchEmployesQuery();
+  const EmployeeCount = data ? data.employees.length : 0;
 
   return (
     <div className="dashboard-container">
@@ -246,7 +247,7 @@ const ListOverview = () => {
         }
         .grid-container {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 15px;
         }
         .card {

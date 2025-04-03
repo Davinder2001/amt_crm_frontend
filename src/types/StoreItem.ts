@@ -31,6 +31,7 @@ export interface CreateStoreItemRequest {
   category?: string;
   vendor_name?: string;
   availability_stock: number;
+  images: File[]
 }
 
 export type StoreResponse = StoreItem[];

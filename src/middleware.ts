@@ -12,7 +12,10 @@ export function middleware(request: NextRequest) {
   if (companySlug === 'undefined' || companySlug === '') {
     companySlug = undefined;
   }
-
+  // ✅ Allow access to public routes (even if not logged in)
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
@@ -63,6 +66,10 @@ export function middleware(request: NextRequest) {
 
     // Allow other users to continue to their pages
     if (['user'].includes(userType || '')) {
+      // ✅ Allow access to public routes (even if not logged in)
+      if (publicRoutes.includes(pathname)) {
+        return NextResponse.next();
+      }
       return NextResponse.next();
     }
   }

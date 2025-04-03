@@ -37,6 +37,7 @@ const LoginForm = () => {
       // Handle redirection based on user type and associated companies
       if (result.user.user_type === 'admin') {
         // Admin can access root ("/")
+        router.refresh();
         router.push('/');
       } else if (result.user.user_type === 'employee') {
         // Employee is redirected to their company's dashboard
@@ -116,6 +117,7 @@ const LoginForm = () => {
         <Link href="/forget-password" className="forgot-password-link">
           Forget Password
         </Link>
+        <Link href="/register-your-company"> Register your company </Link>
       </div>
       <ToastContainer />
     </div>

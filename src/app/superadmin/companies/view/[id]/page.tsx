@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { useFetchCompaniesQuery, Company } from '@/slices/superadminSlices/company/companyApi';
+import { useFetchCompaniesQuery} from '@/slices/superadminSlices/company/companyApi';
 
 interface PageProps {
   params: Promise<{ id: string }>;

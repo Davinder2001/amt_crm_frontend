@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useFetchCompaniesQuery, Company } from '@/slices/superadminSlices/company/companyApi';
+import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
 
 const CompanyComponent = () => {
   const { data, error, isLoading } = useFetchCompaniesQuery();

@@ -4,7 +4,7 @@ import UserHome from '@/components/pages/UserHome';
 import { useCompany } from '@/utils/Company';
 import React from 'react'
 
-function page() {
+function Page() {
   const { userType } = useCompany();
   return (
     <>
@@ -13,4 +13,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

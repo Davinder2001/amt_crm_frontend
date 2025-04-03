@@ -13,7 +13,8 @@ const Footer = () => {
             padding: '20px',
             borderTop: '1px solid #f3f3f3',
             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: '10px'
+            borderRadius: '10px',
+            marginTop: '20px',
         }}>
             <div style={{
                 display: 'flex',

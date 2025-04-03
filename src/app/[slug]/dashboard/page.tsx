@@ -1,33 +1,21 @@
 "use client";
-import React, { useEffect } from 'react';
-import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import the hook
+import React, { useEffect } from 'react'
+import ListOverview from './components/ListOverview'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
-const Page = () => {
+function Page() {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
     setTitle('Overview'); // Update breadcrumb title
   }, [setTitle]);
-  // Fetch users data from the API
-  const { data, error, isLoading } = useFetchUsersQuery();
-
-  // Check if data is fetched and count the number of users
-  const userCount = data ? data.users.length : 0;
-
   return (
-    <div>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p style={{ color: 'red' }}>Error fetching users.</p>
-      ) : (
-        <div>
-          <p>Total Users: {userCount}</p>
-        </div>
-      )}
-    </div>
-  );
-};
+    <>
+      <div className="dashboard-page">
+        <ListOverview />
+      </div>
+    </>
+  )
+}
 
-export default Page;
+export default Page

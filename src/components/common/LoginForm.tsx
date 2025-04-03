@@ -2,14 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFetchProfileQuery, useLoginMutation } from '@/slices/auth/authApi';
+import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useCompany } from '@/utils/Company';
 
 const LoginForm = () => {
   const router = useRouter();

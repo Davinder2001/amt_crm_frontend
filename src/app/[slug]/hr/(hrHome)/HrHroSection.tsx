@@ -10,7 +10,7 @@ const HrHeroSection = () => {
   const employees = employeesData?.employees || [];
   const totalEmployees = employeesData?.total || 0;
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
-  const { companySlug } = useCompany();
+  // const { companySlug } = useCompany();
 
   return (
     <div className="hr-hero-section">
@@ -173,10 +173,11 @@ const TimeSection = React.memo(() => {
     </div>
   );
 });
+TimeSection.displayName = 'TimeSection'; 
 
 // Reusable Stat Card Component
 const StatCard = React.memo(({ icon, value, label }: { icon: React.ReactNode; value: string | number; label: string }) => {
-  const { companySlug } = useCompany();
+  // const { companySlug } = useCompany();
   return (
     <>
       <div className="stat-card">
@@ -210,7 +211,7 @@ const StatCard = React.memo(({ icon, value, label }: { icon: React.ReactNode; va
     </>
   )
 }
-
 );
-
+StatCard.displayName = 'StatCard';
+ 
 export default HrHeroSection;

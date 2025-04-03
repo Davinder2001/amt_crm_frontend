@@ -1,16 +1,5 @@
 import companyCreateApiSlice from "./companyCreateSlice";
 
-// Define types for your Company and responses (adjust these interfaces as needed)
-export interface Company {
-  id: string;
-  name: string;
-  // add additional fields here
-}
-
-export interface CompaniesResponse {
-  companies: Company[];
-}
-
 const companyApi = companyCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // GET: Fetch all companies

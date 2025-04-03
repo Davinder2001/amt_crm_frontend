@@ -1,12 +1,11 @@
 import React from 'react'
+import Company from './components/company'
 
 const Page = () => {
   return (
-    <div>
-    <h1>
-        Companies
-    </h1>
-    </div>
+    <>
+      <Company/>
+    </>
   )
 }
 

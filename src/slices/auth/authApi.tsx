@@ -11,7 +11,10 @@ const authApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    login: builder.mutation<{ access_token: string; user: Profile, message: string }, { number: string; password: string }>({
+    login: builder.mutation<
+      { access_token: string; user: Profile; message: string },
+      { number: string; password: string }
+    >({
       query: (credentials) => ({
         url: "c-login",
         method: "POST",
@@ -21,7 +24,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Auth"],
     }),
 
-    logout: builder.mutation<{message: string}, void>({
+    logout: builder.mutation<{ message: string }, void>({
       query: () => ({
         url: "logout",
         method: "POST",
@@ -39,7 +42,10 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
-    verifyOtp: builder.mutation<void, { email: string; otp: string; password: string; password_confirmation: string }>({
+    verifyOtp: builder.mutation<
+      void,
+      { email: string; otp: string; password: string; password_confirmation: string }
+    >({
       query: (data) => ({
         url: "password/verify-otp",
         method: "POST",
@@ -73,6 +79,16 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
       providesTags: ["Auth"],
     }),
+
+    adminRegister: builder.mutation<{ access_token: string; user: Profile; message: string },{ name: string; email: string; password: string; password_confirmation: string }>({
+      query: (credentials) => ({
+        url: "admin-register",
+        method: "POST",
+        body: credentials,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
@@ -84,7 +100,8 @@ export const {
   useVerifyOtpMutation, 
   useChangePasswordMutation,
   useSelectedCompanyMutation,
-  useFetchSelectedCompanyQuery
+  useFetchSelectedCompanyQuery,
+  useAdminRegisterMutation,
 } = authApi;
 
 export default authApi;

@@ -1,8 +1,11 @@
 import React from 'react'
+import RegisterForm from './components/registerForm'
 
 function page() {
   return (
-    <div>register-your-company</div>
+   <>
+    <RegisterForm/>
+   </>
   )
 }
 

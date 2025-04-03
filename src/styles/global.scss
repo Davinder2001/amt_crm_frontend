@@ -1,6 +1,6 @@
 // common styles for the application
 @use './variables' as *;
-@use './fonts' as *;
+@use './fonts.scss' as *;
 
 // task-details-section
 @use './tasks/task_details.scss' as *;

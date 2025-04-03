@@ -15,11 +15,15 @@ export const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) 
   }
   return (
     <div className="super-admin-layout-wrapper">
-      <div className="side-bar">
-        <SideBar />
+      <div className="super-admin-layout-inner">
+        <div className="sidebar">
+          <SideBar />
+        </div>
+        <div className="content-area">
+          <Header />
+          <main className="super-admin-layout">{children}</main>
+        </div>
       </div>
-      <Header />
-      <main className="super-admin-layout">{children}</main>
     </div>
   );
 }

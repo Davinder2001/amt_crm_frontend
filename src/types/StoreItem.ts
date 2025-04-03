@@ -39,4 +39,21 @@ export interface OcrResponse {
     result: string;
 }
 
+// In your types file (e.g., /src/types/StoreItem.ts)
+export interface UpdateStoreItemRequest {
+  id: number;
+  name: string;
+  quantity_count: number;
+  measurement?: string;
+  purchase_date?: string;
+  date_of_manufacture: string;
+  date_of_expiry?: string;
+  description: string;
+  brand_name: string;
+  replacement?: string;
+  category?: string;
+  vendor_name?: string;
+  availability_stock: number;
+}
+
 

@@ -1,7 +1,5 @@
 "use client";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/app/[slug]/_common/sidebar/sidebar";
 import Header from "@/app/[slug]/_common/header/header";
 import Footer from "@/app/[slug]/_common/footer/footer";
@@ -26,7 +24,6 @@ export const AdminEmployeeLayout = ({
         {children}
         <Footer />
       </div>
-      <ToastContainer autoClose={2000} />
     </div>
   );
 }

@@ -1,58 +1,21 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useFetchEmployesQuery } from '@/slices/employe/employe';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
 import Link from 'next/link';
+import { useCompany } from '@/utils/Company';
 
 const HrHeroSection = () => {
   const { data: employeesData } = useFetchEmployesQuery();
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
-
   const employees = employeesData?.employees || [];
   const totalEmployees = employeesData?.total || 0;
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
-
-  const [dateTime, setDateTime] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDateTime(new Date()); // Just use local time directly
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-IN', { hour12: true });
-  };
-
-  const formatDay = (date: Date) => {
-    const day = date.getDate();
-    const suffix =
-      day % 10 === 1 && day !== 11
-        ? 'st'
-        : day % 10 === 2 && day !== 12
-        ? 'nd'
-        : day % 10 === 3 && day !== 13
-        ? 'rd'
-        : 'th';
-    return `${day}${suffix}`;
-  };
+  const { companySlug } = useCompany();
 
   return (
     <div className="hr-hero-section">
       {/* Left Section - Time & Attendance */}
-      <div className="time-section">
-        <p className="time">{formatTime(dateTime)}</p>
-        <p className="date">
-          Today: {formatDay(dateTime)}{' '}
-          {dateTime.toLocaleString('default', { month: 'long' })} {dateTime.getFullYear()}
-        </p>
-        <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendence`}>
-          View Attendance
-        </Link>
-      </div>
+      <TimeSection />
 
       {/* Middle Section - Stats Overview */}
       <div className="stats-overview">
@@ -87,32 +50,6 @@ const HrHeroSection = () => {
           padding: 30px;
           background: #f7f9fc;
           border-radius: 10px;
-        }
-
-        .time-section {
-          background: white;
-          padding: 15px;
-          border-radius: 8px;
-          text-align: center;
-        }
-
-        .time {
-          font-size: 18px;
-          font-weight: bold;
-        }
-
-        .date {
-          color: gray;
-        }
-
-        .attendance-btn {
-          margin-top: 10px;
-          background: #007bff;
-          color: white;
-          padding: 8px 12px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
         }
 
         .stats-overview {
@@ -167,23 +104,88 @@ const HrHeroSection = () => {
   );
 };
 
-// Reusable Stat Card Component
-const StatCard = ({
-  icon,
-  value,
-  label,
-}: {
-  icon: React.ReactNode;
-  value: string | number;
-  label: string;
-}) => (
-  <div className="stat-card">
-    {icon}
-    <div>
-      <h2>{value}</h2>
-      <p>{label}</p>
+// TimeSection component for the time logic
+const TimeSection = React.memo(() => {
+  const [dateTime, setDateTime] = useState(new Date());
+  const { companySlug } = useCompany();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-IN', { hour12: true });
+  };
+
+  const formatDay = (date: Date) => {
+    const day = date.getDate();
+    const suffix =
+      day % 10 === 1 && day !== 11
+        ? 'st'
+        : day % 10 === 2 && day !== 12
+          ? 'nd'
+          : day % 10 === 3 && day !== 13
+            ? 'rd'
+            : 'th';
+    return `${day}${suffix}`;
+  };
+
+  return (
+    <div className="time-section">
+      <p className="time">{formatTime(dateTime)}</p>
+      <p className="date">
+        Today: {formatDay(dateTime)}{' '}
+        {dateTime.toLocaleString('default', { month: 'long' })} {dateTime.getFullYear()}
+      </p>
+      <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendence`}>
+        View Attendance
+      </Link>
+      <style jsx>{`
+        .time-section {
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+          text-align: center;
+        }
+
+        .time {
+          font-size: 18px;
+          font-weight: bold;
+        }
+
+        .date {
+          color: gray;
+        }
+
+        .attendance-btn {
+          margin-top: 10px;
+          background: #007bff;
+          color: white;
+          padding: 8px 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      `}</style>
     </div>
-    <style jsx>{`
+  );
+});
+
+// Reusable Stat Card Component
+const StatCard = React.memo(({ icon, value, label }: { icon: React.ReactNode; value: string | number; label: string }) => {
+  const { companySlug } = useCompany();
+  return (
+    <>
+      <div className="stat-card">
+        {icon}
+        <div>
+          <h2>{value}</h2>
+          <p>{label}</p>
+        </div>
+        <style jsx>{`
       .stat-card {
         display: flex;
         align-items: center;
@@ -204,7 +206,11 @@ const StatCard = ({
         font-size: 14px;
       }
     `}</style>
-  </div>
+      </div>
+    </>
+  )
+}
+
 );
 
 export default HrHeroSection;

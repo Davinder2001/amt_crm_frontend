@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLoginMutation } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useLoginMutation } from '@/slices/auth/authApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
@@ -14,7 +14,6 @@ import { useCompany } from '@/utils/Company';
 const LoginForm = () => {
   const router = useRouter();
   const { setUser, user } = useUser();
-  const {userType} = useCompany();
   const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -35,11 +34,22 @@ const LoginForm = () => {
       // Update user in context
       setUser(result.user);
 
-      if (userType === 'super-admin') {
-        router.push('/superadmin/dashboard')
-      } else {
+      // Handle redirection based on user type and associated companies
+      if (result.user.user_type === 'admin') {
+        // Admin can access root ("/")
         router.push('/');
+      } else if (result.user.user_type === 'employee') {
+        // Employee is redirected to their company's dashboard
+        if (result.user.companies && result.user.companies.length === 1) {
+          const companySlug = result.user.companies[0].company_slug;
+          Cookies.set('company_slug', companySlug, { path: '/' });
+          router.push(`/${companySlug}/dashboard`);
+        } else {
+          // If multiple companies, let them choose
+          router.push('/');
+        }
       }
+
       router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -52,7 +62,6 @@ const LoginForm = () => {
 
   const isLoggedIn = !!user;
 
-  // Lint fix: include setUser in dependency array
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
     const userType = Cookies.get('user_type');

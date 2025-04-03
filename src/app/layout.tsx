@@ -4,6 +4,8 @@ import Provider from "@/provider/Provider";
 import LayoutWrapper from "../layouts/LayoutWrapper";
 import { UserProvider } from "@/provider/UserContext";
 import { BreadcrumbProvider } from "@/provider/BreadcrumbContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "AMT CRM",
@@ -18,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <ToastContainer autoClose={20000000000000} />
         <Provider>
           <BreadcrumbProvider>
             <UserProvider>

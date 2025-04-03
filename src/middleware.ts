@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { authRoutes, adminEmployeeRoutes } from '@/routes';
+import { authRoutes, adminEmployeeRoutes, publicRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get('access_token');
@@ -22,7 +22,6 @@ export function middleware(request: NextRequest) {
   }
 
   if (laravelSession) {
-
     // ✅ Handle superadmin redirection separately
     if (userType === 'super-admin') {
       if (
@@ -35,12 +34,18 @@ export function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // ✅ Handle admin/employee/user redirection
-    if (['admin', 'employee', 'user'].includes(userType || '')) {
-      // ✅ Allow access to "/" after login
-      if (pathname === '/') {
+    // ✅ Handle admin/employee redirection
+    if (['admin', 'employee'].includes(userType || '')) {
+      // ✅ Allow access to "/" after login only for admins
+      if (userType === 'admin' && pathname === '/') {
         return NextResponse.next();
       }
+
+      // Employees should not access root path "/"
+      if (userType === 'employee' && pathname === '/') {
+        return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
+      }
+
       // 👉 Redirect to "/" if:
       // - `companySlug` is null/undefined/empty
       // - OR pathname doesn't start with `/${companySlug}`
@@ -53,6 +58,11 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
 
+      return NextResponse.next();
+    }
+
+    // Allow other users to continue to their pages
+    if (['user'].includes(userType || '')) {
       return NextResponse.next();
     }
   }

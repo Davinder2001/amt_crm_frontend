@@ -61,20 +61,11 @@ const LoginForm = () => {
   };
 
   const isLoggedIn = !!user;
-
-  useEffect(() => {
-    const accessToken = Cookies.get('access_token');
-    const userType = Cookies.get('user_type');
-    if (!accessToken || !userType) {
-      setUser(null); // Clear context if cookies are missing
-    }
-  }, [setUser]);
-
+  
   return (
     <div>
       <div className="login-container">
         <div className="login-card">
-
           {isLoggedIn ? (
             ''
           ) : (

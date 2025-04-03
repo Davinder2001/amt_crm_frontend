@@ -1,8 +1,13 @@
+'use client';
+import Logout from '@/components/common/Logout'
 import React from 'react'
 
 const Header = () => {
   return (
-    <div>Header</div>
+    <>
+      <h1>Header</h1>
+      <Logout />
+    </>
   )
 }
 

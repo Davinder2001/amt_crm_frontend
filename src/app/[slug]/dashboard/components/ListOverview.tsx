@@ -187,7 +187,6 @@
 
 "use client";
 import React from "react";
-import { useFetchUsersQuery } from "@/slices/users/userApi";
 import {
   FaMoneyBillWave,
   FaShoppingCart,

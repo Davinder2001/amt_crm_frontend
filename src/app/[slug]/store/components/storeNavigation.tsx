@@ -18,6 +18,11 @@ const StoreNavigation = () => {
         </li>
         <li>
           <Link href={companySlug ? `/${companySlug}/store/vendors/add-vendor` : "/store/add-vendor"}>
+            Add a Vendor
+          </Link>
+        </li>
+        <li>
+          <Link href={companySlug ? `/${companySlug}/store/vendors/add-as-vendor` : "/store/add-as-vendor"}>
             Add As a Vendor
           </Link>
         </li>

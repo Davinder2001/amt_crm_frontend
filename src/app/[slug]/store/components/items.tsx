@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useFetchStoreQuery, useDeleteStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { StoreItem } from '@/types/StoreItem';
 
 const Items: React.FC = () => {
   // Fetch selected company data to get the company slug.
@@ -14,6 +13,7 @@ const Items: React.FC = () => {
   const { data: items, error, isLoading } = useFetchStoreQuery();
   // Ensure items is an array.
   const storeItems: StoreItem[] = Array.isArray(items) ? items : [];
+  console.log('Fetched store items:', storeItems);
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [catalogItems, setCatalogItems] = useState<{ [key: number]: boolean }>({});

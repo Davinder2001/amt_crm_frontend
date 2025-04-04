@@ -26,6 +26,11 @@ const StoreNavigation = () => {
             Add As a Vendor
           </Link>
         </li>
+        <li>
+          <Link href={companySlug ? `/${companySlug}/store/vendors` : "/store/add-as-vendor"}>
+            View All Vendor
+          </Link>
+        </li>
       </ul>
     </nav>
   );

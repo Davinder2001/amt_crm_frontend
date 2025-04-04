@@ -1,37 +1,68 @@
-import React from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 
 interface ImageUploadProps {
-  images: File[] | null;
-  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    images: File[] | null;
+    handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleClearImages: () => void; 
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange }) => {
-  return (
-    <div style={{ flex: '1 1 100%' }}>
-      <label>Upload Images (up to 5)*</label>
-      <input
-        type="file"
-        name="images"
-        accept="image/*"
-        multiple
-        onChange={handleImageChange}
-      />
-      {images && images.length > 0 && (
-        <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
-          {Array.from(images).map((file, index) => (
-            <Image
-              key={index}
-              src={URL.createObjectURL(file)}
-              alt={`preview-${index}`}
-              width={100}
-              height={100}
+const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, handleClearImages }) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const selectedFiles = Array.from(e.target.files);
+
+            // Check if total number of images exceeds 5
+            const totalFiles = (images ? images.length : 0) + selectedFiles.length;
+
+            if (totalFiles > 5) {
+                toast.error("You can only select up to 5 images.");
+                e.target.value = ""; // Clear the file input
+                return; // Prevent the files from being added
+            }
+
+            // Pass the selected files to parent for further processing
+            handleImageChange(e);
+        }
+    };
+
+    return (
+        <div style={{ flex: '1 1 100%' }}>
+            <label>Upload Images (up to 5)*</label>
+            <input
+                type="file"
+                name="images"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange} // Handle the file change
             />
-          ))}
+
+            {/* Display preview of selected images */}
+            {images && images.length > 0 && (
+                <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+                    {images.map((file, index) => (
+                        <div key={index}>
+                            {/* Generate the preview of each image */}
+                            <Image
+                                src={URL.createObjectURL(file)} // Convert file to URL for preview
+                                alt={`preview-${index}`}
+                                width={100}
+                                height={100}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
+            {/* Clear Images Button */}
+            <button
+                type="button"
+                style={{ marginTop: '1rem', color: 'red' }}
+                onClick={handleClearImages} // Call the parent function to clear images
+            >
+                Clear Images
+            </button>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default ImageUpload;

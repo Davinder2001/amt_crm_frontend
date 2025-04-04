@@ -1,4 +1,4 @@
-export interface StoreItem {
+interface StoreItem {
   id: number;
   name: string;
   quantity_count: number;
@@ -20,7 +20,7 @@ export interface StoreItem {
   updated_at: string;
 }
 
-export interface CreateStoreItemRequest {
+interface CreateStoreItemRequest {
   name: string;
   quantity_count: number;
   measurement?: string;
@@ -35,14 +35,14 @@ export interface CreateStoreItemRequest {
   images: File[]
 }
 
-export type StoreResponse = StoreItem[];
+type StoreResponse = StoreItem[];
 
-export interface OcrResponse {
-    result: string;
+interface OcrResponse {
+  result: string;
 }
 
 // In your types file (e.g., /src/types/StoreItem.ts)
-export interface UpdateStoreItemRequest {
+interface UpdateStoreItemRequest {
   id: number;
   name: string;
   quantity_count: number;
@@ -59,3 +59,17 @@ export interface UpdateStoreItemRequest {
 }
 
 
+interface AddStoreItem {
+  name: string;
+  quantity_count: string;
+  measurement: string;
+  purchase_date: string;
+  date_of_manufacture: string;
+  date_of_expiry: string;
+  brand_name: string;
+  replacement: string;
+  category: string;
+  vendor_name: string;
+  availability_stock: string;
+  images: File[] | null; // Adjusted to accept File[] type
+}

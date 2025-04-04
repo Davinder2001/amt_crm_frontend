@@ -6,7 +6,8 @@
 @use './tasks/task_details.scss' as *;
 
 
-// hr statusview section
+// hr  section
+@use './Hr/Hr_dashbord.scss' as *;
 @use './Hr/status_view.scss' as *;
 @use './Hr/employees_sallery.scss' as *;
 

@@ -1,0 +1,82 @@
+@use '../variables' as *;
+
+
+
+.hr-hero-section{
+ 
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 30px;
+          background: #f7f9fc;
+          border-radius: 10px;
+
+        .stats-overview {
+          display: grid;
+          width: 100%;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 15px;
+        }
+
+        .recent-employees {
+          background: white;
+          padding: 15px;
+          border-radius: 8px;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        li {
+          display: flex;
+          align-items: center;
+          padding: 8px 0;
+          border-bottom: 1px solid #eee;
+        }
+
+        .avatar {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          background: #007bff;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          margin-right: 10px;
+        }
+
+        .info p {
+          margin: 0;
+          font-weight: bold;
+        }
+
+        .active {
+          color: green;
+        }
+
+
+
+
+        .recent-active-employees {
+            background-color: $white;
+            h3 {
+                padding: 23px 10px 34px 15px;
+                font-size: $font-size-large;
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+}

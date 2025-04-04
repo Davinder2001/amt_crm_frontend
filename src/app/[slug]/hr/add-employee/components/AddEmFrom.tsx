@@ -62,20 +62,9 @@ const AddEmployeeForm: React.FC = () => {
       await createEmployee(formData).unwrap();
       toast.success("Employee created successfully!");
       router.push(`/${companySlug}/hr/status-view`);
-    } catch (err: any) {
-      if (err?.data?.errors) {
-        const serverErrors = err.data.errors;
-        const formattedErrors: { [key: string]: string } = {};
-        Object.keys(serverErrors).forEach((field) => {
-          formattedErrors[field] = serverErrors[field][0];
-          toast.error(`${field.charAt(0).toUpperCase() + field.slice(1)}: ${serverErrors[field][0]}`);
-        });
-        setErrors(formattedErrors);
-      } else if (err?.data?.message) {
-        toast.error(err.data.message);
-      } else {
-        toast.error("Failed to create employee. Please try again.");
-      }
+    } catch (err) {
+      console.error("Error creating employee:", err);
+      toast.error("Failed to create employee");
     }
   };
 

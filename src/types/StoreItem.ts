@@ -71,5 +71,6 @@ interface AddStoreItem {
   category: string;
   vendor_name: string;
   availability_stock: string;
-  images: File[] | null; // Adjusted to accept File[] type
+  catalog: number;
+  images: File[] | null; 
 }

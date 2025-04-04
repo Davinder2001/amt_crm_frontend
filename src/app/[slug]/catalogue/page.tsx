@@ -1,6 +1,7 @@
 'use client';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
+import ItemList from './components/itemList';
 
 function Page() {
     const { setTitle } = useBreadcrumb();
@@ -10,7 +11,7 @@ function Page() {
     }, [setTitle]);
     return (
         <>
-            Catalogue 
+            <ItemList/>
         </>
     )
 }

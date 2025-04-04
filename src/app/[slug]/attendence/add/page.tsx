@@ -3,16 +3,13 @@ import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useCompany } from "@/utils/Company";
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
-  const router = useRouter();
-  const {companySlug} = useCompany();
+
 
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

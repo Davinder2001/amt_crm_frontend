@@ -41,7 +41,14 @@ const EditRolePage: React.FC = () => {
     }
   }, [role]);
 
-  const permissionsList: Permission[] = permissionsApiResponse ?? [];
+  const permissionsList: Permission[] = permissionsApiResponse
+    ? permissionsApiResponse.flatMap((group: any) =>
+        group.permissions.map((perm: any) => ({
+          id: perm.id,
+          name: perm.name,
+        }))
+      )
+    : [];
 
   if (rolesLoading || permissionsLoading) {
     return <p>Loading role and permissions...</p>;

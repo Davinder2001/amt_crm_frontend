@@ -2,7 +2,7 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
-import { UpdateStoreItemRequest } from '@/types/StoreItem';
+
 
 interface FormData {
   name: string;

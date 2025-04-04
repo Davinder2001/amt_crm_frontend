@@ -1,24 +1,25 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useFetchStoreQuery, useDeleteStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import {
+  useAddToCatalogMutation,
+  useRemoveFromCatalogMutation,
+} from '@/slices/catalog/catalogApi';
+
 
 const Items: React.FC = () => {
-  // Fetch selected company data to get the company slug.
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug: string | undefined = selectedCompany?.selected_company?.company_slug;
 
-  // Fetch store items. We assume the API returns an array of StoreItem objects.
   const { data: items, error, isLoading } = useFetchStoreQuery();
-  // Ensure items is an array.
   const storeItems: StoreItem[] = Array.isArray(items) ? items : [];
-  console.log('Fetched store items:', storeItems);
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
-  const [catalogItems, setCatalogItems] = useState<{ [key: number]: boolean }>({});
+  const [addToCatalog] = useAddToCatalogMutation();
+  const [removeFromCatalog] = useRemoveFromCatalogMutation();
 
-  // Handle delete action.
   const handleDelete = async (id: number): Promise<void> => {
     try {
       await deleteStoreItem(id).unwrap();
@@ -27,13 +28,16 @@ const Items: React.FC = () => {
     }
   };
 
-  // Toggle catalog status for a given item.
-  const handleAddToCatalog = (id: number): void => {
-    setCatalogItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-    console.log(`Toggled catalog status for item ${id}: ${!catalogItems[id]}`);
+  const handleCatalogToggle = async (id: number, isInCatalog: boolean): Promise<void> => {
+    try {
+      if (isInCatalog) {
+        await removeFromCatalog(id).unwrap();
+      } else {
+        await addToCatalog(id).unwrap();
+      }
+    } catch (error) {
+      console.error('Error updating catalog status:', error);
+    }
   };
 
   if (isLoading) return <p>Loading items...</p>;
@@ -91,8 +95,8 @@ const Items: React.FC = () => {
                   <button onClick={() => handleDelete(item.id)}>Delete</button>
                 </td>
                 <td>
-                  <button onClick={() => handleAddToCatalog(item.id)}>
-                    {catalogItems[item.id] ? 'Remove from Catalog' : 'Add to Catalog'}
+                  <button onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
+                    {item.catalog ? 'Remove from Catalog' : 'Add to Catalog'}
                   </button>
                 </td>
               </tr>

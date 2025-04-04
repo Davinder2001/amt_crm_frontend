@@ -1,8 +1,12 @@
 interface Permission {
     id: number;
     name: string;
+    guard_name: string;
+    created_at: string;
+    updated_at: string;
 }
 
-interface PermissionsResponse {
-    permissions: Permission[]; // Ensure the API returns an object with a "permissions" key
+interface GroupedPermissions {
+    group: string;
+    permissions: Permission[];
 }

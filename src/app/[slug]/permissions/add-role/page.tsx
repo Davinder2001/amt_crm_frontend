@@ -9,22 +9,28 @@ import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
 
 const Page: React.FC = () => {
-
   const { setTitle } = useBreadcrumb();
   useEffect(() => {
     setTitle('Add Role'); // Update breadcrumb title
   }, [setTitle]);
 
-  const { data} = useFetchPermissionsQuery();
-  const permissions = data || [];
+  const { data } = useFetchPermissionsQuery();
+  const permissionsData = data || [];
+
   const [createRole, { isLoading }] = useCreateRoleMutation();
   const router = useRouter();
-  const {companySlug} = useCompany();
-
+  const { companySlug } = useCompany();
 
   const [newRoleName, setNewRoleName] = useState<string>("");
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
+  const [selectedTab, setSelectedTab] = useState<string>('');
+
+  // Set the default selected tab to the first group after permissions are fetched
+  useEffect(() => {
+    if (permissionsData.length > 0 && !selectedTab) {
+      setSelectedTab(permissionsData[0].group); // Set the first tab by default
+    }
+  }, [permissionsData, selectedTab]);
 
   const handleCreateRole = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,10 +45,12 @@ const Page: React.FC = () => {
         permissions: selectedPermissions,
       }).unwrap();
 
-      toast.success(response.message || 'Role created successfully');
-      setNewRoleName("");
-      setSelectedPermissions([]);
-      router.push(`/${companySlug}/permissions`)
+      if (response.message) {
+        toast.success(response.message);
+        setNewRoleName("");
+        setSelectedPermissions([]);
+        router.push(`/${companySlug}/permissions`);
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Error creating role");
@@ -52,19 +60,11 @@ const Page: React.FC = () => {
     }
   };
 
-  // if (isFetching) return <div style={{ textAlign: 'center', padding: '40px' }}>Loading permissions...</div>;
-  // if (error) return <div style={{ textAlign: 'center', color: 'red', padding: '40px' }}>Error loading permissions</div>;
-
   return (
     <div className="add-role-form">
-
-
-      <h2>
-        Create a Role
-      </h2>
+      <h2>Create a Role</h2>
 
       <form onSubmit={handleCreateRole}>
-
         {/* Role Name */}
         <div className="roll-name-input">
           <label>Role Name:</label>
@@ -78,66 +78,59 @@ const Page: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-          <div className="switch-button">
+        <div className="switch-button">
+          {permissionsData.map((group) => (
             <button
               type="button"
-              onClick={() => setSelectedTab('user')}
+              key={group.group}
+              onClick={() => setSelectedTab(group.group)}
+              className={selectedTab === group.group ? 'active' : ''}
             >
-              User Permissions
+              {group.group}
             </button>
-            <button
-              type="button"
-              onClick={() => setSelectedTab('other')}
-            >
-              Other Permissions
-            </button>
-          </div>
+          ))}
+        </div>
+
         <div className="permissions-container">
-  {/* Permissions List */}
-  {selectedTab === 'user' && (
-    <div>
-      <label>User Permissions:</label>
-      <div>
-        {permissions?.map((perm) => (
-          <label key={perm.id}>
-            <input
-              type="checkbox"
-              value={perm.name}
-              checked={selectedPermissions.includes(perm.name)}
-              onChange={(e) => {
-                const value = e.target.value;
-                setSelectedPermissions((prev) =>
-                  prev.includes(value)
-                    ? prev.filter((p) => p !== value)
-                    : [...prev, value]
-                );
-              }}
-            />
-            <span>{perm.name}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  )}
+          {/* Permissions List */}
+          {permissionsData
+            .filter((group) => group.group === selectedTab) // Filter permissions based on selected tab
+            .map((group) => (
+              <div key={group.group}>
+                <div>
+                  {group.permissions.map((perm) => (
+                    <label key={perm.id}>
+                      <input
+                        type="checkbox"
+                        value={perm.name}
+                        checked={selectedPermissions.includes(perm.name)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setSelectedPermissions((prev) =>
+                            prev.includes(value)
+                              ? prev.filter((p) => p !== value)
+                              : [...prev, value]
+                          );
+                        }}
+                      />
+                      <span>{perm.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
 
-  {selectedTab === 'other' && (
-    <div>
-      <label>Other Permissions:</label>
-      <p>No other permissions available yet.</p>
-    </div>
-  )}
-
-  {/* Submit Button */}
-  <button
-    type="submit"
-    disabled={isLoading}
-    onMouseOver={(e) => e.currentTarget}
-    onMouseOut={(e) => e.currentTarget}
-  >
-    {isLoading ? "Creating..." : "Create Role"}
-  </button>
-</div>
-
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            onMouseOver={(e) => e.currentTarget}
+            onMouseOut={(e) => e.currentTarget}
+            className="addrole-btn"
+          >
+            {isLoading ? "Creating..." : "Create Role"}
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,0 +1,172 @@
+@use '../variables' as *;
+
+// General Layout Styles
+.login-page-container {
+    background-color: $secondary-color;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-layout-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    min-height: 200px;
+    height: auto;
+    overflow: hidden;
+    box-shadow: $box-shadow;
+    
+    .login-image-container, .login-image-container img{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px 0px 0px 5px;
+    }
+}
+
+.login-header h1 {
+    font-size: $font-size-extra-large;
+    font-weight: $font-weight-bold;
+    color: $dark-color;
+}
+
+.login-header p {
+    font-size: $font-size;
+    color: $dark-color;
+    margin-top: 10px;
+}
+
+.login-card {
+    background: $white;
+    padding: 30px;
+    border-radius: 0px 5px 5px 0px;
+    width: 100%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-input,
+.password-input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: $border-radius;
+    width: 100%;
+    font-size: $font-size;
+    font-family: $font-family;
+    color: $dark-color;
+    background-color: $light-color;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $dark-color;
+}
+
+.login-button {
+    padding: 12px;
+    background-color: $primary-color;
+    color: $white;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: $font-size;
+    font-weight: $font-weight-medium;
+    transition: background-color $transition;
+
+    &:hover {
+        background-color: #45a049;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: $font-size-small;
+    text-align: center;
+}
+
+.forgot-password-link,
+.register-company-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.features-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.features-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.feature {
+    width: 30%;
+    padding: 15px;
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+}
+
+.testimonials {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.testimonial-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.testimonial {
+    width: 30%;
+    padding: 15px;
+    background: $light-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+}
+
+.formfooter {
+    margin-top: 40px;
+    text-align: center;
+    font-size: $font-size-small;
+    color: $dark-color;
+}

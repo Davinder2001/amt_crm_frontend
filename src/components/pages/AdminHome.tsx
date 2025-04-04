@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Logout from '../common/Logout';
 
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
@@ -53,6 +54,7 @@ const AdminHome = () => {
         <>
             <ToastContainer />
             <div className='admin-home-container'>
+                <Logout />
                 <div className='admin-header'>
                     <h1>Welcome to Your Admin Dashboard</h1>
                     <p>Select a company to manage or view details</p>

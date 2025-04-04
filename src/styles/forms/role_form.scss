@@ -1,54 +1,166 @@
 @use '../variables' as *;
-.add-role-form  {
-    h2 {text-align: center;
-    padding-bottom: 70px;}
 
+
+
+.add-role-form {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: $box-shadow;
+}
+
+.add-role-form h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
 
 .roll-name-input {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  margin-bottom: 15px;
 }
 
-.switch-button{
-    width: 100%;
-    button {
-        width: 50%;
-        padding: 16px;
-    border: 1px solid $primary-color;
-
-    }
-
+.roll-name-input label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
 }
 
- input {
-    padding: 16px;
-    border: 1px solid $primary-color;
-    border-radius: 5px;
-    margin-bottom: 40px;
+.roll-name-input input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border: $border;
+  border-radius: 6px;
+  margin-top: 5px;
 }
 
-
-button {
-    width: 100%;
-    margin-bottom: 40px;
-    border: 1px solid $primary-color;
-    padding: 16px;
-    &:hover{
-        background-color: $primary-color;
-        border: 1px solid  $primary-color;
-        color: $white;
-
-    }
-    &.active{
-        background-color: $primary-color;
-        color: $white;
-    }
+.switch-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
 }
+
+.switch-button button {
+  padding: 8px 15px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: $border;
+  background-color: #f5f5f5;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.switch-button button.active {
+  background-color: $primary-color;
+  color: $white;
+}
+
+/* Tabs Section */
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabs-box {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.tabs-box .tab {
+  cursor: pointer;
+  padding: 8px 18px;
+  background-color: $light-color;
+  border-radius: 30px;
+  border: $border;
+  font-size: 0.95rem;
+  transition: background 0.3s;
+}
+
+.tabs-box .tab.active {
+  background-color: $primary-color;
+  color: $white;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.icon:first-child {
+  left: 0;
+  display: none;
+}
+
+.icon:last-child {
+  right: 0;
+}
+
+.icon i {
+  font-size: 18px;
+  color: $primary-color;
+}
+
+.icon:hover {
+  background: #efedfb;
+}
+
+.tabs-box.dragging {
+  cursor: grab;
+}
+
+/* Permissions List */
 .permissions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  margin-top: 15px;
 }
 
+.permissions-container label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 500;
+}
+
+.permissions-container div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.permissions-container label input {
+  margin-right: 5px;
+}
+
+.addrole-btn{
+  background-color: $primary-color;
+  color: $white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.addrole-btn:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.addrole-btn:hover:not(:disabled) {
+  background-color: $primary-color;
 }

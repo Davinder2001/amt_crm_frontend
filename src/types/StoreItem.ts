@@ -9,6 +9,7 @@ export interface StoreItem {
   date_of_manufacture: string;
   date_of_expiry: string | null;
   description: string; // <-- Add this line
+  item_code: string;
 
   brand_name: string;
   replacement: string | null;

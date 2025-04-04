@@ -57,7 +57,7 @@ function AddAttendancePage() {
       const response = await recordAttendance({ image: selectedFile }).unwrap();
       console.log('response', response);
       toast.success("Attendance uploaded successfully!");
-      router.push(`${companySlug}/attendence`)
+      // router.push(`${companySlug}/attendence`)
     } catch (err) {
       console.error("Error:", err);
       toast.error("Failed to upload attendance");

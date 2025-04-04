@@ -15,10 +15,12 @@ const Page = () => {
 
   const { currentData } = useFetchSelectedCompanyQuery();
   return (
-    <div className='back-button'>
-      <Link href={`/${currentData?.selected_company.company_slug}/hr`}><FaArrowLeft className='back-icon' /></Link>
-      <UserList />
-    </div>
+    <>
+      <div className="status-view-page">
+        <Link href={`/${currentData?.selected_company.company_slug}/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+        <UserList />
+      </div>
+    </>
   )
 }
 

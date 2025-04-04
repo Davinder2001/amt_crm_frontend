@@ -22,12 +22,15 @@
 // forms section
 @use './forms/add_employes_form.scss' as *;
 @use './forms/role_form.scss' as *;
+@use './forms/forms.scss' as *;
 
 
 
 // superadmin company section
 @use './superadmin/company.scss' as *;
 
+// permissions section
+@use './permissions/permissions.scss' as *;
 
 * {
     margin: 0;
@@ -54,43 +57,46 @@ textarea {
 .hr-attendence-table {
     .user-status {
         .status {
-            text-transform:capitalize;
-            padding:5px 12px;
-            color:white;
-            border-radius:50px;
+            text-transform: capitalize;
+            padding: 5px 12px;
+            color: white;
+            border-radius: 50px;
             text-align: center;
         }
-    } 
+    }
+
     .approval-status {
         .status {
-            text-transform:capitalize;
-            padding:5px 12px;
-            color:white;
-            border-radius:50px;
+            text-transform: capitalize;
+            padding: 5px 12px;
+            color: white;
+            border-radius: 50px;
             text-align: center;
         }
-    } 
-} 
+    }
+}
+
 .employee-attendence-view {
     .user-status {
         .status {
-            text-transform:capitalize;
-            padding:5px 12px;
-            color:white;
-            border-radius:50px;
+            text-transform: capitalize;
+            padding: 5px 12px;
+            color: white;
+            border-radius: 50px;
             text-align: center;
         }
-    } 
+    }
+
     .approval-status {
         .status {
-            text-transform:capitalize;
-            padding:5px 12px;
-            color:white;
-            border-radius:50px;
+            text-transform: capitalize;
+            padding: 5px 12px;
+            color: white;
+            border-radius: 50px;
             text-align: center;
         }
-    } 
-} 
+    }
+}
 
 
 .account {
@@ -223,7 +229,7 @@ textarea {
 //             padding: 20px;
 //             border-radius: 6px;
 //             transition: background-color 0.3s ease, transform 0.3s ease;
-            
+
 //             &:hover {
 //                 background-color: #019677;
 //                 transform: scale(1.1);
@@ -240,7 +246,7 @@ textarea {
 
 //             }            
 //         }
-        
+
 //     }
 // }
 
@@ -253,6 +259,24 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+
+    .logout-btn {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: #45a049;
+        }
+    }
 }
 
 .admin-header {
@@ -260,13 +284,13 @@ textarea {
     margin-bottom: 40px;
 }
 
-.admin-header  h1 {
+.admin-header h1 {
     font-size: 36px;
     font-weight: bold;
     color: #333;
 }
 
-.admin-header  p {
+.admin-header p {
     font-size: 18px;
     color: #777;
 }

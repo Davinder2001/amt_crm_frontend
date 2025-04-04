@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <ToastContainer autoClose={20000000000000} />
+      <ToastContainer autoClose={1500} />
         <Provider>
           <BreadcrumbProvider>
             <UserProvider>

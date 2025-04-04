@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/slices/auth/authApi';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Image from 'next/image';
+import { loginImage } from '@/assets/useImage';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -61,56 +63,106 @@ const LoginForm = () => {
   };
 
   const isLoggedIn = !!user;
-  
+
   return (
-    <div>
-      <div className="login-container">
-        <div className="login-card">
-          {isLoggedIn ? (
-            ''
-          ) : (
-            <form onSubmit={handleLogin} className="login-form">
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-                className="login-input"
-                required
-              />
-
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-3 text-gray-500"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-
-              <button type="submit" className="login-button" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Login'}
-              </button>
-            </form>
-          )}
+    <>
+      <div className="login-page-container">
+        <div className="login-header">
+          <h1>Welcome to Your App!</h1>
+          <p>Sign in to continue and explore all the amazing features.</p>
         </div>
 
-        <Link href="/forget-password" className="forgot-password-link">
-          Forget Password
-        </Link>
-        <Link href="/register-your-company"> Register your company </Link>
+        <div className="login-layout-wrapper">
+          <div className="login-image-container">
+            <Image src={loginImage.src} alt="Login" className="login-image" width={200} height={200}/>
+          </div>
+          <div className="login-card">
+            {isLoggedIn ? (
+              ''
+            ) : (
+              <form onSubmit={handleLogin} className="login-form">
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
+                  className="login-input"
+                  required
+                />
+
+                <div className="password-input-container">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="password-input"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+
+                <button type="submit" className="login-button" disabled={isLoading}>
+                  {isLoading ? 'Logging in...' : 'Login'}
+                </button>
+              </form>
+            )}
+
+            <div className="links">
+              <Link href="/forget-password" className="forgot-password-link">
+                Forget Password
+              </Link>
+              <Link href="/register-your-company" className="register-company-link">
+                Register your company
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="features-section">
+          <h2>Why Choose Us?</h2>
+          <div className="features-container">
+            <div className="feature">
+              <h3>Feature 1</h3>
+              <p>Our app allows you to do XYZ with ease and efficiency. It's fast and secure.</p>
+            </div>
+            <div className="feature">
+              <h3>Feature 2</h3>
+              <p>Enjoy seamless integration with other services and quick setup for your team.</p>
+            </div>
+            <div className="feature">
+              <h3>Feature 3</h3>
+              <p>Access your data anywhere with our cross-platform support for mobile and desktop.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="testimonials">
+          <h2>What Our Users Are Saying</h2>
+          <div className="testimonial-container">
+            <div className="testimonial">
+              <p>"This app is fantastic! It has made my workflow so much easier." - User A</p>
+            </div>
+            <div className="testimonial">
+              <p>"The features are amazing, and I can&apos;t imagine going back to what I was using before." - User B</p>
+            </div>
+            <div className="testimonial">
+              <p>"Great support and easy to use. Highly recommend!" - User C</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="formfooter">
+          <p>&copy; 2025 Your Company. All rights reserved.</p>
+        </div>
       </div>
-      <ToastContainer />
-    </div>
+    </>
   );
 };
 

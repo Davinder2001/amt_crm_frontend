@@ -1,0 +1,14 @@
+@use '../variables' as *;
+
+.content-area {
+    width: 100%;
+}
+.company-table td:last-child {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    border: unset;
+    gap: 10px;
+    justify-content: center;
+}
+

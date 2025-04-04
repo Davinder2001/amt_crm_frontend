@@ -23,6 +23,12 @@
 @use './forms/add_employes_form.scss' as *;
 @use './forms/role_form.scss' as *;
 
+
+
+// superadmin company section
+@use './superadmin/company.scss' as *;
+
+
 * {
     margin: 0;
     padding: 0;

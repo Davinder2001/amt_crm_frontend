@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 const CompanyComponent = () => {
   const { data, error, isLoading } = useFetchCompaniesQuery();
@@ -21,7 +22,7 @@ const CompanyComponent = () => {
   return (
     <div>
       <h1>Companies</h1>
-      <table>
+      <table className='company-table'>
         <thead>
           <tr>
             <th>ID</th>
@@ -35,15 +36,19 @@ const CompanyComponent = () => {
               <td>{company.id}</td>
               <td>{company.company_name}</td>
               <td>
-                <button onClick={() => router.push(`companies/view/${company.id}`)}>
-                  View
-                </button>
-                <button onClick={() => router.push(`companies/edit/${company.id}`)}>
-                  Edit
-                </button>
-                <button onClick={() => router.push(`companies/delete/${company.id}`)}>
-                  Delete
-                </button>
+                
+                <span onClick={() => router.push(`companies/delete/${company.id}`)}>
+                <FaTrash color='#222' />
+                  
+                </span>
+                <span onClick={() => router.push(`companies/edit/${company.id}`)}>
+                <FaEdit color='#222' />
+                  
+                </span>
+                <span onClick={() => router.push(`companies/view/${company.id}`)}>
+                <FaEye color='#222' />
+                </span>
+                
               </td>
             </tr>
           ))}

@@ -244,7 +244,7 @@ const HrHeroSection = () => {
 
   return (
     <div className="hr-hero-section">
-      {/* Left Section - Time & Attendance */}
+     <div className="time_stats_container"> {/* Left Section - Time & Attendance */}
       <TimeSection />
 
       {/* Middle Section - Stats Overview */}
@@ -254,7 +254,7 @@ const HrHeroSection = () => {
         <StatCard icon={<FaTimesCircle />} value="30" label="Absent" />
         <StatCard icon={<FaClock />} value="62" label="Late Arrival" />
       </div>
-
+      </div>
       {/* Right Section - Recent Active Employees */}
       <div className="recent-active-employees">
         <h3>Recent Active Employees</h3>
@@ -271,7 +271,6 @@ const HrHeroSection = () => {
         </ul>
       </div>
 
-      {/* Internal CSS */}
       
     </div>
   );
@@ -317,21 +316,10 @@ const TimeSection = React.memo(() => {
         View Attendance
       </Link>
       <style jsx>{`
-        .time-section {
-          background: white;
-          padding: 15px;
-          border-radius: 8px;
-          text-align: center;
-        }
+      
 
-        .time {
-          font-size: 18px;
-          font-weight: bold;
-        }
 
-        .date {
-          color: gray;
-        }
+        
 
         .attendance-btn {
           margin-top: 10px;
@@ -354,25 +342,15 @@ const StatCard = React.memo(({ icon, value, label }: { icon: React.ReactNode; va
   return (
     <>
       <div className="stat-card">
-        {icon}
+        
         <div>
           <h2>{value}</h2>
           <p>{label}</p>
         </div>
+        {icon}
         <style jsx>{`
-      .stat-card {
-        display: flex;
-        align-items: center;
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
+      
 
-      .stat-card h2 {
-        margin: 0;
-        font-size: 20px;
-      }
 
       .stat-card p {
         margin: 0;

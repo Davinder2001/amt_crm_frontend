@@ -3,7 +3,8 @@
 .content-area {
     width: 100%;
 }
-.company-table td:last-child {
+.company-table {
+    td:last-child {
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -11,4 +12,4 @@
     gap: 10px;
     justify-content: center;
 }
-
+}

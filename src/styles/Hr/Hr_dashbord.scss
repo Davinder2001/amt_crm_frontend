@@ -3,19 +3,69 @@
 
 
 .hr-hero-section{
- 
           display: flex;
           justify-content: space-between;
           gap: 20px;
-          padding: 30px;
           background: #f7f9fc;
           border-radius: 10px;
 
+          .time_stats_container {
+            display: flex !important;
+            width: 100%;
+            gap: 20px;
+            background-color: #FFFFFF;
+            padding: 40px 32px 55px 32px;
+            border-radius: 30px;
+
+            .time-section {
+                display: flex;
+                    flex-direction: column;
+                    gap: 40px;
+                    justify-content: end;
+                    background-color: white;
+                    padding: 21px;
+            box-shadow: 0px 18px 40px 0px #01969314;
+
+                
+                
+        .time {
+            font-size: 22px;
+            font-weight: bold;
+          }
+
+          .date{
+            color: gray;
+            font-size: 18px;
+            font-weight: 500;
+        }
+            }
+        }
         .stats-overview {
           display: grid;
           width: 100%;
           grid-template-columns: repeat(3, 1fr);
           gap: 15px;
+           .stat-card {
+            display: flex;
+            align-items: start;
+            background: #fff;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 18px 40px #01969314;
+            justify-content: space-between;
+        
+            
+            h2 {
+                margin: 0;
+                font-size: 35px;
+                font-weight: 500;
+            }
+            svg {
+                width: 42px;
+                height: 42px;
+            }
+          }
+
         }
 
         .recent-employees {
@@ -64,19 +114,30 @@
 
         .recent-active-employees {
             background-color: $white;
+            border-radius: 16px;
+            padding: 23px 10px 23px 15px;
             h3 {
-                padding: 23px 10px 34px 15px;
                 font-size: $font-size-large;
             }
 
 
-
-
+            
 
 
         }
 
 
+        .attendance-btn {
+            background-color: $primary-color;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px;
+            border-radius: 54px;
+            color: white;
+            margin-top: 24px;
+        }
 
 
 }

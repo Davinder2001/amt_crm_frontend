@@ -137,6 +137,7 @@ import React, { useState } from 'react';
 import { useCreateStoreItemMutation } from '@/slices/store/storeApi';
 import { useRouter } from 'next/navigation';
 import { CreateStoreItemRequest } from '@/types/StoreItem';
+import Image from 'next/image';
 
 interface FormData {
   name: string;
@@ -213,7 +214,7 @@ const AddItem: React.FC = () => {
   };
 
   console.log('images...', formData.images);
-  
+
 
 
   return (
@@ -264,26 +265,27 @@ const AddItem: React.FC = () => {
           <label>Availability Stock</label>
           <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
         </div>
-        
+
         {/* Image Upload Section */}
         <div style={{ flex: '1 1 100%' }}>
           <label>Upload Images (up to 5)*</label>
-          <input 
-            type="file" 
-            name="images" 
-            accept="image/*" 
-            multiple 
-            onChange={handleImageChange} 
-            required 
+          <input
+            type="file"
+            name="images"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+            required
           />
           {formData.images && formData.images.length > 0 && (
             <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
               {Array.from(formData.images).map((file, index) => (
-                <img
+                <Image
                   key={index}
                   src={URL.createObjectURL(file)}
                   alt={`preview-${index}`}
-                  style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                  width={100}
+                  height={100}
                 />
               ))}
             </div>

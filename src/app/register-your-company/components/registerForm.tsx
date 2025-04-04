@@ -31,18 +31,8 @@ const RegisterForm = () => {
       setBackendResponse(JSON.stringify(result, null, 2));
       // Uncomment the next line if you wish to clear the form on success:
       // setFormData({ name: '', email: '', password: '', password_confirmation: '', company_name: '', number: '' });
-    } catch (err: any) {
+    } catch (err) {
       console.error('Registration error:', err);
-      if (err.data?.errors) {
-        // Loop through each error field and print each error message.
-        for (const key in err.data.errors) {
-          err.data.errors[key].forEach((message: string) => {
-            toast.error(`${key}: ${message}`);
-          });
-        }
-      } else {
-        toast.error('Registration failed. Please try again.');
-      }
     }
   };
 

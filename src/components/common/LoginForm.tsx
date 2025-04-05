@@ -34,7 +34,8 @@ const LoginForm = () => {
 
       // Update user in context
       setUser(result.user);
-
+      router.refresh();
+      router.push('/');
       // Handle redirection based on user type and associated companies
       if (result.user.user_type === 'admin') {
         // Admin can access root ("/")
@@ -51,8 +52,6 @@ const LoginForm = () => {
           router.push('/');
         }
       }
-
-      router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || 'Login failed');
@@ -74,7 +73,7 @@ const LoginForm = () => {
 
         <div className="login-layout-wrapper">
           <div className="login-image-container">
-            <Image src={loginImage.src} alt="Login" className="login-image" width={200} height={200}/>
+            <Image src={loginImage.src} alt="Login" className="login-image" width={200} height={200} />
           </div>
           <div className="login-card">
             {isLoggedIn ? (

@@ -61,7 +61,6 @@ const Profile: React.FC = () => {
       router.push('/login');
     }
     router.refresh(); // Refresh the page to ensure the context is updated
-    router.push('/login');
   }, []);
 
 

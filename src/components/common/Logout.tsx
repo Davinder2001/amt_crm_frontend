@@ -30,7 +30,6 @@ function Logout() {
             router.push('/login');
         }
         router.refresh(); // Refresh the page to ensure the context is 
-        router.push('/login');
     }, [setUser]);
 
     return (

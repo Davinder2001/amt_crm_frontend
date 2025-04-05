@@ -34,21 +34,20 @@ const LoginForm = () => {
 
       // Update user in context
       setUser(result.user);
-      router.refresh();
-      router.push('/');
-      // Handle redirection based on user type and associated companies
+
+      // Log the user to ensure it's updated
+      console.log('Updated user:', result.user);
+
+      // Redirect based on user type
       if (result.user.user_type === 'admin') {
-        // Admin can access root ("/")
-        router.refresh();
-        router.push('/');
+        router.push('/');  // Admin goes to the root page
       } else if (result.user.user_type === 'employee') {
-        // Employee is redirected to their company's dashboard
         if (result.user.companies && result.user.companies.length === 1) {
           const companySlug = result.user.companies[0].company_slug;
           Cookies.set('company_slug', companySlug, { path: '/' });
           router.push(`/${companySlug}/dashboard`);
         } else {
-          // If multiple companies, let them choose
+          // Multiple companies, let them choose or go to the home page
           router.push('/');
         }
       }

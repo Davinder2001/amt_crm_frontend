@@ -44,7 +44,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     if (data?.user) {
       setUser(data.user);
     }
-  }, [data, user]);
+  }, [data]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

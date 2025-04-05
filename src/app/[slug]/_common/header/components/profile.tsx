@@ -58,15 +58,17 @@ const Profile: React.FC = () => {
     const userType = Cookies.get('user_type');
     if (!accessToken || !userType) {
       setIsAuthenticated(false);
+      router.push('/login');
     }
+    router.refresh(); // Refresh the page to ensure the context is updated
   }, []);
 
- 
+
   return (
     <div className="account">
       {isAuthenticated ? (
         <div className="dropdown">
- 
+
           <FaUserCircle
             size={30}
             color='#009693'

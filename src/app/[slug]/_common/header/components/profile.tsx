@@ -7,6 +7,7 @@ import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/a
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
+import { useUser } from "@/provider/UserContext";
 
 
 const Profile: React.FC = () => {
@@ -16,6 +17,7 @@ const Profile: React.FC = () => {
 
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
+  const {setUser} = useUser();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -58,8 +60,9 @@ const Profile: React.FC = () => {
     const userType = Cookies.get('user_type');
     if (!accessToken || !userType) {
       setIsAuthenticated(false);
+      setUser(null); 
     }
-  }, []);
+  }, [setUser]);
 
  
   return (

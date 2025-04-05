@@ -28,6 +28,7 @@ function Logout() {
         if (!accessToken || !userType) {
             setUser(null); // Clear context if cookies are missing
         }
+        router.refresh(); // Refresh the page to ensure the context is updated
     }, [setUser]);
 
     return (

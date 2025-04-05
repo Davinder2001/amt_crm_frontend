@@ -59,6 +59,7 @@ const Profile: React.FC = () => {
     if (!accessToken || !userType) {
       setIsAuthenticated(false);
     }
+    router.refresh(); // Refresh the page to ensure the context is updated
   }, []);
 
  

@@ -10,7 +10,7 @@ interface StoreItem {
   date_of_expiry: string | null;
   description: string; // <-- Add this line
   item_code: string;
-
+  catalog: number | null;
   brand_name: string;
   replacement: string | null;
   category: string | null;

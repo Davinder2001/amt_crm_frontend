@@ -42,12 +42,12 @@ const EditRolePage: React.FC = () => {
   }, [role]);
 
   const permissionsList: Permission[] = permissionsApiResponse
-    ? permissionsApiResponse.flatMap((group: any) =>
-        group.permissions.map((perm: any) => ({
-          id: perm.id,
-          name: perm.name,
-        }))
-      )
+    ? permissionsApiResponse.flatMap((group) =>
+      group.permissions.map((perm) => ({
+        id: perm.id,
+        name: perm.name,
+      }))
+    )
     : [];
 
   if (rolesLoading || permissionsLoading) {

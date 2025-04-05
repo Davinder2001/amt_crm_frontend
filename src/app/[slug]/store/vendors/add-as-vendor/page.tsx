@@ -6,9 +6,9 @@ const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
   const [vendorName, setVendorName] = useState('');
   const [vendorNo, setVendorNo] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<{ name: string; price: string; quantity: string; subTotal: string }[]>([]);
   const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<File | null>(null);
   const [showItemFields, setShowItemFields] = useState(false);
 
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
@@ -25,7 +25,9 @@ const Page = () => {
     formData.append('invoice_no', invoiceNo);
     formData.append('vendor_name', vendorName);
     formData.append('vendor_no', vendorNo);
-    formData.append('bill_photo', image);
+    if (image) {
+      formData.append('bill_photo', image);
+    }
     formData.append('items', JSON.stringify(items));
 
     try {
@@ -45,7 +47,14 @@ const Page = () => {
       </div>
 
       <div className="flex gap-4 mb-4">
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              setImage(e.target.files[0]);
+            }
+          }}
+        />
         <button onClick={() => setShowItemFields(true)} className="bg-teal-600 text-white px-4 py-2 rounded shadow">+ Add Items</button>
       </div>
 

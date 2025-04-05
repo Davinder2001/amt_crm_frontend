@@ -1,19 +1,4 @@
 import storeApiSlice from "./storeCreateSlice";
-import { 
-  StoreItem, 
-  CreateStoreItemRequest, 
-  StoreResponse, 
-  OcrResponse 
-} from '@/types/StoreItem';
-
-interface UpdateStoreItemRequest {
-  id: number;
-  name?: string;
-  description?: string;
-  price?: number;
-  quantity?: number;
-  // Add additional fields as needed
-}
 
 const storeApi = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -61,7 +46,7 @@ const storeApi = storeApiSlice.injectEndpoints({
 
 
 
-    bulkCreateStoreItem: builder.mutation<any, FormData>({
+    bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
         url: "store/bulk-items",
         method: "POST",

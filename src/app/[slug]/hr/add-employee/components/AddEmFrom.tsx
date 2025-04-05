@@ -71,7 +71,7 @@ const AddEmployeeForm: React.FC = () => {
   const renderField = (label: string, name: string, type = "text", placeholder = "") => (
     <div className="employee-field">
       <label htmlFor={name}>{label}</label>
-      <input type={type} name={name} value={(formData as any)[name]} onChange={handleChange} placeholder={placeholder} />
+      <input type={type} name={name} value={formData.name} onChange={handleChange} placeholder={placeholder} />
       {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
     </div>
   );

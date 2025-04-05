@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
@@ -15,7 +15,9 @@ const Page: React.FC = () => {
   }, [setTitle]);
 
   const { data } = useFetchPermissionsQuery();
-  const permissionsData = data || [];
+  
+  // Memoize permissionsData to avoid recalculating on each render
+  const permissionsData = useMemo(() => data || [], [data]);
 
   const [createRole, { isLoading }] = useCreateRoleMutation();
   const router = useRouter();

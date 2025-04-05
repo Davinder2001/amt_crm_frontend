@@ -89,7 +89,7 @@ const Items: React.FC = () => {
                   <button onClick={() => handleDelete(item.id)}>Delete</button>
                 </td>
                 <td>
-                  <button onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
+                  <button onClick={() => handleCatalogToggle(item.id, !!item)}>
                     {item.catalog ? 'Remove from Catalog' : 'Add to Catalog'}
                   </button>
                 </td>

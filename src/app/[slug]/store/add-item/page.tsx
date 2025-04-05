@@ -13,9 +13,9 @@ const AddItem: React.FC = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const [formData, setFormData] = useState<AddStoreItem>({
+  const [formData, setFormData] = useState<CreateStoreItemRequest>({
     name: '',
-    quantity_count: '',
+    quantity_count: 0,
     measurement: '',
     purchase_date: '',
     date_of_manufacture: '',
@@ -24,8 +24,8 @@ const AddItem: React.FC = () => {
     replacement: '',
     category: '',
     vendor_name: '',
-    availability_stock: '',
-    images: null, // Initial state for images
+    availability_stock: 0,
+    images: [], // Initial state for images
   });
 
   const [vendors, setVendors] = useState<string[]>([]);
@@ -47,7 +47,7 @@ const AddItem: React.FC = () => {
       const selectedFiles = Array.from(e.target.files); // Convert FileList to array
 
       // If more than 5 images are selected, only consider the first 5 images
-      let newImages = selectedFiles.slice(0, 5); // Limit to 5 selected images
+      const newImages = selectedFiles.slice(0, 5); // Limit to 5 selected images
 
       // Combine the new images with the previously selected images, ensuring a max of 5 images
       const updatedImages: File[] = [
@@ -58,48 +58,43 @@ const AddItem: React.FC = () => {
       // Update the formData with the new images (limit to 5)
       setFormData((prev) => ({
         ...prev,
-        images: updatedImages.length > 0 ? updatedImages : null, // Update state with the latest images
+        images: updatedImages.length > 0 ? updatedImages : [], // Update state with the latest images
       }));
     }
   };
+
   const handleClearImages = () => {
     // Clear images and reset input field
-    setFormData(prev => ({ ...prev, images: null }));
+    setFormData(prev => ({ ...prev, images: [] }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Create a FormData object to append all fields
-    const formDataToSend = new FormData();
+    // Ensure that all form data is in the correct format to send to the mutation
+    const itemData: CreateStoreItemRequest = {
+      name: formData.name,
+      quantity_count: formData.quantity_count,
+      measurement: formData.measurement,
+      purchase_date: formData.purchase_date,
+      date_of_manufacture: formData.date_of_manufacture,
+      date_of_expiry: formData.date_of_expiry,
+      brand_name: formData.brand_name,
+      replacement: formData.replacement,
+      category: formData.category,
+      vendor_name: formData.vendor_name,
+      availability_stock: formData.availability_stock,
+      images: formData.images, // Directly use the images array
+    };
 
-    // Append non-image fields to the FormData object
-    Object.keys(formData).forEach((key) => {
-      if (key !== 'images') {
-        formDataToSend.append(key, formData[key as keyof AddStoreItem] as string);
-      }
-    });
-
-    // Ensure that images are an array before appending them
-    if (formData.images && formData.images.length > 0) {
-      formData.images.forEach((image) => {
-        formDataToSend.append('images', image); // Append each image as binary data under the 'images' key
-      });
-    }
-
-    // Convert numerical fields to number and append them as strings
-    formDataToSend.append('quantity_count', String(Number(formData.quantity_count)));
-    formDataToSend.append('availability_stock', String(Number(formData.availability_stock)));
-
-    // Send the FormData object to the API
+    // Send the plain object (itemData) to the API using the mutation
     try {
-      await createStoreItem(formDataToSend).unwrap();
+      await createStoreItem(itemData).unwrap();
       router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error creating item:', err);
     }
   };
-
 
   const handleVendorSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData(prev => ({ ...prev, vendor_name: e.target.value }));
@@ -176,13 +171,13 @@ const AddItem: React.FC = () => {
         </div>
 
         {/* Image Upload Component */}
-        <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages}/>
+        <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages} />
 
         <div style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Adding...' : 'Save'}
           </button>
-          <button type="button" style={{ marginLeft: '1rem' }}>
+          <button type="button" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
             Cancel
           </button>
         </div>

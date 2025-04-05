@@ -3,11 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useFetchStoreQuery, useDeleteStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import {
-  useAddToCatalogMutation,
-  useRemoveFromCatalogMutation,
-} from '@/slices/catalog/catalogApi';
-
+import { StoreItem } from '@/types/StoreItem';
 
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
@@ -20,6 +16,7 @@ const Items: React.FC = () => {
   const [addToCatalog] = useAddToCatalogMutation();
   const [removeFromCatalog] = useRemoveFromCatalogMutation();
 
+  // Handle delete action.
   const handleDelete = async (id: number): Promise<void> => {
     try {
       await deleteStoreItem(id).unwrap();
@@ -28,16 +25,13 @@ const Items: React.FC = () => {
     }
   };
 
-  const handleCatalogToggle = async (id: number, isInCatalog: boolean): Promise<void> => {
-    try {
-      if (isInCatalog) {
-        await removeFromCatalog(id).unwrap();
-      } else {
-        await addToCatalog(id).unwrap();
-      }
-    } catch (error) {
-      console.error('Error updating catalog status:', error);
-    }
+  // Toggle catalog status for a given item.
+  const handleAddToCatalog = (id: number): void => {
+    setCatalogItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+    console.log(`Toggled catalog status for item ${id}: ${!catalogItems[id]}`);
   };
 
   if (isLoading) return <p>Loading items...</p>;

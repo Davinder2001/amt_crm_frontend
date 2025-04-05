@@ -49,3 +49,38 @@ interface EmployeesResponse {
     data: Employee[];
     total: number;
 }
+
+
+
+interface EmployeeFormData {
+    name: string;
+    number: string;
+    address: string;
+    nationality: string;
+    dob: string;
+    religion: string;
+    maritalStatus: string;
+    passportNo: string;
+    emergencyContact: string;
+    emergencyContactRelation: string;
+    email: string;
+    password: string;
+    salary: string;
+    role: string;
+    department: string;
+    currentSalary: string;
+    shiftTimings: string;
+    dateOfHire: string;
+    workLocation: string;
+    joiningDate: string;
+    joiningType: string;
+    previousEmployer: string;
+    medicalInfo: string;
+    bankName: string;
+    accountNo: string;
+    ifscCode: string;
+    panNo: string;
+    upiId: string;
+    addressProof: string;
+    profilePicture: string;
+}

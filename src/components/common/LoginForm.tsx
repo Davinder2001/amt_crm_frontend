@@ -130,7 +130,7 @@ const LoginForm = () => {
           <div className="features-container">
             <div className="feature">
               <h3>Feature 1</h3>
-              <p>Our app allows you to do XYZ with ease and efficiency. It's fast and secure.</p>
+              <p>Our app allows you to do XYZ with ease and efficiency. It&apos;s fast and secure.</p>
             </div>
             <div className="feature">
               <h3>Feature 2</h3>
@@ -147,13 +147,13 @@ const LoginForm = () => {
           <h2>What Our Users Are Saying</h2>
           <div className="testimonial-container">
             <div className="testimonial">
-              <p>"This app is fantastic! It has made my workflow so much easier." - User A</p>
+              <p>&quot;This app is fantastic! It has made my workflow so much easier.&quot; - User A</p>
             </div>
             <div className="testimonial">
-              <p>"The features are amazing, and I can&apos;t imagine going back to what I was using before." - User B</p>
+              <p>&quot;The features are amazing, and I can&apos;t imagine going back to what I was using before.&quot; - User B</p>
             </div>
             <div className="testimonial">
-              <p>"Great support and easy to use. Highly recommend!" - User C</p>
+              <p>&quot;Great support and easy to use. Highly recommend!&quot; - User C</p>
             </div>
           </div>
         </div>

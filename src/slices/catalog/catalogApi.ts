@@ -1,14 +1,5 @@
 import catalogCreateSlice from "./catalogCreateSlice";
 
-
-interface UpdateStoreItemRequest {
-  id: number;
-  name?: string;
-  description?: string;
-  price?: number;
-  quantity?: number;
-}
-
 const catalogApi = catalogCreateSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch all catalog items

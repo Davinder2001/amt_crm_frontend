@@ -1,9 +1,10 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useFetchStoreQuery, useDeleteStoreItemMutation } from '@/slices/store/storeApi';
+import { useAddToCatalogMutation, useRemoveFromCatalogMutation } from '@/slices/catalog/catalogApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { StoreItem } from '@/types/StoreItem';
+import { StoreItem } from '@/types/storeTypes';
 
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
@@ -16,6 +17,8 @@ const Items: React.FC = () => {
   const [addToCatalog] = useAddToCatalogMutation();
   const [removeFromCatalog] = useRemoveFromCatalogMutation();
 
+  const [catalogItems, setCatalogItems] = useState<{ [key: number]: boolean }>({});
+
   // Handle delete action.
   const handleDelete = async (id: number): Promise<void> => {
     try {
@@ -26,12 +29,21 @@ const Items: React.FC = () => {
   };
 
   // Toggle catalog status for a given item.
-  const handleAddToCatalog = (id: number): void => {
-    setCatalogItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-    console.log(`Toggled catalog status for item ${id}: ${!catalogItems[id]}`);
+  const handleCatalogToggle = async (id: number, isInCatalog: boolean): Promise<void> => {
+    try {
+      if (isInCatalog) {
+        await removeFromCatalog(id).unwrap();
+      } else {
+        await addToCatalog(id).unwrap();
+      }
+
+      setCatalogItems((prev) => ({
+        ...prev,
+        [id]: !isInCatalog,
+      }));
+    } catch (err) {
+      console.error('Error toggling catalog status:', err);
+    }
   };
 
   if (isLoading) return <p>Loading items...</p>;
@@ -89,7 +101,7 @@ const Items: React.FC = () => {
                   <button onClick={() => handleDelete(item.id)}>Delete</button>
                 </td>
                 <td>
-                  <button onClick={() => handleCatalogToggle(item.id, !!item)}>
+                  <button onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
                     {item.catalog ? 'Remove from Catalog' : 'Add to Catalog'}
                   </button>
                 </td>

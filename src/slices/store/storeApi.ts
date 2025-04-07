@@ -43,9 +43,6 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
-
-
-
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
         url: "store/bulk-items",
@@ -59,7 +56,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     // OCR process endpoint (if needed)
     ocrProcess: builder.mutation<OcrResponse, FormData>({
       query: (formData) => ({
-        url: "ocr-process",
+        url: "add-as-vendor/ocrscan",
         method: "POST",
         body: formData,
       }),

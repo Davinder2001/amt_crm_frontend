@@ -2,18 +2,20 @@
 import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useRouter } from 'next/navigation';
+import { useCompany } from '@/utils/Company';
 
 const Page: React.FC = () => {
   const [vendorName, setVendorName] = useState('');
   const [createVendor, { isLoading }] = useCreateVendorMutation();
   const router = useRouter();
+  const { companySlug } = useCompany();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createVendor({ vendor_name: vendorName }).unwrap();
       setVendorName('');
-      router.push('/store/vendors'); // Adjust this route if needed
+      router.push(`/${companySlug}/store/vendors`); // Adjust this route if needed
     } catch (err) {
       console.error('Error adding vendor:', err);
     }

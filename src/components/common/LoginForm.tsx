@@ -75,8 +75,11 @@ const LoginForm = () => {
   return (
     <>
       <div className="login-page-container">
+        <div className="c-logo">
+          <h1>AMT CRM</h1>
+        </div>
         <div className="login-header">
-          <h1>Welcome to Your App!</h1>
+          <h1>Welcome to Asset Management Technology!</h1>
           <p>Sign in to continue and explore all the amazing features.</p>
         </div>
 

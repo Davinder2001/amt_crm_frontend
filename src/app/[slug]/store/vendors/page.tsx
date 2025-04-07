@@ -3,9 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { Vendor } from '@/types/StoreVendor';
+import { useCompany } from '@/utils/Company';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading } = useFetchVendorsQuery();
+  const { companySlug } = useCompany();
 
   return (
     <div>
@@ -33,7 +35,7 @@ const Page: React.FC = () => {
                 <td>{vendor.created_at}</td>
                 <td>{vendor.updated_at}</td>
                 <td>
-                  <Link href={`/store/vendors/${vendor.id}`}>
+                  <Link href={`/${companySlug}/store/vendors/${vendor.id}`}>
                     <button>View</button>
                   </Link>
                 </td>

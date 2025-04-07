@@ -8,6 +8,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.c-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    h1 {
+        font-size: $font-size-extra-large;
+        font-weight: $font-weight-bold;
+        color: $dark-color;
+    }
 }
 
 .login-header {
@@ -26,8 +42,10 @@
     height: auto;
     overflow: hidden;
     box-shadow: $box-shadow;
-    
-    .login-image-container, .login-image-container img{
+    border-radius: 5px;
+
+    .login-image-container,
+    .login-image-container img {
         width: 100%;
         height: 100%;
         border-radius: 5px 0px 0px 5px;

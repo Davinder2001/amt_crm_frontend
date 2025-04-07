@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { useBulkCreateStoreItemMutation } from '@/slices/store/storeApi';
+import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/store/storeApi';
 
 const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
@@ -12,6 +12,7 @@ const Page = () => {
   const [showItemFields, setShowItemFields] = useState(false);
 
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
+  const [ocrProcess] = useOcrProcessMutation(); // OCR API mutation
 
   const handleAddItemToList = () => {
     if (!newItem.name || !newItem.price || !newItem.quantity || !newItem.subTotal) return;
@@ -20,15 +21,40 @@ const Page = () => {
     setShowItemFields(false);
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImage(file); // Set the uploaded file
+
+      const formData = new FormData();
+      formData.append('image', file); // Appending the image as a file (binary data)
+
+      try {
+        const ocrResponse = await ocrProcess(formData).unwrap(); // Send the image to OCR and get the response
+        console.log('OCR Response:', ocrResponse);
+
+        if (ocrResponse.result) {
+          const parsedItems = JSON.parse(ocrResponse.result);
+          setItems(parsedItems); // Automatically populate the table with OCR results
+        }
+
+      } catch (error) {
+        console.error('OCR process failed:', error);
+      }
+    }
+  };
+
   const handleSave = async () => {
     const formData = new FormData();
     formData.append('invoice_no', invoiceNo);
     formData.append('vendor_name', vendorName);
     formData.append('vendor_no', vendorNo);
+
     if (image) {
-      formData.append('bill_photo', image);
+      formData.append('image', image); // Attach the image to the final form data
     }
-    formData.append('items', JSON.stringify(items));
+
+    formData.append('items', JSON.stringify(items)); // Add the items to the form data
 
     try {
       const response = await bulkCreateStoreItem(formData).unwrap();
@@ -39,61 +65,85 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <input className="border p-2 rounded" placeholder="Invoice No" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} />
-        <input className="border p-2 rounded" placeholder="Vendor Name" value={vendorName} onChange={(e) => setVendorName(e.target.value)} />
-        <input className="border p-2 rounded" placeholder="Vendor No" value={vendorNo} onChange={(e) => setVendorNo(e.target.value)} />
+    <div>
+      <div>
+        <input
+          placeholder="Invoice No"
+          value={invoiceNo}
+          onChange={(e) => setInvoiceNo(e.target.value)}
+        />
+        <input
+          placeholder="Vendor Name"
+          value={vendorName}
+          onChange={(e) => setVendorName(e.target.value)}
+        />
+        <input
+          placeholder="Vendor No"
+          value={vendorNo}
+          onChange={(e) => setVendorNo(e.target.value)}
+        />
       </div>
 
-      <div className="flex gap-4 mb-4">
+      <div>
         <input
           type="file"
-          onChange={(e) => {
-            if (e.target.files && e.target.files[0]) {
-              setImage(e.target.files[0]);
-            }
-          }}
+          onChange={handleImageUpload} // Automatically trigger OCR when an image is uploaded
         />
-        <button onClick={() => setShowItemFields(true)} className="bg-teal-600 text-white px-4 py-2 rounded shadow">+ Add Items</button>
+        <button onClick={() => setShowItemFields(true)}>+ Add Items</button>
       </div>
 
       {showItemFields && (
-        <div className="mb-4">
-          <div className="grid grid-cols-4 gap-4 mb-2">
-            <input className="border p-2 rounded" placeholder="Name" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} />
-            <input className="border p-2 rounded" placeholder="Price" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: e.target.value })} />
-            <input className="border p-2 rounded" placeholder="Quantity" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })} />
-            <input className="border p-2 rounded" placeholder="Sub Total" value={newItem.subTotal} onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })} />
+        <div>
+          <div>
+            <input
+              placeholder="Name"
+              value={newItem.name}
+              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+            />
+            <input
+              placeholder="Price"
+              value={newItem.price}
+              onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+            />
+            <input
+              placeholder="Quantity"
+              value={newItem.quantity}
+              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+            />
+            <input
+              placeholder="Sub Total"
+              value={newItem.subTotal}
+              onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })}
+            />
           </div>
-          <button onClick={handleAddItemToList} className="bg-emerald-700 text-white px-4 py-2 rounded shadow">Add</button>
+          <button onClick={handleAddItemToList}>Add</button>
         </div>
       )}
 
-      <table className="w-full border-t text-left">
+      <table>
         <thead>
-          <tr className="bg-teal-700 text-white">
-            <th className="p-2">Name</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Quantity</th>
-            <th className="p-2">Sub Total</th>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Sub Total</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item, index) => (
-            <tr key={index} className="border-t">
-              <td className="p-2">{item.name}</td>
-              <td className="p-2">{item.price}</td>
-              <td className="p-2">{item.quantity}</td>
-              <td className="p-2">{item.subTotal}</td>
+            <tr key={index}>
+              <td>{item.name}</td>
+              <td>{item.price}</td>
+              <td>{item.quantity}</td>
+              <td>{item.subTotal}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="flex justify-end gap-4 mt-6">
-        <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded">Cancel</button>
-        <button onClick={handleSave} disabled={isLoading} className="bg-teal-700 text-white px-6 py-2 rounded shadow">
+      <div>
+        <button>Cancel</button>
+        <button onClick={handleSave} disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save'}
         </button>
       </div>

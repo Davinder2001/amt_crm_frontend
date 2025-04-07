@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useFetchStoreItemQuery } from '@/slices/store/storeApi';
+import Image from 'next/image';
 
 const ViewItem = () => {
   const { companySlug, id } = useParams();
@@ -39,18 +40,23 @@ const ViewItem = () => {
         <div>
           <h2 className="text-lg font-semibold mt-4 mb-2">Images</h2>
           <div className="flex flex-wrap gap-3">
-            {item.images.map((img: string, index: number) => (
-              <img
-
-                key={index}
-                src={img}
-                alt={`Item image ${index + 1}`}
-                className="single-item-images w-32 h-32 object-cover rounded border"
-              />
-            ))}
+            {item.images.map((img: File, index: number) => {
+              const imgSrc = img instanceof File ? URL.createObjectURL(img) : img; // If it's a File, convert it to a URL
+              return (
+                <Image
+                  key={index}
+                  src={imgSrc}
+                  alt={`Item image ${index + 1}`}
+                  className="single-item-images w-32 h-32 object-cover rounded border"
+                  width={100}
+                  height={100}
+                />
+              );
+            })}
           </div>
         </div>
       )}
+
 
       <div className="mt-6">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>

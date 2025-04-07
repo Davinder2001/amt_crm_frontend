@@ -15,7 +15,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Create a new store item
-    createStoreItem: builder.mutation<StoreItem, CreateStoreItemRequest>({
+    createStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (newItem) => ({
         url: "store/add-items",
         method: "POST",

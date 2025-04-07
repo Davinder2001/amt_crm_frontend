@@ -33,6 +33,9 @@
 // permissions section
 @use './permissions/permissions.scss' as *;
 
+// invoices section 
+@use './invoices/invoiceForm.scss' as *;
+
 * {
     margin: 0;
     padding: 0;

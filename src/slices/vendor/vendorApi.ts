@@ -1,5 +1,4 @@
 import storeApiSlice from './vendorCreateSlice';
-import { Vendor, VendorsResponse, CreateVendorRequest } from '@/types/StoreVendor';
 
 const vendorApiSlice = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({

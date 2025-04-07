@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
-import { Vendor } from '@/types/StoreVendor';
 import { useCompany } from '@/utils/Company';
 
 const Page: React.FC = () => {

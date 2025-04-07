@@ -1,13 +1,12 @@
-"use client";
-
+'use client';
 import React, { useState } from "react";
 import { useCreateInvoiceMutation } from "@/slices/invoices/invoice";
 import { useFetchStoreQuery } from "@/slices/store/storeApi";
 
 const AddInvoiceForm = () => {
-  const [clientName, setClientName] = useState("");
-  const [invoiceDate, setInvoiceDate] = useState("");
-  const [items, setItems] = useState([
+  const [clientName, setClientName] = useState<string>("");
+  const [invoiceDate, setInvoiceDate] = useState<string>("");
+  const [items, setItems] = useState<Item[]>([
     {
       id: Date.now(),
       name: "",
@@ -17,32 +16,48 @@ const AddInvoiceForm = () => {
       price: 0,
     },
   ]);
+  const [isAutocompleteVisible, setIsAutocompleteVisible] = useState<boolean>(false);
 
   const [createInvoice, { isLoading }] = useCreateInvoiceMutation();
   const { data: storeData } = useFetchStoreQuery();
-  const storeItems = storeData || [];
+  const storeItems: StoreItem[] = storeData || [];
 
-  const handleItemChange = (index: number, field: string, value: any) => {
+  const handleItemChange = (index: number, field: keyof Item, value: number | string) => {
     const updatedItems = [...items];
-    updatedItems[index][field] = value;
 
     if (field === "quantity" || field === "unit_price") {
-      updatedItems[index].price =
-        updatedItems[index].quantity * updatedItems[index].unit_price;
+      // Ensure these fields are numbers
+      value = isNaN(Number(value)) ? 0 : Number(value);
+    } else {
+      // For 'name' and 'description', treat them as strings
+      value = String(value);
+    }
+
+    updatedItems[index] = {
+      ...updatedItems[index],
+      [field]: value,
+    };
+
+    // Recalculate the price if quantity or unit_price changed
+    if (field === "quantity" || field === "unit_price") {
+      updatedItems[index].price = updatedItems[index].quantity * updatedItems[index].unit_price;
     }
 
     setItems(updatedItems);
   };
 
-  const handleSelectItem = (index: number, storeItem: any) => {
+  const handleSelectItem = (index: number, storeItem: StoreItem) => {
     const updatedItems = [...items];
-    updatedItems[index].name = storeItem.name;
-    updatedItems[index].unit_price = parseFloat(storeItem.price);
-    updatedItems[index].quantity = storeItem.quantity_count || 1;
-    updatedItems[index].price =
-      updatedItems[index].unit_price * updatedItems[index].quantity;
-    updatedItems[index].description = `${storeItem.category || ""} ${storeItem.brand_name || ""}`.trim();
+    updatedItems[index] = {
+      ...updatedItems[index],
+      name: storeItem.name,
+      unit_price: parseFloat(String(storeItem.price)),
+      quantity: storeItem.quantity_count || 1,
+      price: storeItem.price * (storeItem.quantity_count || 1),
+      description: `${storeItem.category || ""} ${storeItem.brand_name || ""}`.trim(),
+    };
     setItems(updatedItems);
+    setIsAutocompleteVisible(false); // Hide autocomplete list after selecting
   };
 
   const addItem = () => {
@@ -69,7 +84,7 @@ const AddInvoiceForm = () => {
     const payload = {
       client_name: clientName,
       invoice_date: invoiceDate,
-      items: items.map(({ id, ...rest }) => rest),
+      items: items.map(({...rest }) => rest),
     };
 
     try {
@@ -82,48 +97,51 @@ const AddInvoiceForm = () => {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="p-4 space-y-6 bg-white rounded shadow">
-      <h2 className="text-xl font-bold">Create Invoice</h2>
+  const handleItemInputFocus = () => {
+    setIsAutocompleteVisible(true); // Show autocomplete list when input is focused
+  };
 
-      <div>
-        <label className="block text-sm">Client Name</label>
+  return (
+    <form onSubmit={handleSubmit} className="invoice-form">
+      <div className="form-group">
+        <label className="form-label">Client Name</label>
         <input
           type="text"
-          className="border p-2 w-full"
+          className="form-input"
           value={clientName}
           onChange={(e) => setClientName(e.target.value)}
           required
         />
       </div>
 
-      <div>
-        <label className="block text-sm">Invoice Date</label>
+      <div className="form-group">
+        <label className="form-label">Invoice Date</label>
         <input
           type="date"
-          className="border p-2 w-full"
+          className="form-input"
           value={invoiceDate}
           onChange={(e) => setInvoiceDate(e.target.value)}
           required
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-semibold">Items</label>
+      <div className="form-group">
+        <label className="form-label">Items</label>
         {items.map((item, index) => (
-          <div key={item.id} className="bg-gray-50 p-3 mb-3 rounded border">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 relative">
+          <div key={item.id} className="item-group">
+            <div className="grid">
               <div className="relative">
                 <input
                   type="text"
-                  className="border p-2 w-full"
+                  className="form-input"
                   placeholder="Item Name"
                   value={item.name}
+                  onFocus={handleItemInputFocus} // Show autocomplete list on focus
                   onChange={(e) => handleItemChange(index, "name", e.target.value)}
                   required
                 />
-                {item.name && (
-                  <ul className="absolute z-10 bg-white border w-full max-h-40 overflow-y-auto">
+                {isAutocompleteVisible && item.name && (
+                  <ul className="autocomplete-list">
                     {storeItems
                       .filter((storeItem) =>
                         storeItem.name.toLowerCase().includes(item.name.toLowerCase())
@@ -131,7 +149,7 @@ const AddInvoiceForm = () => {
                       .map((storeItem) => (
                         <li
                           key={storeItem.id}
-                          className="px-3 py-1 cursor-pointer hover:bg-gray-100 text-sm"
+                          className="autocomplete-item"
                           onClick={() => handleSelectItem(index, storeItem)}
                         >
                           {storeItem.name} - ₹{storeItem.price || 0}
@@ -143,14 +161,14 @@ const AddInvoiceForm = () => {
 
               <input
                 type="text"
-                className="border p-2"
+                className="form-input"
                 placeholder="Description"
                 value={item.description}
                 onChange={(e) => handleItemChange(index, "description", e.target.value)}
               />
               <input
                 type="number"
-                className="border p-2"
+                className="form-input"
                 placeholder="Quantity"
                 value={item.quantity}
                 onChange={(e) => handleItemChange(index, "quantity", parseInt(e.target.value))}
@@ -158,19 +176,19 @@ const AddInvoiceForm = () => {
               />
               <input
                 type="number"
-                className="border p-2"
+                className="form-input"
                 placeholder="Unit Price"
                 value={item.unit_price}
                 onChange={(e) => handleItemChange(index, "unit_price", parseFloat(e.target.value))}
                 required
               />
             </div>
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-gray-600">Subtotal: ₹{item.price.toFixed(2)}</p>
+            <div className="flex-between">
+              <p className="subtotal">Subtotal: ₹{item.price.toFixed(2)}</p>
               {items.length > 1 && (
                 <button
                   type="button"
-                  className="text-red-500 text-sm"
+                  className="remove-item"
                   onClick={() => removeItem(item.id)}
                 >
                   Remove
@@ -182,7 +200,7 @@ const AddInvoiceForm = () => {
         <button
           type="button"
           onClick={addItem}
-          className="bg-green-500 text-white px-3 py-1 mt-2 rounded text-sm"
+          className="add-item-btn"
         >
           Add Item
         </button>
@@ -190,7 +208,7 @@ const AddInvoiceForm = () => {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="submit-btn"
         disabled={isLoading}
       >
         {isLoading ? "Submitting..." : "Create Invoice"}

@@ -35,7 +35,7 @@ const Page = () => {
         console.log('OCR Response:', ocrResponse);
 
         if (ocrResponse.products) {
-          const parsedItems = ocrResponse.products.map((item: any) => ({
+          const parsedItems = ocrResponse.products.map((item) => ({
             name: item.name,
             price: item.price.toString(),
             quantity: item.quantity.toString(),
@@ -69,7 +69,7 @@ const Page = () => {
     try {
       const response = await bulkCreateStoreItem(formData).unwrap();
       console.log('Saved:', response);
-      toast.success(response.message || 'Items saved successfully.');
+      toast.success('Items saved successfully.');
     } catch (error) {
       console.error('Failed to save:', error);
       toast.error('Saving failed.');

@@ -12,12 +12,20 @@ const nextConfig = {
         port: '8000',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**', // Match any domain
+      },
+      {
+        protocol: 'http',
+        hostname: '**', // (Optional) If you want to allow HTTP as well.
+      },
     ],
   },
-  
- 
- 
-  
+
+
+
+
 }
- 
+
 export default nextConfig

@@ -13,7 +13,7 @@ const AddItem: React.FC = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateStoreItemRequest>({
     name: '',
     quantity_count: 0,
     measurement: '',
@@ -68,7 +68,7 @@ const AddItem: React.FC = () => {
     form.append('brand_name', formData.brand_name);
     form.append('replacement', formData.replacement || '');
     form.append('category', formData.category || '');
-    form.append('vendor_name', formData.vendor_name);
+    form.append('vendor_name', formData.vendor_name || '');
     form.append('availability_stock', formData.availability_stock.toString());
 
     formData.images?.forEach((img) => {

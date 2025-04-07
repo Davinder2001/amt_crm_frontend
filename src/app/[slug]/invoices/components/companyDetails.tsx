@@ -9,7 +9,6 @@ const CompanyDetails = () => {
     if (isError || !data) return <p>Failed to load company details.</p>;
 
     const company = data.selected_company;
-    console.log(company);
 
     return (
         <div className="p-4 bg-white rounded shadow">

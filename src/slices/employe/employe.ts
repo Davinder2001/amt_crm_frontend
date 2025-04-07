@@ -1,5 +1,18 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
+
+
+type PaySlipResponse = {
+  message: string;
+  employee: Employee;
+  pdf?: {
+    url: string;
+    filename: string;
+  };
+};
+
+
+
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({
@@ -46,13 +59,13 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
 
 
     fetchPaySlipById: builder.query<Employee, number>({
-      query: (id) => `employee/slip/view/${id}`,
+      query: (id) => `employee/salarySlip/${id}`,
       providesTags: ["Employe"],
     }),
 
 
     downloadPaySlipById: builder.query<Employee, number>({
-      query: (id) => `employee/slip/download/${id}`,
+      query: (id) => `employee/salary-slip-pdf/${id}`,
       providesTags: ["Employe"],
     }),
 
@@ -77,7 +90,7 @@ export const {
   useUpdateEmployeMutation,
   useDeleteEmployeMutation,
   useFetchPaySlipByIdQuery,
-  useDownloadPaySlipByIdQuery,
+  useLazyDownloadPaySlipByIdQuery,
   useFetchEmployeesSalaryQuery,
   useFetchEmployeesSalaryByIdQuery,
 } = employeCreateApi;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast } from 'react-toastify';
@@ -61,6 +61,16 @@ const LoginForm = () => {
   };
 
   const isLoggedIn = !!user;
+
+  useEffect(() => {
+    const accessToken = Cookies.get('access_token');
+    const userType = Cookies.get('user_type');
+    if (accessToken && userType) {
+      setUser(user); // Set the user from context if already logged in
+    } else {
+      setUser(null); // Clear user if not logged in
+    }
+  }, [setUser, user]);
 
   return (
     <>

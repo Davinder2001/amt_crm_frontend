@@ -1,17 +1,25 @@
 'use client';
 import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Logout from '../common/Logout';
+import { useRouter } from 'next/navigation';
 
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
-    const companies = profile?.user?.companies;
+    const [companies, setCompanies] = useState([] as any[]);
     const userType = profile?.user?.user_type;
+    const router = useRouter();
+
+    useEffect(() => {
+        if (profile?.user?.companies) {
+            setCompanies(profile.user.companies);
+        }
+    }, [profile]);
 
     const handleClick = async (companySlug: string, id: number, isVerified: boolean, e: React.MouseEvent) => {
         e.preventDefault();
@@ -24,31 +32,25 @@ const AdminHome = () => {
 
         try {
             await sendCompanyId({ id }).unwrap();
-            window.location.href = `/${companySlug}/dashboard`;
+            router.push(`/${companySlug}/dashboard`);
         } catch (error) {
             console.error(error);
-            alert('Failed to select company. Please try again.');
+            toast.error('Failed to select company. Please try again.');
         }
     };
 
     const isAdmin = userType === 'admin';
 
     useEffect(() => {
-        if (!isAdmin) {
-            return;
-        }
+        if (!isAdmin) return;
 
-        if (Array.isArray(companies) && companies.length > 0) {
+        if (!companies || companies.length === 0) {
+            refetch(); // Trigger refetch when companies are empty
+        } else if (companies.length > 0) {
             const firstCompany = companies[0];
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
         }
-
-        if (!companies || companies.length === 0) {
-            refetch();
-        }
     }, [companies, refetch, isAdmin]);
-
-    console.log('AdminHome component mounted or updated', { companies, userType });
 
     return (
         <>

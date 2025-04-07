@@ -8,10 +8,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import Logout from '../common/Logout';
 import { useRouter } from 'next/navigation';
 
+// Define the Company type
+interface Company {
+    id: number;
+    company_slug: string;
+    company_name: string;
+    verification_status: string;
+    description?: string;
+    company_id: string;
+    location?: string;
+}
+
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
-    const [companies, setCompanies] = useState([] as any[]);
+    const [companies, setCompanies] = useState<Company[]>([]);
     const userType = profile?.user?.user_type;
     const router = useRouter();
 

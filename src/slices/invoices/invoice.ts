@@ -1,14 +1,13 @@
 import invoiceCreateApiSlice from "./invoiceCreateSlice";
 
 export interface InvoiceItem {
-  id: number;
-  invoice_id: number;
+  id?: number;
+  invoice_id?: number;
+  name: string;
   description: string;
   quantity: number;
-  unit_price: string;
-  total: string;
-  created_at: string;
-  updated_at: string;
+  unit_price: number;
+  price: number;
 }
 
 export interface Invoice {
@@ -29,17 +28,39 @@ export interface InvoicesResponse {
   invoices: Invoice[];
 }
 
+export interface CreateInvoicePayload {
+  client_name: string;
+  invoice_date: string;
+  items: {
+    name: string;
+    quantity: number;
+    price: number;
+    unit_price: number;
+    description: string;
+  }[];
+}
+
 const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchInvoices: builder.query<InvoicesResponse, void>({
       query: () => "invoices",
       providesTags: ["Invoice"],
     }),
+
+    createInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
+      query: (newInvoice) => ({
+        url: "invoices",
+        method: "POST",
+        body: newInvoice,
+      }),
+      invalidatesTags: ["Invoice"],
+    }),
   }),
 });
 
 export const {
   useFetchInvoicesQuery,
+  useCreateInvoiceMutation,
 } = invoiceApi;
 
 export default invoiceApi;

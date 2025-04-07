@@ -30,7 +30,7 @@ const AdminHome = () => {
         if (profile?.user?.companies) {
             setCompanies(profile.user.companies);
         }
-    }, [profile, companies]);
+    }, [profile]);
 
     const handleClick = async (companySlug: string, id: number, isVerified: boolean, e: React.MouseEvent) => {
         e.preventDefault();
@@ -61,7 +61,7 @@ const AdminHome = () => {
             const firstCompany = companies[0];
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
         }
-    }, [refetch, isAdmin]);
+    }, [companies, refetch, isAdmin]);
 
     return (
         <>

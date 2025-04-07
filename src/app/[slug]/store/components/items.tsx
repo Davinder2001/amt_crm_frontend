@@ -52,16 +52,12 @@ const Items: React.FC = () => {
             <tr>
               <th>Item code</th>
               <th>Name</th>
-              <th>Quantity Count</th>
-              <th>Measurement</th>
               <th>Purchase Date</th>
               <th>Date of Manufacture</th>
               <th>Date of Expiry</th>
               <th>Brand Name</th>
               <th>Replacement</th>
-              <th>Category</th>
-              <th>Vendor Name</th>
-              <th>Availability Stock</th>
+              <th>Quantity</th>
               <th>Actions</th>
               <th>Catalog</th>
             </tr>
@@ -71,16 +67,12 @@ const Items: React.FC = () => {
               <tr key={item.id}>
                 <td>{item.item_code}</td>
                 <td>{item.name}</td>
-                <td>{item.quantity_count}</td>
-                <td>{item.measurement}</td>
                 <td>{item.purchase_date}</td>
                 <td>{item.date_of_manufacture}</td>
                 <td>{item.date_of_expiry}</td>
                 <td>{item.brand_name}</td>
                 <td>{item.replacement}</td>
-                <td>{item.category}</td>
-                <td>{item.vendor_name}</td>
-                <td>{item.availability_stock}</td>
+                <td>{item.quantity_count}</td>
                 <td>
                   {companySlug && (
                     <>

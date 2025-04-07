@@ -4,7 +4,7 @@ import { useCreateStoreItemMutation } from '@/slices/store/storeApi';
 import { useRouter } from 'next/navigation';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import AddVendor from '../components/AddVendor';
-import ImageUpload from '../components/ImageUpload'; // Import the new ImageUpload component
+import ImageUpload from '../components/ImageUpload';
 import { useCompany } from '@/utils/Company';
 
 const AddItem: React.FC = () => {
@@ -13,7 +13,7 @@ const AddItem: React.FC = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const [formData, setFormData] = useState<CreateStoreItemRequest>({
+  const [formData, setFormData] = useState({
     name: '',
     quantity_count: 0,
     measurement: '',
@@ -25,7 +25,7 @@ const AddItem: React.FC = () => {
     category: '',
     vendor_name: '',
     availability_stock: 0,
-    images: [], // Initial state for images
+    images: [],
   });
 
   const [vendors, setVendors] = useState<string[]>([]);
@@ -44,52 +44,39 @@ const AddItem: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files); // Convert FileList to array
-
-      // If more than 5 images are selected, only consider the first 5 images
-      const newImages = selectedFiles.slice(0, 5); // Limit to 5 selected images
-
-      // Combine the new images with the previously selected images, ensuring a max of 5 images
-      const updatedImages: File[] = [
-        ...(formData.images || []),
-        ...newImages,
-      ].slice(-5); // Only keep the last 5 images
-
-      // Update the formData with the new images (limit to 5)
-      setFormData((prev) => ({
-        ...prev,
-        images: updatedImages.length > 0 ? updatedImages : [], // Update state with the latest images
-      }));
+      const selectedFiles = Array.from(e.target.files);
+      const newImages = selectedFiles.slice(0, 5);
+      const updatedImages = [...(formData.images || []), ...newImages].slice(-5);
+      setFormData(prev => ({ ...prev, images: updatedImages }));
     }
   };
 
   const handleClearImages = () => {
-    // Clear images and reset input field
     setFormData(prev => ({ ...prev, images: [] }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Ensure that all form data is in the correct format to send to the mutation
-    const itemData: CreateStoreItemRequest = {
-      name: formData.name,
-      quantity_count: formData.quantity_count,
-      measurement: formData.measurement,
-      purchase_date: formData.purchase_date,
-      date_of_manufacture: formData.date_of_manufacture,
-      date_of_expiry: formData.date_of_expiry,
-      brand_name: formData.brand_name,
-      replacement: formData.replacement,
-      category: formData.category,
-      vendor_name: formData.vendor_name,
-      availability_stock: formData.availability_stock,
-      images: formData.images, // Directly use the images array
-    };
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('quantity_count', formData.quantity_count.toString());
+    form.append('measurement', formData.measurement || '');
+    form.append('purchase_date', formData.purchase_date || '');
+    form.append('date_of_manufacture', formData.date_of_manufacture || '');
+    form.append('date_of_expiry', formData.date_of_expiry || '');
+    form.append('brand_name', formData.brand_name);
+    form.append('replacement', formData.replacement || '');
+    form.append('category', formData.category || '');
+    form.append('vendor_name', formData.vendor_name);
+    form.append('availability_stock', formData.availability_stock.toString());
 
-    // Send the plain object (itemData) to the API using the mutation
+    formData.images?.forEach((img) => {
+      form.append('images[]', img);
+    });
+
     try {
-      await createStoreItem(itemData).unwrap();
+      await createStoreItem(form).unwrap();
       router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error creating item:', err);
@@ -146,7 +133,6 @@ const AddItem: React.FC = () => {
           <input type="text" name="category" value={formData.category} onChange={handleChange} />
         </div>
 
-        {/* Vendor Selection */}
         <div style={{ flex: '1 1 300px' }}>
           <label>Vendor Name*</label>
           <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>
@@ -161,7 +147,6 @@ const AddItem: React.FC = () => {
               <option>No vendors available</option>
             )}
           </select>
-          {/* AddVendor Component */}
           <AddVendor onVendorAdded={handleVendorAdded} />
         </div>
 
@@ -170,7 +155,6 @@ const AddItem: React.FC = () => {
           <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
         </div>
 
-        {/* Image Upload Component */}
         <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages} />
 
         <div style={{ flex: '1 1 100%', marginTop: '1rem' }}>

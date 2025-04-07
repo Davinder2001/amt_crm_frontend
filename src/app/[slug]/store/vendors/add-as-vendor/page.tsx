@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/store/storeApi';
+import { toast } from 'react-toastify';
 
 const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
@@ -12,7 +13,7 @@ const Page = () => {
   const [showItemFields, setShowItemFields] = useState(false);
 
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
-  const [ocrProcess] = useOcrProcessMutation(); // OCR API mutation
+  const [ocrProcess] = useOcrProcessMutation();
 
   const handleAddItemToList = () => {
     if (!newItem.name || !newItem.price || !newItem.quantity || !newItem.subTotal) return;
@@ -24,22 +25,31 @@ const Page = () => {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setImage(file); // Set the uploaded file
+      setImage(file);
 
       const formData = new FormData();
-      formData.append('image', file); // Appending the image as a file (binary data)
+      formData.append('image', file);
 
       try {
-        const ocrResponse = await ocrProcess(formData).unwrap(); // Send the image to OCR and get the response
+        const ocrResponse = await ocrProcess(formData).unwrap();
         console.log('OCR Response:', ocrResponse);
 
-        if (ocrResponse.result) {
-          const parsedItems = JSON.parse(ocrResponse.result);
-          setItems(parsedItems); // Automatically populate the table with OCR results
+        if (ocrResponse.products) {
+          const parsedItems = ocrResponse.products.map((item: any) => ({
+            name: item.name,
+            price: item.price.toString(),
+            quantity: item.quantity.toString(),
+            subTotal: item.sub_total.toString(),
+          }));
+          setItems(parsedItems);
         }
 
+        if (ocrResponse.message) {
+          toast.success(ocrResponse.message);
+        }
       } catch (error) {
         console.error('OCR process failed:', error);
+        toast.error('OCR processing failed.');
       }
     }
   };
@@ -51,16 +61,18 @@ const Page = () => {
     formData.append('vendor_no', vendorNo);
 
     if (image) {
-      formData.append('image', image); // Attach the image to the final form data
+      formData.append('image', image);
     }
 
-    formData.append('items', JSON.stringify(items)); // Add the items to the form data
+    formData.append('items', JSON.stringify(items));
 
     try {
       const response = await bulkCreateStoreItem(formData).unwrap();
       console.log('Saved:', response);
+      toast.success(response.message || 'Items saved successfully.');
     } catch (error) {
       console.error('Failed to save:', error);
+      toast.error('Saving failed.');
     }
   };
 
@@ -87,7 +99,7 @@ const Page = () => {
       <div>
         <input
           type="file"
-          onChange={handleImageUpload} // Automatically trigger OCR when an image is uploaded
+          onChange={handleImageUpload}
         />
         <button onClick={() => setShowItemFields(true)}>+ Add Items</button>
       </div>

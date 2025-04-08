@@ -37,11 +37,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
                 accept="image/*"
                 multiple
                 onChange={handleFileChange} // Handle the file change
-            />
+            /></div>
 
             {/* Display preview of selected images */}
             {images && images.length > 0 && (
-                <div style={{  display: 'flex', gap: '10px' }}>
+                <div  style={{  display: 'flex', gap: '10px' }}>
                     {images.map((file, index) => (
                         <div key={index}>
                             {/* Generate the preview of each image */}
@@ -57,13 +57,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
             )}
             {/* Clear Images Button */}
             <button
-                type="button"
-                style={{  color: 'red',    padding: '10px' }}
+                type="button" className='buttons'   
                 onClick={handleClearImages} // Call the parent function to clear images
             >
                 Clear Images
             </button>
-        </div>
+        
         </div>
 
     );

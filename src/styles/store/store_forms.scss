@@ -40,7 +40,6 @@ select{
 }
 .store-add-item-form-img-inner {
     display: flex;
-    background-color: $primary-color;
     color: $white;
     justify-content: space-between;
     align-items: center;
@@ -49,12 +48,22 @@ select{
 }
 .save-cancel-button {
     display: flex;
-
+    align-items: center;
+    justify-content: end;
+    gap: 15px;
 }
 .cancel-and-add-button {
     display: flex;
     margin-top: 15px;
     gap: 15px;
+}
+
+.store-add-item-form-img-container{
+    img {
+    object-fit: cover;
+    height: 100px;
+}
+
 }
 }
 
@@ -100,7 +109,7 @@ select{
     .add-as-a-v-inputs {
         margin-bottom: 5px;
         display: flex;
-        gap: 5px;
+        gap: 50px;
         
         input{
             border: 1px solid $primary-color;
@@ -113,6 +122,7 @@ select{
     .add-as-a-v-button {
         display: flex;
         justify-content: end;
+        gap: 15px;
 
         
     }

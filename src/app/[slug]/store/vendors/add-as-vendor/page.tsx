@@ -94,15 +94,16 @@ const Page = () => {
           value={vendorNo}
           onChange={(e) => setVendorNo(e.target.value)}
         />
-        <input
+        
+      </div>
+        
+      <div className='add-as-a-v-button'>
+       <input className='add-as-a-v-image'
           type="file"
           onChange={handleImageUpload}
-        />  
-      </div>
-
-      <div className='add-as-a-v-button'>
-        
+        /> 
         <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
+        
       </div>
 
       {showItemFields && (
@@ -154,10 +155,10 @@ const Page = () => {
         </tbody>
       </table>
 
-      <div>
+      <div className='add-as-a-v-button'>
       
-      <span>Cancel</span>
-              <button onClick={handleSave} disabled={isLoading}>
+      <span className='buttons'>Cancel</span>
+              <button className='buttons' onClick={handleSave} disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save'}
         </button>
       </div>

@@ -9,8 +9,8 @@ type PaySlipResponse = {
     url: string;
     filename: string;
   };
+  
 };
-
 
 
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
@@ -58,7 +58,7 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
     }),
 
 
-    fetchPaySlipById: builder.query<Employee, number>({
+    fetchPaySlipById: builder.query<PaySlipResponse, number>({
       query: (id) => `employee/salarySlip/${id}`,
       providesTags: ["Employe"],
     }),

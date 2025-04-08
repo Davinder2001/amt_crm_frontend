@@ -3,6 +3,11 @@
  */
 const nextConfig = {
 
+  reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
+
   images: {
     domains: ['localhost'],
     remotePatterns: [
@@ -14,11 +19,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**', // Match any domain
+        hostname: '**',
       },
       {
         protocol: 'http',
-        hostname: '**', // (Optional) If you want to allow HTTP as well.
+        hostname: '**',
       },
     ],
   },
@@ -28,4 +33,12 @@ const nextConfig = {
 
 }
 
-export default nextConfig
+
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+});
+
+module.exports = withPWA(nextConfig);

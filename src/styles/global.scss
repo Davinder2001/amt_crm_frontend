@@ -204,21 +204,20 @@ textarea {
     transition: opacity 0.2s ease-in-out, visibility 0s 0.2s;
     z-index: 99999999;
 
-  }
-  
-  .menu-item:hover .tooltip {
+}
+
+.menu-item:hover .tooltip {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.2s ease-in-out, visibility 0s 0s;
     z-index: 99999999;
-  }
-  
-  
+}
+
+
 
 // ********* Sidebar css ********* //
 .sidebar {
     max-width: 250px;
-    height: 100vh;
     background-color: #fff;
     transition: width .3s ease-in-out;
     position: relative;
@@ -226,6 +225,7 @@ textarea {
     .sidebar-header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         font-size: 18px;
         font-weight: bold;
         border-bottom: 1px solid #e5e7eb;
@@ -504,4 +504,25 @@ textarea {
         cursor: pointer;
     }
 
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        max-width: 90%;
+        height: 100vh;
+        transition: transform 0.3s ease-in-out;
+        z-index: 999999;
+        padding: 0px;
+    }
+
+    .hide-sidebar {
+        transform: translateX(-102%);
+    }
+
+    .show-sidebar {
+        transform: translateX(0);
+    }
 }

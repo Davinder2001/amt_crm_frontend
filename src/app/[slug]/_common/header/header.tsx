@@ -10,15 +10,21 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 interface headerProps {
   handleToggleSidebar: () => void;
+  openMenu: () => void;
+  isMobile: boolean;
 }
 
-const Header: React.FC<headerProps> = ({ handleToggleSidebar }) => {
+const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
   const { companySlug } = useCompany();
   const { title } = useBreadcrumb();
 
   return (
     <div className='header'>
-      <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
+      {isMobile ? (
+        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
+      ) : (
+        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
+      )}
       <h1>{title}</h1>
       <div className="nav-container">
         <SearchBar />

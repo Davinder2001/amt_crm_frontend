@@ -13,43 +13,74 @@ export const AdminEmployeeLayout = ({
 }>) => {
   const pathname = usePathname();
 
-  // Initialize state with value from localStorage if available, default to 'true' (expanded)
+  const [isToggle, setIsToggle] = useState<boolean>(false); // mobile sidebar toggle state
+  const [isMobile, setIsMobile] = useState<boolean>(false); // check if the device is mobile
+
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window !== "undefined") {
       const savedState = localStorage.getItem("sidebarState");
-      return savedState ? JSON.parse(savedState) : true; // Default to true if no value is found
+      return savedState ? JSON.parse(savedState) : true;
     }
     return true;
   });
 
-  // Update localStorage whenever the state changes
+  // Detect screen size on mount and when resizing
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024); // Set to true if the screen size is <= 1024px
+    };
+
+    // Initialize on mount
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Update localStorage whenever the state changes, but only for larger screens
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isMobile) {
       localStorage.setItem("sidebarState", JSON.stringify(isSidebarExpanded));
     }
-  }, [isSidebarExpanded]);
+  }, [isSidebarExpanded, isMobile]);
 
+  // Toggle left sidebar for desktop
   const handleToggleSidebar = () => {
-    setIsSidebarExpanded((prevState: boolean) => !prevState); // Toggle the sidebar state
+    setIsSidebarExpanded((prevState: boolean) => !prevState);
   };
 
+  // Toggle sidebar for mobile
+  const openMenu = () => {
+    setIsToggle(!isToggle);  // Toggle mobile sidebar visibility
+  };
+
+  // Render children if on the homepage
   if (pathname === "/") {
-    return <>{children} </>;
+    return <>{children}</>;
   }
 
   return (
     <div className="main">
       <div
-        className={`sidebar ${isSidebarExpanded ? 'show-sidebar' : 'hide-sidebar'}`}
+        className={`sidebar ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
         style={{
-          width: isSidebarExpanded ? '250px' : '60px', // Conditionally set width
+          width: isMobile ? '90%' : isSidebarExpanded ? '250px' : '60px',
         }}
       >
-        <Sidebar isSidebarExpanded={isSidebarExpanded} />
+        <Sidebar
+          isSidebarExpanded={isSidebarExpanded}
+          isMobile={isMobile}
+          openMenu={openMenu}
+        />
       </div>
       <div className="main-content">
         <Header
           handleToggleSidebar={handleToggleSidebar}
+          openMenu={openMenu}
+          isMobile={isMobile}
         />
         {children}
         <Footer />

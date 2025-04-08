@@ -36,6 +36,8 @@ interface CreateStoreItemRequest {
   category?: string;
   vendor_name?: string;
   availability_stock: number;
+  cost_price: number;
+  selling_price: number;
   images: File[]
 }
 

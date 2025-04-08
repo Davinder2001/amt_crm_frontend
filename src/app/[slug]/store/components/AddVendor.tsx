@@ -2,6 +2,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
+import { FaPlug, FaPlus } from 'react-icons/fa';
 
 interface AddVendorProps {
   onVendorAdded: (vendorName: string) => void;
@@ -31,10 +32,10 @@ const AddVendor: React.FC<AddVendorProps> = ({ onVendorAdded }) => {
   };
 
   return (
-    <div>
+    <div className='add-vender-button'>
       {!isAddingVendor ? (
         <button type="button" onClick={() => setIsAddingVendor(true)} style={{ marginTop: '10px' }}>
-          Add New Vendor
+          <FaPlus /> Add New Vendor
         </button>
       ) : (
         <div>

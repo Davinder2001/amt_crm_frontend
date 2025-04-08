@@ -25,6 +25,9 @@
 @use './forms/role_form.scss' as *;
 @use './forms/forms.scss' as *;
 
+// admin store section
+@use './store/storedashbord.scss' as *;
+@use './store/store_forms.scss' as *;
 
 
 // superadmin company section
@@ -427,26 +430,6 @@ textarea {
     }
 }
 
-
-.hr_navigation {
-    display: flex;
-    gap: 15px;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 40px 0;
-
-    a {
-        text-decoration: none;
-        display: flex;
-        gap: 10px;
-        color: $white;
-        background-color: $primary-color;
-        padding: 5px 10px;
-        border-radius: 5px;
-        border-radius: 50px;
-        padding: 12px 30px;
-    }
-}
 
 
 

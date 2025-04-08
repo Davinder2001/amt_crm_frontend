@@ -93,8 +93,7 @@ const AddItem: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Add New Item</h1>
+    <div className='store-add-item'>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ flex: '1 1 300px' }}>
           <label>Name*</label>
@@ -155,8 +154,10 @@ const AddItem: React.FC = () => {
           <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
         </div>
 
+        <div className='add-item-form-image'>
         <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages} />
 
+        </div>
         <div style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Adding...' : 'Save'}

@@ -1,0 +1,33 @@
+@use '../variables' as *;
+
+.store-add-item{
+
+    input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 7px;
+}
+select{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 7px;
+}
+.add-vender-button {
+    button{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: $primary-color;
+    color: $white;
+    border: unset;
+    border-radius: 82px;
+    display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+    
+}
+}
+}

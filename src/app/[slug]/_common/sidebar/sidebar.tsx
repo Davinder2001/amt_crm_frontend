@@ -8,9 +8,13 @@ import {
 } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu"; // Services Icon
 import { useCompany } from "@/utils/Company";
-const Sidebar = () => {
 
-  const {companySlug} = useCompany();
+interface sidebarProps {
+  isSidebarExpanded: boolean;
+}
+
+const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded }) => {
+  const { companySlug } = useCompany();
 
   // Using useRouter to get the current route
   const asPath = usePathname();
@@ -33,7 +37,7 @@ const Sidebar = () => {
   return (
     <aside>
       <div className="sidebar-header">
-        <Link href={'/'}>AMT CRM</Link>
+        {isSidebarExpanded ? <Link href={'/'}>AMT CRM</Link> : <Link href={'/'}>A</Link>}
       </div>
       <nav>
         <ul className="menu-list">
@@ -55,9 +59,15 @@ const Sidebar = () => {
                     style={{
                       color: isActive ? "#009693" : "#222",
                     }}>{icon}</span>
-                  <span className="menu-text">{name}</span>
-                  {hasSubmenu && <span className="submenu-icon">+</span>}
+                  {isSidebarExpanded ?
+                    <>
+                      <span className="menu-text">{name}</span>
+                      {hasSubmenu && <span className="submenu-icon">+</span>}
+                    </> : ''}
                 </Link>
+                {!isSidebarExpanded && (
+                  <div className="tooltip"> {name}</div>
+                )}
                 {isActive && (
                   <span
                     style={{

@@ -7,6 +7,7 @@ import {
   useAddToCatalogMutation,
   useRemoveFromCatalogMutation,
 } from '@/slices/catalog/catalogApi';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 
 const Items: React.FC = () => {
@@ -45,7 +46,6 @@ const Items: React.FC = () => {
 
   return (
     <>
-      <h2>Items List</h2>
       <div style={{ width: '100%', overflowX: 'auto' }}>
         <table border={1} cellPadding={8} cellSpacing={0}>
           <thead>
@@ -77,14 +77,18 @@ const Items: React.FC = () => {
                   {companySlug && (
                     <>
                       <Link href={`/${companySlug}/store/view-item/${item.id}`}>
-                        <button>View</button>
+                        <button><FaEye color='#222' /></button>
                       </Link>
                       <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-                        <button>Edit</button>
+                                            <FaEdit color='#222' />
+                        
                       </Link>
                     </>
                   )}
-                  <button onClick={() => handleDelete(item.id)}>Delete</button>
+                  <button onClick={() => handleDelete(item.id)}>
+                                        <FaTrash color='#222' />
+                    
+                  </button>
                 </td>
                 <td>
                   <button onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>

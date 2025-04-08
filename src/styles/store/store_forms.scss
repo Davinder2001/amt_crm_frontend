@@ -1,0 +1,162 @@
+@use '../variables' as *;
+
+.store-add-item{
+
+    input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 7px;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+
+}
+select{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 7px;
+    border: 1px solid $primary-color;
+    border-radius: 5px;
+
+    
+}
+.add-vender-button {
+    button{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: $primary-color;
+    color: $white;
+    border: unset;
+    border-radius: 82px;
+    display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+       
+    
+}
+}
+.store-add-item-form-img-inner {
+    display: flex;
+    background-color: $primary-color;
+    color: $white;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+   
+}
+.save-cancel-button {
+    display: flex;
+
+}
+.cancel-and-add-button {
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+}
+}
+
+
+
+
+// Add vendors section
+
+
+
+
+.stor-add-v-form-container{
+        form.stor-add-v-form-inner {
+            display: flex;
+            gap: 15px;
+        }
+        input {
+            padding: 7px;
+            margin-left: 5px;
+            border: 1px solid $primary-color;
+            border-radius: 5px;
+        }
+        
+        label {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .buttons{
+            padding: 7px 22px;
+            border-radius: 50px;
+            border: unset;
+            background-color: $primary-color;
+            color: $white;
+            font-size: 16px;
+        }
+    }
+
+
+    // Add as a vendors section
+
+.add-as-a-v-container{
+    .add-as-a-v-inputs {
+        margin-bottom: 5px;
+        display: flex;
+        gap: 5px;
+        
+        input{
+            border: 1px solid $primary-color;
+            padding: 9px;
+            width: 100%;
+            border-radius: 5px;
+        
+        }
+    }
+    .add-as-a-v-button {
+        display: flex;
+        justify-content: end;
+
+        
+    }
+    
+   
+}
+
+
+
+/////////////////////////////////////////Add Items////////////////////////////////////////////////
+
+
+
+
+
+.add-as-a-v-items-container{
+    .buttons
+{
+    padding: 7px 35px;
+        margin: 7px 0px;
+}
+    
+}
+.add-as-a-v-items-inner {
+    display: flex;
+    gap: 5px;
+    /* width: 100%; */
+
+
+    input {
+        padding: 9px;
+        border: 1px solid $primary-color;
+        border-radius: 5px;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+
+
+}
+
+
+
+
+
+
+

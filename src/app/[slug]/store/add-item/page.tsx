@@ -368,12 +368,13 @@ const AddItem: React.FC = () => {
 
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Adding...' : 'Save'}
-          </button>
-          <button type="button" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
+        <button  className='buttons' type="button" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
             Cancel
           </button>
+          <button  className='buttons' type="submit" disabled={isLoading}>
+            {isLoading ? 'Adding...' : 'Save'}
+          </button>
+          
         </div>
       </form>
     </div>

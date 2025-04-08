@@ -12,7 +12,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
     }),
 
     login: builder.mutation<
-      { access_token: string; user: Profile; message: string },
+      { access_token: string; user: UserProfile; message: string },
       { number: string; password: string }
     >({
       query: (credentials) => ({
@@ -80,7 +80,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    adminRegister: builder.mutation<{ access_token: string; user: Profile; message: string },{ name: string; email: string; password: string; password_confirmation: string }>({
+    adminRegister: builder.mutation<{ access_token: string; user: UserProfile; message: string }, { name: string; email: string; password: string; password_confirmation: string }>({
       query: (credentials) => ({
         url: "admin-register",
         method: "POST",
@@ -92,12 +92,12 @@ const authApi = userCreateApiSlice.injectEndpoints({
   }),
 });
 
-export const { 
-  useFetchProfileQuery, 
-  useLoginMutation, 
-  useLogoutMutation, 
-  useForgotPasswordMutation, 
-  useVerifyOtpMutation, 
+export const {
+  useFetchProfileQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useForgotPasswordMutation,
+  useVerifyOtpMutation,
   useChangePasswordMutation,
   useSelectedCompanyMutation,
   useFetchSelectedCompanyQuery,

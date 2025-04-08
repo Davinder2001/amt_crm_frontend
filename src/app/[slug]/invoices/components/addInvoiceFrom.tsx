@@ -42,7 +42,7 @@ const AddInvoiceForm = () => {
       ...updatedItems[index],
       name: storeItem.name,
       unit_price: parseFloat(String(storeItem.price)) || 0,
-      quantity: storeItem.quantity_count || 1,
+      // quantity: storeItem.quantity_count || 1,
       price: storeItem.price * (storeItem.quantity_count || 1),
       description: `${storeItem.category || ""} ${storeItem.brand_name || ""}`.trim(),
     };
@@ -109,7 +109,6 @@ const AddInvoiceForm = () => {
     }
   };
 
-  // Functions to increment or decrement the quantity
   const incrementQuantity = (index: number) => {
     const updatedItems = [...items];
     updatedItems[index].quantity += 1;
@@ -193,7 +192,21 @@ const AddInvoiceForm = () => {
                   >
                     -
                   </button>
-                  <span className="quantity-display">{item.quantity}</span>
+                  <input
+                    type="number"
+                    className="form-input quantity-input"
+                    value={item.quantity}
+                    onChange={(e) => {
+                      const newQuantity = parseInt(e.target.value, 10);
+                      if (e.target.value === "") {
+                        handleItemChange(index, "quantity", 1);
+                      } else if (!isNaN(newQuantity) && newQuantity >= 1) {
+                        handleItemChange(index, "quantity", newQuantity);
+                      }
+                    }}
+                    min={1}
+                    required
+                  />
                   <button
                     type="button"
                     className="quantity-btn"

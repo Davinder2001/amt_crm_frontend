@@ -16,7 +16,7 @@ interface Company {
     [key: string]: string | number; // Allow for additional fields
 }
 
-interface Profile {
+interface UserProfile {
     id: number;
     name: string;
     number: string;
@@ -30,6 +30,7 @@ interface Profile {
 }
 
 interface UsersResponse {
+    message: string;
     user: Profile;
 }
 

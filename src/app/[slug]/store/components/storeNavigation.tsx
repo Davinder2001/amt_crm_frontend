@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaFolderPlus, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 const StoreNavigation = () => {
   // Fetch selected company data to get the company slug.

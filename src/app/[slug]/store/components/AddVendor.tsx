@@ -2,7 +2,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
-import { FaPlug, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 interface AddVendorProps {
   onVendorAdded: (vendorName: string) => void;

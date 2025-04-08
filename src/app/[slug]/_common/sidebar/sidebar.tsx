@@ -4,16 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FaTachometerAlt, FaStore, FaUserTie, FaUserShield,
-  FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, FaClipboardList, FaBox
+  FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, FaClipboardList, FaBox,
+  FaTimesCircle
 } from "react-icons/fa";
 import { LuClipboardList } from "react-icons/lu"; // Services Icon
 import { useCompany } from "@/utils/Company";
 
 interface sidebarProps {
   isSidebarExpanded: boolean;
+  isMobile: boolean;
+  openMenu: () => void;
 }
 
-const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded }) => {
+const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
   const { companySlug } = useCompany();
 
   // Using useRouter to get the current route
@@ -37,7 +40,25 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded }) => {
   return (
     <aside>
       <div className="sidebar-header">
-        {isSidebarExpanded ? <Link href={'/'}>AMT CRM</Link> : <Link href={'/'}>A</Link>}
+        {
+          isMobile ? (
+            <>
+              <Link href={'/'}>AMT CRM</Link>
+              <FaTimesCircle
+                size={20}
+                style={{ cursor: 'pointer' }}
+                onClick={openMenu}
+                className="close-sidebar"
+              />
+            </>
+          ) : (
+            isSidebarExpanded ? (
+              <Link href={'/'}>AMT CRM</Link>
+            ) : (
+              <Link href={'/'}>A</Link>
+            )
+          )
+        }
       </div>
       <nav>
         <ul className="menu-list">
@@ -59,11 +80,17 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded }) => {
                     style={{
                       color: isActive ? "#009693" : "#222",
                     }}>{icon}</span>
-                  {isSidebarExpanded ?
+                  {isMobile ? (
+                    <>
+                      <span className="menu-text">{name}</span>
+                      {hasSubmenu && <span className="submenu-icon">+</span>}
+                    </>
+                  ) : isSidebarExpanded ?
                     <>
                       <span className="menu-text">{name}</span>
                       {hasSubmenu && <span className="submenu-icon">+</span>}
                     </> : ''}
+
                 </Link>
                 {!isSidebarExpanded && (
                   <div className="tooltip"> {name}</div>

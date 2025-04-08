@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 type UserContextType = {
   user: UserProfile | null;
@@ -13,30 +11,23 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { data, error} = useFetchProfileQuery();
+  const { data, isLoading, refetch  } = useFetchProfileQuery();
   const [user, setUser] = useState<UserProfile | null>(data?.user || null);
-  const router = useRouter();
+
+  // Trigger data fetch when the component mounts
+  useEffect(() => {
+    if (!data && !isLoading) { // If no data is present, trigger fetch manually
+      refetch();
+    } else if (data?.user) {
+      setUser(data.user);
+    }
+  }, [data, isLoading, refetch]);
 
   useEffect(() => {
     if (data?.user) {
       setUser(data.user);
     }
-  }, [data, user, setUser]);
-
-  // useEffect(() => {
-  //   if (data?.message === "Unauthenticated.") {
-  //     // Clear the user context
-  //     setUser(null);
-
-  //     // Remove cookies
-  //     Cookies.remove('access_token');
-  //     Cookies.remove('user_type');
-  //     Cookies.remove('company_slug');
-
-  //     // Redirect to login page
-  //     router.push('/login');
-  //   }
-  // }, [user, data, error, router])
+  }, [data]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

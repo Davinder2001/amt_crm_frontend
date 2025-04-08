@@ -25,6 +25,8 @@ const AddItem: React.FC = () => {
     category: '',
     vendor_name: '',
     availability_stock: 0,
+    cost_price: 0,
+    selling_price: 0,
     images: [],
   });
 
@@ -70,6 +72,8 @@ const AddItem: React.FC = () => {
     form.append('category', formData.category || '');
     form.append('vendor_name', formData.vendor_name || '');
     form.append('availability_stock', formData.availability_stock.toString());
+    form.append('cost_price', formData.cost_price.toString());
+    form.append('selling_price', formData.selling_price.toString());
 
     formData.images?.forEach((img) => {
       form.append('images[]', img);
@@ -132,7 +136,14 @@ const AddItem: React.FC = () => {
           <label>Category</label>
           <input type="text" name="category" value={formData.category} onChange={handleChange} />
         </div>
-
+        <div style={{ flex: '1 1 300px' }}>
+          <label>Cost Price*</label>
+          <input type="number" name="cost_price" value={formData.cost_price} onChange={handleChange} required />
+        </div>
+        <div style={{ flex: '1 1 300px' }}>
+          <label>Selling Price*</label>
+          <input type="number" name="selling_price" value={formData.selling_price} onChange={handleChange} required />
+        </div>
         <div style={{ flex: '1 1 300px' }}>
           <label>Vendor Name*</label>
           <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>

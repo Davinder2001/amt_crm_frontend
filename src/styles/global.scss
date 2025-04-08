@@ -178,10 +178,11 @@ textarea {
 
 // ********* Sidebar css ********* //
 .sidebar {
-    width: 250px;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     background-color: #fff;
+    transition: width .3s ease-in-out;
 
     .sidebar-header {
         display: flex;

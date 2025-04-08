@@ -2,7 +2,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
-import { FaPlug, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 interface AddVendorProps {
   onVendorAdded: (vendorName: string) => void;
@@ -45,10 +45,12 @@ const AddVendor: React.FC<AddVendorProps> = ({ onVendorAdded }) => {
             onChange={(e) => setNewVendor(e.target.value)}
             placeholder="Enter new vendor name"
           />
+          <div className="cancel-and-add-button">
           <button type="button" onClick={handleAddVendor} disabled={isCreatingVendor}>
             {isCreatingVendor ? 'Adding Vendor...' : 'Add'}
           </button>
           <button type="button" onClick={() => setIsAddingVendor(false)}>Cancel</button>
+          </div>
         </div>
       )}
     </div>

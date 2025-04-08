@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
+import { FaEye } from 'react-icons/fa';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading } = useFetchVendorsQuery();
@@ -10,7 +11,6 @@ const Page: React.FC = () => {
 
   return (
     <div>
-      <h1>Vendors</h1>
       {isLoading ? (
         <p>Loading vendors...</p>
       ) : error ? (
@@ -35,7 +35,7 @@ const Page: React.FC = () => {
                 <td>{vendor.updated_at}</td>
                 <td>
                   <Link href={`/${companySlug}/store/vendors/${vendor.id}`}>
-                    <button>View</button>
+                    <span><FaEye color='#222' /></span>
                   </Link>
                 </td>
               </tr>

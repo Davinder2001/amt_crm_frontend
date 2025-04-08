@@ -22,9 +22,8 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Add Vendors</h1>
-      <form onSubmit={handleSubmit}>
+    <div  className='stor-add-v-form-container'>
+      <form  className='stor-add-v-form-inner' onSubmit={handleSubmit}>
         <div>
           <label>Vendor Name:</label>
           <input
@@ -34,7 +33,7 @@ const Page: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" disabled={isLoading}>
+        <button className='buttons' type="submit" disabled={isLoading}>
           {isLoading ? 'Adding...' : 'Add Vendor'}
         </button>
       </form>

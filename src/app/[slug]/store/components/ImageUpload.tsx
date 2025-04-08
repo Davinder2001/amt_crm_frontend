@@ -58,7 +58,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
             {/* Clear Images Button */}
             <button
                 type="button"
-                style={{  color: 'red' }}
+                style={{  color: 'red',    padding: '10px' }}
                 onClick={handleClearImages} // Call the parent function to clear images
             >
                 Clear Images

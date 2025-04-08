@@ -3,20 +3,20 @@ import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useFetchPaySlipByIdQuery,
-  useLazyDownloadPaySlipByIdQuery,
-} from '@/slices/employe/employe';
+import { useFetchPaySlipByIdQuery } from '@/slices/employe/employe';
 
-function Page(): JSX.Element {
+function Page() {
   const { setTitle } = useBreadcrumb();
-  const params = useParams();
-  const id = Number((params as { id: string }).id);
+  const params = useParams() as { id?: string };
+  const id = Number(params?.id || 0);
 
-  const { currentData } = useFetchPaySlipByIdQuery(id);
-  const [triggerDownload] = useLazyDownloadPaySlipByIdQuery();
+  const { currentData } = useFetchPaySlipByIdQuery(id, {
+    skip: isNaN(id) || id === 0,
+  });
 
   const employee = currentData?.employee;
+  const pdfBase64 = currentData?.pdf?.url;
+  const fileName = currentData?.pdf?.filename || `pay-slip-${employee?.name || 'employee'}.pdf`;
 
   useEffect(() => {
     setTitle('Pay Slip');
@@ -26,29 +26,35 @@ function Page(): JSX.Element {
     window.print();
   };
 
-  const handleDownload = async () => {
-    try {
-      const response = await triggerDownload(id).unwrap();
-
-      if (response?.pdf?.url) {
-        const fileResponse = await fetch(response.pdf.url);
-        const blob = await fileResponse.blob();
-
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = response.pdf.filename || `pay-slip-${employee?.name || 'employee'}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      } else {
-        alert('PDF download link not found.');
-      }
-    } catch (error) {
-      console.error('Failed to download PDF:', error);
-      alert('Error downloading PDF');
+  const handleDownload = () => {
+    if (!pdfBase64) {
+      alert('PDF not available.');
+      return;
     }
+
+    const byteCharacters = atob(pdfBase64);
+    const byteArrays: Uint8Array[] = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   if (!employee) return <p>Loading...</p>;

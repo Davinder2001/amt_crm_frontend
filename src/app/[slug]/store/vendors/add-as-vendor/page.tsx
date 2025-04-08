@@ -77,8 +77,8 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className='add-as-a-v-container'>
+      <div className='add-as-a-v-inputs' >
         <input
           placeholder="Invoice No"
           value={invoiceNo}
@@ -94,19 +94,20 @@ const Page = () => {
           value={vendorNo}
           onChange={(e) => setVendorNo(e.target.value)}
         />
-      </div>
-
-      <div>
         <input
           type="file"
           onChange={handleImageUpload}
-        />
-        <button onClick={() => setShowItemFields(true)}>+ Add Items</button>
+        />  
+      </div>
+
+      <div className='add-as-a-v-button'>
+        
+        <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
       </div>
 
       {showItemFields && (
-        <div>
-          <div>
+        <div className='add-as-a-v-items-container'>
+          <div className='add-as-a-v-items-inner'>
             <input
               placeholder="Name"
               value={newItem.name}
@@ -128,7 +129,7 @@ const Page = () => {
               onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })}
             />
           </div>
-          <button onClick={handleAddItemToList}>Add</button>
+          <button className='buttons' onClick={handleAddItemToList}>Add</button>
         </div>
       )}
 
@@ -154,8 +155,9 @@ const Page = () => {
       </table>
 
       <div>
-        <button>Cancel</button>
-        <button onClick={handleSave} disabled={isLoading}>
+      
+      <span>Cancel</span>
+              <button onClick={handleSave} disabled={isLoading}>
           {isLoading ? 'Saving...' : 'Save'}
         </button>
       </div>

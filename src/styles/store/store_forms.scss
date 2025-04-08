@@ -30,4 +30,11 @@ select{
     
 }
 }
+.store-add-item-form-img-inner {
+    display: flex;
+    background-color: $primary-color;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+}
 }

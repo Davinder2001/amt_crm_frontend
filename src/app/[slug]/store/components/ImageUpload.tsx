@@ -27,9 +27,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
     };
 
     return (
-        <div style={{ flex: '1 1 100%' }}>
+        <div className='store-add-item-form-img-container'>
             <label>Upload Images (up to 5)*</label>
-            <input
+            
+            <div className='store-add-item-form-img-inner'>
+                <input
                 type="file"
                 name="images"
                 accept="image/*"
@@ -39,7 +41,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
 
             {/* Display preview of selected images */}
             {images && images.length > 0 && (
-                <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+                <div style={{  display: 'flex', gap: '10px' }}>
                     {images.map((file, index) => (
                         <div key={index}>
                             {/* Generate the preview of each image */}
@@ -56,12 +58,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
             {/* Clear Images Button */}
             <button
                 type="button"
-                style={{ marginTop: '1rem', color: 'red' }}
+                style={{  color: 'red' }}
                 onClick={handleClearImages} // Call the parent function to clear images
             >
                 Clear Images
             </button>
         </div>
+        </div>
+
     );
 };
 

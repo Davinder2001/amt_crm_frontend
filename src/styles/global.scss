@@ -94,7 +94,7 @@ textarea {
         }
     }
 
-    
+
     .approval-status {
         .status {
             text-transform: capitalize;
@@ -177,15 +177,39 @@ textarea {
 
 
 
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateX(10px) translateY(-50%);
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0s 0.2s;
+    z-index: 99999999;
 
+  }
+  
+  .menu-item:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-in-out, visibility 0s 0s;
+    z-index: 99999999;
+  }
+  
+  
 
 // ********* Sidebar css ********* //
 .sidebar {
-    width: 100%;
+    max-width: 250px;
     height: 100vh;
-    overflow: hidden;
     background-color: #fff;
     transition: width .3s ease-in-out;
+    position: relative;
 
     .sidebar-header {
         display: flex;
@@ -199,6 +223,7 @@ textarea {
         a {
             text-decoration: none;
             color: #222222;
+            white-space: nowrap;
         }
     }
 
@@ -219,6 +244,9 @@ textarea {
                 gap: 20px;
                 font-size: 18px;
                 color: black;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
     }
@@ -262,6 +290,7 @@ textarea {
 .single-item-images {
     height: 200px;
 }
+
 /* General Layout */
 .admin-home-container {
     padding: 40px;
@@ -284,6 +313,7 @@ textarea {
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease;
+
         &:hover {
             background-color: #45a049;
         }

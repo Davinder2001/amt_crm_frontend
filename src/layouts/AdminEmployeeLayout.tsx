@@ -1,45 +1,3 @@
-// "use client";
-
-// import Sidebar from "@/app/[slug]/_common/sidebar/sidebar";
-// import Header from "@/app/[slug]/_common/header/header";
-// import Footer from "@/app/[slug]/_common/footer/footer";
-// import { usePathname } from "next/navigation";
-
-// export const AdminEmployeeLayout = ({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) => {
-//   const pathname = usePathname();
-//   if (pathname === "/") {
-//     return <>{children} </>
-//   }
-//   return (
-//     <div className="main">
-//       <div className="sidebar">
-//         <Sidebar />
-//       </div>
-//       <div className="main-content">
-//         <Header />
-//         {children}
-//         <Footer />
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -84,11 +42,10 @@ export const AdminEmployeeLayout = ({
       <div
         className={`sidebar ${isSidebarExpanded ? 'show-sidebar' : 'hide-sidebar'}`}
         style={{
-          maxWidth: isSidebarExpanded ? '250px' : '60px', // Conditionally set width
-          transition: 'maxWidth 0.3s ease-in-out', // Smooth transition
+          width: isSidebarExpanded ? '250px' : '60px', // Conditionally set width
         }}
       >
-        <Sidebar />
+        <Sidebar isSidebarExpanded={isSidebarExpanded} />
       </div>
       <div className="main-content">
         <Header

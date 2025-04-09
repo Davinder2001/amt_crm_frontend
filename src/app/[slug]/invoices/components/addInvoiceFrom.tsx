@@ -16,7 +16,7 @@ const AddInvoiceForm = () => {
   const { data: storeData } = useFetchStoreQuery();
   const storeItems: StoreItem[] = storeData || [];
 
-  console.log('customers.....', customers);
+  // console.log('customers.....', customers);
 
   const handleItemChange = (index: number, field: keyof InvoiceItem, value: number | string) => {
     const updatedItems = [...items];

@@ -60,9 +60,9 @@ body {
 
 }
 
-// ::-webkit-scrollbar {
-//     display: none;
-// }
+::-webkit-scrollbar {
+    display: none;
+}
 
 .buttons {
     padding: 9px 22px;
@@ -459,6 +459,7 @@ textarea {
         flex: 1;
         padding-bottom: 50px;
         overflow-y: auto;
+        width: 100%;
         min-height: 0;
         height: 100vh;
         .page-content{

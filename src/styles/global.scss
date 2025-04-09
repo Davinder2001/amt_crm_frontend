@@ -51,17 +51,21 @@ body {
 
 }
 
-    .buttons {
-        padding: 9px 22px;
-        border-radius: 50px;
-        border: unset;
-        background-color: $primary-color;
-        color: $white;
-        font-size: 16px;
-        margin-top: 5px;
+// ::-webkit-scrollbar {
+//     display: none;
+// }
+
+.buttons {
+    padding: 9px 22px;
+    border-radius: 50px;
+    border: unset;
+    background-color: $primary-color;
+    color: $white;
+    font-size: 16px;
+    margin-top: 5px;
 }
 
-    
+
 input,
 select,
 textarea {
@@ -221,6 +225,7 @@ textarea {
     background-color: #fff;
     transition: width .3s ease-in-out;
     position: relative;
+    height: 100vh;
 
     .sidebar-header {
         display: flex;
@@ -469,7 +474,10 @@ textarea {
 
     .main-content {
         flex: 1;
-        padding: 0px 20px;
+        padding: 0px 20px 50px 20px;
+        overflow: auto;
+        min-height: 0;
+        height: 100vh;
     }
 }
 
@@ -516,6 +524,10 @@ textarea {
         transition: transform 0.3s ease-in-out;
         z-index: 999999;
         padding: 0px;
+
+        .tooltip {
+            display: none;
+        }
     }
 
     .hide-sidebar {

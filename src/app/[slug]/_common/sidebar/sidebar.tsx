@@ -43,7 +43,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
         {
           isMobile ? (
             <>
-              <Link href={'/'}>AMT CRM</Link>
+              <Link href={'/'} onClick={openMenu}>AMT CRM</Link>
               <FaTimesCircle
                 size={20}
                 style={{ cursor: 'pointer' }}
@@ -74,6 +74,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
                   backgroundColor: isActive ? "#F1F9F9" : "",
                   position: "relative",
                 }}
+                onClick={openMenu}
               >
                 <Link href={`/${companySlug}/${path}`} className="menu-link">
                   <span className="menu-icon"

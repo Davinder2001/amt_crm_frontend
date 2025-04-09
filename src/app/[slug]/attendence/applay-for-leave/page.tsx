@@ -3,9 +3,13 @@ import React, { useEffect } from 'react';
 import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useCompany } from '@/utils/Company';
 
 const Page = () => {
   const [applyForLeave, { isLoading, isSuccess, isError }] = useApplyForLeaveMutation();
+  const { companySlug } = useCompany();
 
   useEffect(() => {
     if (isSuccess) {
@@ -29,13 +33,16 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <h1>Apply for Leave</h1>
-      <button onClick={handleApplyLeave} disabled={isLoading}>
-        {isLoading ? 'Applying...' : 'Apply for Leave'}
-      </button>
-      <ToastContainer />
-    </div>
+    <>
+      <Link href={`/${companySlug}/attendence`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <div>
+        <h1>Apply for Leave</h1>
+        <button onClick={handleApplyLeave} disabled={isLoading}>
+          {isLoading ? 'Applying...' : 'Apply for Leave'}
+        </button>
+        <ToastContainer />
+      </div>
+    </>
   );
 };
 

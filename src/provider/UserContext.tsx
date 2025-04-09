@@ -14,6 +14,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { data, isLoading, refetch  } = useFetchProfileQuery();
   const [user, setUser] = useState<UserProfile | null>(data?.user || null);
 
+  console.log('message:...', data?.message);
+  
+
   // Trigger data fetch when the component mounts
   useEffect(() => {
     if (!data && !isLoading) { // If no data is present, trigger fetch manually

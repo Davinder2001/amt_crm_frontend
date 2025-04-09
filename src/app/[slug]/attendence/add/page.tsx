@@ -4,12 +4,15 @@ import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendance";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa";
+import { useCompany } from "@/utils/Company";
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
-
+  const { companySlug } = useCompany();
 
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,72 +65,75 @@ function AddAttendancePage() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h1>Add Attendance</h1>
+    <>
+      <Link href={`/${companySlug}/attendence`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <div style={{ padding: "1rem" }}>
+        <h1>Add Attendance</h1>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <button
-          onClick={() => setShowWebcam(true)}
-          style={{ marginRight: "1rem" }}
-        >
-          Use Webcam
-        </button>
-        <button
-          onClick={() => {
-            const uploadInput = document.getElementById("uploadInput") as HTMLInputElement;
-            uploadInput?.click();
-          }}
-        >
-          Upload Image
-        </button>
-      </div>
-
-      {showWebcam && (
         <div style={{ marginBottom: "1rem" }}>
-          <ReactWebcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={{ facingMode: "user" }}
-            style={{ width: 300 }}
-          />
-          <div style={{ marginTop: "0.5rem" }}>
-            <button onClick={captureFromWebcam} style={{ marginRight: "1rem" }}>
-              Capture
-            </button>
-            <button onClick={() => setShowWebcam(false)}>Cancel</button>
+          <button
+            onClick={() => setShowWebcam(true)}
+            style={{ marginRight: "1rem" }}
+          >
+            Use Webcam
+          </button>
+          <button
+            onClick={() => {
+              const uploadInput = document.getElementById("uploadInput") as HTMLInputElement;
+              uploadInput?.click();
+            }}
+          >
+            Upload Image
+          </button>
+        </div>
+
+        {showWebcam && (
+          <div style={{ marginBottom: "1rem" }}>
+            <ReactWebcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={{ facingMode: "user" }}
+              style={{ width: 300 }}
+            />
+            <div style={{ marginTop: "0.5rem" }}>
+              <button onClick={captureFromWebcam} style={{ marginRight: "1rem" }}>
+                Capture
+              </button>
+              <button onClick={() => setShowWebcam(false)}>Cancel</button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <input
-        id="uploadInput"
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
+        <input
+          id="uploadInput"
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
 
-      {selectedFile && (
-        <div style={{ marginTop: "1rem" }}>
-          <p>Preview:</p>
-          <Image
-            alt="Preview"
-            src={URL.createObjectURL(selectedFile)}
-            width={100}
-            height={100}
-            unoptimized
-          />
+        {selectedFile && (
+          <div style={{ marginTop: "1rem" }}>
+            <p>Preview:</p>
+            <Image
+              alt="Preview"
+              src={URL.createObjectURL(selectedFile)}
+              width={100}
+              height={100}
+              unoptimized
+            />
 
-        </div>
-      )}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Submit Attendance
-        </button>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          <button type="submit" style={{ marginTop: "1rem" }}>
+            Submit Attendance
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 

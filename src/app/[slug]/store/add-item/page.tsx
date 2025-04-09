@@ -204,6 +204,8 @@ import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import AddVendor from '../components/AddVendor';
 import ImageUpload from '../components/ImageUpload';
 import { useCompany } from '@/utils/Company';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
@@ -296,6 +298,7 @@ const AddItem: React.FC = () => {
 
   return (
     <div className='store-add-item'>
+      <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ flex: '1 1 300px' }}>
           <label>Name*</label>

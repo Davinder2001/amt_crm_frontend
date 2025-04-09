@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/store/storeApi';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useCompany } from '@/utils/Company';
 
 const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
@@ -11,6 +14,7 @@ const Page = () => {
   const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
   const [image, setImage] = useState<File | null>(null);
   const [showItemFields, setShowItemFields] = useState(false);
+  const {companySlug} = useCompany();
 
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
   const [ocrProcess] = useOcrProcessMutation();
@@ -77,92 +81,95 @@ const Page = () => {
   };
 
   return (
-    <div className='add-as-a-v-container'>
-      <div className='add-as-a-v-inputs' >
-        <input
-          placeholder="Invoice No"
-          value={invoiceNo}
-          onChange={(e) => setInvoiceNo(e.target.value)}
-        />
-        <input
-          placeholder="Vendor Name"
-          value={vendorName}
-          onChange={(e) => setVendorName(e.target.value)}
-        />
-        <input
-          placeholder="Vendor No"
-          value={vendorNo}
-          onChange={(e) => setVendorNo(e.target.value)}
-        />
-        
-      </div>
-        
-      <div className='add-as-a-v-button'>
-       <input className='add-as-a-v-image'
-          type="file"
-          onChange={handleImageUpload}
-        /> 
-        <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
-        
-      </div>
+    <>
+      <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <div className='add-as-a-v-container'>
+        <div className='add-as-a-v-inputs' >
+          <input
+            placeholder="Invoice No"
+            value={invoiceNo}
+            onChange={(e) => setInvoiceNo(e.target.value)}
+          />
+          <input
+            placeholder="Vendor Name"
+            value={vendorName}
+            onChange={(e) => setVendorName(e.target.value)}
+          />
+          <input
+            placeholder="Vendor No"
+            value={vendorNo}
+            onChange={(e) => setVendorNo(e.target.value)}
+          />
 
-      {showItemFields && (
-        <div className='add-as-a-v-items-container'>
-          <div className='add-as-a-v-items-inner'>
-            <input
-              placeholder="Name"
-              value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-            />
-            <input
-              placeholder="Price"
-              value={newItem.price}
-              onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
-            />
-            <input
-              placeholder="Quantity"
-              value={newItem.quantity}
-              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-            />
-            <input
-              placeholder="Sub Total"
-              value={newItem.subTotal}
-              onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })}
-            />
-          </div>
-          <button className='buttons' onClick={handleAddItemToList}>Add</button>
         </div>
-      )}
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Sub Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <tr key={index}>
-              <td>{item.name}</td>
-              <td>{item.price}</td>
-              <td>{item.quantity}</td>
-              <td>{item.subTotal}</td>
+        <div className='add-as-a-v-button'>
+          <input className='add-as-a-v-image'
+            type="file"
+            onChange={handleImageUpload}
+          />
+          <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
+
+        </div>
+
+        {showItemFields && (
+          <div className='add-as-a-v-items-container'>
+            <div className='add-as-a-v-items-inner'>
+              <input
+                placeholder="Name"
+                value={newItem.name}
+                onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+              />
+              <input
+                placeholder="Price"
+                value={newItem.price}
+                onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+              />
+              <input
+                placeholder="Quantity"
+                value={newItem.quantity}
+                onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+              />
+              <input
+                placeholder="Sub Total"
+                value={newItem.subTotal}
+                onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })}
+              />
+            </div>
+            <button className='buttons' onClick={handleAddItemToList}>Add</button>
+          </div>
+        )}
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Sub Total</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>{item.price}</td>
+                <td>{item.quantity}</td>
+                <td>{item.subTotal}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className='add-as-a-v-button'>
-      
-      <span className='buttons'>Cancel</span>
-              <button className='buttons' onClick={handleSave} disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save'}
-        </button>
+        <div className='add-as-a-v-button'>
+
+          <span className='buttons'>Cancel</span>
+          <button className='buttons' onClick={handleSave} disabled={isLoading}>
+            {isLoading ? 'Saving...' : 'Save'}
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

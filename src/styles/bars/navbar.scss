@@ -8,6 +8,12 @@
   z-index: 9999999999999;
   box-shadow: $box-shadow;
   width: 100%;
+  .nav-container{
+    background-color: #f1f9f9;
+    .search-container{
+      background-color: $white;
+    }
+  }
 }
 
 .header {

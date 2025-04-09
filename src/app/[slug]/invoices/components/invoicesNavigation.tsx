@@ -9,6 +9,9 @@ const InvoicesNavigation = () => {
                 <li>
                     <Link href="invoices/new-invoice">Add Invoices</Link>
                 </li>
+                <li>
+                    <Link href="invoices/all-customers">All Customers</Link>
+                </li>
             </ul>
         </nav>
     </>

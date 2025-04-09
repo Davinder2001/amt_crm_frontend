@@ -11,6 +11,7 @@ import attendanceApiSlice from '@/slices/attendance/attendance';
 import companyApiSlice from '@/slices/superadminSlices/company/companyCreateSlice';
 import catalogCreateApiSlice from '@/slices/catalog/catalogCreateSlice';
 import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
+import customerCreateApiSlice from '@/slices/customers/customerCreateSlice';
 
 
 const store = configureStore({
@@ -24,9 +25,10 @@ const store = configureStore({
     [permissionApiSlice.reducerPath]: permissionApiSlice.reducer,
     [tasksApi.reducerPath]: tasksApi.reducer,
     [attendanceApiSlice.reducerPath]: attendanceApiSlice.reducer,
-    [companyApiSlice.reducerPath]: companyApiSlice.reducer, 
+    [companyApiSlice.reducerPath]: companyApiSlice.reducer,
     [catalogCreateApiSlice.reducerPath]: catalogCreateApiSlice.reducer,
     [invoiceCreateApiSlice.reducerPath]: invoiceCreateApiSlice.reducer,
+    [customerCreateApiSlice.reducerPath]: customerCreateApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -42,6 +44,7 @@ const store = configureStore({
       .concat(companyApiSlice.middleware)
       .concat(catalogCreateApiSlice.middleware)
       .concat(invoiceCreateApiSlice.middleware)
+      .concat(customerCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

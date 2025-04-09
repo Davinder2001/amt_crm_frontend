@@ -76,19 +76,21 @@ const Items: React.FC = () => {
                 <td>
                   {companySlug && (
                     <>
+                    <div className="store-t-e-e-icons">
+
                       <Link href={`/${companySlug}/store/view-item/${item.id}`}>
                         <span ><FaEye color='#222' /></span>
                       </Link>
                       <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-                                            <FaEdit color='#222' />
-                        
+                        <FaEdit color='#222' />
+
                       </Link>
+                  <span onClick={() => handleDelete(item.id)}>
+                    <FaTrash color='#222' />
+                  </span>
+                    </div>
                     </>
                   )}
-                  <span onClick={() => handleDelete(item.id)}>
-                                        <FaTrash color='#222' />
-                    
-                  </span>
                 </td>
                 <td>
                   <button className='buttons' onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>

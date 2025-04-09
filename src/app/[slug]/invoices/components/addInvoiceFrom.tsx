@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useCreateInvoiceMutation } from "@/slices/invoices/invoice";
 import { useFetchStoreQuery } from "@/slices/store/storeApi";
 import { useFetchAllCustomersQuery } from "@/slices/customers/customer";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const AddInvoiceForm = () => {
   const [number, setNumber] = useState<string>("");
@@ -16,28 +19,34 @@ const AddInvoiceForm = () => {
   const { data: storeData } = useFetchStoreQuery();
   const storeItems: StoreItem[] = storeData || [];
 
-  console.log('customers.....', customers);
+  const handleNumberBlur = () => {
+    if (!number || !customers?.customers) return;
+  
+    const matchedCustomer = customers.customers.find(
+      (cust: Customer) => cust.number === number
+    );
+  
+    if (matchedCustomer) {
+      setClientName(matchedCustomer.name);
+      toast.success(`Customer "${matchedCustomer.name}" found and autofilled!`);
+    }
+  };
+  
 
   const handleItemChange = (index: number, field: keyof InvoiceItem, value: number | string) => {
     const updatedItems = [...items];
-
-    // Convert value to a valid number, defaulting to 0 if not valid
     if (field === "quantity" || field === "unit_price") {
       value = isNaN(Number(value)) ? 0 : Number(value);
     } else {
       value = String(value);
     }
-
     updatedItems[index] = {
       ...updatedItems[index],
       [field]: value,
     };
-
-    // Recalculate price based on quantity and unit price
     if (field === "quantity" || field === "unit_price") {
       updatedItems[index].price = updatedItems[index].quantity * updatedItems[index].unit_price;
     }
-
     setItems(updatedItems);
   };
 
@@ -47,7 +56,6 @@ const AddInvoiceForm = () => {
       ...updatedItems[index],
       name: storeItem.name,
       unit_price: parseFloat(String(storeItem.price)) || 0,
-      // quantity: storeItem.quantity_count || 1,
       price: storeItem.price * (storeItem.quantity_count || 1),
       description: `${storeItem.category || ""} ${storeItem.brand_name || ""}`.trim(),
     };
@@ -76,14 +84,12 @@ const AddInvoiceForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const payload = {
-      number: number,
+      number,
       client_name: clientName,
       invoice_date: invoiceDate,
       items: items.map(({ item_id, ...rest }) => ({ ...rest, item_id })),
     };
-
     try {
       const response = await createInvoice(payload).unwrap();
       console.log("Invoice created:", response);
@@ -96,15 +102,13 @@ const AddInvoiceForm = () => {
 
   const handleItemInputFocus = () => {
     setIsAutocompleteVisible(true);
-
-    if (storeItems && storeItems.length > 0) {
+    if (storeItems.length > 0) {
       setFilteredStoreItems(storeItems);
     }
   };
 
   const handleItemInputChange = (index: number, value: string) => {
     handleItemChange(index, "name", value);
-
     if (value) {
       const filteredItems = storeItems.filter((storeItem) =>
         storeItem.name.toLowerCase().includes(value.toLowerCase())
@@ -140,6 +144,7 @@ const AddInvoiceForm = () => {
           className="form-input"
           value={number}
           onChange={(e) => setNumber(e.target.value)}
+          onBlur={handleNumberBlur} // 👈 added for autofill
           required
         />
       </div>
@@ -170,7 +175,7 @@ const AddInvoiceForm = () => {
         {items.map((item, index) => (
           <div key={item.item_id} className="item-group">
             <div className="grid">
-              <div className="relative" style={{ position: "relative" }}>
+              <div className="relative">
                 <div className="item-field">
                   <label htmlFor="item-name">Item Name:</label>
                   <input

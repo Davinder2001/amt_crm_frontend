@@ -1,0 +1,13 @@
+@use '../variables' as *;
+
+
+.logout-button {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+
+    .buttons{
+        margin: 0px;
+    }
+}

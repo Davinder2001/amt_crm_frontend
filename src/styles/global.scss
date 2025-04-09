@@ -33,6 +33,12 @@
 // superadmin company section
 @use './superadmin/company.scss' as *;
 
+// super admin header sectiion 
+@use './s-admin-header/s-admin-header.scss' as *;
+
+
+
+
 // permissions section
 @use './permissions/permissions.scss' as *;
 
@@ -48,6 +54,9 @@
 
 body {
     background-color: #F1F9F9;
+    .content-area {
+        margin: 0px 20px;
+    }
 
 }
 
@@ -156,23 +165,6 @@ textarea {
         z-index: 10;
     }
 
-    .dropdown-content a,
-    .logout-btn {
-        display: block;
-        padding: 10px 15px;
-        text-decoration: none;
-        color: black;
-        background: white;
-        border: none;
-        text-align: left;
-        width: 100%;
-        cursor: pointer;
-    }
-
-    .dropdown-content a:hover,
-    .logout-btn:hover {
-        background-color: #f3f4f6;
-    }
 
     .login-btn {
         background-color: #007bff;
@@ -221,7 +213,7 @@ textarea {
     background-color: #fff;
     transition: width .3s ease-in-out;
     position: relative;
-
+    height: 100vh;
     .sidebar-header {
         display: flex;
         align-items: center;

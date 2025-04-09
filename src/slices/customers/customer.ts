@@ -3,7 +3,7 @@ import customerCreateApiSlice from "./customerCreateSlice";
 const customerApi = customerCreateApiSlice.injectEndpoints({
     endpoints: (builder) => ({
 
-        fetchAllCustomers: builder.query<void, void>({
+        fetchAllCustomers: builder.query<CustomersResponse, void>({
             query: () => ({
                 url: "customers",
                 method: "GET",

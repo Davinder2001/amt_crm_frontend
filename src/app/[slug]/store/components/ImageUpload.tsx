@@ -27,45 +27,49 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, handleImageChange, ha
     };
 
     return (
-        <div className='store-add-item-form-img-container'>
-            <label>Upload Images (up to 5)*</label>
-            
-            <div className='store-add-item-form-img-inner'>
-                <input
-                type="file"
-                name="images"
-                accept="image/*"
-                multiple
-                onChange={handleFileChange} // Handle the file change
-            /></div>
+    <div className='store-add-item-form-img-container'>
+    <label>Upload Images (up to 5)*</label>
+    
+    <div className='store-add-item-form-img-inner'>
+        <input
+            type="file"
+            name="images"
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+        />
+    </div>
 
-            {/* Display preview of selected images */}
-            {images && images.length > 0 && (
-                <div  style={{  display: 'flex', gap: '10px' }}>
-                    {images.map((file, index) => (
-                        <div key={index}>
-                            {/* Generate the preview of each image */}
-                            <Image
-                                src={URL.createObjectURL(file)} // Convert file to URL for preview
-                                alt={`preview-${index}`}
-                                width={100}
-                                height={100}
-                            />
-                        </div>
-                    ))}
+    {/* Image Previews */}
+    {images && images.length > 0 && (
+        <div style={{ display: 'flex', gap: '10px' }}>
+            {images.map((file, index) => (
+                <div key={index}>
+                    <Image
+                        src={URL.createObjectURL(file)}
+                        alt={`preview-${index}`}
+                        width={100}
+                        height={100}
+                    />
                 </div>
-            )}
-            {/* Clear Images Button */}
-            <button
-                type="button" className='buttons'   
-                onClick={handleClearImages} // Call the parent function to clear images
-            >
-                Clear Images
-            </button>
-        
+            ))}
         </div>
+    )}
 
-    );
+    {/* ✅ Conditionally Render the Clear Button */}
+    {images && images.length > 0 && (
+        <button
+            type="button"
+            className='clear-image-button'
+            onClick={handleClearImages}
+        >
+            Clear Images
+        </button>
+    )}
+</div>
+);
+
+
 };
 
 export default ImageUpload;

@@ -10,8 +10,8 @@ const StoreNavigation = () => {
   const companySlug = selectedCompany?.selected_company?.company_slug;
 
   return (
-    <div className="store-nav-outer">
-    <nav className='store_nav'>
+    <nav  className="store-nav-outer">
+    <div className='store_nav'>
       <ul>
         <li>
           <Link href={companySlug ? `/${companySlug}/store/add-item` : "/store/add-items"}>
@@ -34,8 +34,8 @@ const StoreNavigation = () => {
           </Link>
         </li>
       </ul>
-    </nav>
     </div>
+    </nav>
   );
 }
 

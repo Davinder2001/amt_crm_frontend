@@ -345,6 +345,10 @@ const AddItem: React.FC = () => {
           <input type="number" name="selling_price" value={formData.selling_price} onChange={handleChange} required />
         </div>
         <div style={{ flex: '1 1 300px' }}>
+          <label>Availability Stock</label>
+          <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
+        </div>
+        <div style={{ flex: '1 1 300px' }}>
           <label>Vendor Name*</label>
           <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>
             <option value="">Select Vendor</option>
@@ -361,25 +365,23 @@ const AddItem: React.FC = () => {
           <AddVendor onVendorAdded={handleVendorAdded} />
         </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Availability Stock</label>
-          <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
-        </div>
+
 
         <div className='add-item-form-image'>
-        <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages} />
+          <ImageUpload images={formData.images} handleImageChange={handleImageChange} handleClearImages={handleClearImages} />
 
         </div>
-        <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-        <button  className='buttons' type="button" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
-            Cancel
-          </button>
-          <button  className='buttons' type="submit" disabled={isLoading}>
-            {isLoading ? 'Adding...' : 'Save'}
-          </button>
-          
-        </div>
+
       </form>
+      <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+        <button className='buttons' type="button" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
+          Cancel
+        </button>
+        <button className='buttons' type="submit" disabled={isLoading}>
+          {isLoading ? 'Adding...' : 'Save'}
+        </button>
+
+      </div>
     </div>
   );
 };

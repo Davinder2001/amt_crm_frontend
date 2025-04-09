@@ -19,8 +19,10 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
   const { title } = useBreadcrumb();
 
   return (
+
     <div className='header'>
-      {isMobile ? (
+     <div className='desktop-header'>
+     {isMobile ? (
         <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
       ) : (
         <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
@@ -31,6 +33,12 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         <Link href={`/${companySlug}/notifications`}> <FaRegBell size={20} color='#009693' /> </Link>
         <Profile />
       </div>
+     </div>
+     <div className='mobile-searchbar'>
+     <SearchBar />
+      
+     </div>
+
     </div>
   )
 }

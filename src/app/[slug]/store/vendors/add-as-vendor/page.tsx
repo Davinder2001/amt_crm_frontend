@@ -161,10 +161,10 @@ const Page = () => {
           </tbody>
         </table>
 
-        <div className='add-as-a-v-button'>
+        <div className='add-as-a-v-button c-s-buttons-outers'>
 
-          <span className='buttons'>Cancel</span>
-          <button className='buttons' onClick={handleSave} disabled={isLoading}>
+          <span className='buttons c-s-buttons'>Cancel</span>
+          <button className='buttons c-s-buttons' onClick={handleSave} disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save'}
           </button>
         </div>

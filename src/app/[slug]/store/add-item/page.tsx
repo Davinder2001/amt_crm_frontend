@@ -299,7 +299,7 @@ const AddItem: React.FC = () => {
   return (
     <div className='store-add-item'>
       <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      <form onSubmit={handleSubmit} className='add-items-form-container'>
         <div style={{ flex: '1 1 300px' }}>
           <label>Name*</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />

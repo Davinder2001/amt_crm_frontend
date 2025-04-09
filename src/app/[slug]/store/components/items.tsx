@@ -77,7 +77,7 @@ const Items: React.FC = () => {
                   {companySlug && (
                     <>
                       <Link href={`/${companySlug}/store/view-item/${item.id}`}>
-                        <button><FaEye color='#222' /></button>
+                        <span ><FaEye color='#222' /></span>
                       </Link>
                       <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
                                             <FaEdit color='#222' />
@@ -85,13 +85,13 @@ const Items: React.FC = () => {
                       </Link>
                     </>
                   )}
-                  <button onClick={() => handleDelete(item.id)}>
+                  <span onClick={() => handleDelete(item.id)}>
                                         <FaTrash color='#222' />
                     
-                  </button>
+                  </span>
                 </td>
                 <td>
-                  <button onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
+                  <button className='buttons' onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
                     {item.catalog ? 'Remove from Catalog' : 'Add to Catalog'}
                   </button>
                 </td>

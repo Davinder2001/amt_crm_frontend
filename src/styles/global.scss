@@ -172,16 +172,14 @@ textarea {
 
 
     .login-btn {
-        background-color: #007bff;
-        color: white;
+        background-color: $primary-color;
+        color: $white;
         padding: 10px 15px;
         border-radius: 5px;
         text-decoration: none;
     }
 
-    .login-btn:hover {
-        background-color: #0056b3;
-    }
+    
 }
 
 
@@ -193,7 +191,7 @@ textarea {
     transform: translateX(10px) translateY(-50%);
     padding: 5px 10px;
     background-color: #333;
-    color: #fff;
+    color: $white;
     border-radius: 4px;
     white-space: nowrap;
     opacity: 0;
@@ -215,7 +213,7 @@ textarea {
 // ********* Sidebar css ********* //
 .sidebar {
     max-width: 250px;
-    background-color: #fff;
+    background-color: $white;
     transition: width .3s ease-in-out;
     position: relative;
     height: 100vh;

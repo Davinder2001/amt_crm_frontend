@@ -26,14 +26,14 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
     { name: "Catalogue", path: "catalogue", icon: <FaClipboardList /> },
     { name: "Store", path: "store", icon: <FaStore /> },
-    { name: "Services", path: "services", icon: <LuClipboardList /> },
+    // { name: "Services", path: "services", icon: <LuClipboardList /> },
     { name: "H.R", path: "hr", icon: <FaUserTie /> },
     { name: "Invoices", path: "invoices", icon: <FaFileInvoice />, hasSubmenu: true },
     { name: "Task", path: "tasks", icon: <FaTasks /> },
-    { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
-    { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
+    // { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
+    // { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
     { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
-    { name: "Orders", path: "orders", icon: <FaBox /> },
+    // { name: "Orders", path: "orders", icon: <FaBox /> },
     { name: "Settings", path: "settings", icon: <FaCog /> },
   ];
 
@@ -63,7 +63,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
       <nav>
         <ul className="menu-list">
           {menuItems.map(({ name, path, icon, hasSubmenu }) => {
-            // Check if the current path matches the route
+            
             const isActive = asPath.includes(path);
 
             return (

@@ -83,58 +83,54 @@ const LoginForm = () => {
           <p>Sign in to continue and explore all the amazing features.</p>
         </div>
 
-        <div className="login-layout-wrapper">
-          <div className="login-image-container">
-            <Image src={loginImage.src} alt="Login" className="login-image" width={200} height={200} />
-          </div>
-          <div className="login-card">
-            {isLoggedIn ? (
-              ''
-            ) : (
-              <form onSubmit={handleLogin} className="login-form">
+        <div className="login-form-wrapper">
+          {isLoggedIn ? (
+            ''
+          ) : (
+            <form onSubmit={handleLogin} className="login-form">
+              <input
+                type="text"
+                placeholder="Phone Number"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+                className="login-input"
+                required
+              />
+
+              <div className="password-input-container">
                 <input
-                  type="text"
-                  placeholder="Phone Number"
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
-                  className="login-input"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="password-input"
                   required
                 />
-
-                <div className="password-input-container">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="password-input"
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-
-                <button type="submit" className="buttons" disabled={isLoading}>
-                  {isLoading ? 'Logging in...' : 'Login'}
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
-              </form>
-            )}
+              </div>
 
-            <div className="links">
-              <Link href="/forget-password" className="forgot-password-link">
-                Forget Password
-              </Link>
-              <Link href="/register-your-company" className="register-company-link">
-                Register your company
-              </Link>
-            </div>
+              <button type="submit" className="buttons" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
+              </button>
+            </form>
+          )}
+
+          <div className="links">
+            <Link href="/forget-password" className="forgot-password-link">
+              Forget Password
+            </Link>
+            <Link href="/register-your-company" className="register-company-link">
+              Register your company
+            </Link>
           </div>
         </div>
+
 
         <div className="features-section">
           <h2>Why Choose Us?</h2>

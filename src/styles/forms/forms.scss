@@ -19,6 +19,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
     h1 {
         font-size: $font-size-extra-large;
         font-weight: $font-weight-bold;
@@ -31,12 +32,12 @@
     margin-bottom: 40px;
 }
 
-.login-layout-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
+.login-form-wrapper {
+    background: $white;
+    padding: 30px;
+    border-radius: 0px 5px 5px 0px;
     width: 100%;
-    max-width: 800px;
+    max-width: 500px;
     margin: 0 auto;
     min-height: 200px;
     height: auto;
@@ -44,12 +45,6 @@
     box-shadow: $box-shadow;
     border-radius: 5px;
 
-    .login-image-container,
-    .login-image-container img {
-        width: 100%;
-        height: 100%;
-        border-radius: 5px 0px 0px 5px;
-    }
 }
 
 .login-header h1 {
@@ -62,13 +57,6 @@
     font-size: $font-size;
     color: $dark-color;
     margin-top: 10px;
-}
-
-.login-card {
-    background: $white;
-    padding: 30px;
-    border-radius: 0px 5px 5px 0px;
-    width: 100%;
 }
 
 .login-form {

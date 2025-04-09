@@ -18,6 +18,8 @@ const Page: React.FC = () => {
     <>
       <Link href={`/${companySlug}/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       <AddEmployeeForm />
+      <AddEmployeeForm />
+      <AddEmployeeForm />
     </>
   );
 };

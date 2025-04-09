@@ -132,7 +132,7 @@ const Page: React.FC = () => {
   const [assignedTo, setAssignedTo] = useState(''); // Will store user id as string
   const [deadline, setDeadline] = useState('');
   const router = useRouter();
-  const {companySlug} = useCompany();
+  const { companySlug } = useCompany();
 
   const [createTask, { isLoading, error }] = useCreateTaskMutation();
   const { data: usersData, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
@@ -163,51 +163,48 @@ const Page: React.FC = () => {
     <>
       <ToastContainer />
       <form className="task-form" onSubmit={handleSubmit}>
-  <div className="form-row">
-    <div className="form-group">
-      <label>Task Name</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-    </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Task Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-    <div className="form-group">
-      <label>Assigned To</label>
-      <select
-        value={assignedTo}
-        onChange={(e) => setAssignedTo(e.target.value)}
-        required
-      >
-        <option value="">Select a user</option>
-        {usersData?.users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.name}
-          </option>
-        ))}
-      </select>
-    </div>
+          <div className="form-group">
+            <label>Assigned To</label>
+            <select
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+              required
+            >
+              <option value="">Select a user</option>
+              {usersData?.users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-    <div className="form-group">
-      <label>Deadline</label>
-      <input
-        type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-      />
-    </div>
-  </div>
-
-  
-</form>
-<div className=' task-add-button'><button className='buttons task-add-button' type="submit" disabled={isLoading}>
-    {isLoading ? 'Creating...' : 'Add Task'}
-  </button></div>
+          <div className="form-group">
+            <label>Deadline</label>
+            <input
+              type="date"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
+          </div>
+        </div>
 
 
-
+        <div className=' task-add-button'><button className='buttons task-add-button' type="submit" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Add Task'}
+        </button></div>
+      </form>
     </>
   );
 };

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
+import { FaRegImage } from 'react-icons/fa6';
 
 const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
@@ -14,7 +15,7 @@ const Page = () => {
   const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
   const [image, setImage] = useState<File | null>(null);
   const [showItemFields, setShowItemFields] = useState(false);
-  const {companySlug} = useCompany();
+  const { companySlug } = useCompany();
 
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
   const [ocrProcess] = useOcrProcessMutation();
@@ -104,8 +105,14 @@ const Page = () => {
         </div>
 
         <div className='add-as-a-v-button'>
-          <input className='add-as-a-v-image'
+          <label htmlFor="file-upload" className="file-upload-button">
+            <FaRegImage size={20} style={{ marginRight: '8px' }} />
+            Upload Bill Photo
+          </label>
+          <input
+            id="file-upload"
             type="file"
+            className="hidden-input"
             onChange={handleImageUpload}
           />
           <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>

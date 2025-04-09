@@ -51,7 +51,7 @@ const AllInvoices = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((invoice, index) => (
+            {data?.invoices.map((invoice, index) => (
               <tr key={invoice.id} className="hover:bg-gray-50">
                 <td className="p-2 border">{index + 1}</td>
                 <td className="p-2 border">{invoice.invoice_number}</td>

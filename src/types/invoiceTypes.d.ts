@@ -19,11 +19,11 @@ interface Invoice {
   pdf_base64: string;
   created_at: string;
   updated_at: string;
-  items: InvoiceItem;
+  items: InvoiceItem[];
 }
 
 interface InvoicesResponse {
-  invoices: Invoice;
+  invoices: Invoice[];
 }
 
 interface CreateInvoicePayload {

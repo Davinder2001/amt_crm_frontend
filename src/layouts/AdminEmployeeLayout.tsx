@@ -82,7 +82,9 @@ export const AdminEmployeeLayout = ({
           openMenu={openMenu}
           isMobile={isMobile}
         />
-        {children}
+        <div className="page-content">
+          {children}
+        </div>
         <Footer />
       </div>
     </div>

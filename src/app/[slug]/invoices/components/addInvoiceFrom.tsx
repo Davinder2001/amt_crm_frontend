@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useCreateInvoiceMutation } from "@/slices/invoices/invoice";
 import { useFetchStoreQuery } from "@/slices/store/storeApi";
+import { useFetchAllCustomersQuery } from "@/slices/customers/customer";
 
 const AddInvoiceForm = () => {
+  const [number, setNumber] = useState<string>("");
   const [clientName, setClientName] = useState<string>("");
   const [invoiceDate, setInvoiceDate] = useState<string>("");
   const [items, setItems] = useState<InvoiceItem[]>([]);
@@ -10,8 +12,11 @@ const AddInvoiceForm = () => {
   const [filteredStoreItems, setFilteredStoreItems] = useState<StoreItem[]>([]);
   const [nextItemId, setNextItemId] = useState<number>(1);
   const [createInvoice, { isLoading }] = useCreateInvoiceMutation();
+  const { data: customers } = useFetchAllCustomersQuery();
   const { data: storeData } = useFetchStoreQuery();
   const storeItems: StoreItem[] = storeData || [];
+
+  console.log('customers.....', customers);
 
   const handleItemChange = (index: number, field: keyof InvoiceItem, value: number | string) => {
     const updatedItems = [...items];
@@ -73,6 +78,7 @@ const AddInvoiceForm = () => {
     e.preventDefault();
 
     const payload = {
+      number: number,
       client_name: clientName,
       invoice_date: invoiceDate,
       items: items.map(({ item_id, ...rest }) => ({ ...rest, item_id })),
@@ -127,6 +133,16 @@ const AddInvoiceForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="invoice-form">
+      <div className="form-group">
+        <label className="form-label">Number</label>
+        <input
+          type="number"
+          className="form-input"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          required
+        />
+      </div>
       <div className="form-group">
         <label className="form-label">Client Name</label>
         <input

@@ -111,13 +111,13 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
 
   return (
     <div className={`header ${isSticky ? 'sticky' : ''}`}>
-      <div className='desktop-header'>
+      
         {isMobile ? (
           <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
         ) : (
           <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
         )}
-        <h1>{title}</h1>
+        <h1 className='header-title'>{title}</h1>
         <div className="nav-container">
           <SearchBar />
           <Link href={`/${companySlug}/notifications`}>
@@ -126,10 +126,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
           <Profile />
         </div>
       </div>
-      <div className='mobile-searchbar'>
-        <SearchBar />
-      </div>
-    </div>
+      
   );
 };
 

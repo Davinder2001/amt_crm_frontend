@@ -153,7 +153,6 @@
   gap: 20px;
   background: #f7f9fc;
   border-radius: 10px;
-  flex-wrap: wrap;
 
   .time_stats_container {
     display: flex !important;
@@ -171,6 +170,7 @@
       background-color: $white;
       padding: 21px;
       box-shadow: 0px 18px 40px 0px #01969314;
+      border-radius: 15px;
 
       .time {
         font-size: 22px;
@@ -281,16 +281,12 @@
 
 
 
-
-
-
-
 .hr_navigation {
     display: flex;
     gap: 15px;
     justify-content: flex-end;
     align-items: center;
-    padding: 40px 0;
+    padding-bottom: 30px;
     flex-wrap: wrap;
 
     a {
@@ -354,11 +350,24 @@
 //   }
 
 // }
-
+@media (max-width: 1320px) {
+  .hr-hero-section{
+    .stats-overview {
+          display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+      .stat-card {
+        
+    }
+    }
+  } 
 
 @media (max-width: 1024px) {
   .hr-hero-section {
     flex-direction: column;
+
 
     .time_stats_container {
       flex-direction: column;

@@ -76,6 +76,34 @@ body {
 }
 
 
+
+.navigation-buttons {
+    display: flex;
+    gap: 18px;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+
+    .navigation-button{
+        background-color: $primary-color;
+        color: $white;
+        font-size: $font-size-large;
+        font-weight:  $font-weight-medium;
+        padding: 10px 30px;
+        text-decoration: none;
+        border-radius: 50px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+   
+
+}
+
+
+
+
+
+
 input,
 select,
 textarea {

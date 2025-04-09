@@ -21,13 +21,12 @@
   margin: 10px 0px;
   border-radius: $border-radius;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
-  .desktop-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-  }
+  
 
 
   .nav-container {
@@ -102,17 +101,7 @@
 
 
 
-.mobile-searchbar {
 
-  display: none;
-  background-color: #fff;
-  border-radius: 50px;
-  padding: 10px;
-  gap: 26px;
-  max-width: 70%;
-  width: 100%;
-
-}
 
 
 
@@ -120,12 +109,7 @@
 
 
 @media (max-width:1024px) {
-  .mobile-searchbar {
-    display: flex;
-    width: 100%;
-    max-width: 1024px;
-    padding: 5px 10px;
-  }
+
 
 
   .header {
@@ -151,6 +135,26 @@
 
 }
 
+@media (max-width:768px) {
+.header-title{
+  display: none;
+}
+
+}
+
+@media (max-width:468px) {
 
 
-@media (max-width:1024px) {}
+
+
+  .header{
+    .nav-container {
+      max-width: 100%;
+      gap: 10px;
+  
+  }
+
+  } 
+
+
+}

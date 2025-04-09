@@ -9,8 +9,6 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Image from 'next/image';
-import { loginImage } from '@/assets/useImage';
 
 const LoginForm = () => {
   const router = useRouter();

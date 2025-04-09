@@ -134,8 +134,8 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const [createTask, { isLoading, error }] = useCreateTaskMutation();
-  const { data: usersData, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
+  const [createTask, { isLoading, }] = useCreateTaskMutation();
+  const { data: usersData } = useFetchUsersQuery();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

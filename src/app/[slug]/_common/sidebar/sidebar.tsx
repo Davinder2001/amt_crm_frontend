@@ -4,10 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   FaTachometerAlt, FaStore, FaUserTie, FaUserShield,
-  FaCog, FaTasks, FaCar, FaCheck, FaFileInvoice, FaClipboardList, FaBox,
+  FaCog, FaTasks, FaFileInvoice, FaClipboardList,
   FaTimesCircle
 } from "react-icons/fa";
-import { LuClipboardList } from "react-icons/lu"; // Services Icon
 import { useCompany } from "@/utils/Company";
 
 interface sidebarProps {
@@ -63,7 +62,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
       <nav>
         <ul className="menu-list">
           {menuItems.map(({ name, path, icon, hasSubmenu }) => {
-            
+
             const isActive = asPath.includes(path);
 
             return (

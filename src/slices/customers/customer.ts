@@ -12,11 +12,17 @@ const customerApi = customerCreateApiSlice.injectEndpoints({
             providesTags: ["Customer"],
         }),
 
+        fetchCustomerById: builder.query<Customer, number>({
+            query: (id) => `customers/${id}`,
+            providesTags: ["Customer"],
+        }),
+
     }),
 });
 
 export const {
     useFetchAllCustomersQuery,
+    useFetchCustomerByIdQuery,
 } = customerApi;
 
 export default customerApi;

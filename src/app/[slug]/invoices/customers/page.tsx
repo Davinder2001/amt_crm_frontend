@@ -1,10 +1,14 @@
 'use client';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
+import { useCompany } from '@/utils/Company';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { FaEye } from 'react-icons/fa'; // Import the 'eye' icon for view action
+import { FaEye } from 'react-icons/fa';
 
 const CustomerList = () => {
   const { data } = useFetchAllCustomersQuery();
+  const router = useRouter();
+  const { companySlug } = useCompany();
 
   return (
     <div>
@@ -25,7 +29,7 @@ const CustomerList = () => {
               <td>{customer.name}</td>
               <td>{customer.number}</td>
               <td>
-                <button onClick={() => alert(`Viewing customer ${customer.name}`)}>
+                <button onClick={() => router.push(`/${companySlug}/invoices/customers/${customer.id}`)}>
                   <FaEye /> View
                 </button>
               </td>

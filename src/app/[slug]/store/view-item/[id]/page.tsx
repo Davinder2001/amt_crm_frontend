@@ -59,7 +59,7 @@ const ViewItem = () => {
 
       <div className="buttons-container">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-          <button className="buttons">
+          <button className="buttons" >
             Edit Item
           </button>
         </Link>

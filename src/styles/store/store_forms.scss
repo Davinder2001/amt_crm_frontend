@@ -99,7 +99,7 @@
 
 // Add as a vendors section
 .add-as-a-v-container {
-    display: flex;
+    display: flex;  
     flex-direction: column;
     gap: 20px;
 
@@ -131,6 +131,8 @@
       color: white;
       display: flex;
       align-items: center;
+      justify-content: center;
+
   }
   }
 }

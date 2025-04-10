@@ -87,9 +87,12 @@ const UserList: React.FC = () => {
               <td className="user-td">{employee.company_name}</td>
               <td className="user-td">{employee.user_status}</td>
               <td className="user-td">
-              <span onClick={() => handleDelete(employee.id)} className="user-btn"><FaTrash color='#222' /></span>
+                <div  className='store-t-e-e-icons'>
+                <span onClick={() => handleDelete(employee.id)} className="user-btn"><FaTrash color='#222' /></span>
               <span onClick={() => update(employee)} className="user-btn"><FaEdit color='#222' /></span>
-                <span onClick={() => view(employee)} className="user-btn">                                        <FaEye color='#222' /></span>
+                <span onClick={() => view(employee)} className="user-btn"><FaEye color='#222' /></span>
+                </div>
+                                                      
 
 
               </td>

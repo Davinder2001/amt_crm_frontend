@@ -213,7 +213,6 @@
   }
 
   .time-stats-wrapper {
-    flex-direction: column;
     gap: 16px;
   }
 
@@ -223,9 +222,10 @@
 }
 
 @media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
+  
+  .time-stats-wrapper {
+    flex-direction: column;
+}
 
   .time {
     font-size: 18px;
@@ -248,7 +248,9 @@
   .time-section {
     max-width: 100%;
     width: 100%;
-  }
+    flex-direction: row;
+}
+
 
   .stat-card-box {
     padding: 14px;
@@ -285,6 +287,18 @@
   }
 }
 
+
+
+@media (max-width: 500px) {
+
+  .time-section {
+    flex-direction: column; 
+}
+
+
+
+
+}
 @media (max-width: 480px) {
   .stat-card-box {
     padding: 12px;

@@ -46,7 +46,7 @@ const Items: React.FC = () => {
 
   return (
     <>
-      <div style={{ width: '100%', overflowX: 'auto' }}>
+      <div style={{ width: '100%', overflowX: 'auto' }} className='tables-container'>
         <table border={1} cellPadding={8} cellSpacing={0}>
           <thead>
             <tr>

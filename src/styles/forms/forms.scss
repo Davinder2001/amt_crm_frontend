@@ -3,7 +3,7 @@
 // General Layout Styles
 .login-page-container {
     background-color: $secondary-color;
-    padding: 40px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,7 +29,7 @@
 
 .login-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin: 60px 0px 40px 0px;
 }
 
 .login-form-wrapper {
@@ -93,6 +93,7 @@
 }
 
 .login-button {
+    cursor: pointer;
     padding: 12px;
     background-color: $primary-color;
     color: $white;
@@ -132,38 +133,29 @@
     }
 }
 
-.features-section {
-    margin-top: 40px;
+.features-section,
+.testimonials {
+    width: 90%;
+    margin: 30px auto;
     text-align: center;
 }
 
-.features-container {
-    display: flex;
-    justify-content: space-between;
+.features-container,
+.testimonial-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
     margin-top: 30px;
 }
 
 .feature {
-    width: 30%;
     padding: 15px;
     background: $white;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
 }
 
-.testimonials {
-    margin-top: 40px;
-    text-align: center;
-}
-
-.testimonial-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-
 .testimonial {
-    width: 30%;
     padding: 15px;
     background: $light-color;
     border-radius: $border-radius;
@@ -180,4 +172,18 @@
 .store-t-e-e-icons {
     display: flex;
     justify-content: space-between;
+}
+
+@media (max-width:768px) {
+
+    .features-section,
+    .testimonials {
+        width: 100%;
+        margin: 50px auto;
+
+        .features-container,
+        .testimonial-container {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
 }

@@ -169,7 +169,7 @@ textarea {
 
 /* General Layout */
 .admin-home-container {
-    padding: 40px;
+    padding: 40px 10px;
     background-color: #f4f7fa;
     min-height: 100vh;
     display: flex;
@@ -223,7 +223,7 @@ textarea {
 }
 
 .company-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 

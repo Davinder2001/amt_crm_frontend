@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks, FaFileInvoice, FaClipboardList } from "react-icons/fa";
+import { FaTachometerAlt, FaStore, FaUserTie, FaUserShield, FaCog, FaTasks, FaFileInvoice } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
@@ -10,7 +10,7 @@ interface admNavProps {
     openMenu: () => void;
 }
 
-const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
+const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, openMenu }) => {
     const asPath = usePathname();
     const { companySlug } = useCompany();
     const menuItems = [

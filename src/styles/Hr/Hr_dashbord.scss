@@ -57,6 +57,10 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
+
+  svg {
+    transition: all 1s ease-out;
+  }
 }
 
 .realtime-label {
@@ -93,11 +97,12 @@
   flex: 1;
 }
 
-.stat-card-inner{
+.stat-card-inner {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
+
 .stat-card-box {
   background: $white;
   padding: 16px;

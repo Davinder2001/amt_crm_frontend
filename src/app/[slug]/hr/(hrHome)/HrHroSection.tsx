@@ -90,16 +90,15 @@ const TimeSection = React.memo(() => {
             <clipPath id="sun-fill-mask">
               <rect
                 x="0"
-                y={64 - (progress / 100) * 64}
+                y="0"
                 width="64"
-                height="64"
+                height={(100 - progress) / 100 * 64}
               />
             </clipPath>
           </defs>
 
-          {/* Full sun design with base gray color */}
+          {/* Base sun design - gray outline */}
           <g stroke="#ddd" strokeWidth="2" fill="none">
-            {/* Sun rays */}
             {[...Array(8)].map((_, i) => {
               const angle = (i * 45 * Math.PI) / 180;
               const x1 = 32 + Math.cos(angle) * 20;
@@ -117,11 +116,10 @@ const TimeSection = React.memo(() => {
                 />
               );
             })}
-            {/* Sun core outline */}
             <circle cx="32" cy="32" r="14" />
           </g>
 
-          {/* Yellow fill overlay with clip path */}
+          {/* Yellow overlay that decreases with time */}
           <g
             clipPath="url(#sun-fill-mask)"
             stroke="#f2c94c"
@@ -164,8 +162,6 @@ const TimeSection = React.memo(() => {
   );
 });
 TimeSection.displayName = 'TimeSection';
-
-
 
 const StatCard = React.memo(({ icon, value, label, note }: { icon: React.ReactNode; value: string | number; label: string; note: string }) => {
   return (

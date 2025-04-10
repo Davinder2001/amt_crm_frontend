@@ -49,7 +49,6 @@ interface OcrResponse {
   message?: string;
 }
 
-// In your types file (e.g., /src/types/StoreItem.ts)
 interface UpdateStoreItemRequest {
   id: number;
   name: string;
@@ -67,8 +66,6 @@ interface UpdateStoreItemRequest {
 }
 
 
-
-// vendors types
 interface Vendor {
   id: number;
   company_id: number;
@@ -81,3 +78,20 @@ type VendorsResponse = Vendor[];
 interface CreateVendorRequest {
   vendor_name: string;
 }
+
+interface AttributeValue {
+  id: number;
+  attribute_id: number;
+  value: string;
+};
+
+interface Attribute {
+  id: number;
+  name: string;
+  values: AttributeValue[];
+};
+
+interface CreateAttributePayload {
+  name: string;
+  values: string[]; 
+};

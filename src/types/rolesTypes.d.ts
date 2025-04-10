@@ -4,3 +4,4 @@ interface Role {
     company_id: string;
     permissions: { id: number; name: string }[];
 }
+

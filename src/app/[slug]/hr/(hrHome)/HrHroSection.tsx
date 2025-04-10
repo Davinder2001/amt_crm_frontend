@@ -36,7 +36,7 @@ const HrHeroSection = () => {
               <div className="emp-avatar">{emp.name.charAt(0).toUpperCase()}</div>
               <div className="emp-info">
                 <p>{emp.name}</p>
-                <span className="status active">Active</span>
+                <span className="emp-status active">Active</span>
               </div>
             </li>
           ))}
@@ -170,12 +170,14 @@ TimeSection.displayName = 'TimeSection';
 const StatCard = React.memo(({ icon, value, label, note }: { icon: React.ReactNode; value: string | number; label: string; note: string }) => {
   return (
     <div className="stat-card-box">
-      <div className="card-left">
-        <h2>{value}</h2>
-        <p className="label">{label}</p>
-        <p className="note">{note}</p>
+      <div className="stat-card-inner">
+        <div className="card-left">
+          <h2>{value}</h2>
+          <p className="label">{label}</p>
+        </div>
+        <div className="card-icon">{icon}</div>
       </div>
-      <div className="card-icon">{icon}</div>
+      <p className="note">{note}</p>
     </div>
   );
 });

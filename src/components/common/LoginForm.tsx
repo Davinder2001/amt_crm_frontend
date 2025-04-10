@@ -43,11 +43,13 @@ const LoginForm = () => {
         if (result.user.companies && result.user.companies.length === 1) {
           const companySlug = result.user.companies[0].company_slug;
           Cookies.set('company_slug', companySlug, { path: '/' });
-          router.push(`/${companySlug}/dashboard`);
+          router.push(`/${companySlug}/employee/dashboard`);
         } else {
           // Multiple companies, let them choose or go to the home page
           router.push('/');
         }
+      } else if (result.user.user_type === 'super-admin') {
+        router.push('/superadmin/dashboard')
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

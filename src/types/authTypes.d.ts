@@ -24,7 +24,7 @@ interface UserProfile {
     company_name: string;
     company_slug: string;
     meta: Meta;
-    user_type: "admin" | "employee" | "user" | "superadmin"; // Union type for user_type
+    user_type: "admin" | "employee" | "user" | "super-admin"; // Union type for user_type
     password: string;
     companies: Company[]; // Updated to array of Company objects
 }
@@ -36,6 +36,6 @@ interface UsersResponse {
 
 // Response type for fetching selected company
 interface SelectedCompanyResponse {
-    company_user_role: "admin" | "employee" | "user" | "superadmin";
+    company_user_role: "admin" | "employee" | "user" | "super-admin";
     selected_company: Profile;
 }

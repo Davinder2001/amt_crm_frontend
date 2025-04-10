@@ -17,10 +17,10 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
 
   const renderNav = () => {
     if (userType === "employee") {
-      return <EmployeeNavs />;
+      return <EmployeeNavs openMenu={openMenu} isSidebarExpanded={isSidebarExpanded} isMobile={isMobile} />;
     }
     if (userType === "admin") {
-      return <AdminNavs />;
+      return <AdminNavs openMenu={openMenu} isSidebarExpanded={isSidebarExpanded} isMobile={isMobile} />;
     }
     return null;
   };

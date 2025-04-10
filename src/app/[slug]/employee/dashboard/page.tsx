@@ -1,9 +1,11 @@
 import React from 'react'
 
 function EmployeeDashboard() {
-  return (
-    <div>Employee Dashboard</div>
-  )
+    return (
+        <>
+            <h1>Employee Dashboard</h1>
+        </>
+    )
 }
 
 export default EmployeeDashboard

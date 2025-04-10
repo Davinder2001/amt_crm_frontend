@@ -4,12 +4,18 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
 
-const AdminNavs: React.FC = () => {
+interface admNavProps {
+    isSidebarExpanded: boolean;
+    isMobile: boolean;
+    openMenu: () => void;
+}
+
+const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
     const asPath = usePathname();
     const { companySlug } = useCompany();
     const menuItems = [
         { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
-        { name: "Catalogue", path: "catalogue", icon: <FaClipboardList /> },
+        // { name: "Catalogue", path: "catalogue", icon: <FaClipboardList /> },
         { name: "Store", path: "store", icon: <FaStore /> },
         // { name: "Services", path: "services", icon: <LuClipboardList /> },
         { name: "H.R", path: "hr", icon: <FaUserTie /> },
@@ -32,6 +38,7 @@ const AdminNavs: React.FC = () => {
                             key={path}
                             className={`menu-item ${hasSubmenu ? "has-submenu" : ""}`}
                             style={{ backgroundColor: isActive ? "#F1F9F9" : "", position: "relative" }}
+                            onClick={openMenu}
                         >
                             <Link href={`/${companySlug}/${path}`} className="menu-link">
                                 <span className="menu-icon" style={{ color: isActive ? "#009693" : "#222" }}>
@@ -40,6 +47,9 @@ const AdminNavs: React.FC = () => {
                                 <span className="menu-text">{name}</span>
                                 {hasSubmenu && <span className="submenu-icon">+</span>}
                             </Link>
+                            {!isSidebarExpanded && (
+                                <div className="tooltip"> {name}</div>
+                            )}
                             {isActive && (
                                 <span
                                     style={{

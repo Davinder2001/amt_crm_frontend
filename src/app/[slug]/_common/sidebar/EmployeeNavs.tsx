@@ -4,12 +4,18 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
 
-const EmployeeNavs: React.FC = () => {
+interface empNavProps {
+    isSidebarExpanded: boolean;
+    isMobile: boolean;
+    openMenu: () => void;
+}
+
+const EmployeeNavs: React.FC<empNavProps> = ({isSidebarExpanded, isMobile, openMenu }) => {
     const asPath = usePathname();
     const { companySlug } = useCompany();
     const menuItems = [
         { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
-        { name: "Catalogue", path: "catalogue", icon: <FaClipboardList /> },
+        // { name: "Catalogue", path: "catalogue", icon: <FaClipboardList /> },
         { name: "Task", path: "tasks", icon: <FaTasks /> },
         { name: "H.R", path: "hr", icon: <FaUserTie /> },
     ];
@@ -24,6 +30,7 @@ const EmployeeNavs: React.FC = () => {
                             key={path}
                             className="menu-item"
                             style={{ backgroundColor: isActive ? "#F1F9F9" : "", position: "relative" }}
+                            onClick={openMenu}
                         >
                             <Link href={`/${companySlug}/employee/${path}`} className="menu-link">
                                 <span className="menu-icon" style={{ color: isActive ? "#009693" : "#222" }}>
@@ -31,6 +38,9 @@ const EmployeeNavs: React.FC = () => {
                                 </span>
                                 <span className="menu-text">{name}</span>
                             </Link>
+                            {!isSidebarExpanded && (
+                                <div className="tooltip"> {name}</div>
+                            )}
                             {isActive && (
                                 <span
                                     style={{

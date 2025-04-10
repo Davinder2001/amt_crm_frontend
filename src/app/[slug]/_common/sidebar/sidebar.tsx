@@ -16,7 +16,7 @@ interface sidebarProps {
 }
 
 const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
-  const { companySlug } = useCompany();
+  const { companySlug, userType } = useCompany();
 
   // Using useRouter to get the current route
   const asPath = usePathname();
@@ -75,7 +75,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
                 }}
                 onClick={openMenu}
               >
-                <Link href={`/${companySlug}/${path}`} className="menu-link">
+                <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/${path}`} className="menu-link">
                   <span className="menu-icon"
                     style={{
                       color: isActive ? "#009693" : "#222",

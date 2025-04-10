@@ -100,6 +100,130 @@
 }
 
 
+// Profile styling start
+.account {
+  display: flex;
+  justify-content: flex-end;
+
+  .profile-icon {
+      cursor: pointer;
+  }
+
+  .profile-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+  }
+
+  .profile-img:hover {
+      border-color: #007bff;
+  }
+
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .dropdown-content {
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 150px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 10;
+  }
+
+
+  .login-btn {
+      background-color: $primary-color;
+      color: $white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+  }
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color:$white;
+  border-radius: 5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  width: 150px;
+  z-index: 1000;
+  margin-top: 20px;
+}
+.custom-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px; /* adjust to match trigger button */
+  width: 16px;
+  height: 16px;
+  background-color: $white;
+  transform: rotate(45deg);
+  box-shadow: -1px -1px 1px rgba(0, 0, 0, 0.05);
+  z-index: -1;
+}
+
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: $primary-color; /* Teal color */
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: $white; /* Light teal bg on hover */
+}
+
+.dropdown-icon {
+  font-size: 18px;
+  margin-right: 12px;
+}
+
+/* Optional: style logout differently */
+.logout-btn {
+  color: $danger-color; /* red-ish for emphasis */
+}
+
+
+
+
+
+// Profile styling End
+
+
+
 
 
 

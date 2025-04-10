@@ -78,17 +78,31 @@ const Profile: React.FC = () => {
           />
 
           {isOpen && (
-            <div className="dropdown-content">
-              <Link href={`/${companySlug}/my-account`} onClick={() => setIsOpen(false)}>
-                <FaUser className="icon" /> My Account
-              </Link>
-              <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)}>
-                <FaCog className="icon" /> Settings
-              </Link>
-              <button className="logout-btn" onClick={handleLogout}>
-                <FaSignOutAlt className="icon" /> Logout
-              </button>
-            </div>
+            // <div className="dropdown-content">
+            //   <Link href={`/${companySlug}/my-account`} onClick={() => setIsOpen(false)}>
+            //     <FaUser className="icon" /> My Account
+            //   </Link>
+            //   <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)}>
+            //     <FaCog className="icon" /> Settings
+            //   </Link>
+            //   <button className="logout-btn" onClick={handleLogout}>
+            //     <FaSignOutAlt className="icon" /> Logout
+            //   </button>
+            // </div>
+
+
+            <div className="custom-dropdown">
+  <Link href={`/${companySlug}/my-account`} onClick={() => setIsOpen(false)} className="dropdown-item">
+    <FaUser className="dropdown-icon" /> My Account
+  </Link>
+  <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)} className="dropdown-item">
+    <FaCog className="dropdown-icon" /> Settings
+  </Link>
+  <button className="dropdown-item logout-btn" onClick={handleLogout}>
+    <FaSignOutAlt className="dropdown-icon" /> Logout
+  </button>
+</div>
+
           )}
         </div>
       ) : (

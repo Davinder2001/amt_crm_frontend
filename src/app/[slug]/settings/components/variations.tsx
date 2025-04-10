@@ -4,12 +4,14 @@ import {
   useFetchAttributesQuery,
   useCreateAttributeMutation,
   useDeleteAttributeMutation,
+  useToggleAttributeStatusMutation,
 } from '@/slices/store/storeApi';
 
 const Variations = () => {
   const { data: attributes, isLoading, isError } = useFetchAttributesQuery();
   const [createAttribute] = useCreateAttributeMutation();
   const [deleteAttribute] = useDeleteAttributeMutation();
+  const [toggleStatus] = useToggleAttributeStatusMutation();
 
   const [newAttributeName, setNewAttributeName] = useState('');
   const [values, setValues] = useState<string[]>(['']);
@@ -32,16 +34,11 @@ const Variations = () => {
 
   const handleCreate = async () => {
     if (!newAttributeName.trim()) return;
-
     const filteredValues = values.filter((v) => v.trim() !== '');
     if (filteredValues.length === 0) return;
 
     try {
-      await createAttribute({
-        name: newAttributeName,
-        values: filteredValues,
-      }).unwrap();
-
+      await createAttribute({ name: newAttributeName, values: filteredValues }).unwrap();
       setNewAttributeName('');
       setValues(['']);
     } catch (error) {
@@ -56,6 +53,14 @@ const Variations = () => {
       } catch (error) {
         console.error('Error deleting attribute:', error);
       }
+    }
+  };
+
+  const handleStatusChange = async (id: number) => {
+    try {
+      await toggleStatus(id).unwrap();
+    } catch (error) {
+      console.error('Error toggling status:', error);
     }
   };
 
@@ -123,6 +128,7 @@ const Variations = () => {
             <th className="border px-4 py-2 text-left">#</th>
             <th className="border px-4 py-2 text-left">Attribute</th>
             <th className="border px-4 py-2 text-left">Values</th>
+            <th className="border px-4 py-2 text-left">Status</th>
             <th className="border px-4 py-2 text-left">Actions</th>
           </tr>
         </thead>
@@ -133,6 +139,16 @@ const Variations = () => {
               <td className="border px-4 py-2">{attribute.name}</td>
               <td className="border px-4 py-2">
                 {attribute.values?.map((v) => v.value).join(', ') || '—'}
+              </td>
+              <td className="border px-4 py-2">
+                <select
+                  value={attribute.status}
+                  onChange={() => handleStatusChange(attribute.id)}
+                  className="border rounded px-2 py-1"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
               </td>
               <td className="border px-4 py-2">
                 <button

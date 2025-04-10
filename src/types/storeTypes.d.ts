@@ -89,6 +89,7 @@ interface Attribute {
   id: number;
   name: string;
   values: AttributeValue[];
+  status: string;
 };
 
 interface CreateAttributePayload {

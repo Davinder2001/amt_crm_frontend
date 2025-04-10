@@ -105,6 +105,16 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Store"],
     }),
+
+    toggleAttributeStatus: builder.mutation<{ status: string }, number>({
+      query: (id) => ({
+        url: `attributes/${id}/toggle-status`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['Store'],
+    }),
+    
+
   }),
 });
 
@@ -123,6 +133,7 @@ export const {
   useCreateAttributeMutation,
   useUpdateAttributeMutation,
   useDeleteAttributeMutation,
+  useToggleAttributeStatusMutation
 } = storeApi;
 
 export default storeApi;

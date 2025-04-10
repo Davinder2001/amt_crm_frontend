@@ -1,0 +1,80 @@
+@use '../variables' as *;
+
+
+
+// ********* Sidebar css ********* //
+.sidebar {
+    max-width: 250px;
+    background-color: $white;
+    transition: width .3s ease-in-out;
+    position: relative;
+    height: 100vh;
+    z-index: 999999;
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 18px;
+        font-weight: bold;
+        border-bottom: 1px solid #e5e7eb;
+        height: 100px;
+        padding: 0px 20px;
+
+        a {
+            text-decoration: none;
+            color: #222222;
+            white-space: nowrap;
+        }
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0px;
+
+        li {
+            font-size: 18px;
+            padding: 5px 20px;
+
+            a {
+                text-decoration: none;
+                display: flex;
+                gap: 20px;
+                font-size: 18px;
+                color: black;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+
+
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateX(10px) translateY(-50%);
+    padding: 5px 10px;
+    background-color: #333;
+    color: $white;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0s 0.2s;
+    z-index: 99999999;
+
+}
+
+.menu-item:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-in-out, visibility 0s 0s;
+    z-index: 99999999;
+}

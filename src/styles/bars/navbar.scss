@@ -4,13 +4,15 @@
 .header.sticky {
   background-color: $white;
   position: sticky;
-  top: 5px;
-  z-index: 9999999999999;
+  top: 0;
+  z-index: 99999;
   margin: 10px 5px;
   box-shadow: $box-shadow;
-  .nav-container{
+
+  .nav-container {
     background-color: #f1f9f9;
-    .search-container{
+
+    .search-container {
       background-color: $white;
     }
   }
@@ -26,9 +28,6 @@
   justify-content: space-between;
   gap: 20px;
 
-  
-
-
   .nav-container {
     display: flex;
     align-items: center;
@@ -40,13 +39,10 @@
     max-width: 70%;
     width: 100%;
 
-
-
-
-
-
-
-
+    a {
+      display: flex;
+      align-items: center;
+    }
   }
 
   .search-input-container {
@@ -106,79 +102,65 @@
   justify-content: flex-end;
 
   .profile-icon {
-      cursor: pointer;
+    cursor: pointer;
   }
 
   .profile-img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.3s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
   }
 
   .profile-img:hover {
-      border-color: #007bff;
+    border-color: #007bff;
   }
 
   .dropdown {
-      position: relative;
-      display: inline-block;
+    position: relative;
+    display: flex;
   }
 
   .dropdown-content {
-      position: absolute;
-      right: 0;
-      background-color: white;
-      min-width: 150px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      overflow: hidden;
-      z-index: 10;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 10;
   }
-
 
   .login-btn {
-      background-color: $primary-color;
-      color: $white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      text-decoration: none;
+    background-color: $primary-color;
+    color: $white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
   }
-
-  
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 .custom-dropdown {
   position: absolute;
-  top: 100%;
-  right: 0;
-  background-color:$white;
+  top: 40px;
+  right: -5px;
+  background-color: $white;
   border-radius: 5px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   padding: 8px 0;
   width: 150px;
   z-index: 1000;
-  margin-top: 20px;
 }
+
 .custom-dropdown::before {
   content: '';
   position: absolute;
   top: -8px;
-  right: 20px; /* adjust to match trigger button */
+  right: 20px;
   width: 16px;
   height: 16px;
   background-color: $white;
@@ -191,56 +173,35 @@
 .dropdown-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 7px 15px;
   font-size: 15px;
-  color: $primary-color; /* Teal color */
+  color: $primary-color;
   text-decoration: none;
   background: none;
   border: none;
   cursor: pointer;
   width: 100%;
   transition: background-color 0.2s ease;
-}
 
-.dropdown-item:hover {
-  background-color: $white; /* Light teal bg on hover */
-}
-
-.dropdown-icon {
-  font-size: 18px;
-  margin-right: 12px;
+  &:hover {
+    background-color: $secondary-color;
+  }
 }
 
 /* Optional: style logout differently */
 .logout-btn {
-  color: $danger-color; /* red-ish for emphasis */
+  color: $danger-color;
+  /* red-ish for emphasis */
 }
-
-
-
-
 
 // Profile styling End
 
 
-
-
-
-
-
-
-
-
-
 @media (max-width:1024px) {
-
-
-
   .header {
     .desktop-header {
       margin: 0px;
-
-
 
       .nav-container {
         justify-content: end;
@@ -255,30 +216,20 @@
       }
     }
   }
-
-
 }
 
 @media (max-width:768px) {
-.header-title{
-  display: none;
-}
-
+  .header-title {
+    display: none;
+  }
 }
 
 @media (max-width:468px) {
-
-
-
-
-  .header{
+  .header {
     .nav-container {
       max-width: 100%;
       gap: 10px;
-  
+
+    }
   }
-
-  } 
-
-
 }

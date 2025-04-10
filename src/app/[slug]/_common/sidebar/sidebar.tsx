@@ -13,7 +13,7 @@ interface sidebarProps {
 }
 
 const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
-  const { userType, companySlug } = useCompany();
+  const { userType } = useCompany();
 
   const renderNav = () => {
     if (userType === "employee") {
@@ -30,7 +30,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
       <div className="sidebar-header">
         {isMobile ? (
           <>
-            <Link href={`/${companySlug}${userType === "employee" ? "/employee/dashboard" : "/"}`} onClick={openMenu}>
+            <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`} onClick={openMenu}>
               AMT CRM
             </Link>
             <FaTimesCircle
@@ -41,9 +41,9 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
             />
           </>
         ) : isSidebarExpanded ? (
-          <Link href={`/${companySlug}${userType === "employee" ? "/employee/dashboard" : "/"}`}>AMT CRM</Link>
+          <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`}>AMT CRM</Link>
         ) : (
-          <Link href={`/${companySlug}${userType === "employee" ? "/employee/dashboard" : "/"}`}>A</Link>
+          <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`}>A</Link>
         )}
       </div>
       {renderNav()}

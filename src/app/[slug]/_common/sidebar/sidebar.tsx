@@ -42,7 +42,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
         {
           isMobile ? (
             <>
-              <Link href={'/'} onClick={openMenu}>AMT CRM</Link>
+              <Link href={`${userType === 'employee' ? '/employee/dashboard' : '/'}`} onClick={openMenu}>AMT CRM</Link>
               <FaTimesCircle
                 size={20}
                 style={{ cursor: 'pointer' }}
@@ -52,9 +52,9 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
             </>
           ) : (
             isSidebarExpanded ? (
-              <Link href={'/'}>AMT CRM</Link>
+              <Link href={`${userType === 'employee' ? '/employee/dashboard' : '/'}`}>AMT CRM</Link>
             ) : (
-              <Link href={'/'}>A</Link>
+              <Link href={`${userType === 'employee' ? '/employee/dashboard' : '/'}`}>A</Link>
             )
           )
         }

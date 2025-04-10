@@ -35,8 +35,7 @@ const AllInvoices = () => {
   if (isError) return <p>Failed to load invoices.</p>;
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">All Invoices</h2>
+    <div className="all-invoice-table-container">
       <div className="overflow-x-auto">
         <table className="w-full border text-sm">
           <thead className="bg-gray-100">
@@ -63,13 +62,13 @@ const AllInvoices = () => {
                 </td>
                 <td className="p-2 border">
                   {invoice.pdf_base64 ? (
-                    <div className="flex flex-col gap-1 text-blue-600 underline">
+                    <div className="invoice-v-d-button-container">
                       <button
                         onClick={() => handleViewPdf(invoice.pdf_base64)}
-                        className="hover:text-blue-800"
+                        className="buttons"
                       >
                         View
-                      </button>
+                      </button> 
                       <button
                         onClick={() =>
                           handleDownloadPdf(
@@ -77,7 +76,7 @@ const AllInvoices = () => {
                             `invoice_${invoice.id}.pdf`
                           )
                         }
-                        className="hover:text-blue-800"
+                        className="buttons"
                       >
                         Download
                       </button>

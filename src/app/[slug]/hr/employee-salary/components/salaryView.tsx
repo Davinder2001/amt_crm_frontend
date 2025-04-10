@@ -91,7 +91,7 @@ const SalaryView: React.FC = () => {
                 </span>
               </td>
               <td>{employee.user_status || "N/A"}</td>
-              <td>
+              <td className="user-td">
                 <span
                   onClick={() =>
                     navigateTo(
@@ -112,7 +112,8 @@ const SalaryView: React.FC = () => {
                 >
                 <FaEdit color='#222' />
                 </span>{" "}
-                <span onClick={() => handleDelete(employee.id)}>    <FaEye color='#222' /></span>
+                <span onClick={() => handleDelete(employee.id)}>   
+                   <FaEye color='#222' /></span>
               </td>
             </tr>
           ))}

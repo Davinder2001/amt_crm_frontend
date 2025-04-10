@@ -89,68 +89,143 @@ const Page = () => {
   if (error) return <p>Error loading item details.</p>;
 
   return (
-    <div>
-      <h1>Edit Item</h1>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Name*</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Quantity Count*</label>
-          <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Measurement</label>
-          <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Purchase Date</label>
-          <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Date Of Manufacture*</label>
-          <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Date Of Expiry</label>
-          <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Description</label>
-          <textarea name="description" value={formData.description} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Brand Name*</label>
-          <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Replacement</label>
-          <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Category</label>
-          <input type="text" name="category" value={formData.category} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Vendor Name</label>
-          <input type="text" name="vendor_name" value={formData.vendor_name} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Availability Stock</label>
-          <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
-        </div>
-        <div style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-          <button type="submit" disabled={isUpdating}>
-            {isUpdating ? 'Updating...' : 'Update Item'}
-          </button>
-          <button type="button" style={{ marginLeft: '1rem' }}>
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+    // <div>
+    //   <h1>Edit Item</h1>
+    //   <form onSubmit={handleSubmit} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Name*</label>
+    //       <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Quantity Count*</label>
+    //       <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Measurement</label>
+    //       <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Purchase Date</label>
+    //       <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Date Of Manufacture*</label>
+    //       <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Date Of Expiry</label>
+    //       <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Description</label>
+    //       <textarea name="description" value={formData.description} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Brand Name*</label>
+    //       <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Replacement</label>
+    //       <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Category</label>
+    //       <input type="text" name="category" value={formData.category} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Vendor Name</label>
+    //       <input type="text" name="vendor_name" value={formData.vendor_name} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 300px' }}>
+    //       <label>Availability Stock</label>
+    //       <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
+    //     </div>
+    //     <div style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+    //       <button type="submit" disabled={isUpdating}>
+    //         {isUpdating ? 'Updating...' : 'Update Item'}
+    //       </button>
+    //       <button type="button" style={{ marginLeft: '1rem' }}>
+    //         Cancel
+    //       </button>
+    //     </div>
+    //   </form>
+    // </div>
+  
+  
+  
+    <div className="form-wrapper">
+    <form onSubmit={handleSubmit} className="item-form">
+      <div className="form-group">
+        <label>Item Name*</label>
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Item Code" required />
+      </div>
+  
+      <div className="form-group">
+        <label>Quantity Count*</label>
+        <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} placeholder="Quantity Count" required />
+      </div>
+  
+      <div className="form-group">
+        <label>Measurement*</label>
+        <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} placeholder="Measurement" required />
+      </div>
+  
+      <div className="form-group">
+        <label>Purchase Date*</label>
+        <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} required />
+      </div>
+  
+      <div className="form-group">
+        <label>Date Of Manufacture*</label>
+        <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
+      </div>
+  
+      <div className="form-group">
+        <label>Date Of Expiry*</label>
+        <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} required />
+      </div>
+  
+      <div className="form-group">
+        <label>Description</label>
+        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Item Description" />
+      </div>
+  
+      <div className="form-group">
+        <label>Brand Name*</label>
+        <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="Brand Name" required />
+      </div>
+  
+      <div className="form-group">
+        <label>Replacement*</label>
+        <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} placeholder="Replacement Item Name" required />
+      </div>
+  
+      <div className="form-group">
+        <label>Category</label>
+        <input type="text" name="category" value={formData.category} onChange={handleChange} placeholder="Product Category" />
+      </div>
+  
+      <div className="form-group">
+        <label>Vendor Name</label>
+        <input type="text" name="vendor_name" value={formData.vendor_name} onChange={handleChange} placeholder="Vendor Name" />
+      </div>
+  
+      <div className="form-group">
+        <label>Availability Stock</label>
+        <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} placeholder="Available Quantity" />
+      </div>
+  
+      <div className="form-actions">
+        <button type="submit" disabled={isUpdating}>
+          {isUpdating ? 'Updating...' : 'Update Item'}
+        </button>
+        <button type="button" className="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+
+);
 };
 
 export default Page;

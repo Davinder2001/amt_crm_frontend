@@ -109,7 +109,7 @@ const Page = () => {
             <FaRegImage size={20} style={{ marginRight: '8px' }} />
             Upload Bill Photo
           </label>
-          <input
+          <input style={{ display:'none'}}
             id="file-upload"
             type="file"
             className="hidden-input"

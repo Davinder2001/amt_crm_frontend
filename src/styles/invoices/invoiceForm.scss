@@ -1,5 +1,26 @@
 @use '../variables' as *;
 
+.navigation{
+
+    .invoice-nav-section{
+
+        .invoice-nav-buttons{   
+                list-style-type: none;
+                padding-left: 0; 
+                display: flex;
+                gap: 20px;
+            
+                a{
+                text-decoration: none;
+                }
+        }
+    }
+}
+
+
+
+
+
 .invoice-form {
     padding: 20px;
     background-color: white;
@@ -163,4 +184,14 @@
     margin-bottom: 6px;
     font-size: 14px;
     color: #666;
+}
+
+
+
+.all-invoice-table-container{
+    .invoice-v-d-button-container{
+        display: flex;
+    gap: 10px;
+    justify-content: center;
+    }
 }

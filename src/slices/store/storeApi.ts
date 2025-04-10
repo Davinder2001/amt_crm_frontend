@@ -1,5 +1,7 @@
 import storeApiSlice from "./storeCreateSlice";
 
+
+
 const storeApi = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch all store items
@@ -8,7 +10,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       providesTags: ["Store"],
     }),
 
-    // Fetch a single store item by id (for show/view)
+    // Fetch a single store item by id
     fetchStoreItem: builder.query<StoreItem, number>({
       query: (id) => `store/items/${id}`,
       providesTags: (result, error, id) => [{ type: "Store", id }],
@@ -33,7 +35,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
-    // Update (edit) a store item
+    // Update a store item
     updateStoreItem: builder.mutation<StoreItem, UpdateStoreItemRequest>({
       query: ({ id, ...patch }) => ({
         url: `store/items/${id}`,
@@ -43,6 +45,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
+    // Bulk create store items
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
         url: "store/bulk-items",
@@ -51,15 +54,56 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Store"],
     }),
-    
 
-    // OCR process endpoint (if needed)
+    // OCR scan
     ocrProcess: builder.mutation<OcrResponse, FormData>({
       query: (formData) => ({
         url: "add-as-vendor/ocrscan",
         method: "POST",
         body: formData,
       }),
+    }),
+
+    // 🆕 Fetch all attributes
+    fetchAttributes: builder.query<Attribute[], void>({
+      query: () => "attributes",
+      providesTags: ["Store"],
+    }),
+
+    // 🆕 Fetch single attribute by ID
+    fetchAttributeById: builder.query<Attribute, number>({
+      query: (id) => `attributes/${id}`,
+      providesTags: (result, error, id) => [{ type: "Store", id }],
+    }),
+
+    // 🆕 Create new attribute
+    createAttribute: builder.mutation<Attribute, CreateAttributePayload>({
+      query: (data) => ({
+        url: "attributes",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Store"],
+    }),
+    
+
+    // 🆕 Update an attribute
+    updateAttribute: builder.mutation<Attribute, { id: number; data: Partial<Attribute> }>({
+      query: ({ id, data }) => ({
+        url: `attributes/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Store"],
+    }),
+
+    // 🆕 Delete attribute
+    deleteAttribute: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `attributes/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Store"],
     }),
   }),
 });
@@ -72,6 +116,13 @@ export const {
   useUpdateStoreItemMutation,
   useBulkCreateStoreItemMutation,
   useOcrProcessMutation,
+
+  // 🆕 Attribute hooks
+  useFetchAttributesQuery,
+  useFetchAttributeByIdQuery,
+  useCreateAttributeMutation,
+  useUpdateAttributeMutation,
+  useDeleteAttributeMutation,
 } = storeApi;
 
 export default storeApi;

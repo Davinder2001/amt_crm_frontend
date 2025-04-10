@@ -10,11 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 export const metadata: Metadata = {
   title: "AMT CRM",
   description: "By Spark Web Solutions",
-  themeColor: "#009693",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icons/icon-192x192.png",
-    apple: "/icons/icon-192x192.png",
+    icon: "/icons/download.png",
+    apple: "/icons/download.png",
   },
 };
 

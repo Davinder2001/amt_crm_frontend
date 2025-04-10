@@ -1,15 +1,18 @@
 'use client';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import Link from 'next/link';
 import React, { useEffect } from 'react'
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    setTitle('Settings'); // Update breadcrumb title
+    setTitle('Settings'); 
   }, [setTitle]);
   return (
-    <div>Settings page here</div>
+    <>
+      <Link href="settings/store-settings">Store Settings</Link>
+    </>
   )
 }
 

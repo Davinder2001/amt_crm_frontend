@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
-import { useFetchSelectedCompanyQuery, useLogoutMutation } from "@/slices/auth/authApi";
+import { useLogoutMutation } from "@/slices/auth/authApi";
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
+import { useCompany } from "@/utils/Company";
 
 
 const Profile: React.FC = () => {
@@ -15,9 +16,8 @@ const Profile: React.FC = () => {
   const router = useRouter();
   const [logout] = useLogoutMutation();
 
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
-  const {setUser} = useUser();
+  const { setUser } = useUser();
+  const { companySlug, userType } = useCompany();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -60,16 +60,16 @@ const Profile: React.FC = () => {
     const userType = Cookies.get('user_type');
     if (!accessToken || !userType) {
       setIsAuthenticated(false);
-      setUser(null); 
+      setUser(null);
     }
   }, [setUser]);
 
- 
+
   return (
     <div className="account">
       {isAuthenticated ? (
         <div className="dropdown">
- 
+
           <FaUserCircle
             size={30}
             color='#009693'
@@ -92,16 +92,16 @@ const Profile: React.FC = () => {
 
 
             <div className="custom-dropdown">
-  <Link href={`/${companySlug}/my-account`} onClick={() => setIsOpen(false)} className="dropdown-item">
-    <FaUser className="dropdown-icon" /> My Account
-  </Link>
-  <Link href={`/${companySlug}/settings`} onClick={() => setIsOpen(false)} className="dropdown-item">
-    <FaCog className="dropdown-icon" /> Settings
-  </Link>
-  <button className="dropdown-item logout-btn" onClick={handleLogout}>
-    <FaSignOutAlt className="dropdown-icon" /> Logout
-  </button>
-</div>
+              <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/my-account`} onClick={() => setIsOpen(false)} className="dropdown-item">
+                <FaUser className="dropdown-icon" /> My Account
+              </Link>
+              <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/settings`} onClick={() => setIsOpen(false)} className="dropdown-item">
+                <FaCog className="dropdown-icon" /> Settings
+              </Link>
+              <button className="dropdown-item logout-btn" onClick={handleLogout}>
+                <FaSignOutAlt className="dropdown-icon" /> Logout
+              </button>
+            </div>
 
           )}
         </div>

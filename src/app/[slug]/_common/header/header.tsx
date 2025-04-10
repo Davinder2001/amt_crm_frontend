@@ -70,7 +70,7 @@ interface headerProps {
 }
 
 const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
-  const { companySlug } = useCompany();
+  const { companySlug, userType } = useCompany();
   const { title } = useBreadcrumb();
 
   // State to manage sticky class
@@ -111,22 +111,22 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
 
   return (
     <div className={`header ${isSticky ? 'sticky' : ''}`}>
-      
-        {isMobile ? (
-          <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
-        ) : (
-          <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
-        )}
-        <h1 className='header-title'>{title}</h1>
-        <div className="nav-container">
-          <SearchBar />
-          <Link href={`/${companySlug}/notifications`}>
-            <FaRegBell size={20} color='#009693' />
-          </Link>
-          <Profile />
-        </div>
+
+      {isMobile ? (
+        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
+      ) : (
+        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
+      )}
+      <h1 className='header-title'>{title}</h1>
+      <div className="nav-container">
+        <SearchBar />
+        <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`}>
+          <FaRegBell size={20} color='#009693' />
+        </Link>
+        <Profile />
       </div>
-      
+    </div>
+
   );
 };
 

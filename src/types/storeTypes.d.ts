@@ -24,6 +24,16 @@ interface StoreItem {
   images: File[]
 }
 
+interface attributes {
+  attribute_id: number | string;
+  attribute_value_id: number | string;
+}
+
+interface variations {
+  [key: string]: any;
+  price: number;
+  attributes: attributes[];
+}
 interface CreateStoreItemRequest {
   name: string;
   quantity_count: number;
@@ -38,7 +48,8 @@ interface CreateStoreItemRequest {
   availability_stock: number;
   cost_price: number;
   selling_price: number;
-  images: File[]
+  images: File[],
+  variants: variations[]
 }
 
 type StoreResponse = StoreItem[];
@@ -94,5 +105,5 @@ interface Attribute {
 
 interface CreateAttributePayload {
   name: string;
-  values: string[]; 
+  values: string[];
 };

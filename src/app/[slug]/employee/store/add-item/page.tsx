@@ -30,6 +30,7 @@ const AddItem: React.FC = () => {
     cost_price: 0,
     selling_price: 0,
     images: [],
+    variants: []
   });
 
   const [vendors, setVendors] = useState<string[]>([]);

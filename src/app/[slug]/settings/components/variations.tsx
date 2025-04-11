@@ -15,6 +15,7 @@ const Variations = () => {
 
   const [newAttributeName, setNewAttributeName] = useState('');
   const [values, setValues] = useState<string[]>(['']);
+  const [isCanvasOpen, setIsCanvasOpen] = useState(false);
 
   const handleValueChange = (index: number, newValue: string) => {
     const updated = [...values];
@@ -41,6 +42,7 @@ const Variations = () => {
       await createAttribute({ name: newAttributeName, values: filteredValues }).unwrap();
       setNewAttributeName('');
       setValues(['']);
+      setIsCanvasOpen(false); // Close canvas after successful creation
     } catch (error) {
       console.error('Error creating attribute:', error);
     }
@@ -68,92 +70,114 @@ const Variations = () => {
   if (isError) return <p>Failed to load attributes.</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold mb-4">Variations</h1>
+    <div className="container">
+      <h1 className="title">Variations</h1>
 
-      {/* Create Attribute Form */}
-      <div className="mb-6 space-y-4">
-        <input
-          type="text"
-          value={newAttributeName}
-          onChange={(e) => setNewAttributeName(e.target.value)}
-          placeholder="New attribute name"
-          className="border px-3 py-2 rounded w-full max-w-sm"
-        />
+      {/* Open Canvas Button */}
+      <button
+        onClick={() => setIsCanvasOpen(true)}
+        className='buttons'
+      >
+        + Add Variation Attribute
+      </button>
 
-        {/* Multiple Values Input */}
-        <div className="space-y-2">
-          <label className="block font-medium">Attribute Values</label>
-          {values.map((val, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <input
-                type="text"
-                value={val}
-                onChange={(e) => handleValueChange(index, e.target.value)}
-                placeholder={`Value ${index + 1}`}
-                className="border px-3 py-2 rounded w-full max-w-sm"
-              />
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeValueField(index)}
-                  className="text-red-600 hover:underline"
-                >
-                  Remove
-                </button>
-              )}
+      {/* Sliding Canvas */}
+      <div
+        className={`canvas ${isCanvasOpen ? 'open' : ''}`}
+      >
+        <div className="canvas-content">
+          <h2 className="canvas-title">Create New Attribute</h2>
+          {/* Create Attribute Form */}
+          <div className="form-container">
+            <input
+              type="text"
+              value={newAttributeName}
+              onChange={(e) => setNewAttributeName(e.target.value)}
+              placeholder="New attribute name"
+              className="input"
+            />
+
+            {/* Multiple Values Input */}
+            <div className="values-container">
+              <label className="label">Attribute Values</label>
+              {values.map((val, index) => (
+                <div key={index} className="value-row">
+                  <input
+                    type="text"
+                    value={val}
+                    onChange={(e) => handleValueChange(index, e.target.value)}
+                    placeholder={`Value ${index + 1}`}
+                    className="input"
+                  />
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => removeValueField(index)}
+                      className="remove-btn"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addNewValueField}
+                className="add-value-btn"
+              >
+                + Add another value
+              </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addNewValueField}
-            className="text-sm text-blue-600 hover:underline mt-2"
-          >
-            + Add another value
-          </button>
-        </div>
 
-        <button
-          onClick={handleCreate}
-          className="bg-blue-600 text-white px-4 py-2 rounded mt-2"
-        >
-          Add Attribute
-        </button>
+            <button
+              onClick={handleCreate}
+              className="submit-btn"
+            >
+              Add Attribute
+            </button>
+            <button
+              onClick={() => setIsCanvasOpen(false)}
+              className="close-btn"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Attributes Table */}
-      <table className="min-w-full border border-gray-300">
+      <table className="attributes-table">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2 text-left">#</th>
-            <th className="border px-4 py-2 text-left">Attribute</th>
-            <th className="border px-4 py-2 text-left">Values</th>
-            <th className="border px-4 py-2 text-left">Status</th>
-            <th className="border px-4 py-2 text-left">Actions</th>
+          <tr>
+            <th>#</th>
+            <th>Attribute</th>
+            <th>Values</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {attributes?.map((attribute, index) => (
             <tr key={attribute.id}>
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td className="border px-4 py-2">{attribute.name}</td>
-              <td className="border px-4 py-2">
+              <td>{index + 1}</td>
+              <td>{attribute.name}</td>
+              <td>
                 {attribute.values?.map((v) => v.value).join(', ') || '—'}
               </td>
-              <td className="border px-4 py-2">
+              <td>
                 <select
                   value={attribute.status}
                   onChange={() => handleStatusChange(attribute.id)}
-                  className="border rounded px-2 py-1"
+                  className="status-select"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
               </td>
-              <td className="border px-4 py-2">
+              <td>
                 <button
                   onClick={() => handleDelete(attribute.id)}
-                  className="text-red-600 hover:underline"
+                  className="delete-btn"
                 >
                   Delete
                 </button>
@@ -162,6 +186,115 @@ const Variations = () => {
           ))}
         </tbody>
       </table>
+
+      <style jsx>{`
+        .container {
+          padding: 16px;
+        }
+        .title {
+          font-size: 24px;
+          font-weight: 600;
+          margin-bottom: 16px;
+        }
+        .open-canvas-btn {
+          background-color: #009693;
+          color: white;
+          padding: 12px 24px;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-bottom: 16px;
+          border: none;
+        }
+        .canvas {
+          position: fixed;
+          top: 0;
+          left: -30%;
+          width: 30%;
+          height: 100%;
+          background-color: white;
+          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+          z-index: 999999;
+          padding: 16px;
+          overflow-y: auto;
+          transition: transform 0.3s ease;
+        }
+        .canvas.open {
+          transform: translateX(100%); /* Slide the canvas in */
+        }
+        .canvas-content {
+          margin-top: 32px;
+        }
+        .canvas-title {
+          font-size: 24px;
+          margin-bottom: 16px;
+        }
+        .form-container {
+          margin-bottom: 24px;
+        }
+        .input {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          margin-bottom: 16px;
+        }
+        .values-container {
+          margin-bottom: 16px;
+        }
+        .value-row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+        }
+        .remove-btn {
+          background-color: red;
+          color: white;
+          padding: 6px 12px;
+          border-radius: 8px;
+          margin-left: 8px;
+          cursor: pointer;
+          border: none;
+        }
+        .add-value-btn {
+          color: blue;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        .submit-btn {
+          background-color: #009693;
+          color: white;
+          padding: 12px 24px;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 16px;
+        }
+        .close-btn {
+          color: red;
+          cursor: pointer;
+          position: absolute;
+          top: 0;
+          right: 0
+        }
+        .attributes-table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        .attributes-table th, .attributes-table td {
+          padding: 12px;
+          border: 1px solid #ccc;
+          text-align: left;
+        }
+        .status-select {
+          padding: 6px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+        }
+        .delete-btn {
+          color: red;
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      `}</style>
     </div>
   );
 };

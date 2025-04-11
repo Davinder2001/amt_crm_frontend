@@ -372,37 +372,6 @@ textarea {
 
 }
 
-@media (max-width: 1024px) {
-    .sidebar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        max-width: 50%;
-        height: 100vh;
-        transition: transform 0.3s ease-in-out;
-        z-index: 999999;
-        padding: 0px;
-
-        .tooltip {
-            display: none;
-        }
-    }
-
-    .hide-sidebar {
-        transform: translateX(-102%);
-    }
-
-    .show-sidebar {
-        transform: translateX(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        max-width: 90%;
-    }
-}
-
 @media (max-width:468px) {
     .buttons {
         padding: 5px 15px;

@@ -1,11 +1,21 @@
-import React from 'react'
+'use client';
+import React, { useEffect } from 'react'
+import Navigation from './components/navigation'
+import AllTasks from './components/allTasks'
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
-function Page() {
-    return (
-        <>
-            <h1>tasks page</h1>
-        </>
-    )
+const Page = () => {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Tasks'); // Update breadcrumb title
+  }, [setTitle]);
+  return (
+    <>
+      <Navigation />
+      <AllTasks />
+    </>
+  )
 }
 
 export default Page

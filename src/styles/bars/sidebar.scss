@@ -1,6 +1,12 @@
 @use '../variables' as *;
 
 
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
 
 // ********* Sidebar css ********* //
 .sidebar {
@@ -10,6 +16,7 @@
     position: relative;
     height: 100vh;
     z-index: 999999;
+
     .sidebar-header {
         display: flex;
         align-items: center;
@@ -38,6 +45,12 @@
             font-size: 18px;
             padding: 5px 20px;
 
+            span.menu-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
             a {
                 text-decoration: none;
                 display: flex;
@@ -52,7 +65,9 @@
     }
 }
 
-
+.sidebar.collapse-view .sidebar-header {
+    padding: 12px;
+}
 
 
 .tooltip {
@@ -77,4 +92,71 @@
     visibility: visible;
     transition: opacity 0.2s ease-in-out, visibility 0s 0s;
     z-index: 99999999;
+}
+
+
+@media (max-width: 1024px) {
+    .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        max-width: 50%;
+        height: 100vh;
+        transition: transform 0.3s ease-in-out;
+        z-index: 999999;
+        padding: 0px;
+
+        .tooltip {
+            display: none;
+        }
+    }
+
+    .hide-sidebar {
+        transform: translateX(-102%);
+    }
+
+    .show-sidebar {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 468px) {
+    .sidebar {
+        max-width: 100%;
+        width: 100% !important;
+        height: 50vh;
+        position: fixed;
+        bottom: 0;
+        border-radius: 20px 20px 0 0;
+        box-shadow: $secondary-shadow;
+
+        ul.menu-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            padding: 20px 10px 200px 10px;
+            overflow: auto;
+            height: auto;
+            min-height: 0vh;
+            max-height: 50vh;
+
+            li {
+                padding: 20px;
+                box-shadow: $box-shadow;
+            }
+        }
+    }
+
+    .hide-sidebar {
+        transform: translateY(100vh);
+    }
+
+    .show-sidebar {
+        transform: translateY(50vh);
+    }
 }

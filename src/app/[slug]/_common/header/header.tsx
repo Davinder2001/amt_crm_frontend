@@ -1,59 +1,3 @@
-
-// 'use client';
-// import React from 'react'
-// import Profile from './components/profile'
-// import SearchBar from '../search/SearchBar';
-// import Link from 'next/link';
-// import { FaRegBell, FaBars } from 'react-icons/fa';
-// import { useCompany } from '@/utils/Company';
-// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-
-// interface headerProps {
-//   handleToggleSidebar: () => void;
-//   openMenu: () => void;
-//   isMobile: boolean;
-// }
-
-// const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
-//   const { companySlug } = useCompany();
-//   const { title } = useBreadcrumb();
-
-//   return (
-
-//     <div className='header'>
-//      <div className='desktop-header'>
-//      {isMobile ? (
-//         <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
-//       ) : (
-//         <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
-//       )}
-//       <h1>{title}</h1>
-//       <div className="nav-container">
-//         <SearchBar />
-//         <Link href={`/${companySlug}/notifications`}> <FaRegBell size={20} color='#009693' /> </Link>
-//         <Profile />
-//       </div>
-//      </div>
-//      <div className='mobile-searchbar'>
-//      <SearchBar />
-
-//      </div>
-
-//     </div>
-//   )
-// }
-
-// export default Header
-
-
-
-
-
-
-
-
-
-
 'use client';
 import React, { useEffect, useState } from 'react';
 import Profile from './components/profile';
@@ -62,6 +6,9 @@ import Link from 'next/link';
 import { FaRegBell, FaBars } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import Image from 'next/image';
+import { logo } from '@/assets/useImage';
+import { useRouter } from 'next/navigation';
 
 interface headerProps {
   handleToggleSidebar: () => void;
@@ -72,6 +19,7 @@ interface headerProps {
 const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
   const { companySlug, userType } = useCompany();
   const { title } = useBreadcrumb();
+  const router = useRouter();
 
   // State to manage sticky class
   const [isSticky, setIsSticky] = useState(false);
@@ -111,12 +59,14 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
 
   return (
     <div className={`header ${isSticky ? 'sticky' : ''}`}>
-
-      {isMobile ? (
-        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />
-      ) : (
-        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />
-      )}
+      {isMobile && <Image src={logo.src} alt="logo" width={30} height={30} onClick={() => router.push(
+        userType === 'employee'
+          ? `/${companySlug}/employee/dashboard`
+          : `/`
+      )
+      }
+      />}
+      {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
       <h1 className='header-title'>{title}</h1>
       <div className="nav-container">
         <SearchBar />
@@ -125,6 +75,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         </Link>
         <Profile />
       </div>
+      {isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />}
     </div>
 
   );

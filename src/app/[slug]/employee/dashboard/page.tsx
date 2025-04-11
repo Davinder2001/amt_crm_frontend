@@ -1,11 +1,21 @@
-import React from 'react'
+"use client";
+import React, { useEffect } from 'react'
+import ListOverview from './components/ListOverview'
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
-function EmployeeDashboard() {
-    return (
-        <>
-            <h1>Employee Dashboard</h1>
-        </>
-    )
+function Page() {
+  const { setTitle } = useBreadcrumb();
+
+  useEffect(() => {
+    setTitle('Overview'); // Update breadcrumb title
+  }, [setTitle]);
+  return (
+    <>
+      <div className="dashboard-page">
+        <ListOverview />
+      </div>
+    </>
+  )
 }
 
-export default EmployeeDashboard
+export default Page

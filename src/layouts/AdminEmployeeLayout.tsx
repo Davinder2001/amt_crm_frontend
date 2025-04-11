@@ -65,7 +65,7 @@ export const AdminEmployeeLayout = ({
   return (
     <div className="main">
       <div
-        className={`sidebar ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
+        className={`sidebar ${isSidebarExpanded ? 'expanded-view' : 'collapse-view'} ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
         style={{
           width: isMobile ? '90%' : isSidebarExpanded ? '250px' : '60px',
         }}

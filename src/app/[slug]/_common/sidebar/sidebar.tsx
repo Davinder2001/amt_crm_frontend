@@ -5,6 +5,8 @@ import { useCompany } from "@/utils/Company";
 import { FaTimesCircle } from "react-icons/fa";
 import AdminNavs from "./AdminNavs";
 import EmployeeNavs from "./EmployeeNavs";
+import Image from "next/image";
+import { logo } from "@/assets/useImage";
 
 interface sidebarProps {
   isSidebarExpanded: boolean;
@@ -13,7 +15,7 @@ interface sidebarProps {
 }
 
 const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu }) => {
-  const { userType } = useCompany();
+  const { userType, companySlug } = useCompany();
 
   const renderNav = () => {
     if (userType === "employee") {
@@ -30,9 +32,9 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
       <div className="sidebar-header">
         {isMobile ? (
           <>
-            <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`} onClick={openMenu}>
-              AMT CRM
-            </Link>
+            <Link href={`${userType === 'employee'
+              ? `/${companySlug}/employee/dashboard`
+              : `/`}`} className="logo-wrapper" onClick={openMenu}><Image src={logo.src} alt="logo" width={50} height={50} /> <span>AMT CRM</span></Link>
             <FaTimesCircle
               size={20}
               style={{ cursor: "pointer" }}
@@ -41,9 +43,13 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
             />
           </>
         ) : isSidebarExpanded ? (
-          <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`}>AMT CRM</Link>
+          <Link href={`${userType === 'employee'
+            ? `/${companySlug}/employee/dashboard`
+            : `/`}`} className="logo-wrapper"><Image src={logo.src} alt="logo" width={50} height={50} /> <span>AMT CRM</span></Link>
         ) : (
-          <Link href={`${userType === "employee" ? "/employee/dashboard" : "/"}`}>A</Link>
+          <Link href={`${userType === 'employee'
+            ? `/${companySlug}/employee/dashboard`
+            : `/`}`} className="logo-wrapper"><Image src={logo.src} alt="logo" width={30} height={30} /></Link>
         )}
       </div>
       {renderNav()}

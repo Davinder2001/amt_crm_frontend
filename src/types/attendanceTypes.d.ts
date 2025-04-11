@@ -16,7 +16,7 @@ interface Attendance {
 
 // AttendanceResponse type for the array of attendances
 interface AttendanceResponse {
-    attendances: Attendance[];
+    attendances: Attendance[];   // ✅ This is an array
 }
 
 // AttendanceRequest type for submitting attendance data (e.g., when marking attendance)

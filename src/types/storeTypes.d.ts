@@ -31,10 +31,11 @@ interface attributes {
 }
 
 interface variations {
-  [key: string]: any;
   price: number;
+  stock?: number;
   attributes: attributes[];
 }
+
 interface CreateStoreItemRequest {
   name: string;
   quantity_count: number;

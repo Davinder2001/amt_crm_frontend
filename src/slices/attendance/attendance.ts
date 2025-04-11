@@ -1,109 +1,14 @@
-// import attendanceCreateApiSlice from "./attendanceCreateApiSlice";
-
-// interface Attendance {
-//   id: number;
-//   user_id: number;
-//   company_id: number;
-//   attendance_date: string;
-//   clock_in: string | null;
-//   clock_in_image: string | null;
-//   clock_out: string | null;
-//   clock_out_image: string | null;
-//   status: string | null;
-//   approval_status: string | null;
-//   created_at: string;
-//   updated_at: string;
-//   user: User;
-// }
-
-// interface User {
-//   id: number;
-//   name: string;
-//   email: string;
-//   number: string;
-//   uid: string;
-// }
-
-// interface AttendanceResponse {
-//   attendances: Attendance[];
-//   attendance: Attendance[];
-//   User: Attendance[];
-// }
-
-// const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
-//   endpoints: (builder) => ({
-//     fetchAttenances: builder.query<AttendanceResponse, void>({
-//       query: () => 'attendances',
-//       providesTags: ['Attendance'],
-//     }),
-
-//     recordAttendance: builder.mutation<FormData, { image: File | Blob }>({
-//       query: (data) => {
-//         const formData = new FormData();
-//         formData.append('image', data.image);
-//         return {
-//           url: 'attendance',
-//           method: 'POST',
-//           body: formData,
-//         };
-//       },
-//       invalidatesTags: ['Attendance'],
-//     }),
-
-//     updateAttendance: builder.mutation<AttendanceResponse, AttendanceRequest>({
-//       query: (id) => ({
-//         url: `attendance/${id}`,
-//         method: 'PUT',
-//         body: id,
-//       }),
-//       invalidatesTags: ['Attendance'],
-//     }),
-
-//     approveAttendance: builder.mutation<AttendanceResponse, number>({
-//       query: (id) => ({
-//         url: `attendance/approve/${id}`,
-//         method: 'PUT',
-//       }),
-//       invalidatesTags: ['Attendance'],
-//     }),
-
-//     rejectAttendance: builder.mutation<AttendanceResponse, number>({
-//       query: (id) => ({
-//         url: `attendance/reject/${id}`,
-//         method: 'PUT',
-//       }),
-//       invalidatesTags: ['Attendance'],
-//     }),
-
-//     applyForLeave: builder.mutation<AttendanceResponse, void>({
-//       query: () => ({
-//         url: 'apply-for-leave',
-//         method: 'POST',
-//       }),
-//       invalidatesTags: ['Attendance'],
-//     }),
-//   }),
-// });
-
-// export const {
-//   useFetchAttenancesQuery,
-//   useRecordAttendanceMutation,
-//   useUpdateAttendanceMutation,
-//   useApproveAttendanceMutation,
-//   useRejectAttendanceMutation,
-//   useApplyForLeaveMutation,
-// } = attendanceCreateApi;
-
-// export default attendanceCreateApi;
-
-
-
-
-
-
 import attendanceCreateApiSlice from "./attendanceCreateApiSlice";
 
-interface Attendance {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  number: string;
+  uid: string;
+}
+
+export interface Attendance {
   id: number;
   user_id: number;
   company_id: number;
@@ -119,72 +24,73 @@ interface Attendance {
   user: User;
 }
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  number: string;
-  uid: string;
+interface AttendanceResponse {
+  attendances: Attendance[];   // For lists
+  attendance: Attendance;      // For single item (e.g. detail/edit)
 }
 
-interface AttendanceResponse {
-  attendances: Attendance[];
-  attendance: Attendance[];
-  User: Attendance[];
+export interface AttendanceRequest {
+  id: number;
+  attendance_date?: string;
+  clock_in?: string;
+  clock_out?: string;
+  status?: string;
+  approval_status?: string;
+  // Add any fields that may be updated
 }
 
 const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchAttenances: builder.query<AttendanceResponse, void>({
-      query: () => 'attendances',
-      providesTags: ['Attendance'],
+      query: () => "attendances",
+      providesTags: ["Attendance"],
     }),
 
-    recordAttendance: builder.mutation<FormData, { image: File | Blob }>({
+    recordAttendance: builder.mutation<Attendance, { image: File | Blob }>({
       query: (data) => {
         const formData = new FormData();
-        formData.append('image', data.image);
+        formData.append("image", data.image);
         return {
-          url: 'attendance',
-          method: 'POST',
+          url: "attendance",
+          method: "POST",
           body: formData,
         };
       },
-      invalidatesTags: ['Attendance'],
+      invalidatesTags: ["Attendance"],
     }),
 
-    updateAttendance: builder.mutation<AttendanceResponse, AttendanceRequest>({
-      query: (id) => ({
-        url: `attendance/${id}`,
-        method: 'PUT',
-        body: id,
+    updateAttendance: builder.mutation<Attendance, AttendanceRequest>({
+      query: (payload) => ({
+        url: `attendance/${payload.id}`,
+        method: "PUT",
+        body: payload,
       }),
-      invalidatesTags: ['Attendance'],
+      invalidatesTags: ["Attendance"],
     }),
 
-    approveAttendance: builder.mutation<AttendanceResponse, number>({
+    approveAttendance: builder.mutation<Attendance, number>({
       query: (id) => ({
         url: `attendance/approve/${id}`,
-        method: 'PUT',
+        method: "PUT",
       }),
-      invalidatesTags: ['Attendance'],
+      invalidatesTags: ["Attendance"],
     }),
 
-    rejectAttendance: builder.mutation<AttendanceResponse, number>({
+    rejectAttendance: builder.mutation<Attendance, number>({
       query: (id) => ({
         url: `attendance/reject/${id}`,
-        method: 'PUT',
+        method: "PUT",
       }),
-      invalidatesTags: ['Attendance'],
+      invalidatesTags: ["Attendance"],
     }),
 
     applyForLeave: builder.mutation<AttendanceResponse, { dates: string[] }>({
       query: (data) => ({
-        url: 'apply-for-leave',
-        method: 'POST',
+        url: "apply-for-leave",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Attendance'],
+      invalidatesTags: ["Attendance"],
     }),
   }),
 });

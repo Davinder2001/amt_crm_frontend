@@ -64,20 +64,22 @@ const AddInvoiceForm = () => {
     setIsAutocompleteVisible(false);
   };
 
-  const addItem = () => {
-    setItems([
-      ...items,
-      {
-        item_id: nextItemId,
-        name: "",
-        description: "",
-        quantity: 1,
-        unit_price: 0,
-        price: 0,
-      },
-    ]);
-    setNextItemId(nextItemId + 1);
-  };
+const addItem = () => {
+  setItems([
+    ...items,
+    {
+      item_id: nextItemId,
+      name: "",
+      description: "",
+      quantity: 1,
+      unit_price: 0,
+      price: 0,
+      total: 0, // ✅ Add this line
+    },
+  ]);
+  setNextItemId(nextItemId + 1);
+};
+
 
   const removeItem = (item_id: number) => {
     setItems(items.filter((item) => item.item_id !== item_id));

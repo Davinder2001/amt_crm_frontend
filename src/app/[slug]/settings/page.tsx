@@ -12,6 +12,7 @@ const Page = () => {
   return (
     <>
       <Link href="settings/store-settings">Store Settings</Link>
+      <Link href="settings/shifts">Shifts</Link>
     </>
   )
 }

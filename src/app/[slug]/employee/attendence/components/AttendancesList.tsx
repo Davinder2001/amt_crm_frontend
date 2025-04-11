@@ -1,13 +1,26 @@
 'use client';
-import { useFetchAttenancesQuery } from '@/slices/attendance/attendance';
+
+import { useFetchAttenancesQuery, Attendance as APIAttendance } from '@/slices/attendance/attendance';
 import Image from 'next/image';
 import React from 'react';
 
+// If you want to alias the API type locally:
+type Attendance = APIAttendance & {
+  user: {
+    name: string;
+    uid: string;
+  };
+};
 
 function AttendancesList() {
   const { data } = useFetchAttenancesQuery();
-  const attendanceList = data?.attendance || [];
-
+  const attendanceList: Attendance[] = (data?.attendances ?? []).filter(
+    (a): a is Attendance =>
+      a.status !== null &&
+      a.approval_status !== null &&
+      typeof a.user === 'object' &&
+      a.user !== null
+  );
 
   return (
     <div className='employee-attendence-view'>
@@ -25,70 +38,74 @@ function AttendancesList() {
               <th>Clock Out Image</th>
               <th>Status</th>
               <th>Approval Status</th>
-  
             </tr>
           </thead>
           <tbody>
             {attendanceList.map((attendance) => (
               <tr key={attendance.id}>
                 <td>{attendance.id}</td>
-                <td>{attendance.user.name}</td>
-                <td>{attendance.user.uid}</td>
+                <td>{attendance.user?.name}</td>
+                <td>{attendance.user?.uid}</td>
                 <td>{attendance.attendance_date}</td>
-                <td>{attendance.clock_in}</td>
+                <td>{attendance.clock_in ?? '-'}</td>
                 <td>
                   {attendance.clock_in_image && (
                     <Image
-                      src={`${attendance.clock_in_image}`}
+                      src={attendance.clock_in_image}
                       alt="Clock In"
                       width={50}
                       height={50}
                     />
                   )}
                 </td>
-                <td>{attendance.clock_out}</td>
+                <td>{attendance.clock_out ?? '-'}</td>
                 <td>
                   {attendance.clock_out_image && (
-                  <Image
-                    alt="Preview"
-                    src={`${attendance.clock_out_image}`}
-                    width={100}
-                    height={100}
-                    unoptimized
-                  />
-                )}
+                    <Image
+                      alt="Clock Out"
+                      src={attendance.clock_out_image}
+                      width={100}
+                      height={100}
+                      unoptimized
+                    />
+                  )}
                 </td>
                 <td className='user-status'>
-                <div
+                  <div
                     className="status"
                     style={{
-                        backgroundColor:
-                            attendance.status === 'present' ? '#009693' :
-                            attendance.status === 'leave' ? 'yellow' :
-                            attendance.status === 'absent' ? 'red' :
-                            'gray',
-                        color: attendance.status === 'leave' ? 'black' : 'white'
+                      backgroundColor:
+                        attendance.status === 'present'
+                          ? '#009693'
+                          : attendance.status === 'on_leave'
+                          ? 'yellow'
+                          : attendance.status === 'absent'
+                          ? 'red'
+                          : 'gray',
+                      color: attendance.status === 'on_leave' ? 'black' : 'white',
                     }}
-                >
+                  >
                     {attendance.status}
-                </div>
-            </td>
-
-            <td className='approval-status'>
-                <div
+                  </div>
+                </td>
+                <td className='approval-status'>
+                  <div
                     className="status"
                     style={{
-                        backgroundColor:
-                            attendance.approval_status === 'approved' ? '#009693' :
-                            attendance.approval_status === 'pending' ? 'yellow' :
-                            attendance.approval_status === 'unapproved' ? 'red' :
-                            'gray',
-                        color: attendance.approval_status === 'pending' ? 'black' : 'white'
+                      backgroundColor:
+                        attendance.approval_status === 'approved'
+                          ? '#009693'
+                          : attendance.approval_status === 'pending'
+                          ? 'yellow'
+                          : attendance.approval_status === 'unapproved'
+                          ? 'red'
+                          : 'gray',
+                      color: attendance.approval_status === 'pending' ? 'black' : 'white',
                     }}
-                >
+                  >
                     {attendance.approval_status}
-                </div>
-            </td>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -15,12 +15,25 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Invoice"],
     }),
+
+    getInvoiceById: builder.query<Invoice, string | number>({
+      query: (id) => `invoices/${id}`,
+      providesTags: (result, error, id) => [{ type: "Invoice", id }],
+    }),
+
+    downloadInvoicePdf: builder.query<Blob, string | number>({
+      query: (id) => ({
+        url: `invoices/${id}/download`,
+      }),
+    }),
   }),
 });
 
 export const {
   useFetchInvoicesQuery,
   useCreateInvoiceMutation,
+  useGetInvoiceByIdQuery,
+  useLazyDownloadInvoicePdfQuery,
 } = invoiceApi;
 
 export default invoiceApi;

@@ -25,6 +25,7 @@ const HrNavigation = () => {
         </a>
         <Link href={`/${companySlug}/hr/status-view`}><span>Status View</span></Link>
         <Link href={`/${companySlug}/hr/employee-salary`}><span>Employee Salary</span></Link>
+        <Link href={`/${companySlug}/attendence`}><span>Attendances</span></Link>
       </div>
 
       {/* Render InviteEmployeeForm as a popup when state is true */}

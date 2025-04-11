@@ -1,34 +1,39 @@
 import React from "react";
-import { useFetchInvoicesQuery } from "@/slices/invoices/invoice";
+import { useRouter } from "next/navigation";
+import { useFetchInvoicesQuery, useLazyDownloadInvoicePdfQuery } from "@/slices/invoices/invoice";
 
 const AllInvoices = () => {
   const { data, isLoading, isError } = useFetchInvoicesQuery();
+  const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
+  const router = useRouter();
 
-  const handleViewPdf = (base64: string) => {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length)
-      .fill(0)
-      .map((_, i) => byteCharacters.charCodeAt(i));
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "application/pdf" });
+  const handleDownloadPdf = async (invoiceId: number) => {
+    try {
+      const result = await triggerDownload(invoiceId).unwrap();
 
-    const url = URL.createObjectURL(blob);
-    window.open(url);
+      const byteCharacters = atob(result.pdf_base64);
+      const byteNumbers = new Array(byteCharacters.length)
+        .fill(0)
+        .map((_, i) => byteCharacters.charCodeAt(i));
+      const byteArray = new Uint8Array(byteNumbers);
+
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = result.filename || `invoice_${invoiceId}.pdf`;
+      link.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (err) {
+      console.error("Download error:", err);
+      alert("Failed to fetch the PDF.");
+    }
   };
 
-  const handleDownloadPdf = (base64: string, fileName: string) => {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length)
-      .fill(0)
-      .map((_, i) => byteCharacters.charCodeAt(i));
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "application/pdf" });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = fileName || "invoice.pdf";
-    link.click();
+  const handleViewInvoice = (invoiceId: number) => {
+    router.push(`invoices/view/${invoiceId}`);
   };
 
   if (isLoading) return <p>Loading invoices...</p>;
@@ -45,8 +50,7 @@ const AllInvoices = () => {
               <th className="p-2 border">Client</th>
               <th className="p-2 border">Date</th>
               <th className="p-2 border">Total (₹)</th>
-              <th className="p-2 border">Items</th>
-              <th className="p-2 border">PDF</th>
+              <th className="p-2 border">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -57,33 +61,22 @@ const AllInvoices = () => {
                 <td className="p-2 border">{invoice.client_name}</td>
                 <td className="p-2 border">{invoice.invoice_date}</td>
                 <td className="p-2 border">₹{invoice.total_amount}</td>
+      
                 <td className="p-2 border">
-                  {invoice.items.map((item) => item.description).join(", ")}
-                </td>
-                <td className="p-2 border">
-                  {invoice.pdf_base64 ? (
-                    <div className="invoice-v-d-button-container">
-                      <button
-                        onClick={() => handleViewPdf(invoice.pdf_base64)}
-                        className="buttons"
-                      >
-                        View
-                      </button> 
-                      <button
-                        onClick={() =>
-                          handleDownloadPdf(
-                            invoice.pdf_base64,
-                            `invoice_${invoice.id}.pdf`
-                          )
-                        }
-                        className="buttons"
-                      >
-                        Download
-                      </button>
-                    </div>
-                  ) : (
-                    <span className="text-gray-400">Not Generated</span>
-                  )}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleViewInvoice(invoice.id)}
+                      className="buttons"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => handleDownloadPdf(invoice.id)}
+                      className="buttons"
+                    >
+                      Download
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

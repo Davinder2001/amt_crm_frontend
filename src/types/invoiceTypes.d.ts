@@ -6,7 +6,9 @@ interface InvoiceItem {
   quantity: number;
   unit_price: number;
   price: number;
+  total: number;
 }
+
 
 interface Invoice {
   id: number;

@@ -4,6 +4,7 @@ interface StoreItem {
   quantity_count: number;
   price: number;
   quantity: number;
+  selling_price: number;
   measurement: string | null;
   purchase_date: string | null;
   date_of_manufacture: string;

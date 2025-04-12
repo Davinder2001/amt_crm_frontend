@@ -97,7 +97,7 @@ const AddItem: React.FC = () => {
     // Attach variants
     variations.forEach((variation, i) => {
       form.append(`variants[${i}][price]`, variation.price.toString());
-    
+
       // 🔁 Build nested attribute list correctly
       variation.attributes.forEach((attr, attrIndex) => {
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
@@ -111,7 +111,7 @@ const AddItem: React.FC = () => {
         }
       });
     });
-    
+
 
     try {
       await createStoreItem(form).unwrap();
@@ -127,94 +127,94 @@ const AddItem: React.FC = () => {
         <FaArrowLeft size={20} color='#fff' />
       </Link>
 
-      <form onSubmit={handleSubmit} className='add-items-form-container'>
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Name*</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
+      <form onSubmit={handleSubmit}>
+        <div className='add-items-form-container'>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Name*</label>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Quantity Count*</label>
-          <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Quantity Count*</label>
+            <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Measurement</label>
-          <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Measurement</label>
+            <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Purchase Date</label>
-          <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Purchase Date</label>
+            <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Date Of Manufacture*</label>
-          <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Date Of Manufacture*</label>
+            <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Date Of Expiry</label>
-          <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Date Of Expiry</label>
+            <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Brand Name*</label>
-          <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Brand Name*</label>
+            <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Replacement</label>
-          <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Replacement</label>
+            <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Category</label>
-          <input type="text" name="category" value={formData.category} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Category</label>
+            <input type="text" name="category" value={formData.category} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Cost Price*</label>
-          <input type="number" name="cost_price" value={formData.cost_price} onChange={handleChange} required />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Cost Price*</label>
+            <input type="number" name="cost_price" value={formData.cost_price} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Selling Price*</label>
-          <input type="number" name="selling_price" value={formData.selling_price} onChange={handleChange} required />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Selling Price*</label>
+            <input type="number" name="selling_price" value={formData.selling_price} onChange={handleChange} required />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Availability Stock</label>
-          <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Availability Stock</label>
+            <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <label>Vendor Name*</label>
-          <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>
-            <option value="">Select Vendor</option>
-            {vendors.length > 0 ? (
-              vendors.map((vendor, index) => (
-                <option key={index} value={vendor}>{vendor}</option>
-              ))
-            ) : (
-              <option>No vendors available</option>
-            )}
-          </select>
-          <AddVendor onVendorAdded={handleVendorAdded} />
-        </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Vendor Name*</label>
+            <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>
+              <option value="">Select Vendor</option>
+              {vendors.length > 0 ? (
+                vendors.map((vendor, index) => (
+                  <option key={index} value={vendor}>{vendor}</option>
+                ))
+              ) : (
+                <option>No vendors available</option>
+              )}
+            </select>
+            <AddVendor onVendorAdded={handleVendorAdded} />
+          </div>
 
-        <div style={{ flex: '1 1 300px' }}>
-          <AddAttributes onChange={setVariations} />
+          <div className='add-item-form-image'>
+            <ImageUpload
+              images={formData.images}
+              handleImageChange={handleImageChange}
+              handleClearImages={handleClearImages}
+            />
+          </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <AddAttributes onChange={setVariations} />
+          </div>
         </div>
-
-        <div className='add-item-form-image'>
-          <ImageUpload
-            images={formData.images}
-            handleImageChange={handleImageChange}
-            handleClearImages={handleClearImages}
-          />
-        </div>
-
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button
             className='buttons'

@@ -4,7 +4,6 @@ interface StoreItem {
   quantity_count: number;
   price: number;
   quantity: number;
-  selling_price: number;
   measurement: string | null;
   purchase_date: string | null;
   date_of_manufacture: string;
@@ -20,10 +19,15 @@ interface StoreItem {
   category: string | null;
   vendor_name: string | null;
   availability_stock: number;
+  date_of_manufacture: string;
+  date_of_expiry: string | null;
+  category: string | null;
+  brand_name: string;
   created_at: string;
   updated_at: string;
   images: File[]
 }
+
 
 interface attributes {
   attribute_id: number | string;

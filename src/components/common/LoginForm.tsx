@@ -28,6 +28,8 @@ const LoginForm = () => {
       const result = await login({ number, password }).unwrap();
       toast.success(result.message);
 
+      console.log('Login result:', result);
+
       // Set cookies
       Cookies.set('access_token', result.access_token, { path: '/' });
       Cookies.set('user_type', result.user.user_type, { path: '/' });

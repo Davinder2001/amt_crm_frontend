@@ -43,7 +43,7 @@ const ListOverview = () => {
               <span className="icon-shell">
                 <item.icon color="#009693" size={20} />
               </span>
-              <div>
+              <div className="dash-card-content">
                 <p>{item.label}</p>
                 <h3 className={`value-count ${item.className || ""}`}>{item.value}</h3>
                 {item.extra && <span className="green">{item.extra}</span>}

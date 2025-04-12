@@ -83,11 +83,58 @@ p {
 }
 
 @media (max-width: 1024px) {
-    .overview-grid-container{
+    .overview-grid-container {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 }
 
+
+
 @media (max-width: 468px) {
+    .card {
+        gap: 8px;
+        padding: 10px 10px;
+
+.value-count {
+    font-size: 18px;
+}
+}
+}
+
+
+
+@media (max-width: 375px) {
+    
+    .overview-grid-container {
+    gap: 10px;
+    .card {
+
+        padding: 10px 10px;
+        display: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+
+        .icon-shell {
+            width: 35px;
+            height: 35px;
+        }
+    }
+    .dash-card-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .value-count {
+            font-size: 18px;
+        }
+    }
+    
+    }
 
 }
+
+
+
+

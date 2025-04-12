@@ -89,14 +89,125 @@ table {
 }
 
 @media (max-width: 768px) {
-  .table-view {
-    display: none;
-  }
+  // .table-view {
+  //   display: none;
+  // }
 
-  .card-view {
+  // .card-view {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 10px;
+  //   margin: 20px 0px;
+  // }
+
+
+
+  /* ResponsiveTable.css */
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+
+
+
+.responsive-table {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.table-view {
+  display: none; /* hide table view for mobile by default */
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.table-view table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.table-view th,
+.table-view td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table-view th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+}
+
+.card-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.t-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.card-row {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-row strong {
+  margin-right: 0.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-row span {
+  color: #555;
+}
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #00b4d8;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination-controls button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.store-t-e-e-icons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+}
+
+@media (max-width: 348px) {
+
+  .card-row {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 20px 0px;
+    justify-content: unset;
+
   }
 }

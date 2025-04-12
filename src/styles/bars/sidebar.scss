@@ -146,8 +146,11 @@
             max-height: 50vh;
 
             li {
-                padding: 20px;
+                padding: 15px 10px;
                 box-shadow: $box-shadow;
+                            a {
+                                gap: 10px;
+                            }             
             }
         }
     }
@@ -160,3 +163,4 @@
         transform: translateY(50vh);
     }
 }
+

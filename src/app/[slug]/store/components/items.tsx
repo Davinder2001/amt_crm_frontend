@@ -176,6 +176,8 @@ const Items: React.FC = () => {
     { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
     {
       label: 'Actions',
+      className: 'actions-column',
+
       render: (item: StoreItem) =>
         companySlug && (
           <div className="store-t-e-e-icons">

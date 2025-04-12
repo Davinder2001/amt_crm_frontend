@@ -6,6 +6,8 @@ type Column<T> = {
   label: string;
   key?: keyof T;
   render?: (item: T, index: number) => React.ReactNode;
+  className?: string;
+
 };
 
 type Props<T> = {
@@ -64,7 +66,7 @@ function ResponsiveTable<T>({ data, columns, itemsPerPage = 10 }: Props<T>) {
         {currentData.map((item, index) => (
           <div key={index} className="t-card">
             {columns.map((col, i) => (
-              <div key={i} className="card-row">
+              <div key={i} className={`card-row ${col.className || ''}`}>
                 <strong>{col.label}: </strong>
                 <span>
                   {col.render

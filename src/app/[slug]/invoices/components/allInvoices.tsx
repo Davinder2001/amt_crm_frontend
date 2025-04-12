@@ -11,18 +11,16 @@ const AllInvoices = () => {
     try {
       const result = await triggerDownload(invoiceId).unwrap();
 
-      const byteCharacters = atob(result.pdf_base64);
-      const byteNumbers = new Array(byteCharacters.length)
-        .fill(0)
-        .map((_, i) => byteCharacters.charCodeAt(i));
-      const byteArray = new Uint8Array(byteNumbers);
+      if (!(result instanceof Blob)) {
+        throw new Error("Invalid response: Expected a Blob object.");
+      }
 
-      const blob = new Blob([byteArray], { type: "application/pdf" });
+      const blob = result;
       const url = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = result.filename || `invoice_${invoiceId}.pdf`;
+      link.download = `invoice_${invoiceId}.pdf`;
       link.click();
 
       setTimeout(() => URL.revokeObjectURL(url), 60000);
@@ -61,7 +59,7 @@ const AllInvoices = () => {
                 <td className="p-2 border">{invoice.client_name}</td>
                 <td className="p-2 border">{invoice.invoice_date}</td>
                 <td className="p-2 border">₹{invoice.total_amount}</td>
-      
+
                 <td className="p-2 border">
                   <div className="flex gap-2">
                     <button

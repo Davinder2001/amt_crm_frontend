@@ -5,8 +5,6 @@ import { useFetchAllCustomersQuery } from "@/slices/customers/customer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-
 const AddInvoiceForm = () => {
   const [number, setNumber] = useState<string>("");
   const [clientName, setClientName] = useState<string>("");
@@ -64,21 +62,25 @@ const AddInvoiceForm = () => {
     setIsAutocompleteVisible(false);
   };
 
-const addItem = () => {
-  setItems([
-    ...items,
-    {
-      item_id: nextItemId,
-      name: "",
-      description: "",
-      quantity: 1,
-      unit_price: 0,
-      price: 0,
-      total: 0, // ✅ Add this line
-    },
-  ]);
-  setNextItemId(nextItemId + 1);
-};
+  const addItem = () => {
+    setItems([
+      ...items,
+      {
+        item_id: nextItemId,
+        name: "",
+        description: "",
+        quantity: 1,
+        unit_price: 0,
+        price: 0,
+        total: 0,
+        measurement: '',
+        date_of_manufacture: '',
+        date_of_expiry: '',
+      },
+    ]);
+    setNextItemId(nextItemId + 1);
+  };
+
 
 
   const removeItem = (item_id: number) => {
@@ -267,7 +269,7 @@ const addItem = () => {
                 <button
                   type="button"
                   className="remove-item"
-                  onClick={() => removeItem(item.item_id)}
+                  onClick={() => item.item_id !== null && removeItem(item.item_id)}
                 >
                   Remove
                 </button>

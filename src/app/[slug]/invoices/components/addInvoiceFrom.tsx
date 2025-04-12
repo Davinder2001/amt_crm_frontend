@@ -7,37 +7,6 @@ import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface StoreItem {
-  id: number;
-  name: string;
-  selling_price: number;
-  quantity_count: number;
-  measurement: string | null;
-  date_of_manufacture: string;
-  date_of_expiry: string | null;
-  category: string | null;
-  brand_name: string;
-}
-
-interface InvoiceItem {
-  item_id: number | null;
-  name: string;
-  description: string;
-  quantity: number;
-  unit_price: number;
-  price: number;
-  measurement: string;
-  date_of_manufacture: string;
-  date_of_expiry: string;
-}
-
-interface Customer {
-  id: number;
-  name: string;
-  number: string;
-  email?: string;
-}
-
 const AddInvoiceForm = () => {
   const [number, setNumber] = useState('');
   const [clientName, setClientName] = useState('');
@@ -66,12 +35,21 @@ const AddInvoiceForm = () => {
     }
   };
 
-  const handleItemChange = (index: number, field: keyof InvoiceItem, value: number | string) => {
+  const handleItemChange = <K extends keyof InvoiceItem>(
+    index: number,
+    field: K,
+    value: InvoiceItem[K]
+  ) => {
     const updated = [...items];
-    updated[index][field] = field === 'quantity' || field === 'unit_price' ? Number(value) : String(value);
-    updated[index].price = updated[index].quantity * updated[index].unit_price;
+    updated[index][field] = value;
+
+    if (field === 'quantity' || field === 'unit_price') {
+      updated[index].price = updated[index].quantity * updated[index].unit_price;
+    }
+
     setItems(updated);
   };
+
 
   const handleSelectItem = (index: number, storeItem: StoreItem) => {
     const price = storeItem.selling_price;
@@ -102,6 +80,7 @@ const AddInvoiceForm = () => {
         quantity: 1,
         unit_price: 0,
         price: 0,
+        total: 0,
         measurement: '',
         date_of_manufacture: '',
         date_of_expiry: ''
@@ -206,7 +185,7 @@ const AddInvoiceForm = () => {
               <input type="number" value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value, 10))} min={1} />
               <button type="button" onClick={() => incrementQuantity(index)}>+</button>
             </div>
-            <input type="number" value={item.unit_price} onChange={(e) => handleItemChange(index, 'unit_price', e.target.value)} placeholder="Unit Price" />
+            <input type="number" value={item.unit_price} onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))} placeholder="Unit Price" />
             <input type="text" value={item.measurement} disabled />
             <input type="date" value={item.date_of_manufacture} disabled />
             <input type="date" value={item.date_of_expiry} disabled />

@@ -1,12 +1,15 @@
 interface InvoiceItem {
-  item_id: number;
+  item_id: number | null;
   invoice_id?: number;
   name: string;
   description: string;
-  quantity: number;
   unit_price: number;
   price: number;
   total: number;
+  quantity: number;
+  measurement: string;
+  date_of_manufacture: string;
+  date_of_expiry: string;
 }
 
 

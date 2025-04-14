@@ -216,7 +216,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         <div className="toolbar" onMouseLeave={closeDropdown}>
             {/* Left Side: Filter */}
             <div className="left-group">
-                <div className="dropdown">
+                <div className="dropdown dropdown-left">
                     <button onClick={() => toggleDropdown('filter')}>
                         <FiFilter />
                         <span>Filter</span>
@@ -246,7 +246,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
 
             {/* Right Side: Columns & Actions */}
             <div className="right-group">
-                <div className="dropdown">
+                <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('columns')}>
                         <FiColumns />
                         <span>Columns</span>
@@ -267,7 +267,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     )}
                 </div>
 
-                <div className="dropdown">
+                <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('actions')}>
                         <FiSettings />
                         <span>Actions</span>
@@ -289,7 +289,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    gap: 1rem;
                     font-family: "DMSans", sans-serif;
                 }
 
@@ -325,15 +324,22 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 .dropdown-content {
                     position: absolute;
                     top: 50px;
-                    right: 0;
                     background: #ffffff;
                     border: 1px solid #ddd;
                     border-radius: 5px;
                     padding: 1rem;
                     box-shadow: 0px 18px 40px 0px #01969314;
-                    width: 240px;
+                    min-width: 240px;
                     animation: fadeIn 0.3s ease-in-out;
                     z-index: 100;
+                }
+
+                .dropdown-left .dropdown-content {
+                    left: 0;
+                }
+
+                .dropdown-right .dropdown-content {
+                    right: 0;
                 }
 
                 .section {

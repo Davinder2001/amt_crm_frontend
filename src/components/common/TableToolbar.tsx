@@ -323,7 +323,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
 
                 .dropdown-content {
                     position: absolute;
-                    top: 50px;
+                    top: 40px;
                     background: #ffffff;
                     border: 1px solid #ddd;
                     border-radius: 5px;

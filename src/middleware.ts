@@ -137,7 +137,7 @@ export function middleware(request: NextRequest) {
     if (userType === 'admin') {
 
       // ✅ Allow access to "/" after login only for admins
-      if (pathname === '/') {
+      if (userType === 'admin' && pathname === '/') {
         return NextResponse.next();
       }
       // Admin can ONLY access their own company routes and not /employee or /superadmin

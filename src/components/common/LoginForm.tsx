@@ -44,16 +44,14 @@ const LoginForm = () => {
       if (result.user.user_type === 'admin') {
         router.push('/');  // Admin goes to the root page
       } else if (result.user.user_type === 'employee') {
-        if (result.user.companies && result.user.companies.length === 1) {
-          const companySlug = result.user.companies[0].company_slug;
-          Cookies.set('company_slug', companySlug, { path: '/' });
-          router.push(`/${companySlug}/employee/dashboard`);
-        } else {
-          // Multiple companies, let them choose or go to the home page
-          router.push('/');
-        }
+        const companySlug = result.user.companies[0].company_slug;
+        Cookies.set('company_slug', companySlug, { path: '/' });
+        router.push(`/${companySlug}/employee/dashboard`);
       } else if (result.user.user_type === 'super-admin') {
         router.push('/superadmin/dashboard')
+      } else {
+        // Multiple companies, let them choose or go to the home page
+        router.push('/');
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

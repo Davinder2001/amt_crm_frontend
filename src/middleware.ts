@@ -116,9 +116,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (userType === 'admin') {
-    if (laravelSession) {
+    if (laravelSession && userType) {
       return NextResponse.redirect(new URL('/', request.url));
     }
+    return NextResponse.next();
   }
 
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { authRoutes, adminRoutes, employeeRoutes, publicRoutes } from '@/routes';
+import { authRoutes, adminRoutes, publicRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get('access_token');

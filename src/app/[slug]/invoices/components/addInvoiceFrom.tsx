@@ -155,9 +155,10 @@ const AddInvoiceForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="invoice-form">
-      <div>
-        <label>Client Number</label>
+      <div className="form-group">
+        <label className="form-label">Client Number</label>
         <input
+          className="form-input"
           type="number"
           value={number}
           onChange={(e) => setNumber(e.target.value)}
@@ -165,26 +166,32 @@ const AddInvoiceForm = () => {
           required
         />
       </div>
-      <div>
-        <label>Client Name</label>
+
+      <div className="form-group">
+        <label className="form-label">Client Name</label>
         <input
+          className="form-input"
           type="text"
           value={clientName}
           onChange={(e) => setClientName(e.target.value)}
           required
         />
       </div>
-      <div>
-        <label>Client Email</label>
+
+      <div className="form-group">
+        <label className="form-label">Client Email</label>
         <input
+          className="form-input"
           type="email"
           value={clientEmail}
           onChange={(e) => setClientEmail(e.target.value)}
         />
       </div>
-      <div>
-        <label>Invoice Date</label>
+
+      <div className="form-group">
+        <label className="form-label">Invoice Date</label>
         <input
+          className="form-input"
           type="date"
           value={invoiceDate}
           onChange={(e) => setInvoiceDate(e.target.value)}
@@ -192,26 +199,30 @@ const AddInvoiceForm = () => {
         />
       </div>
 
-      <div>
-        <label>Items</label>
+      <div className="form-group">
+        <label className="form-label">Items</label>
         {items.map((item, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              value={item.name}
-              onFocus={() => {
-                setActiveItemIndex(index);
-                setIsAutocompleteVisible(true);
-              }}
-              onChange={(e) => handleItemInputChange(index, e.target.value)}
-              required
-            />
+          <div className="item-group" key={index}>
+            <div className="item-field">
+              <input
+                className="form-input"
+                type="text"
+                value={item.name}
+                onFocus={() => {
+                  setActiveItemIndex(index);
+                  setIsAutocompleteVisible(true);
+                }}
+                onChange={(e) => handleItemInputChange(index, e.target.value)}
+                required
+              />
+            </div>
 
             {isAutocompleteVisible && activeItemIndex === index && item.name && (
-              <ul>
+              <ul className="autocomplete-list">
                 {filteredStoreItems.map(storeItem => (
                   <li
                     key={storeItem.id}
+                    className="autocomplete-item"
                     onClick={() => handleSelectItem(index, storeItem)}
                     style={{ cursor: 'pointer' }}
                   >
@@ -221,44 +232,88 @@ const AddInvoiceForm = () => {
               </ul>
             )}
 
-            <div>
-              <label>Quantity</label>
-              <button type="button" onClick={() => decrementQuantity(index)}>-</button>
+            <div className="quantity-controls">
+              <label className="form-label">Quantity</label>
+              <button
+                type="button"
+                className="quantity-btn"
+                onClick={() => decrementQuantity(index)}
+              >
+                -
+              </button>
               <input
+                className="form-input quantity-display"
                 type="number"
                 value={item.quantity}
                 onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value, 10))}
                 min={1}
               />
-              <button type="button" onClick={() => incrementQuantity(index)}>+</button>
+              <button
+                type="button"
+                className="quantity-btn"
+                onClick={() => incrementQuantity(index)}
+              >
+                +
+              </button>
             </div>
-            <input
-              type="number"
-              value={item.unit_price}
-              onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
-              placeholder="Unit Price"
-            />
-            <input type="text" value={item.measurement} disabled />
-            <input type="date" value={item.date_of_manufacture} disabled />
-            <input type="date" value={item.date_of_expiry} disabled />
-            <textarea
-              value={item.description}
-              onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-              placeholder="Description"
-            />
-            <p>Subtotal: ₹{typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}</p>
+
+            <div className="item-field">
+              <input
+                className="form-input"
+                type="number"
+                value={item.unit_price}
+                onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
+                placeholder="Unit Price"
+              />
+            </div>
+
+            <div className="item-field">
+              <input className="form-input" type="text" value={item.measurement} disabled />
+            </div>
+
+            <div className="item-field">
+              <input className="form-input" type="date" value={item.date_of_manufacture} disabled />
+            </div>
+
+            <div className="item-field">
+              <input className="form-input" type="date" value={item.date_of_expiry} disabled />
+            </div>
+
+            <div className="item-field">
+              <textarea
+                className="form-input"
+                value={item.description}
+                onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                placeholder="Description"
+              />
+            </div>
+
+            <p className="subtotal">
+              Subtotal: ₹{typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}
+            </p>
+
             {items.length > 1 && (
-              <button type="button" onClick={() => removeItem(index)}>Remove</button>
+              <button
+                type="button"
+                className="remove-item"
+                onClick={() => removeItem(index)}
+              >
+                Remove
+              </button>
             )}
           </div>
         ))}
-        <button type="button" onClick={addItem}>Add Item</button>
+
+        <button type="button" className="add-item-btn" onClick={addItem}>
+          Add Item
+        </button>
       </div>
 
-      <button type="submit" disabled={isLoading}>
+      <button type="submit" className="submit-btn" disabled={isLoading}>
         {isLoading ? 'Submitting...' : 'Create Invoice'}
       </button>
     </form>
+
   );
 };
 

@@ -107,7 +107,7 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
   // ✅ Allow access to public routes (even if not logged in)
-  
+
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
@@ -135,17 +135,16 @@ export function middleware(request: NextRequest) {
 
     if (userType === 'admin') {
 
-      // ✅ Allow access to "/" after login only for admins
-      if (pathname === '/') {
-        return NextResponse.next();
-      }
       // 👉 Redirect to "/" if:
       // - `companySlug` is null/undefined/empty
       // - OR pathname doesn't start with `/${companySlug}`
       if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));
       }
-
+      // ✅ Allow access to "/" after login only for admins
+      if (laravelSession && pathname === '/') {
+        return NextResponse.next();
+      }
       // Admin can ONLY access their own company routes and not /employee or /superadmin
       if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));

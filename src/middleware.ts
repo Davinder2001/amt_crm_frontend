@@ -107,14 +107,6 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
 
-  if (userType === 'admin') {
-    if (laravelSession && userType) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-    return NextResponse.next();
-  }
-
-
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {

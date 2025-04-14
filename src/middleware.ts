@@ -124,11 +124,9 @@ export function middleware(request: NextRequest) {
     const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
     if (userType === 'super-admin') {
-      if (pathname === "/") {
-        return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-      }
+
       // Super admin can ONLY access /superadmin/*
-      if (!isSuperAdminPath) {
+      if (!isSuperAdminPath || pathname === "/login" || pathname === "/") {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
       return NextResponse.next();
@@ -148,7 +146,7 @@ export function middleware(request: NextRequest) {
       }
 
       // Admin can ONLY access their own company routes and not /employee or /superadmin
-      if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname)) {
+      if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
       return NextResponse.next();
@@ -160,7 +158,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
       }
       // Employee can ONLY access their company's /employee routes
-      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname)) {
+      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
       }
       return NextResponse.next();
@@ -169,7 +167,7 @@ export function middleware(request: NextRequest) {
     if (userType === 'user') {
       // You can customize this logic based on what normal users should access
       // Right now, blocking them from all protected routes
-      if (!publicRoutes.includes(pathname)) {
+      if (!publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL('/', request.url));
       }
       return NextResponse.next();

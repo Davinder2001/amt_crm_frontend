@@ -67,10 +67,8 @@ const LoginForm = () => {
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
     const userType = Cookies.get('user_type');
-    if (accessToken && userType) {
-      setUser(user); // Set the user from context if already logged in
-    } else {
-      setUser(null); // Clear user if not logged in
+    if (!accessToken && !userType) {
+      setUser(null);
     }
   }, [setUser, user]);
 

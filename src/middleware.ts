@@ -129,7 +129,11 @@ export function middleware(request: NextRequest) {
   // Admin
   if (userType === 'admin') {
     const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
-
+    
+    // Allow access to public routes
+    if (publicRoutes.includes(pathname)) {
+      return NextResponse.next();
+    }
     if (pathname === '/') {
       return NextResponse.next(); // Allow "/"
     }
@@ -170,11 +174,6 @@ export function middleware(request: NextRequest) {
     if (!publicRoutes.includes(pathname) || pathname === '/login') {
       return NextResponse.redirect(new URL('/', request.url));
     }
-    return NextResponse.next();
-  }
-
-   // Allow access to public routes
-   if (publicRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 

@@ -106,10 +106,15 @@ export function middleware(request: NextRequest) {
   if (companySlug === 'undefined' || companySlug === '') {
     companySlug = undefined;
   }
-  // ✅ Allow access to public routes (even if not logged in)
-  if (publicRoutes.includes(pathname)) {
+
+  if (userType === 'user' || userType === 'admin') {
+    // Block user from protected routes
+    if (!publicRoutes.includes(pathname)) {
+      return NextResponse.next();
+    }
     return NextResponse.next();
   }
+
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
@@ -124,50 +129,49 @@ export function middleware(request: NextRequest) {
     const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
     if (userType === 'super-admin') {
-
-      // Super admin can ONLY access /superadmin/*
-      if (!isSuperAdminPath || pathname === "/login" || pathname === "/") {
+      // ✅ Redirect super-admin if they hit "/", "/login", or any non-/superadmin route
+      if (!isSuperAdminPath || pathname === '/login' || pathname === '/') {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
       return NextResponse.next();
     }
 
     if (userType === 'admin') {
-
-      // ✅ Allow access to "/" after login only for admins
+      // ✅ Allow "/" for admin
       if (pathname === '/') {
         return NextResponse.next();
       }
-      // 👉 Redirect to "/" if:
-      // - `companySlug` is null/undefined/empty
-      // - OR pathname doesn't start with `/${companySlug}`
+      // Redirect if not accessing their own company area
       if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));
       }
-
-      // Admin can ONLY access their own company routes and not /employee or /superadmin
-      if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
+      // Block access to /employee or /superadmin paths
+      if (!isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
       return NextResponse.next();
     }
 
     if (userType === 'employee') {
-
-      if (pathname === "/") {
+      if (pathname === '/') {
         return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
       }
-      // Employee can ONLY access their company's /employee routes
-      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
+      if (
+        !companySlug ||
+        !isEmployeePath ||
+        isSuperAdminPath ||
+        pathname === `/${companySlug}` ||
+        publicRoutes.includes(pathname) ||
+        pathname === '/login'
+      ) {
         return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
       }
       return NextResponse.next();
     }
 
     if (userType === 'user') {
-      // You can customize this logic based on what normal users should access
-      // Right now, blocking them from all protected routes
-      if (!publicRoutes.includes(pathname) || pathname === "/login") {
+      // Block user from protected routes
+      if (!publicRoutes.includes(pathname) || pathname === '/login') {
         return NextResponse.redirect(new URL('/', request.url));
       }
       return NextResponse.next();

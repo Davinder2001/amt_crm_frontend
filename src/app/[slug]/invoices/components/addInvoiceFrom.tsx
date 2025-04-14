@@ -5,7 +5,6 @@ import { useCreateInvoiceMutation } from '@/slices/invoices/invoice';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const AddInvoiceForm = () => {
   const [number, setNumber] = useState('');
@@ -15,10 +14,12 @@ const AddInvoiceForm = () => {
   const [items, setItems] = useState<InvoiceItem[]>([]);
   const [filteredStoreItems, setFilteredStoreItems] = useState<StoreItem[]>([]);
   const [isAutocompleteVisible, setIsAutocompleteVisible] = useState(false);
+  const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null);
 
   const [createInvoice, { isLoading }] = useCreateInvoiceMutation();
   const { data: customers } = useFetchAllCustomersQuery();
   const { data: storeData } = useFetchStoreQuery();
+
   const storeItems: StoreItem[] = (storeData || []).map(item => ({
     ...item,
     measurement: item.measurement ?? '',
@@ -44,15 +45,16 @@ const AddInvoiceForm = () => {
     updated[index][field] = value;
 
     if (field === 'quantity' || field === 'unit_price') {
-      updated[index].price = updated[index].quantity * updated[index].unit_price;
+      const quantity = Number(updated[index].quantity);
+      const unit_price = Number(updated[index].unit_price);
+      updated[index].price = quantity * unit_price;
     }
 
     setItems(updated);
   };
 
-
   const handleSelectItem = (index: number, storeItem: StoreItem) => {
-    const price = storeItem.selling_price;
+    const price = Number(storeItem.selling_price);
     const updated = [...items];
     updated[index] = {
       ...updated[index],
@@ -60,7 +62,7 @@ const AddInvoiceForm = () => {
       name: storeItem.name,
       unit_price: price,
       quantity: 1,
-      price,
+      price: price,
       measurement: storeItem.measurement ?? '',
       date_of_manufacture: storeItem.date_of_manufacture,
       date_of_expiry: storeItem.date_of_expiry ?? '',
@@ -68,6 +70,7 @@ const AddInvoiceForm = () => {
     };
     setItems(updated);
     setIsAutocompleteVisible(false);
+    setActiveItemIndex(null);
   };
 
   const addItem = () => {
@@ -97,6 +100,7 @@ const AddInvoiceForm = () => {
     setFilteredStoreItems(
       value ? storeItems.filter(i => i.name.toLowerCase().includes(value.toLowerCase())) : storeItems
     );
+    setActiveItemIndex(index);
     setIsAutocompleteVisible(true);
   };
 
@@ -118,6 +122,8 @@ const AddInvoiceForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate if each item has a valid item_id
     if (items.some(item => !item.item_id)) {
       toast.error('Please select valid items.');
       return;
@@ -129,6 +135,7 @@ const AddInvoiceForm = () => {
       email: clientEmail,
       invoice_date: invoiceDate,
       items: items.map(item => ({
+        item_id: item.item_id,
         name: item.name,
         quantity: item.quantity,
         unit_price: item.unit_price,
@@ -150,48 +157,99 @@ const AddInvoiceForm = () => {
     <form onSubmit={handleSubmit} className="invoice-form">
       <div>
         <label>Client Number</label>
-        <input type="number" value={number} onChange={(e) => setNumber(e.target.value)} onBlur={handleNumberBlur} required />
+        <input
+          type="number"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          onBlur={handleNumberBlur}
+          required
+        />
       </div>
       <div>
         <label>Client Name</label>
-        <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)} required />
+        <input
+          type="text"
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          required
+        />
       </div>
       <div>
         <label>Client Email</label>
-        <input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} />
+        <input
+          type="email"
+          value={clientEmail}
+          onChange={(e) => setClientEmail(e.target.value)}
+        />
       </div>
       <div>
         <label>Invoice Date</label>
-        <input type="date" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} required />
+        <input
+          type="date"
+          value={invoiceDate}
+          onChange={(e) => setInvoiceDate(e.target.value)}
+          required
+        />
       </div>
 
       <div>
         <label>Items</label>
         {items.map((item, index) => (
           <div key={index}>
-            <input type="text" value={item.name} onFocus={() => setIsAutocompleteVisible(true)} onChange={(e) => handleItemInputChange(index, e.target.value)} required />
-            {isAutocompleteVisible && item.name && (
+            <input
+              type="text"
+              value={item.name}
+              onFocus={() => {
+                setActiveItemIndex(index);
+                setIsAutocompleteVisible(true);
+              }}
+              onChange={(e) => handleItemInputChange(index, e.target.value)}
+              required
+            />
+
+            {isAutocompleteVisible && activeItemIndex === index && item.name && (
               <ul>
                 {filteredStoreItems.map(storeItem => (
-                  <li key={storeItem.id} onClick={() => handleSelectItem(index, storeItem)}>
+                  <li
+                    key={storeItem.id}
+                    onClick={() => handleSelectItem(index, storeItem)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {storeItem.name}
                   </li>
                 ))}
               </ul>
             )}
+
             <div>
               <label>Quantity</label>
               <button type="button" onClick={() => decrementQuantity(index)}>-</button>
-              <input type="number" value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value, 10))} min={1} />
+              <input
+                type="number"
+                value={item.quantity}
+                onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value, 10))}
+                min={1}
+              />
               <button type="button" onClick={() => incrementQuantity(index)}>+</button>
             </div>
-            <input type="number" value={item.unit_price} onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))} placeholder="Unit Price" />
+            <input
+              type="number"
+              value={item.unit_price}
+              onChange={(e) => handleItemChange(index, 'unit_price', parseFloat(e.target.value))}
+              placeholder="Unit Price"
+            />
             <input type="text" value={item.measurement} disabled />
             <input type="date" value={item.date_of_manufacture} disabled />
             <input type="date" value={item.date_of_expiry} disabled />
-            <textarea value={item.description} onChange={(e) => handleItemChange(index, 'description', e.target.value)} placeholder="Description" />
-            <p>Subtotal: ₹{item.price.toFixed(2)}</p>
-            {items.length > 1 && <button type="button" onClick={() => removeItem(index)}>Remove</button>}
+            <textarea
+              value={item.description}
+              onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+              placeholder="Description"
+            />
+            <p>Subtotal: ₹{typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}</p>
+            {items.length > 1 && (
+              <button type="button" onClick={() => removeItem(index)}>Remove</button>
+            )}
           </div>
         ))}
         <button type="button" onClick={addItem}>Add Item</button>

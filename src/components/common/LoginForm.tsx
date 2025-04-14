@@ -134,41 +134,6 @@ const LoginForm = () => {
             </Link>
           </div>
         </div>
-
-
-        <div className="features-section">
-          <h2>Why Choose Us?</h2>
-          <div className="features-container">
-            <div className="feature">
-              <h3>Feature 1</h3>
-              <p>Our app allows you to do XYZ with ease and efficiency. It&apos;s fast and secure.</p>
-            </div>
-            <div className="feature">
-              <h3>Feature 2</h3>
-              <p>Enjoy seamless integration with other services and quick setup for your team.</p>
-            </div>
-            <div className="feature">
-              <h3>Feature 3</h3>
-              <p>Access your data anywhere with our cross-platform support for mobile and desktop.</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="testimonials">
-          <h2>What Our Users Are Saying</h2>
-          <div className="testimonial-container">
-            <div className="testimonial">
-              <p>&quot;This app is fantastic! It has made my workflow so much easier.&quot; - User A</p>
-            </div>
-            <div className="testimonial">
-              <p>&quot;The features are amazing, and I can&apos;t imagine going back to what I was using before.&quot; - User B</p>
-            </div>
-            <div className="testimonial">
-              <p>&quot;Great support and easy to use. Highly recommend!&quot; - User C</p>
-            </div>
-          </div>
-        </div>
-
         <div className="formfooter">
           <p>&copy; 2025 Your Company. All rights reserved.</p>
         </div>

@@ -107,13 +107,20 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
 
-  if (userType === 'user' || userType === 'admin') {
+  if (userType === 'user') {
     // Block user from protected routes
     if (!publicRoutes.includes(pathname)) {
       return NextResponse.next();
     }
     return NextResponse.next();
   }
+
+  if (userType === 'admin') {
+    if (laravelSession) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+
 
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {

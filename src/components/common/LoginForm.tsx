@@ -43,6 +43,7 @@ const LoginForm = () => {
       // Redirect based on user type
       if (result.user.user_type === 'admin') {
         router.push('/');  // Admin goes to the root page
+        router.refresh();
       } else if (result.user.user_type === 'employee') {
         const companySlug = result.user.companies[0].company_slug;
         Cookies.set('company_slug', companySlug, { path: '/' });

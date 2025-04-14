@@ -102,15 +102,13 @@ export function middleware(request: NextRequest) {
   const userType = request.cookies.get('user_type')?.value;
   const { pathname } = request.nextUrl;
 
-  // ✅ Treat string "undefined" as a missing value
+  // Treat string "undefined" as missing
   if (companySlug === 'undefined' || companySlug === '') {
     companySlug = undefined;
   }
-  // ✅ Allow access to public routes (even if not logged in)
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next();
-  }
-  // If not logged in → Redirect to /login (except for /login itself)
+
+
+  // Not logged in
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
@@ -118,65 +116,71 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (laravelSession) {
+  // Super Admin
+  if (userType === 'super-admin') {
     const isSuperAdminPath = pathname.startsWith('/superadmin');
-    const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
-    const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
-    if (userType === 'super-admin') {
-
-      // Super admin can ONLY access /superadmin/*
-      if (!isSuperAdminPath || pathname === "/login" || pathname === "/") {
-        return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-      }
-      return NextResponse.next();
+    if (!isSuperAdminPath || pathname === '/login' || pathname === '/') {
+      return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
     }
-
-    if (userType === 'admin') {
-
-      // ✅ Allow access to "/" after login only for admins
-      if (pathname === '/') {
-        return NextResponse.next();
-      }
-      // 👉 Redirect to "/" if:
-      // - `companySlug` is null/undefined/empty
-      // - OR pathname doesn't start with `/${companySlug}`
-      if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-
-      // Admin can ONLY access their own company routes and not /employee or /superadmin
-      if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
-        return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
-      }
-      return NextResponse.next();
-    }
-
-    if (userType === 'employee') {
-
-      if (pathname === "/") {
-        return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
-      }
-      // Employee can ONLY access their company's /employee routes
-      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
-        return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
-      }
-      return NextResponse.next();
-    }
-
-    if (userType === 'user') {
-      // You can customize this logic based on what normal users should access
-      // Right now, blocking them from all protected routes
-      if (!publicRoutes.includes(pathname) || pathname === "/login") {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-      return NextResponse.next();
-    }
+    return NextResponse.next();
   }
 
+  // Admin
+  if (userType === 'admin') {
+    const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
+
+    if (pathname === '/') {
+      return NextResponse.next(); // Allow "/"
+    }
+
+    if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    if (!isAdminPath || pathname.includes('/employee') || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
+      return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  // Employee
+  if (userType === 'employee') {
+    const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
+
+    const isInvalidEmployeePath =
+      !companySlug ||
+      !isEmployeePath ||
+      pathname === '/' || // 🚫 Block "/"
+      pathname === `/${companySlug}` ||
+      pathname === '/login' ||
+      publicRoutes.includes(pathname) ||
+      pathname.startsWith('/superadmin');
+
+    if (isInvalidEmployeePath) {
+      return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  // General user
+  if (userType === 'user') {
+    if (!publicRoutes.includes(pathname) || pathname === '/login') {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    return NextResponse.next();
+  }
+
+   // Allow access to public routes
+   if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   return NextResponse.next();
 }
+
 
 export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/'],

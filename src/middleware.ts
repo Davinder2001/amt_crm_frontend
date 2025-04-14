@@ -117,7 +117,7 @@ export function middleware(request: NextRequest) {
 
   if (laravelSession) {
     const isSuperAdminPath = pathname.startsWith('/superadmin');
-    const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
+    const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes(`/${companySlug}/employee`);
     const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
     if (userType === 'super-admin') {
@@ -138,7 +138,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url));
       }
       // Block access to /employee or /superadmin paths
-      if (!isAdminPath || pathname.includes(`/${companySlug}/employee`) || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
+      if (!isAdminPath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
       return NextResponse.next();

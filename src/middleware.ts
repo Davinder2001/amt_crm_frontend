@@ -91,10 +91,9 @@
 
 
 
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { authRoutes, publicRoutes } from '@/routes';
+import { authRoutes, publicRoutes, adminRoutes, superAdminRoutes, employeeRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get('access_token');
@@ -102,15 +101,12 @@ export function middleware(request: NextRequest) {
   const userType = request.cookies.get('user_type')?.value;
   const { pathname } = request.nextUrl;
 
-  // ✅ Treat string "undefined" as a missing value
-  if (companySlug === 'undefined' || companySlug === '') {
+  // Treat 'undefined' string or empty string as undefined
+  if (!companySlug || companySlug === 'undefined' || companySlug.trim() === '') {
     companySlug = undefined;
   }
-  // ✅ Allow access to public routes (even if not logged in)
-  // if (publicRoutes.includes(pathname)) {
-  //   return NextResponse.next();
-  // }
-  // If not logged in → Redirect to /login (except for /login itself)
+
+  // --- If NOT logged in ---
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
@@ -118,54 +114,67 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (laravelSession) {
-    const isSuperAdminPath = pathname.startsWith('/superadmin');
-    const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
-    const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
+  // --- Super Admin Access ---
+  if (userType === 'super-admin') {
+    const isSuperAdminRoute = pathname.startsWith('/superadmin');
+    const isAllowed = superAdminRoutes.some(route => matchWildcardRoute(route, pathname));
 
-    if (userType === 'super-admin') {
-
-      // Super admin can ONLY access /superadmin/*
-      if (userType === 'super-admin' && pathname === "/" || !isSuperAdminPath) {
-        return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-      }
-      return NextResponse.next();
+    if (!isSuperAdminRoute || !isAllowed || authRoutes.includes(pathname) || adminRoutes(companySlug || '').some((route) => pathname.startsWith(route))) {
+      return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
     }
 
-    if (userType === 'admin') {
-
-      // ✅ Allow access to "/" after login only for admins
-      if (userType === 'admin' && pathname === '/') {
-        return NextResponse.next();
-      }
-      // Admin can ONLY access their own company routes and not /employee or /superadmin
-      if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath) {
-        return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
-      }
-      return NextResponse.next();
-    }
-
-    if (userType === 'employee') {
-
-      // Employee can ONLY access their company's /employee routes
-      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === "/") {
-        return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
-      }
-      return NextResponse.next();
-    }
-
-    if (userType === 'user') {
-      // You can customize this logic based on what normal users should access
-      // Right now, blocking them from all protected routes
-      if (!publicRoutes.includes(pathname)) {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-      return NextResponse.next();
-    }
+    return NextResponse.next();
   }
 
+  // --- Admin Access ---
+  if (userType === 'admin') {
+    // ✅ Allow access to "/" after login only for admins
+    if (pathname === '/') {
+      return NextResponse.next();
+    }
 
+    // 👉 Redirect to "/" if:
+    // - `companySlug` is null/undefined/empty
+    // - OR pathname doesn't start with `/${companySlug}`
+    if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    // 👉 Redirect to `/${companySlug}/dashboard` if the path is exactly `/${companySlug}`
+    if (pathname === `/${companySlug}` || employeeRoutes(companySlug || '').some((route) => pathname.startsWith(route)) || pathname.startsWith(`/${companySlug}/employee`)) {
+      return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  // --- Employee Access ---
+  if (userType === 'employee') {
+    const allowed = pathname.startsWith(`/${companySlug}/employee`);
+
+    if (!companySlug || !allowed || authRoutes.includes(pathname) || adminRoutes(companySlug || '').some((route) => pathname.startsWith(route))) {
+      return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  // --- Regular User Access ---
+  if (userType === 'user') {
+    if (publicRoutes.includes(pathname)) {
+      return NextResponse.next();
+    }
+    return NextResponse.next();
+  }
+
+  // Fallback
   return NextResponse.next();
+}
+
+// Utility to match wildcards like /slug/* or /superadmin/*
+function matchWildcardRoute(routePattern: string, pathname: string): boolean {
+  const baseRoute = routePattern.replace('/*', '');
+  return pathname.startsWith(baseRoute);
 }
 
 export const config = {

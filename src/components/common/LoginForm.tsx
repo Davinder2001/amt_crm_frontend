@@ -70,7 +70,7 @@ const LoginForm = () => {
     if (!accessToken && !userType) {
       setUser(null);
     }
-  }, [setUser, user]);
+  }, [setUser, user, router]);
 
   return (
     <>

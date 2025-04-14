@@ -107,9 +107,9 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
   // ✅ Allow access to public routes (even if not logged in)
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next();
-  }
+  // if (publicRoutes.includes(pathname)) {
+  //   return NextResponse.next();
+  // }
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
@@ -124,11 +124,9 @@ export function middleware(request: NextRequest) {
     const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
     if (userType === 'super-admin') {
-      if (pathname === "/") {
-        return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-      }
+
       // Super admin can ONLY access /superadmin/*
-      if (!isSuperAdminPath) {
+      if (userType === 'super-admin' && pathname === "/" || !isSuperAdminPath) {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
       return NextResponse.next();

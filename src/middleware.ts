@@ -107,6 +107,10 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
 
+  // Allow access to public routes
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   // Not logged in
   if (!laravelSession) {
@@ -129,11 +133,7 @@ export function middleware(request: NextRequest) {
   // Admin
   if (userType === 'admin') {
     const isAdminPath = pathname.startsWith(`/${companySlug}`) && !pathname.includes('/employee');
-    
-    // Allow access to public routes
-    if (publicRoutes.includes(pathname)) {
-      return NextResponse.next();
-    }
+
     if (pathname === '/') {
       return NextResponse.next(); // Allow "/"
     }
@@ -154,6 +154,7 @@ export function middleware(request: NextRequest) {
     const isEmployeePath = pathname.startsWith(`/${companySlug}/employee`);
 
     const isInvalidEmployeePath =
+      !pathname.startsWith(`/${companySlug}/employee`) ||
       !companySlug ||
       !isEmployeePath ||
       pathname === '/' || // 🚫 Block "/"
@@ -180,7 +181,6 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-
 export const config = {
-  matcher: ['/((?!.*\\..*|_next).*)', '/'],
+  matcher: ['/((?!.*\\..*|_next).*)', '/',],
 };

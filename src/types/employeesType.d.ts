@@ -19,6 +19,8 @@ interface Employee {
     company_name: string;
     company_slug: string;
     user_status: string;
+    pdf_base64: string;
+    file_name: string;
     roles: Role[];
     meta?: {
         dateOfHire?: string;

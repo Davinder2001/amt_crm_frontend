@@ -107,14 +107,13 @@ export function middleware(request: NextRequest) {
     companySlug = undefined;
   }
   // ✅ Allow access to public routes (even if not logged in)
-
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
     if (!authRoutes.includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
-    }
-    if (publicRoutes.includes(pathname)) {
-      return NextResponse.next();
     }
     return NextResponse.next();
   }
@@ -135,16 +134,17 @@ export function middleware(request: NextRequest) {
 
     if (userType === 'admin') {
 
+      // ✅ Allow access to "/" after login only for admins
+      if (pathname === '/') {
+        return NextResponse.next();
+      }
       // 👉 Redirect to "/" if:
       // - `companySlug` is null/undefined/empty
       // - OR pathname doesn't start with `/${companySlug}`
       if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));
       }
-      // ✅ Allow access to "/" after login only for admins
-      if (laravelSession && pathname === '/') {
-        return NextResponse.next();
-      }
+
       // Admin can ONLY access their own company routes and not /employee or /superadmin
       if (!companySlug || !isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
@@ -153,8 +153,12 @@ export function middleware(request: NextRequest) {
     }
 
     if (userType === 'employee') {
+
+      if (pathname === "/") {
+        return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
+      }
       // Employee can ONLY access their company's /employee routes
-      if (!pathname.startsWith(`/${companySlug}`) || !companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || pathname === "/" || pathname === "/login") {
+      if (!companySlug || !isEmployeePath || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === "/login") {
         return NextResponse.redirect(new URL(`/${companySlug}/employee/dashboard`, request.url));
       }
       return NextResponse.next();

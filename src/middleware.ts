@@ -138,7 +138,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url));
       }
       // Block access to /employee or /superadmin paths
-      if (!isAdminPath || pathname.includes('/employee') || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
+      if (!isAdminPath || pathname.includes(`/${companySlug}/employee`) || isSuperAdminPath || pathname === `/${companySlug}` || publicRoutes.includes(pathname) || pathname === '/login') {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
       return NextResponse.next();

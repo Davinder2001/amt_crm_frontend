@@ -21,7 +21,7 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "Invoice", id }],
     }),
 
-    downloadInvoicePdf: builder.query<Blob, string | number>({
+    downloadInvoicePdf: builder.query<InvoicePdfDownloadResponse, number>({
       query: (id) => ({
         url: `invoices/${id}/download`,
       }),

@@ -15,9 +15,7 @@ const SalaryView: React.FC = () => {
   const { data: employeesData, error, isLoading, refetch } = useFetchEmployeesSalaryQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
 
-  console.log("employeesData", employeesData);
-
-  const navigateTo = (path: string, message: string) => {
+    const navigateTo = (path: string, message: string) => {
     if (!path) {
       toast.error(message);
       return;

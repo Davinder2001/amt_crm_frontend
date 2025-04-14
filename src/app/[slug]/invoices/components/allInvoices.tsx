@@ -10,25 +10,44 @@ const AllInvoices = () => {
   const handleDownloadPdf = async (invoiceId: number) => {
     try {
       const result = await triggerDownload(invoiceId).unwrap();
-
-      if (!(result instanceof Blob)) {
-        throw new Error("Invalid response: Expected a Blob object.");
+  
+      if (!result.pdf_base64) {
+        throw new Error("PDF base64 string missing.");
       }
-
-      const blob = result;
+  
+      // Decode Base64 and create a Blob
+      const byteCharacters = atob(result.pdf_base64);
+      const byteArrays: Uint8Array[] = [];
+  
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+  
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+  
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+  
+      const blob = new Blob(byteArrays, { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-
+  
       const link = document.createElement("a");
       link.href = url;
-      link.download = `invoice_${invoiceId}.pdf`;
+      link.download = result.filename || `invoice_${invoiceId}.pdf`;
+      document.body.appendChild(link);
       link.click();
-
+      document.body.removeChild(link);
+  
       setTimeout(() => URL.revokeObjectURL(url), 60000);
     } catch (err) {
       console.error("Download error:", err);
       alert("Failed to fetch the PDF.");
     }
   };
+  
 
   const handleViewInvoice = (invoiceId: number) => {
     router.push(`invoices/view/${invoiceId}`);

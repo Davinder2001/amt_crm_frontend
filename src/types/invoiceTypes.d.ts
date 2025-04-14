@@ -43,3 +43,9 @@ interface CreateInvoicePayload {
   }[];
 }
 
+interface InvoicePdfDownloadResponse {
+  status: boolean;
+  message: string;
+  pdf_base64: string;
+  filename: string;
+}

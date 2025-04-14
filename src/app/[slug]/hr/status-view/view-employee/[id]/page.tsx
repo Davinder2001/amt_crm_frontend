@@ -13,7 +13,7 @@ const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    setTitle('Employee Profile'); // Update breadcrumb title
+    setTitle('Employee Profile');
   }, [setTitle]);
 
   const { id } = useParams() as { id: string };
@@ -36,62 +36,68 @@ const ViewUserPage: React.FC = () => {
 
   return (
     <div className="container">
-      <HrNavigation />
-      {/* Profile Section */}
-      <div className="profile-card">
-        <div className="profile-mage-wrapper">
-          {firstLetter ?
-            <h1>{firstLetter}</h1>
-            :
-            <Image
-              src={user.profile_picture || 'https://via.placeholder.com/100'}
-              alt={user.name}
-              className="profile-image"
-              width={100}
-              height={100}
-            />
-          }
-        </div>
-        <div className="profile-info">
-          <h2 style={{ textTransform: 'capitalize' }}>{user.name}</h2>
-          <p className="employee-meta">Manager | Employee ID: <strong>{user.id}</strong></p>
-          <p className="bio">Lorem Ipsum is a dummy text used in design and publishing.</p>
-          <div className="info-row">
-            <span><strong>Mobile:</strong> {user.number || 'N/A'}</span>
-            <span><strong>Email:</strong> {user.email}</span>
-            <span><strong>Birth Date:</strong> {user.meta?.dateOfHire || 'N/A'}</span>
-            <span><strong>City:</strong> {user.meta?.city || 'N/A'}</span>
-            <span><strong>Current Salary:</strong> ₹{user.salary || 'N/A'}</span>
-            <span><strong>Joining Date:</strong> {user.meta?.joiningDate || 'N/A'}</span>
-          </div>
+    <HrNavigation />
+  
+    <div className="profile-card">
+      <div className="profile-mage-wrapper">
+        {firstLetter ? (
+          <h1>{firstLetter}</h1>
+        ) : (
+          <Image
+            src={user.employee_details?.profilePicture || 'https://via.placeholder.com/100'}
+            alt={user.name}
+            className="profile-image"
+            width={100}
+            height={100}
+          />
+        )}
+      </div>
+      <div className="profile-info">
+        <h2 style={{ textTransform: 'capitalize' }}>{user.name}</h2>
+        <p className="employee-meta">
+          Role: {user.roles?.[0]?.name || 'N/A'} | Employee ID: <strong>{user.id}</strong>
+        </p>
+        <p className="bio">This is a detailed employee profile view.</p>
+        <div className="info-row">
+          <span><strong>Mobile:</strong> {user.number || 'N/A'}</span>
+          <span><strong>Email:</strong> {user.email}</span>
+          <span><strong>Birth Date:</strong> {user.employee_details?.dob || 'N/A'}</span>
+          <span><strong>City:</strong> {user.employee_details?.address || 'N/A'}</span>
+          <span><strong>Current Salary:</strong> ₹{user.employee_details?.currentSalary || 'N/A'}</span>
+          <span><strong>Salary:</strong> ₹{user.employee_details?.salary || 'N/A'}</span>
+          <span><strong>Joining Date:</strong> {user.employee_details?.joiningDate || 'N/A'}</span>
+          <span><strong>Department:</strong> {user.employee_details?.department || 'N/A'}</span>
+          <span><strong>Work Location:</strong> {user.employee_details?.workLocation || 'N/A'}</span>
         </div>
       </div>
-
-      {/* Personal & Bank Information Sections */}
-      <div className="info-sections">
-        {/* Personal Info */}
-        <div className="info-card">
-          <h3>Personal Information</h3>
-          <p><strong>Nationality:</strong> {user.meta?.nationality || 'N/A'}</p>
-          <p><strong>Religion:</strong> {user.meta?.religion || 'N/A'}</p>
-          <p><strong>Marital Status:</strong> {user.meta?.maritalStatus || 'N/A'}</p>
-          <p><strong>Passport No:</strong> {user.meta?.passportNumber || 'N/A'}</p>
-          <p><strong>Emergency Contact:</strong> {user.meta?.emergencyContact || 'N/A'}</p>
-          <p><strong>Join Date & Time:</strong> {user.meta?.joiningDate || 'N/A'}</p>
-        </div>
-
-        {/* Bank Info */}
-        <div className="info-card">
-          <h3>Bank Information</h3>
-          <p><strong>Bank Name:</strong> {user.meta?.bankName || 'N/A'}</p>
-          <p><strong>Account No:</strong> {user.meta?.accountNumber || 'N/A'}</p>
-          <p><strong>IFSC Code:</strong> {user.meta?.ifscCode || 'N/A'}</p>
-          <p><strong>Pan No:</strong> {user.meta?.panNumber || 'N/A'}</p>
-          <p><strong>UPI Id:</strong> {user.meta?.upiId || 'N/A'}</p>
-          <p><strong>Current Salary:</strong> ₹{user.salary || 'N/A'}</p>
-        </div>
+    </div>
+  
+    <div className="info-sections">
+      <div className="info-card">
+        <h3>Personal Information</h3>
+        <p><strong>Nationality:</strong> {user.employee_details?.nationality || 'N/A'}</p>
+        <p><strong>Religion:</strong> {user.employee_details?.religion || 'N/A'}</p>
+        <p><strong>Marital Status:</strong> {user.employee_details?.maritalStatus || 'N/A'}</p>
+        <p><strong>Passport No:</strong> {user.employee_details?.passportNo || 'N/A'}</p>
+        <p><strong>Emergency Contact:</strong> {user.employee_details?.emergencyContact || 'N/A'}</p>
+        <p><strong>Emergency Relation:</strong> {user.employee_details?.emergencyContactRelation || 'N/A'}</p>
+        <p><strong>Medical Info:</strong> {user.employee_details?.medicalInfo || 'N/A'}</p>
+        <p><strong>Joining Type:</strong> {user.employee_details?.joiningType || 'N/A'}</p>
+        <p><strong>Previous Employer:</strong> {user.employee_details?.previousEmployer || 'N/A'}</p>
       </div>
+  
+      <div className="info-card">
+        <h3>Bank Information</h3>
+        <p><strong>Bank Name:</strong> {user.employee_details?.bankName || 'N/A'}</p>
+        <p><strong>Account No:</strong> {user.employee_details?.accountNo || 'N/A'}</p>
+        <p><strong>IFSC Code:</strong> {user.employee_details?.ifscCode || 'N/A'}</p>
+        <p><strong>Pan No:</strong> {user.employee_details?.panNo || 'N/A'}</p>
+        <p><strong>UPI Id:</strong> {user.employee_details?.upiId || 'N/A'}</p>
+        <p><strong>Address Proof:</strong> {user.employee_details?.addressProof || 'N/A'}</p>
+      </div>
+    </div>
 
+  
       <style jsx>{`
         .container {
           padding: 20px;

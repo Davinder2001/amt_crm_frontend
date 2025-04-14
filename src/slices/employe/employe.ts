@@ -80,6 +80,12 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       providesTags: ["Employe"],
     }),
 
+    
+    downloadPaySlipPdf: builder.query<Employee, number>({
+      query: (id) => `employee/downloadSlip/${id}`,
+      providesTags: ["Employe"],
+    }),
+
   }),
 });
 
@@ -93,6 +99,7 @@ export const {
   useLazyDownloadPaySlipByIdQuery,
   useFetchEmployeesSalaryQuery,
   useFetchEmployeesSalaryByIdQuery,
+  useDownloadPaySlipPdfQuery,
 } = employeCreateApi;
 
 export default employeCreateApi;

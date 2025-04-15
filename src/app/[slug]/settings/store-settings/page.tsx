@@ -1,10 +1,9 @@
 import React from 'react'
-import Variations from '../components/variations'
-
+import Attributes from '../components/Attributes'
 const Page = () => {
   return (
     <>
-        <Variations />
+      <Attributes />
     </>
   )
 }

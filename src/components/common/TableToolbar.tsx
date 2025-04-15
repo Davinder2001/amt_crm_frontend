@@ -258,7 +258,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     filters,
     onFilterChange,
     columns,
-    visibleColumns,
     onColumnToggle,
     actions,
 }) => {

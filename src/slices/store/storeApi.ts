@@ -85,7 +85,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Store"],
     }),
-    
+
 
     // 🆕 Update an attribute
     updateAttribute: builder.mutation<Attribute, { id: number; data: Partial<Attribute> }>({
@@ -113,7 +113,41 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Store'],
     }),
-    
+
+    // 🆕 Fetch all categories
+    fetchCategories: builder.query<CategoryResponse, void>({
+      query: () => "categories",
+      providesTags: ["Store"],
+    }),
+
+    // 🆕 Create new category
+    createCategory: builder.mutation<Category, Partial<Category>>({
+      query: (data) => ({
+        url: "categories",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Store"],
+    }),
+
+    // 🆕 Update an category
+    updateCategory: builder.mutation<Category, { id: number; data: Partial<Category> }>({
+      query: ({ id, data }) => ({
+        url: `categories/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Store"],
+    }),
+
+     // 🆕 Delete category
+     deleteCategory: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `categories/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Store"],
+    }),
 
   }),
 });
@@ -133,7 +167,13 @@ export const {
   useCreateAttributeMutation,
   useUpdateAttributeMutation,
   useDeleteAttributeMutation,
-  useToggleAttributeStatusMutation
+  useToggleAttributeStatusMutation,
+
+  // categories hook
+  useFetchCategoriesQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation
 } = storeApi;
 
 export default storeApi;

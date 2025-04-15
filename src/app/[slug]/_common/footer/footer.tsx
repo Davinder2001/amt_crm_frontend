@@ -5,11 +5,9 @@ import FooterBarMenu from './FooterBarMenu';
 
 interface footerProps {
     openMenu: () => void;
-    isMobile: boolean;
-
 }
 
-const Footer: React.FC<footerProps> = ({ openMenu, isMobile }) => {
+const Footer: React.FC<footerProps> = ({ openMenu }) => {
     return (
         <>
             <div style={{

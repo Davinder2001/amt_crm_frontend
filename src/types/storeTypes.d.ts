@@ -28,6 +28,20 @@ interface StoreItem {
   images: File[]
 }
 
+interface Category {
+  id: number;
+  company_id: number;
+  name: string;
+  parent_id: number | null;
+  created_at: string;
+  updated_at: string;
+  children?: Category[];
+}
+
+interface CategoryResponse {
+  data: Category[];
+}
+
 
 interface attributes {
   attribute_id: number | string;

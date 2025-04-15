@@ -8,7 +8,7 @@ import ImageUpload from '../components/ImageUpload';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
-import AddAttributes from './AddAttributes';
+import ItemsTab from './ItemsTab';
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
@@ -47,15 +47,6 @@ const AddItem: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleVendorSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData(prev => ({ ...prev, vendor_name: e.target.value }));
-  };
-
-  const handleVendorAdded = (vendorName: string) => {
-    setVendors(prev => [...prev, vendorName]);
-    setFormData(prev => ({ ...prev, vendor_name: vendorName }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,7 +210,7 @@ const AddItem: React.FC = () => {
             handleRemoveImage={handleRemoveImage}
           />
           <div style={{ flex: '1 1 300px' }}>
-            <AddAttributes onChange={setVariations} variations={variations} />
+            <ItemsTab onChange={setVariations} variations={variations} />
           </div>
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>

@@ -1,0 +1,98 @@
+@use '../variables' as *;
+
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .upload-input-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border: 2px dashed $border-color;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #fafafa;
+        transition: border 0.2s;
+        margin-top: 5px;
+
+        &:hover {
+            border-color: $primary-color;
+        }
+    }
+
+    .upload-text {
+        font-size: 14px;
+        color: #4a4a4a;
+    }
+
+    .upload-note {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .preview-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+
+        .preview-image-wrapper {
+            position: relative;
+
+            .delete-btn {
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                background-color: #ff4d4d;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                font-size: 12px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                transition: background 0.3s;
+
+                &:hover {
+                    background-color: #e60000;
+                }
+            }
+        }
+
+        .preview-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+
+            img {
+                object-fit: cover;
+            }
+        }
+    }
+
+    .clear-btn {
+        margin-left: auto;
+        margin-top: 0;
+        font-size: 12px;
+        background: transparent;
+        color: $primary-color;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        text-decoration: underline;
+    
+        &:hover {
+          text-decoration: none;
+        }
+      }
+
+}

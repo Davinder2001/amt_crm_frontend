@@ -2,26 +2,20 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFetchAttributesQuery } from '@/slices/store/storeApi';
 import { FaTimes } from 'react-icons/fa';
+import Variations from '../../settings/components/variations';
 
 interface Props {
     onChange: (combinations: variations[]) => void;
+    variations: variations[];
 }
 
-const VariationsTab = () => {
-    return <div>Variations content goes here (you can replace this with a real component).</div>;
-};
-
-const AddAttributes: React.FC<Props> = ({ onChange }) => {
+const AddAttributes: React.FC<Props> = ({ onChange, variations }) => {
     const { data: attributes } = useFetchAttributesQuery();
     const [showModal, setShowModal] = useState(false);
-    const [activeTab, setActiveTab] = useState('attributes');
+    const [activeTab, setActiveTab] = useState('variations');
     const [combinations, setCombinations] = useState<variations[]>([
         { attributes: [], price: 0 }
     ]);
-
-    useEffect(() => {
-        onChange(combinations);
-    }, [combinations, onChange]);
 
     const handleAttributeChange = (
         comboIndex: number,
@@ -60,10 +54,24 @@ const AddAttributes: React.FC<Props> = ({ onChange }) => {
         setCombinations(prev => prev.filter((_, i) => i !== index));
     };
 
+    const handleDone = () => {
+        onChange(combinations);
+        setShowModal(false);
+    };
+
+    const handleReset = () => {
+        setCombinations([{ attributes: [], price: 0 }])
+    }
+
     const tabs: { key: string; label: string; content: ReactNode }[] = [
         {
             key: 'attributes',
             label: 'Attributes',
+            content: <Variations />
+        },
+        {
+            key: 'variations',
+            label: 'Variations',
             content: (
                 <>
                     {combinations.map((combo, index) => (
@@ -119,11 +127,6 @@ const AddAttributes: React.FC<Props> = ({ onChange }) => {
                     </button>
                 </>
             )
-        },
-        {
-            key: 'variations',
-            label: 'Variations',
-            content: <VariationsTab />
         }
     ];
 
@@ -131,8 +134,12 @@ const AddAttributes: React.FC<Props> = ({ onChange }) => {
         <>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <label htmlFor="attributes">Attributes</label>
-                <button type="button" onClick={() => setShowModal(true)} className="buttons">
-                    Add Attributes
+                <button type="button" onClick={() => setShowModal(true)} className="buttons add-attr">
+                    Add Attributes  {variations.filter(v => v.attributes.length > 0 || v.price > 0).length > 0 && (
+                        <span>
+                            {variations.filter(v => v.attributes.length > 0 || v.price > 0).length}
+                        </span>
+                    )}
                 </button>
             </div>
 
@@ -145,6 +152,7 @@ const AddAttributes: React.FC<Props> = ({ onChange }) => {
                         <aside className="tabs-sidebar">
                             {tabs.map(tab => (
                                 <button
+                                    type="button"
                                     key={tab.key}
                                     className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
                                     onClick={() => setActiveTab(tab.key)}
@@ -159,138 +167,11 @@ const AddAttributes: React.FC<Props> = ({ onChange }) => {
                         </section>
                     </div>
                     <div style={{ marginTop: '1rem' }}>
-                        <button onClick={() => setShowModal(false)}>Done</button>
+                        <button type="button" onClick={handleReset}>Reset</button>
+                        <button type="button" onClick={handleDone}>Done</button>
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-                .modal-overlay {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: rgba(0, 0, 0, 0.1);
-                    display: flex;
-                    justify-content: center;
-                    align-items: flex-end;
-                    transition: opacity 0.3s ease;
-                    pointer-events: none;
-                    opacity: 0;
-                    z-index: 999999;
-                }
-
-                .modal-overlay.show {
-                    opacity: 1;
-                    pointer-events: auto;
-                }
-
-                .modal-content {
-                    position: relative;
-                    background: #fff;
-                    width: 100%;
-                    height: 80%;
-                    overflow-y: hidden;
-                    border-radius: 12px 12px 0 0;
-                    padding: 1.5rem;
-                    transform: translateY(100%);
-                    transition: transform 0.3s ease-in-out;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .modal-inner {
-                    display: flex;
-                    flex: 1;
-                    overflow: hidden;
-                }
-
-                .modal-overlay.show .modal-content {
-                    transform: translateY(0%);
-                }
-
-                .modal-overlay.hide .modal-content {
-                    transform: translateY(100%);
-                }
-
-                .close-modal {
-                    position: absolute;
-                    top: 16px;
-                    right: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #e0e0e0;
-                    border-radius: 50%;
-                    width: 32px;
-                    height: 32px;
-                    cursor: pointer;
-                    font-size: 16px;
-                    color: #333;
-                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-                    transition: background 0.2s;
-                }
-
-                .close-modal:hover {
-                    background-color: #d5d5d5;
-                }
-
-                .tabs-sidebar {
-                    width: 150px;
-                    border-right: 1px solid #eee;
-                    padding-right: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .tab-button {
-                    padding: 10px;
-                    background: none;
-                    border: none;
-                    text-align: left;
-                    cursor: pointer;
-                    font-weight: 500;
-                    border-radius: 6px;
-                    margin-bottom: 6px;
-                    transition: background 0.2s;
-                }
-
-                .tab-button.active {
-                    background-color: #f0f0f0;
-                    font-weight: 600;
-                }
-
-                .tab-content {
-                    flex: 1;
-                    padding-left: 1.5rem;
-                    overflow-y: auto;
-                }
-
-                .variation-block {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-bottom: 20px;
-                }
-
-                .remove-button {
-                    background: #ff4d4f;
-                    color: #fff;
-                    border: none;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    cursor: pointer;
-                }
-
-                select,
-                input {
-                    padding: 8px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    font-size: 14px;
-                }
-            `}</style>
         </>
     );
 };

@@ -67,6 +67,14 @@ const AddItem: React.FC = () => {
     }
   };
 
+  const handleRemoveImage = (index: number) => {
+    setFormData(prev => {
+      const updatedImages = [...(prev.images || [])];
+      updatedImages.splice(index, 1);
+      return { ...prev, images: updatedImages };
+    });
+  };
+
   const handleClearImages = () => {
     setFormData(prev => ({ ...prev, images: [] }));
   };
@@ -191,28 +199,27 @@ const AddItem: React.FC = () => {
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Vendor Name*</label>
-            <select name="vendor_name" value={formData.vendor_name} onChange={handleVendorSelect} required>
-              <option value="">Select Vendor</option>
-              {vendors.length > 0 ? (
-                vendors.map((vendor, index) => (
-                  <option key={index} value={vendor}>{vendor}</option>
-                ))
-              ) : (
-                <option>No vendors available</option>
-              )}
-            </select>
-            <AddVendor onVendorAdded={handleVendorAdded} />
-          </div>
-
-          <div className='add-item-form-image'>
-            <ImageUpload
-              images={formData.images}
-              handleImageChange={handleImageChange}
-              handleClearImages={handleClearImages}
+            <AddVendor
+              vendors={vendors}
+              selectedVendor={formData.vendor_name || ''}
+              onVendorSelect={(vendorName) =>
+                setFormData(prev => ({ ...prev, vendor_name: vendorName }))
+              }
+              onVendorAdded={(vendorName) => {
+                setVendors(prev => [...prev, vendorName]);
+                setFormData(prev => ({ ...prev, vendor_name: vendorName }));
+              }}
             />
           </div>
+
+          <ImageUpload
+            images={formData.images}
+            handleImageChange={handleImageChange}
+            handleClearImages={handleClearImages}
+            handleRemoveImage={handleRemoveImage}
+          />
           <div style={{ flex: '1 1 300px' }}>
-            <AddAttributes onChange={setVariations} />
+            <AddAttributes onChange={setVariations} variations={variations} />
           </div>
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>

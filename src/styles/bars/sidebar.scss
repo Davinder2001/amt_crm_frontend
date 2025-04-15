@@ -136,6 +136,10 @@
         border-radius: 20px 20px 0 0;
         box-shadow: $secondary-shadow;
 
+        .sidebar-header {
+            height: 70px;
+        }
+
         ul.menu-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -148,9 +152,10 @@
             li {
                 padding: 15px 10px;
                 box-shadow: $box-shadow;
-                            a {
-                                gap: 10px;
-                            }             
+
+                a {
+                    gap: 10px;
+                }
             }
         }
     }
@@ -163,4 +168,3 @@
         transform: translateY(50vh);
     }
 }
-

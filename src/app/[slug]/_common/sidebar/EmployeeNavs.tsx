@@ -32,7 +32,7 @@ const EmployeeNavs: React.FC<empNavProps> = ({ isSidebarExpanded, openMenu }) =>
         <nav>
             <ul className="menu-list">
                 {menuItems.map(({ name, path, icon }) => {
-                    const isActive = asPath.includes(path);
+                    const isActive = asPath === `/${companySlug}/${path}` || asPath.startsWith(`/${companySlug}/${path}/`);
                     return (
                         <li
                             key={path}

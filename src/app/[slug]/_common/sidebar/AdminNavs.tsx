@@ -32,7 +32,7 @@ const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, openMenu }) => {
         <nav>
             <ul className="menu-list">
                 {menuItems.map(({ name, path, icon, hasSubmenu }) => {
-                    const isActive = asPath.includes(path);
+                    const isActive = asPath === `/${companySlug}/${path}` || asPath.startsWith(`/${companySlug}/${path}/`);
                     return (
                         <li
                             key={path}

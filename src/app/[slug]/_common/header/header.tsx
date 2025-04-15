@@ -75,7 +75,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         </Link>
         <Profile />
       </div>
-      {isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} />}
+      {isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className='m-toggle'/>}
     </div>
 
   );

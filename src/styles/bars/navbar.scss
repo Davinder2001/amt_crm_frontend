@@ -225,10 +225,33 @@
 
 @media (max-width:468px) {
   .header {
+    .m-toggle {
+      display: none;
+    }
+
     .nav-container {
       max-width: 100%;
       gap: 10px;
 
+      .search-container {
+        svg {
+          width: 13px;
+          height: 13px;
+        }
+
+        .search-input {
+          padding: 0;
+        }
+
+        .clear-button {
+          font-size: 12px;
+        }
+      }
+
+      .account .profile-icon {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

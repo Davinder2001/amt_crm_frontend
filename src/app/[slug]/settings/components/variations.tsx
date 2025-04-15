@@ -75,6 +75,7 @@ const Variations = () => {
 
       {/* Open Canvas Button */}
       <button
+        type="button"
         onClick={() => setIsCanvasOpen(true)}
         className='buttons'
       >
@@ -129,18 +130,13 @@ const Variations = () => {
               </button>
             </div>
 
-            <button
-              onClick={handleCreate}
-              className="submit-btn"
-            >
+            <button type="button" onClick={handleCreate} className="submit-btn">
               Add Attribute
             </button>
-            <button
-              onClick={() => setIsCanvasOpen(false)}
-              className="close-btn"
-            >
+            <button type="button" onClick={() => setIsCanvasOpen(false)} className="close-btn">
               Close
             </button>
+
           </div>
         </div>
       </div>
@@ -176,6 +172,7 @@ const Variations = () => {
               </td>
               <td>
                 <button
+                  type="button"
                   onClick={() => handleDelete(attribute.id)}
                   className="delete-btn"
                 >

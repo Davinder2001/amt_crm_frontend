@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCreateInvoiceMutation } from '@/slices/invoices/invoice';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
@@ -119,6 +119,14 @@ const AddInvoiceForm = () => {
       setItems(updated);
     }
   };
+  
+
+  useEffect(() => {
+    const today = new Date();
+    const formatted = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    setInvoiceDate(formatted);
+  }, []);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

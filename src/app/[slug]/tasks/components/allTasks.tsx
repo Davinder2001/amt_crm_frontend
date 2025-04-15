@@ -9,7 +9,7 @@ import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 const AllTasks: React.FC = () => {
-  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch} = useGetTasksQuery();
+  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
@@ -30,7 +30,6 @@ const AllTasks: React.FC = () => {
   if (profileLoading || tasksLoading) return <p>Loading...</p>;
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
-
   if (!companySlug) return <p>Company slug not found.</p>;
 
   return (
@@ -40,36 +39,40 @@ const AllTasks: React.FC = () => {
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Company Name</th>
-              <th>Assigned By Name</th>
-              <th>Assigned To Name</th>
-              <th>Deadline</th>
-              <th>Action</th>
+              <th>Employee Name</th>
+              <th>Employee Role</th>
+              <th>Task Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {tasks.data.map((task: Task) => (
               <tr key={task.id}>
-                <td>{task.id}</td>
-                <td>{task.name}</td>
-                <td>{task.company_name}</td>
-                <td>{task.assigned_by_name}</td>
                 <td>{task.assigned_to_name}</td>
-                <td>{task.deadline}</td>
-                <td >
-                  
-                <button className='table-e-d-v-buttons' onClick={() => handleDelete(task.id)} disabled={isDeleting}>
-                    <FaTrash color='#222' />
-                  </button>
-                  <Link className='table-e-d-v-buttons'  href={`/${companySlug}/tasks/edit-task/${task.id}`}>
-                    <FaEdit color='#222' />
-                  </Link>
-                  
-                  <Link className='table-e-d-v-buttons' href={`/${companySlug}/tasks/view-task/${task.id}`}>
-                    <FaEye color='#222' />
-                  </Link>
+                <td>{task.assigned_role}</td>
+                <td>{task.name}</td>
+                <td>{task.start_date?.slice(0, 16).replace('T', ' ')}</td>
+                <td>{task.end_date?.slice(0, 16).replace('T', ' ')}</td>
+                <td>{task.status}</td>
+                <td>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <Link href={`/${companySlug}/tasks/view-task/${task.id}`} className="table-e-d-v-buttons">
+                      <FaEye color="#222" />
+                    </Link>
+                    <Link href={`/${companySlug}/tasks/edit-task/${task.id}`} className="table-e-d-v-buttons">
+                      <FaEdit color="#222" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(task.id)}
+                      disabled={isDeleting}
+                      className="table-e-d-v-buttons"
+                    >
+                      <FaTrash color="#222" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

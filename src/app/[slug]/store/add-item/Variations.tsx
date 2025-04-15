@@ -1,5 +1,5 @@
 'use client';
-import { useFetchAttributesQuery } from '@/slices/store/storeApi';
+import { useFetchVariationsQuery } from '@/slices/store/storeApi';
 import React, { useState } from 'react';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
-    const { data: attributes } = useFetchAttributesQuery();
+    const { data: attributes } = useFetchVariationsQuery();
     const [combinations, setCombinations] = useState<variations[]>([
         { attributes: [], price: 0 }
     ]);

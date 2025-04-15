@@ -1,69 +1,3 @@
-
-// {
-//     "name": "Premium T-Shirt",
-//     "quantity_count": 100,
-//     "measurement": "pcs",
-//     "purchase_date": "2025-04-01",
-//     "date_of_manufacture": "2025-03-20",
-//     "date_of_expiry": null,
-//     "brand_name": "StyleX",
-//     "replacement": "7 Days Return",
-//     "category": "Clothing",
-//     "vendor_name": "FashionVendor",
-//     "cost_price": 180,
-//     "selling_price": 250,
-//     "availability_stock": 100,
-//     "variants": [
-//       {
-//         "price": 250,
-//         "color": 20,
-//         "attributes": [
-//           {
-//             // this is suppose for "price" variation attribute id's
-//             "attribute_id": 1,
-//             "attribute_value_id": 1
-//           },
-//                {
-//                 // this is suppose for "color" variation attribute id's
-//             "attribute_id": 2,
-//             "attribute_value_id": 2
-//           }
-//         ]
-//       },
-//       {
-//         "price": 260,
-//         "stock": 25,
-//         "attributes": [
-//           {
-//             "attribute_id": 1,
-//             "attribute_value_id": 2
-//           }
-//         ]
-//       }
-//     ]
-//   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client';
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFetchAttributesQuery } from '@/slices/store/storeApi';
@@ -73,7 +7,6 @@ interface Props {
     onChange: (combinations: variations[]) => void;
 }
 
-// You can later move this component into its own file
 const VariationsTab = () => {
     return <div>Variations content goes here (you can replace this with a real component).</div>;
 };

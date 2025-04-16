@@ -12,6 +12,10 @@ interface Permission {
   name: string;
 }
 
+interface PermissionGroup {
+  group: string;
+  permissions: Permission[];
+}
 
 const EditRolePage: React.FC = () => {
   const params = useParams();
@@ -19,19 +23,14 @@ const EditRolePage: React.FC = () => {
   const router = useRouter();
 
   const { data: role, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(id);
-
-  const {
-    data: permissionsApiResponse,
-    isLoading: permissionsLoading,
-    error: permissionsError,
-  } = useFetchPermissionsQuery();
+  const { data: permissionsApiResponse, isLoading: permissionsLoading, error: permissionsError } = useFetchPermissionsQuery();
 
   const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
 
   const [name, setName] = useState<string>('');
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [companyId, setCompanyId] = useState<string>('');
-  const [selectedTab, setSelectedTab] = useState<'user' | 'other'>('user');
+  const [activeTab, setActiveTab] = useState<string>('');
 
   useEffect(() => {
     if (role) {
@@ -41,22 +40,11 @@ const EditRolePage: React.FC = () => {
     }
   }, [role]);
 
-  const permissionsList: Permission[] = permissionsApiResponse
-    ? permissionsApiResponse.flatMap((group) =>
-      group.permissions.map((perm) => ({
-        id: perm.id,
-        name: perm.name,
-      }))
-    )
-    : [];
-
-  if (rolesLoading || permissionsLoading) {
-    return <p>Loading role and permissions...</p>;
-  }
-
-  if (rolesError || permissionsError || !role) {
-    return <p>Error fetching role or permissions data.</p>;
-  }
+  useEffect(() => {
+    if (permissionsApiResponse && permissionsApiResponse.length > 0) {
+      setActiveTab(permissionsApiResponse[0].group); // Set first group as default tab
+    }
+  }, [permissionsApiResponse]);
 
   const handlePermissionChange = (permissionName: string) => {
     setSelectedPermissions((prevSelected) =>
@@ -94,6 +82,14 @@ const EditRolePage: React.FC = () => {
     }
   };
 
+  if (rolesLoading || permissionsLoading) {
+    return <p>Loading role and permissions...</p>;
+  }
+
+  if (rolesError || permissionsError || !role) {
+    return <p>Error fetching role or permissions data.</p>;
+  }
+
   return (
     <div style={{ padding: '24px' }}>
       <h1>Edit Role</h1>
@@ -108,60 +104,48 @@ const EditRolePage: React.FC = () => {
           />
         </div>
 
-        <div style={{ marginBottom: '12px' }}>
-          <button
-            type="button"
-            onClick={() => setSelectedTab('user')}
-            style={{
-              padding: '10px',
-              marginRight: '10px',
-              backgroundColor: selectedTab === 'user' ? '#0070f3' : '#ccc',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            User Permissions
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedTab('other')}
-            style={{
-              padding: '10px',
-              backgroundColor: selectedTab === 'other' ? '#0070f3' : '#ccc',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-          >
-            Other Permissions
-          </button>
+        {/* Dynamic Tabs */}
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+          {permissionsApiResponse?.map((group: PermissionGroup, index: number) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setActiveTab(group.group)}
+              style={{
+                padding: '10px 16px',
+                backgroundColor: activeTab === group.group ? '#0070f3' : '#ccc',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              {group.group}
+            </button>
+          ))}
         </div>
 
-        {selectedTab === 'user' && (
-          <div style={{ marginBottom: '12px' }}>
-            <label>User Permissions:</label>
-            <div>
-              {permissionsList.map((permission) => (
-                <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedPermissions.includes(permission.name)}
-                    onChange={() => handlePermissionChange(permission.name)}
-                  />
-                  {permission.name}
-                </label>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {selectedTab === 'other' && (
-          <div style={{ marginBottom: '12px' }}>
-            <label>Other Permissions:</label>
-            <p>No other permissions available yet</p>
-          </div>
-        )}
+        {/* Permissions for Selected Tab */}
+        <div style={{ marginBottom: '24px' }}>
+          {permissionsApiResponse
+            ?.filter((group: PermissionGroup) => group.group === activeTab)
+            .map((group: PermissionGroup, index: number) => (
+              <div key={index}>
+                <h3 style={{ marginBottom: '10px' }}>{group.group} Permissions</h3>
+                {group.permissions.map((permission) => (
+                  <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedPermissions.includes(permission.name)}
+                      onChange={() => handlePermissionChange(permission.name)}
+                      style={{ marginRight: '6px' }}
+                    />
+                    {permission.name}
+                  </label>
+                ))}
+              </div>
+            ))}
+        </div>
 
         <button
           type="submit"

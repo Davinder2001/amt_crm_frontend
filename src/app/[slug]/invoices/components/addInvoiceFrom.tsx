@@ -123,7 +123,7 @@ const AddInvoiceForm = () => {
 
   useEffect(() => {
     const today = new Date();
-    const formatted = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    const formatted = today.toISOString().split('T')[0];
     setInvoiceDate(formatted);
   }, []);
 
@@ -131,7 +131,6 @@ const AddInvoiceForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate if each item has a valid item_id
     if (items.some(item => !item.item_id)) {
       toast.error('Please select valid items.');
       return;

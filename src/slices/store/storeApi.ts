@@ -70,6 +70,11 @@ const storeApi = storeApiSlice.injectEndpoints({
       providesTags: ["Store"],
     }),
 
+    fetchVariations: builder.query<Attribute[], void>({
+      query: () => "variations",
+      providesTags: ["Store"],
+    }),
+
     // 🆕 Fetch single attribute by ID
     fetchAttributeById: builder.query<Attribute, number>({
       query: (id) => `attributes/${id}`,
@@ -163,6 +168,7 @@ export const {
 
   // 🆕 Attribute hooks
   useFetchAttributesQuery,
+  useFetchVariationsQuery,
   useFetchAttributeByIdQuery,
   useCreateAttributeMutation,
   useUpdateAttributeMutation,

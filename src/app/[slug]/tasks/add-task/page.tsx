@@ -1,48 +1,62 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import { useCompany } from '@/utils/Company';
+import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
 
 const Page: React.FC = () => {
-  const [name, setName] = useState('');
-  const [assignedTo, setAssignedTo] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [role, setRole] = useState('');
-  const [notify, setNotify] = useState(true);
-
   const router = useRouter();
   const { companySlug } = useCompany();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    assignedTo: '',
+    role: '',
+    startDate: '',
+    endDate: '',
+    notify: true,
+    description: '',
+  });
 
   const [createTask, { isLoading }] = useCreateTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
   const { data: profileData } = useFetchProfileQuery();
 
   useEffect(() => {
-    if (assignedTo && usersData?.users.length) {
-      const selectedUser = usersData.users.find((user) => user.id.toString() === assignedTo);
+    if (formData.assignedTo && usersData?.users.length) {
+      const selectedUser = usersData.users.find(
+        (user) => user.id.toString() === formData.assignedTo
+      );
       if (selectedUser) {
         const userRole = selectedUser.roles?.[0]?.name || '';
-        setRole(userRole);
+        setFormData((prev) => ({ ...prev, role: userRole }));
       }
     }
-  }, [assignedTo, usersData]);
+  }, [formData.assignedTo, usersData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newTask = {
-      name,
-      assigned_to: Number(assignedTo),
-      assigned_role: role,
-      start_date: startDate,
-      end_date: endDate,
-      notify,
+      name: formData.name,
+      assigned_to: Number(formData.assignedTo),
+      assigned_role: formData.role,
+      start_date: formData.startDate,
+      end_date: formData.endDate,
+      notify: formData.notify,
+      description: formData.description,
     };
 
     try {
@@ -58,30 +72,25 @@ const Page: React.FC = () => {
   return (
     <form className="task-form" onSubmit={handleSubmit}>
       <div className="form-row">
-
-        <div className="form-group">
-          <label>Employee Name</label>
-          <input type="text" value={profileData?.user?.name || ''} readOnly />
-        </div>
-
-        <div className="form-group">
-          <label>Employee Role</label>
-          <input type="text" value={profileData?.user?.roles?.[0]?.name || ''} readOnly />
-        </div>
-
         <div className="form-group">
           <label>Assign Task Name</label>
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             required
           />
         </div>
 
         <div className="form-group">
           <label>Assign Task To</label>
-          <select value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} required>
+          <select
+            name="assignedTo"
+            value={formData.assignedTo}
+            onChange={handleChange}
+            required
+          >
             <option value="">Select a user</option>
             {usersData?.users.map((user) => (
               <option key={user.id} value={user.id}>
@@ -93,15 +102,16 @@ const Page: React.FC = () => {
 
         <div className="form-group">
           <label>Assign Task to Role</label>
-          <input type="text" value={role} readOnly />
+          <input type="text" value={formData.role} readOnly />
         </div>
 
         <div className="form-group">
           <label>Start Timing</label>
           <input
             type="datetime-local"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            name="startDate"
+            value={formData.startDate}
+            onChange={handleChange}
             required
           />
         </div>
@@ -110,9 +120,21 @@ const Page: React.FC = () => {
           <label>End Timing</label>
           <input
             type="datetime-local"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            name="endDate"
+            value={formData.endDate}
+            onChange={handleChange}
             required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            rows={3}
+            placeholder="Write description for the task"
           />
         </div>
 
@@ -120,10 +142,12 @@ const Page: React.FC = () => {
           <label>Notification</label>
           <button
             type="button"
-            onClick={() => setNotify(!notify)}
-            className={`toggle-button ${notify ? 'on' : 'off'}`}
+            onClick={() =>
+              setFormData((prev) => ({ ...prev, notify: !prev.notify }))
+            }
+            className={`toggle-button ${formData.notify ? 'on' : 'off'}`}
           >
-            {notify ? 'ON 🔔' : 'OFF 🔕'}
+            {formData.notify ? 'ON 🔔' : 'OFF 🔕'}
           </button>
         </div>
       </div>

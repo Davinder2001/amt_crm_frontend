@@ -35,7 +35,7 @@ const AddItem: React.FC = () => {
   });
 
   const [vendors, setVendors] = useState<string[]>([]);
-  const [variations, setVariations] = useState<variations[]>([]);
+  const [variants, setVariants] = useState<variations[]>([]);
 
   useEffect(() => {
     if (currentData) {
@@ -94,17 +94,17 @@ const AddItem: React.FC = () => {
     });
 
     // Attach variants
-    variations.forEach((variation, i) => {
-      form.append(`variants[${i}][price]`, variation.price.toString());
+    variants.forEach((variant, i) => {
+      form.append(`variants[${i}][price]`, variant.price.toString());
 
       // 🔁 Build nested attribute list correctly
-      variation.attributes.forEach((attr, attrIndex) => {
+      variant.attributes.forEach((attr, attrIndex) => {
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());
       });
 
       // 🧠 Support any additional dynamic fields (e.g. color, size, etc.)
-      Object.entries(variation).forEach(([key, val]) => {
+      Object.entries(variant).forEach(([key, val]) => {
         if (!['price', 'attributes'].includes(key)) {
           form.append(`variants[${i}][${key}]`, val.toString());
         }
@@ -210,7 +210,7 @@ const AddItem: React.FC = () => {
             handleRemoveImage={handleRemoveImage}
           />
           <div style={{ flex: '1 1 300px' }}>
-            <ItemsTab onChange={setVariations} variations={variations} />
+            <ItemsTab onChange={setVariants} variations={variants} />
           </div>
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
@@ -232,3 +232,48 @@ const AddItem: React.FC = () => {
 };
 
 export default AddItem;
+
+
+
+
+
+
+
+
+
+
+
+// const LOCAL_STORAGE_KEY = 'storeItemDraft'
+
+//  // Load saved draft on mount
+//  useEffect(() => {
+//   const savedDraft = localStorage.getItem(LOCAL_STORAGE_KEY);
+//   if (savedDraft) {
+//     const parsed = JSON.parse(savedDraft);
+
+//     // Restore only basic data (exclude File objects like images)
+//     setFormData((prev) => ({
+//       ...prev,
+//       ...parsed,
+//       images: [], // Can't restore File objects
+//     }));
+
+//     // Restore variations if present
+//     if (parsed.variations) {
+//       setVariations(parsed.variations);
+//     }
+//   }
+// }, []);
+// useEffect(() => {
+//   const { images, ...safeFormData } = formData;
+
+//   // Avoid saving empty drafts
+//   const hasContent = Object.values(safeFormData).some(value => {
+//     if (Array.isArray(value)) return value.length > 0;
+//     return value !== '' && value !== 0;
+//   });
+
+//   if (hasContent) {
+//     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ ...safeFormData, variations }));
+//   }
+// }, [formData, variations]);

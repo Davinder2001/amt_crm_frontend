@@ -25,7 +25,7 @@ interface StoreItem {
   brand_name: string;
   created_at: string;
   updated_at: string;
-  images: File[]
+  images?: File[]
 }
 
 interface Category {
@@ -36,6 +36,7 @@ interface Category {
   created_at: string;
   updated_at: string;
   children?: Category[];
+  items?: StoreItem[];
 }
 
 interface CategoryResponse {

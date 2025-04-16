@@ -145,13 +145,20 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
-     // 🆕 Delete category
-     deleteCategory: builder.mutation<void, number>({
+    // 🆕 Delete category
+    deleteCategory: builder.mutation<void, number>({
       query: (id) => ({
         url: `categories/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Store"],
+    }),
+
+
+    // 🆕 Fetch all  with items
+    fetchCategoriesAndItems: builder.query<CategoryResponse, void>({
+      query: () => "store/cat-items",
+      providesTags: ["Store"],
     }),
 
   }),
@@ -179,7 +186,8 @@ export const {
   useFetchCategoriesQuery,
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
-  useDeleteCategoryMutation
+  useDeleteCategoryMutation,
+  useFetchCategoriesAndItemsQuery,
 } = storeApi;
 
 export default storeApi;

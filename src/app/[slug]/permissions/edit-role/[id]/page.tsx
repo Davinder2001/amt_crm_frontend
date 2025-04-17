@@ -1,169 +1,153 @@
 'use client';
 
-import React, { useEffect, useState, FormEvent } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
 import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Permission {
   id: number;
   name: string;
 }
-
 interface PermissionGroup {
   group: string;
   permissions: Permission[];
 }
 
-const EditRolePage: React.FC = () => {
-  const params = useParams();
-  const id = params?.id as string;
+export default function EditRolePage() {
   const router = useRouter();
+  const { companySlug, id } = useParams() as {
+    companySlug: string;
+    id: string;
+  };
 
-  const { data: role, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery(id);
-  const { data: permissionsApiResponse, isLoading: permissionsLoading, error: permissionsError } = useFetchPermissionsQuery();
+  /* ───────────────────── Role & permissions ───────────────────── */
+  const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery( id );
+  console.log('role', role);
 
-  const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
+  const { 
+    data: permissionGroups,
+    isLoading: permLoading,
+    error: permError,
+  } = useFetchPermissionsQuery();
 
-  const [name, setName] = useState<string>('');
+  const [updateRole, { isLoading: saving }] = useUpdateRoleMutation();
+
+  /* ───────────────────── Local state ───────────────────── */
+  const [name, setName] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const [companyId, setCompanyId] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<string>('');
+  const [activeTab, setActiveTab] = useState('');
 
+  /* populate form when data arrives */
   useEffect(() => {
     if (role) {
       setName(role.name);
-      setCompanyId(role.company_id);
-      setSelectedPermissions(role.permissions?.map((perm: Permission) => perm.name) || []);
+      setSelectedPermissions(role.permissions?.map((p: Permission) => p.name) || []);
     }
   }, [role]);
 
   useEffect(() => {
-    if (permissionsApiResponse && permissionsApiResponse.length > 0) {
-      setActiveTab(permissionsApiResponse[0].group); // Set first group as default tab
-    }
-  }, [permissionsApiResponse]);
+    if (permissionGroups?.length) setActiveTab(permissionGroups[0].group);
+  }, [permissionGroups]);
 
-  const handlePermissionChange = (permissionName: string) => {
-    setSelectedPermissions((prevSelected) =>
-      prevSelected.includes(permissionName)
-        ? prevSelected.filter((name) => name !== permissionName)
-        : [...prevSelected, permissionName]
+  /* ───────────────────── Handlers ───────────────────── */
+  const togglePermission = (perm: string) =>
+    setSelectedPermissions((prev) =>
+      prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
     );
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    if (!name.trim()) {
-      toast.error('Role name is required');
-      return;
-    }
+    if (!name.trim()) return toast.error('Role name is required');
 
     try {
       await updateRole({
+        companySlug,
         id: Number(id),
         name,
         permissions: selectedPermissions,
-        company_id: companyId,
       }).unwrap();
-
-      toast.success('Role updated successfully!');
-      router.push('/roles');
-    } catch (err) {
-      if (err && typeof err === 'object' && 'data' in err) {
-        const error = err as { data: { message: string } };
-        toast.error(error.data.message || 'Failed to update role. Please try again.');
-      } else {
-        toast.error('An unexpected error occurred.');
-      }
+      toast.success('Role updated!');
+      router.push(`/${companySlug}/permissions/roles`);
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? 'Update failed');
     }
   };
 
-  if (rolesLoading || permissionsLoading) {
-    return <p>Loading role and permissions...</p>;
-  }
+  /* ───────────────────── UI states ───────────────────── */
+  if (roleLoading || permLoading) return <p>Loading…</p>;
+  if (roleError || permError || !role) return <p>Couldn’t load data.</p>;
 
-  if (rolesError || permissionsError || !role) {
-    return <p>Error fetching role or permissions data.</p>;
-  }
-
+  /* ───────────────────── Mark‑up ───────────────────── */
   return (
-    <div style={{ padding: '24px' }}>
-      <h1>Edit Role</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '12px' }}>
-          <input
-            type="text"
-            placeholder="Role Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
-          />
-        </div>
+    <div style={{ padding: 24 }}>
+      <h1>Edit role</h1>
 
-        {/* Dynamic Tabs */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          {permissionsApiResponse?.map((group: PermissionGroup, index: number) => (
+      <form onSubmit={handleSubmit}>
+        <input
+          style={{ width: '100%', marginBottom: 12, padding: 8 }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Role name"
+        />
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+          {permissionGroups?.map((g) => (
             <button
-              key={index}
+              key={g.group}
               type="button"
-              onClick={() => setActiveTab(group.group)}
+              onClick={() => setActiveTab(g.group)}
               style={{
-                padding: '10px 16px',
-                backgroundColor: activeTab === group.group ? '#0070f3' : '#ccc',
-                color: '#fff',
+                padding: '8px 14px',
+                borderRadius: 4,
                 border: 'none',
-                borderRadius: '4px',
                 cursor: 'pointer',
+                background: g.group === activeTab ? '#0070f3' : '#aaa',
+                color: '#fff',
               }}
             >
-              {group.group}
+              {g.group}
             </button>
           ))}
         </div>
 
-        {/* Permissions for Selected Tab */}
-        <div style={{ marginBottom: '24px' }}>
-          {permissionsApiResponse
-            ?.filter((group: PermissionGroup) => group.group === activeTab)
-            .map((group: PermissionGroup, index: number) => (
-              <div key={index}>
-                <h3 style={{ marginBottom: '10px' }}>{group.group} Permissions</h3>
-                {group.permissions.map((permission) => (
-                  <label key={permission.id} style={{ display: 'block', marginBottom: '8px' }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedPermissions.includes(permission.name)}
-                      onChange={() => handlePermissionChange(permission.name)}
-                      style={{ marginRight: '6px' }}
-                    />
-                    {permission.name}
-                  </label>
-                ))}
-              </div>
-            ))}
-        </div>
+        {/* Permissions */}
+        {permissionGroups
+          ?.filter((g) => g.group === activeTab)
+          .map((g) => (
+            <div key={g.group} style={{ marginBottom: 24 }}>
+              <h3>{g.group} permissions</h3>
+              {g.permissions.map((p) => (
+                <label key={p.id} style={{ display: 'block', marginBottom: 6 }}>
+                  <input
+                    type="checkbox"
+                    checked={selectedPermissions.includes(p.name)}
+                    onChange={() => togglePermission(p.name)}
+                    style={{ marginRight: 6 }}
+                  />
+                  {p.name}
+                </label>
+              ))}
+            </div>
+          ))}
 
         <button
-          type="submit"
-          disabled={isUpdating}
+          disabled={saving}
           style={{
             width: '100%',
-            padding: '12px',
-            background: isUpdating ? '#ccc' : '#0070f3',
+            padding: 12,
+            background: saving ? '#888' : '#0070f3',
             color: '#fff',
             border: 'none',
             cursor: 'pointer',
           }}
         >
-          {isUpdating ? 'Updating...' : 'Update Role'}
+          {saving ? 'Updating…' : 'Update role'}
         </button>
       </form>
     </div>
   );
-};
-
-export default EditRolePage;
+}

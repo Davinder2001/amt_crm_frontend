@@ -32,9 +32,11 @@ interface InvoicesResponse {
 }
 
 interface CreateInvoicePayload {
+  number: string;
   client_name: string;
   invoice_date: string;
   items: {
+    item_id: number | null;
     name: string;
     quantity: number;
     price: number;

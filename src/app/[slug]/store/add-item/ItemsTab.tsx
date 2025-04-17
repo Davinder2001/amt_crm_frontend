@@ -31,7 +31,7 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, sel
             key: 'categories',
             label: 'Categories',
             content: <AddCategory onCategoryChange={onCategoryChange}
-                selectedCategories={selectedCategories} setShowModal={setShowModal}/>
+                selectedCategories={selectedCategories}/>
         }
     ];
 

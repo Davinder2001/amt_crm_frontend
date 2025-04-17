@@ -7,7 +7,7 @@ import CategoriesMenu from './CategoriesMenu';
 import InvoiceItems from './InvoiceItems';
 
 function POSPage() {
-    const { data: categories } = useFetchCategoriesAndItemsQuery();
+    const { data: categories } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined };
     const [selectedTopCatId, setSelectedTopCatId] = useState<number | null>(null);
     const [selectedChildCatId, setSelectedChildCatId] = useState<number | null>(null);
     const [expandedChildCats, setExpandedChildCats] = useState<number[]>([]);

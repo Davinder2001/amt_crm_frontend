@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices/tasks/taskApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image';
 
 export default function Page() {
   const params = useParams<{ id?: string | string[] }>();
   const idParam = Array.isArray(params.id) ? params.id[0] : params.id;
   const taskId = idParam ?? '';
-  const router = useRouter();
   const { setTitle } = useBreadcrumb();
   const { data: tasksData, isLoading } = useGetTasksQuery();
   const task = tasksData?.data.find(t => t.id.toString() === taskId);
@@ -57,9 +57,8 @@ export default function Page() {
       const result = await submitTask({ id: task.id, formData }).unwrap();
       console.log(result);
       toast.success(result.message);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      toast.error(err.data?.message || 'Submission failed');
     }
   };
 
@@ -98,11 +97,13 @@ export default function Page() {
         {previews.length > 0 && (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
             {previews.map((src, idx) => (
-              <img
+              <Image
                 key={idx}
                 src={src}
                 alt={`Preview ${idx + 1}`}
-                style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 4 }}
+                style={{ objectFit: 'cover', borderRadius: 4 }}
+                width={100}
+                height={100}
               />
             ))}
           </div>

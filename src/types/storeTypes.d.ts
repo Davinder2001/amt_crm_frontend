@@ -37,7 +37,7 @@ interface Category {
   updated_at: string;
   children?: Category[];
   items?: StoreItem[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface CategoryResponse {
@@ -49,6 +49,7 @@ interface CartItem {
   name: string;
   selling_price: number;
   quantity: number;
+  description? : string;
 };
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';

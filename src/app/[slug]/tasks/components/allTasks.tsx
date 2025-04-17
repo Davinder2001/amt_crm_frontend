@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -53,7 +53,7 @@ const AllTasks: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.data.map((task: any) => (
+            {tasks.data.map((task) => (
               <tr key={task.id}>
                 <td>{task.assigned_to_name}</td>
                 <td>{task.assigned_role}</td>

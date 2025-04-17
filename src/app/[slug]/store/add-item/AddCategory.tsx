@@ -8,7 +8,6 @@ import {
 interface Props {
   onCategoryChange: (categories: Category[]) => void;
   selectedCategories: Category[];
-  setShowModal: (value: boolean) => void;
 }
 
 type CategoryNode = {
@@ -33,17 +32,18 @@ const flattenCategories = (
   }, [] as Array<CategoryNode & { level: number }>);
 };
 
-const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories, setShowModal}) => {
+const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] =
     useCreateCategoryMutation();
-
+  const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
   const [selectedListCategories, setSelectedListCategories] = useState<number[]>([]);
   const [selectedParents, setSelectedParents] = useState<number[]>([]);
   const [name, setName] = useState('');
 
   const handleListCheckboxChange = (id: number) => {
+    setHasChanges(true);
     setSelectedListCategories((prev) =>
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
     );
@@ -140,32 +140,33 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories, se
             <div>
               {renderCategoriesWithChildren(data.data as CategoryNode[])}
 
-              <button
-                type="button"
-                onClick={() => {
-                  const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
+              {hasChanges && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
 
-                  const selectedCats: Category[] = allFlattened
-                    .filter(cat => selectedListCategories.includes(cat.id))
-                    .map(({ level, ...rest }) => rest);
+                    const selectedCats: Category[] = allFlattened
+                      .filter(cat => selectedListCategories.includes(cat.id))
+                      .map(({...rest }) => rest);
 
-                  onCategoryChange(selectedCats);
-                  setShowModal(false);
-                }}
-                style={{
-                  padding: '10px 16px',
-                  backgroundColor: '#4caf50',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  marginTop: '20px',
-                  display: 'block'
-                }}
-              >
-                Done
-              </button>
-
+                    onCategoryChange(selectedCats);
+                    setHasChanges(false);
+                  }}
+                  style={{
+                    padding: '10px 16px',
+                    backgroundColor: '#4caf50',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    marginTop: '20px',
+                    display: 'block',
+                  }}
+                >
+                  Done
+                </button>
+              )}
             </div>
           ) : (
             !isLoading && <p>No categories found.</p>

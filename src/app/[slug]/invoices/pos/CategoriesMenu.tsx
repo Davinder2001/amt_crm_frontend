@@ -34,7 +34,7 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
     };
 
     const renderNestedCategories = (categories: Category[], level = 1) => (
-        <div style={{ marginLeft: level * 20 }}>
+        <div style={{ marginLeft: level * 5 }}>
             {categories.map(child => (
                 <div key={child.id}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>

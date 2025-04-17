@@ -11,10 +11,10 @@ interface Permission {
   id: number;
   name: string;
 }
-interface PermissionGroup {
-  group: string;
-  permissions: Permission[];
-}
+// interface PermissionGroup {
+//   group: string;
+//   permissions: Permission[];
+// }
 
 export default function EditRolePage() {
   const router = useRouter();

@@ -71,7 +71,7 @@ const Page: React.FC = () => {
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
-      <div className="form-row">
+      <div className="add-task-form">
         <div className="form-group">
           <label>Assign Task Name</label>
           <input
@@ -150,15 +150,15 @@ const Page: React.FC = () => {
             {formData.notify ? 'ON 🔔' : 'OFF 🔕'}
           </button>
         </div>
-      </div>
 
-      <div className="form-actions">
-        <button type="button" onClick={() => router.back()} className="cancel-button">
-          Cancel
-        </button>
-        <button type="submit" disabled={isLoading} className="save-button">
-          {isLoading ? 'Saving...' : 'Save'}
-        </button>
+        <div className="form-actions">
+          <button type="button" onClick={() => router.back()} className="cancel-button">
+            Cancel
+          </button>
+          <button type="submit" disabled={isLoading} className="save-button">
+            {isLoading ? 'Saving...' : 'Save'}
+          </button>
+        </div>
       </div>
     </form>
   );

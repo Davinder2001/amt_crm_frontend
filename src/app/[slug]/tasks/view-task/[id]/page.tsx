@@ -1,7 +1,6 @@
-'use client';
-
+'use client'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useGetTasksQuery } from '@/slices/tasks/taskApi';
+import { useGetTasksQuery, useApproveHistoryMutation, useRejectHistoryMutation } from '@/slices/tasks/taskApi';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 
@@ -9,7 +8,10 @@ function Page() {
   const { id } = useParams(); // Dynamic route param
   const { setTitle } = useBreadcrumb();
 
+  // Fetch tasks and approval/reject mutations
   const { data: tasks } = useGetTasksQuery();
+  const [approveHistory, { isLoading: isApproving }] = useApproveHistoryMutation();
+  const [rejectHistory, { isLoading: isRejecting }] = useRejectHistoryMutation();
 
   useEffect(() => {
     setTitle(`View Task`);
@@ -21,6 +23,27 @@ function Page() {
   if (!task) {
     return <div>No task found with ID: {id}</div>;
   }
+
+  const handleApprove = async () => {
+    try {
+      await approveHistory(task.id).unwrap();
+      alert('Task approved successfully');
+      // optionally refetch or navigate back
+    } catch (err) {
+      console.error("Approve Error:", err);
+      alert('Error approving task');
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      await rejectHistory({ id: task.id }).unwrap();
+      alert('Task rejected');
+    } catch (err) {
+      console.error("Reject Error:", err);
+      alert('Error rejecting task');
+    }
+  };
 
   return (
     <div className="view-task-container">
@@ -35,15 +58,26 @@ function Page() {
         <p><strong>Company Name:</strong> {task.company_name || 'N/A'}</p>
         <p><strong>Start Date:</strong> {task.start_date?.replace('T', ' ').slice(0, 16)}</p>
         <p><strong>End Date:</strong> {task.end_date?.replace('T', ' ').slice(0, 16)}</p>
+        {/* New Status Field */}
         <p><strong>Status:</strong> {task.status}</p>
-        <p><strong>Notification:</strong> {task.notify ? 'Enabled' : 'Disabled'}</p>
-        <p><strong>Attachment:</strong> {
-          task.attachment_url
-            ? <a href={task.attachment_url} target="_blank" rel="noopener noreferrer">Download</a>
-            : 'No attachment'
-        }</p>
-        <p><strong>Created At:</strong> {task.created_at.replace('T', ' ').slice(0, 16)}</p>
-        <p><strong>Updated At:</strong> {task.updated_at.replace('T', ' ').slice(0, 16)}</p>
+
+        {/* Approve and Reject Buttons */}
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={handleApprove}
+            disabled={isApproving}
+            className="px-4 py-2 rounded bg-green-500 text-white"
+          >
+            {isApproving ? 'Approving...' : 'Approve'}
+          </button>
+          <button
+            onClick={handleReject}
+            disabled={isRejecting}
+            className="px-4 py-2 rounded bg-red-500 text-white"
+          >
+            {isRejecting ? 'Rejecting...' : 'Reject'}
+          </button>
+        </div>
       </div>
     </div>
   );

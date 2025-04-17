@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +36,8 @@ const AllTasks: React.FC = () => {
     <>
       <ToastContainer />
       {tasks?.data && tasks.data.length > 0 ? (
+        // …inside AllTasks’s return:
+
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr>
@@ -44,25 +46,42 @@ const AllTasks: React.FC = () => {
               <th>Task Name</th>
               <th>Start Date</th>
               <th>End Date</th>
+              <th>Assigned By</th>        {/* ← added */}
               <th>Status</th>
+              <th>Submit Task</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {tasks.data.map((task: Task) => (
+            {tasks.data.map((task: any) => (
               <tr key={task.id}>
                 <td>{task.assigned_to_name}</td>
                 <td>{task.assigned_role}</td>
                 <td>{task.name}</td>
                 <td>{task.start_date?.slice(0, 16).replace('T', ' ')}</td>
                 <td>{task.end_date?.slice(0, 16).replace('T', ' ')}</td>
+                <td>{task.assigned_by_name}</td>  {/* ← added */}
                 <td>{task.status}</td>
                 <td>
+                  <Link
+                    href={`/${companySlug}/tasks/submit-task/${task.id}`}
+                    className="table-e-d-v-buttons"
+                  >
+                    Submit Task
+                  </Link>
+                </td>
+                <td>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <Link href={`/${companySlug}/tasks/view-task/${task.id}`} className="table-e-d-v-buttons">
+                    <Link
+                      href={`/${companySlug}/tasks/view-task/${task.id}`}
+                      className="table-e-d-v-buttons"
+                    >
                       <FaEye color="#222" />
                     </Link>
-                    <Link href={`/${companySlug}/tasks/edit-task/${task.id}`} className="table-e-d-v-buttons">
+                    <Link
+                      href={`/${companySlug}/tasks/edit-task/${task.id}`}
+                      className="table-e-d-v-buttons"
+                    >
                       <FaEdit color="#222" />
                     </Link>
                     <button
@@ -78,6 +97,7 @@ const AllTasks: React.FC = () => {
             ))}
           </tbody>
         </table>
+
       ) : (
         <p>No tasks available.</p>
       )}

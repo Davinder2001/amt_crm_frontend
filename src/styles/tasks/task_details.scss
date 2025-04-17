@@ -11,13 +11,6 @@
     gap: 24px;
   }
   
-  .form-row {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-    flex-wrap: wrap; /* makes it responsive */
-  }
-  
   .form-group {
     flex: 1;
     display: flex;
@@ -44,4 +37,9 @@
   }
   
   
-  
+  form.task-form .add-task-form {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    row-gap:10px;
+    column-gap:20px;
+}

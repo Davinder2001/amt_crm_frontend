@@ -8,9 +8,11 @@ import Variations from './Variations';
 interface Props {
     onChange: (combinations: variations[]) => void;
     variations: variations[];
+    onCategoryChange: (categories: Category[]) => void;
+    selectedCategories: Category[];
 }
 
-const ItemsTab: React.FC<Props> = ({ onChange, variations }) => {
+const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, selectedCategories }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 
@@ -28,7 +30,8 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations }) => {
         {
             key: 'categories',
             label: 'Categories',
-            content: <AddCategory />
+            content: <AddCategory onCategoryChange={onCategoryChange}
+                selectedCategories={selectedCategories} setShowModal={setShowModal}/>
         }
     ];
 

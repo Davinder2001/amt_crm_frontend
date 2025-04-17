@@ -36,6 +36,7 @@ const AddItem: React.FC = () => {
 
   const [vendors, setVendors] = useState<string[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     if (currentData) {
@@ -111,6 +112,11 @@ const AddItem: React.FC = () => {
       });
     });
 
+    // ✅ Send only category IDs
+    selectedCategories.forEach((category, index) => {
+      form.append(`categories[${index}]`, category.id.toString());
+    });
+
 
     try {
       await createStoreItem(form).unwrap();
@@ -169,11 +175,6 @@ const AddItem: React.FC = () => {
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
-            <label>Category</label>
-            <input type="text" name="category" value={formData.category} onChange={handleChange} />
-          </div>
-
-          <div style={{ flex: '1 1 300px' }}>
             <label>Cost Price*</label>
             <input type="number" name="cost_price" value={formData.cost_price} onChange={handleChange} required />
           </div>
@@ -210,7 +211,13 @@ const AddItem: React.FC = () => {
             handleRemoveImage={handleRemoveImage}
           />
           <div style={{ flex: '1 1 300px' }}>
-            <ItemsTab onChange={setVariants} variations={variants} />
+            <ItemsTab
+              onChange={setVariants}
+              variations={variants}
+              onCategoryChange={setSelectedCategories}
+              selectedCategories={selectedCategories}
+            />
+
           </div>
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>

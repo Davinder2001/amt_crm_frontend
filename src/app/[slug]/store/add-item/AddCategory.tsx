@@ -1,16 +1,22 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useCreateCategoryMutation,
   useFetchCategoriesQuery,
 } from '@/slices/store/storeApi';
+
+interface Props {
+  onCategoryChange: (categories: Category[]) => void;
+  selectedCategories: Category[];
+  setShowModal: (value: boolean) => void;
+}
 
 type CategoryNode = {
   id: number;
   company_id: number;
   name: string;
   parent_id: number | null;
-  children?: CategoryNode[];  
+  children?: CategoryNode[];
 };
 
 const flattenCategories = (
@@ -27,7 +33,7 @@ const flattenCategories = (
   }, [] as Array<CategoryNode & { level: number }>);
 };
 
-const AddCategory: React.FC = () => {
+const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories, setShowModal}) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] =
     useCreateCategoryMutation();
@@ -48,6 +54,12 @@ const AddCategory: React.FC = () => {
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
     );
   };
+
+  useEffect(() => {
+    if (selectedCategories.length > 0) {
+      setSelectedListCategories(selectedCategories.map((cat) => cat.id));
+    }
+  }, [selectedCategories]);
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -125,7 +137,36 @@ const AddCategory: React.FC = () => {
           <h2>All Categories</h2>
           {isLoading && <p>Loading categories...</p>}
           {!isLoading && data?.data?.length ? (
-            renderCategoriesWithChildren(data.data as CategoryNode[])
+            <div>
+              {renderCategoriesWithChildren(data.data as CategoryNode[])}
+
+              <button
+                type="button"
+                onClick={() => {
+                  const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
+
+                  const selectedCats: Category[] = allFlattened
+                    .filter(cat => selectedListCategories.includes(cat.id))
+                    .map(({ level, ...rest }) => rest);
+
+                  onCategoryChange(selectedCats);
+                  setShowModal(false);
+                }}
+                style={{
+                  padding: '10px 16px',
+                  backgroundColor: '#4caf50',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  marginTop: '20px',
+                  display: 'block'
+                }}
+              >
+                Done
+              </button>
+
+            </div>
           ) : (
             !isLoading && <p>No categories found.</p>
           )}

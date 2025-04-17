@@ -48,7 +48,6 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-    // ← New: Approve (accept) a submitted task history
     approveHistory: builder.mutation<{ message: string }, number>({
       query: (historyId) => ({
         url: `tasks/${historyId}/approve`,
@@ -57,7 +56,6 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-    // ← New: Reject a submitted task history (optionally send a remark)
     rejectHistory: builder.mutation<{ message: string }, { id: number; remark?: string }>({
       query: ({ id, remark }) => ({
         url: `tasks/${id}/reject`,

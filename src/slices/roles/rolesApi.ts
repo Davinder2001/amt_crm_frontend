@@ -13,7 +13,6 @@ export interface Role {
 }
 
 
-
 export const roleApi = userCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({
@@ -21,6 +20,12 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
       query: () => 'roles',
       providesTags: ['Auth'],
     }),
+
+    getRole: builder.query({
+      query: (id) => `roles/${id}`,
+      providesTags: ['Auth'],
+    }),
+
 
     createRole: builder.mutation({
       query: (newRole) => ({
@@ -30,6 +35,8 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Auth'],
     }),
+
+    
     updateRole: builder.mutation({
       query: ({ id, ...roleData }) => ({
         url: `roles/${id}`,
@@ -38,6 +45,7 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Auth'],
     }),
+    
     deleteRole: builder.mutation({
       query: (id) => ({
         url: `roles/${id}`,
@@ -45,12 +53,14 @@ export const roleApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Auth'],
     }),
+
   }),
   overrideExisting: false,
 });
 
 export const {
   useGetRolesQuery,
+  useGetRoleQuery,
   useCreateRoleMutation,
   useUpdateRoleMutation,
   useDeleteRoleMutation,

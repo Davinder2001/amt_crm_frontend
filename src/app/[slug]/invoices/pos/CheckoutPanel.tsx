@@ -1,22 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
+import { FiX, FiTrash2, FiShoppingCart } from 'react-icons/fi';
 
-type ItemType = { name: string; price: number; qty: number };
-type TabType = 'DineIn' | 'Delivery' | 'Pickup';
-
-type Props = {
+type catMenuProps = {
     activeTab: TabType;
     onTabChange: (tab: TabType) => void;
-    cart: ItemType[];
-    onQtyChange: (itemName: string, delta: number) => void;
+    cart: CartItem[];
+    onQtyChange: (itemId: number, delta: number) => void;
+    onRemoveItem: (itemId: number) => void;
+    onClearCart: () => void;
 };
 
-const tabs: TabType[] = ['DineIn', 'Delivery', 'Pickup'];
+const tabs: TabType[] = ['Cart', 'Delivery', 'Pickup'];
 
-export default function CheckoutPanel({ activeTab, onTabChange, cart, onQtyChange }: Props) {
+export default function CheckoutPanel({ activeTab, onTabChange, cart, onQtyChange, onRemoveItem, onClearCart }: catMenuProps) {
     const [showPaymentDetails, setShowPaymentDetails] = useState(true);
-    const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+    const total = cart.reduce((sum, item) => sum + item.quantity * item.selling_price, 0);
 
     return (
         <div className="checkout">
@@ -33,32 +33,45 @@ export default function CheckoutPanel({ activeTab, onTabChange, cart, onQtyChang
             </div>
 
             <div className="content">
-                {activeTab === 'DineIn' && (
+                {activeTab === 'Cart' && (
                     <>
-                        {cart.length > 0 && (
-                            <table className="cartTable">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {cart.map((item) => (
-                                        <tr key={item.name}>
-                                            <td>{item.name}</td>
-                                            <td>
-                                                <button onClick={() => onQtyChange(item.name, -1)}>-</button>
-                                                {item.qty}
-                                                <button onClick={() => onQtyChange(item.name, 1)}>+</button>
-                                            </td>
-                                            <td>₹{item.qty * item.price}</td>
+                        {cart.length > 0 ? (
+                            <>
+                                <table className="cartTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
+                                    </thead>
+                                    <tbody>
+                                        {cart.map((item) => (
+                                            <tr key={item.id}>
+                                                <td> <button className="removeBtn" onClick={() => onRemoveItem(item.id)}>
+                                                    <FiX />
+                                                </button> {item.name}</td>
+                                                <td>
+                                                    <button onClick={() => onQtyChange(item.id, -1)}>-</button>
+                                                    {item.quantity}
+                                                    <button onClick={() => onQtyChange(item.id, 1)}>+</button>
+                                                </td>
+                                                <td>₹{item.quantity * item.selling_price}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <button onClick={onClearCart} title="Clear all items from cart">
+                                    <FiTrash2 style={{ marginRight: 5 }} />
+                                    Clear All
+                                </button>
+                            </>
+                        ) :
+                            <div className="emptyCart">
+                                <FiShoppingCart size={80} color="#ccc" />
+                                <p>Your cart is empty</p>
+                            </div>
+                        }
 
                         <div className="sectionToggle" onClick={() => setShowPaymentDetails(!showPaymentDetails)}>
                             <span>{showPaymentDetails ? '▼' : '▲'}</span>
@@ -85,8 +98,8 @@ export default function CheckoutPanel({ activeTab, onTabChange, cart, onQtyChang
 
                         <div className="actions">
                             <button className="btn">Save</button>
-                            <button className="btn">Print</button>
-                            <button className="btn">KOT</button>
+                            <button className="btn">Save & Print</button>
+                            <button className="btn">Save & KOT</button>
                         </div>
                     </>
                 )}
@@ -173,6 +186,20 @@ export default function CheckoutPanel({ activeTab, onTabChange, cart, onQtyChang
                     margin: 0 4px;
                     padding: 2px 6px;
                 }
+                    .emptyCart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 10px;
+    color: #888;
+}
+
+.emptyCart p {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
 
                 .sectionToggle {
                     display: flex;

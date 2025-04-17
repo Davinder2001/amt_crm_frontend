@@ -1,62 +1,74 @@
 'use client';
+
 import React, { useState } from 'react';
 
-type ItemType = { name: string; price: number };
-type Props = {
-  items: ItemType[];
-  onItemClick: (item: ItemType) => void;
-};
+interface catMenuProps {
+  items: StoreItem[];
+  onAddToCart: (item: StoreItem) => void;
+}
 
-export default function InvoiceItems({ items, onItemClick }: Props) {
-  const [searchQuery, setSearchQuery] = useState('');
+const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredItems = items.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="centerArea">
+    <div style={{ padding: '1rem', flex: 1, width: '100%' }}>
+
+      {/* Search Input */}
       <input
-        className="searchBar"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        type="text"
+        placeholder="Search items..."
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
+        style={{
+          marginBottom: '1rem',
+          padding: '8px',
+          width: '100%',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+        }}
       />
 
-      <div className="itemGrid">
-        {filteredItems.map((item) => (
-          <div key={item.name} className="itemCard" onClick={() => onItemClick(item)}>
-            <div>{item.name}</div>
-            <div>₹{item.price}</div>
-          </div>
-        ))}
-      </div>
-
-      <style jsx>{`
-        .centerArea {
-          flex: 1;
-          padding: 10px;
-          display: flex;
-          flex-direction: column;
-        }
-        .searchBar {
-          padding: 8px;
-          margin-bottom: 10px;
-          border: 1px solid #ccc;
-        }
-        .itemGrid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-        .itemCard {
-          width: 150px;
-          padding: 10px;
-          background: white;
-          border: 1px solid #ccc;
-          cursor: pointer;
-        }
-      `}</style>
+      {filteredItems.length === 0 ? (
+        <p>No items found</p>
+      ) : (
+        <ul
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4,1fr)',
+            gap: '10px',
+          }}
+        >
+          {filteredItems.map(item => (
+            <li key={item.id}>
+              <button
+                onClick={() => onAddToCart(item)}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  textAlign: 'left',
+                  background: '#f9f9f9',
+                  border: '1px solid #ddd',
+                  borderRadius: 4,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px'
+                }}
+              >
+                <strong>{item.name}</strong> <p>- ₹{item.selling_price}</p>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-}
+};
+
+export default InvoiceItems;

@@ -37,12 +37,21 @@ interface Category {
   updated_at: string;
   children?: Category[];
   items?: StoreItem[];
+  [key: string]: any;
 }
 
 interface CategoryResponse {
   data: Category[];
 }
 
+interface CartItem {
+  id: number;
+  name: string;
+  selling_price: number;
+  quantity: number;
+};
+
+type TabType = 'Cart' | 'Delivery' | 'Pickup';
 
 interface attributes {
   attribute_id: number | string;

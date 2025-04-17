@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useCompany } from '@/utils/Company';
 import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+// import { useFetchProfileQuery } from '@/slices/auth/authApi';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const Page: React.FC = () => {
 
   const [createTask, { isLoading }] = useCreateTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
-  const { data: profileData } = useFetchProfileQuery();
+  // const { data: profileData } = useFetchProfileQuery();
 
   useEffect(() => {
     if (formData.assignedTo && usersData?.users.length) {

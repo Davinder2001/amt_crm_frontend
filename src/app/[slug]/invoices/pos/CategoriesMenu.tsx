@@ -1,115 +1,96 @@
 'use client';
-import React, { useState } from 'react';
 
-type MenuNode = {
-    soreItems?: { name: string; price: number }[];
-    [key: string]: any;
-};
+import React from 'react';
 
-type Props = {
-    menu: Record<string, MenuNode>;
-    mainCategory: string;
-    selectedPath: string[];
-    onMainCatChange: (cat: string) => void;
-    onPathChange: (path: string[]) => void;
-};
+interface catMenuProps {
+    categories: Category[];
+    selectedTopCatId: number | null;
+    setSelectedTopCatId: (id: number) => void;
+    selectedChildCatId: number | null;
+    setSelectedChildCatId: (id: number | null) => void;
+    expandedChildCats: number[];
+    setExpandedChildCats: (ids: number[]) => void;
+}
 
-export default function CategoriesMenu({
-    menu,
-    mainCategory,
-    selectedPath,
-    onMainCatChange,
-    onPathChange,
-}: Props) {
-    const [expandedPaths, setExpandedPaths] = useState<string[][]>([]);
-
-    const toggleExpand = (path: string[]) => {
-        const exists = expandedPaths.some((p) => p.join('/') === path.join('/'));
-        if (exists) {
-            setExpandedPaths(expandedPaths.filter((p) => p.join('/') !== path.join('/')));
-        } else {
-            setExpandedPaths([...expandedPaths, path]);
-        }
+const CategoriesMenu: React.FC<catMenuProps> = ({
+    categories,
+    selectedTopCatId,
+    setSelectedTopCatId,
+    selectedChildCatId,
+    setSelectedChildCatId,
+    expandedChildCats,
+    setExpandedChildCats,
+}) => {
+    const handleChildTabClick = (id: number) => {
+        setSelectedChildCatId(selectedChildCatId === id ? null : id);
     };
 
-    const isExpanded = (path: string[]) =>
-        expandedPaths.some((p) => p.join('/') === path.join('/'));
+    const toggleExpandChild = (id: number) => {
+        setExpandedChildCats(
+            expandedChildCats.includes(id)
+                ? expandedChildCats.filter(cid => cid !== id)
+                : [...expandedChildCats, id]
+        );
+    };
 
-    const renderSubTree = (node: MenuNode, path: string[]) => {
-        return Object.entries(node)
-            .filter(([key]) => key !== 'soreItems')
-            .map(([key, value]) => {
-                const currentPath = [...path, key];
-                const hasChildren = Object.keys(value).some((k) => k !== 'soreItems');
-                const selected = selectedPath.join('/') === currentPath.join('/');
-                const hasItems = value.soreItems?.length > 0;
-
-                return (
-                    <div key={key} style={{ marginLeft: path.length * 10 }}>
+    const renderNestedCategories = (categories: Category[], level = 1) => (
+        <div style={{ marginLeft: level * 20 }}>
+            {categories.map(child => (
+                <div key={child.id}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         <button
-                            className={`subTabBtn ${selected ? 'active' : ''}`}
-                            onClick={() => {
-                                if (selected) {
-                                    // Unselect the current subcategory and show its parent items
-                                    onPathChange(path.slice(0, path.length - 1)); // Parent path
-                                } else {
-                                    onPathChange(currentPath); // Select current subcategory
-                                }
+                            onClick={() => handleChildTabClick(child.id)}
+                            style={{
+                                padding: '10px',
+                                background: child.id === selectedChildCatId ? '#ddd' : '#fff',
+                                border: 'none',
+                                textAlign: 'left',
+                                cursor: 'pointer',
+                                flex: 1,
                             }}
                         >
-                            {key} {hasChildren && <span onClick={(e) => {
-                                e.stopPropagation();
-                                toggleExpand(currentPath);
-                            }}>+</span>}
+                            {child.name}
                         </button>
-                        {hasChildren && isExpanded(currentPath) && renderSubTree(value, currentPath)}
+                        {(child.children ?? []).length > 0 && (
+                            <button onClick={() => toggleExpandChild(child.id)} style={{ marginLeft: 4 }}>
+                                {expandedChildCats.includes(child.id) ? '-' : '+'}
+                            </button>
+                        )}
                     </div>
-                );
-            });
-    };
+                    {expandedChildCats.includes(child.id) && child.children && (
+                        renderNestedCategories(child.children, level + 1)
+                    )}
+                </div>
+            ))}
+        </div>
+    );
+
+    const selectedTopCategory = categories.find(cat => cat.id === selectedTopCatId);
+    const childCategories = selectedTopCategory?.children || [];
 
     return (
-        <div className="leftPanel">
-            <select value={mainCategory} onChange={(e) => onMainCatChange(e.target.value)}>
-                {Object.keys(menu).map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
+        <div>
+            <select
+                value={selectedTopCatId ?? ''}
+                onChange={e => {
+                    const id = parseInt(e.target.value);
+                    setSelectedTopCatId(id);
+                    setSelectedChildCatId(null);
+                    setExpandedChildCats([]);
+                }}
+            >
+                {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                    </option>
                 ))}
             </select>
 
-            <div className="subTabs">
-                {renderSubTree(menu[mainCategory], [])}
+            <div style={{ marginTop: '1rem' }}>
+                {renderNestedCategories(childCategories)}
             </div>
-
-            <style jsx>{`
-        .leftPanel {
-          width: 180px;
-          background: #f1f1f1;
-          padding: 10px;
-          border-right: 1px solid #ccc;
-        }
-        select {
-          padding: 6px;
-          margin-bottom: 10px;
-          border: 1px solid #ccc;
-        }
-        .subTabs {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .subTabBtn {
-          background: white;
-          border: 1px solid #ccc;
-          padding: 5px 10px;
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 0.3s, color 0.3s;
-        }
-        .subTabBtn.active {
-          background: #009688;
-          color: white;
-        }
-      `}</style>
         </div>
     );
-}
+};
+
+export default CategoriesMenu;

@@ -156,7 +156,7 @@ const storeApi = storeApiSlice.injectEndpoints({
 
 
     // 🆕 Fetch all  with items
-    fetchCategoriesAndItems: builder.query<CategoryResponse, void>({
+    fetchCategoriesAndItems: builder.query<Category, void>({
       query: () => "store/cat-items",
       providesTags: ["Store"],
     }),

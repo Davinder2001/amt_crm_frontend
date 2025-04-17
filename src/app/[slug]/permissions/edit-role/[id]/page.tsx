@@ -24,10 +24,10 @@ export default function EditRolePage() {
   };
 
   /* ───────────────────── Role & permissions ───────────────────── */
-  const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery( id );
+  const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery(id);
   console.log('role', role);
 
-  const { 
+  const {
     data: permissionGroups,
     isLoading: permLoading,
     error: permError,
@@ -71,8 +71,8 @@ export default function EditRolePage() {
       }).unwrap();
       toast.success('Role updated!');
       router.push(`/${companySlug}/permissions/roles`);
-    } catch (err: any) {
-      toast.error(err?.data?.message ?? 'Update failed');
+    } catch {
+      toast.error('Update failed');
     }
   };
 

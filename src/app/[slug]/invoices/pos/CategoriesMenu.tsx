@@ -69,7 +69,7 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
     const childCategories = selectedTopCategory?.children || [];
 
     return (
-        <div>
+        <div style={{backgroundColor: '#fff', flex: 1}}>
             <select
                 value={selectedTopCatId ?? ''}
                 onChange={e => {

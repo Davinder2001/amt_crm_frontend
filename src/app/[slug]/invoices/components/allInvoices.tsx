@@ -14,7 +14,7 @@ const AllInvoices = () => {
 
       // Since result is a Blob, create an object URL for it
       const url = URL.createObjectURL(result);
-      
+
       // Create a link and programmatically click to trigger the download
       const link = document.createElement("a");
       link.href = url;
@@ -53,7 +53,7 @@ const AllInvoices = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((invoice, index) => (
+            {Array.isArray(data) ? (data?.map((invoice, index) => (
               <tr key={invoice.id} className="hover:bg-gray-50">
                 <td className="p-2 border">{index + 1}</td>
                 <td className="p-2 border">{invoice.invoice_number}</td>
@@ -78,7 +78,13 @@ const AllInvoices = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            ))) : (
+              <tr>
+                <td colSpan={6} className="p-2 text-center">
+                  No invoices found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -30,6 +30,48 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
+
+    .categories-menu {
+        background-color: #fff;
+        flex: 1;
+    }
+
+    .top-category-select {
+        width: 100%;
+        padding: 10px;
+        text-overflow: ellipsis;
+    }
+
+    .category-tab {
+        display: flex;
+        align-items: center;
+        border-bottom: $border;
+        background-color: $white;
+        color: $dark-color;
+    }
+
+    .category-tab.selected {
+        background-color: $primary-color;
+        color: $white;
+    }
+
+    .category-button {
+        padding: 10px;
+        background: transparent;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        flex: 1;
+        color: inherit;
+    }
+
+    .expand-icon {
+        margin: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
 }
 
 .invoice-items-wrapper {

@@ -25,28 +25,27 @@ type CartTabContentProps = {
     setNumber: React.Dispatch<React.SetStateAction<string>>;
     discountAmount: number;
     setDiscountAmount: React.Dispatch<React.SetStateAction<number>>;
+    paymentMethod: '' | 'cash' | 'online' | 'card' | 'due';
+    setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'due'>>;
+
 };
 
 type InnerTabType = 'Items' | 'Client';
 
 export default function CartTabContent({
-    cart,
-    onQtyChange,
-    onRemoveItem,
-    onClearCart,
-    handleSave,
-    isSaving,
-    handlePrint,
-    isPrinting,
-    handleMail,
-    isMailing,
+    cart, onQtyChange,
+    onRemoveItem, onClearCart,
+    handleSave, isSaving,
+    handlePrint, isPrinting,
+    handleMail, isMailing,
     clientName, setClientName,
     email, setEmail,
     number, setNumber,
-    discountAmount, setDiscountAmount
+    discountAmount, setDiscountAmount,
+    paymentMethod, setPaymentMethod
 }: CartTabContentProps) {
     const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
-    const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+    const [showPaymentDetails, setShowPaymentDetails] = useState(true);
     const [isDiscountApplied, setIsDiscountApplied] = useState(false);
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
@@ -77,6 +76,11 @@ export default function CartTabContent({
             toast.error('Please fill in required client details.');
             return false;
         }
+        if (!paymentMethod) {
+            setShowPaymentDetails(true);
+            toast.error('Please select a payment method.');
+            return false;
+        }
         return true;
     };
 
@@ -87,8 +91,8 @@ export default function CartTabContent({
         setNumber('');
         setDiscountAmount(0);
         setIsDiscountApplied(false);
-        setShowPaymentDetails(false);
         setActiveInnerTab('Items')
+        setPaymentMethod('')
     };
 
     return (
@@ -284,17 +288,49 @@ export default function CartTabContent({
                             <div className="section-title">Payment Method</div>
                             <div className="options-row">
                                 <label className="custom-radio">
-                                    <input type="radio" name="pay" />
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="cash"
+                                        checked={paymentMethod === 'cash'}
+                                        onChange={() => setPaymentMethod('cash')}
+                                    />
                                     <span className="radiomark" />
                                     Cash
                                 </label>
+
                                 <label className="custom-radio">
-                                    <input type="radio" name="pay" />
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="online"
+                                        checked={paymentMethod === 'online'}
+                                        onChange={() => setPaymentMethod('online')}
+                                    />
+                                    <span className="radiomark" />
+                                    Online
+                                </label>
+
+                                <label className="custom-radio">
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="card"
+                                        checked={paymentMethod === 'card'}
+                                        onChange={() => setPaymentMethod('card')}
+                                    />
                                     <span className="radiomark" />
                                     Card
                                 </label>
+
                                 <label className="custom-radio">
-                                    <input type="radio" name="pay" />
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
+                                        value="due"
+                                        checked={paymentMethod === 'due'}
+                                        onChange={() => setPaymentMethod('due')}
+                                    />
                                     <span className="radiomark" />
                                     Due
                                 </label>

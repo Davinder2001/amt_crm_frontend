@@ -38,6 +38,7 @@ interface CreateInvoicePayload {
   email?: string;
   discount_price?: number;
   item_type: TabType;
+  payment_method: string;
   items: {
     item_id: number;
     quantity: number;

@@ -37,6 +37,8 @@ export default function CheckoutPanel({
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
     const [discountAmount, setDiscountAmount] = useState<number>(0);
+    const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'due'>('');
+
     const cartItemCount = cart.length;
 
     const buildPayload = (): CreateInvoicePayload => ({
@@ -46,6 +48,7 @@ export default function CheckoutPanel({
         invoice_date: new Date().toISOString().split('T')[0],
         discount_price: discountAmount,
         item_type: activeTab,
+        payment_method: paymentMethod,
         items: cart.map(i => ({
             item_id: i.id,
             quantity: i.quantity,
@@ -162,6 +165,8 @@ export default function CheckoutPanel({
                 setNumber={setNumber}
                 discountAmount={discountAmount}
                 setDiscountAmount={setDiscountAmount}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
             />
             <div className="content">
                 {activeTab === 'Cart' && (

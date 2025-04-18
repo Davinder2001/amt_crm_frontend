@@ -12,6 +12,10 @@ interface Permission {
   id: number;
   name: string;
 }
+interface PermissionGroup {
+  group: string;
+  permissions: Permission[];
+}
 
 export default function EditRolePage() {
   const router = useRouter();
@@ -20,9 +24,11 @@ export default function EditRolePage() {
     id: string;
   };
 
+  /* ───────────────────── Role & permissions ───────────────────── */
   const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery( id );
+  console.log('role', role);
 
-  const { 
+  const {
     data: permissionGroups,
     isLoading: permLoading,
     error: permError,
@@ -62,11 +68,8 @@ export default function EditRolePage() {
       }).unwrap();
       toast.success('Role updated!');
       router.push(`/${companySlug}/permissions/roles`);
-    } catch (err) {
-      const error = err as FetchBaseQueryError;
-      toast.error(
-        (error.data as { message?: string })?.message ?? 'Update failed'
-      );
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? 'Update failed');
     }
     
   };

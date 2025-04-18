@@ -1,41 +1,11 @@
 import invoiceCreateApiSlice from "./invoiceCreateSlice";
 
-export interface InvoiceItem {
-  item_id: number | null;
-  quantity: number;
-  unit_price: number;
-  description: string;
-  total: number;
-}
-
-
-
-export interface CreateInvoicePayload {
-  client_name: string;
-  number: string;
-  email?: string;
-  invoice_date: string;
-  items: InvoiceItem[];
-}
-
-export interface Invoice {
-  id: number;
-  invoice_number: string;
-  client_name: string;
-  client_email: string;
-  invoice_date: string;
-  total_amount: number;
-  items: InvoiceItem[];
-}
-
-export interface InvoicePdfDownloadResponse {
-  pdfUrl: string; // Example, update this based on actual backend response
-}
 
 const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    fetchInvoices: builder.query<Invoice[], void>({
+
+    fetchInvoices: builder.query<InvoicesResponse, void>({
       query: () => "invoices",
       providesTags: ["Invoice"],
     }),

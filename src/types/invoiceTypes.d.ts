@@ -36,12 +36,14 @@ interface CreateInvoicePayload {
   client_name: string;
   invoice_date: string;
   email?: string;
+  discount_price?: number;
+  item_type: TabType;
   items: {
-      item_id: number;
-      quantity: number;
-      unit_price: number;
-      description: string;
-      total: number;
+    item_id: number;
+    quantity: number;
+    unit_price: number;
+    description: string;
+    total: number;
   }[];
 };
 

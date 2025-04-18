@@ -36,12 +36,16 @@ export default function CheckoutPanel({
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
+    const [discountAmount, setDiscountAmount] = useState<number>(0);
+    const cartItemCount = cart.length;
 
     const buildPayload = (): CreateInvoicePayload => ({
         number: number,
         client_name: clientName,
         email: email,
         invoice_date: new Date().toISOString().split('T')[0],
+        discount_price: discountAmount,
+        item_type: activeTab,
         items: cart.map(i => ({
             item_id: i.id,
             quantity: i.quantity,
@@ -110,61 +114,71 @@ export default function CheckoutPanel({
                             key={tab}
                             className={`tab ${tab === activeTab ? 'active' : ''}`}
                             onClick={() => onTabChange(tab)}
+                            style={{ display: 'flex', alignItems: 'center', gap: 6 }}
                         >
-                            {Icon && <Icon style={{ marginRight: 6, fontSize: 16 }} />}
-                            {tab}
+                            {Icon && <Icon style={{ fontSize: 16 }} />}
+                            <span style={{ position: 'relative', display: 'inline-block' }}>
+                                {tab}
+                                {tab === 'Cart' && cartItemCount > 0 && (
+                                    <span
+                                        className="cart-badge"
+                                        style={{
+                                            position: 'absolute',
+                                            top: -8,
+                                            right: -12,
+                                            background: 'red',
+                                            color: 'white',
+                                            borderRadius: '50%',
+                                            padding: '2px 6px',
+                                            fontSize: 11,
+                                            fontWeight: 'bold',
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        {cartItemCount}
+                                    </span>
+                                )}
+                            </span>
                         </button>
                     );
                 })}
             </div>
-
+            <CartTabContent
+                cart={cart}
+                onQtyChange={onQtyChange}
+                onRemoveItem={onRemoveItem}
+                onClearCart={onClearCart}
+                handleSave={handleSave}
+                isSaving={isSaving}
+                handlePrint={handlePrint}
+                isPrinting={isPrinting}
+                handleMail={handleMail}
+                isMailing={isMailing}
+                clientName={clientName}
+                setClientName={setClientName}
+                email={email}
+                setEmail={setEmail}
+                number={number}
+                setNumber={setNumber}
+                discountAmount={discountAmount}
+                setDiscountAmount={setDiscountAmount}
+            />
             <div className="content">
                 {activeTab === 'Cart' && (
                     <>
-                        <CartTabContent
-                            cart={cart}
-                            onQtyChange={onQtyChange}
-                            onRemoveItem={onRemoveItem}
-                            onClearCart={onClearCart}
-                            handleSave={handleSave}
-                            isSaving={isSaving}
-                            handlePrint={handlePrint}
-                            isPrinting={isPrinting}
-                            handleMail={handleMail}
-                            isMailing={isMailing}
-                            clientName={clientName}
-                            setClientName={setClientName}
-                            email={email}
-                            setEmail={setEmail}
-                            number={number}
-                            setNumber={setNumber}
-                        />
 
                     </>
                 )}
 
                 {activeTab === 'Delivery' && (
-                    <div className="form">
-                        <h4>Delivery Details</h4>
-                        <input type="text" placeholder="Customer Name" />
-                        <input type="text" placeholder="Phone Number" />
-                        <textarea placeholder="Delivery Address" />
-                        <div className="actions">
-                            <button className="btn">Save</button>
-                            <button className="btn">Send</button>
-                        </div>
+                    <div className="delivery">
+
                     </div>
                 )}
 
                 {activeTab === 'Pickup' && (
-                    <div className="form">
-                        <h4>Pickup Details</h4>
-                        <input type="text" placeholder="Customer Name" />
-                        <input type="text" placeholder="Phone Number" />
-                        <div className="actions">
-                            <button className="btn">Save</button>
-                            <button className="btn">Notify</button>
-                        </div>
+                    <div className="pickup">
+
                     </div>
                 )}
             </div>

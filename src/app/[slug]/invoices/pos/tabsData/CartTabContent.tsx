@@ -23,6 +23,8 @@ type CartTabContentProps = {
     setEmail: React.Dispatch<React.SetStateAction<string>>;
     number: string;
     setNumber: React.Dispatch<React.SetStateAction<string>>;
+    discountAmount: number;
+    setDiscountAmount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type InnerTabType = 'Items' | 'Client';
@@ -40,14 +42,17 @@ export default function CartTabContent({
     isMailing,
     clientName, setClientName,
     email, setEmail,
-    number, setNumber
+    number, setNumber,
+    discountAmount, setDiscountAmount
 }: CartTabContentProps) {
     const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
     const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+    const [isDiscountApplied, setIsDiscountApplied] = useState(false);
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
 
-    const total = cart.reduce((sum, i) => sum + i.quantity * i.selling_price, 0);
+    const baseTotal = cart.reduce((sum, i) => sum + i.quantity * i.selling_price, 0);
+    const total = Math.max(0, baseTotal - (isDiscountApplied ? discountAmount : 0));
 
     const innerTabs: InnerTabType[] = ['Items', 'Client'];
 
@@ -73,6 +78,17 @@ export default function CartTabContent({
             return false;
         }
         return true;
+    };
+
+    const handleClearAll = () => {
+        onClearCart();
+        setClientName('');
+        setEmail('');
+        setNumber('');
+        setDiscountAmount(0);
+        setIsDiscountApplied(false);
+        setShowPaymentDetails(false);
+        setActiveInnerTab('Items')
     };
 
     return (
@@ -102,7 +118,7 @@ export default function CartTabContent({
                         </button>
                     )
                 })}
-                <button className="inner-tab danger" onClick={onClearCart}>
+                <button className="inner-tab danger" onClick={handleClearAll}>
                     <FiTrash2 style={{ marginRight: 5 }} />
                     Clear All
                 </button>
@@ -222,7 +238,11 @@ export default function CartTabContent({
                             <div className="section-title">Discount Options</div>
                             <div className="options-row">
                                 <label className="custom-checkbox">
-                                    <input type="checkbox" />
+                                    <input
+                                        type="checkbox"
+                                        checked={isDiscountApplied}
+                                        onChange={(e) => setIsDiscountApplied(e.target.checked)}
+                                    />
                                     <span className="checkmark" />
                                     Discount
                                 </label>
@@ -233,6 +253,32 @@ export default function CartTabContent({
                                 </label>
                             </div>
                         </div>
+                        {isDiscountApplied && (
+                            <div className="discount-input-container">
+                                <label>Discount Amount</label>
+                                <input
+                                    type="number"
+                                    value={discountAmount === 0 ? '' : discountAmount}
+                                    onChange={(e) => {
+                                        const val = Number(e.target.value);
+                                        setDiscountAmount(isNaN(val) ? 0 : val);
+                                    }}
+                                    onFocus={(e) => {
+                                        if (e.target.value === '0') {
+                                            e.target.value = '';
+                                        }
+                                    }}
+                                    onBlur={(e) => {
+                                        if (e.target.value === '') {
+                                            setDiscountAmount(0);
+                                        }
+                                    }}
+                                    placeholder="Enter discount amount"
+                                    min={0}
+                                    max={baseTotal}
+                                />
+                            </div>
+                        )}
 
                         <div className="section-group">
                             <div className="section-title">Payment Method</div>

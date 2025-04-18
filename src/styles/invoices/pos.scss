@@ -221,6 +221,34 @@
         gap: 10px;
     }
 
+    .discount-input-container {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .discount-input-container label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .discount-input-container input[type="number"] {
+        height: 30px;
+        max-width: 60%;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px !important;
+        transition: border-color 0.2s ease;
+        outline: none;
+    }
+
+    .discount-input-container input[type="number"]:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+    }
+
     .section-group {
         display: flex;
         flex-direction: column;

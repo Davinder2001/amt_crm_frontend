@@ -74,9 +74,9 @@ function POSPage() {
     };
 
     return (
-        <div className="container">
+        <div className="pos-wrapper">
             {/* Left: Categorie */}
-            <div style={{ minWidth: '200px', display: 'flex', flexDirection: 'column', borderRight: '1px solid #ccc' }}>
+            <div className='cats-sidebar'>
                 <CategoriesMenu
                     categories={topCategories}
                     selectedTopCatId={selectedTopCatId}
@@ -88,21 +88,20 @@ function POSPage() {
                 />
             </div>
             {/* center items */}
-            <InvoiceItems items={displayItems} onAddToCart={handleAddToCart} />
+            <div className='invoice-items-wrapper'>
+                <InvoiceItems items={displayItems} onAddToCart={handleAddToCart} />
+            </div>
             {/* Right: Checkout Panel */}
-            <CheckoutPanel
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                cart={cart}
-                onQtyChange={handleQtyChange}
-                onRemoveItem={handleRemoveItem}
-                onClearCart={handleClearCart}
-            />
-            <style jsx>{`
-        .container {
-          display: flex;
-        }
-      `}</style>
+            <div className='checkout-panel'>
+                <CheckoutPanel
+                    activeTab={activeTab}
+                    onTabChange={setActiveTab}
+                    cart={cart}
+                    onQtyChange={handleQtyChange}
+                    onRemoveItem={handleRemoveItem}
+                    onClearCart={handleClearCart}
+                />
+            </div>
         </div>
     );
 }

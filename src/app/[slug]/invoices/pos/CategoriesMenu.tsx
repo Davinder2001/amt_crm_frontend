@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
 
 interface catMenuProps {
     categories: Category[];
@@ -36,13 +37,14 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
     const renderNestedCategories = (categories: Category[], level = 1) => (
         <div style={{ marginLeft: level * 5 }}>
             {categories.map(child => (
-                <div key={child.id}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                <>
+                    <div key={child.id} style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd', background: child.id === selectedChildCatId ? '#009693' : '#fff', color: child.id === selectedChildCatId ? '#fff' : '#000' }}>
                         <button
                             onClick={() => handleChildTabClick(child.id)}
                             style={{
                                 padding: '10px',
-                                background: child.id === selectedChildCatId ? '#ddd' : '#fff',
+                                background: child.id === selectedChildCatId ? '#009693' : '#fff',
+                                color: child.id === selectedChildCatId ? '#fff' : '#000',
                                 border: 'none',
                                 textAlign: 'left',
                                 cursor: 'pointer',
@@ -52,15 +54,15 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
                             {child.name}
                         </button>
                         {(child.children ?? []).length > 0 && (
-                            <button onClick={() => toggleExpandChild(child.id)} style={{ marginLeft: 4 }}>
-                                {expandedChildCats.includes(child.id) ? '-' : '+'}
-                            </button>
+                            <span onClick={() => toggleExpandChild(child.id)} style={{ margin: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
+                                {expandedChildCats.includes(child.id) ? <FaMinusCircle/> : <FaPlusCircle/>}
+                            </span>
                         )}
                     </div>
                     {expandedChildCats.includes(child.id) && child.children && (
                         renderNestedCategories(child.children, level + 1)
                     )}
-                </div>
+                </>
             ))}
         </div>
     );
@@ -69,7 +71,7 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
     const childCategories = selectedTopCategory?.children || [];
 
     return (
-        <div style={{backgroundColor: '#fff', flex: 1}}>
+        <div style={{ backgroundColor: '#fff', flex: 1 }}>
             <select
                 value={selectedTopCatId ?? ''}
                 onChange={e => {
@@ -78,6 +80,7 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
                     setSelectedChildCatId(null);
                     setExpandedChildCats([]);
                 }}
+                style={{ width: '100%' }}
             >
                 {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>

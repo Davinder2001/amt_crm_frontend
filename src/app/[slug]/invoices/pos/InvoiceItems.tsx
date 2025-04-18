@@ -15,9 +15,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
   );
 
   return (
-    <div style={{ flex: 1, width: '100%', background: '#fff'
-    }}>
-
+    <>
       <div className="searchbar-container" style={{ backgroundColor: '#eee' }}>
         {/* Search Input */}
         < input
@@ -36,7 +34,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
       {
         filteredItems.length === 0 ? (
-          <p style={{padding: '20px', textAlign: 'center'}}>No items found</p>
+          <p style={{ padding: '20px', textAlign: 'center' }}>No items found</p>
         ) : (
           <ul
             style={{
@@ -64,14 +62,15 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                     gap: '10px'
                   }}
                 >
-                  <strong>{item.name}</strong> <p>- ₹{item.selling_price}</p>
+                  <strong>{item.name}</strong>
+                  <p> ₹{item.selling_price}</p>
                 </button>
               </li>
             ))}
           </ul>
         )
       }
-    </div >
+    </ >
   );
 };
 

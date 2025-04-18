@@ -8,6 +8,8 @@ import Image from 'next/image';
 const ViewItem = () => {
   const { companySlug, id } = useParams();
   const { data: item, error, isLoading } = useFetchStoreItemQuery(Number(id));
+  console.log('images', item?.images);
+  
 
   if (isLoading) return <p>Loading item...</p>;
   if (error) return <p>Error loading item.</p>;
@@ -35,12 +37,12 @@ const ViewItem = () => {
         <p><strong>Online Visibility:</strong> {item.online_visibility ? 'Yes' : 'No'}</p>
       </div>
 
-      {item.images && item.images.length > 0 && (
+      {Array.isArray(item.images) && item.images.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold mt-4 mb-2">Images</h2>
           <div className="flex flex-wrap gap-3">
-            {item.images.map((img: File, index: number) => {
-              const imgSrc = img instanceof File ? URL.createObjectURL(img) : img; 
+            {item.images.map((img: File | string, index: number) => {
+              const imgSrc = typeof img === 'string' ? img : URL.createObjectURL(img);
               return (
                 <Image
                   key={index}
@@ -55,7 +57,6 @@ const ViewItem = () => {
           </div>
         </div>
       )}
-
 
       <div className="buttons-container">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>

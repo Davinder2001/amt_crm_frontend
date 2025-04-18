@@ -35,15 +35,16 @@ interface CreateInvoicePayload {
   number: string;
   client_name: string;
   invoice_date: string;
+  email?: string;
   items: {
-    item_id: number | null;
-    name: string;
-    quantity: number;
-    price: number;
-    unit_price: number;
-    description: string;
+      item_id: number;
+      quantity: number;
+      unit_price: number;
+      description: string;
+      total: number;
   }[];
-}
+};
+
 
 interface InvoicePdfDownloadResponse {
   status: boolean;

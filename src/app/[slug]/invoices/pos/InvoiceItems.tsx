@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 interface catMenuProps {
   items: StoreItem[];
@@ -16,18 +17,18 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
   return (
     <>
-      <div className="searchbar-container" style={{ backgroundColor: '#eee' }}>
+      <div className="searchbar-container" style={{ backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '5px', border: '1px solid #ccc', padding: '0px 10px' }}>
         {/* Search Input */}
+        <FaSearch />
         < input
           type="text"
           placeholder="Search items..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           style={{
-            padding: '8px',
             width: '100%',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
+            border: 'none',
+            padding: 0
           }}
         />
       </div>
@@ -46,7 +47,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
             }}
           >
             {filteredItems.map(item => (
-              <li key={item.id}>
+              <li key={item.id} style={{ borderLeft: '3px solid #009693', overflow: 'hidden' }}>
                 <button
                   onClick={() => onAddToCart(item)}
                   style={{
@@ -55,7 +56,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                     textAlign: 'left',
                     background: '#f9f9f9',
                     border: '1px solid #ddd',
-                    borderRadius: 4,
                     cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',

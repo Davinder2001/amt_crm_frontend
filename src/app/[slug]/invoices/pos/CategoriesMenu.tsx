@@ -34,11 +34,11 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
         );
     };
 
-    const renderNestedCategories = (categories: Category[], level = 1) => (
-        <div style={{ marginLeft: level * 5 }}>
+    const renderNestedCategories = (categories: Category[]) => (
+        <div>
             {categories.map(child => (
                 <>
-                    <div key={child.id} style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd', background: child.id === selectedChildCatId ? '#009693' : '#fff', color: child.id === selectedChildCatId ? '#fff' : '#000' }}>
+                    <div key={child.id} style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd', background: child.id === selectedChildCatId ? '#009693' : '#fff', color: child.id === selectedChildCatId ? '#fff' : '#000' }} className='category-tab'>
                         <button
                             onClick={() => handleChildTabClick(child.id)}
                             style={{
@@ -54,13 +54,13 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
                             {child.name}
                         </button>
                         {(child.children ?? []).length > 0 && (
-                            <span onClick={() => toggleExpandChild(child.id)} style={{ margin: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                                {expandedChildCats.includes(child.id) ? <FaMinusCircle/> : <FaPlusCircle/>}
+                            <span onClick={() => toggleExpandChild(child.id)} style={{ margin: '4px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
+                                {expandedChildCats.includes(child.id) ? <FaMinusCircle /> : <FaPlusCircle />}
                             </span>
                         )}
                     </div>
                     {expandedChildCats.includes(child.id) && child.children && (
-                        renderNestedCategories(child.children, level + 1)
+                        renderNestedCategories(child.children, )
                     )}
                 </>
             ))}
@@ -89,7 +89,7 @@ const CategoriesMenu: React.FC<catMenuProps> = ({
                 ))}
             </select>
 
-            <div style={{ marginTop: '1rem' }}>
+            <div>
                 {renderNestedCategories(childCategories)}
             </div>
         </div>

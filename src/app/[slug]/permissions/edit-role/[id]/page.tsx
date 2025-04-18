@@ -3,7 +3,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+// import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
 import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,10 +12,10 @@ interface Permission {
   id: number;
   name: string;
 }
-interface PermissionGroup {
-  group: string;
-  permissions: Permission[];
-}
+// interface PermissionGroup {
+//   group: string;
+//   permissions: Permission[];
+// }
 
 export default function EditRolePage() {
   const router = useRouter();
@@ -68,14 +68,14 @@ export default function EditRolePage() {
       }).unwrap();
       toast.success('Role updated!');
       router.push(`/${companySlug}/permissions/roles`);
-    } catch (err: any) {
-      toast.error(err?.data?.message ?? 'Update failed');
+    } catch {
+      toast.error( 'Update failed');
     }
     
   };
 
   if (roleLoading || permLoading) return <p>Loading…</p>;
-  if (roleError || permError || !role) return <p>Couldn’t load data.</p>;
+  if (roleError || permError || !role) return <p>Could not load data.</p>;
 
   return (
     <div style={{ padding: 24 }}>

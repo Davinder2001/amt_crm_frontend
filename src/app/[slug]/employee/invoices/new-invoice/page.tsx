@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect } from 'react'
-import AddInvoiceFrom from '../components/addInvoiceFrom'
+// import AddInvoiceFrom from '../components/addInvoiceFrom'
 // import CompanyDetails from '../components/companyDetails'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const Page = () => {
     <>
       <Link href={`/${companySlug}/employee/invoices`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       {/* <CompanyDetails /> */}
-      <AddInvoiceFrom />
+      {/* <AddInvoiceFrom /> */}
     </>
   )
 }

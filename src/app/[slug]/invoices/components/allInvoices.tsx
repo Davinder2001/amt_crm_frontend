@@ -9,45 +9,27 @@ const AllInvoices = () => {
 
   const handleDownloadPdf = async (invoiceId: number) => {
     try {
+      // Trigger the PDF download (this returns a Blob)
       const result = await triggerDownload(invoiceId).unwrap();
-  
-      if (!result.pdf_base64) {
-        throw new Error("PDF base64 string missing.");
-      }
-  
-      // Decode Base64 and create a Blob
-      const byteCharacters = atob(result.pdf_base64);
-      const byteArrays: Uint8Array[] = [];
-  
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-  
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-  
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-  
-      const blob = new Blob(byteArrays, { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-  
+
+      // Since result is a Blob, create an object URL for it
+      const url = URL.createObjectURL(result);
+      
+      // Create a link and programmatically click to trigger the download
       const link = document.createElement("a");
       link.href = url;
-      link.download = result.filename || `invoice_${invoiceId}.pdf`;
+      link.download = `invoice_${invoiceId}.pdf`; // You can adjust this filename if needed
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-  
+
+      // Clean up the object URL after a short delay
       setTimeout(() => URL.revokeObjectURL(url), 60000);
     } catch (err) {
       console.error("Download error:", err);
       alert("Failed to fetch the PDF.");
     }
   };
-  
 
   const handleViewInvoice = (invoiceId: number) => {
     router.push(`invoices/view/${invoiceId}`);
@@ -71,7 +53,7 @@ const AllInvoices = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.invoices.map((invoice, index) => (
+            {data?.map((invoice, index) => (
               <tr key={invoice.id} className="hover:bg-gray-50">
                 <td className="p-2 border">{index + 1}</td>
                 <td className="p-2 border">{invoice.invoice_number}</td>

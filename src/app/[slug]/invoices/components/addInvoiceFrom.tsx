@@ -130,12 +130,12 @@ const AddInvoiceForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (items.some(item => !item.item_id)) {
       toast.error('Please select valid items.');
       return;
     }
-
+  
     const payload = {
       number,
       client_name: clientName,
@@ -147,10 +147,11 @@ const AddInvoiceForm = () => {
         quantity: item.quantity,
         unit_price: item.unit_price,
         price: item.price,
-        description: item.description
+        description: item.description,
+        total: item.quantity * item.unit_price,  
       }))
     };
-
+  
     try {
       await createInvoice(payload).unwrap();
       toast.success('Invoice created successfully!');
@@ -159,7 +160,7 @@ const AddInvoiceForm = () => {
       toast.error('Failed to create invoice.');
     }
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="invoice-form">
       <div className="form-group">

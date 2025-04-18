@@ -3,6 +3,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
 import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,10 +12,10 @@ interface Permission {
   id: number;
   name: string;
 }
-// interface PermissionGroup {
-//   group: string;
-//   permissions: Permission[];
-// }
+interface PermissionGroup {
+  group: string;
+  permissions: Permission[];
+}
 
 export default function EditRolePage() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function EditRolePage() {
   };
 
   /* ───────────────────── Role & permissions ───────────────────── */
-  const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery(id);
+  const { data: role, isLoading: roleLoading, error: roleError } = useGetRolesQuery( id );
   console.log('role', role);
 
   const {
@@ -34,13 +35,10 @@ export default function EditRolePage() {
   } = useFetchPermissionsQuery();
 
   const [updateRole, { isLoading: saving }] = useUpdateRoleMutation();
-
-  /* ───────────────────── Local state ───────────────────── */
   const [name, setName] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('');
 
-  /* populate form when data arrives */
   useEffect(() => {
     if (role) {
       setName(role.name);
@@ -52,7 +50,6 @@ export default function EditRolePage() {
     if (permissionGroups?.length) setActiveTab(permissionGroups[0].group);
   }, [permissionGroups]);
 
-  /* ───────────────────── Handlers ───────────────────── */
   const togglePermission = (perm: string) =>
     setSelectedPermissions((prev) =>
       prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
@@ -71,16 +68,15 @@ export default function EditRolePage() {
       }).unwrap();
       toast.success('Role updated!');
       router.push(`/${companySlug}/permissions/roles`);
-    } catch {
-      toast.error('Update failed');
+    } catch (err: any) {
+      toast.error(err?.data?.message ?? 'Update failed');
     }
+    
   };
 
-  /* ───────────────────── UI states ───────────────────── */
   if (roleLoading || permLoading) return <p>Loading…</p>;
   if (roleError || permError || !role) return <p>Couldn’t load data.</p>;
 
-  /* ───────────────────── Mark‑up ───────────────────── */
   return (
     <div style={{ padding: 24 }}>
       <h1>Edit role</h1>
@@ -93,7 +89,6 @@ export default function EditRolePage() {
           placeholder="Role name"
         />
 
-        {/* Tabs */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           {permissionGroups?.map((g) => (
             <button
@@ -114,7 +109,6 @@ export default function EditRolePage() {
           ))}
         </div>
 
-        {/* Permissions */}
         {permissionGroups
           ?.filter((g) => g.group === activeTab)
           .map((g) => (

@@ -39,7 +39,7 @@ const ViewItem = () => {
         <div>
           <h2 className="text-lg font-semibold mt-4 mb-2">Images</h2>
           <div className="flex flex-wrap gap-3">
-            {item.images.map((img: File, index: number) => {
+            {item.images.map((img: string | File, index: number) => {
               const imgSrc = img instanceof File ? URL.createObjectURL(img) : img; // If it's a File, convert it to a URL
               return (
                 <Image

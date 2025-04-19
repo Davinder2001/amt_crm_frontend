@@ -36,8 +36,10 @@ export default function CheckoutPanel({
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
-    const [discountAmount, setDiscountAmount] = useState<number>(0);
     const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'due'>('');
+    const [discountType, setDiscountType] = useState<'amount' | 'percentage'>('amount');
+    const [discountAmount, setDiscountAmount] = useState<number>(0);
+    const [discountPercent, setDiscountPercent] = useState<number>(0);
 
     const cartItemCount = cart.length;
 
@@ -47,6 +49,8 @@ export default function CheckoutPanel({
         email: email,
         invoice_date: new Date().toISOString().split('T')[0],
         discount_price: discountAmount,
+        percentage: discountPercent, 
+        discount_type: discountType,
         item_type: activeTab,
         payment_method: paymentMethod,
         items: cart.map(i => ({
@@ -165,6 +169,10 @@ export default function CheckoutPanel({
                 setNumber={setNumber}
                 discountAmount={discountAmount}
                 setDiscountAmount={setDiscountAmount}
+                discountType={discountType}
+                setDiscountType={setDiscountType}
+                discountPercent={discountPercent}
+                setDiscountPercent={setDiscountPercent}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
             />

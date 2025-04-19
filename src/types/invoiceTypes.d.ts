@@ -37,6 +37,8 @@ interface CreateInvoicePayload {
   invoice_date: string;
   email?: string;
   discount_price?: number;
+  percentage?: number;
+  discount_type?: string;
   item_type: TabType;
   payment_method: string;
   items: {

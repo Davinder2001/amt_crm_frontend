@@ -25,7 +25,7 @@ interface StoreItem {
   brand_name: string;
   created_at: string;
   updated_at: string;
-  images?: File[]
+  images: (string | File)[];
 }
 
 interface Category {

@@ -49,7 +49,7 @@ interface CartItem {
   name: string;
   selling_price: number;
   quantity: number;
-  description? : string;
+  description?: string;
 };
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';
@@ -79,6 +79,7 @@ interface CreateStoreItemRequest {
   availability_stock: number;
   cost_price: number;
   selling_price: number;
+  tax_id: number;
   images: File[],
   variants: variations[]
 }

@@ -9,10 +9,12 @@ import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import ItemsTab from './ItemsTab';
+import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
   const { currentData } = useFetchVendorsQuery();
+  const { data: taxesData } = useFetchTaxesQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
 
@@ -30,6 +32,7 @@ const AddItem: React.FC = () => {
     availability_stock: 0,
     cost_price: 0,
     selling_price: 0,
+    tax_id: 0,
     images: [],
     variants: []
   });
@@ -88,6 +91,7 @@ const AddItem: React.FC = () => {
     form.append('availability_stock', formData.availability_stock.toString());
     form.append('cost_price', formData.cost_price.toString());
     form.append('selling_price', formData.selling_price.toString());
+    form.append('tax_id', formData.tax_id.toString());
 
     // Attach images
     formData.images?.forEach((img) => {
@@ -187,6 +191,21 @@ const AddItem: React.FC = () => {
           <div style={{ flex: '1 1 300px' }}>
             <label>Availability Stock</label>
             <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
+          </div>
+          <div style={{ flex: '1 1 300px' }}>
+            <label>Tax</label>
+            <select
+              name="tax_id"
+              value={formData.tax_id}
+              onChange={(e) => setFormData(prev => ({ ...prev, tax_id: parseInt(e.target.value) }))}
+            >
+              <option value="">Select Tax</option>
+              {taxesData?.data?.map((tax: Tax) => (
+                <option key={tax.id} value={tax.id}>
+                  {tax.name} - {tax.rate}%
+                </option>
+              ))}
+            </select>
           </div>
 
           <div style={{ flex: '1 1 300px' }}>

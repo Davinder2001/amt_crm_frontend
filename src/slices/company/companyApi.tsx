@@ -1,33 +1,5 @@
 import companyCreateSlice from "./companyCreateSlice";
 
-type Shift = {
-  id: number;
-  company_id: number;
-  shift_name: string;
-  start_time: string;
-  end_time: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type ShiftApiResponse = {
-  message: string;
-  data: Shift[];
-};
-
-type CreateShiftPayload = {
-  shift_name: string;
-  start_time: string;
-  end_time: string;
-};
-
-type UpdateShiftPayload = {
-  id: number;
-  shift_name?: string;
-  start_time?: string;
-  end_time?: string;
-};
-
 const companyApi = companyCreateSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchCompanyShifts: builder.query<ShiftApiResponse, void>({
@@ -58,6 +30,44 @@ const companyApi = companyCreateSlice.injectEndpoints({
       }),
       invalidatesTags: ["Company"],
     }),
+
+    fetchTaxes: builder.query<TaxesResponse, void>({
+      query: () => ({
+        url: "taxes",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
+
+    createTax: builder.mutation<{ message: string; data: Tax }, CreateTaxPayload>({
+      query: (payload) => ({
+        url: "taxes",
+        method: "POST",
+        body: payload,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
+    updateTax: builder.mutation<{ message: string; data: Tax }, UpdateTaxPayload>({
+      query: ({ id, ...body }) => ({
+        url: `shifts/${id}`,
+        method: "PUT",
+        body,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+    deleteTax: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `taxes/${id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
   }),
 });
 
@@ -65,6 +75,10 @@ export const {
   useFetchCompanyShiftsQuery,
   useCreateShiftMutation,
   useUpdateShiftMutation,
+  useFetchTaxesQuery,
+  useCreateTaxMutation,
+  useUpdateTaxMutation,
+  useDeleteTaxMutation,
 } = companyApi;
 
 export default companyApi;

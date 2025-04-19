@@ -29,6 +29,7 @@ const AddItem: React.FC = () => {
     availability_stock: 0,
     cost_price: 0,
     selling_price: 0,
+    tax_id: 0,
     images: [],
     variants: []
   });

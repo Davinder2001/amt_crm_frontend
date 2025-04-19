@@ -11,6 +11,9 @@ const SettingNavigation = () => {
             <li>
                 <Link href="settings/shifts">Shifts</Link>
             </li>
+            <li>
+                <Link href="settings/taxes">Taxes</Link>
+            </li>
         </ul>
 
         </nav>

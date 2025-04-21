@@ -89,7 +89,7 @@ function TaxesPage() {
                 onChange={(e) => setNewTax({ ...newTax, rate: e.target.value })}
                 placeholder="Tax rate"
             />
-            <button onClick={handleCreate}>Create</button>
+            <button onClick={handleCreate} className='buttons'>Create</button>
         </div>
     );
 }

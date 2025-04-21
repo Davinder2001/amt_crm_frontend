@@ -34,7 +34,7 @@ const RoleList: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="permissions-form-outer">
       <div className="navigation-buttons">
         <Link className="navigation-button" href={`/${companySlug}/permissions/add-role`}>
           <FaPlus /> Add Role
@@ -60,7 +60,7 @@ const RoleList: React.FC = () => {
                     : "None"}
                 </td>
                 <td>{role.company_id}</td>
-                <td className="flex gap-2">
+                <td className="permissions-form-actions-icons-outer">
                   <Link href={`/${companySlug}/permissions/view-role/${role.id}`}>
                     <span><FaEye color="#222" /></span>
                   </Link>

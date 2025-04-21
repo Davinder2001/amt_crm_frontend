@@ -25,6 +25,7 @@ const AddItem: React.FC = () => {
     brand_name: '',
     replacement: '',
     category: '',
+    categories: [],
     vendor_name: '',
     availability_stock: 0,
     cost_price: 0,

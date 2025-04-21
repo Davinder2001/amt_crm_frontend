@@ -7,9 +7,9 @@
   border-radius: 10px;
 
   .item-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 
     .form-group {
       flex: 1 1 45%;

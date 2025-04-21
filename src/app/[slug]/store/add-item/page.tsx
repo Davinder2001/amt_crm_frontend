@@ -34,7 +34,8 @@ const AddItem: React.FC = () => {
     selling_price: 0,
     tax_id: 0,
     images: [],
-    variants: []
+    variants: [],
+    categories: [],
   });
 
   const [vendors, setVendors] = useState<string[]>([]);
@@ -139,58 +140,155 @@ const AddItem: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className='add-items-form-container'>
           <div style={{ flex: '1 1 300px' }}>
-            <label>Name*</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+            <label>Item Name*</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="e.g. Samsung Monitor 24 inch"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Quantity Count*</label>
-            <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
+            <input
+              type="number"
+              name="quantity_count"
+              value={formData.quantity_count === 0 ? '' : formData.quantity_count}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  quantity_count: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 100"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Measurement</label>
-            <input type="text" name="measurement" value={formData.measurement} onChange={handleChange} />
+            <input
+              type="text"
+              name="measurement"
+              value={formData.measurement}
+              onChange={handleChange}
+              placeholder="e.g. kg, pcs, liters"
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Purchase Date</label>
-            <input type="date" name="purchase_date" value={formData.purchase_date} onChange={handleChange} />
+            <input
+              type="date"
+              name="purchase_date"
+              value={formData.purchase_date}
+              onChange={handleChange}
+              placeholder="Select purchase date"
+              onFocus={(e) => e.target.showPicker?.()}
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Date Of Manufacture*</label>
-            <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture} onChange={handleChange} required />
+            <input
+              type="date"
+              name="date_of_manufacture"
+              value={formData.date_of_manufacture}
+              onChange={handleChange}
+              placeholder="Select manufacture date"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Date Of Expiry</label>
-            <input type="date" name="date_of_expiry" value={formData.date_of_expiry} onChange={handleChange} />
+            <input
+              type="date"
+              name="date_of_expiry"
+              value={formData.date_of_expiry}
+              onChange={handleChange}
+              placeholder="Select expiry date"
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Brand Name*</label>
-            <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
+            <input
+              type="text"
+              name="brand_name"
+              value={formData.brand_name}
+              onChange={handleChange}
+              placeholder="e.g. Samsung, LG"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Replacement</label>
-            <input type="text" name="replacement" value={formData.replacement} onChange={handleChange} />
+            <input
+              type="text"
+              name="replacement"
+              value={formData.replacement}
+              onChange={handleChange}
+              placeholder="e.g. Replace after 2 years"
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Cost Price*</label>
-            <input type="number" name="cost_price" value={formData.cost_price} onChange={handleChange} required />
+            <input
+              type="number"
+              name="cost_price"
+              value={formData.cost_price === 0 ? '' : formData.cost_price}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  cost_price: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 250.00"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Selling Price*</label>
-            <input type="number" name="selling_price" value={formData.selling_price} onChange={handleChange} required />
+            <input
+              type="number"
+              name="selling_price"
+              value={formData.selling_price === 0 ? '' : formData.selling_price}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  selling_price: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 300.00"
+              required
+            />
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
             <label>Availability Stock</label>
-            <input type="number" name="availability_stock" value={formData.availability_stock} onChange={handleChange} />
+            <input
+              type="number"
+              name="availability_stock"
+              value={formData.availability_stock === 0 ? '' : formData.availability_stock}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  availability_stock: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 50"
+            />
           </div>
           <div style={{ flex: '1 1 300px' }}>
             <label>Tax</label>
@@ -236,7 +334,6 @@ const AddItem: React.FC = () => {
               onCategoryChange={setSelectedCategories}
               selectedCategories={selectedCategories}
             />
-
           </div>
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>

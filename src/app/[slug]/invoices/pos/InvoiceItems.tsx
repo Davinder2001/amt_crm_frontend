@@ -23,6 +23,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  console.log('wrwer', filteredItems);
+  
+
   const toggleWishlist = (id: number) => {
     setWishlistItems((prev) =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
@@ -56,9 +59,18 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
     document.body.style.overflow = selectedItem ? 'hidden' : 'auto';
   }, [selectedItem]);
 
+  // Function to calculate the min and max price for items with variants
+  const getPriceRange = (variants: variations[]) => {
+    if (!variants || variants.length <= 1) return null;  // Only calculate range if more than 1 variant
+    
+    const prices = variants.map(variant => parseFloat(String(variant.final_cost ?? '0')));
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    return { min: minPrice, max: maxPrice };
+  };
+
   return (
     <>
-      {/* Search */}
       <div className="searchbar-container">
         <FaSearch />
         <input
@@ -70,89 +82,86 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
       </div>
 
       {/* Item List */}
-      {
-        filteredItems.length === 0 ? (
-          <p className="no-items">No items found</p>
-        ) : (
-          <ul className="item-list">
-            {filteredItems.map(item => {
-              const firstImage = Array.isArray(item.images) && item.images.length > 0
-                ? (typeof item.images[0] === 'string' ? item.images[0] : URL.createObjectURL(item.images[0]))
-                : placeholderImg;
+      {filteredItems.length === 0 ? (
+        <p className="no-items">No items found</p>
+      ) : (
+        <ul className="item-list">
+          {filteredItems.map(item => {
+            const firstImage = Array.isArray(item.images) && item.images.length > 0
+              ? (typeof item.images[0] === 'string' ? item.images[0] : URL.createObjectURL(item.images[0]))
+              : placeholderImg;
 
-              const isHovered = hoveredItemId === item.id;
+            const isHovered = hoveredItemId === item.id;
+            const priceRange = item.variants ? getPriceRange(item.variants) : null;
 
-              return (
-                <li
-                  key={`item-${item.id}`}
-                  className={`item ${isHovered ? 'hovered' : ''}`}
-                  onMouseEnter={() => setHoveredItemId(item.id)}
-                  onMouseLeave={() => setHoveredItemId(null)}
-                >
-                  {/* Image */}
-                  <div className="item-image" onClick={() => {
-                    if (Array.isArray(item.images) && item.images.length > 0) {
-                      openModal(item);
-                    }
-                  }}>
-                    <Image
-                      src={firstImage}
-                      alt={item.name}
-                      width={120}
-                      height={100}
-                      className="item-image-img"
-                    />
-                    {/* Add to Cart Button on Hover */}
-                    {isHovered && (
-                      <div className="cart-navs">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onAddToCart(item);
-                          }}
-                          className="cart-btn"
-                          title="Add to Cart"
-                        >
-                          <FiShoppingCart />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleWishlist(item.id);
-                          }}
-                          className="cart-btn"
-                          title="Add to Wishlist"
-                        >
-                          {wishlistItems.includes(item.id) ? <AiFillHeart /> : <FiHeart />}
-                        </button>
-                      </div>
-                    )}
-                  </div>
+            // If there's a price range, display it. Otherwise, show the final cost.
+            const priceDisplay = priceRange 
+              ? `₹${priceRange.min} - ₹${priceRange.max}` 
+              : `₹${item.final_cost}`;
 
-                  {/* Details */}
-                  <div className="item-details">
-                    <h4 className="item-name">
-                      {item.name}
-                    </h4>
-                    <p className="item-price">₹{item.selling_price}</p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        )
-      }
+            return (
+              <li
+                key={`item-${item.id}`}
+                className={`item ${isHovered ? 'hovered' : ''}`}
+                onMouseEnter={() => setHoveredItemId(item.id)}
+                onMouseLeave={() => setHoveredItemId(null)}
+              >
+                <div className="item-image" onClick={() => {
+                  if (Array.isArray(item.images) && item.images.length > 0) {
+                    openModal(item);
+                  }
+                }}>
+                  <Image
+                    src={firstImage}
+                    alt={item.name}
+                    width={120}
+                    height={100}
+                    className="item-image-img"
+                  />
+                  {isHovered && (
+                    <div className="cart-navs">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddToCart(item);
+                        }}
+                        className="cart-btn"
+                        title="Add to Cart"
+                      >
+                        <FiShoppingCart />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(item.id);
+                        }}
+                        className="cart-btn"
+                        title="Add to Wishlist"
+                      >
+                        {wishlistItems.includes(item.id) ? <AiFillHeart /> : <FiHeart />}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="item-details">
+                  <h4 className="item-name">{item.name}</h4>
+                  <p className="item-price">{priceDisplay}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       {/* Modal */}
       {selectedItem && (
         <div className="images-modal">
           <div className="images-modal-content">
-            {/* Close Button */}
             <span onClick={closeModal} className="modal-close-btn">
               <FiX />
             </span>
 
-            {/* Image Slider */}
             {selectedItem.images.length > 0 ? (
               <div className="image-slider">
                 <div className="slider-images" style={{
@@ -177,7 +186,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                   })}
                 </div>
 
-                {/* Prev Button */}
                 <button
                   onClick={prevImage}
                   className="slider-btn prev-btn"
@@ -185,7 +193,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                   <FiChevronLeft />
                 </button>
 
-                {/* Next Button */}
                 <button
                   onClick={nextImage}
                   className="slider-btn next-btn"
@@ -193,7 +200,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                   <FiChevronRight />
                 </button>
 
-                {/* Image Counter */}
                 <div className="image-counter">
                   {currentImageIndex + 1} / {selectedItem.images.length}
                 </div>

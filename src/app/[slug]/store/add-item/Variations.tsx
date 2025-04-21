@@ -26,7 +26,9 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
 
             currentAttributes.push({
                 attribute_id: attributeId,
-                attribute_value_id: valueId
+                attribute_value_id: valueId,
+                attribute: '',
+                value: ''
             });
 
             updated[comboIndex].attributes = currentAttributes;

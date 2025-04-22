@@ -30,8 +30,7 @@
     margin-bottom: 6px;
   }
   
-  input[type="text"],
-  input[type="time"] {
+  input {
     width: 100%;
     padding: 10px 14px;
     font-size: 14px;
@@ -41,7 +40,7 @@
     transition: border-color 0.3s, background-color 0.3s;
   
     &:focus {
-      border-color: #4a90e2;
+      border-color: $primary-color;
       background-color: #fff;
       outline: none;
     }

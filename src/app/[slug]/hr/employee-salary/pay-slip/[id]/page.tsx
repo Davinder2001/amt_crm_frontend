@@ -14,7 +14,7 @@ export default function Page() {
   const { currentData } = useFetchPaySlipByIdQuery(id, {
     skip: isNaN(id) || id === 0,
   });
-  const [triggerDownload, { data: pdfData, isFetching }] =
+  const [triggerDownload, { isFetching }] =
     useLazyDownloadPaySlipPdfQuery();
 
   useEffect(() => {

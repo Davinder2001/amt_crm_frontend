@@ -19,6 +19,7 @@
     }
 }
 
+// categories menus sidebar ************
 .cats-sidebar {
     width: 150px;
     background: $white;
@@ -74,6 +75,7 @@
     }
 }
 
+// invoice items list ************
 .invoice-items-wrapper {
     flex: 1;
     overflow-y: auto;
@@ -333,6 +335,7 @@
     }
 }
 
+// checkout pannel ***********
 .checkout-panel {
     max-width: 500px;
     width: 100%;
@@ -773,4 +776,150 @@
         color: #27ae60;
     }
 
+}
+
+
+
+
+
+// Responsive Design
+@media (max-width: 1200px) {
+    .invoice-items-wrapper .item-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .checkout-panel {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pos-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .cats-sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: $border;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        .category-tab {
+            min-width: 120px;
+        }
+    }
+
+    .checkout-panel {
+        width: 100%;
+        max-width: 100%;
+        border-left: none;
+        border-top: $border;
+    }
+
+    .checkout-panel .tab,
+    .checkout-panel .inner-tab {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .cart-items-list .cart-item-row {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .item-price {
+            align-self: flex-end;
+        }
+
+        .item-quantity {
+            margin-top: 10px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .invoice-items-wrapper .item-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checkout-panel .cart-labels {
+        font-size: 12px;
+
+        .label-name,
+        .label-quantity,
+        .label-price {
+            text-align: left;
+        }
+    }
+
+    .cats-sidebar .category-tab {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .invoice-items-wrapper .item-name {
+        font-size: 14px;
+    }
+
+    .cart-navs {
+        padding: 6px;
+        gap: 6px;
+
+        button svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    .checkout-panel .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .cart-items-list .cart-item-row {
+        padding: 10px;
+    }
+
+    .checkout-panel .payment-section {
+        padding: 8px;
+    }
+
+    .checkout-panel .tax-section h4 {
+        font-size: 16px;
+    }
+
+    .checkout-panel .form input,
+    .checkout-panel .form textarea {
+        font-size: 14px;
+    }
+
+    .cats-sidebar {
+        .category-tab {
+            font-size: 12px;
+            min-width: 100px;
+        }
+    }
+
+    .checkout-panel .sectionToggle {
+        font-size: 13px;
+    }
+
+    .slider-image {
+        height: 200px;
+    }
+
+    .variant-modal-content {
+        width: 90%;
+    }
+
+    .confirm-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
 }

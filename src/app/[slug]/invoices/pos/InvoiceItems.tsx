@@ -19,15 +19,19 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [wishlistItems, setWishlistItems] = useState<number[]>([]);
 
+  const [variantModalItem, setVariantModalItem] = useState<StoreItem | null>(null);
+  const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
+  const [variants, setSelectedVariant] = useState<variations | null>(null);
+
   const filteredItems = items.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   console.log('wrwer', filteredItems);
-  
+
 
   const toggleWishlist = (id: number) => {
-    setWishlistItems((prev) =>
+    setWishlistItems(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
@@ -59,10 +63,20 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
     document.body.style.overflow = selectedItem ? 'hidden' : 'auto';
   }, [selectedItem]);
 
-  // Function to calculate the min and max price for items with variants
+  useEffect(() => {
+    if (!variantModalItem || !variantModalItem.variants) return;
+
+    const matchedVariant = variantModalItem.variants.find(variant =>
+      variant.attributes.every(attr =>
+        selectedAttributes[attr.attribute] === attr.value
+      )
+    );
+    setSelectedVariant(matchedVariant ?? null);
+  }, [selectedAttributes, variantModalItem]);
+
   const getPriceRange = (variants: variations[]) => {
-    if (!variants || variants.length <= 1) return null;  // Only calculate range if more than 1 variant
-    
+    if (!variants || variants.length <= 1) return null;
+
     const prices = variants.map(variant => parseFloat(String(variant.final_cost ?? '0')));
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
@@ -81,7 +95,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
         />
       </div>
 
-      {/* Item List */}
       {filteredItems.length === 0 ? (
         <p className="no-items">No items found</p>
       ) : (
@@ -94,9 +107,8 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
             const isHovered = hoveredItemId === item.id;
             const priceRange = item.variants ? getPriceRange(item.variants) : null;
 
-            // If there's a price range, display it. Otherwise, show the final cost.
-            const priceDisplay = priceRange 
-              ? `₹${priceRange.min} - ₹${priceRange.max}` 
+            const priceDisplay = priceRange
+              ? `₹${priceRange.min} - ₹${priceRange.max}`
               : `₹${item.final_cost}`;
 
             return (
@@ -106,11 +118,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}
               >
-                <div className="item-image" onClick={() => {
-                  if (Array.isArray(item.images) && item.images.length > 0) {
-                    openModal(item);
-                  }
-                }}>
+                <div className="item-image" onClick={() => openModal(item)}>
                   <Image
                     src={firstImage}
                     alt={item.name}
@@ -123,7 +131,11 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onAddToCart(item);
+                          if (item.variants && item.variants.length > 1) {
+                            setVariantModalItem(item);
+                          } else {
+                            onAddToCart(item);
+                          }
                         }}
                         className="cart-btn"
                         title="Add to Cart"
@@ -154,7 +166,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
         </ul>
       )}
 
-      {/* Modal */}
+      {/* Image Modal */}
       {selectedItem && (
         <div className="images-modal">
           <div className="images-modal-content">
@@ -170,10 +182,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                   {selectedItem.images.map((img, index) => {
                     const imgSrc = typeof img === 'string' ? img : URL.createObjectURL(img);
                     return (
-                      <div
-                        key={index}
-                        className="slider-image"
-                      >
+                      <div key={index} className="slider-image">
                         <Image
                           src={imgSrc}
                           alt={`Image ${index + 1}`}
@@ -185,28 +194,68 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                     );
                   })}
                 </div>
-
-                <button
-                  onClick={prevImage}
-                  className="slider-btn prev-btn"
-                >
-                  <FiChevronLeft />
-                </button>
-
-                <button
-                  onClick={nextImage}
-                  className="slider-btn next-btn"
-                >
-                  <FiChevronRight />
-                </button>
-
+                <button onClick={prevImage} className="slider-btn prev-btn"><FiChevronLeft /></button>
+                <button onClick={nextImage} className="slider-btn next-btn"><FiChevronRight /></button>
                 <div className="image-counter">
                   {currentImageIndex + 1} / {selectedItem.images.length}
                 </div>
               </div>
-            ) : (
-              <p>No images available.</p>
+            ) : <p>No images available.</p>}
+          </div>
+        </div>
+      )}
+
+      {/* Variant Selection Modal */}
+      {variantModalItem && (
+        <div className="variant-modal">
+          <div className="variant-modal-content">
+            <h3>Select Variant</h3>
+            <button onClick={() => {
+              setVariantModalItem(null);
+              setSelectedAttributes({});
+              setSelectedVariant(null);
+            }} className="close-btn"><FiX /></button>
+
+            <select
+              onChange={(e) => {
+                const variantId = parseInt(e.target.value);
+                const matched = variantModalItem?.variants?.find(v => v.id === variantId) ?? null;
+                setSelectedVariant(matched);
+              }}
+              defaultValue=""
+            >
+              <option value="" disabled>Select a variant</option>
+              {(variantModalItem?.variants ?? []).map(variant => {
+                const label = variant.attributes
+                  .map(attr => `${attr.attribute}: ${attr.value}`)
+                  .join(', ');
+
+                return (
+                  <option key={variant.id} value={variant.id}>
+                    {label} - ₹{variant.final_cost}
+                  </option>
+                );
+              })}
+            </select>
+
+            {variants && (
+              <p className="price-info">Price: ₹{variants.final_cost}</p>
             )}
+
+            <button
+              disabled={!variants}
+              onClick={() => {
+                if (variants) {
+                  onAddToCart({ ...variantModalItem, variants: [variants] });
+                  setVariantModalItem(null);
+                  setSelectedAttributes({});
+                  setSelectedVariant(null);
+                }
+              }}
+              className="confirm-btn"
+            >
+              Confirm Add to Cart
+            </button>
           </div>
         </div>
       )}

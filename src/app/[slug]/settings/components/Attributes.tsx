@@ -6,7 +6,7 @@ import {
     useDeleteAttributeMutation,
     useToggleAttributeStatusMutation,
 } from '@/slices/store/storeApi';
-import { FaClosedCaptioning, FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
 
 const Attributes = () => {
     const { data: attributes, isLoading, isError } = useFetchAttributesQuery();

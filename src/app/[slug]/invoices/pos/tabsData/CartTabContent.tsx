@@ -3,7 +3,7 @@
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import React, { useState } from 'react';
-import { FiX, FiTrash2, FiShoppingCart, FiList, FiUser, FiDollarSign } from 'react-icons/fi';
+import { FiX, FiTrash2, FiShoppingCart, FiList, FiUser } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 type CartTabContentProps = {
@@ -34,7 +34,7 @@ type CartTabContentProps = {
 
 };
 
-type InnerTabType = 'Items' | 'Client' | 'Tax';
+type InnerTabType = 'Items' | 'Client';
 
 export default function CartTabContent({
     cart, onQtyChange,
@@ -57,7 +57,7 @@ export default function CartTabContent({
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
 
-    const baseTotal = cart.reduce((sum, i) => sum + i.quantity * i.selling_price, 0);
+    const baseTotal = cart.reduce((sum, i) => sum + i.quantity * i.final_cost, 0);
     // const total = Math.max(0, baseTotal - (isDiscountApplied ? discountAmount : 0));
 
     const appliedDiscount = isDiscountApplied
@@ -69,7 +69,7 @@ export default function CartTabContent({
     const total = (Math.max(0, baseTotal - appliedDiscount)).toFixed(2);
 
 
-    const innerTabs: InnerTabType[] = ['Items', 'Client', 'Tax'];
+    const innerTabs: InnerTabType[] = ['Items', 'Client'];
 
     const handleNumberBlur = () => {
         if (!number || !customers?.customers) return;
@@ -114,9 +114,9 @@ export default function CartTabContent({
     };
 
     // Tax Calculation (You can modify this logic according to your tax rules)
-    const taxRate = 18; // Example: 18% tax rate
-    const taxAmount = (baseTotal - appliedDiscount) * (taxRate / 100);
-    const totalWithTax = (Number(total) + taxAmount).toFixed(2);
+    // const taxRate = 18; // Example: 18% tax rate
+    // const taxAmount = (baseTotal - appliedDiscount) * (taxRate / 100);
+    // const totalWithTax = (Number(total) + taxAmount).toFixed(2);
 
     return (
         <div className="cart-tab-content">
@@ -131,9 +131,9 @@ export default function CartTabContent({
                         case 'Client':
                             Icon = FiUser;
                             break;
-                        case 'Tax':
-                            Icon = FiDollarSign;
-                            break;
+                        // case 'Tax':
+                        //     Icon = FiDollarSign;
+                        //     break;
                         default:
                             Icon = null;
                     }
@@ -197,7 +197,7 @@ export default function CartTabContent({
                                                         +
                                                     </button>
                                                 </td>
-                                                <td>₹{item.quantity * item.selling_price}</td>
+                                                <td>₹{item.quantity * item.final_cost}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -248,7 +248,7 @@ export default function CartTabContent({
                     </div>
                 )}
 
-                {activeInnerTab === 'Tax' && (
+                {/* {activeInnerTab === 'Tax' && (
                     <div className="tax-section" style={{ padding: '10px' }}>
                         <h4>Tax Calculation</h4>
                         <div className="tax-details">
@@ -266,7 +266,7 @@ export default function CartTabContent({
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
                 <div className="toggle-total-outer">
                     <div
                         className="sectionToggle"
@@ -278,7 +278,8 @@ export default function CartTabContent({
                     <div className="total">
                         Total:{' '}
                         <strong>
-                            ₹{activeInnerTab === 'Tax' ? totalWithTax : total}
+                            {/* ₹{activeInnerTab === 'Tax' ? totalWithTax : total} */}
+                            ₹{total}
                         </strong>
                     </div>
                 </div>

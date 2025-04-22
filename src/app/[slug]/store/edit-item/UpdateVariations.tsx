@@ -54,9 +54,10 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants, setShowModal
         updatedAttrs[attrIndex] = { ...updatedAttrs[attrIndex], value };
       } else {
         updatedAttrs.push({
-            attribute: attributeKey, value,
-            attribute_id: '',
-            attribute_value_id: ''
+          attribute: attributeKey, value,
+          attribute_id: '',
+          attribute_value_id: '',
+          final_cost: 0
         });
       }
 
@@ -79,7 +80,8 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants, setShowModal
         attribute: attr.attribute,
         value: '',
         attribute_id: '',
-        attribute_value_id: ''
+        attribute_value_id: '',
+        final_cost: 0
       })),
       price: 0,
     };

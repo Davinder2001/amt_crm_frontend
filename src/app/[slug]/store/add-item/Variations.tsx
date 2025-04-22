@@ -28,7 +28,8 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
                 attribute_id: attributeId,
                 attribute_value_id: valueId,
                 attribute: '',
-                value: ''
+                value: '',
+                final_cost: 0
             });
 
             updated[comboIndex].attributes = currentAttributes;

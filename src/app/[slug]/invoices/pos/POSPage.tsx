@@ -51,7 +51,7 @@ function POSPage() {
                     ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
                 );
             } else {
-                return [...prev, { id: item.id, name: item.name, selling_price: item.selling_price, quantity: 1 }];
+                return [...prev, { id: item.id, name: item.name, quantity: 1, final_cost: item.final_cost }];
             }
         });
     };

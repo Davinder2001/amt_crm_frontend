@@ -19,6 +19,7 @@
     }
 }
 
+// categories menus sidebar ************
 .cats-sidebar {
     width: 150px;
     background: $white;
@@ -74,6 +75,7 @@
     }
 }
 
+// invoice items list ************
 .invoice-items-wrapper {
     flex: 1;
     overflow-y: auto;
@@ -333,6 +335,7 @@
     }
 }
 
+// checkout pannel ***********
 .checkout-panel {
     max-width: 500px;
     width: 100%;
@@ -408,80 +411,145 @@
         gap: 16px;
     }
 
-    .cartTable {
-        width: 100%;
-        border-collapse: collapse;
+    .cart-labels {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 12px;
+        margin: 10px;
+        font-weight: 600;
         font-size: 14px;
-        white-space: nowrap;
-    }
+        color: #555;
 
-    .cartTable th,
-    .cartTable td {
-        padding: 6px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-
-
-    .cartTable {
-        th {
-            background-color: #f1f1f1;
-            color: $dark-color;
+        .label-name {
+            flex: 2;
         }
 
-        .item-name-checkout {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            border: none;
+        .label-quantity {
+            flex: 1;
+            text-align: center;
         }
 
-        .delete-btn {
-            background-color: #ff4d4d;
-            color: $white;
-            border: none;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            cursor: pointer;
+        .label-price {
+            flex: 1;
+            text-align: right;
+        }
+    }
+
+    .cart-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px;
+
+        .cart-item-row {
+            position: relative;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s;
+            padding: 12px;
+            background-color: $white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
 
             &:hover {
-                background-color: #e60000;
+                background-color: #f8f8f8;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
-        }
 
-        span {
-            word-wrap: break-word;
-            font-size: 16px;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
+            .item-info {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
 
-        button {
-            margin: 0 4px;
-            padding: 2px 6px;
+            .item-name {
+                font-size: 16px;
+                font-weight: 600;
+                color: #333;
+                text-transform: capitalize;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .delete-btn {
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                background-color: #ff4d4d;
+                color: $white;
+                border: none;
+                border-radius: 50%;
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                transition: background 0.3s;
+
+                &:hover {
+                    background-color: #e60000;
+                }
+            }
+
+            .item-quantity {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+            }
+
+            .item-quantity-btn {
+                background: $primary-color;
+                color: $white;
+                border: none;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background-color 0.3s ease;
+
+                &:disabled {
+                    background: #bdc3c7;
+                    cursor: not-allowed;
+                }
+
+                &:hover:not(:disabled) {
+                    background: #2980b9;
+                }
+            }
+
+            .item-price {
+                font-size: 16px;
+                font-weight: 600;
+                color: #2c3e50;
+            }
         }
     }
 
-    .emptyCart {
+    .empty-cart-message {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 40px 10px;
         color: #888;
-    }
 
-    .emptyCart p {
-        margin-top: 10px;
-        font-size: 16px;
+        p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
     }
-
 
     .toggle-total-outer {
         display: flex;
@@ -708,4 +776,150 @@
         color: #27ae60;
     }
 
+}
+
+
+
+
+
+// Responsive Design
+@media (max-width: 1200px) {
+    .invoice-items-wrapper .item-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .checkout-panel {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pos-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .cats-sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: $border;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        .category-tab {
+            min-width: 120px;
+        }
+    }
+
+    .checkout-panel {
+        width: 100%;
+        max-width: 100%;
+        border-left: none;
+        border-top: $border;
+    }
+
+    .checkout-panel .tab,
+    .checkout-panel .inner-tab {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .cart-items-list .cart-item-row {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .item-price {
+            align-self: flex-end;
+        }
+
+        .item-quantity {
+            margin-top: 10px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .invoice-items-wrapper .item-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checkout-panel .cart-labels {
+        font-size: 12px;
+
+        .label-name,
+        .label-quantity,
+        .label-price {
+            text-align: left;
+        }
+    }
+
+    .cats-sidebar .category-tab {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .invoice-items-wrapper .item-name {
+        font-size: 14px;
+    }
+
+    .cart-navs {
+        padding: 6px;
+        gap: 6px;
+
+        button svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    .checkout-panel .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .cart-items-list .cart-item-row {
+        padding: 10px;
+    }
+
+    .checkout-panel .payment-section {
+        padding: 8px;
+    }
+
+    .checkout-panel .tax-section h4 {
+        font-size: 16px;
+    }
+
+    .checkout-panel .form input,
+    .checkout-panel .form textarea {
+        font-size: 14px;
+    }
+
+    .cats-sidebar {
+        .category-tab {
+            font-size: 12px;
+            min-width: 100px;
+        }
+    }
+
+    .checkout-panel .sectionToggle {
+        font-size: 13px;
+    }
+
+    .slider-image {
+        height: 200px;
+    }
+
+    .variant-modal-content {
+        width: 90%;
+    }
+
+    .confirm-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
 }

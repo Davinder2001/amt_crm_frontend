@@ -83,6 +83,25 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
       alert('Error creating category');
     }
   };
+  const handleDoneClick = () => {
+    const allFlattened = flattenCategories(data?.data || []);
+    const selectedCats = allFlattened
+      .filter(cat => selectedListCategories.includes(cat.id))
+      .map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+        company_id: cat.company_id,
+        parent_id: cat.parent_id,
+        created_at: '', // filling required fields
+        updated_at: '',
+      }));
+  
+    onCategoryChange(selectedCats);
+    setHasChanges(false);
+  };
+  
+
+
 
   const renderCategoriesWithChildren = (
     cats: CategoryNode[],
@@ -131,129 +150,215 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
   };
 
   return (
-    <div style={{ maxWidth: '500px', padding: '1rem' }}>
-      {!isCreatingNewCategory ? (
-        <>
-          <h2>All Categories</h2>
-          {isLoading && <p>Loading categories...</p>}
-          {!isLoading && data?.data?.length ? (
-            <div>
-              {renderCategoriesWithChildren(data.data as CategoryNode[])}
+    // <div style={{ maxWidth: '500px', padding: '1rem' }}>
+    //   {!isCreatingNewCategory ? (
+    //     <>
+    //       <h2>All Categories</h2>
+    //       {isLoading && <p>Loading categories...</p>}
+    //       {!isLoading && data?.data?.length ? (
+    //         <div>
+    //           {renderCategoriesWithChildren(data.data as CategoryNode[])}
 
-              {hasChanges && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
+    //           {hasChanges && (
+    //             <button
+    //               type="button"
+    //               onClick={() => {
+    //                 const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
 
-                    const selectedCats: Category[] = allFlattened
-                      .filter(cat => selectedListCategories.includes(cat.id))
-                      .map(({...rest }) => rest);
+    //                 const selectedCats: Category[] = allFlattened
+    //                   .filter(cat => selectedListCategories.includes(cat.id))
+    //                   .map(({...rest }) => rest);
 
-                    onCategoryChange(selectedCats);
-                    setHasChanges(false);
-                  }}
-                  style={{
-                    padding: '10px 16px',
-                    backgroundColor: '#4caf50',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    marginTop: '20px',
-                    display: 'block',
-                  }}
-                >
-                  Done
-                </button>
-              )}
-            </div>
-          ) : (
-            !isLoading && <p>No categories found.</p>
-          )}
-          <button
-            type="button"
-            onClick={() => setIsCreatingNewCategory(true)}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#009693',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginTop: '20px',
-            }}
-          >
-            Create New Category
-          </button>
-        </>
-      ) : (
+    //                 onCategoryChange(selectedCats);
+    //                 setHasChanges(false);
+    //               }}
+    //               style={{
+    //                 padding: '10px 16px',
+    //                 backgroundColor: '#4caf50',
+    //                 color: '#fff',
+    //                 border: 'none',
+    //                 borderRadius: '6px',
+    //                 cursor: 'pointer',
+    //                 marginTop: '20px',
+    //                 display: 'block',
+    //               }}
+    //             >
+    //               Done
+    //             </button>
+    //           )}
+    //         </div>
+    //       ) : (
+    //         !isLoading && <p>No categories found.</p>
+    //       )}
+    //       <button
+    //         type="button"
+    //         onClick={() => setIsCreatingNewCategory(true)}
+    //         style={{
+    //           padding: '10px 16px',
+    //           backgroundColor: '#009693',
+    //           color: '#fff',
+    //           border: 'none',
+    //           borderRadius: '6px',
+    //           cursor: 'pointer',
+    //           marginTop: '20px',
+    //         }}
+    //       >
+    //         Create New Category
+    //       </button>
+    //     </>
+    //   ) : (
+    //     <div>
+    //       <h2>Create New Category</h2>
+
+    //       <div style={{ marginBottom: '1rem' }}>
+    //         <label>Category Name</label>
+    //         <input
+    //           type="text"
+    //           value={name}
+    //           onChange={(e) => setName(e.target.value)}
+    //           placeholder="Enter category name"
+    //           style={{
+    //             display: 'block',
+    //             width: '100%',
+    //             padding: '8px',
+    //             borderRadius: '4px',
+    //             border: '1px solid #ccc',
+    //             marginTop: '4px',
+    //           }}
+    //         />
+    //       </div>
+
+    //       <div style={{ marginBottom: '1rem' }}>
+    //         <label>Select Parent Category</label>
+    //         <div style={{ marginTop: '8px' }}>
+    //           {isLoading && <p>Loading...</p>}
+    //           {!isLoading && data?.data?.length ? (
+    //             renderParentCategories(data.data as CategoryNode[])
+    //           ) : (
+    //             <p>No parent categories found.</p>
+    //           )}
+    //         </div>
+    //       </div>
+
+    //       <button
+    //         type="button"
+    //         onClick={handleSubmit}
+    //         disabled={isCreating}
+    //         style={{
+    //           padding: '10px 16px',
+    //           backgroundColor: '#009693',
+    //           color: '#fff',
+    //           border: 'none',
+    //           borderRadius: '6px',
+    //           cursor: 'pointer',
+    //         }}
+    //       >
+    //         {isCreating ? 'Creating...' : 'Create Category'}
+    //       </button>
+    //       <button
+    //         type="button"
+    //         onClick={() => setIsCreatingNewCategory(false)}
+    //         style={{
+    //           padding: '10px 16px',
+    //           backgroundColor: '#ccc',
+    //           color: '#000',
+    //           border: 'none',
+    //           borderRadius: '6px',
+    //           cursor: 'pointer',
+    //           marginLeft: '10px',
+    //         }}
+    //       >
+    //         Cancel
+    //       </button>
+    //     </div>
+    //   )}
+    // </div>
+
+
+
+
+
+<div className="category-container">
+  {!isCreatingNewCategory ? (
+    <>
+      <h2 className="category-title">All Categories</h2>
+      {isLoading && <p>Loading categories...</p>}
+      
+      {!isLoading && data?.data?.length ? (
         <div>
-          <h2>Create New Category</h2>
+          {renderCategoriesWithChildren(data.data as CategoryNode[])}
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Category Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter category name"
-              style={{
-                display: 'block',
-                width: '100%',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                marginTop: '4px',
-              }}
-            />
-          </div>
-
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Select Parent Category</label>
-            <div style={{ marginTop: '8px' }}>
-              {isLoading && <p>Loading...</p>}
-              {!isLoading && data?.data?.length ? (
-                renderParentCategories(data.data as CategoryNode[])
-              ) : (
-                <p>No parent categories found.</p>
-              )}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isCreating}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#009693',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-            }}
-          >
-            {isCreating ? 'Creating...' : 'Create Category'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsCreatingNewCategory(false)}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#ccc',
-              color: '#000',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginLeft: '10px',
-            }}
-          >
-            Cancel
-          </button>
+          {hasChanges && (
+            <button
+              type="button"
+              onClick={handleDoneClick}
+              className="category-button done-button"
+            >
+              Done
+            </button>
+          )}
         </div>
+      ) : (
+        !isLoading && <p>No categories found.</p>
       )}
+
+      <button
+        type="button"
+        onClick={() => setIsCreatingNewCategory(true)}
+        className="buttons create-button"
+      >
+        Create New Category
+      </button>
+    </>
+  ) : (
+    <div>
+      <h2 className="category-title">Create New Category</h2>
+
+      <div className="form-group">
+        <label>Category Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter category name"
+          className="input-field"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Select Parent Category</label>
+        <div className="parent-category-list">
+          {isLoading && <p>Loading...</p>}
+          {!isLoading && data?.data?.length ? (
+            renderParentCategories(data.data as CategoryNode[])
+          ) : (
+            <p>No parent categories found.</p>
+          )}
+        </div>
+      </div>
+
+      <div className="button-group">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isCreating}
+          className="buttons create-button"
+        >
+          {isCreating ? 'Creating...' : 'Create Category'}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsCreatingNewCategory(false)}
+          className="buttons cancel-button"
+        >
+          Cancel
+        </button>
+      </div>
     </div>
+  )}
+</div>
+
   );
 };
 

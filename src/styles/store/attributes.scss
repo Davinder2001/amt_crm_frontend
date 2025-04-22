@@ -28,7 +28,7 @@
     height: 80%;
     overflow-y: hidden;
     border-radius: 12px 12px 0 0;
-    padding: 1.5rem;
+    // padding: 1.5rem;
     transform: translateY(100%);
     transition: transform 0.3s ease-in-out;
     display: flex;
@@ -51,8 +51,8 @@
 
 .close-modal {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 25px;
+    right: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,38 +72,42 @@
 }
 
 .tabs-sidebar {
-    width: 150px;
+    width: 200px;
     border-right: 1px solid #eee;
-    padding-right: 1rem;
     display: flex;
     flex-direction: column;
+    box-shadow: $box-shadow;
+    padding-top: 20px;
 }
 
 .tab-button {
-    padding: 10px;
+  padding: 10px 0px 10px 20px;
     background: none;
     border: none;
     text-align: left;
     cursor: pointer;
     font-weight: 500;
-    border-radius: 6px;
     margin-bottom: 6px;
     transition: background 0.2s;
+    font-size: 18px;
 }
 
 .tab-button.active {
-    background-color: #f0f0f0;
-    font-weight: 600;
+    background-color: rgb(241, 249, 249);
+    font-weight: 500;
+    color: $primary-color;
+    border-right: 3px solid $primary-color;
 }
 
 .tab-content {
     flex: 1;
-    padding-left: 1.5rem;
     overflow-y: auto;
 }
 
 .variation-block {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
@@ -235,7 +239,7 @@ input {
     width: 100%;
     padding: 10px 14px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid $primary-color;
     border-radius: 6px;
     background: #fafafa;
     transition: border-color 0.3s;

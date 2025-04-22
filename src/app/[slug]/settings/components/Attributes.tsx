@@ -186,9 +186,7 @@ const Attributes = () => {
             </table>
 
             <style jsx>{`
-        .container {
-          padding: 16px;
-        }
+           
         .title {
           font-size: 24px;
           font-weight: 600;
@@ -236,9 +234,7 @@ const Attributes = () => {
           border-radius: 8px;
           margin-bottom: 10px;
         }
-        .values-container {
-          margin-bottom: 16px;
-        }
+        
         .value-row {
           display: flex;
           align-items: center;
@@ -278,14 +274,13 @@ const Attributes = () => {
           border-collapse: collapse;
         }
         .attributes-table th, .attributes-table td {
-          padding: 12px;
+          padding: 10px;
           border: 1px solid #ccc;
           text-align: left;
         }
         .status-select {
           padding: 6px;
-          border-radius: 4px;
-          border: 1px solid #ccc;
+         
         }
         .delete-btn {
          border:none;

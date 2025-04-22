@@ -68,7 +68,7 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, sel
                             ))}
                         </aside>
 
-                        <section className="tab-content">
+                        <section className="tab-content container">
                             {tabs.find(tab => tab.key === activeTab)?.content}
                         </section>
                     </div>

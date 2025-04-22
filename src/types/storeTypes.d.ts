@@ -49,11 +49,12 @@ interface CategoryResponse {
 
 interface CartItem {
   id: number;
+  itemId?: number;
   name: string;
   quantity: number;
   final_cost: number;
   description?: string;
-};
+}
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';
 

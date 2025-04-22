@@ -9,7 +9,7 @@ import { placeholderImg } from '@/assets/useImage';
 
 interface catMenuProps {
   items: StoreItem[];
-  onAddToCart: (item: StoreItem) => void;
+  onAddToCart: (item: StoreItem, variant?: variations) => void;
 }
 
 const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
@@ -37,6 +37,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
   };
 
   const openModal = (item: StoreItem) => {
+    if (!Array.isArray(item.images) || item.images.length === 0) {
+      return; 
+    }
     setSelectedItem(item);
     setCurrentImageIndex(0);
   };
@@ -133,6 +136,8 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                           e.stopPropagation();
                           if (item.variants && item.variants.length > 1) {
                             setVariantModalItem(item);
+                          } else if (item.variants && item.variants.length === 1) {
+                            onAddToCart(item, item.variants[0]);
                           } else {
                             onAddToCart(item);
                           }
@@ -246,7 +251,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
               disabled={!variants}
               onClick={() => {
                 if (variants) {
-                  onAddToCart({ ...variantModalItem, variants: [variants] });
+                  onAddToCart(variantModalItem, variants);
                   setVariantModalItem(null);
                   setSelectedAttributes({});
                   setSelectedVariant(null);

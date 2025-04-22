@@ -7,6 +7,7 @@ import { FiX, FiTrash2, FiShoppingCart, FiList, FiUser } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 type CartTabContentProps = {
+    activeTab: TabType;
     cart: CartItem[];
     onQtyChange: (itemId: number, delta: number) => void;
     onRemoveItem: (itemId: number) => void;
@@ -31,13 +32,18 @@ type CartTabContentProps = {
     setDiscountType: React.Dispatch<React.SetStateAction<'amount' | 'percentage'>>;
     paymentMethod: '' | 'cash' | 'online' | 'card' | 'due';
     setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'due'>>;
-
+    address: string;
+    setAddress: React.Dispatch<React.SetStateAction<string>>;
+    pincode: string;
+    setPincode: React.Dispatch<React.SetStateAction<string>>;
+    deliveryCharge: number;
+    setDeliveryCharge: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type InnerTabType = 'Items' | 'Client';
 
 export default function CartTabContent({
-    cart, onQtyChange,
+    activeTab, cart, onQtyChange,
     onRemoveItem, onClearCart,
     handleSave, isSaving,
     handlePrint, isPrinting,
@@ -49,6 +55,9 @@ export default function CartTabContent({
     paymentMethod, setPaymentMethod,
     discountType, setDiscountType,
     discountPercent, setDiscountPercent,
+    address, setAddress,
+    pincode, setPincode,
+    deliveryCharge, setDeliveryCharge
 
 }: CartTabContentProps) {
     const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
@@ -87,11 +96,30 @@ export default function CartTabContent({
             toast.error('Cart is empty. Please add at least one item.');
             return false;
         }
+
         if (!number || !clientName) {
             setActiveInnerTab('Client');
             toast.error('Please fill in required client details.');
             return false;
         }
+
+        
+        if ((activeTab === 'Delivery' || activeTab === 'Pickup') && !address.trim()) {
+            setActiveInnerTab('Client');
+            toast.error(
+                activeTab === 'Delivery'
+                ? 'Please provide a delivery address.'
+                : 'Please provide pickup location.'
+            );
+            return false;
+        }
+        
+        if (activeTab === 'Delivery' && !pincode.trim()) {
+            setActiveInnerTab('Client');
+            toast.error('Please provide a pincode.');
+            return false;
+        }
+        
         if (!paymentMethod) {
             setShowPaymentDetails(true);
             toast.error('Please select a payment method.');
@@ -111,12 +139,10 @@ export default function CartTabContent({
         setIsDiscountApplied(false);
         setActiveInnerTab('Items')
         setPaymentMethod('')
+        setAddress('');
+        setPincode('');
+        setDeliveryCharge(0);
     };
-
-    // Tax Calculation (You can modify this logic according to your tax rules)
-    // const taxRate = 18; // Example: 18% tax rate
-    // const taxAmount = (baseTotal - appliedDiscount) * (taxRate / 100);
-    // const totalWithTax = (Number(total) + taxAmount).toFixed(2);
 
     return (
         <div className="cart-tab-content">
@@ -131,9 +157,6 @@ export default function CartTabContent({
                         case 'Client':
                             Icon = FiUser;
                             break;
-                        // case 'Tax':
-                        //     Icon = FiDollarSign;
-                        //     break;
                         default:
                             Icon = null;
                     }
@@ -159,7 +182,7 @@ export default function CartTabContent({
                 {activeInnerTab === 'Items' && (
                     <>
                         {cart.length > 0 ? (
-                            <>
+                            <div style={{ overflow: 'auto' }}>
                                 <table className="cartTable" style={{ margin: 0 }}>
                                     <thead>
                                         <tr>
@@ -203,7 +226,7 @@ export default function CartTabContent({
                                     </tbody>
                                 </table>
 
-                            </>
+                            </div>
                         ) : (
                             <div className="emptyCart">
                                 <FiShoppingCart size={80} color="#ccc" />
@@ -245,28 +268,46 @@ export default function CartTabContent({
                                 placeholder="Enter email"
                             />
                         </div>
+                        {activeTab !== 'Cart' &&
+                            <>
+                                <div className="form-group">
+                                    <label>Address</label>
+                                    <input
+                                        type="text"
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                        placeholder="Enter address"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Pincode</label>
+                                    <input
+                                        type="text"
+                                        value={pincode}
+                                        onChange={(e) => setPincode(e.target.value)}
+                                        placeholder="Enter pincode"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Delivery Charge</label>
+                                    <input
+                                        type="number"
+                                        value={deliveryCharge === 0 ? '' : deliveryCharge}
+                                        onChange={(e) => {
+                                            const val = Number(e.target.value);
+                                            setDeliveryCharge(isNaN(val) ? 0 : val);
+                                        }}
+                                        placeholder="Enter delivery charge"
+                                        min={0}
+                                    />
+                                </div>
+                            </>
+                        }
                     </div>
                 )}
 
-                {/* {activeInnerTab === 'Tax' && (
-                    <div className="tax-section" style={{ padding: '10px' }}>
-                        <h4>Tax Calculation</h4>
-                        <div className="tax-details">
-                            <div className="tax-item">
-                                <span>Base Total:</span> ₹{baseTotal.toFixed(2)}
-                            </div>
-                            <div className="tax-item">
-                                <span>Discount Applied:</span> ₹{discountType === 'percentage' ? `${discountPercent}%` : appliedDiscount.toFixed(2)}
-                            </div>
-                            <div className="tax-item">
-                                <span>Tax ({taxRate}%):</span> ₹{taxAmount.toFixed(2)}
-                            </div>
-                            <div className="tax-item">
-                                <span>Total with Tax:</span> ₹{totalWithTax}
-                            </div>
-                        </div>
-                    </div>
-                )} */}
                 <div className="toggle-total-outer">
                     <div
                         className="sectionToggle"
@@ -278,7 +319,6 @@ export default function CartTabContent({
                     <div className="total">
                         Total:{' '}
                         <strong>
-                            {/* ₹{activeInnerTab === 'Tax' ? totalWithTax : total} */}
                             ₹{total}
                         </strong>
                     </div>

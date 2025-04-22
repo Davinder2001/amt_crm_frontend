@@ -25,13 +25,13 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variations, setSelectedCategor
         {
             key: 'variations',
             label: 'Variations',
-            content: <UpdateVariations setVariants={setVariants} setShowModal={setShowModal} variants={variations}/>
+            content: <UpdateVariations setVariants={setVariants} variants={variations} />
         },
         {
             key: 'categories',
             label: 'Categories',
             content: <UpdateCategory setSelectedCategories={setSelectedCategories}
-                selectedCategories={selectedCategories}/>
+                selectedCategories={selectedCategories} />
         }
     ];
 
@@ -71,6 +71,26 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variations, setSelectedCategor
                         <section className="tab-content">
                             {tabs.find(tab => tab.key === activeTab)?.content}
                         </section>
+                        
+                        <div className="modal-footer" style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: '10px' }}>
+                            <button
+                                type="button"
+                                className="buttons"
+                                onClick={() => setShowModal(false)} // Cancel action
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="buttons primary"
+                                onClick={() => {
+                                    // Optional: You can trigger a callback or save logic here
+                                    setShowModal(false); // Done action
+                                }}
+                            >
+                                Done
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

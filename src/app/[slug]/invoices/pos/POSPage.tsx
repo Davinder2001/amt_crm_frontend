@@ -43,15 +43,36 @@ function POSPage() {
             ? selectedChild.items as StoreItem[]
             : selectedTopCategory?.items as StoreItem[] || [];
 
-    const handleAddToCart = (item: StoreItem) => {
+    const handleAddToCart = (item: StoreItem, variant?: variations) => {
+        const itemId = item.id;
+        const variantId = variant?.id;
+        const id = variantId ?? itemId; // use variant id as unique cart key
+        const finalCost = variant?.final_cost ?? item.final_cost;
+        const name = item.name + (variant
+            ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
+            : '');
+
         setCart(prev => {
-            const existing = prev.find(ci => ci.id === item.id);
+            const existing = prev.find(ci => ci.id === id);
+
             if (existing) {
                 return prev.map(ci =>
-                    ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
+                    ci.id === id
+                        ? { ...ci, quantity: ci.quantity + 1 }
+                        : ci
                 );
             } else {
-                return [...prev, { id: item.id, name: item.name, quantity: 1, final_cost: item.final_cost }];
+                return [
+                    ...prev,
+                    {
+                        id, // this will be variant id if available
+                        itemId,
+                        variantId,
+                        name,
+                        quantity: 1,
+                        final_cost: finalCost
+                    }
+                ];
             }
         });
     };

@@ -40,6 +40,10 @@ export default function CheckoutPanel({
     const [discountType, setDiscountType] = useState<'amount' | 'percentage'>('amount');
     const [discountAmount, setDiscountAmount] = useState<number>(0);
     const [discountPercent, setDiscountPercent] = useState<number>(0);
+    const [address, setAddress] = useState('');
+    const [pincode, setPincode] = useState('');
+    const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
+
 
     const cartItemCount = cart.length;
 
@@ -53,10 +57,14 @@ export default function CheckoutPanel({
         discount_type: discountType,
         item_type: activeTab,
         payment_method: paymentMethod,
+        address: address,
+        pincode: pincode,
+        delivery_charge: deliveryCharge,
         items: cart.map(i => ({
             item_id: i.id,
             quantity: i.quantity,
             unit_price: i.final_cost,
+            final_cost: i.final_cost,
             description: i.description || i.name,
             total: i.quantity * i.final_cost,
         })),
@@ -151,6 +159,7 @@ export default function CheckoutPanel({
                 })}
             </div>
             <CartTabContent
+                activeTab={activeTab}
                 cart={cart}
                 onQtyChange={onQtyChange}
                 onRemoveItem={onRemoveItem}
@@ -175,6 +184,12 @@ export default function CheckoutPanel({
                 setDiscountPercent={setDiscountPercent}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
+                address={address}
+                setAddress={setAddress}
+                pincode={pincode}
+                setPincode={setPincode}
+                deliveryCharge={deliveryCharge}
+                setDeliveryCharge={setDeliveryCharge}
             />
             <div className="content">
                 {activeTab === 'Cart' && (

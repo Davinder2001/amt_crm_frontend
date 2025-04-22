@@ -1,166 +1,217 @@
-'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useFetchVariationsQuery } from '@/slices/store/storeApi';
 
 interface Props {
   variants: variations[];
   setVariants: (combinations: variations[]) => void;
-  setShowModal: (value: boolean) => void;
 }
 
-const UpdateVariations: React.FC<Props> = ({ variants, setVariants, setShowModal }) => {
-  const [combinations, setCombinations] = useState<variations[]>([]);
+const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
+  const { data: attributes } = useFetchVariationsQuery();
+  const [existingCombinations, setExistingCombinations] = useState<variations[]>([]);
+  const [newCombinations, setNewCombinations] = useState<variations[]>([]);
+  const [initialVariants, setInitialVariants] = useState<variations[]>([]);
 
-  // Generate attribute options from existing variants
-  const attributeOptions: AttributeOption[] = useMemo(() => {
-    const map = new Map<string, Set<string>>();
-    variants.forEach(variant => {
-      variant.attributes.forEach(attr => {
-        if (!map.has(attr.attribute)) {
-          map.set(attr.attribute, new Set());
-        }
-        map.get(attr.attribute)!.add(attr.value);
-      });
-    });
-
-    return Array.from(map.entries()).map(([attribute, values]) => ({
-      attribute,
-      values: Array.from(values),
-    }));
-  }, [variants]);
-
-  // Initialize combinations from passed-in variants
+  // Load existing variants on mount
   useEffect(() => {
     const initialized = variants.map(variant => ({
       ...variant,
       attributes: variant.attributes.map(attr => ({ ...attr })),
     }));
-    setCombinations(initialized.length > 0 ? initialized : [{ attributes: [], price: 0 }]);
+    setExistingCombinations(initialized);
+    setInitialVariants(JSON.parse(JSON.stringify(initialized)));
   }, [variants]);
 
-  const handleAttributeChange = (
-    comboIndex: number,
-    attributeKey: string,
-    value: string
-  ) => {
-    setCombinations(prev => {
+  const hasChanges = () => {
+    const serialize = (arr: variations[]) =>
+      JSON.stringify(
+        arr.map(item => ({
+          ...item,
+          attributes: item.attributes.sort((a, b) =>
+            a.attribute_id > b.attribute_id ? 1 : -1
+          ), // sort for consistent comparison
+        }))
+      );
+
+    return (
+      serialize(existingCombinations) !== serialize(initialVariants) ||
+      newCombinations.length > 0
+    );
+  };
+
+  // Handlers for existing combinations
+  const handleExistingChange = (comboIndex: number, key: string, value: string) => {
+    setExistingCombinations(prev => {
       const updated = [...prev];
       const combo = { ...updated[comboIndex] };
-
-      // Ensure we clone deeply to avoid mutation
-      const updatedAttrs = [...combo.attributes];
-      const attrIndex = updatedAttrs.findIndex(a => a.attribute === attributeKey);
-
+      const attrs = [...combo.attributes];
+      const attrIndex = attrs.findIndex(a => a.attribute === key);
       if (attrIndex !== -1) {
-        updatedAttrs[attrIndex] = { ...updatedAttrs[attrIndex], value };
+        attrs[attrIndex] = { ...attrs[attrIndex], value };
       } else {
-        updatedAttrs.push({
-          attribute: attributeKey, value,
-          attribute_id: '',
-          attribute_value_id: '',
-          final_cost: 0
-        });
+        attrs.push({ attribute: key, value, attribute_id: '', attribute_value_id: '', final_cost: 0 });
       }
-
-      updated[comboIndex] = { ...combo, attributes: updatedAttrs };
+      updated[comboIndex] = { ...combo, attributes: attrs };
       return updated;
     });
   };
 
-  const handlePriceChange = (comboIndex: number, price: number) => {
-    setCombinations(prev => {
+  const handleExistingPriceChange = (index: number, price: number) => {
+    setExistingCombinations(prev => {
       const updated = [...prev];
-      updated[comboIndex] = { ...updated[comboIndex], price };
+      updated[index] = { ...updated[index], price };
       return updated;
     });
   };
 
-  const handleAddCombination = () => {
-    const newCombo: variations = {
-      attributes: attributeOptions.map(attr => ({
-        attribute: attr.attribute,
-        value: '',
-        attribute_id: '',
-        attribute_value_id: '',
+  // Handlers for new combinations
+  const handleNewAttributeChange = (
+    comboIndex: number,
+    attributeId: number,
+    valueId: string
+  ) => {
+    setNewCombinations(prev => {
+      const updated = [...prev];
+      const attrs = updated[comboIndex].attributes.filter(attr => attr.attribute_id !== attributeId);
+
+      // Find the selected attribute name and value
+      const selectedAttribute = attributes?.find(attr => attr.id === attributeId);
+      const selectedValue = selectedAttribute?.values.find(val => val.id === Number(valueId));
+
+      attrs.push({
+        attribute_id: attributeId,
+        attribute_value_id: valueId,
+        attribute: selectedAttribute?.name || '', // Set the attribute name
+        value: selectedValue?.value || '', // Set the attribute value
         final_cost: 0
-      })),
-      price: 0,
-    };
-    setCombinations(prev => [...prev, newCombo]);
+      });
+
+      updated[comboIndex].attributes = attrs;
+      return updated;
+    });
   };
 
-  const handleRemoveCombination = (index: number) => {
-    setCombinations(prev => prev.filter((_, i) => i !== index));
+  const handleNewPriceChange = (index: number, price: number) => {
+    setNewCombinations(prev => {
+      const updated = [...prev];
+      updated[index].price = price;
+      return updated;
+    });
   };
 
+  const handleAddNewCombination = () => {
+    setNewCombinations(prev => [...prev, { attributes: [], price: 0 }]);
+  };
+
+  const handleRemoveNewCombo = (index: number) => {
+    setNewCombinations(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveExistingCombo = (index: number) => {
+    setExistingCombinations(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // handleDone function now resets newCombinations to clear the fields after setting the variants
   const handleDone = () => {
-    setVariants(combinations);
-    setShowModal(false);
+    setVariants([...existingCombinations, ...newCombinations]); // Send both existing and new combinations together
+    setNewCombinations([]); // Reset the new combinations to clear the fields
   };
 
   const handleReset = () => {
-    setCombinations([{ attributes: [], price: 0 }]);
+    setNewCombinations([]);
   };
 
   return (
-    <>
-      {combinations.map((combo, index) => (
-        <div key={index} className="variation-block">
-          {attributeOptions.map(attr => (
+    <div>
+      {/* Existing Combinations Section */}
+      {existingCombinations.map((combo, index) => (
+        <div key={`existing-${index}`} className="variation-block">
+          {combo.attributes.map(attr => (
             <div key={attr.attribute} style={{ marginBottom: '12px' }}>
               <label>{attr.attribute}</label>
               <select
-                value={
-                  combo.attributes.find(a => a.attribute === attr.attribute)?.value || ''
-                }
-                onChange={e =>
-                  handleAttributeChange(index, attr.attribute, e.target.value)
-                }
+                value={attr.value}
+                onChange={e => handleExistingChange(index, attr.attribute, e.target.value)}
               >
                 <option value="">Select {attr.attribute}</option>
-                {attr.values.map(val => (
-                  <option key={val} value={val}>
-                    {val}
-                  </option>
+                {attributes?.map(attribute => (
+                  attribute.name === attr.attribute &&
+                  attribute.values.map(val => (
+                    <option key={val.id} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))
                 ))}
               </select>
             </div>
           ))}
-
           <div style={{ marginBottom: '12px' }}>
             <label>Price</label>
             <input
               type="number"
               value={combo.price}
-              onChange={e => handlePriceChange(index, +e.target.value)}
+              onChange={e => handleExistingPriceChange(index, +e.target.value)}
             />
           </div>
-
-          {index > 0 && (
-            <button
-              type="button"
-              onClick={() => handleRemoveCombination(index)}
-              className="remove-button"
-            >
-              Remove
-            </button>
-          )}
+          <button type="button" onClick={() => handleRemoveExistingCombo(index)}>
+            Remove
+          </button>
           <hr />
         </div>
       ))}
 
-      <button type="button" onClick={handleAddCombination}>
-        Add More
+      {/* New Combinations Section */}
+      {newCombinations.map((combo, index) => (
+        <div key={`new-${index}`} className="variation-block">
+          {attributes?.map(attr => (
+            <div key={attr.id} style={{ marginBottom: '12px' }}>
+              <label>{attr.name}</label>
+              <select
+                value={combo.attributes.find(a => a.attribute_id === attr.id)?.attribute_value_id || ''}
+                onChange={e =>
+                  handleNewAttributeChange(index, attr.id, e.target.value)
+                }
+              >
+                <option value="">Select {attr.name}</option>
+                {attr.values.map(val => (
+                  <option key={val.id} value={val.id}>
+                    {val.value}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+          <div style={{ marginBottom: '12px' }}>
+            <label>Price</label>
+            <input
+              type="number"
+              value={combo.price}
+              onChange={e => handleNewPriceChange(index, +e.target.value)}
+            />
+          </div>
+          <button type="button" onClick={() => handleRemoveNewCombo(index)}>
+            Remove
+          </button>
+          <hr />
+        </div>
+      ))}
+
+      <button type="button" onClick={handleAddNewCombination}>
+        Add New
       </button>
 
-      <div style={{ marginTop: '1rem' }}>
-        <button type="button" onClick={handleReset}>
-          Reset
-        </button>
-        <button type="button" onClick={handleDone}>
-          Done
-        </button>
-      </div>
-    </>
+      {hasChanges() && (
+        <div style={{ marginTop: '1rem' }}>
+          <button type="button" onClick={handleReset}>
+            Reset New
+          </button>
+          <button type="button" onClick={handleDone}>
+            Done
+          </button>
+        </div>
+      )}
+
+    </div>
   );
 };
 

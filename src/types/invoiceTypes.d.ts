@@ -30,7 +30,11 @@ interface Invoice {
 interface InvoicesResponse {
   invoices: Invoice[];
 }
-
+interface Variant {
+  variant_id: number;
+  final_cost: number;
+  quantity: number;
+}
 interface CreateInvoicePayload {
   number: string;
   client_name: string;
@@ -41,11 +45,14 @@ interface CreateInvoicePayload {
   discount_type?: string;
   item_type: TabType;
   payment_method: string;
+  address?: string;
+  pincode?: string;
+  delivery_charge?: number;
   items: {
     item_id: number;
     quantity: number;
     unit_price: number;
-    description: string;
+    final_cost: number;
     total: number;
   }[];
 };

@@ -99,7 +99,7 @@ export const {
   useLazyDownloadPaySlipByIdQuery,
   useFetchEmployeesSalaryQuery,
   useFetchEmployeesSalaryByIdQuery,
-  useDownloadPaySlipPdfQuery,
+  useLazyDownloadPaySlipPdfQuery,
 } = employeCreateApi;
 
 export default employeCreateApi;

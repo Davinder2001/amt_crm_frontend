@@ -1,0 +1,59 @@
+@use '../variables' as *;
+
+.category-container {
+
+  
+  
+  .category-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .category-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    display: inline-block;
+  }
+  
+  .create-button {
+    background-color: #009693;
+    color: #fff;
+  }
+  
+  .done-button {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .cancel-button {
+    background-color: #ccc;
+    color: #000;
+    margin-left: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .input-field {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-top: 4px;
+  }
+  
+  .parent-category-list {
+    margin-top: 8px;
+  }
+  
+  .button-group {
+    display: flex;
+  }
+}

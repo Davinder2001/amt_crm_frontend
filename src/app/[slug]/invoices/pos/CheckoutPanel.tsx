@@ -49,16 +49,16 @@ export default function CheckoutPanel({
         email: email,
         invoice_date: new Date().toISOString().split('T')[0],
         discount_price: discountAmount,
-        percentage: discountPercent, 
+        percentage: discountPercent,
         discount_type: discountType,
         item_type: activeTab,
         payment_method: paymentMethod,
         items: cart.map(i => ({
             item_id: i.id,
             quantity: i.quantity,
-            unit_price: i.selling_price,
+            unit_price: i.final_cost,
             description: i.description || i.name,
-            total: i.quantity * i.selling_price,
+            total: i.quantity * i.final_cost,
         })),
     });
 

@@ -50,8 +50,8 @@ interface CategoryResponse {
 interface CartItem {
   id: number;
   name: string;
-  selling_price: number;
   quantity: number;
+  final_cost: number;
   description?: string;
 };
 
@@ -63,6 +63,7 @@ interface AttributeItem {
   attribute_value_id: number | string;
   attribute: string;
   value: string;
+  final_cost: number;
 }
 
 interface AttributeOption {

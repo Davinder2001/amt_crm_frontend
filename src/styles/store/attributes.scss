@@ -51,8 +51,8 @@
 
 .close-modal {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 10px;
+    right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -146,4 +146,145 @@ input {
         min-width: 20px;
         text-align: center;
     }
+    
 }
+
+
+.canvas-content{
+    .close-btn {
+        font-size: 25px !important;
+        border: unset !important;
+        background-color: unset !important;
+        color: $primary-color !important;
+    }
+
+
+
+}
+
+
+
+
+
+.container {
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+
+  
+  /* Sliding Canvas */
+  .canvas {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    padding: 24px 20px;
+    transition: right 0.4s ease;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    z-index: 1000;
+  
+    &.open {
+      right: 0;
+    }
+  }
+  
+  .canvas-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s;
+  
+    &:hover {
+      color: #e74c3c;
+    }
+  }
+  
+  .form-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fafafa;
+    transition: border-color 0.3s;
+  
+    &:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
+  }
+  
+  .values-container {
+    margin-top: 24px;
+  
+    .label {
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 8px;
+      display: block;
+    }
+  
+    .value-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+  
+      .input {
+        flex: 1;
+      }
+    }
+  }
+  
+  .remove-btns {
+    background: #ff5c5c;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    &:hover {
+      background: #e04848;
+    }
+  }
+  
+

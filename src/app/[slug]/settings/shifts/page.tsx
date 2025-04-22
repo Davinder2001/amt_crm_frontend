@@ -36,8 +36,8 @@ const Page = () => {
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Create New Shift</h1>
+    <div className="shift-page-form-outer">
+      <h1 className="Heading ">Create New Shift</h1>
 
       <form onSubmit={handleCreate} className="space-y-4 mb-10">
         <div>
@@ -76,7 +76,7 @@ const Page = () => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="buttons create-shift-buttons"
           disabled={isCreating}
         >
           {isCreating ? "Creating..." : "Create Shift"}

@@ -6,6 +6,7 @@ import {
     useDeleteAttributeMutation,
     useToggleAttributeStatusMutation,
 } from '@/slices/store/storeApi';
+import { FaClosedCaptioning, FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
 
 const Attributes = () => {
     const { data: attributes, isLoading, isError } = useFetchAttributesQuery();
@@ -79,7 +80,7 @@ const Attributes = () => {
                 onClick={() => setIsCanvasOpen(true)}
                 className='buttons'
             >
-                + Add Variation Attribute
+                <FaPlus/> Add Variation Attribute
             </button>
 
             {/* Sliding Canvas */}
@@ -114,9 +115,9 @@ const Attributes = () => {
                                         <button
                                             type="button"
                                             onClick={() => removeValueField(index)}
-                                            className="remove-btn"
+                                            className="remove-btns"
                                         >
-                                            Remove
+                                            <FaTimes/>
                                         </button>
                                     )}
                                 </div>
@@ -124,17 +125,17 @@ const Attributes = () => {
                             <button
                                 type="button"
                                 onClick={addNewValueField}
-                                className="add-value-btn"
+                                className="buttons"
                             >
-                                + Add another value
+                                <FaPlus/> Add another value
                             </button>
                         </div>
 
                         <button type="button" onClick={handleCreate} className="submit-btn">
-                            Add Attribute
+                           <FaPlus/> Add Attribute
                         </button>
                         <button type="button" onClick={() => setIsCanvasOpen(false)} className="close-btn">
-                            Close
+                          <FaTimes/>
                         </button>
 
                     </div>
@@ -176,7 +177,7 @@ const Attributes = () => {
                                     onClick={() => handleDelete(attribute.id)}
                                     className="delete-btn"
                                 >
-                                    Delete
+                                    <FaTrash/>
                                 </button>
                             </td>
                         </tr>
@@ -233,7 +234,7 @@ const Attributes = () => {
           padding: 12px;
           border: 1px solid #ccc;
           border-radius: 8px;
-          margin-bottom: 16px;
+          margin-bottom: 10px;
         }
         .values-container {
           margin-bottom: 16px;
@@ -287,9 +288,9 @@ const Attributes = () => {
           border: 1px solid #ccc;
         }
         .delete-btn {
-          color: red;
-          cursor: pointer;
-          text-decoration: underline;
+         border:none;
+         cursor: pointer;
+         font-size: 20px;
         }
       `}</style>
         </div>

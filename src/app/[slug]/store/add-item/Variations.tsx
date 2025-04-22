@@ -109,16 +109,16 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
                     <hr />
                 </div>
             ))}
-
-            <button type="button" onClick={handleAddCombination}>
+    
+            <button type="button" onClick={handleAddCombination} className="buttons">
                 Add More
             </button>
 
-            <div style={{ marginTop: '1rem' }}>
-                <button type="button" onClick={handleReset}>
+            <div style={{ marginTop: '1rem' }} className='variation-buttons-container'>
+                <button type="button" onClick={handleReset} className="buttons">
                     Reset
                 </button>
-                <button type="button" onClick={handleDone}>
+                <button type="button" onClick={handleDone} className="buttons">
                     Done
                 </button>
             </div>

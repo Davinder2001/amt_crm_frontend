@@ -1,0 +1,13 @@
+@use '../variables' as *;
+
+
+.settings-panel-buttons {
+    display: flex;
+    /* color: red; */
+    a{
+        color: $white;
+        text-decoration: none;
+        font-weight: $font-weight-medium;
+        font-size: 18px;
+    }
+}

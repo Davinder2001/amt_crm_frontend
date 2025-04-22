@@ -103,23 +103,23 @@ export default function CartTabContent({
             return false;
         }
 
-        
+
         if ((activeTab === 'Delivery' || activeTab === 'Pickup') && !address.trim()) {
             setActiveInnerTab('Client');
             toast.error(
                 activeTab === 'Delivery'
-                ? 'Please provide a delivery address.'
-                : 'Please provide pickup location.'
+                    ? 'Please provide a delivery address.'
+                    : 'Please provide pickup location.'
             );
             return false;
         }
-        
+
         if (activeTab === 'Delivery' && !pincode.trim()) {
             setActiveInnerTab('Client');
             toast.error('Please provide a pincode.');
             return false;
         }
-        
+
         if (!paymentMethod) {
             setShowPaymentDetails(true);
             toast.error('Please select a payment method.');
@@ -179,56 +179,60 @@ export default function CartTabContent({
 
             {/* Inner Tab Content */}
             <div className="inner-tab-content">
+
                 {activeInnerTab === 'Items' && (
                     <>
                         {cart.length > 0 ? (
-                            <div style={{ overflow: 'auto' }}>
-                                <table className="cartTable" style={{ margin: 0 }}>
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Qty</th>
-                                            <th>Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {cart.map(item => (
-                                            <tr key={item.id}>
-                                                <td className="item-name-checkout">
-                                                    <small className="delete-btn" onClick={() => onRemoveItem(item.id)}>
-                                                        <FiX />
-                                                    </small>{' '}
-                                                    <span>{item.name}</span>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        onClick={() => onQtyChange(item.id, -1)}
-                                                        disabled={item.quantity <= 1}
-                                                    >
-                                                        -
-                                                    </button>
-                                                    {item.quantity}
-                                                    <button
-                                                        onClick={() => onQtyChange(item.id, 1)}
-                                                        disabled={
-                                                            (() => {
-                                                                const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
-                                                                return storeItem ? item.quantity >= storeItem.quantity_count : false;
-                                                            })()
-                                                        }
-                                                    >
-                                                        +
-                                                    </button>
-                                                </td>
-                                                <td>₹{item.quantity * item.final_cost}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                            <>
+                                <div className="cart-labels">
+                                    <span className="label-name">Item</span>
+                                    <span className="label-quantity">Qty</span>
+                                    <span className="label-price">Price</span>
+                                </div>
+                                <div className="cart-items-list">
+                                    {cart.map(item => (
+                                        <div key={item.id} className="cart-item-row">
+                                            <div className="item-info">
+                                                <span className="item-name">{item.name}</span>
+                                                <button
+                                                    className="delete-btn"
+                                                    onClick={() => onRemoveItem(item.id)}>
+                                                    <FiX />
+                                                </button>
+                                            </div>
 
-                            </div>
+                                            <div className="item-quantity">
+                                                <button
+                                                    className="item-quantity-btn"
+                                                    onClick={() => onQtyChange(item.id, -1)}
+                                                    disabled={item.quantity <= 1}
+                                                >
+                                                    -
+                                                </button>
+                                                <span>{item.quantity}</span>
+                                                <button
+                                                    className="item-quantity-btn"
+                                                    onClick={() => onQtyChange(item.id, 1)}
+                                                    disabled={
+                                                        (() => {
+                                                            const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
+                                                            return storeItem ? item.quantity >= storeItem.quantity_count : false;
+                                                        })()
+                                                    }
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+
+                                            <div className="item-price">
+                                                ₹{item.quantity * item.final_cost}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
                         ) : (
-                            <div className="emptyCart">
+                            <div className="empty-cart-message">
                                 <FiShoppingCart size={80} color="#ccc" />
                                 <p>Your cart is empty</p>
                             </div>

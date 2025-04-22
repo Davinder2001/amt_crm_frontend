@@ -16,6 +16,28 @@ interface Company {
     [key: string]: string | number; // Allow for additional fields
 }
 
+interface documentImages {
+  frontImage: File;
+  backImage?: File;
+}
+
+interface registerForm {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  company_name: string;
+  number: string;
+  business_address: string;
+  pin_code: string;
+  business_proof_type: string;
+  business_id: string;
+  aadhar_number: string;
+  pan_number: string;
+  document_proof: documentImages[];
+}
+
 interface UserProfile {
     id: number;
     name: string;

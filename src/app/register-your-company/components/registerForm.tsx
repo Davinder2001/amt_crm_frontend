@@ -6,6 +6,11 @@ import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 
+interface documentImages {
+  frontImage: File;
+  backImage?: File;
+}
+
 interface FormData {
   first_name: string;
   last_name: string;
@@ -18,6 +23,9 @@ interface FormData {
   pin_code: string;
   business_proof_type: string;
   business_id: string;
+  aadhar_number: string;
+  pan_number: string;
+  document_proof: documentImages[];
 }
 
 const RegisterForm: React.FC = () => {
@@ -25,18 +33,22 @@ const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     first_name: '', last_name: '', email: '', password: '', password_confirmation: '',
     company_name: '', number: '', business_address: '', pin_code: '',
-    business_proof_type: '', business_id: ''
+    business_proof_type: '', business_id: '',
+    aadhar_number: '', pan_number: '',
+    document_proof: []
   });
 
   const [companyValid, setCompanyValid] = useState(true);
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const [errors, setErrors] = useState<any>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (name === 'company_name') setCompanyValid(true);
+    setErrors((prev: Record<string, string>) => ({ ...prev, [name]: '' })); // Reset error message on change
   };
 
   const handleCompanyBlur = () => {
@@ -55,19 +67,69 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!formData.company_name || !formData.email || !formData.first_name || !formData.number || !formData.password) {
+      setErrors({
+        company_name: !formData.company_name ? "The company name field is required." : "",
+        email: !formData.email ? "The email field is required." : "",
+        name: !formData.first_name ? "The name field is required." : "",
+        number: !formData.number ? "The number field is required." : "",
+        password: !formData.password ? "The password field is required." : ""
+      });
+      return;
+    }
+
     if (!companyValid) return;
 
     try {
-      const payload = { ...formData };
-      const result = await adminRegister(payload).unwrap();
+      // Create FormData object
+      const formPayload = new FormData();
+
+      // Append all form fields to FormData object
+      Object.keys(formData).forEach((key) => {
+        if (key !== 'document_proof') {
+          const value = formData[key as keyof FormData];
+          if (typeof value === 'string') {
+            formPayload.append(key, value);
+          }
+        }
+      });
+
+      // Handle document proofs (front and back)
+      formData.document_proof.forEach((document) => {
+        if (document.frontImage) formPayload.append('document_proof[frontImage]', document.frontImage);
+        if (document.backImage) formPayload.append('document_proof[backImage]', document.backImage);
+      });
+
+      const result = await adminRegister(formPayload).unwrap();
       toast.success(result.message || 'Registered successfully');
     } catch (err: any) {
       if (err.data?.errors) {
-        Object.values(err.data.errors).flat().forEach((msg: string) => toast.error(msg));
+        // Handle backend validation errors
+        setErrors(err.data.errors);
+        (Object.values(err.data.errors).flat() as string[]).forEach((message: string) => toast.error(message));
       } else {
         toast.error(err.data?.message || 'Registration failed');
       }
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, side: 'front' | 'back') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFormData(prev => {
+      const existing = prev.document_proof[0] || {};
+      const updatedProof = side === 'front'
+        ? { ...existing, frontImage: file }
+        : { ...existing, backImage: file };
+
+      return {
+        ...prev,
+        document_proof: [updatedProof]
+      };
+    });
   };
 
   return (
@@ -75,7 +137,7 @@ const RegisterForm: React.FC = () => {
       <form onSubmit={handleSubmit} className="form-container">
         <h2>Admin Registration</h2>
 
-        <div className={`form-group full-width ${!companyValid ? 'has-error' : ''}`}>
+        <div className={`form-group full-width ${errors.company_name ? 'has-error' : ''}`}>
           <label htmlFor="company_name">Business Name</label>
           <input
             id="company_name"
@@ -87,6 +149,7 @@ const RegisterForm: React.FC = () => {
             required
             placeholder="Enter your company name"
           />
+          {errors.company_name && <span className="error">{errors.company_name}</span>}
         </div>
 
         <div className="form-grid">
@@ -111,6 +174,7 @@ const RegisterForm: React.FC = () => {
                 required
                 placeholder={`Enter ${label.toLowerCase()}`}
               />
+              {errors[name] && <span className="error">{errors[name]}</span>}
             </div>
           ))}
 
@@ -131,6 +195,7 @@ const RegisterForm: React.FC = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+            {errors.password && <span className="error">{errors.password}</span>}
           </div>
 
           <div className="form-group">
@@ -149,6 +214,55 @@ const RegisterForm: React.FC = () => {
                 {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="aadhar_number">Aadhar Number</label>
+            <input
+              id="aadhar_number"
+              name="aadhar_number"
+              type="text"
+              value={formData.aadhar_number}
+              onChange={handleChange}
+              required
+              placeholder="Enter Aadhar Number"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="pan_number">PAN Number</label>
+            <input
+              id="pan_number"
+              name="pan_number"
+              type="text"
+              value={formData.pan_number}
+              onChange={handleChange}
+              required
+              placeholder="Enter PAN Number"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="frontImage">Upload Document Front (required)</label>
+            <input
+              id="frontImage"
+              name="frontImage"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'front')}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="backImage">Upload Document Back (optional)</label>
+            <input
+              id="backImage"
+              name="backImage"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, 'back')}
+            />
           </div>
         </div>
 
@@ -172,6 +286,7 @@ const RegisterForm: React.FC = () => {
         .password-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#888; }
         .submit-button { width:100%; padding:12px; background:#009693; border:none; border-radius:8px; color:#fff; font-size:18px; margin-top:30px; cursor:pointer; }
         .submit-button:hover { background:#01a601; }
+        .error { color:#e74c3c; font-size:12px; margin-top:5px; }
       `}</style>
     </section>
   );

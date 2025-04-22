@@ -10,7 +10,7 @@ const companyApi = companyCreateApiSlice.injectEndpoints({
       }),
       providesTags: ["Company"],
     }),
-
+    
     // POST: Create a new company
     createCompany: builder.mutation<Company, Partial<Company>>({
       query: (newCompany) => ({
@@ -42,6 +42,15 @@ const companyApi = companyCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Company"],
     }),
+    
+    // GET: Fetch a single company by id
+    fetchCompaniesName: builder.query<void, void>({
+      query: () => ({
+        url: "companies/names",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
   }),
 });
 
@@ -50,6 +59,7 @@ export const {
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
+  useFetchCompaniesNameQuery
 } = companyApi;
 
 export default companyApi;

@@ -1,253 +1,179 @@
 'use client';
 import React, { useState } from 'react';
 import { useAdminRegisterMutation } from '@/slices/auth/authApi';
+import { useFetchCompaniesNameQuery } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 
-const RegisterForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    company_name: '',
-    number: '',
+interface FormData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  company_name: string;
+  number: string;
+  business_address: string;
+  pin_code: string;
+  business_proof_type: string;
+  business_id: string;
+}
+
+const RegisterForm: React.FC = () => {
+  const { data: companiesData = { companies: [] } } = useFetchCompaniesNameQuery();
+  const [formData, setFormData] = useState<FormData>({
+    first_name: '', last_name: '', email: '', password: '', password_confirmation: '',
+    company_name: '', number: '', business_address: '', pin_code: '',
+    business_proof_type: '', business_id: ''
   });
-  const [adminRegister] = useAdminRegisterMutation();
+
+  const [companyValid, setCompanyValid] = useState(true);
+  const [adminRegister, { isLoading }] = useAdminRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'company_name') setCompanyValid(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCompanyBlur = () => {
+    const name = formData.company_name.trim().toLowerCase();
+    if (!name) return;
+    const exists = companiesData?.companies?.some(
+      (company: any) => company.company_name.toLowerCase() === name
+    );
+    if (exists) {
+      setCompanyValid(false);
+      toast.error('This business name is already registered');
+    } else {
+      setCompanyValid(true);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation();
+    if (!companyValid) return;
+
     try {
-      const result = await adminRegister(formData).unwrap();
-      if (result.message) {
-        toast.success(result.message);
+      const payload = { ...formData };
+      const result = await adminRegister(payload).unwrap();
+      toast.success(result.message || 'Registered successfully');
+    } catch (err: any) {
+      if (err.data?.errors) {
+        Object.values(err.data.errors).flat().forEach((msg: string) => toast.error(msg));
+      } else {
+        toast.error(err.data?.message || 'Registration failed');
       }
-    } catch (err) {
-      console.error('Registration error:', err);
     }
   };
 
   return (
-    <>
-      <section className="form-wrapper">
-        <form onSubmit={handleSubmit} className="form-container">
-          <h2>Admin Registration</h2>
-          <p className="form-subtitle">Please fill in the details to register as an admin.</p>
+    <section className="form-wrapper">
+      <form onSubmit={handleSubmit} className="form-container">
+        <h2>Admin Registration</h2>
 
-          <div className="form-grid">
-            {/* Name Field */}
-            <div className="form-group">
-              <label htmlFor="name">Full Name:</label>
+        <div className={`form-group full-width ${!companyValid ? 'has-error' : ''}`}>
+          <label htmlFor="company_name">Business Name</label>
+          <input
+            id="company_name"
+            name="company_name"
+            type="text"
+            value={formData.company_name}
+            onChange={handleChange}
+            onBlur={handleCompanyBlur}
+            required
+            placeholder="Enter your company name"
+          />
+        </div>
+
+        <div className="form-grid">
+          {[
+            { label: 'First Name', name: 'first_name' },
+            { label: 'Last Name', name: 'last_name' },
+            { label: 'Email', name: 'email', type: 'email' },
+            { label: 'Phone Number', name: 'number' },
+            { label: 'Business Address', name: 'business_address' },
+            { label: 'Pin Code', name: 'pin_code' },
+            { label: 'Business Proof Type', name: 'business_proof_type' },
+            { label: 'Business ID Number', name: 'business_id' }
+          ].map(({ label, name, type = 'text' }) => (
+            <div className="form-group" key={name}>
+              <label htmlFor={name}>{label}</label>
               <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                id={name}
+                name={name}
+                type={type}
+                value={(formData as any)[name]}
                 onChange={handleChange}
                 required
-                placeholder="Enter your full name"
+                placeholder={`Enter ${label.toLowerCase()}`}
               />
             </div>
+          ))}
 
-            {/* Email Field */}
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
+          {/* Password Fields */}
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <div className="password-container">
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="Enter your email address"
+                placeholder="Create password"
               />
-            </div>
-
-            {/* Password Field */}
-            <div className="form-group">
-              <label htmlFor="password">Password:</label>
-              <div className="password-container">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  placeholder="Create a password"
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            {/* Confirm Password Field */}
-            <div className="form-group">
-              <label htmlFor="password_confirmation">Confirm Password:</label>
-              <div className="password-container">
-                <input
-                  type={showPasswordConfirmation ? 'text' : 'password'}
-                  id="password_confirmation"
-                  name="password_confirmation"
-                  value={formData.password_confirmation}
-                  onChange={handleChange}
-                  required
-                  placeholder="Re-enter your password"
-                />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                >
-                  {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            {/* Company Name Field */}
-            <div className="form-group">
-              <label htmlFor="company_name">Company Name:</label>
-              <input
-                type="text"
-                id="company_name"
-                name="company_name"
-                value={formData.company_name}
-                onChange={handleChange}
-                required
-                placeholder="Enter your company name"
-              />
-            </div>
-
-            {/* Phone Number Field */}
-            <div className="form-group">
-              <label htmlFor="number">Phone Number:</label>
-              <input
-                type="text"
-                id="number"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
-                required
-                placeholder="Enter your phone number"
-              />
+              <button type="button" className="password-toggle" onClick={() => setShowPassword(prev => !prev)}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
           </div>
 
-          <button type="submit" className="submit-button">Register</button>
-        </form>
-      </section>
+          <div className="form-group">
+            <label htmlFor="password_confirmation">Confirm Password</label>
+            <div className="password-container">
+              <input
+                id="password_confirmation"
+                name="password_confirmation"
+                type={showPasswordConfirmation ? 'text' : 'password'}
+                value={formData.password_confirmation}
+                onChange={handleChange}
+                required
+                placeholder="Re-enter password"
+              />
+              <button type="button" className="password-toggle" onClick={() => setShowPasswordConfirmation(prev => !prev)}>
+                {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled={isLoading || !companyValid} className="submit-button">
+          {isLoading ? 'Registering…' : 'Register'}
+        </button>
+      </form>
 
       <style jsx>{`
-        .form-wrapper {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 50px 0;
-          background: #f9f9f9;
-        }
-
-        .form-container {
-          max-width: 700px;
-          width: 100%;
-          padding: 30px;
-          background-color: #ffffff;
-          border-radius: 12px;
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease-in-out;
-        }
-        h2 {
-          text-align: center;
-          font-size: 32px;
-          font-weight: 700;
-          color: #222222;
-          margin-bottom: 15px;
-        }
-
-        .form-subtitle {
-          text-align: center;
-          font-size: 16px;
-          color: #888888;
-          margin-bottom: 30px;
-        }
-
-        .form-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-        }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-        }
-
-        label {
-          display: block;
-          font-weight: 600;
-          margin-bottom: 8px;
-          color: #333333;
-        }
-
-        input {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          font-size: 16px;
-          color: #333333;
-          margin-bottom: 5px;
-          transition: border 0.3s ease;
-        }
-
-        input:focus {
-          border-color: #009693;
-          outline: none;
-        }
-
-        .password-container {
-          position: relative;
-        }
-
-        .password-toggle {
-          position: absolute;
-          right: 10px;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: #888888;
-        }
-
-        .submit-button {
-          width: 100%;
-          padding: 10px;
-          background-color: #009693;
-          border: none;
-          border-radius: 8px;
-          color: #ffffff;
-          font-size: 18px;
-          cursor: pointer;
-          margin-top: 20px;
-        }
-        .submit-button:hover{
-        background-color: #01A601;
-        }
+        .form-wrapper { display: flex; justify-content: center; align-items: center; padding: 50px 0; background: #f9f9f9; }
+        .form-container { padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        h2 { text-align:center; font-size:32px; margin-bottom:15px; color:#222; }
+        .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:20px; }
+        .form-group { display:flex; flex-direction:column; }
+        .full-width { grid-column:1/-1; }
+        .has-error input { border-color:#e74c3c; }
+        label { font-weight:600; margin-bottom:8px; color:#333; }
+        input { padding:10px; border:1px solid #ddd; border-radius:8px; font-size:16px; transition:border 0.3s; }
+        input:focus { border-color:#009693; outline:none; }
+        .password-container { position:relative; }
+        .password-toggle { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#888; }
+        .submit-button { width:100%; padding:12px; background:#009693; border:none; border-radius:8px; color:#fff; font-size:18px; margin-top:30px; cursor:pointer; }
+        .submit-button:hover { background:#01a601; }
       `}</style>
-    </>
+    </section>
   );
 };
 

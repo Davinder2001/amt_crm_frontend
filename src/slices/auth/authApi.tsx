@@ -80,15 +80,18 @@ const authApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    adminRegister: builder.mutation<{ access_token: string; user: UserProfile; message: string }, { name: string; email: string; password: string; password_confirmation: string }>({
-      query: (credentials) => ({
-        url: "admin-register",
-        method: "POST",
-        body: credentials,
-        credentials: "include",
-      }),
-      invalidatesTags: ["Auth"],
+    adminRegister: builder.mutation<
+    { access_token: string; user: UserProfile; message: string },
+    FormData
+  >({
+    query: (formData) => ({
+      url: "admin-register",
+      method: "POST",
+      body: formData,
+      credentials: "include",
     }),
+    invalidatesTags: ["Auth"],
+  }),
   }),
 });
 

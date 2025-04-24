@@ -1,10 +1,10 @@
 import React from 'react'
-import Cards from '@/app/superadmin/components/cards'
+import AdminList from '../components/adminList'
 
 const Page = () => {
   return (
     <>
-      <Cards />
+      <AdminList/>
     </>
   )
 }

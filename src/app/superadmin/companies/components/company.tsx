@@ -1,7 +1,9 @@
 'use client';
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
+import { toast } from 'react-toastify';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 interface Company {
@@ -19,47 +21,105 @@ const CompanyComponent: React.FC = () => {
   const { data, error, isLoading } = useFetchCompaniesQuery();
   const router = useRouter();
 
-  if (isLoading) return <div>Loading companies...</div>;
-  if (error)   return <div>Error loading companies.</div>;
+  const [localCompanies, setLocalCompanies] = useState<Company[]>([]);
 
-  const companies: Company[] = data?.data || [];
+  useEffect(() => {
+    if (data?.data) {
+      setLocalCompanies(data.data);
+    }
+  }, [data]);
+
+  const paymentStatusOptions      = ['pending', 'processing', 'completed', 'failed'];
+  const verificationStatusOptions = ['pending', 'under_review', 'verified', 'rejected'];
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
+  };
+
+  const handlePaymentChange = (companyId: number, value: string) => {
+    setLocalCompanies((prev) =>
+      prev.map((c) =>
+        c.id === companyId ? { ...c, payment_status: value } : c
+      )
+    );
+    toast.success(`Payment marked as "${value}" successfully.`);
+  };
+
+  const handleVerificationChange = (companyId: number, value: string) => {
+    setLocalCompanies((prev) =>
+      prev.map((c) =>
+        c.id === companyId ? { ...c, verification_status: value } : c
+      )
+    );
+    toast.success(`Verification marked as "${value}" successfully.`);
+  };
+
+  if (isLoading) return <div>Loading companies...</div>;
+  if (error) return <div>Error loading companies.</div>;
 
   return (
-    <div>
-      <h1>Companies</h1>
-      <table className="company-table">
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Companies</h1>
+      <table className="min-w-full border border-gray-300">
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Slug</th>
-            <th>Payment Status</th>
-            <th>Verification Status</th>
-            <th>Actions</th>
+          <tr className="bg-gray-100">
+            <th className="border p-2">ID</th>
+            <th className="border p-2">Code</th>
+            <th className="border p-2">Name</th>
+            <th className="border p-2">Slug</th>
+            <th className="border p-2">Payment</th>
+            <th className="border p-2">Verification</th>
+            <th className="border p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {companies.map(c => (
+          {localCompanies.map((c) => (
             <tr key={c.id}>
-              <td>{c.id}</td>
-              <td>{c.company_id}</td>
-              <td>{c.company_name}</td>
-              <td>{c.company_slug}</td>
-              <td>{c.payment_status}</td>
-              <td>{c.verification_status}</td>
-              <td className="actions">
+              <td className="border p-2">{c.id}</td>
+              <td className="border p-2">{c.company_id}</td>
+              <td className="border p-2">{c.company_name}</td>
+              <td className="border p-2">{c.company_slug}</td>
+              <td className="border p-2">
+                <select
+                  className="border rounded px-2 py-1"
+                  value={c.payment_status}
+                  onChange={(e) => handlePaymentChange(c.id, e.target.value)}
+                >
+                  {paymentStatusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td className="border p-2">
+                <select
+                  className="border rounded px-2 py-1"
+                  value={c.verification_status}
+                  onChange={(e) => handleVerificationChange(c.id, e.target.value)}
+                >
+                  {verificationStatusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td className="border p-2 flex space-x-2">
                 <FaEye
-                  style={{ cursor: 'pointer', marginRight: 8 }}
-                  onClick={() => router.push(`/companies/view/${c.id}`)}
+                  onClick={() => handleNavigation(`companies/view/${c.id}`)}
+                  className="cursor-pointer text-blue-500"
+                  title="View"
                 />
                 <FaEdit
-                  style={{ cursor: 'pointer', marginRight: 8 }}
-                  onClick={() => router.push(`/companies/edit/${c.id}`)}
+                  onClick={() => handleNavigation(`companies/edit/${c.id}`)}
+                  className="cursor-pointer text-green-500"
+                  title="Edit"
                 />
                 <FaTrash
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => router.push(`/companies/delete/${c.id}`)}
+                  onClick={() => handleNavigation(`/companies/delete/${c.id}`)}
+                  className="cursor-pointer text-red-500"
+                  title="Delete"
                 />
               </td>
             </tr>

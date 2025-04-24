@@ -7,13 +7,16 @@ const SideBar = () => {
       <nav>
         <ul>
           <li>
-            <Link href='dashboard'>Dashnoard</Link>
+            <Link href='/superadmin/dashboard'>Dashnoard</Link>
           </li>
           <li>
-            <Link href='companies'>Companies</Link>
+            <Link href='/superadmin/admins'>Biuisness Users</Link>
           </li>
           <li>
-            <Link href='settings'>Settings</Link>
+            <Link href='/superadmin/companies'>Companies</Link>
+          </li>
+          <li>
+            <Link href='/superadmin/settings'>Settings</Link>
           </li>
         </ul>
       </nav>

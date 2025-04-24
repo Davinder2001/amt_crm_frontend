@@ -12,9 +12,6 @@ const CompanyNav = () => {
                 <li>
                     <Link href='/superadmin/companies/pending'>Pending Companies</Link>
                 </li>
-                <li>
-                    <Link href='/superadmin/companies/admins'>All Admins</Link>
-                </li>
             </ul>
         </nav>
     </>

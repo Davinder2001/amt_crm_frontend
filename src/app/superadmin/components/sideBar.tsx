@@ -10,6 +10,9 @@ const SideBar = () => {
             <Link href='/superadmin/dashboard'>Dashnoard</Link>
           </li>
           <li>
+            <Link href='/superadmin/admins'>Biuisness Users</Link>
+          </li>
+          <li>
             <Link href='/superadmin/companies'>Companies</Link>
           </li>
           <li>

@@ -10,7 +10,7 @@ interface Props {
 const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
     const { data: attributes } = useFetchVariationsQuery();
     const [combinations, setCombinations] = useState<variations[]>([
-        { attributes: [], price: 0 }
+        { attributes: [], price: 0, regular_price: 0 }
     ]);
 
     const handleAttributeChange = (
@@ -37,16 +37,19 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
         });
     };
 
-    const handlePriceChange = (comboIndex: number, price: number) => {
+    const handlePriceChange = (comboIndex: number, price: number, regular_price?: number) => {
         setCombinations(prev => {
             const updated = [...prev];
             updated[comboIndex].price = price;
+            if (regular_price !== undefined) {
+                updated[comboIndex].regular_price = regular_price;
+            }
             return updated;
         });
     };
 
     const handleAddCombination = () => {
-        setCombinations(prev => [...prev, { attributes: [], price: 0 }]);
+        setCombinations(prev => [...prev, { attributes: [], price: 0, regular_price: 0 }]);
     };
 
     const handleRemoveCombination = (index: number) => {
@@ -59,7 +62,7 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
     };
 
     const handleReset = () => {
-        setCombinations([{ attributes: [], price: 0 }]);
+        setCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
     };
 
     return (
@@ -89,11 +92,30 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
                     ))}
 
                     <div style={{ marginBottom: '12px' }}>
+                        <label>Regular Price</label>
+                        <input
+                            type="number"
+                            value={combo.regular_price === 0 ? '' : combo.regular_price}
+                            onChange={e => {
+                                const val = Number(e.target.value);
+                                handlePriceChange(index, combo.price, isNaN(val) ? 0 : val);
+                            }}
+                            placeholder="e.g. 300.00"
+                            min={0}
+                        />
+                    </div>
+
+                    <div style={{ marginBottom: '12px' }}>
                         <label>Price</label>
                         <input
                             type="number"
-                            value={combo.price}
-                            onChange={e => handlePriceChange(index, +e.target.value)}
+                            value={combo.price === 0 ? '' : combo.price}
+                            onChange={e => {
+                                const val = Number(e.target.value);
+                                handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
+                            }}
+                            placeholder="e.g. 250.00"
+                            min={0}
                         />
                     </div>
 
@@ -109,7 +131,7 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
                     <hr />
                 </div>
             ))}
-    
+
             <button type="button" onClick={handleAddCombination} className="buttons">
                 Add More
             </button>

@@ -128,10 +128,12 @@ import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employ
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { useCompany } from '@/utils/Company';
 
 const UserList: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
+  const { companySlug } = useCompany();
 
   const [deleteEmployee] = useDeleteEmployeMutation();
   const employees: Employee[] = employeesData?.employees ?? [];
@@ -199,7 +201,10 @@ const UserList: React.FC = () => {
     },
   ];
 
-  return <ResponsiveTable data={employees} columns={columns} />;
+  return <ResponsiveTable data={employees} columns={columns}
+    onDelete={(id) => handleDelete(id)}
+    onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+    onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)} />;
 };
 
 export default UserList;

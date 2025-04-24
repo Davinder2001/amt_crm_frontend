@@ -74,7 +74,7 @@ interface AttributeOption {
 
 interface variations {
   id?: number;
-  discounted_price?: number;
+  regular_price?: number;
   price: number;
   stock?: number;
   images?: string[];

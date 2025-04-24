@@ -12,7 +12,6 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
   const [newCombinations, setNewCombinations] = useState<variations[]>([]);
   const [initialVariants, setInitialVariants] = useState<variations[]>([]);
 
-  // Load existing variants on mount
   useEffect(() => {
     const initialized = variants.map(variant => ({
       ...variant,
@@ -20,6 +19,13 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
     }));
     setExistingCombinations(initialized);
     setInitialVariants(JSON.parse(JSON.stringify(initialized)));
+
+    // Show new blank if no existing combos
+    if (initialized.length === 0) {
+      setNewCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
+    } else {
+      setNewCombinations([]); // clean up
+    }
   }, [variants]);
 
   const hasChanges = () => {
@@ -29,7 +35,7 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
           ...item,
           attributes: item.attributes.sort((a, b) =>
             a.attribute_id > b.attribute_id ? 1 : -1
-          ), // sort for consistent comparison
+          ),
         }))
       );
 
@@ -39,68 +45,55 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
     );
   };
 
-  // Handlers for existing combinations
-  const handleExistingChange = (comboIndex: number, key: string, value: string) => {
-    setExistingCombinations(prev => {
-      const updated = [...prev];
-      const combo = { ...updated[comboIndex] };
-      const attrs = [...combo.attributes];
-      const attrIndex = attrs.findIndex(a => a.attribute === key);
-      if (attrIndex !== -1) {
-        attrs[attrIndex] = { ...attrs[attrIndex], value };
-      } else {
-        attrs.push({ attribute: key, value, attribute_id: '', attribute_value_id: '', final_cost: 0 });
-      }
-      updated[comboIndex] = { ...combo, attributes: attrs };
-      return updated;
-    });
-  };
-
-  const handleExistingPriceChange = (index: number, price: number) => {
-    setExistingCombinations(prev => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], price };
-      return updated;
-    });
-  };
-
-  // Handlers for new combinations
-  const handleNewAttributeChange = (
-    comboIndex: number,
-    attributeId: number,
-    valueId: string
+  const handleFieldChange = (
+    index: number,
+    field: string,
+    value: any,
+    isNew: boolean
   ) => {
-    setNewCombinations(prev => {
-      const updated = [...prev];
-      const attrs = updated[comboIndex].attributes.filter(attr => attr.attribute_id !== attributeId);
-
-      // Find the selected attribute name and value
-      const selectedAttribute = attributes?.find(attr => attr.id === attributeId);
-      const selectedValue = selectedAttribute?.values.find(val => val.id === Number(valueId));
-
-      attrs.push({
-        attribute_id: attributeId,
-        attribute_value_id: valueId,
-        attribute: selectedAttribute?.name || '', // Set the attribute name
-        value: selectedValue?.value || '', // Set the attribute value
-        final_cost: 0
+    if (isNew) {
+      setNewCombinations(prev => {
+        const updated = [...prev];
+        if (field === 'price' || field === 'regular_price') {
+          updated[index][field] = value;
+        } else {
+          const attrs = updated[index].attributes;
+          const attrIndex = attrs.findIndex(a => a.attribute_id === value.attribute_id);
+          if (attrIndex !== -1) {
+            attrs[attrIndex] = value;
+          } else {
+            attrs.push(value);
+          }
+        }
+        return updated;
       });
-
-      updated[comboIndex].attributes = attrs;
-      return updated;
-    });
-  };
-
-  const handleNewPriceChange = (index: number, price: number) => {
-    setNewCombinations(prev => {
-      const updated = [...prev];
-      updated[index].price = price;
-      return updated;
-    });
+    } else {
+      setExistingCombinations(prev => {
+        const updated = [...prev];
+        if (field === 'price' || field === 'regular_price') {
+          updated[index][field] = value;
+        } else {
+          const attrs = updated[index].attributes;
+          const attrIndex = attrs.findIndex(a => a.attribute === field);
+          if (attrIndex !== -1) {
+            attrs[attrIndex] = { ...attrs[attrIndex], value };
+          } else {
+            attrs.push({
+              attribute: field,
+              value,
+              attribute_id: '',
+              attribute_value_id: '',
+              final_cost: 0
+            });
+          }
+        }
+        return updated;
+      });
+    }
   };
 
   const handleAddNewCombination = () => {
-    setNewCombinations(prev => [...prev, { attributes: [], price: 0 }]);
+    setNewCombinations(prev => [...prev, { attributes: [], price: 0, regular_price: 0 }]);
   };
 
   const handleRemoveNewCombo = (index: number) => {
@@ -108,22 +101,32 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
   };
 
   const handleRemoveExistingCombo = (index: number) => {
-    setExistingCombinations(prev => prev.filter((_, i) => i !== index));
+    setExistingCombinations(prev => {
+      const updated = prev.filter((_, i) => i !== index);
+      // If no existing left, show a blank new combo
+      if (updated.length === 0) {
+        setNewCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
+      }
+      return updated;
+    });
   };
 
-  // handleDone function now resets newCombinations to clear the fields after setting the variants
   const handleDone = () => {
-    setVariants([...existingCombinations, ...newCombinations]); // Send both existing and new combinations together
-    setNewCombinations([]); // Reset the new combinations to clear the fields
+    const merged = [...existingCombinations, ...newCombinations];
+    setExistingCombinations(merged);
+    setInitialVariants(JSON.parse(JSON.stringify(merged)));
+    setNewCombinations([]);
+    setVariants(merged);
   };
 
   const handleReset = () => {
-    setNewCombinations([]);
+    // Always reset to one blank new
+    setNewCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
   };
 
   return (
     <div>
-      {/* Existing Combinations Section */}
+      {/* Existing Combinations */}
       {existingCombinations.map((combo, index) => (
         <div key={`existing-${index}`} className="variation-block">
           {combo.attributes.map(attr => (
@@ -131,17 +134,17 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
               <label>{attr.attribute}</label>
               <select
                 value={attr.value}
-                onChange={e => handleExistingChange(index, attr.attribute, e.target.value)}
+                onChange={e => handleFieldChange(index, attr.attribute, e.target.value, false)}
               >
                 <option value="">Select {attr.attribute}</option>
-                {attributes?.map(attribute => (
+                {attributes?.map(attribute =>
                   attribute.name === attr.attribute &&
                   attribute.values.map(val => (
                     <option key={val.id} value={val.value}>
                       {val.value}
                     </option>
                   ))
-                ))}
+                )}
               </select>
             </div>
           ))}
@@ -150,7 +153,15 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
             <input
               type="number"
               value={combo.price}
-              onChange={e => handleExistingPriceChange(index, +e.target.value)}
+              onChange={e => handleFieldChange(index, 'price', +e.target.value, false)}
+            />
+          </div>
+          <div style={{ marginBottom: '12px' }}>
+            <label>Regular Price</label>
+            <input
+              type="number"
+              value={combo.regular_price}
+              onChange={e => handleFieldChange(index, 'regular_price', +e.target.value, false)}
             />
           </div>
           <button type="button" onClick={() => handleRemoveExistingCombo(index)}>
@@ -160,46 +171,66 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
         </div>
       ))}
 
-      {/* New Combinations Section */}
-      {newCombinations.map((combo, index) => (
-        <div key={`new-${index}`} className="variation-block">
-          {attributes?.map(attr => (
-            <div key={attr.id} style={{ marginBottom: '12px' }}>
-              <label>{attr.name}</label>
-              <select
-                value={combo.attributes.find(a => a.attribute_id === attr.id)?.attribute_value_id || ''}
-                onChange={e =>
-                  handleNewAttributeChange(index, attr.id, e.target.value)
-                }
-              >
-                <option value="">Select {attr.name}</option>
-                {attr.values.map(val => (
-                  <option key={val.id} value={val.id}>
-                    {val.value}
-                  </option>
-                ))}
-              </select>
+      {/* New Combinations - only shown if explicitly added or no existing */}
+      {newCombinations.length > 0 && (
+        <>
+          {newCombinations.map((combo, index) => (
+            <div key={`new-${index}`} className="variation-block">
+              {attributes?.map(attr => (
+                <div key={attr.id} style={{ marginBottom: '12px' }}>
+                  <label>{attr.name}</label>
+                  <select
+                    value={combo.attributes.find(a => a.attribute_id === attr.id)?.attribute_value_id || ''}
+                    onChange={e =>
+                      handleFieldChange(index, attr.name, {
+                        attribute_id: attr.id,
+                        attribute_value_id: e.target.value,
+                        attribute: attr.name,
+                        value: attr.values.find(v => v.id === +e.target.value)?.value || '',
+                        final_cost: 0,
+                      }, true)
+                    }
+                  >
+                    <option value="">Select {attr.name}</option>
+                    {attr.values.map(val => (
+                      <option key={val.id} value={val.id}>
+                        {val.value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <div style={{ marginBottom: '12px' }}>
+                <label>Price</label>
+                <input
+                  type="number"
+                  value={combo.price}
+                  onChange={e => handleFieldChange(index, 'price', +e.target.value, true)}
+                />
+              </div>
+              <div style={{ marginBottom: '12px' }}>
+                <label>Regular Price</label>
+                <input
+                  type="number"
+                  value={combo.regular_price}
+                  onChange={e => handleFieldChange(index, 'regular_price', +e.target.value, true)}
+                />
+              </div>
+              <button type="button" onClick={() => handleRemoveNewCombo(index)}>
+                Remove
+              </button>
+              <hr />
             </div>
           ))}
-          <div style={{ marginBottom: '12px' }}>
-            <label>Price</label>
-            <input
-              type="number"
-              value={combo.price}
-              onChange={e => handleNewPriceChange(index, +e.target.value)}
-            />
-          </div>
-          <button type="button" onClick={() => handleRemoveNewCombo(index)}>
-            Remove
-          </button>
-          <hr />
-        </div>
-      ))}
+        </>
+      )}
 
+      {/* Always visible "Add New" */}
       <button type="button" onClick={handleAddNewCombination}>
         Add New
       </button>
 
+      {/* Show Done/Reset if needed */}
       {hasChanges() && (
         <div style={{ marginTop: '1rem' }}>
           <button type="button" onClick={handleReset}>
@@ -210,7 +241,6 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
           </button>
         </div>
       )}
-
     </div>
   );
 };

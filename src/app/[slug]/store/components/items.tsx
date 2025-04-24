@@ -164,7 +164,9 @@ const Items: React.FC = () => {
           { label: 'View All Vendor', onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
       />
-      <ResponsiveTable data={filteredItems} columns={columns} />
+      <ResponsiveTable data={filteredItems} columns={columns} onDelete={(id) => handleDelete(id)}
+        onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)} />
     </div>
   );
 };

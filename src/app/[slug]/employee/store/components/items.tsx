@@ -12,11 +12,13 @@ import {
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { useRouter } from 'next/navigation';
 
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug: string | undefined =
     selectedCompany?.selected_company?.company_slug;
+  const router = useRouter();
 
   const { data: items, error, isLoading } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items) ? items : [];
@@ -89,7 +91,9 @@ const Items: React.FC = () => {
     }
   ];
 
-  return <ResponsiveTable data={storeItems} columns={columns} />;
+  return <ResponsiveTable data={storeItems} columns={columns} onDelete={(id) => handleDelete(id)}
+    onEdit={(id) => router.push(`/${companySlug}/employee/store/edit-item/${id}`)}
+    onView={(id) => router.push(`/${companySlug}/employee/store/view-item/${id}`)} />;
 };
 
 export default Items;

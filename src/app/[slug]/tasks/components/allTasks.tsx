@@ -46,9 +46,8 @@ const AllTasks: React.FC = () => {
               <th>Task Name</th>
               <th>Start Date</th>
               <th>End Date</th>
-              <th>Assigned By</th>        {/* ← added */}
+              <th>Assigned By</th>
               <th>Status</th>
-              <th>Submit Task</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -58,18 +57,11 @@ const AllTasks: React.FC = () => {
                 <td>{task.assigned_to_name}</td>
                 <td>{task.assigned_role}</td>
                 <td>{task.name}</td>
-                <td>{task.start_date?.slice(0, 16).replace('T', ' ')}</td>
-                <td>{task.end_date?.slice(0, 16).replace('T', ' ')}</td>
-                <td>{task.assigned_by_name}</td>  {/* ← added */}
+                <td>{task.start_date}</td>
+                <td>{task.end_date}</td>
+                <td>{task.assigned_by_name}</td>
                 <td>{task.status}</td>
-                <td>
-                  <Link
-                    href={`/${companySlug}/tasks/submit-task/${task.id}`}
-                    className="table-e-d-v-buttons"
-                  >
-                    Submit Task
-                  </Link>
-                </td>
+        
                 <td>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <Link

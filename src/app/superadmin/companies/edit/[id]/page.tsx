@@ -2,16 +2,51 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchSingleCompanyQuery, useUpdateCompanyMutation } from '@/slices/superadminSlices/company/companyApi';
+import Image from 'next/image';
+import {
+  useFetchSingleCompanyQuery,
+  useUpdateCompanyMutation,
+} from '@/slices/superadminSlices/company/companyApi';
+
+interface Company {
+  id: number;
+  company_name: string;
+  company_slug: string;
+  business_address: string;
+  business_proof_type: string;
+  business_id: string;
+  pin_code: string;
+  payment_status: 'paid' | 'pending' | '';
+  verification_status: 'verified' | 'pending' | '';
+  business_proof_front: string;
+  business_proof_back?: string;
+}
+
+interface FormDataState {
+  company_name: string;
+  company_slug: string;
+  payment_status: string;
+  verification_status: string;
+  business_address: string;
+  business_proof_type: string;
+  business_id: string;
+  pin_code: string;
+}
 
 const EditCompanyPage = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : '';
   const router = useRouter();
 
-  const { data, isLoading, error } = useFetchSingleCompanyQuery(id as string);
+  const {
+    data: companyResponse,
+    isLoading,
+    error,
+  } = useFetchSingleCompanyQuery(id);
+
   const [updateCompany, { isLoading: isUpdating }] = useUpdateCompanyMutation();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataState>({
     company_name: '',
     company_slug: '',
     payment_status: '',
@@ -23,20 +58,20 @@ const EditCompanyPage = () => {
   });
 
   useEffect(() => {
-    if (data?.data) {
-      const company = data.data;
+    if (companyResponse?.data) {
+      const company = companyResponse.data as Company;
       setFormData({
-        company_name: company.company_name || '',
-        company_slug: company.company_slug || '',
-        payment_status: company.payment_status || '',
-        verification_status: company.verification_status || '',
-        business_address: company.business_address || '',
-        business_proof_type: company.business_proof_type || '',
-        business_id: company.business_id || '',
-        pin_code: company.pin_code || '',
+        company_name: company.company_name ?? '',
+        company_slug: company.company_slug ?? '',
+        payment_status: company.payment_status ?? '',
+        verification_status: company.verification_status ?? '',
+        business_address: company.business_address ?? '',
+        business_proof_type: company.business_proof_type ?? '',
+        business_id: company.business_id ?? '',
+        pin_code: company.pin_code ?? '',
       });
     }
-  }, [data]);
+  }, [companyResponse]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -48,7 +83,7 @@ const EditCompanyPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await updateCompany({ id: id as string, data: formData }).unwrap();
+      await updateCompany({ id, data: formData }).unwrap();
       alert('Company updated!');
       router.push('/superadmin/companies');
     } catch (err) {
@@ -56,78 +91,35 @@ const EditCompanyPage = () => {
     }
   };
 
-  const isImage = (url: string) => {
-    return /\.(jpg|jpeg|png|webp)$/i.test(url);
-  };
+  const isImage = (url: string) => /\.(jpg|jpeg|png|webp)$/i.test(url);
 
   if (isLoading) return <div>Loading company...</div>;
-  if (error) return <div>Error loading company.</div>;
+  if (error || !companyResponse?.data) return <div>Error loading company.</div>;
 
-  const company = data?.data;
+  const company = companyResponse.data as Company;
 
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">Edit Company</h1>
       <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
-        <div>
-          <label className="block text-sm font-medium mb-1">Company Name</label>
-          <input
-            name="company_name"
-            value={formData.company_name}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Slug</label>
-          <input
-            name="company_slug"
-            value={formData.company_slug}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Business Address</label>
-          <input
-            name="business_address"
-            value={formData.business_address}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Business ID</label>
-          <input
-            name="business_id"
-            value={formData.business_id}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">PIN Code</label>
-          <input
-            name="pin_code"
-            value={formData.pin_code}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Proof Type (e.g., GST, PAN)</label>
-          <input
-            name="business_proof_type"
-            value={formData.business_proof_type}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
+        {([
+          ['Company Name', 'company_name'],
+          ['Slug', 'company_slug'],
+          ['Business Address', 'business_address'],
+          ['Business ID', 'business_id'],
+          ['PIN Code', 'pin_code'],
+          ['Proof Type (e.g., GST, PAN)', 'business_proof_type'],
+        ] as [string, keyof FormDataState][]).map(([label, name]) => (
+          <div key={name}>
+            <label className="block text-sm font-medium mb-1">{label}</label>
+            <input
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              className="border p-2 w-full"
+            />
+          </div>
+        ))}
 
         <div>
           <label className="block text-sm font-medium mb-1">Payment Status</label>
@@ -161,11 +153,14 @@ const EditCompanyPage = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Business Proof Front</label>
             {isImage(company.business_proof_front) ? (
-              <img
-                src={company.business_proof_front}
-                alt="Business Proof Front"
-                className="border rounded max-w-full h-48 object-contain"
-              />
+              <div className="relative w-full max-w-md h-48 border rounded overflow-hidden">
+                <Image
+                  src={company.business_proof_front}
+                  alt="Business Proof Front"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             ) : (
               <a
                 href={company.business_proof_front}
@@ -183,11 +178,14 @@ const EditCompanyPage = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Business Proof Back</label>
             {isImage(company.business_proof_back) ? (
-              <img
-                src={company.business_proof_back}
-                alt="Business Proof Back"
-                className="border rounded max-w-full h-48 object-contain"
-              />
+              <div className="relative w-full max-w-md h-48 border rounded overflow-hidden">
+                <Image
+                  src={company.business_proof_back}
+                  alt="Business Proof Back"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             ) : (
               <a
                 href={company.business_proof_back}

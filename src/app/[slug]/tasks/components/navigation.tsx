@@ -19,6 +19,7 @@ const Navigation: React.FC = () => {
       <Link href={`/${companySlug}/tasks/task-timeline` } className='navigation-button'> <FaPlus/> <span>Task Timeline</span></Link>
       <Link href={`/${companySlug}/tasks/add-task`} className='navigation-button'> <FaPlus/> <span>Add Task</span></Link>
       <Link href={`/${companySlug}/attendence`} className='navigation-button'><span>Attendence</span></Link>
+      <Link href={`/${companySlug}/tasks/recurring-tasks`} className='navigation-button'><span>Recurring Tasks</span></Link>
     
     </div>
   );

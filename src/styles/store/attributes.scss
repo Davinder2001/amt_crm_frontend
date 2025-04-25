@@ -51,8 +51,8 @@
 
 .close-modal {
     position: absolute;
-    top: 25px;
-    right: 25px;
+    top: 10px;
+    right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,7 +62,7 @@
     height: 32px;
     cursor: pointer;
     font-size: 16px;
-    color: #333;
+    color: $primary-color;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: background 0.2s;
 }
@@ -72,7 +72,7 @@
 }
 
 .tabs-sidebar {
-    width: 200px;
+    width: 250px;
     border-right: 1px solid #eee;
     display: flex;
     flex-direction: column;
@@ -81,7 +81,7 @@
 }
 
 .tab-button {
-  padding: 10px 0px 10px 20px;
+  padding: 15px 0px 15px 20px;
     background: none;
     border: none;
     text-align: left;
@@ -91,9 +91,13 @@
     transition: background 0.2s;
     font-size: 18px;
 }
+.tab-button:hover {
+  background-color: #f1f9f9;
+  border-right: 3px solid $primary-color;
+}
 
 .tab-button.active {
-    background-color: rgb(241, 249, 249);
+    background-color: #f1f9f9;
     font-weight: 500;
     color: $primary-color;
     border-right: 3px solid $primary-color;
@@ -107,7 +111,6 @@
 .variation-block {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
@@ -211,7 +214,15 @@ input {
     text-align: center;
     position: relative;
   }
-  
+
+ .canvas-content{
+  .create-attribute-title{
+    color: $primary-color;
+    font-size: 25px;
+    padding: 5px 0px; 
+  }
+ }
+
   .close-btn {
     position: absolute;
     top: 20px;
@@ -245,17 +256,20 @@ input {
     transition: border-color 0.3s;
   
     &:focus {
-      border-color: #4a90e2;
+      border-color: $primary-color !important;
       outline: none;
     }
   }
   
   .values-container {
-    margin-top: 24px;
-  
+    // margin-top: 24px;
+    display: flex;
+        gap: 10PX;
+        flex-direction: column;
+    
     .label {
       font-weight: 500;
-      color: #444;
+      color: #000000;
       margin-bottom: 8px;
       display: block;
     }
@@ -273,8 +287,8 @@ input {
   }
   
   .remove-btns {
-    background: #ff5c5c;
-    color: white;
+    background: #e0e0e0;
+    color: $primary-color;
     border: none;
     width: 32px;
     height: 32px;
@@ -288,7 +302,304 @@ input {
   
     &:hover {
       background: #e04848;
+      color: $white;
     }
   }
   
+  .container {
+    padding: 1rem;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
 
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #111827;
+  }
+
+  
+
+  .buttons:hover {
+    background-color:#4bcbc9 ;
+  }
+
+  .canvas {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 500px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: $box-shadow;
+    transition: right 0.35s ease-in-out;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  .canvas.open {
+   left: 0;
+  }
+
+  .canvas-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #111;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .label {
+    font-weight: 500;
+    color: #000000;
+    font-size: 0.9rem;
+  }
+  
+
+  .input {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+  }
+
+  .values-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .value-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+
+  .add-Another-value-btn {
+    background-color: $primary-color;
+    color: #fff;
+    border-radius: 6px;
+    padding: .5rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-btn {
+    background-color:$primary-color;
+    color: white;
+    border: none;
+    padding: 0.7rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 1.25rem;
+    align-self: flex-end;
+    cursor: pointer;
+  }
+
+  .attributes-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 15px;
+    margin-top: 2rem;
+  }
+
+  .attributes-table tr,
+  .attributes-table td,
+  .attributes-table th {
+    display: block;
+  }
+
+  .attributes-table tbody {
+    display: contents;
+  }
+
+//   .attribute-card {
+//     background: white;
+//     border: 1px solid #e5e7eb;
+//     border-radius: 10px;
+//     padding: 1.2rem;
+//     box-shadow: $box-shadow;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.5rem;
+//   }
+
+
+.attribute-card {
+  background: white;
+  border: 1px solid #fafafa;
+  border-radius: 10px;
+     padding: 1.2rem 1.2rem 1rem 1.2rem;
+  box-shadow:0 4px 8px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.2s ease-in-out;
+      position: relative;
+      justify-content: space-between;
+
+}
+
+.attribute-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:0 6px 12px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+
+
+  .attribute-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color:black;
+    text-transform: capitalize;
+  }
+
+  .attribute-card .values {
+    font-size: 1rem;
+    color: #4b5563;
+    text-transform: capitalize
+  }
+
+  .status-pill {
+   border-radius: 9999px;
+    width: fit-content;
+    padding: 4px 10px;
+    font-size: .75rem;
+    font-weight: 600;
+  }
+.active-option,
+.inactive-option {
+   text-transform: capitalize;
+}
+  .active-option {
+    background-color: #b4e8c6;
+    color: #0f4624;
+  }
+
+  .inactive-option {
+    background-color: #fee2e2;
+    color: $danger-color;
+  }
+.selector-and-active-inactive-outer{
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+  .status-select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.2rem;
+    width: fit-content;
+    background: white;
+  }
+
+  .delete-btn {
+      background-color: unset;
+    color: $primary-color;
+    border: none;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    align-self: flex-start;
+    position: absolute;
+    right: 0;
+    top:0;
+  }
+    
+    .delete-btn:hover {
+       color:$danger-color;
+    font-size: 1rem;
+
+    }
+
+.toggle-switch {
+  width: 42px;
+  height: 19px;
+  background-color: #e5e7eb;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  padding: 0 3px;
+}
+
+.toggle-switch.active {
+  background-color: $primary-color; /* green-400 */
+}
+
+.toggle-switch.inactive {
+  background-color: $primary-color; /* red-400 */
+}
+
+.toggle-thumb {
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  transition: transform 0.2s ease-in-out;
+}
+
+.toggle-switch.active .toggle-thumb {
+  transform: translateX(24px);
+  right: 26px;
+  left: 2px;
+}
+
+
+
+
+
+
+.floting-attributes-button {
+  position: relative;
+  transition: transform 0.3s ease-in-out; /* Optional: smooth transition on hover */
+  /* Other button styles */
+}
+
+.floting-attributes-button:hover {
+  animation: rotateFan 0.5s infinite; /* Fast rotation */
+  background-color: #085d5d;
+}
+
+@keyframes rotateFan {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

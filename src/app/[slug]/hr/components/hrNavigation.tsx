@@ -19,10 +19,6 @@ const HrNavigation = () => {
     <>
       <div className="hr_navigation">
         <Link href={`/${companySlug}/hr/add-employee`}><FaPlus/><span>Add Employee</span></Link>
-        <a href="#" onClick={(e) => { e.preventDefault(); setInviteModalOpen(true); }}>
-          <FaPlus/>
-          <span>Invite Employee</span>
-        </a>
         <Link href={`/${companySlug}/hr/status-view`}><span>Status View</span></Link>
         <Link href={`/${companySlug}/hr/employee-salary`}><span>Employee Salary</span></Link>
       </div>

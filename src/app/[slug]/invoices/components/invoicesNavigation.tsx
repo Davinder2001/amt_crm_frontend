@@ -12,6 +12,9 @@ const InvoicesNavigation = () => {
                 <li>
                     <Link href="invoices/customers" className='buttons' >All Customers</Link>
                 </li>
+                <li>
+                    <Link href="invoices/credits" className='buttons' >Credits</Link>
+                </li>
             </ul>
         </nav>
     </>

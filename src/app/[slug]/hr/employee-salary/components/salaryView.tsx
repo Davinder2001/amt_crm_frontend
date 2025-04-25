@@ -7,15 +7,15 @@ import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
 } from "@/slices/employe/employe";
-import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
+import "react-toastify/dist/ReactToastify.css";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading, refetch } = useFetchEmployeesSalaryQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
 
-    const navigateTo = (path: string, message: string) => {
+  const navigateTo = (path: string, message: string) => {
     if (!path) {
       toast.error(message);
       return;
@@ -46,6 +46,7 @@ const SalaryView: React.FC = () => {
     router.push(`/${employee.company_slug}/hr/employee-salary/pay-slip/${employee.id}`);
   };
 
+
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   if (isLoading) return <p>Loading employees...</p>;
@@ -61,10 +62,10 @@ const SalaryView: React.FC = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Contact Number</th>
-            <th>Company</th>
             <th>Current Salary</th>
             <th>Roles</th>
             <th>Salary Slip</th>
+            <th>Monthly Salary</th> {/* ✅ New Column */}
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -76,7 +77,6 @@ const SalaryView: React.FC = () => {
               <td>{employee.name}</td>
               <td>{employee.email}</td>
               <td>{employee.number || "N/A"}</td>
-              <td>{employee.company_name || "N/A"}</td>
               <td>{employee.employee_salary?.current_salary ?? "N/A"}</td>
               <td>
                 {employee.roles?.length
@@ -85,8 +85,18 @@ const SalaryView: React.FC = () => {
               </td>
               <td>
                 <span onClick={() => view(employee)} className="salary-slip">
-                  <FaEnvelope /> <span>slip</span>
+                  <FaEnvelope /> <span>Slip</span>
                 </span>
+              </td>
+              <td>
+                <button onClick={() =>
+                    navigateTo(
+                      `/${employee.company_slug}/hr/employee-salary/monthly/${employee.id}`,
+                      "Company slug not found"
+                    )
+                  } className="btn-primary">
+                  Monthly
+                </button>
               </td>
               <td>{employee.user_status || "N/A"}</td>
               <td className="user-td">
@@ -98,7 +108,8 @@ const SalaryView: React.FC = () => {
                     )
                   }
                 >
-                  <FaTrash color='#222' />
+                    <FaEye color="#222" />
+               
                 </span>{" "}
                 <span
                   onClick={() =>
@@ -108,17 +119,16 @@ const SalaryView: React.FC = () => {
                     )
                   }
                 >
-                <FaEdit color='#222' />
+                  <FaEdit color="#222" />
                 </span>{" "}
-                <span onClick={() => handleDelete(employee.id)}>   
-                   <FaEye color='#222' /></span>
+                <span onClick={() => handleDelete(employee.id)}>
+                <FaTrash color="#222" />
+                </span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-
     </div>
   );
 };

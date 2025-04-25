@@ -128,7 +128,7 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
                             Remove
                         </button>
                     )}
-                    <hr />
+                  
                 </div>
             ))}
 

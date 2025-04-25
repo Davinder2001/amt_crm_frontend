@@ -95,8 +95,14 @@
   .add-items-form-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 20px;
   }
+
+  .add-items-form-input-label-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 }
 
 // Add vendors section

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import ItemsTab from './ItemsTab';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
+import AddCategory from './AddCategory';
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
@@ -139,7 +140,7 @@ const AddItem: React.FC = () => {
 
       <form onSubmit={handleSubmit}>
         <div className='add-items-form-container'>
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Item Name*</label>
             <input
               type="text"
@@ -151,7 +152,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Quantity Count*</label>
             <input
               type="number"
@@ -169,7 +170,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Measurement</label>
             <input
               type="text"
@@ -180,7 +181,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Purchase Date</label>
             <input
               type="date"
@@ -192,7 +193,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Date Of Manufacture*</label>
             <input
               type="date"
@@ -204,7 +205,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Date Of Expiry</label>
             <input
               type="date"
@@ -215,7 +216,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Brand Name*</label>
             <input
               type="text"
@@ -227,7 +228,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Replacement</label>
             <input
               type="text"
@@ -238,7 +239,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Cost Price*</label>
             <input
               type="number"
@@ -256,7 +257,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Selling Price*</label>
             <input
               type="number"
@@ -274,7 +275,7 @@ const AddItem: React.FC = () => {
             />
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Availability Stock</label>
             <input
               type="number"
@@ -290,7 +291,7 @@ const AddItem: React.FC = () => {
               placeholder="e.g. 50"
             />
           </div>
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Tax</label>
             <select
               name="tax_id"
@@ -306,7 +307,7 @@ const AddItem: React.FC = () => {
             </select>
           </div>
 
-          <div style={{ flex: '1 1 300px' }}>
+          <div className='add-items-form-input-label-container'>
             <label>Vendor Name*</label>
             <AddVendor
               vendors={vendors}
@@ -320,6 +321,7 @@ const AddItem: React.FC = () => {
               }}
             />
           </div>
+          <AddCategory onCategoryChange={setSelectedCategories} selectedCategories={selectedCategories} />
 
           <ImageUpload
             images={formData.images}
@@ -327,7 +329,7 @@ const AddItem: React.FC = () => {
             handleClearImages={handleClearImages}
             handleRemoveImage={handleRemoveImage}
           />
-          <div style={{ flex: '1 1 300px' }}>
+          <div >
             <ItemsTab
               onChange={setVariants}
               variations={variants}

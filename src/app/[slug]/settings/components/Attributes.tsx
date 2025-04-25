@@ -78,9 +78,9 @@ const Attributes = () => {
             <button
                 type="button"
                 onClick={() => setIsCanvasOpen(true)}
-                className='buttons'
+                className='buttons floting-attributes-button' title='Add New Attribute'
             >
-                <FaPlus/> Add Variation Attribute
+                <FaPlus />
             </button>
 
             {/* Sliding Canvas */}
@@ -88,9 +88,10 @@ const Attributes = () => {
                 className={`canvas ${isCanvasOpen ? 'open' : ''}`}
             >
                 <div className="canvas-content">
-                    <h2 className="canvas-title">Create New Attribute</h2>
+                    <h2 className="canvas-title  create-attribute-title">Create New Attribute</h2>
                     {/* Create Attribute Form */}
                     <div className="form-container">
+                        <label className="label">Add New Attribute</label>
                         <input
                             type="text"
                             value={newAttributeName}
@@ -115,9 +116,9 @@ const Attributes = () => {
                                         <button
                                             type="button"
                                             onClick={() => removeValueField(index)}
-                                            className="remove-btns"
+                                            className="remove-btns "
                                         >
-                                            <FaTimes/>
+                                            <FaTimes />
                                         </button>
                                     )}
                                 </div>
@@ -125,17 +126,17 @@ const Attributes = () => {
                             <button
                                 type="button"
                                 onClick={addNewValueField}
-                                className="buttons"
+                                className="buttons add-Another-value-btn"
                             >
-                                <FaPlus/> Add another value
+                                <FaPlus /> Add Another value
                             </button>
                         </div>
 
-                        <button type="button" onClick={handleCreate} className="submit-btn">
-                           <FaPlus/> Add Attribute
+                        <button type="button" onClick={handleCreate} className="buttons">
+                            <FaPlus /> Add Attribute
                         </button>
                         <button type="button" onClick={() => setIsCanvasOpen(false)} className="close-btn">
-                          <FaTimes/>
+                            <FaTimes />
                         </button>
 
                     </div>
@@ -143,152 +144,37 @@ const Attributes = () => {
             </div>
 
             {/* Attributes Table */}
-            <table className="attributes-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Attribute</th>
-                        <th>Values</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {attributes?.map((attribute, index) => (
-                        <tr key={attribute.id}>
-                            <td>{index + 1}</td>
-                            <td>{attribute.name}</td>
-                            <td>
-                                {attribute.values?.map((v) => v.value).join(', ') || '—'}
-                            </td>
-                            <td>
-                                <select
-                                    value={attribute.status}
-                                    onChange={() => handleStatusChange(attribute.id)}
-                                    className="status-select"
-                                >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button
-                                    type="button"
-                                    onClick={() => handleDelete(attribute.id)}
-                                    className="delete-btn"
-                                >
-                                    <FaTrash/>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="attributes-table">
+                {attributes?.map((attribute, index) => (
+                    <div key={attribute.id} className="attribute-card">
+                        <h3>{attribute.name}</h3>
+                        <div className="values">{attribute.values?.map(v => v.value).join(', ') || '—'}</div>
+                        <div className='selector-and-active-inactive-outer'>
+                            <div className={`status-pill ${attribute.status === 'active' ? 'active-option' : 'inactive-option'}`}>
+                                {attribute.status}
+                            </div>
+                            <div
+                                className={`toggle-switch ${attribute.status === 'active' ? 'active' : 'inactive'}`}
+                                onClick={() => handleStatusChange(attribute.id)}
+                            >
+                                <div className="toggle-thumb" />
+                            </div>
 
-            <style jsx>{`
-           
-        .title {
-          font-size: 24px;
-          font-weight: 600;
-          margin-bottom: 16px;
-        }
-        .open-canvas-btn {
-          background-color: #009693;
-          color: white;
-          padding: 12px 24px;
-          border-radius: 8px;
-          cursor: pointer;
-          margin-bottom: 16px;
-          border: none;
-        }
-        .canvas {
-          position: fixed;
-          top: 0;
-          left: -30%;
-          width: 30%;
-          height: 100%;
-          background-color: white;
-          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-          z-index: 999999;
-          padding: 16px;
-          overflow-y: auto;
-          transition: transform 0.3s ease;
-        }
-        .canvas.open {
-          transform: translateX(100%); /* Slide the canvas in */
-        }
-        .canvas-content {
-          margin-top: 32px;
-        }
-        .canvas-title {
-          font-size: 24px;
-          margin-bottom: 16px;
-        }
-        .form-container {
-          margin-bottom: 24px;
-        }
-        .input {
-          width: 100%;
-          padding: 12px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-          margin-bottom: 10px;
-        }
-        
-        .value-row {
-          display: flex;
-          align-items: center;
-          margin-bottom: 8px;
-        }
-        .remove-btn {
-          background-color: red;
-          color: white;
-          padding: 6px 12px;
-          border-radius: 8px;
-          margin-left: 8px;
-          cursor: pointer;
-          border: none;
-        }
-        .add-value-btn {
-          color: blue;
-          text-decoration: underline;
-          cursor: pointer;
-        }
-        .submit-btn {
-          background-color: #009693;
-          color: white;
-          padding: 12px 24px;
-          border-radius: 8px;
-          cursor: pointer;
-          margin-top: 16px;
-        }
-        .close-btn {
-          color: red;
-          cursor: pointer;
-          position: absolute;
-          top: 0;
-          right: 0
-        }
-        .attributes-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        .attributes-table th, .attributes-table td {
-          padding: 10px;
-          border: 1px solid #ccc;
-          text-align: left;
-        }
-        .status-select {
-          padding: 6px;
-         
-        }
-        .delete-btn {
-         border:none;
-         cursor: pointer;
-         font-size: 20px;
-        }
-      `}</style>
+
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => handleDelete(attribute.id)}
+                            className="delete-btn"
+                        >
+                            <FaTrash />
+                        </button>
+
+                    </div>
+                ))}
+            </div>
         </div>
+
     );
 };
 

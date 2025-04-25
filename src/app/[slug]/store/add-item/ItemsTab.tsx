@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, ReactNode } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaBox, FaCogs, FaEye, FaTag, FaTimes } from 'react-icons/fa';
 import AddCategory from './AddCategory';
 import Attributes from '../../settings/components/Attributes';
 import Variations from './Variations';
@@ -16,28 +16,34 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, sel
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 
-    const tabs: { key: string; label: string; content: ReactNode }[] = [
+    const tabs: { key: string; label: ReactNode; content: ReactNode }[] = [
         {
             key: 'attributes',
-            label: 'Attributes',
-            content: <Attributes />
+            label: <div className="tab-label">
+                <FaTag className="tab-icon" /> <span className="tab-text">Attributes</span>
+            </div>,
+            content: <div className="tab-content"><Attributes /></div>
         },
         {
             key: 'variations',
-            label: 'Variations',
-            content: <Variations onChange={onChange} setShowModal={setShowModal} />
-        },
+            label: <div className="tab-label">
+                <FaBox className="tab-icon" /> <span className="tab-text">Variations</span>
+            </div>,
+            content: <div className="tab-content"><Variations onChange={onChange} setShowModal={setShowModal} /></div>
+        },        
         {
             key: 'categories',
-            label: 'Categories',
-            content: <AddCategory onCategoryChange={onCategoryChange}
-                selectedCategories={selectedCategories}/>
+            label: <div className="tab-label">
+                <FaCogs className="tab-icon" /> <span className="tab-text">Categories</span>
+            </div>,
+            content: <div className="tab-content"></div>
         }
+        
     ];
 
     return (
         <>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className='add-items-form-input-label-container'>
                 <label htmlFor="attributes">Attributes</label>
                 <button type="button" onClick={() => setShowModal(true)} className="buttons add-attr">
                     Add Attributes

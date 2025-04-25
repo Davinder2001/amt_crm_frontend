@@ -9,21 +9,23 @@ import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
 const Page = () => {
-  const [invoiceNo, setInvoiceNo] = useState('');
-  const [vendorName, setVendorName] = useState('');
-  const [vendorNo, setVendorNo] = useState('');
-  const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
-  const [image, setImage] = useState(null);
-  const [showItemFields, setShowItemFields] = useState(false);
-  const [selectedTaxId, setSelectedTaxId] = useState(null);
-  const [taxMode, setTaxMode] = useState('overall');
-  const [itemTaxes, setItemTaxes] = useState([]);
+  const [invoiceNo,       setInvoiceNo]       = useState('');
+  const [vendorName,      setVendorName]      = useState('');
+  const [vendorNo,        setVendorNo]        = useState('');
+  const [items,           setItems]           = useState([]);
+  const [newItem,         setNewItem]         = useState({ name: '', price: '', quantity: '', subTotal: '' });
+  const [image,           setImage]           = useState(null);
+  const [showItemFields,  setShowItemFields]  = useState(false);
+  const [selectedTaxId,   setSelectedTaxId]   = useState(null);
+  const [taxMode,         setTaxMode]         = useState('overall');
+  const [itemTaxes,       setItemTaxes]       = useState([]);
 
   const { companySlug } = useCompany();
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
   const [ocrProcess] = useOcrProcessMutation();
   const { data: taxData, isLoading: taxLoading } = useFetchTaxesQuery();
+
+  console.log('taxData', taxData);
 
   useEffect(() => {
     setItemTaxes(items.map(() => null));
@@ -67,13 +69,30 @@ const Page = () => {
     formData.append('vendor_name', vendorName);
     formData.append('vendor_no', vendorNo);
     if (image) formData.append('image', image);
+  
+    formData.append('tax_mode', taxMode);
+  
+    let itemsToSend = [...items];
+  
     if (taxMode === 'overall' && selectedTaxId) {
+
+      itemsToSend = items.map((item) => ({
+        ...item,
+        tax_id: selectedTaxId
+      }));
       formData.append('tax_id', selectedTaxId.toString());
     } else if (taxMode === 'individual') {
-      formData.append('item_taxes', JSON.stringify(itemTaxes));
+      itemsToSend = items.map((item, index) => {
+        const taxId = itemTaxes[index];
+        return {
+          ...item,
+          tax_id: taxId
+        };
+      });
     }
-    formData.append('items', JSON.stringify(items));
-
+  
+    formData.append('items', JSON.stringify(itemsToSend));
+  
     try {
       await bulkCreateStoreItem(formData).unwrap();
       toast.success('Items saved successfully.');
@@ -81,6 +100,7 @@ const Page = () => {
       toast.error('Saving failed.');
     }
   };
+  
 
   return (
     <>
@@ -147,7 +167,7 @@ const Page = () => {
                         <option>Loading...</option>
                       ) : (
                         taxData?.data?.map((tax) => (
-                          <option key={tax.id} value={tax.id}>{tax.name} ({tax.percentage}%)</option>
+                          <option key={tax.id} value={tax.id}>{tax.name} ({tax.rate}%)</option>
                         ))
                       )}
                     </select>
@@ -184,7 +204,7 @@ const Page = () => {
                 <option>Loading...</option>
               ) : (
                 taxData?.data?.map((tax) => (
-                  <option key={tax.id} value={tax.id}>{tax.name} ({tax.percentage}%)</option>
+                  <option key={tax.id} value={tax.id}>{tax.name} ({tax.rate}%)</option>
                 ))
               )}
             </select>

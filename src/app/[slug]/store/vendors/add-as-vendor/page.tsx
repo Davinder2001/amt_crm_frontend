@@ -25,7 +25,6 @@ const Page = () => {
   const [ocrProcess] = useOcrProcessMutation();
   const { data: taxData, isLoading: taxLoading } = useFetchTaxesQuery();
 
-  console.log('taxData', taxData);
 
   useEffect(() => {
     setItemTaxes(items.map(() => null));

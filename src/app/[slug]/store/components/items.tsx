@@ -34,7 +34,7 @@ const Items: React.FC = () => {
     'date_of_manufacture',
     'date_of_expiry',
     'brand_name',
-    'replacement',
+    'taxes',
     'quantity_count',
     'actions',
     'catalog',
@@ -69,7 +69,7 @@ const Items: React.FC = () => {
     { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },
     { label: 'Date of Expiry', key: 'date_of_expiry' as keyof StoreItem },
     { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
-    { label: 'Replacement', key: 'replacement' as keyof StoreItem },
+    { label: 'Taxes', key: 'taxes' as keyof StoreItem }, // ✅ taxes here instead of replacement
     { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
     { label: 'Actions', key: 'actions' as keyof StoreItem },
     // { label: 'Catalog', key: 'catalog' as keyof StoreItem },
@@ -140,6 +140,18 @@ const Items: React.FC = () => {
         };
       }
 
+      if (col.key === 'taxes') {
+        return {
+          label: 'Taxes',
+          render: (item: StoreItem) => {
+            if (Array.isArray(item.taxes) && item.taxes.length > 0) {
+              return item.taxes.map((tax: any) => `${tax.name} (${tax.rate}%)`).join(', ');
+            }
+            return '-';
+          },
+        };
+      }
+
       return col;
     });
 
@@ -164,9 +176,13 @@ const Items: React.FC = () => {
           { label: 'View All Vendor', onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
       />
-      <ResponsiveTable data={filteredItems} columns={columns} onDelete={(id) => handleDelete(id)}
+      <ResponsiveTable
+        data={filteredItems}
+        columns={columns}
+        onDelete={(id) => handleDelete(id)}
         onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)} />
+        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
+      />
     </div>
   );
 };

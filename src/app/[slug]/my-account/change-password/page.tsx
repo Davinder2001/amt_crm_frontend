@@ -1,10 +1,10 @@
 import React from 'react'
-import Notifications from './components/notifications'
+import ChangePassword from '../components/changePassword'
 
 const Page = () => {
   return (
     <>
-      <Notifications />
+        <ChangePassword />
     </>
   )
 }

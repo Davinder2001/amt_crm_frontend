@@ -14,6 +14,7 @@ import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
 import customerCreateApiSlice from '@/slices/customers/customerCreateSlice';
 import companyCreateSlice from '@/slices/company/companyCreateSlice';
 import adminManageApi from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import notificationApi from '@/slices/notifications/notificationsCreateSlice';
 
 
 const store = configureStore({
@@ -33,6 +34,8 @@ const store = configureStore({
     [customerCreateApiSlice.reducerPath]: customerCreateApiSlice.reducer,
     [companyCreateSlice.reducerPath]: companyCreateSlice.reducer,
     [adminManageApi.reducerPath]: adminManageApi.reducer,
+    [notificationApi.reducerPath]: notificationApi.reducer,
+    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -50,7 +53,8 @@ const store = configureStore({
       .concat(invoiceCreateApiSlice.middleware)
       .concat(customerCreateApiSlice.middleware)
       .concat(companyCreateSlice.middleware)
-      .concat(adminManageApi.middleware),
+      .concat(adminManageApi.middleware)
+      .concat(notificationApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

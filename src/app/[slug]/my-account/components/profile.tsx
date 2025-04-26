@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import Link from 'next/link';
 
 const Profile = () => {
   const { data, isLoading, isError } = useFetchProfileQuery();
@@ -53,6 +54,14 @@ const Profile = () => {
               <p className="add-text">Add Company</p>
             </div>
           </div>
+
+<div className="password-change-btn">
+  <Link href="my-account/change-password">
+            Change Password
+  </Link>   
+</div>
+
+
         </div>
       )}
 

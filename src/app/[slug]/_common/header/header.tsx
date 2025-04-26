@@ -9,6 +9,7 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
+import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 
 interface headerProps {
   handleToggleSidebar: () => void;
@@ -24,32 +25,29 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
   // State to manage sticky class
   const [isSticky, setIsSticky] = useState(false);
 
+  // ✅ Fetch notifications
+  const { data: notifications, isLoading } = useFetchNotificationsQuery(undefined, {
+    pollingInterval: 30000, // (Optional) Refresh every 30 sec for live updates
+  });
+
+  // ✅ Calculate unread count
+  const unreadCount = notifications?.filter((n: any) => !n.read_at)?.length || 0;
+
   useEffect(() => {
-    const mainContent = document.querySelector('.main-content');  // Get the .main-content element
+    const mainContent = document.querySelector('.main-content');
 
     const handleScroll = () => {
       if (mainContent) {
-        // Get the scroll position of the .main-content element
         const scrollPosition = mainContent.scrollTop;
-
-        // Calculate 1vh in pixels (1% of the viewport height)
         const threshold = window.innerHeight * 0.01;
-
-        // Apply sticky class if scroll position is greater than 1% of viewport height
-        if (scrollPosition > threshold) {
-          setIsSticky(true);
-        } else {
-          setIsSticky(false);
-        }
+        setIsSticky(scrollPosition > threshold);
       }
     };
 
-    // Add scroll event listener to .main-content
     if (mainContent) {
       mainContent.addEventListener('scroll', handleScroll);
     }
 
-    // Cleanup event listener on component unmount
     return () => {
       if (mainContent) {
         mainContent.removeEventListener('scroll', handleScroll);
@@ -59,25 +57,42 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
 
   return (
     <div className={`header ${isSticky ? 'sticky' : ''}`}>
-      {isMobile && <Image src={logo.src} alt="logo" width={30} height={30} onClick={() => router.push(
-        userType === 'employee'
-          ? `/${companySlug}/employee/dashboard`
-          : `/`
-      )
-      }
-      />}
+      {isMobile && (
+        <Image
+          src={logo.src}
+          alt="logo"
+          width={30}
+          height={30}
+          onClick={() =>
+            router.push(
+              userType === 'employee'
+                ? `/${companySlug}/employee/dashboard`
+                : `/`
+            )
+          }
+        />
+      )}
       {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
-      <h1 className='header-title'>{title}</h1>
-      <div className="nav-container">
+      <h1 className="header-title">{title}</h1>
+      <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
-        <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`}>
-          <FaRegBell size={20} color='#009693' />
+
+        {/* Notification Icon with Unread Count */}
+        <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="relative">
+          <FaRegBell size={22} color="#009693" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+              {unreadCount}
+            </span>
+          )}
         </Link>
+
         <Profile />
       </div>
-      {isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className='m-toggle'/>}
+      {isMobile && (
+        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className="m-toggle" />
+      )}
     </div>
-
   );
 };
 

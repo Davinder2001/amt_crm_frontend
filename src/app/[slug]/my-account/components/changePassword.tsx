@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { useChangePasswordMutation } from '@/slices/auth/authApi'; // Import the mutation hook
 

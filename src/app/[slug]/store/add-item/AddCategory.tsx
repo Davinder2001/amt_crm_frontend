@@ -41,6 +41,7 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
   const [selectedListCategories, setSelectedListCategories] = useState<number[]>([]);
   const [selectedParents, setSelectedParents] = useState<number[]>([]);
   const [name, setName] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleListCheckboxChange = (id: number) => {
     setHasChanges(true);
@@ -285,19 +286,44 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
       {isLoading && <p>Loading categories...</p>}
       
       {!isLoading && data?.data?.length ? (
-        <div>
-          {renderCategoriesWithChildren(data.data as CategoryNode[])}
+        // <div  className='categories-list-outer-div'>
+        //   {renderCategoriesWithChildren(data.data as CategoryNode[])}
 
-          {hasChanges && (
-            <button
-              type="button"
-              onClick={handleDoneClick}
-              className="category-button done-button"
-            >
-              Done
-            </button>
-          )}
-        </div>
+        //   {hasChanges && (
+        //     <button
+        //       type="button"
+        //       onClick={handleDoneClick}
+        //       className="category-button done-button"
+        //     >
+        //       Done
+        //     </button>
+        //   )}
+        // </div>
+        <div className="categories-list-outer-div">
+  <div
+    className="dropdown-toggle"
+    onClick={() => setIsDropdownOpen(prev => !prev)}
+  >
+    Select Categories ▾
+  </div>
+
+  {isDropdownOpen && (
+    <div className="dropdown-menu">
+      {renderCategoriesWithChildren(data.data as CategoryNode[])}
+
+      {hasChanges && (
+        <button
+          type="button"
+          onClick={handleDoneClick}
+          className="category-button done-button"
+        >
+          Done
+        </button>
+      )}
+    </div>
+  )}
+</div>
+
       ) : (
         !isLoading && <p>No categories found.</p>
       )}

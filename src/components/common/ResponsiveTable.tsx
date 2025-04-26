@@ -184,10 +184,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       )}
       <style jsx>{`
       .responsive-table {
-  .card-view {
-    display: grid;
-    gap: 1rem;
-  }
+  
 
   .t-card {
     border: 1px solid #ccc;

@@ -68,7 +68,7 @@ const Variations: React.FC<Props> = ({ onChange, setShowModal }) => {
     return (
         <>
             {combinations.map((combo, index) => (
-                <div key={index} className="variation-block">
+                <div key={index} className="variation-block  variation-container">
                     {attributes?.map(attr => (
                         <div key={attr.id} style={{ marginBottom: '12px' }}>
                             <label>{attr.name}</label>

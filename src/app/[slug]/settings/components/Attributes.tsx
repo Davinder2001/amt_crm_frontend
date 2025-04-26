@@ -75,6 +75,7 @@ const Attributes = () => {
             <h1 className="title">Variations</h1>
 
             {/* Open Canvas Button */}
+            <div className="add-attribute-button-container">
             <button
                 type="button"
                 onClick={() => setIsCanvasOpen(true)}
@@ -82,6 +83,7 @@ const Attributes = () => {
             >
                 <FaPlus />
             </button>
+            </div>
 
             {/* Sliding Canvas */}
             <div

@@ -1,6 +1,6 @@
-@use '../variables' as *;
+  @use '../variables' as *;
 
-.modal-overlay {
+  .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,14 +14,14 @@
     pointer-events: none;
     opacity: 0;
     z-index: 999999;
-}
+  }
 
-.modal-overlay.show {
+  .modal-overlay.show {
     opacity: 1;
     pointer-events: auto;
-}
+  }
 
-.modal-content {
+  .modal-content {
     position: relative;
     background: #fff;
     width: 100%;
@@ -33,23 +33,23 @@
     transition: transform 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
-}
+  }
 
-.modal-inner {
+  .modal-inner {
     display: flex;
     flex: 1;
     overflow: hidden;
-}
+  }
 
-.modal-overlay.show .modal-content {
+  .modal-overlay.show .modal-content {
     transform: translateY(0%);
-}
+  }
 
-.modal-overlay.hide .modal-content {
+  .modal-overlay.hide .modal-content {
     transform: translateY(100%);
-}
+  }
 
-.close-modal {
+  .close-modal {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -65,23 +65,23 @@
     color: $primary-color;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: background 0.2s;
-}
+  }
 
-.close-modal:hover {
+  .close-modal:hover {
     background-color: #d5d5d5;
-}
+  }
 
-.tabs-sidebar {
+  .tabs-sidebar {
     width: 250px;
     border-right: 1px solid #eee;
     display: flex;
     flex-direction: column;
     box-shadow: $box-shadow;
-    padding-top: 20px;
-}
 
-.tab-button {
-  padding: 15px 0px 15px 20px;
+  }
+
+  .tab-button {
+    padding: 15px 0px 15px 20px;
     background: none;
     border: none;
     text-align: left;
@@ -90,102 +90,103 @@
     margin-bottom: 6px;
     transition: background 0.2s;
     font-size: 18px;
-}
-.tab-button:hover {
-  background-color: #f1f9f9;
-  border-right: 3px solid $primary-color;
-}
+  }
 
-.tab-button.active {
+  .tab-button:hover {
+    background-color: #f1f9f9;
+    border-right: 3px solid $primary-color;
+  }
+
+  .tab-button.active {
     background-color: #f1f9f9;
     font-weight: 500;
     color: $primary-color;
     border-right: 3px solid $primary-color;
-}
+  }
 
-.tab-content {
+  .tab-content {
     flex: 1;
     overflow-y: auto;
-}
+  }
 
-.variation-block {
+  .variation-block {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
-}
+  }
 
-.remove-button {
+  .remove-button {
     background: #ff4d4f;
     color: #fff;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
-}
+  }
 
-select,
-input {
+  select,
+  input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
-}
+  }
 
 
-.add-attr {
+  .add-attr {
     position: relative;
     display: inline-block;
     width: fit-content;
 
     span {
-        position: absolute;
-        top: -6px;
-        right: -10px;
-        background-color: green;
-        color: white;
-        font-size: 12px;
-        padding: 2px 6px;
-        border-radius: 999px;
-        font-weight: bold;
-        line-height: 1;
-        min-width: 20px;
-        text-align: center;
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background-color: green;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-weight: bold;
+      line-height: 1;
+      min-width: 20px;
+      text-align: center;
     }
-    
-}
+
+  }
 
 
-.canvas-content{
+  .canvas-content {
     .close-btn {
-        font-size: 25px !important;
-        border: unset !important;
-        background-color: unset !important;
-        color: $primary-color !important;
+      font-size: 25px !important;
+      border: unset !important;
+      background-color: unset !important;
+      color: $primary-color !important;
     }
 
 
 
-}
+  }
 
 
 
 
 
-.container {
+  .container {
     padding: 20px;
   }
-  
+
   .title {
     font-size: 24px;
     font-weight: 600;
     color: #333;
     margin-bottom: 20px;
   }
-  
 
-  
+
+
   /* Sliding Canvas */
   .canvas {
     position: fixed;
@@ -200,12 +201,12 @@ input {
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     z-index: 1000;
-  
+
     &.open {
       right: 0;
     }
   }
-  
+
   .canvas-title {
     font-size: 20px;
     font-weight: 600;
@@ -215,13 +216,13 @@ input {
     position: relative;
   }
 
- .canvas-content{
-  .create-attribute-title{
-    color: $primary-color;
-    font-size: 25px;
-    padding: 5px 0px; 
+  .canvas-content {
+    .create-attribute-title {
+      color: $primary-color;
+      font-size: 25px;
+      padding: 5px 0px;
+    }
   }
- }
 
   .close-btn {
     position: absolute;
@@ -233,19 +234,19 @@ input {
     color: #555;
     cursor: pointer;
     transition: color 0.3s;
-  
+
     &:hover {
       color: #e74c3c;
     }
   }
-  
+
   .form-container {
     margin-top: 30px;
     display: flex;
     flex-direction: column;
     gap: 14px;
   }
-  
+
   .input {
     width: 100%;
     padding: 10px 14px;
@@ -254,38 +255,38 @@ input {
     border-radius: 6px;
     background: #fafafa;
     transition: border-color 0.3s;
-  
+
     &:focus {
       border-color: $primary-color !important;
       outline: none;
     }
   }
-  
+
   .values-container {
     // margin-top: 24px;
     display: flex;
-        gap: 10PX;
-        flex-direction: column;
-    
+    gap: 10PX;
+    flex-direction: column;
+
     .label {
       font-weight: 500;
       color: #000000;
       margin-bottom: 8px;
       display: block;
     }
-  
+
     .value-row {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 14px;
-  
+
       .input {
         flex: 1;
       }
     }
   }
-  
+
   .remove-btns {
     background: #e0e0e0;
     color: $primary-color;
@@ -299,13 +300,13 @@ input {
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s;
-  
+
     &:hover {
       background: #e04848;
       color: $white;
     }
   }
-  
+
   .container {
     padding: 1rem;
     min-height: 100vh;
@@ -319,10 +320,10 @@ input {
     color: #111827;
   }
 
-  
+
 
   .buttons:hover {
-    background-color:#4bcbc9 ;
+    background-color: #4bcbc9;
   }
 
   .canvas {
@@ -341,7 +342,7 @@ input {
   }
 
   .canvas.open {
-   left: 0;
+    left: 0;
   }
 
   .canvas-title {
@@ -362,7 +363,7 @@ input {
     color: #000000;
     font-size: 0.9rem;
   }
-  
+
 
   .input {
     padding: 0.6rem 0.8rem;
@@ -395,7 +396,7 @@ input {
   }
 
   .submit-btn {
-    background-color:$primary-color;
+    background-color: $primary-color;
     color: white;
     border: none;
     padding: 0.7rem;
@@ -433,45 +434,45 @@ input {
     display: contents;
   }
 
-//   .attribute-card {
-//     background: white;
-//     border: 1px solid #e5e7eb;
-//     border-radius: 10px;
-//     padding: 1.2rem;
-//     box-shadow: $box-shadow;
-//     display: flex;
-//     flex-direction: column;
-//     gap: 0.5rem;
-//   }
+  //   .attribute-card {
+  //     background: white;
+  //     border: 1px solid #e5e7eb;
+  //     border-radius: 10px;
+  //     padding: 1.2rem;
+  //     box-shadow: $box-shadow;
+  //     display: flex;
+  //     flex-direction: column;
+  //     gap: 0.5rem;
+  //   }
 
 
-.attribute-card {
-  background: white;
-  border: 1px solid #fafafa;
-  border-radius: 10px;
-     padding: 1.2rem 1.2rem 1rem 1.2rem;
-  box-shadow:0 4px 8px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  transition: all 0.2s ease-in-out;
-      position: relative;
-      justify-content: space-between;
+  .attribute-card {
+    background: white;
+    border: 1px solid #fafafa;
+    border-radius: 10px;
+    padding: 1.2rem 1.2rem 1rem 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    justify-content: space-between;
 
-}
+  }
 
-.attribute-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:0 6px 12px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
+  .attribute-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
 
 
 
   .attribute-card h3 {
     font-size: 1rem;
     font-weight: 600;
-    color:black;
+    color: black;
     text-transform: capitalize;
   }
 
@@ -482,16 +483,18 @@ input {
   }
 
   .status-pill {
-   border-radius: 9999px;
+    border-radius: 9999px;
     width: fit-content;
     padding: 4px 10px;
     font-size: .75rem;
     font-weight: 600;
   }
-.active-option,
-.inactive-option {
-   text-transform: capitalize;
-}
+
+  .active-option,
+  .inactive-option {
+    text-transform: capitalize;
+  }
+
   .active-option {
     background-color: #b4e8c6;
     color: #0f4624;
@@ -501,11 +504,13 @@ input {
     background-color: #fee2e2;
     color: $danger-color;
   }
-.selector-and-active-inactive-outer{
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
+
+  .selector-and-active-inactive-outer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .status-select {
     border: 1px solid #d1d5db;
     border-radius: 6px;
@@ -515,7 +520,7 @@ align-items: center;
   }
 
   .delete-btn {
-      background-color: unset;
+    background-color: unset;
     color: $primary-color;
     border: none;
     padding: 0.6rem 0.75rem;
@@ -525,81 +530,180 @@ align-items: center;
     align-self: flex-start;
     position: absolute;
     right: 0;
-    top:0;
+    top: 0;
   }
-    
-    .delete-btn:hover {
-       color:$danger-color;
+
+  .delete-btn:hover {
+    color: $danger-color;
     font-size: 1rem;
+
+  }
+
+  .toggle-switch {
+    width: 42px;
+    height: 19px;
+    background-color: #e5e7eb;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    padding: 0 3px;
+  }
+
+  .toggle-switch.active {
+    background-color: $primary-color;
+    /* green-400 */
+  }
+
+  .toggle-switch.inactive {
+    background-color: $primary-color;
+    /* red-400 */
+  }
+
+  .toggle-thumb {
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .toggle-switch.active .toggle-thumb {
+    transform: translateX(24px);
+    right: 26px;
+    left: 2px;
+  }
+
+
+  .floting-attributes-button {
+    transition: transform 0.3s ease-in-out;
+    /* Optional: smooth transition on hover */
+    /* Other button styles */
+    position: absolute;
+    right: 60px;
+    bottom: 60px;
+    padding: 13px !important;
+    font-size: 24px !important;
+  }
+
+  .floting-attributes-button svg:hover {
+    animation: rotateFan 0.5s infinite;
+    /* Fast rotation */
+    cursor: pointer;
+  }
+
+  @keyframes rotateFan {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    25% {
+      transform: rotate(90deg);
+    }
+
+    50% {
+      transform: rotate(180deg);
+    }
+
+    75% {
+      transform: rotate(270deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
+
+
+  // tabs-sidebar styling starts here
+
+
+
+  @media(max-width: 969px) {
+    .attributes-table {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+    }
+  }
+
+  @media(max-width: 854px) {
+
+
+
+    .modal-inner {
+      flex-direction: column;
 
     }
 
-.toggle-switch {
-  width: 42px;
-  height: 19px;
-  background-color: #e5e7eb;
-  border-radius: 20px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-  padding: 0 3px;
-}
+    .tabs-sidebar {
+      width: 100%;
+      flex-direction: row;
+      gap: 10px;
+    }
 
-.toggle-switch.active {
-  background-color: $primary-color; /* green-400 */
-}
+    .close-modal {
+      top: 5px;
+    }
 
-.toggle-switch.inactive {
-  background-color: $primary-color; /* red-400 */
-}
+    .tab-button {
+      margin-bottom: 0px;
+      padding: 10px 20px;
+      font-size: 15px;
+    }
 
-.toggle-thumb {
-  width: 16px;
-  height: 16px;
-  background-color: white;
-  border-radius: 50%;
-  position: absolute;
-  transition: transform 0.2s ease-in-out;
-}
-
-.toggle-switch.active .toggle-thumb {
-  transform: translateX(24px);
-  right: 26px;
-  left: 2px;
-}
+    .tab-button.active {
+      border-right: unset;
+      border-bottom: 3px solid #009693;
+    }
 
 
+    .floting-attributes-button {
+      position: unset;
+      padding: 10px !important;
+      cursor: pointer;
+
+    }
+
+    .add-attribute-button-container {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .title {
+      margin-bottom: 0px;
+      font-size: 24px;
+    }
 
 
 
 
-.floting-attributes-button {
-  position: relative;
-  transition: transform 0.3s ease-in-out; /* Optional: smooth transition on hover */
-  /* Other button styles */
-}
-
-.floting-attributes-button:hover {
-  animation: rotateFan 0.5s infinite; /* Fast rotation */
-  background-color: #085d5d;
-}
-
-@keyframes rotateFan {
-  0% {
-    transform: rotate(0deg);
   }
-  25% {
-    transform: rotate(90deg);
+
+  @media(max-width: 668px) {
+    .canvas {
+      width: 400px
+    }
+
   }
-  50% {
-    transform: rotate(180deg);
+
+  @media(max-width: 505px) {
+    .canvas {
+      width: 100%;
+    }
   }
-  75% {
-    transform: rotate(270deg);
+
+
+
+  @media(max-width: 468px) {
+    .tab-button {
+      margin-bottom: 0;
+      padding: 9px 15px;
+      font-size: 12px;
   }
-  100% {
-    transform: rotate(360deg);
+
   }
-}

@@ -134,7 +134,7 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   return (
     <div style={{ maxWidth: '500px', padding: '1rem' }}>
       {!isCreatingNewCategory ? (
-        <>
+        <div>
           <h2>All Categories</h2>
           {isLoading && <p>Loading categories...</p>}
           {!isLoading && data?.data?.length ? (
@@ -187,7 +187,7 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           >
             Create New Category
           </button>
-        </>
+        </div>
       ) : (
         <div>
           <h2>Create New Category</h2>

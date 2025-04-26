@@ -68,7 +68,9 @@
 
 
 @use '../variables' as *;
-
+.variation-container {
+  margin-top: 30px;
+}
 .variation-block {
   background: #fff;
   border: 1px solid #e0e0e0;
@@ -158,4 +160,20 @@
   justify-content: flex-end;
   margin-top: 20px;
   gap: 10px;
+}
+
+
+
+
+
+
+
+
+
+@media(max-width: 854px) {
+  .variation-block{
+    margin-right: 0px;
+
+  }
+  
 }

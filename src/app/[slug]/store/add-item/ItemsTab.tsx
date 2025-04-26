@@ -31,13 +31,7 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, sel
             </div>,
             content: <div className="tab-content"><Variations onChange={onChange} setShowModal={setShowModal} /></div>
         },        
-        {
-            key: 'categories',
-            label: <div className="tab-label">
-                <FaCogs className="tab-icon" /> <span className="tab-text">Categories</span>
-            </div>,
-            content: <div className="tab-content"></div>
-        }
+        
         
     ];
 

@@ -4,6 +4,7 @@
 .settings-panel-buttons {
     display: flex;
     /* color: red; */
+    gap: 10px;
     a{
         color: $white;
         text-decoration: none;

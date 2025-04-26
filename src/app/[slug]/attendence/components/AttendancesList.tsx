@@ -99,7 +99,13 @@ const AttendancesList: React.FC = () => {
     },
   ];
 
-  return <ResponsiveTable data={attendanceList} columns={columns} />;
+  return <ResponsiveTable data={attendanceList} columns={columns} onDelete={function (id: number): void {
+    throw new Error('Function not implemented.');
+  } } onEdit={function (id: number): void {
+    throw new Error('Function not implemented.');
+  } } onView={function (id: number): void {
+    throw new Error('Function not implemented.');
+  } } />;
 };
 
 export default AttendancesList;

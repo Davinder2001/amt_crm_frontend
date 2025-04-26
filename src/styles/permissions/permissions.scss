@@ -54,12 +54,13 @@
             }
         }
     }
-    .permissions-form-actions-icons-outer {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-    }
+    
 }
 
-
+.permissions-form-actions-icons-outer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border: none;
+}
 

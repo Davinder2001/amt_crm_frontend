@@ -84,7 +84,8 @@ const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Attendance"],
     }),
 
-    applyForLeave: builder.mutation<AttendanceResponse, { dates: string[] }>({
+    applyForLeave: builder.mutation<AttendanceResponse, { dates: string[], subject: string, description: string }>
+({
       query: (data) => ({
         url: "apply-for-leave",
         method: "POST",

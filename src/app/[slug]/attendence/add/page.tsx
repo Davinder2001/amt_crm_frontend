@@ -66,74 +66,84 @@ function AddAttendancePage() {
 
   return (
     <>
-      <Link href={`/${companySlug}/attendence`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-      <div style={{ padding: "1rem" }}>
-        <h1>Add Attendance</h1>
+  <Link href={`/${companySlug}/attendence`} className="back-button">
+    <FaArrowLeft size={20} color="#fff" />
+  </Link>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <button
-            onClick={() => setShowWebcam(true)}
-            style={{ marginRight: "1rem" }}
-          >
-            Use Webcam
+  <div className="attendance-container">
+    <h1 className="page-title">Add Attendance</h1>
+
+    <div className="button-group">
+      <button
+        onClick={() => setShowWebcam(true)}
+        className="button webcam-button"
+      >
+        Use Webcam
+      </button>
+      <button
+        onClick={() => {
+          const uploadInput = document.getElementById("uploadInput") as HTMLInputElement;
+          uploadInput?.click();
+        }}
+        className="button upload-button"
+      >
+        Upload Image
+      </button>
+    </div>
+
+    {showWebcam && (
+      <div className="webcam-container">
+        <ReactWebcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={{ facingMode: "user" }}
+          className="webcam"
+        />
+        <div className="webcam-actions">
+          <button onClick={captureFromWebcam} className="button capture-button">
+            Capture
           </button>
-          <button
-            onClick={() => {
-              const uploadInput = document.getElementById("uploadInput") as HTMLInputElement;
-              uploadInput?.click();
-            }}
-          >
-            Upload Image
+          <button onClick={() => setShowWebcam(false)} className="button cancel-button">
+            Cancel
           </button>
         </div>
-
-        {showWebcam && (
-          <div style={{ marginBottom: "1rem" }}>
-            <ReactWebcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={{ facingMode: "user" }}
-              style={{ width: 300 }}
-            />
-            <div style={{ marginTop: "0.5rem" }}>
-              <button onClick={captureFromWebcam} style={{ marginRight: "1rem" }}>
-                Capture
-              </button>
-              <button onClick={() => setShowWebcam(false)}>Cancel</button>
-            </div>
-          </div>
-        )}
-
-        <input
-          id="uploadInput"
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-
-        {selectedFile && (
-          <div style={{ marginTop: "1rem" }}>
-            <p>Preview:</p>
-            <Image
-              alt="Preview"
-              src={URL.createObjectURL(selectedFile)}
-              width={100}
-              height={100}
-              unoptimized
-            />
-
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <button type="submit" style={{ marginTop: "1rem" }}>
-            Submit Attendance
-          </button>
-        </form>
       </div>
-    </>
+    )}
+
+    <input
+      id="uploadInput"
+      type="file"
+      accept="image/*"
+      className="upload-input"
+      onChange={handleFileChange}
+    />
+
+    {selectedFile && (
+      <div className="preview-container">
+        <p className="preview-text">Preview:</p>
+        <div className="image-preview-card">
+          <Image
+            alt="Preview"
+            src={URL.createObjectURL(selectedFile)}
+            width={100}
+            height={100}
+            unoptimized
+            className="preview-image"
+          />
+        </div>
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit}>
+      <button type="submit" className="button submit-button">
+        Submit Attendance
+      </button>
+    </form>
+  </div>
+</>
+
+
   );
 }
 

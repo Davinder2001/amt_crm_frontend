@@ -250,7 +250,7 @@ const SalaryView: React.FC = () => {
               "Company slug not found"
             )
           }
-          className="btn-primary"
+          className="btn-primary salary-view-button"
         >
           Monthly
         </button>

@@ -9,6 +9,9 @@
 // task-details-section
 @use './tasks/task_details.scss' as *;
 @use './tasks/apply_for_leave.scss' as *;
+@use './tasks/recurring_tasks.scss' as *;
+
+
 
 
 
@@ -67,6 +70,8 @@
 // setting styling
 @use './settings/settings.scss' as *;
 @use './settings/shift.scss' as *;
+@use './settings/taxes.scss' as *;
+
 
 
 * {
@@ -74,7 +79,9 @@
     padding: 0;
     font-family: $font-family;
     box-sizing: border-box;
-    
+    svg{
+        cursor: pointer;
+    }
 }
 
 body {
@@ -106,34 +113,15 @@ body {
     justify-content: center;
     cursor: pointer;
 
-    
+    &:hover {
+        background-color: #007c7a;
+      }
 }
 
 
 
 
-.navigation-buttons {
-    display: flex;
-    gap: 18px;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
 
-    .navigation-button {
-        background-color: $primary-color;
-        color: $white;
-        font-size: $font-size-large;
-        font-weight: $font-weight-medium;
-        padding: 10px 30px;
-        text-decoration: none;
-        border-radius: 50px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-
-}
 
 
 input,
@@ -168,6 +156,17 @@ textarea {
         }
     }
 }
+
+
+.datetime-local-input{
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+
+
+
 
 .employee-attendence-view {
     .user-status {

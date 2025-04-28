@@ -62,8 +62,7 @@ const AllTasks: React.FC = () => {
                 <td>{task.assigned_by_name}</td>
                 <td>{task.status}</td>
         
-                <td>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                <td className='store-t-e-e-icons'>
                     <Link
                       href={`/${companySlug}/tasks/view-task/${task.id}`}
                       className="table-e-d-v-buttons"
@@ -83,7 +82,6 @@ const AllTasks: React.FC = () => {
                     >
                       <FaTrash color="#222" />
                     </button>
-                  </div>
                 </td>
               </tr>
             ))}

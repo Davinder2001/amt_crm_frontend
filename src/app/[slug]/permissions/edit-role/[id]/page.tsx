@@ -78,70 +78,62 @@ export default function EditRolePage() {
   if (roleError || permError || !role) return <p>Could not load data.</p>;
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Edit role</h1>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          style={{ width: '100%', marginBottom: 12, padding: 8 }}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Role name"
-        />
-
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          {permissionGroups?.map((g) => (
-            <button
-              key={g.group}
-              type="button"
-              onClick={() => setActiveTab(g.group)}
-              style={{
-                padding: '8px 14px',
-                borderRadius: 4,
-                border: 'none',
-                cursor: 'pointer',
-                background: g.group === activeTab ? '#0070f3' : '#aaa',
-                color: '#fff',
-              }}
-            >
-              {g.group}
-            </button>
-          ))}
+    <div className="edit-role-container add-role-form">
+<h2>Edit a Role</h2>
+  <form onSubmit={handleSubmit} className="edit-role-form">
+  <div className="roll-name-input">
+    <label>Edit role Name:</label>
+    <input
+      className="role-input"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      placeholder="Role name"
+    />
         </div>
 
-        {permissionGroups
-          ?.filter((g) => g.group === activeTab)
-          .map((g) => (
-            <div key={g.group} style={{ marginBottom: 24 }}>
-              <h3>{g.group} permissions</h3>
-              {g.permissions.map((p) => (
-                <label key={p.id} style={{ display: 'block', marginBottom: 6 }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedPermissions.includes(p.name)}
-                    onChange={() => togglePermission(p.name)}
-                    style={{ marginRight: 6 }}
-                  />
-                  {p.name}
-                </label>
-              ))}
-            </div>
-          ))}
-
+    <div className="switch-button">
+      {permissionGroups?.map((g) => (
         <button
-          disabled={saving}
-          style={{
-            width: '100%',
-            padding: 12,
-            background: saving ? '#888' : '#0070f3',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer',
-          }}
+          key={g.group}
+          type="button"
+          onClick={() => setActiveTab(g.group)}
+          className={`tab-buttons ${g.group === activeTab ? 'active' : ''}`}
         >
-          {saving ? 'Updating…' : 'Update role'}
+          {g.group}
         </button>
-      </form>
+      ))}
     </div>
+
+
+
+    {permissionGroups
+      ?.filter((g) => g.group === activeTab)
+      .map((g) => (
+        <div key={g.group} className="permission-group">
+          
+          <div className="permission-group-header">
+            {g.permissions.map((p) => (
+            <label key={p.id} className="permission-label">
+              <input
+                type="checkbox"
+                checked={selectedPermissions.includes(p.name)}
+                onChange={() => togglePermission(p.name)}
+              />
+              {p.name}
+            </label>
+          ))}
+          </div>
+        </div>
+      ))}
+
+    <button
+      disabled={saving}
+      className={`submit-button addrole-btn ${saving ? 'saving' : ''}`}
+    >
+      {saving ? 'Updating…' : 'Update role'}
+    </button>
+  </form>
+</div>
+
   );
 }

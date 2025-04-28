@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { FaPlus } from 'react-icons/fa'
 
 const InvoicesNavigation = () => {
   return (
@@ -7,7 +8,7 @@ const InvoicesNavigation = () => {
         <nav className='invoice-nav-section'>
             <ul  className='invoice-nav-buttons'>
                 <li>
-                    < Link href="invoices/new-invoice" className='buttons'>Add Invoices</Link>
+                    < Link href="invoices/new-invoice" className='buttons'> <FaPlus/>Add Invoices</Link>
                 </li>
                 <li>
                     <Link href="invoices/customers" className='buttons' >All Customers</Link>

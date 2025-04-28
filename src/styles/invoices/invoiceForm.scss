@@ -31,7 +31,11 @@
 
 .form-group {
     margin-bottom: 16px;
-}
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
 
 .form-label {
     display: block;
@@ -46,6 +50,11 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    &:focus {
+        border-color: #009693;
+        background: #ffffff;
+        transform: scale(1.02);
+      }
 }
 
 .item-group {

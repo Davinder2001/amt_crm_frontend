@@ -4,6 +4,7 @@ import {
   useGetPredefinedTasksQuery,
   useDeletePredefinedTaskMutation,
 } from '@/slices/tasks/taskApi';
+import { FaPlus } from 'react-icons/fa';
 
 const Page = () => {
   const { data, isLoading, error, refetch } = useGetPredefinedTasksQuery();
@@ -31,8 +32,8 @@ const Page = () => {
     <div className="recurring-wrapper">
       <div className="header">
         <h2>Recurring Tasks</h2>
-        <button className="add-btn" onClick={handleAdd}>
-          + Add
+        <button className="add-btn buttons" onClick={handleAdd}>
+          <FaPlus/> Add
         </button>
       </div>
 
@@ -74,48 +75,7 @@ const Page = () => {
         </table>
       ) : (
         !isLoading && <p>No recurring tasks found.</p>
-      )}
-
-      
-
-      <style jsx>{`
-        .recurring-wrapper {
-          padding: 24px;
-        }
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-        }
-        .add-btn {
-          padding: 8px 16px;
-          background-color: #009693;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        .task-table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-        .task-table th,
-        .task-table td {
-          border: 1px solid #ccc;
-          padding: 10px;
-          font-size: 14px;
-        }
-        .task-table th {
-          background-color: #f0f0f0;
-        }
-        .task-table button {
-          margin-right: 8px;
-          padding: 4px 8px;
-          cursor: pointer;
-        }
-        
-      `}</style>
+      )}   
     </div>
   );
 };

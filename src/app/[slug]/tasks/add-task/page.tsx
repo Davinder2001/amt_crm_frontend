@@ -124,6 +124,7 @@ const Page: React.FC = () => {
             value={formData.endDate}
             onChange={handleChange}
             required
+            className='datetime-local-input'
           />
         </div>
 
@@ -145,17 +146,17 @@ const Page: React.FC = () => {
             onClick={() =>
               setFormData((prev) => ({ ...prev, notify: !prev.notify }))
             }
-            className={`toggle-button ${formData.notify ? 'on' : 'off'}`}
+            className={`toggle-button buttons ${formData.notify ? 'on' : 'off'}`}
           >
             {formData.notify ? 'ON 🔔' : 'OFF 🔕'}
           </button>
         </div>
 
         <div className="form-actions">
-          <button type="button" onClick={() => router.back()} className="cancel-button">
+          <button type="button" onClick={() => router.back()} className="cancel-button buttons ">
             Cancel
           </button>
-          <button type="submit" disabled={isLoading} className="save-button">
+          <button type="submit" disabled={isLoading} className="save-button buttons">
             {isLoading ? 'Saving...' : 'Save'}
           </button>
         </div>

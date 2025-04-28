@@ -25,15 +25,16 @@
       input,
       textarea {
         padding: 10px 12px;
-        border: 1px solid #d0e5e4;
+        border: 1px solid $primary-color;  
         border-radius: 6px;
         font-size: 14px;
         background: #fff;
         color: #161616;
 
         &:focus {
-          border-color: $primary-color;
-          outline: none;
+          border-color: #009693;
+          background: #ffffff;
+          transform: scale(1.02);
         }
       }
     }

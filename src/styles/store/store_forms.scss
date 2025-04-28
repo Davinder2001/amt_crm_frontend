@@ -69,6 +69,11 @@
     font-size: 16px;
     border: 1px solid $border-color;
     border-radius: 10px;
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1.02);
+    }
   }
 
   .save-cancel-button {

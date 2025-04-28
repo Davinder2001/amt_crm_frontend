@@ -3,6 +3,7 @@
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import React, { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 import { FiX, FiTrash2, FiShoppingCart, FiList, FiUser } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -197,7 +198,7 @@ export default function CartTabContent({
                                                 <button
                                                     className="delete-btn"
                                                     onClick={() => onRemoveItem(item.id)}>
-                                                    <FiX />
+                                                    <FaTimes />
                                                 </button>
                                             </div>
 

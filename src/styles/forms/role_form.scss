@@ -6,7 +6,8 @@
   background: #fff;
   padding: 15px;
   border-radius: 10px;
-  width: 100%;
+  width: 1000PX;
+  margin: auto;
   box-shadow: $box-shadow;
 }
 
@@ -27,9 +28,9 @@
 
 .roll-name-input input {
   width: 100%;
-  padding: 8px 12px;
+  padding:12px 16px;
   font-size: 0.95rem;
-  border: $border;
+  border: 1px solid $primary-color;
   border-radius: 6px;
   margin-top: 5px;
 }
@@ -38,11 +39,14 @@
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
+  flex-wrap: wrap;
+
 }
 
 .switch-button button {
-  padding: 8px 15px;
-  font-size: 0.95rem;
+  padding: 8px 8px;
+  font-size: 14px;
+  font-weight: 500;
   border-radius: 6px;
   border: $border;
   background-color: #f5f5f5;
@@ -107,9 +111,14 @@
 }
 
 .permissions-container label {
-  display: block;
-  margin: 8px 0 4px;
-  font-weight: 500;
+display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
 }
 
 .permissions-container div {
@@ -142,4 +151,22 @@
 
 .addrole-btn:hover:not(:disabled) {
   background-color: $primary-color;
+}
+
+
+.permission-group-header {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  .permission-label{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+ 
 }

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/store/storeApi';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaPlus } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
@@ -115,7 +115,7 @@ const Page = () => {
             className="hidden-input"
             onChange={handleImageUpload}
           />
-          <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
+          <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus/> Add Items</button>
 
         </div>
 

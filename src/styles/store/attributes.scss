@@ -129,9 +129,14 @@
   select,
   input {
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid $primary-color;  
     border-radius: 4px;
     font-size: 14px;
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1.02);
+    }
   }
 
 
@@ -323,7 +328,7 @@
 
 
   .buttons:hover {
-    background-color: #4bcbc9;
+    background-color: #007c7a;
   }
 
   .canvas {
@@ -368,9 +373,14 @@
   .input {
     padding: 0.6rem 0.8rem;
     font-size: 0.95rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid $primary-color;  
     border-radius: 6px;
     background-color: #fff;
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1.02);
+    }
   }
 
   .values-container {

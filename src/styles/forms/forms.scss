@@ -74,6 +74,11 @@
     font-family: $font-family;
     color: $dark-color;
     background-color: $light-color;
+    &:focus {
+        border-color: #009693;
+        background: #ffffff;
+        transform: scale(1.02);
+      }
 }
 
 .password-input-container {
@@ -170,7 +175,7 @@
 
 .store-t-e-e-icons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .stor-table{
 overflow: scroll;

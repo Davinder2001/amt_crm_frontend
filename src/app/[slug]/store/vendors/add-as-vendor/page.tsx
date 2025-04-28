@@ -4,7 +4,7 @@ import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaPlus } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
@@ -12,13 +12,13 @@ const Page = () => {
   const [invoiceNo,       setInvoiceNo]       = useState('');
   const [vendorName,      setVendorName]      = useState('');
   const [vendorNo,        setVendorNo]        = useState('');
-  const [items,           setItems]           = useState([]);
+  const [items,           setItems]           = useState<{ name: string; price: string; quantity: string; subTotal: string; }[]>([]);
   const [newItem,         setNewItem]         = useState({ name: '', price: '', quantity: '', subTotal: '' });
-  const [image,           setImage]           = useState(null);
+  const [image,           setImage]           = useState<File | null>(null);
   const [showItemFields,  setShowItemFields]  = useState(false);
-  const [selectedTaxId,   setSelectedTaxId]   = useState(null);
+  const [selectedTaxId,   setSelectedTaxId]   = useState<number | null>(null);
   const [taxMode,         setTaxMode]         = useState('overall');
-  const [itemTaxes,       setItemTaxes]       = useState([]);
+  const [itemTaxes,       setItemTaxes]       = useState<(number | null)[]>([]);
 
   const { companySlug } = useCompany();
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
@@ -37,7 +37,7 @@ const Page = () => {
     setShowItemFields(false);
   };
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImage(file);
@@ -119,7 +119,7 @@ const Page = () => {
             <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
           </label>
           <input style={{ display: 'none' }} id="file-upload" type="file" onChange={handleImageUpload} />
-          <button className='buttons' onClick={() => setShowItemFields(true)}>+ Add Items</button>
+          <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus/> Add Items</button>
         </div>
 
         {showItemFields && (

@@ -20,7 +20,8 @@ const Page = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target as HTMLInputElement;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -38,7 +39,7 @@ const Page = () => {
   };
 
   return (
-    <div className="form-wrapper">
+    <div className="Recurring-form-wrapper">
       <h2>Create Recurring Task</h2>
       <form onSubmit={handleSubmit} className="form-container">
         <input name="name" placeholder="Task Name" value={formData.name} onChange={handleChange} required />
@@ -60,34 +61,9 @@ const Page = () => {
           <input type="checkbox" name="notify" checked={formData.notify} onChange={handleChange} /> Notify
         </label>
 
-        <button type="submit" disabled={isLoading}>Create</button>
+        <button type="submit" className='buttons' disabled={isLoading}>Create</button>
       </form>
 
-      <style jsx>{`
-        .form-wrapper {
-          padding: 24px;
-          max-width: 500px;
-          margin: auto;
-        }
-        .form-container {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        input, select {
-          padding: 8px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        button {
-          padding: 10px;
-          background-color: #009693;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-      `}</style>
     </div>
   );
 };

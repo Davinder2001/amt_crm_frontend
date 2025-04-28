@@ -8,7 +8,8 @@
   border-radius: 10px;
   width: 1000PX;
   margin: auto;
-  box-shadow: $box-shadow;
+  box-shadow: 0 4px 8px #0000001a, 0 10px 20px #0000000d;
+  
 }
 
 .add-role-form h2 {
@@ -17,7 +18,7 @@
 }
 
 .roll-name-input {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .roll-name-input label {
@@ -38,7 +39,7 @@
 .switch-button {
   display: flex;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 
 }

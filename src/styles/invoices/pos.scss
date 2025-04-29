@@ -345,6 +345,7 @@
     border-left: $border;
     display: flex;
     flex-direction: column;
+    overflow: scroll;
 
     .tabs {
         display: flex;

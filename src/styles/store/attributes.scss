@@ -132,11 +132,7 @@
     border: 1px solid $primary-color;  
     border-radius: 4px;
     font-size: 14px;
-    &:focus {
-      border-color: #009693;
-      background: #ffffff;
-      transform: scale(1.02);
-    }
+    
   }
 
 
@@ -261,10 +257,7 @@
     background: #fafafa;
     transition: border-color 0.3s;
 
-    &:focus {
-      border-color: $primary-color !important;
-      outline: none;
-    }
+    
   }
 
   .values-container {
@@ -376,11 +369,7 @@
     border: 1px solid $primary-color;  
     border-radius: 6px;
     background-color: #fff;
-    &:focus {
-      border-color: #009693;
-      background: #ffffff;
-      transform: scale(1.02);
-    }
+    
   }
 
   .values-container {

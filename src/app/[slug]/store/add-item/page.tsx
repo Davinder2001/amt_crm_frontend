@@ -139,6 +139,7 @@ const AddItem: React.FC = () => {
       </Link>
 
       <form onSubmit={handleSubmit}>
+        <div className='categories-filds-outer'>
         <div className='add-items-form-container'>
           <div className='add-items-form-input-label-container'>
             <label>Item Name*</label>
@@ -321,7 +322,7 @@ const AddItem: React.FC = () => {
               }}
             />
           </div>
-          <AddCategory onCategoryChange={setSelectedCategories} selectedCategories={selectedCategories} />
+        
 
           <ImageUpload
             images={formData.images}
@@ -337,6 +338,8 @@ const AddItem: React.FC = () => {
               selectedCategories={selectedCategories}
             />
           </div>
+        </div>
+        <AddCategory onCategoryChange={setSelectedCategories} selectedCategories={selectedCategories} />
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button
@@ -357,48 +360,3 @@ const AddItem: React.FC = () => {
 };
 
 export default AddItem;
-
-
-
-
-
-
-
-
-
-
-
-// const LOCAL_STORAGE_KEY = 'storeItemDraft'
-
-//  // Load saved draft on mount
-//  useEffect(() => {
-//   const savedDraft = localStorage.getItem(LOCAL_STORAGE_KEY);
-//   if (savedDraft) {
-//     const parsed = JSON.parse(savedDraft);
-
-//     // Restore only basic data (exclude File objects like images)
-//     setFormData((prev) => ({
-//       ...prev,
-//       ...parsed,
-//       images: [], // Can't restore File objects
-//     }));
-
-//     // Restore variations if present
-//     if (parsed.variations) {
-//       setVariations(parsed.variations);
-//     }
-//   }
-// }, []);
-// useEffect(() => {
-//   const { images, ...safeFormData } = formData;
-
-//   // Avoid saving empty drafts
-//   const hasContent = Object.values(safeFormData).some(value => {
-//     if (Array.isArray(value)) return value.length > 0;
-//     return value !== '' && value !== 0;
-//   });
-
-//   if (hasContent) {
-//     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ ...safeFormData, variations }));
-//   }
-// }, [formData, variations]);

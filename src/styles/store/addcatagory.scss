@@ -3,10 +3,19 @@
 .category-container {
 
   
-  
+  .done-category-button-outer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
   .category-title {
     font-size: 1.5rem;
     color: #333;
+    margin-bottom: 10px;
+        padding: 20px;
   }
   
   .category-button {
@@ -19,21 +28,14 @@
     display: inline-block;
   }
   
-  .create-button {
-    background-color: #009693;
-    color: #fff;
-  }
+
   
   .done-button {
     background-color: #4caf50;
     color: #fff;
   }
   
-  .cancel-button {
-    background-color: #ccc;
-    color: #000;
-    margin-left: 10px;
-  }
+
   
   .form-group {
     margin-bottom: 1rem;
@@ -41,16 +43,13 @@
   
   .input-field {
     display: block;
-    width: 100%;
+    width: initial;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid $primary-color;  
     margin-top: 4px;
-    &:focus {
-      border-color: #009693;
-      background: #ffffff;
-      transform: scale(1.02);
-    }
+    margin: 0px 20px 0px 20px;
+    
   }
   
   .parent-category-list {

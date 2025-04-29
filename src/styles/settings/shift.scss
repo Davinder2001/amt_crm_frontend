@@ -55,11 +55,7 @@ form {
       background: #fafafa;
       transition: border-color 0.3s, background-color 0.3s, transform 0.2s ease;
 
-      &:focus {
-        border-color: #009693;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 150, 147, 0.2);
-      }
+      
 
       &:disabled {
           background: #f2f2f2;

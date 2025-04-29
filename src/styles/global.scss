@@ -19,6 +19,10 @@
 @use './Hr/Hr_dashbord.scss' as *;
 @use './Hr/status_view.scss' as *;
 @use './Hr/employees_sallery.scss' as *;
+@use './Hr/edituser.scss' as *;
+
+
+
 
 // tables section
 @use './tables/tables.scss' as *;
@@ -129,9 +133,7 @@ select,
 textarea {
 
     &:focus {
-        border: 1px solid $primary-color;
         outline: none;
-        transition: 0.2s ease-in-out;
     }
 }
 

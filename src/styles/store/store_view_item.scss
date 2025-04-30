@@ -1,0 +1,24 @@
+@use '../variables' as *;
+.view-item-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: $box-shadow;
+
+.view-item-inner-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+   
+
+    p {
+        color: #717171;
+        strong {
+            color: #4b4b4b;
+            font-size: 15px;
+        }
+    }
+}}

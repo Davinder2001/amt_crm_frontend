@@ -1,0 +1,11 @@
+@use '../variables' as *;
+.Sdash-container{
+    .card-title {
+        font-size: 18px;
+    }
+    p{
+        color: $primary-color;
+        font-size: 26px;
+        
+    }
+}

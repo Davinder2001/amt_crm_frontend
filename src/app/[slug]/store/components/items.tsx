@@ -21,7 +21,28 @@ const Items: React.FC = () => {
   const router = useRouter();
 
   const { data: items, error, isLoading } = useFetchStoreQuery();
-  const storeItems: StoreItem[] = Array.isArray(items) ? items : [];
+  interface StoreItem {
+    id: number;
+    item_code: string;
+    name: string;
+    purchase_date: string;
+    date_of_manufacture: string;
+    date_of_expiry: string;
+    brand_name: string;
+    quantity_count: number;
+    catalog?: boolean;
+    taxes?: { name: string; rate: number }[]; // Added taxes property
+  }
+  
+  const storeItems: StoreItem[] = Array.isArray(items)
+    ? items.map((item) => ({
+        ...item,
+        purchase_date: item.purchase_date || '',
+        date_of_manufacture: item.date_of_manufacture || '',
+        date_of_expiry: item.date_of_expiry || '',
+        catalog: item.catalog ? Boolean(item.catalog) : undefined,
+      }))
+    : [];
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [addToCatalog] = useAddToCatalogMutation();
@@ -140,7 +161,7 @@ const Items: React.FC = () => {
         };
       }
 
-      if (col.key === 'taxes') {
+      if (col.key === 'taxes' as string) {
         return {
           label: 'Taxes',
           render: (item: StoreItem) => {

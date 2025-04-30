@@ -20,6 +20,8 @@
 @use './Hr/status_view.scss' as *;
 @use './Hr/employees_sallery.scss' as *;
 @use './Hr/edituser.scss' as *;
+@use './Hr/employee_profile.scss' as *;
+
 
 
 
@@ -47,6 +49,8 @@
 @use './store/variations.scss' as *;
 @use './store/addcatagory.scss' as *;
 @use './store/itemtab.scss' as *;
+@use './store/store_view_item.scss' as *;
+
 
 // @use './store/attributes.scss' as *;
 
@@ -59,9 +63,22 @@
 
 // superadmin company section
 @use './superadmin/company.scss' as *;
+@use './superadmin/sDashbord.scss' as *;
+@use './superadmin/supAdminbusness.scss' as *;
+@use './superadmin/companyView.scss' as *;
+@use './superadmin/editCompany.scss' as *;
+@use './superadmin/viewadmin.scss' as *;
+
+
+
+
 
 // super admin header sectiion 
 @use './s-admin-header/s-admin-header.scss' as *;
+
+// super admin dashbord sectiion 
+@use './superadmin/sDashbord.scss' as *;
+
 
 // permissions section
 @use './permissions/permissions.scss' as *;

@@ -37,7 +37,8 @@ const ViewUserPage: React.FC = () => {
   const firstLetter = user?.name?.[0]?.toUpperCase();
 
   return (
-    <div className="container">
+    
+    <div className="container employ-prpofile-container">
       <HrNavigation />
 
       <div className="profile-card">
@@ -57,6 +58,7 @@ const ViewUserPage: React.FC = () => {
 
         <div className="profile-info">
           <h2 style={{ textTransform: 'capitalize' }}>{user.name}</h2>
+          <div className='employ-details-wraper'>
           <p className="employee-meta">
             Role: {user.roles?.[0]?.name || 'N/A'} | Employee ID: <strong>{user.id}</strong>
           </p>
@@ -64,6 +66,7 @@ const ViewUserPage: React.FC = () => {
             Company: {user.company_name || 'N/A'} | Status: {user.user_status}
           </p>
           <p className="bio">This is a detailed employee profile view.</p>
+          </div>
           <div className="info-row">
             <span><strong>Mobile:</strong> {user.number || 'N/A'}</span>
             <span><strong>Email:</strong> {user.email}</span>
@@ -103,82 +106,7 @@ const ViewUserPage: React.FC = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        .container {
-          padding: 20px;
-          margin: auto;
-        }
-        .profile-card {
-          display: flex;
-          background: #f9fbfc;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
-        }
-        .profile-mage-wrapper {
-          max-width: 100px;
-          width: 100%;
-          height: 100px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: rgba(0, 150, 147, 0.06);
-          border-radius: 50%;
-          margin-right: 20px;
-        }
-        .profile-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .profile-info {
-          flex-grow: 1;
-        }
-        .employee-meta {
-          font-size: 14px;
-          color: #777;
-        }
-        .bio {
-          font-size: 14px;
-          color: #555;
-          margin-top: 5px;
-        }
-        .info-row {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-          gap: 20px;
-          font-size: 14px;
-          color: #333;
-          margin-top: 8px;
-        }
-        .info-row span {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          background-color: rgba(0, 150, 147, 0.06);
-          padding: 5px;
-        }
-        .info-sections {
-          display: flex;
-          gap: 20px;
-        }
-        .info-card {
-          background: #fff;
-          padding: 15px;
-          border-radius: 8px;
-          flex: 1;
-          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .info-card h3 {
-          margin-bottom: 10px;
-          font-size: 16px;
-        }
-        .info-card p {
-          font-size: 14px;
-          margin: 5px 0;
-        }
-      `}</style>
+      
     </div>
   );
 };

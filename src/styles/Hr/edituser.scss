@@ -1,7 +1,6 @@
 @use '../variables' as *;
 .edit-user-container {
-    margin: 2rem auto;
-    padding: 2rem;
+    padding: 20px;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -14,32 +13,29 @@
     }
   
     .edit-user-form {
-        display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 20px;
+      display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 15px;
   
       .form-group {
         display: flex;
         flex-direction: column;
   
         label.form-label {
-          font-size: 0.95rem;
-          margin-bottom: 0.5rem;
-          color: #444;
+          font-weight: 600;
+    margin-bottom: 8px;
+    color: #161616;
         }
   
         .form-input,
         .form-select {
-          padding: 10px 20px;
-          border: 1px solid #e0e0e0;
-          border-radius: 10px;
-          font-size: 1rem;
-          transition: border-color 0.3s ease;
-  
-          &:focus {
-            outline: none;
-            border-color: #009693;
-          }
+          padding: 10px 12px;
+    border: 1px solid #009693;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #fff;
+    color: #161616;
+
         }
       }
   
@@ -47,10 +43,11 @@
         grid-column: span 2;
       }
   
-      .edit-user-form-smt-btn {
-        display: flex;
-        justify-content: flex-end;
+      
     }
-    }
+    .edit-user-form-smt-btn {
+      display: flex;
+      justify-content: flex-end;
+  }
   }
   

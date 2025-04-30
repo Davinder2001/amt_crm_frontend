@@ -243,6 +243,7 @@ const EditUserPage: React.FC = () => {
       <form className="edit-user-form-outer" onSubmit={handleSubmit}>
       <div className="edit-user-form">
        <div className="form-group">
+       <label className="form-label">Name:</label>
           <input
             type="text"
             placeholder="Name"
@@ -252,6 +253,7 @@ const EditUserPage: React.FC = () => {
           />
         </div>
         <div className="form-group">
+        <label className="form-label">Email:</label>
           <input
             type="email"
             placeholder="Email"
@@ -261,6 +263,7 @@ const EditUserPage: React.FC = () => {
           />
         </div>
         <div className="form-group">
+        <label className="form-label">Phone Number:</label>
           <input
             type="text"
             placeholder="Phone Number"

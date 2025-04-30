@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import { FaEye } from 'react-icons/fa';
 
 const statusOptions = ['active', 'blocked'];
 
@@ -17,7 +18,7 @@ const AdminList = () => {
     const router = useRouter();
 
     return (
-        <div className="p-4">
+        <div className="p-4 allAdmin-table-outer">
             <h1 className="text-2xl font-semibold mb-4">All Admins</h1>
 
             {isLoading && <p>Loading...</p>}
@@ -53,22 +54,23 @@ const AdminList = () => {
                                     {admin.email_verified_at ? 'Yes' : 'No'}
                                 </td>
                                 <td className="border p-2">
-                                    <select
-                                        value={admin.user_status}
-                                        onChange={(e) => handleStatusChange(admin.id, e.target.value)}
-                                        className="border px-2 py-1 rounded"
-                                    >
-                                        {statusOptions.map((status) => (
-                                            <option key={status} value={status}>
-                                                {status.charAt(0).toUpperCase() + status.slice(1)}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <select
+  className={`status-select ${admin.user_status}`}
+  value={admin.user_status}
+  onChange={(e) => handleStatusChange(admin.id, e.target.value)}
+>
+  {statusOptions.map((status) => (
+    <option key={status} value={status}>
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </option>
+  ))}
+</select>
+
                                 </td>
-                                <td className="border p-2">
+                                <td className="border p-2 store-t-e-e-icons Scompany-table-action-icon">
                                     <button
                                         onClick={() => router.push(`/superadmin/admins/view-admin/${admin.id}`)}>
-                                        View    
+                                        <FaEye />
                                     </button>                </td>
                             </tr>
                         ))}

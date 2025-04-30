@@ -5,14 +5,16 @@ const CompanyNav = () => {
   return (
     <>
         <nav>
+            <div className='Scompany-nav-outer'>
             <ul>
-                <li>
+                <li className='buttons'>
                     <Link href='/superadmin/companies'>All Companies</Link>
                 </li>
-                <li>
+                <li className='buttons'>
                     <Link href='/superadmin/companies/pending'>Pending Companies</Link>
                 </li>
             </ul>
+            </div>
         </nav>
     </>
   )

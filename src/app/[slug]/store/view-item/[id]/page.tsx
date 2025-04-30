@@ -16,9 +16,9 @@ const ViewItem = () => {
   if (!item) return <p>Item not found.</p>;
 
   return (
-    <div className="p-4 space-y-4 bg-white shadow rounded">
+    <div className="view-item-container">
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="view-item-inner-container">
         <p><strong>Item Code:</strong> {item.item_code}</p>
         <p><strong>Name:</strong> {item.name}</p>
         <p><strong>Quantity Count:</strong> {item.quantity_count}</p>
@@ -58,7 +58,7 @@ const ViewItem = () => {
         </div>
       )}
 
-      <div className="buttons-container">
+      <div className="buttons-container ">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
           <button className="buttons" >
             Edit Item

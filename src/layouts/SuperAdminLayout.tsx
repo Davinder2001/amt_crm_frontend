@@ -1,29 +1,138 @@
-'use client'
+// 'use client'
 
-import Header from "@/app/superadmin/components/header";
-import SideBar from "@/app/superadmin/components/sideBar";
+// import Header from "@/app/superadmin/components/header";
+// import SideBar from "@/app/superadmin/components/sideBar";
+// import { usePathname } from "next/navigation";
+
+// interface SuperAdminLayoutProps {
+//   children: React.ReactNode;
+// }
+
+// export const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) => {
+//   const pathname = usePathname()
+//   if (pathname === '/') {
+//     return <>{children}</>
+//   }
+//   return (
+//     <div className="super-admin-layout-wrapper">
+//       <div className="super-admin-layout-inner">
+//         <div className="sidebar">
+//           <SideBar />
+//         </div>
+//         <div className="content-area">
+//           <Header />
+//           <main className="super-admin-layout">{children}</main>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"use client";
+
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Sidebar from "@/app/superadmin/components/sideBar";
+import Header from "@/app/superadmin/components/header";
+import Footer from "@/app/[slug]/_common/footer/footer";
 
-interface SuperAdminLayoutProps {
+export const SuperAdminLayout = ({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
+}>) => {
+  const pathname = usePathname();
 
-export const SuperAdminLayout: React.FC<SuperAdminLayoutProps> = ({ children }) => {
-  const pathname = usePathname()
-  if (pathname === '/') {
-    return <>{children}</>
+  const [isToggle, setIsToggle] = useState<boolean>(false); // mobile sidebar toggle state
+  const [isMobile, setIsMobile] = useState<boolean>(false); // check if the device is mobile
+
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedState = localStorage.getItem("sidebarState");
+      return savedState ? JSON.parse(savedState) : true;
+    }
+    return true;
+  });
+
+  // Detect screen size on mount and when resizing
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024); // Set to true if the screen size is <= 1024px
+    };
+
+    // Initialize on mount
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Update localStorage whenever the state changes, but only for larger screens
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isMobile) {
+      localStorage.setItem("sidebarState", JSON.stringify(isSidebarExpanded));
+    }
+  }, [isSidebarExpanded, isMobile]);
+
+  // Toggle left sidebar for desktop
+  const handleToggleSidebar = () => {
+    setIsSidebarExpanded((prevState: boolean) => !prevState);
+  };
+
+  // Toggle sidebar for mobile
+  const openMenu = () => {
+    setIsToggle(!isToggle);  // Toggle mobile sidebar visibility
+  };
+
+  // Render children if on the homepage
+  if (pathname === "/") {
+    return <>{children}</>;
   }
+
   return (
     <div className="super-admin-layout-wrapper">
       <div className="super-admin-layout-inner">
-        <div className="sidebar">
-          <SideBar />
+      <div
+        className={`sidebar ${isSidebarExpanded ? 'expanded-view' : 'collapse-view'} ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
+        style={{
+          width: isMobile ? '90%' : isSidebarExpanded ? '250px' : '60px',
+        }}
+      >
+        <Sidebar
+          isSidebarExpanded={isSidebarExpanded}
+          isMobile={isMobile}
+          openMenu={openMenu}
+        />
+      </div>
+      <div className="content-area">
+        <Header
+          handleToggleSidebar={handleToggleSidebar}
+          openMenu={openMenu}
+          isMobile={isMobile}
+        />
+        <div className="page-content">
+          {children}
         </div>
-        <div className="content-area">
-          <Header />
-          <main className="super-admin-layout">{children}</main>
-        </div>
+        <Footer openMenu={openMenu} />
       </div>
     </div>
+    </div>
   );
-}
+};

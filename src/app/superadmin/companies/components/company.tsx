@@ -29,7 +29,7 @@ const CompanyComponent: React.FC = () => {
     }
   }, [data]);
 
-  const paymentStatusOptions      = ['pending', 'processing', 'completed', 'failed'];
+  const paymentStatusOptions = ['pending', 'processing', 'completed', 'failed'];
   const verificationStatusOptions = ['pending', 'under_review', 'verified', 'rejected'];
 
   const handleNavigation = (route: string) => {
@@ -58,8 +58,7 @@ const CompanyComponent: React.FC = () => {
   if (error) return <div>Error loading companies.</div>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Companies</h1>
+    <div className="company-table-outer">
       <table className="min-w-full border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
@@ -81,7 +80,7 @@ const CompanyComponent: React.FC = () => {
               <td className="border p-2">{c.company_slug}</td>
               <td className="border p-2">
                 <select
-                  className="border rounded px-2 py-1"
+                  className={`payment-select ${c.payment_status} border rounded px-2 py-1`}
                   value={c.payment_status}
                   onChange={(e) => handlePaymentChange(c.id, e.target.value)}
                 >
@@ -92,20 +91,24 @@ const CompanyComponent: React.FC = () => {
                   ))}
                 </select>
               </td>
+
               <td className="border p-2">
                 <select
-                  className="border rounded px-2 py-1"
+                  className={`verification-select ${c.verification_status} border rounded px-2 py-1`}
                   value={c.verification_status}
                   onChange={(e) => handleVerificationChange(c.id, e.target.value)}
                 >
                   {verificationStatusOptions.map((status) => (
                     <option key={status} value={status}>
-                      {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+                      {status
+                        .charAt(0)
+                        .toUpperCase() + status.slice(1).replace('_', ' ')}
                     </option>
                   ))}
                 </select>
               </td>
-              <td className="border p-2 flex space-x-2">
+
+              <td className="border p-2 flex space-x-2 store-t-e-e-icons">
                 <FaEye
                   onClick={() => handleNavigation(`companies/view/${c.id}`)}
                   className="cursor-pointer text-blue-500"

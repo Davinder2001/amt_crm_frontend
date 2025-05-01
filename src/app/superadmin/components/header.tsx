@@ -103,12 +103,12 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
   const [isSticky, setIsSticky] = useState(false);
 
   // ✅ Fetch notifications
-  const { data: notifications, isLoading } = useFetchNotificationsQuery(undefined, {
+  const { data } = useFetchNotificationsQuery(undefined, {
     pollingInterval: 30000, // (Optional) Refresh every 30 sec for live updates
   });
 
   // ✅ Calculate unread count
-  const unreadCount = notifications?.filter((n: any) => !n.read_at)?.length || 0;
+  const unreadCount = data?.notifications?.filter((n) => !n.read_at)?.length || 0;
 
   useEffect(() => {
     const mainContent = document.querySelector('.main-content');

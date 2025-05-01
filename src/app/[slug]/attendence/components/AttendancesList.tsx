@@ -30,82 +30,90 @@ const AttendancesList: React.FC = () => {
     key?: keyof Attendance;
     render?: (row: Attendance, index?: number) => React.ReactNode;
   }[] = [
-    {
-      label: 'Sr. No',
-      render: (_: Attendance, index?: number) => (index ?? 0) + 1,
-    },
-    { label: 'ID', key: 'id' },
-    {
-      label: 'Name',
-      render: (row: Attendance) => row.user?.name ?? '-',
-    },
-    {
-      label: 'User ID',
-      render: (row: Attendance) => row.user?.uid ?? '-',
-    },
-    { label: 'Attendance Date', key: 'attendance_date' },
-    { label: 'Clock In', key: 'clock_in' },
-    { label: 'Clock Out', key: 'clock_out' },
-    {
-      label: 'Status',
-      render: (attendance: Attendance) => (
-        <div
-          className="status"
-          style={{
-            backgroundColor:
-              attendance.status === 'present'
-                ? '#009693'
-                : attendance.status === 'leave'
-                ? 'yellow'
-                : attendance.status === 'absent'
-                ? 'red'
-                : 'gray',
-            color: attendance.status === 'leave' ? 'black' : 'white',
-          }}
-        >
-          {attendance.status}
-        </div>
-      ),
-    },
-    {
-      label: 'Approval Status',
-      render: (attendance: Attendance) => (
-        <div
-          className="status"
-          style={{
-            backgroundColor:
-              attendance.approval_status === 'approved'
-                ? '#009693'
-                : attendance.approval_status === 'pending'
-                ? 'yellow'
-                : attendance.approval_status === 'unapproved'
-                ? 'red'
-                : 'gray',
-            color: attendance.approval_status === 'pending' ? 'black' : 'white',
-          }}
-        >
-          {attendance.approval_status}
-        </div>
-      ),
-    },
-    {
-      label: 'Action',
-      render: (attendance: Attendance) => (
-        <div className="store-t-e-e-icons">
-          <span onClick={() => update(attendance)}><FaEdit /></span>
-          <span onClick={() => view(attendance)}><FaEye /></span>
-        </div>
-      ),
-    },
-  ];
+      {
+        label: 'Sr. No',
+        render: (_: Attendance, index?: number) => (index ?? 0) + 1,
+      },
+      { label: 'ID', key: 'id' },
+      {
+        label: 'Name',
+        render: (row: Attendance) => row.user?.name ?? '-',
+      },
+      {
+        label: 'User ID',
+        render: (row: Attendance) => row.user?.uid ?? '-',
+      },
+      { label: 'Attendance Date', key: 'attendance_date' },
+      { label: 'Clock In', key: 'clock_in' },
+      { label: 'Clock Out', key: 'clock_out' },
+      {
+        label: 'Status',
+        render: (attendance: Attendance) => (
+          <div
+            className="status"
+            style={{
+              backgroundColor:
+                attendance.status === 'present'
+                  ? '#009693'
+                  : attendance.status === 'leave'
+                    ? 'yellow'
+                    : attendance.status === 'absent'
+                      ? 'red'
+                      : 'gray',
+              color: attendance.status === 'leave' ? 'black' : 'white',
+            }}
+          >
+            {attendance.status}
+          </div>
+        ),
+      },
+      {
+        label: 'Approval Status',
+        render: (attendance: Attendance) => (
+          <div
+            className="status"
+            style={{
+              backgroundColor:
+                attendance.approval_status === 'approved'
+                  ? '#009693'
+                  : attendance.approval_status === 'pending'
+                    ? 'yellow'
+                    : attendance.approval_status === 'unapproved'
+                      ? 'red'
+                      : 'gray',
+              color: attendance.approval_status === 'pending' ? 'black' : 'white',
+            }}
+          >
+            {attendance.approval_status}
+          </div>
+        ),
+      },
+      {
+        label: 'Action',
+        render: (attendance: Attendance) => (
+          <div className="store-t-e-e-icons">
+            <span onClick={() => update(attendance)}><FaEdit /></span>
+            <span onClick={() => view(attendance)}><FaEye /></span>
+          </div>
+        ),
+      },
+    ];
 
-  return <ResponsiveTable data={attendanceList} columns={columns} onDelete={function (id: number): void {
-    throw new Error('Function not implemented.');
-  } } onEdit={function (id: number): void {
-    throw new Error('Function not implemented.');
-  } } onView={function (id: number): void {
-    throw new Error('Function not implemented.');
-  } } />;
+  return (
+    <ResponsiveTable
+      data={attendanceList}
+      columns={columns}
+      onDelete={(id: number) => {
+        console.log('Delete attendance with ID:', id);
+      }}
+      onEdit={(id: number) => {
+        console.log('Edit attendance with ID:', id);
+      }}
+      onView={(id: number) => {
+        console.log('View attendance with ID:', id);
+      }}
+    />
+  );
 };
 
 export default AttendancesList;

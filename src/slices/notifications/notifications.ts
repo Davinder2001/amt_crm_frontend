@@ -3,13 +3,12 @@ import invoiceCreateApiSlice from "./notificationsCreateSlice";
 const notificationApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-
-    fetchNotifications: builder.query<any, void>({
+    fetchNotifications: builder.query<NotificationResponse, void>({
       query: () => "notifications",
       providesTags: ["Notifications"],
     }),
 
-    markNotificationAsRead: builder.mutation<any, string | number>({
+    markNotificationAsRead: builder.mutation<MarkNotificationResponse, string | number>({
       query: (id) => ({
         url: `notifications/${id}/read`,
         method: "POST",
@@ -17,7 +16,7 @@ const notificationApi = invoiceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Notifications"],
     }),
 
-    markAllNotificationsAsRead: builder.mutation<any, void>({
+    markAllNotificationsAsRead: builder.mutation<MarkNotificationResponse, void>({
       query: () => ({
         url: "notifications/read-all",
         method: "POST",

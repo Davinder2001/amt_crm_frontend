@@ -36,7 +36,7 @@ const Profile = () => {
         <div className="companies-section">
           <h2 className="section-title">Associated Companies</h2>
           <div className="company-grid">
-            {user.companies.map((company: any) => (
+            {user.companies.map((company: Company) => (
               <div key={company.id} className="company-card">
                 <h3>{company.company_name}</h3>
                 <p><strong>Slug:</strong> {company.company_slug}</p>
@@ -55,11 +55,11 @@ const Profile = () => {
             </div>
           </div>
 
-<div className="password-change-btn">
-  <Link href="my-account/change-password">
-            Change Password
-  </Link>   
-</div>
+          <div className="password-change-btn">
+            <Link href="my-account/change-password">
+              Change Password
+            </Link>
+          </div>
 
 
         </div>

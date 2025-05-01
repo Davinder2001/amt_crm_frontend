@@ -13,6 +13,9 @@ interface Task {
     description: string;
     company_id: string | number;
     notify: boolean;
+    recurrence_type: string;
+    recurrence_start_date: string;
+    recurrence_end_date: string
     attachment_url: string;
     created_at: string;
     updated_at: string;
@@ -20,4 +23,22 @@ interface Task {
 
 interface TasksResponse {
     data: Task[];
+}
+
+interface PredefinedTask {
+    notify: boolean;
+    id: number;
+    name: string;
+    description: string;
+    recurrence_type: string;
+    recurrence_start_date: string;
+    recurrence_end_date: string
+    attachment_url: string;
+    created_at: string;
+    updated_at: string;
+    // Add more fields if needed
+}
+
+interface PredefinedTasksResponse {
+    data: PredefinedTask[];
 }

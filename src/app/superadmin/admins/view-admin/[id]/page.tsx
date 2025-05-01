@@ -21,7 +21,9 @@ const ViewAdminPage = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading admin.</p>;
 
-  const admin = data?.admin;
+  const admin = data;
+
+  if (!admin) return <p>No admin data available.</p>;
 
   return (
     <div className="vadmin-container">

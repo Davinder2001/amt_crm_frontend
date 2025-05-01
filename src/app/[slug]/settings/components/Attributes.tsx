@@ -147,7 +147,7 @@ const Attributes = () => {
 
             {/* Attributes Table */}
             <div className="attributes-table">
-                {attributes?.map((attribute, index) => (
+                {attributes?.map((attribute) => (
                     <div key={attribute.id} className="attribute-card">
                         <h3>{attribute.name}</h3>
                         <div className="values">{attribute.values?.map(v => v.value).join(', ') || '—'}</div>

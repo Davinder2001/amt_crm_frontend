@@ -1,18 +1,15 @@
 'use client';
 import React, { useState, ReactNode } from 'react';
-import { FaBox, FaCogs, FaEye, FaTag, FaTimes } from 'react-icons/fa';
-import AddCategory from './AddCategory';
+import { FaBox, FaTag, FaTimes } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
 import Variations from './Variations';
 
 interface Props {
     onChange: (combinations: variations[]) => void;
     variations: variations[];
-    onCategoryChange: (categories: Category[]) => void;
-    selectedCategories: Category[];
 }
 
-const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, selectedCategories }) => {
+const ItemsTab: React.FC<Props> = ({ onChange, variations }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 
@@ -30,9 +27,9 @@ const ItemsTab: React.FC<Props> = ({ onChange, variations, onCategoryChange, sel
                 <FaBox className="tab-icon" /> <span className="tab-text">Variations</span>
             </div>,
             content: <div className="tab-content"><Variations onChange={onChange} setShowModal={setShowModal} /></div>
-        },        
-        
-        
+        },
+
+
     ];
 
     return (

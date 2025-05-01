@@ -334,8 +334,6 @@ const AddItem: React.FC = () => {
             <ItemsTab
               onChange={setVariants}
               variations={variants}
-              onCategoryChange={setSelectedCategories}
-              selectedCategories={selectedCategories}
             />
           </div>
         </div>

@@ -166,7 +166,7 @@ const Items: React.FC = () => {
           label: 'Taxes',
           render: (item: StoreItem) => {
             if (Array.isArray(item.taxes) && item.taxes.length > 0) {
-              return item.taxes.map((tax: any) => `${tax.name} (${tax.rate}%)`).join(', ');
+              return item.taxes.map((tax) => `${tax.name} (${tax.rate}%)`).join(', ');
             }
             return '-';
           },

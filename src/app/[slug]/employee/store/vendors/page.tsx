@@ -36,7 +36,16 @@ const Page: React.FC = () => {
       <Link href={`/${companySlug}/employee/store`} className="back-button">
         <FaArrowLeft size={20} color="#fff" />
       </Link>
-      <ResponsiveTable data={vendors} columns={columns} />
+      <ResponsiveTable data={vendors} columns={columns} onDelete={(id) => {
+        console.warn(`Delete not implemented for vendor ID: ${id}`);
+      }}
+        onEdit={(id) => {
+          console.warn(`Edit not implemented for vendor ID: ${id}`);
+        }}
+        onView={(id) => {
+          console.warn(`View not implemented for vendor ID: ${id}`);
+        }}
+      />
     </>
   );
 };

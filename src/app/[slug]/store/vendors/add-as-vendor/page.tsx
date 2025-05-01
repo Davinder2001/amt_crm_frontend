@@ -56,7 +56,7 @@ const Page = () => {
           setItems(parsedItems);
         }
         if (ocrResponse.message) toast.success(ocrResponse.message);
-      } catch (error) {
+      } catch {
         toast.error('OCR processing failed.');
       }
     }
@@ -95,7 +95,7 @@ const Page = () => {
     try {
       await bulkCreateStoreItem(formData).unwrap();
       toast.success('Items saved successfully.');
-    } catch (error) {
+    } catch{
       toast.error('Saving failed.');
     }
   };

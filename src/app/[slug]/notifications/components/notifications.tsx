@@ -4,10 +4,10 @@ import {
   useFetchNotificationsQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
-} from '@/slices/notifications/notifications'; 
+} from '@/slices/notifications/notifications';
 
 const Notifications = () => {
-  const { data: notifications, isLoading, isError, refetch } = useFetchNotificationsQuery();
+  const { data, isLoading, isError, refetch } = useFetchNotificationsQuery();
   const [markNotificationAsRead, { isLoading: markingSingle }] = useMarkNotificationAsReadMutation();
   const [markAllNotificationsAsRead, { isLoading: markingAll }] = useMarkAllNotificationsAsReadMutation();
 
@@ -36,7 +36,7 @@ const Notifications = () => {
     <div className="max-w-2xl mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Notifications</h2>
-        {notifications?.length > 0 && (
+        {(data?.notifications?.length ?? 0) > 0 && (
           <button
             onClick={handleMarkAllAsRead}
             disabled={markingAll}
@@ -47,16 +47,15 @@ const Notifications = () => {
         )}
       </div>
 
-      {notifications?.length === 0 ? (
+      {data?.notifications?.length === 0 ? (
         <p>No notifications found.</p>
       ) : (
         <ul className="space-y-3">
-          {notifications?.map((notification: any) => (
+          {data?.notifications?.map((notification) => (
             <li
               key={notification.id}
-              className={`p-4 rounded-lg shadow-md ${
-                notification.read_at ? 'bg-gray-100' : 'bg-white border border-blue-400'
-              }`}
+              className={`p-4 rounded-lg shadow-md ${notification.read_at ? 'bg-gray-100' : 'bg-white border border-blue-400'
+                }`}
             >
               <div className="flex justify-between items-center">
                 <div>

@@ -11,7 +11,7 @@ const Page = () => {
   const { data, isLoading, error } = useGetWorkingTasksQuery();
   
   const tasks = data?.data || [];
-    const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
+    const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   
   const companySlug = selectedCompany?.selected_company?.company_slug;
 

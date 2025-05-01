@@ -102,7 +102,15 @@ const Page: React.FC = () => {
       <Link href={`/${companySlug}/store`} className="back-button">
         <FaArrowLeft size={20} color="#fff" />
       </Link>
-      <ResponsiveTable data={vendors} columns={columns} />
+      <ResponsiveTable data={vendors} columns={columns} onDelete={(id: number) => {
+        console.log('Delete attendance with ID:', id);
+      }}
+      onEdit={(id: number) => {
+        console.log('Edit attendance with ID:', id);
+      }}
+      onView={(id: number) => {
+        console.log('View attendance with ID:', id);
+      }}/>
     </>
   );
 };

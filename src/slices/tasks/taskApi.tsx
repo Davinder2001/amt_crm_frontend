@@ -86,17 +86,17 @@ export const tasksApi = apiSlice.injectEndpoints({
     }),
 
     // ✅ Predefined Task CRUD
-    getPredefinedTasks: builder.query<any, void>({
+    getPredefinedTasks: builder.query<PredefinedTasksResponse, void>({
       query: () => 'predefined-tasks',
       providesTags: ['Task'],
     }),
 
-    getSinglePredefinedTask: builder.query<any, number>({
+    getSinglePredefinedTask: builder.query<PredefinedTask, number>({
       query: (id) => `predefined-tasks/${id}`,
       providesTags: ['Task'],
     }),
 
-    createPredefinedTask: builder.mutation<any, Partial<any>>({
+    createPredefinedTask: builder.mutation<PredefinedTask, Partial<PredefinedTask>>({
       query: (task) => ({
         url: 'predefined-tasks',
         method: 'POST',
@@ -105,7 +105,7 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-    updatePredefinedTask: builder.mutation<any, { id: number; data: Partial<any> }>({
+    updatePredefinedTask: builder.mutation<PredefinedTask, { id: number; data: Partial<PredefinedTask> }>({
       query: ({ id, data }) => ({
         url: `predefined-tasks/${id}`,
         method: 'PUT',
@@ -114,7 +114,7 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-    deletePredefinedTask: builder.mutation<any, number>({
+    deletePredefinedTask: builder.mutation<PredefinedTask, number>({
       query: (id) => ({
         url: `predefined-tasks/${id}`,
         method: 'DELETE',

@@ -23,7 +23,7 @@ const ViewUserPage: React.FC = () => {
     isLoading: usersLoading,
   } = useFetchEmployeByIdQuery(Number(id));
 
-  const user = data?.employee;
+  const user = data;
 
   useEffect(() => {
     if (usersError) {
@@ -43,9 +43,9 @@ const ViewUserPage: React.FC = () => {
 
       <div className="profile-card">
       <div className="profile-mage-wrapper">
-          {user?.profilePicture ? (
+          {user?.profile_picture ? (
             <Image
-              src={user.profilePicture}
+              src={user.profile_picture}
               alt={user.name}
               className="profile-image"
               width={100}

@@ -32,7 +32,11 @@ const Page = () => {
       const formattedDates = [...selectedDates]
         .sort((a, b) => a.getTime() - b.getTime())
         .map(date => date.toISOString().split('T')[0]); // Converts to "YYYY-MM-DD"
-      const response = await applyForLeave({ dates: formattedDates }).unwrap();
+      const response = await applyForLeave({
+        dates: formattedDates,
+        subject: '',
+        description: ''
+      }).unwrap();
       console.log('Leave applied successfully:', response);
     } catch (err) {
       console.error('Error applying leave:', err);

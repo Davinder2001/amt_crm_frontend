@@ -3,6 +3,10 @@
 @use './fonts.scss' as *;
 
 
+// homepage styling
+@use './homepage.scss' as *;
+
+
 // admin dashboard section
 @use './adminDashboard/dashboard.scss' as *;
 

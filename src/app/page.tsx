@@ -7,13 +7,14 @@ import EmployeeHome from '@/components/pages/EmployeeHome';
 import SuperAdminHome from '@/components/pages/SuperAdminHome';
 
 import { useCompany } from '@/utils/Company';
+import Homepage from '@/components/pages/Homepage';
 
 function Page() {
   const { userType } = useCompany();
 
   switch (userType) {
     case 'admin':
-      return <AdminHome />;
+      return <Homepage />;
     case 'super-admin':
       return <SuperAdminHome />;
     case 'employee':

@@ -141,21 +141,21 @@ const UserList: React.FC = () => {
   if (error) return <p>Error fetching employees.</p>;
   if (employees.length === 0) return <p>No employees found.</p>;
 
-  const update = (employee: Employee) => {
-    if (!employee.company_slug) {
-      toast.error('Company slug not found for employee');
-      return;
-    }
-    router.push(`/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`);
-  };
+  // const update = (employee: Employee) => {
+  //   if (!employee.company_slug) {
+  //     toast.error('Company slug not found for employee');
+  //     return;
+  //   }
+  //   router.push(`/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`);
+  // };
 
-  const view = (employee: Employee) => {
-    if (!employee.company_slug) {
-      toast.error('Company slug not found for employee');
-      return;
-    }
-    router.push(`/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`);
-  };
+  // const view = (employee: Employee) => {
+  //   if (!employee.company_slug) {
+  //     toast.error('Company slug not found for employee');
+  //     return;
+  //   }
+  //   router.push(`/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`);
+  // };
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 

@@ -132,7 +132,7 @@ const ViewUserPage: React.FC = () => {
 
       <ConfirmDialog
         isOpen={showConfirm}
-        message="Are you sure you want to delete this item? This action cannot be undone."
+        message="Are you sure you want to delete this Profile? This action cannot be undone."
         onConfirm={handleDelete}
         onCancel={() => setShowConfirm(false)}
       />

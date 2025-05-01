@@ -1,15 +1,30 @@
 'use client'
-import React from 'react';
-import { useParams } from 'next/navigation';
+import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useFetchStoreItemQuery } from '@/slices/store/storeApi';
+import { useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
 import Image from 'next/image';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { useCompany } from '@/utils/Company';
 
 const ViewItem = () => {
-  const { companySlug, id } = useParams();
+  const { id } = useParams();
   const { data: item, error, isLoading } = useFetchStoreItemQuery(Number(id));
+  const [deleteStoreItem] = useDeleteStoreItemMutation();
   console.log('images', item?.images);
-  
+  const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
+  const {companySlug} = useCompany();
+
+  const handleDelete = async () => {
+    try {
+      await deleteStoreItem(Number(id)).unwrap();
+      setShowConfirm(false);
+      router.push(`/${companySlug}/store`);
+    } catch (err) {
+      console.error('Error deleting item:', err);
+    }
+  };
 
   if (isLoading) return <p>Loading item...</p>;
   if (error) return <p>Error loading item.</p>;
@@ -58,13 +73,25 @@ const ViewItem = () => {
         </div>
       )}
 
-      <div className="buttons-container ">
+      <div className="buttons-container">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
           <button className="buttons" >
             Edit Item
           </button>
         </Link>
+        <button
+          onClick={() => setShowConfirm(true)}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Delete Item
+        </button>
       </div>
+      <ConfirmDialog
+        isOpen={showConfirm}
+        message="Are you sure you want to delete this item? This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 };

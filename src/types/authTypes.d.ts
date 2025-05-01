@@ -52,6 +52,13 @@ interface UsersResponse {
     user: Profile;
 }
 
+interface CreateUserRequest {
+    name: string;
+    email: string;
+    password: string;
+    role: "admin" | "employee" | "user" | "super-admin";
+}
+
 // Response type for fetching selected company
 interface SelectedCompanyResponse {
     company_user_role: "admin" | "employee" | "user" | "super-admin";

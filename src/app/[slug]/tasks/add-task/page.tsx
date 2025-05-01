@@ -27,9 +27,9 @@ const Page: React.FC = () => {
   // const { data: profileData } = useFetchProfileQuery();
 
   useEffect(() => {
-    if (formData.assignedTo && usersData?.users.length) {
-      const selectedUser = usersData.users.find(
-        (user) => user.id.toString() === formData.assignedTo
+    if (formData.assignedTo && usersData?.user.length) {
+      const selectedUser = usersData.user.find(
+        (user: { id: { toString: () => string; }; }) => user.id.toString() === formData.assignedTo
       );
       if (selectedUser) {
         const userRole = selectedUser.roles?.[0]?.name || '';
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
             required
           >
             <option value="">Select a user</option>
-            {usersData?.users.map((user) => (
+            {usersData?.user.map((user: UserProfile) => (
               <option key={user.id} value={user.id}>
                 {user.name}
               </option>

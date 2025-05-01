@@ -10,7 +10,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    createUser: builder.mutation<User, CreateUserRequest>({
+    createUser: builder.mutation<UserProfile, CreateUserRequest>({
       query: (newUser) => ({
         url: "users",
         method: "POST",
@@ -30,7 +30,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
     }),
 
     updateUser: builder.mutation<
-      User,
+      UserProfile,
       { id: number; name: string; email: string; role: string }
     >({
       query: ({ id, ...data }) => ({

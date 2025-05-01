@@ -13,22 +13,19 @@ interface StoreItem {
   online_visibility: string;
   description: string;
   item_code: string;
-  catalog: number | null;
+  catalog?: number | boolean | null;
   brand_name: string;
   replacement: string | null;
   category: string | null;
   vendor_name: string | null;
   availability_stock: number;
-  date_of_manufacture: string;
-  date_of_expiry: string | null;
-  category: string | null;
-  brand_name: string;
   created_at: string;
   updated_at: string;
   images: (string | File)[];
   final_cost: number;
   categories: Category[];
   variants: variations[];
+  taxes?: { name: string; rate: number }[];
 }
 
 interface Category {

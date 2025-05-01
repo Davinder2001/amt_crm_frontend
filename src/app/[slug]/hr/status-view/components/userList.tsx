@@ -126,7 +126,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 

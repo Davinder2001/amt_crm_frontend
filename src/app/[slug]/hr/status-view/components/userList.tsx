@@ -165,13 +165,8 @@ const UserList: React.FC = () => {
     try {
       await deleteEmployee(id).unwrap();
       toast.success('Employee deleted successfully!');
-    } catch (err: unknown) {
-      if (err && typeof err === 'object' && 'data' in err) {
-        const error = err as { data: { message: string } };
-        toast.error(error?.data?.message || 'Failed to delete employee.');
-      } else {
-        toast.error('Failed to delete employee. Please try again.');
-      }
+    } catch {
+      toast.error('Failed to delete employee. Please try again.');
     }
   };
 
@@ -189,22 +184,22 @@ const UserList: React.FC = () => {
     { label: 'Phone Number', key: 'number' as keyof Employee },
     { label: 'Company', key: 'company_name' as keyof Employee },
     { label: 'Status', key: 'user_status' as keyof Employee },
-    {
-      label: 'Action',
-      render: (emp: Employee) => (
-        <div className="store-t-e-e-icons">
-          <span onClick={() => handleDelete(emp.id)}><FaTrash /></span>
-          <span onClick={() => update(emp)}><FaEdit /></span>
-          <span onClick={() => view(emp)}><FaEye /></span>
-        </div>
-      ),
-    },
+    // {
+    //   label: 'Action',
+    //   render: (emp: Employee) => (
+    //     <div className="store-t-e-e-icons">
+    //       <span onClick={() => handleDelete(emp.id)}><FaTrash /></span>
+    //       <span onClick={() => update(emp)}><FaEdit /></span>
+    //       <span onClick={() => view(emp)}><FaEye /></span>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return <ResponsiveTable data={employees} columns={columns}
     onDelete={(id) => handleDelete(id)}
-    onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-    onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)} />;
+    onEdit={(id) => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
+    onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)} />;
 };
 
 export default UserList;

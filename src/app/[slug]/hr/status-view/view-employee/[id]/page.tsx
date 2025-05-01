@@ -1,16 +1,23 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchEmployeByIdQuery } from '@/slices/employe/employe';
 import HrNavigation from '../../../components/hrNavigation';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import { useDeleteEmployeMutation } from '@/slices/employe/employe';
+import { useCompany } from '@/utils/Company';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
+  const [deleteEmployee] = useDeleteEmployeMutation();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const { companySlug } = useCompany();
+  const router = useRouter();
 
   useEffect(() => {
     setTitle('Employee Profile');
@@ -36,13 +43,23 @@ const ViewUserPage: React.FC = () => {
 
   const firstLetter = user?.name?.[0]?.toUpperCase();
 
+  const handleDelete = async () => {
+    try {
+      await deleteEmployee(Number(id)).unwrap();
+      setShowConfirm(false);
+      router.push(`/${companySlug}/hr`);
+    } catch (err) {
+      console.error('Error deleting item:', err);
+    }
+  };
+
   return (
-    
+
     <div className="container employ-prpofile-container">
       <HrNavigation />
 
       <div className="profile-card">
-      <div className="profile-mage-wrapper">
+        <div className="profile-mage-wrapper">
           {user?.profile_picture ? (
             <Image
               src={user.profile_picture}
@@ -59,13 +76,13 @@ const ViewUserPage: React.FC = () => {
         <div className="profile-info">
           <h2 style={{ textTransform: 'capitalize' }}>{user.name}</h2>
           <div className='employ-details-wraper'>
-          <p className="employee-meta">
-            Role: {user.roles?.[0]?.name || 'N/A'} | Employee ID: <strong>{user.id}</strong>
-          </p>
-          <p className="employee-meta">
-            Company: {user.company_name || 'N/A'} | Status: {user.user_status}
-          </p>
-          <p className="bio">This is a detailed employee profile view.</p>
+            <p className="employee-meta">
+              Role: {user.roles?.[0]?.name || 'N/A'} | Employee ID: <strong>{user.id}</strong>
+            </p>
+            <p className="employee-meta">
+              Company: {user.company_name || 'N/A'} | Status: {user.user_status}
+            </p>
+            <p className="bio">This is a detailed employee profile view.</p>
           </div>
           <div className="info-row">
             <span><strong>Mobile:</strong> {user.number || 'N/A'}</span>
@@ -106,7 +123,20 @@ const ViewUserPage: React.FC = () => {
         </div>
       </div>
 
-      
+      <button
+        onClick={() => setShowConfirm(true)}
+        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Delete Profile
+      </button>
+
+      <ConfirmDialog
+        isOpen={showConfirm}
+        message="Are you sure you want to delete this item? This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
+
     </div>
   );
 };

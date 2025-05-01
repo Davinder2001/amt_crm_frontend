@@ -74,7 +74,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </thead>
           <tbody>
             {currentData.map((item, index) => (
-              <tr key={index}>
+              <tr key={index} onClick={() => onView(item.id)}>
                 {columns.map((col, i) => (
                   <td key={i}>
                     {col.render

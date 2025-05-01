@@ -64,18 +64,27 @@
 
 
 
-'use client';
-
-import React from 'react';
+"use client";
+import React, { useEffect } from 'react'
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useParams } from 'next/navigation';
 import { useFetchSingleCompanyQuery } from '@/slices/superadminSlices/company/companyApi';
+import { useRouter } from 'next/navigation';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const ViewCompanyPage = () => {
+  const { setTitle } = useBreadcrumb();
+
+      useEffect(() => {
+        setTitle('Company View'); // Update breadcrumb title
+      }, [setTitle]);
+
   const { id } = useParams();
   const { data, isLoading, error } = useFetchSingleCompanyQuery(id as string);
 
   if (isLoading) return <div>Loading company details...</div>;
   if (error) return <div>Error loading company details.</div>;
+  const router = useRouter();
 
   const company = data?.data as unknown as {
     company_name: string;
@@ -92,9 +101,18 @@ const ViewCompanyPage = () => {
   };
 
   if (!company) return <div>Company not found.</div>;
-
   return (
     <div className="vc-container">
+      <div className='vC-back-btn'>
+      <button
+      onClick={() => router.back()}
+      className="buttons"
+    >
+      <FaArrowLeft/>Back
+    </button>
+    </div>
+    <div className="vc-inner-container">
+      
       <header className="vc-header">
         <h1 className="vc-title">{company.company_name}</h1>
         <p className="vc-subtitle">
@@ -145,6 +163,7 @@ const ViewCompanyPage = () => {
           )}
         </div>
       )}
+    </div>
     </div>
   );
 };

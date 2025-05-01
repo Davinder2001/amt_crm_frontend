@@ -1,6 +1,7 @@
-'use client';
+"use client";
+import React, { useEffect } from 'react'
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
-import React from 'react';
 import {
   useFetchPendingCompaniesQuery,
   useVerifyCompanyPaymentMutation,
@@ -8,6 +9,12 @@ import {
 } from '@/slices/superadminSlices/company/companyApi';
 
 const PendingCompaniesPage = () => {
+  const { setTitle } = useBreadcrumb();
+    
+      useEffect(() => {
+        setTitle('Pending Companies'); // Update breadcrumb title
+      }, [setTitle]);
+
   const { data, isLoading, error, refetch } = useFetchPendingCompaniesQuery();
   const [verifyPayment, { isLoading: isVerifyingPayment }] = useVerifyCompanyPaymentMutation();
   const [verifyStatus, { isLoading: isVerifyingStatus }] = useVerifyCompanyStatusMutation();
@@ -39,8 +46,6 @@ const PendingCompaniesPage = () => {
 
   return (
     <div>
-      <h1>Pending Companies</h1>
-
       {data?.data?.length ? (
         <table border={1}>
           <thead>

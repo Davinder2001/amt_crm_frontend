@@ -252,6 +252,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
 import {
   useFetchSingleCompanyQuery,
@@ -284,6 +285,11 @@ interface FormDataState {
 }
 
 const EditCompanyPage = () => {
+  const { setTitle } = useBreadcrumb();
+    
+      useEffect(() => {
+        setTitle('Edit Company'); // Update breadcrumb title
+      }, [setTitle]);
   const params = useParams();
   const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : '';
   const router = useRouter();
@@ -354,7 +360,6 @@ const EditCompanyPage = () => {
 
   return  (
     <div className="edit-company-wrapper">
-      <h1>Edit Company</h1>
       <form onSubmit={handleSubmit} className="edit-company-form">
         {([
           ['Company Name', 'company_name'],

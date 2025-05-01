@@ -1,10 +1,10 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 interface Company {
   id: number;
@@ -22,6 +22,11 @@ const CompanyComponent: React.FC = () => {
   const router = useRouter();
 
   const [localCompanies, setLocalCompanies] = useState<Company[]>([]);
+const { setTitle } = useBreadcrumb();
+  
+    useEffect(() => {
+      setTitle('All Companies'); // Update breadcrumb title
+    }, [setTitle]);
 
   useEffect(() => {
     if (data?.data) {

@@ -1,10 +1,13 @@
 @use '../variables' as *;
 .Sdash-container{
+    padding: 20px;
+    background-color: $white;
+    border-radius: 15px;
     .card-title {
         font-size: 18px;
     }
     p{
-        color: $primary-color;
+        color: coral;
         font-size: 26px;
         
     }

@@ -21,19 +21,6 @@ const Items: React.FC = () => {
   const router = useRouter();
 
   const { data: items, error, isLoading } = useFetchStoreQuery();
-  interface StoreItem {
-    id: number;
-    item_code: string;
-    name: string;
-    purchase_date: string;
-    date_of_manufacture: string;
-    date_of_expiry: string;
-    brand_name: string;
-    quantity_count: number;
-    catalog?: boolean;
-    taxes?: { name: string; rate: number }[]; // Added taxes property
-  }
-  
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
         ...item,
@@ -92,7 +79,7 @@ const Items: React.FC = () => {
     { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
     { label: 'Taxes', key: 'taxes' as keyof StoreItem }, // ✅ taxes here instead of replacement
     { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
-    { label: 'Actions', key: 'actions' as keyof StoreItem },
+    // { label: 'Actions', key: 'actions' as keyof StoreItem },
     // { label: 'Catalog', key: 'catalog' as keyof StoreItem },
   ];
 

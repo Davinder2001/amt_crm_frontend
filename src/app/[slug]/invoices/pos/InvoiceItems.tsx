@@ -38,7 +38,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
   const openModal = (item: StoreItem) => {
     if (!Array.isArray(item.images) || item.images.length === 0) {
-      return; 
+      return;
     }
     setSelectedItem(item);
     setCurrentImageIndex(0);
@@ -129,41 +129,41 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                     height={100}
                     className="item-image-img"
                   />
-                  {isHovered && (
-                    <div className="cart-navs">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (item.variants && item.variants.length > 1) {
-                            setVariantModalItem(item);
-                          } else if (item.variants && item.variants.length === 1) {
-                            onAddToCart(item, item.variants[0]);
-                          } else {
-                            onAddToCart(item);
-                          }
-                        }}
-                        className="cart-btn"
-                        title="Add to Cart"
-                      >
-                        <FiShoppingCart />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleWishlist(item.id);
-                        }}
-                        className="cart-btn"
-                        title="Add to Wishlist"
-                      >
-                        {wishlistItems.includes(item.id) ? <AiFillHeart /> : <FiHeart />}
-                      </button>
-                    </div>
-                  )}
+                  <div className="cart-navs">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist(item.id);
+                      }}
+                      className="cart-btn"
+                      title="Add to Wishlist"
+                    >
+                      {wishlistItems.includes(item.id) ? <AiFillHeart /> : <FiHeart />}
+                    </button>
+                  </div>
+
                 </div>
 
                 <div className="item-details">
                   <h4 className="item-name">{item.name}</h4>
                   <p className="item-price">{priceDisplay}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (item.variants && item.variants.length > 1) {
+                        setVariantModalItem(item);
+                      } else if (item.variants && item.variants.length === 1) {
+                        onAddToCart(item, item.variants[0]);
+                      } else {
+                        onAddToCart(item);
+                      }
+                    }}
+                    className="addcart-btn"
+                    title="Add to Cart"
+                  >
+                    <FiShoppingCart />
+                    <span>Add To Cart</span>
+                  </button>
                 </div>
               </li>
             );

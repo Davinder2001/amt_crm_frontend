@@ -274,7 +274,7 @@ export default function Homepage() {
 }
 
 export const UserFooter = () => {
-  const router = useRouter();
+  // const router = useRouter();
   return (
     <>
       {/* Footer Section */}

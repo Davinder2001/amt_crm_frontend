@@ -63,7 +63,7 @@ const ProfileIcon: React.FC = () => {
 
   useEffect(() => {
     const accessToken = Cookies.get("access_token");
-    const userType = Cookies.get('user_type') ?? 'user';
+    const userType = Cookies.get("user_type");
 
     if (!accessToken || !userType) {
       setIsAuthenticated(false);

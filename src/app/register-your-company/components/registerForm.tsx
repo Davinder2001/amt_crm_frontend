@@ -149,11 +149,12 @@ const RegisterForm: React.FC = () => {
 
       <style jsx>{`
         .form-wrapper {
-          display: flex;
           justify-content: center;
           align-items: center;
           padding: 50px 0;
-          background: #f9f9f9;
+          background: none;
+          max-width: 1440px;
+          margin: auto;
         }
         .form-container {
           padding: 30px;

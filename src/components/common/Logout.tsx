@@ -30,7 +30,7 @@ function Logout() {
 
     useEffect(() => {
         const accessToken = Cookies.get('access_token');
-        const userType = Cookies.get('user_type') ?? 'user';
+        const userType = Cookies.get('user_type');
 
         if (!accessToken || !userType) {
             setUser(null); // Clear context if cookies are missing

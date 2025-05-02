@@ -1,12 +1,19 @@
 @use '../variables' as *;
+
 // nav section styling
-.back-button{
+.back-button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color:$primary-color;
+    background-color: $primary-color;
     color: $white;
     padding: 10px;
     border-radius: 10px;
     margin: 20px 0px 20px 0px;
+}
+
+@media (max-width:468px) {
+    .back-button {
+        display: none;
+    }
 }

@@ -36,10 +36,15 @@ export default function CheckoutPanel({
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'due'>('');
+    const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'credit'>('');
     const [discountType, setDiscountType] = useState<'amount' | 'percentage'>('amount');
     const [discountAmount, setDiscountAmount] = useState<number>(0);
     const [discountPercent, setDiscountPercent] = useState<number>(0);
+    const [serviceChargeType, setServiceChargeType] = useState<'amount' | 'percentage'>('amount');
+    const [serviceChargeAmount, setServiceChargeAmount] = useState(0);
+    const [serviceChargePercent, setServiceChargePercent] = useState(0);
+    const [creditPaymentType, setCreditPaymentType] = useState<'full' | 'partial'>('full');
+    const [partialAmount, setPartialAmount] = useState(0);
     const [address, setAddress] = useState('');
     const [pincode, setPincode] = useState('');
     const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
@@ -55,6 +60,11 @@ export default function CheckoutPanel({
         discount_price: discountAmount,
         percentage: discountPercent,
         discount_type: discountType,
+        serviceChargeAmount: serviceChargeAmount,
+        serviceChargePercent: serviceChargePercent,
+        serviceChargeType: serviceChargeType,
+        creditPaymentType: creditPaymentType,
+        partialAmount: partialAmount,
         item_type: activeTab,
         payment_method: paymentMethod,
         address: address,
@@ -182,6 +192,12 @@ export default function CheckoutPanel({
                 setDiscountType={setDiscountType}
                 discountPercent={discountPercent}
                 setDiscountPercent={setDiscountPercent}
+                serviceChargeAmount={serviceChargeAmount}
+                setServiceChargeAmount={setServiceChargeAmount}
+                serviceChargeType={serviceChargeType}
+                setServiceChargeType={setServiceChargeType}
+                serviceChargePercent={serviceChargePercent}
+                setServiceChargePercent={setServiceChargePercent}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
                 address={address}
@@ -190,6 +206,10 @@ export default function CheckoutPanel({
                 setPincode={setPincode}
                 deliveryCharge={deliveryCharge}
                 setDeliveryCharge={setDeliveryCharge}
+                creditPaymentType={creditPaymentType}
+                setCreditPaymentType={setCreditPaymentType}
+                partialAmount={partialAmount}
+                setPartialAmount={setPartialAmount}
             />
             <div className="content">
                 {activeTab === 'Cart' && (

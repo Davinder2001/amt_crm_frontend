@@ -23,30 +23,17 @@ const Items: React.FC = () => {
   const { data: items, error, isLoading } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
-        ...item,
-        purchase_date: item.purchase_date || '',
-        date_of_manufacture: item.date_of_manufacture || '',
-        date_of_expiry: item.date_of_expiry || '',
-        catalog: item.catalog ? Boolean(item.catalog) : undefined,
-      }))
+      ...item,
+      purchase_date: item.purchase_date || '',
+      date_of_manufacture: item.date_of_manufacture || '',
+      date_of_expiry: item.date_of_expiry || '',
+      catalog: item.catalog ? Boolean(item.catalog) : undefined,
+    }))
     : [];
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [addToCatalog] = useAddToCatalogMutation();
   const [removeFromCatalog] = useRemoveFromCatalogMutation();
-
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'item_code',
-    'name',
-    'purchase_date',
-    'date_of_manufacture',
-    'date_of_expiry',
-    'brand_name',
-    'taxes',
-    'quantity_count',
-    'actions',
-    'catalog',
-  ]);
 
   const [filters, setFilters] = useState<Record<string, string[]>>({});
 
@@ -71,17 +58,23 @@ const Items: React.FC = () => {
   };
 
   const allColumns = [
-    { label: 'Item Code', key: 'item_code' as keyof StoreItem },
+    // { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
     { label: 'Name', key: 'name' as keyof StoreItem },
-    { label: 'Purchase Date', key: 'purchase_date' as keyof StoreItem },
+    { label: 'HSN Code', key: 'item_code' as keyof StoreItem },
+    // { label: 'Purchase Date', key: 'purchase_date' as keyof StoreItem },
     { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },
     { label: 'Date of Expiry', key: 'date_of_expiry' as keyof StoreItem },
-    { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
     { label: 'Taxes', key: 'taxes' as keyof StoreItem }, // ✅ taxes here instead of replacement
-    { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
+    { label: 'Selling Price', key: 'selling_price' as keyof StoreItem },
+    // { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
+    { label: 'Stock Avaible', key: 'availability_stock' as keyof StoreItem },
     // { label: 'Actions', key: 'actions' as keyof StoreItem },
     // { label: 'Catalog', key: 'catalog' as keyof StoreItem },
   ];
+
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    allColumns.map((col) => col.key as string)
+  );
 
   const handleFilterChange = (field: string, value: string, checked: boolean) => {
     setFilters((prev) => {
@@ -178,9 +171,9 @@ const Items: React.FC = () => {
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
         actions={[
-          { label: 'Add Item', onClick: () => router.push(`/${companySlug}/store/add-item`) },
-          { label: 'Add a Vendor', onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`) },
-          { label: 'Add As a Vendor', onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`) },
+          { label: 'Create New Item', onClick: () => router.push(`/${companySlug}/store/add-item`) },
+          { label: 'Create New Vendor', onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`) },
+          { label: 'Add Purchased bill', onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`) },
           { label: 'View All Vendor', onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
       />

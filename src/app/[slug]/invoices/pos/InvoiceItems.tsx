@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
-import { FiX, FiChevronLeft, FiChevronRight, FiShoppingCart, FiHeart } from 'react-icons/fi';
+import { FiX, FiChevronLeft, FiChevronRight, FiHeart } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
 import { placeholderImg } from '@/assets/useImage';
 
@@ -120,6 +120,19 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                 className={`item ${isHovered ? 'hovered' : ''}`}
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}
+                onClick={(e) => {
+                  // Make sure click is not on the image container
+                  const isImageClick = (e.target as HTMLElement).closest('.item-image');
+                  if (isImageClick) return;
+
+                  if (item.variants && item.variants.length > 1) {
+                    setVariantModalItem(item);
+                  } else if (item.variants && item.variants.length === 1) {
+                    onAddToCart(item, item.variants[0]);
+                  } else {
+                    onAddToCart(item);
+                  }
+                }}
               >
                 <div className="item-image" onClick={() => openModal(item)}>
                   <Image
@@ -135,7 +148,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                         e.stopPropagation();
                         toggleWishlist(item.id);
                       }}
-                      className="cart-btn"
+                      className={`cart-btn ${wishlistItems.includes(item.id) ? 'filled' : ''}`}
                       title="Add to Wishlist"
                     >
                       {wishlistItems.includes(item.id) ? <AiFillHeart /> : <FiHeart />}
@@ -147,23 +160,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
                 <div className="item-details">
                   <h4 className="item-name">{item.name}</h4>
                   <p className="item-price">{priceDisplay}</p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (item.variants && item.variants.length > 1) {
-                        setVariantModalItem(item);
-                      } else if (item.variants && item.variants.length === 1) {
-                        onAddToCart(item, item.variants[0]);
-                      } else {
-                        onAddToCart(item);
-                      }
-                    }}
-                    className="addcart-btn"
-                    title="Add to Cart"
-                  >
-                    <FiShoppingCart />
-                    <span>Add To Cart</span>
-                  </button>
                 </div>
               </li>
             );

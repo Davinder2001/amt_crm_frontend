@@ -1,6 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react'
-// import AddInvoiceFrom from '../components/addInvoiceFrom'
+import React, { useEffect, useState } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
@@ -9,16 +8,31 @@ import POSPage from '../pos/POSPage';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
-  const [isFullView, setIsFullView] = useState(false);
+  const { companySlug } = useCompany();
+
+  // ✅ Initialize from localStorage immediately (server-safe)
+  const [isFullView, setIsFullView] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const storedView = localStorage.getItem('isFullView');
+      return storedView === 'true';
+    }
+    return false;
+  });
+
   useEffect(() => {
     setTitle('Add Invoices');
   }, [setTitle]);
-  const { companySlug } = useCompany();
+
+  // ✅ Save to localStorage on change
+  useEffect(() => {
+    localStorage.setItem('isFullView', isFullView.toString());
+  }, [isFullView]);
 
   return (
     <>
-      <Link href={`/${companySlug}/invoices`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-      {/* <AddInvoiceFrom /> */}
+      <Link href={`/${companySlug}/invoices`} className="back-button">
+        <FaArrowLeft size={20} color="#fff" />
+      </Link>
       <div className={`creat-inv-page ${isFullView ? 'fullView' : 'autoView'}`}>
         <div className="fullView-content">
           <span style={{ display: 'flex', justifyContent: 'flex-end', padding: '0px 10px 10px 0px' }}>
@@ -32,35 +46,34 @@ const Page = () => {
         </div>
       </div>
       <style jsx>{`
-      .fullView {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000000000;
-}
-  .autoView .fullView-content{
-  
-  border-radius: 8px;
-  }
-  
-.fullView-content {
-padding: 10px 0px 0px 0px;
-  background: #fff;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  position: relative;
-}
+        .fullView {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.6);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999999;
+        }
 
+        .autoView .fullView-content {
+          border-radius: 8px;
+        }
+
+        .fullView-content {
+          padding: 10px 0px 0px 0px;
+          background: #fff;
+          width: 100%;
+          height: 100%;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          position: relative;
+        }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

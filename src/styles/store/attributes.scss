@@ -458,6 +458,26 @@
     position: relative;
     justify-content: space-between;
 
+    .delete-btn {
+      background-color: unset;
+      color: $primary-color;
+      border: none;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      align-self: flex-start;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  
+    .delete-btn:hover {
+      color: $danger-color;
+      font-size: 1rem;
+  
+    }
+
   }
 
   .attribute-card:hover {
@@ -518,25 +538,7 @@
     background: white;
   }
 
-  .delete-btn {
-    background-color: unset;
-    color: $primary-color;
-    border: none;
-    padding: 0.6rem 0.75rem;
-    font-size: 0.8rem;
-    border-radius: 6px;
-    cursor: pointer;
-    align-self: flex-start;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .delete-btn:hover {
-    color: $danger-color;
-    font-size: 1rem;
-
-  }
+  
 
   .toggle-switch {
     width: 42px;

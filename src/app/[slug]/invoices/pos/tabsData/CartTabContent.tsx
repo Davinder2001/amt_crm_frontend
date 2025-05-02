@@ -31,8 +31,18 @@ type CartTabContentProps = {
     setDiscountPercent: React.Dispatch<React.SetStateAction<number>>;
     discountType: 'amount' | 'percentage';
     setDiscountType: React.Dispatch<React.SetStateAction<'amount' | 'percentage'>>;
-    paymentMethod: '' | 'cash' | 'online' | 'card' | 'due';
-    setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'due'>>;
+    paymentMethod: '' | 'cash' | 'online' | 'card' | 'credit';
+    serviceChargeAmount: number;
+    setServiceChargeAmount: React.Dispatch<React.SetStateAction<number>>;
+    serviceChargeType: 'amount' | 'percentage';
+    setServiceChargeType: React.Dispatch<React.SetStateAction<'amount' | 'percentage'>>;
+    serviceChargePercent: number;
+    setServiceChargePercent: React.Dispatch<React.SetStateAction<number>>;
+    setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'credit'>>;
+    creditPaymentType: 'full' | 'partial';
+    setCreditPaymentType: React.Dispatch<React.SetStateAction<'full' | 'partial'>>;
+    partialAmount: number;
+    setPartialAmount: React.Dispatch<React.SetStateAction<number>>;
     address: string;
     setAddress: React.Dispatch<React.SetStateAction<string>>;
     pincode: string;
@@ -58,12 +68,18 @@ export default function CartTabContent({
     discountPercent, setDiscountPercent,
     address, setAddress,
     pincode, setPincode,
-    deliveryCharge, setDeliveryCharge
+    deliveryCharge, setDeliveryCharge,
+    serviceChargeAmount, setServiceChargeAmount,
+    serviceChargePercent, setServiceChargePercent,
+    serviceChargeType, setServiceChargeType,
+    creditPaymentType, setCreditPaymentType,
+    partialAmount, setPartialAmount,
 
 }: CartTabContentProps) {
     const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
     const [showPaymentDetails, setShowPaymentDetails] = useState(true);
     const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+    const [isServiceChargeApplied, setIsServiceChargeApplied] = useState(false);
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
 
@@ -104,7 +120,7 @@ export default function CartTabContent({
             return false;
         }
 
-
+        // Check for address if Delivery or Pickup tab is active
         if ((activeTab === 'Delivery' || activeTab === 'Pickup') && !address.trim()) {
             setActiveInnerTab('Client');
             toast.error(
@@ -115,17 +131,26 @@ export default function CartTabContent({
             return false;
         }
 
+        // Check for pincode if the Delivery tab is active
         if (activeTab === 'Delivery' && !pincode.trim()) {
             setActiveInnerTab('Client');
             toast.error('Please provide a pincode.');
             return false;
         }
 
+        // Ensure payment method is selected
         if (!paymentMethod) {
             setShowPaymentDetails(true);
             toast.error('Please select a payment method.');
             return false;
         }
+
+        if (paymentMethod === 'credit' && !partialAmount) {
+            setCreditPaymentType('full');
+            toast.error('Partial amount not specified, defaulting to full payment.');
+            return false;
+        }
+
         return true;
     };
 
@@ -143,6 +168,11 @@ export default function CartTabContent({
         setAddress('');
         setPincode('');
         setDeliveryCharge(0);
+        setServiceChargeType('amount');
+        setServiceChargeAmount(0);
+        setServiceChargePercent(0);
+        setPartialAmount(0);
+        setCreditPaymentType('full');
     };
 
     return (
@@ -319,7 +349,7 @@ export default function CartTabContent({
                         onClick={() => setShowPaymentDetails(!showPaymentDetails)}
                     >
                         <span>{showPaymentDetails ? '▼' : '▲'}</span>
-                        <span>Discounts & Payment</span>
+                        <span>Payments & Discount</span>
                     </div>
                     <div className="total">
                         Total:{' '}
@@ -332,7 +362,77 @@ export default function CartTabContent({
                 {showPaymentDetails && (
                     <div className="payment-section">
                         <div className="section-group">
-                            <div className="section-title">Discount Options</div>
+                            <div className="options-row" style={{ marginBottom: 5 }}>
+                                <label className="custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        checked={isServiceChargeApplied}
+                                        onChange={(e) => setIsServiceChargeApplied(e.target.checked)}
+                                    />
+                                    <span className="checkmark" />
+                                    <div className="section-title" style={{ margin: 0 }}>Service Charges*</div>
+                                </label>
+                            </div>
+
+                            {isServiceChargeApplied && (
+                                <div className="discount-input-container" style={{ marginBottom: 10 }}>
+                                    <div className="options-row">
+                                        <label className="custom-radio">
+                                            <input
+                                                type="radio"
+                                                name="serviceChargeType"
+                                                value="amount"
+                                                checked={serviceChargeType === 'amount'}
+                                                onChange={() => setServiceChargeType('amount')}
+                                            />
+                                            <span className="radiomark" />
+                                            Fixed Amount
+                                        </label>
+
+                                        <label className="custom-radio">
+                                            <input
+                                                type="radio"
+                                                name="serviceChargeType"
+                                                value="percentage"
+                                                checked={serviceChargeType === 'percentage'}
+                                                onChange={() => setServiceChargeType('percentage')}
+                                            />
+                                            <span className="radiomark" />
+                                            Percentage
+                                        </label>
+                                    </div>
+
+                                    {serviceChargeType === 'amount' ? (
+                                        <input
+                                            type="number"
+                                            value={serviceChargeAmount === 0 ? '' : serviceChargeAmount}
+                                            onChange={(e) => {
+                                                const val = Number(e.target.value);
+                                                setServiceChargeAmount(isNaN(val) ? 0 : val);
+                                            }}
+                                            placeholder="Enter service charge amount"
+                                            min={0}
+                                            max={baseTotal}
+                                        />
+                                    ) : (
+                                        <input
+                                            type="number"
+                                            value={serviceChargePercent === 0 ? '' : serviceChargePercent}
+                                            onChange={(e) => {
+                                                const val = Number(e.target.value);
+                                                setServiceChargePercent(isNaN(val) ? 0 : val);
+                                            }}
+                                            placeholder="Enter service charge %"
+                                            min={0}
+                                            max={100}
+                                        />
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="section-group">
+                            <div className="section-title">Discount Options*</div>
                             <div className="options-row">
                                 <label className="custom-checkbox">
                                     <input
@@ -409,7 +509,7 @@ export default function CartTabContent({
                         )}
 
                         <div className="section-group">
-                            <div className="section-title">Payment Method</div>
+                            <div className="section-title">Payment Method*</div>
                             <div className="options-row">
                                 <label className="custom-radio">
                                     <input
@@ -451,15 +551,64 @@ export default function CartTabContent({
                                     <input
                                         type="radio"
                                         name="paymentMethod"
-                                        value="due"
-                                        checked={paymentMethod === 'due'}
-                                        onChange={() => setPaymentMethod('due')}
+                                        value="credit"
+                                        checked={paymentMethod === 'credit'}
+                                        onChange={() => setPaymentMethod('credit')}
                                     />
                                     <span className="radiomark" />
-                                    Due
+                                    Credit
                                 </label>
+
+                                {paymentMethod === 'credit' && (
+                                    <div className="credit-options" style={{ marginTop: 10 }}>
+                                        <div className="options-row">
+                                            <label className="custom-radio">
+                                                <input
+                                                    type="radio"
+                                                    name="creditPaymentType"
+                                                    value="full"
+                                                    checked={creditPaymentType === 'full'}
+                                                    onChange={() => setCreditPaymentType('full')}
+                                                />
+                                                <span className="radiomark" />
+                                                Full Payment
+                                            </label>
+
+                                            <label className="custom-radio">
+                                                <input
+                                                    type="radio"
+                                                    name="creditPaymentType"
+                                                    value="partial"
+                                                    checked={creditPaymentType === 'partial'}
+                                                    onChange={() => setCreditPaymentType('partial')}
+                                                />
+                                                <span className="radiomark" />
+                                                Partial Payment
+                                            </label>
+                                        </div>
+
+                                        {creditPaymentType === 'partial' && (
+                                            <div className="form-group" style={{ marginTop: 10 }}>
+                                                <input
+                                                    type="number"
+                                                    value={partialAmount === 0 ? '' : partialAmount}
+                                                    onChange={(e) => {
+                                                        const val = Number(e.target.value);
+                                                        setPartialAmount(isNaN(val) ? 0 : val);
+                                                    }}
+                                                    placeholder="Enter partial payment amount"
+                                                    min={0}
+                                                    max={parseFloat(total)}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                             </div>
                         </div>
+
+
                     </div>
                 )}
 

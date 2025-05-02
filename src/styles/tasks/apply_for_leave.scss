@@ -96,24 +96,24 @@
       }
     }
   
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: teal; // Teal background
-      color: white;
-      padding: 8px 14px;
-      border-radius: 20px;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.3s ease;
+    // .back-button {
+    //   position: absolute;
+    //   top: 20px;
+    //   left: 20px;
+    //   background-color: teal; 
+    //   color: white;
+    //   padding: 8px 14px;
+    //   border-radius: 20px;
+    //   display: inline-flex;
+    //   justify-content: center;
+    //   align-items: center;
+    //   transition: all 0.3s ease;
   
-      &:hover {
-        background-color: darkcyan; // Dark cyan on hover
-        transform: scale(1.1);
-      }
-    }
+    //   &:hover {
+    //     background-color: darkcyan; 
+    //     transform: scale(1.1);
+    //   }
+    // }
   }
   
 
@@ -276,17 +276,17 @@
   }
   
   /* Back Button */
-  .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+  // .back-button {
+  //   position: absolute;
+  //   top: 20px;
+  //   left: 20px;
+  //   background-color: transparent;
+  //   border: none;
+  //   cursor: pointer;
+  //   transition: transform 0.3s ease;
   
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
+  //   &:hover {
+  //     transform: scale(1.1);
+  //   }
+  // }
   

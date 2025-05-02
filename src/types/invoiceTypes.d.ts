@@ -43,6 +43,11 @@ interface CreateInvoicePayload {
   discount_price?: number;
   percentage?: number;
   discount_type?: string;
+  serviceChargeAmount?: number;
+  serviceChargePercent?: number;
+  serviceChargeType?: string;
+  partialAmount?: number;
+  creditPaymentType?: string;
   item_type: TabType;
   payment_method: string;
   address?: string;

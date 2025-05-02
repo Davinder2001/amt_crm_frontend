@@ -38,6 +38,8 @@ const ListOverview = () => {
             { label: "Total Employees", value: isLoading ? <FaSpinner className="item-loader" /> : EmployeeCount, icon: FaUsers },
             { label: "Total Vendor", value: "600", icon: FaStore },
             { label: "Total Customer", value: "2935", icon: FaUserFriends },
+            { label: "Receiveable", value: "2935", icon: FaUserFriends },
+            { label: "Payable", value: "2935", icon: FaUserFriends },
           ].map((item, index) => (
             <div key={index} className="card">
               <span className="icon-shell">

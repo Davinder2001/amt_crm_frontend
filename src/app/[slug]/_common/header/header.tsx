@@ -26,7 +26,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
   const [isSticky, setIsSticky] = useState(false);
 
   // ✅ Fetch notifications
-  const { data} = useFetchNotificationsQuery(undefined, {
+  const { data } = useFetchNotificationsQuery(undefined, {
     pollingInterval: 30000, // (Optional) Refresh every 30 sec for live updates
   });
 

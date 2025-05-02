@@ -99,7 +99,7 @@ import { authRoutes, publicRoutes } from '@/routes';
 export function middleware(request: NextRequest) {
   const laravelSession = request.cookies.get('access_token');
   let companySlug = request.cookies.get('company_slug')?.value;
-  const userType = request.cookies.get('user_type')?.value;
+  const userType = request.cookies.get('user_type')?.value ?? 'user';
   const { pathname } = request.nextUrl;
 
   // ✅ Treat string "undefined" as a missing value

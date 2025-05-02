@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 export const useCompany = () => {
     return {
         companySlug: Cookies.get('company_slug'),
-        userType: Cookies.get('user_type'),
+        userType: Cookies.get('user_type') ?? 'user',
         accessToken: Cookies.get('access_token'),
     };
 };

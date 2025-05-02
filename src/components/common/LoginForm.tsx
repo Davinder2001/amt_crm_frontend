@@ -9,8 +9,6 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Image from 'next/image';
-import { logo } from '@/assets/useImage';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -71,14 +69,6 @@ const LoginForm = () => {
   return (
     <>
       <div className="login-page-container">
-        <div className="c-logo">
-          <Link href={`${user?.user_type === "employee" ? "/employee/dashboard" : "/"}`} className="logo-wrapper"><Image src={logo.src} alt="logo" width={50} height={50} /> <h1>AMT CRM</h1></Link>
-        </div>
-        <div className="login-header">
-          <h1>Welcome to Asset Management Technology!</h1>
-          <p>Sign in to continue and explore all the amazing features.</p>
-        </div>
-
         <div className="login-form-wrapper">
           {isLoggedIn ? (
             ''
@@ -125,9 +115,6 @@ const LoginForm = () => {
               Register your company
             </Link>
           </div>
-        </div>
-        <div className="formfooter">
-          <p>&copy; 2025 Your Company. All rights reserved.</p>
         </div>
       </div>
     </>

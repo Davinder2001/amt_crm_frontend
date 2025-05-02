@@ -40,12 +40,18 @@ const Profile: React.FC = () => {
       if (response?.data?.message) {
         toast.success(response?.data?.message);
         Cookies.remove('access_token');
-        Cookies.remove('user_type');
+        Cookies.set('user_type', 'user');
         Cookies.remove('company_slug');
 
         setIsAuthenticated(false);
 
-        router.push('/login');
+        if (userType === 'user') {
+          // Redirect to login page
+          router.push('/');
+        } else {
+          // Redirect to login page
+          router.push('/login');
+        }
         router.refresh();
       } else {
         toast.error(response?.data?.message)

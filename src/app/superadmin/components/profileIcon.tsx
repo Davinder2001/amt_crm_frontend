@@ -8,11 +8,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
+import { useCompany } from "@/utils/Company";
 
 const ProfileIcon: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logout] = useLogoutMutation();
   const router = useRouter();
+  const { userType } = useCompany();
 
   const { setUser } = useUser();
 
@@ -43,7 +45,13 @@ const ProfileIcon: React.FC = () => {
         setIsAuthenticated(false);
         setUser(null);
 
-        router.push("/login");
+        if (userType === 'user') {
+          // Redirect to home page
+          router.push('/');
+        } else {
+          // Redirect to login page
+          router.push('/login');
+        };
         router.refresh();
       } else {
         toast.error("Logout failed");
@@ -55,7 +63,7 @@ const ProfileIcon: React.FC = () => {
 
   useEffect(() => {
     const accessToken = Cookies.get("access_token");
-    const userType = Cookies.get("user_type");
+    const userType = Cookies.get('user_type') ?? 'user';
 
     if (!accessToken || !userType) {
       setIsAuthenticated(false);

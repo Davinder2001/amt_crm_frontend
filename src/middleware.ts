@@ -109,7 +109,7 @@ export function middleware(request: NextRequest) {
 
   // If not logged in → Redirect to /login (except for /login itself)
   if (!laravelSession) {
-    if (!authRoutes.includes(pathname)) {
+    if (!authRoutes.includes(pathname) && !publicRoutes.includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     return NextResponse.next();

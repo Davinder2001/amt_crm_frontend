@@ -20,7 +20,7 @@ function Logout() {
         Cookies.remove('company_slug');
 
         if (userType === 'user') {
-            // Redirect to login page
+            // Redirect to home page
             router.push('/');
         } else {
             // Redirect to login page
@@ -30,7 +30,7 @@ function Logout() {
 
     useEffect(() => {
         const accessToken = Cookies.get('access_token');
-        const userType = Cookies.get('user_type');
+        const userType = Cookies.get('user_type') ?? 'user';
 
         if (!accessToken || !userType) {
             setUser(null); // Clear context if cookies are missing

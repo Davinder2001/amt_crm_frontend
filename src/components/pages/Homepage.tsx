@@ -16,8 +16,8 @@ export const UserNavbar = () => {
               <span>Asset Management Technology</span></Link>
           </div>
           <nav className="nav">
-            <Link href="#">Home</Link>
-            <Link href="#">Company</Link>
+            <Link href="/">Home</Link>
+            <Link href="/about">Company</Link>
             <Link href="#">Dashboard</Link>
             <Link href="#">Price</Link>
           </nav>
@@ -274,6 +274,7 @@ export default function Homepage() {
 }
 
 export const UserFooter = () => {
+  const router = useRouter();
   return (
     <>
       {/* Footer Section */}
@@ -293,17 +294,18 @@ export const UserFooter = () => {
               <h3>Company</h3>
               <ul>
                 <li>Team</li>
-                <li>About</li>
+                <li><Link href={'/about'}>About</Link></li>
                 <li>Careers</li>
                 <li>Newsroom</li>
                 <li>FAQ</li>
+                <li><Link href={'/contact'}>Contact Us</Link></li>
               </ul>
             </div>
             <div>
               <h3>Legal</h3>
               <ul>
                 <li>Disclosures</li>
-                <li>Privacy</li>
+                <li><Link href={'/privacy-policy'}>Privacy</Link></li>
                 <li>Terms of Service</li>
                 <li>Security</li>
               </ul>

@@ -99,7 +99,13 @@
             }
         }
     }
-
+    .dropdown-left{
+        .dropdown-content{
+            padding-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+    }
     .dropdown-right {
         .dropdown-content {
             right: 0;
@@ -114,11 +120,13 @@
         border-radius: 12px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         min-width: 240px;
+        max-height: 700px;
+        overflow: auto;
         opacity: 0;
         visibility: hidden;
         transform: translateY(10px);
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-        z-index: 100;
+        z-index: 99999;
         border: 1px solid rgba(0, 150, 147, 0.1);
         padding: 8px;
 

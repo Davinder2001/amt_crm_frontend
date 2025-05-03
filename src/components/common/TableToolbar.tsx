@@ -10,6 +10,7 @@ interface Column {
 
 interface Action {
     label: string;
+    icon?: React.ReactNode;
     onClick: () => void;
 }
 
@@ -111,12 +112,15 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             {/* Left Side: Filter */}
             <div className="left-group">
                 <div className="dropdown dropdown-left">
-                    <button onClick={() => toggleDropdown('filter')} className='toolbar-btn'>
+                    <button
+                        onClick={() => toggleDropdown('filter')}
+                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
+                    >
                         <FiFilter />
                         <span className='hide-mobile'>Filter</span>
                     </button>
                     {openDropdown === 'filter' && (
-                        <div className="dropdown-content">
+                        <div className="dropdown-content show">
                             {Object.entries(filters).map(([field, options]) => (
                                 <div key={field} className="section">
                                     <p className="title">{field}</p>
@@ -142,12 +146,14 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             {/* Right Side: Columns & Actions */}
             <div className="right-group">
                 <div className="dropdown dropdown-right">
-                    <button onClick={() => toggleDropdown('columns')} className='toolbar-btn'>
+                    <button onClick={() => toggleDropdown('columns')}
+                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
+                    >
                         <FiColumns />
                         <span >Columns</span>
                     </button>
                     {openDropdown === 'columns' && (
-                        <div className="dropdown-content">
+                        <div className="dropdown-content show">
                             {columns.map((col) => (
                                 <label key={col.key} className="option">
                                     <input
@@ -177,17 +183,22 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     </button>
                 </div>
                 <div className="dropdown dropdown-right">
-                    <button onClick={() => toggleDropdown('actions')} className='toolbar-btn'>
+                    <button onClick={() => toggleDropdown('actions')}
+                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
+                    >
                         <FiSettings />
                         <span>Actions</span>
                     </button>
                     {openDropdown === 'actions' && (
-                        <div className="dropdown-content">
-                            {actions.map((action, i) => (
-                                <button key={i} onClick={action.onClick}>
-                                    {action.label}
-                                </button>
-                            ))}
+                        <div className="dropdown-content show">
+                            <ul className="action-list">
+                                {actions.map((action, i) => (
+                                    <li key={i} onClick={action.onClick} className="action-item">
+                                        {action.icon && <span className="a-icon">{action.icon}</span>}
+                                        <span>{action.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     )}
                 </div>

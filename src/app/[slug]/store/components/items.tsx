@@ -10,7 +10,7 @@ import {
   useRemoveFromCatalogMutation,
 } from '@/slices/catalog/catalogApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaEye, FaTrash, FaPlus, FaUserPlus, FaFileInvoice, FaUsers } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
@@ -59,8 +59,8 @@ const Items: React.FC = () => {
 
   const allColumns = [
     // { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
-    { label: 'Name', key: 'name' as keyof StoreItem },
     { label: 'HSN Code', key: 'item_code' as keyof StoreItem },
+    { label: 'Name', key: 'name' as keyof StoreItem },
     // { label: 'Purchase Date', key: 'purchase_date' as keyof StoreItem },
     { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },
     { label: 'Date of Expiry', key: 'date_of_expiry' as keyof StoreItem },
@@ -171,10 +171,26 @@ const Items: React.FC = () => {
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
         actions={[
-          { label: 'Create New Item', onClick: () => router.push(`/${companySlug}/store/add-item`) },
-          { label: 'Create New Vendor', onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`) },
-          { label: 'Add Purchased bill', onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`) },
-          { label: 'View All Vendor', onClick: () => router.push(`/${companySlug}/store/vendors`) },
+          {
+            label: 'Create New Item',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/store/add-item`)
+          },
+          {
+            label: 'Create New Vendor',
+            icon: <FaUserPlus />,
+            onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`)
+          },
+          {
+            label: 'Add Purchased Bill',
+            icon: <FaFileInvoice />,
+            onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`)
+          },
+          {
+            label: 'View All Vendors',
+            icon: <FaUsers />,
+            onClick: () => router.push(`/${companySlug}/store/vendors`)
+          },
         ]}
       />
       <ResponsiveTable

@@ -30,18 +30,21 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/invoices`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
+
       <div className={`creat-inv-page ${isFullView ? 'fullView' : 'autoView'}`}>
         <div className="fullView-content">
-          <span style={{ display: 'flex', justifyContent: 'flex-end', padding: '0px 10px 10px 0px' }}>
-            {isFullView ? (
-              <FaCompress size={20} onClick={() => setIsFullView(false)} />
-            ) : (
-              <FaExpand size={20} onClick={() => setIsFullView(true)} />
-            )}
-          </span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 10px 10px' }}>
+            <Link href={`/${companySlug}/invoices`} className="back-button" style={{ margin: 0, padding: 5 }}>
+              <FaArrowLeft size={16} color="#fff" />
+            </Link>
+            <span style={{ display: 'flex' }}>
+              {isFullView ? (
+                <FaCompress size={20} onClick={() => setIsFullView(false)} />
+              ) : (
+                <FaExpand size={20} onClick={() => setIsFullView(true)} />
+              )}
+            </span>
+          </div>
           <POSPage />
         </div>
       </div>

@@ -165,113 +165,39 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       {/* Pagination */}
       {shouldShowPagination && (
         <div className="pagination-controls">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <div className="pagination-track">
+            <button
+              className="nav-arrow"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              ←
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => handlePageChange(i + 1)}
+                className={currentPage === i + 1 ? 'active' : ''}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              className="nav-arrow"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              →
+            </button>
+
+            <span className="pagination-info">
+              Page {currentPage} of {totalPages}
+            </span>
+          </div>
         </div>
       )}
-      <style jsx>{`
-      .responsive-table {
-
-
-  .t-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1rem;
-    position: relative;
-    background: #fff;
-
-    .card-header {
-      display: flex;
-      justify-content: flex-end;
-      position: relative;
-
-      .ellipsis-icon {
-        cursor: pointer;
-      }
-
-      .card-actions {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        background: #f9f9f9;
-        padding: 5px 10px;
-        border-radius: 4px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .action-icon {
-          margin: 0 5px;
-          cursor: pointer;
-
-          &.edit {
-            color: green;
-          }
-
-          &.delete {
-            color: red;
-          }
-        }
-      }
-    }
-
-    .card-body {
-      margin-top: 0.5rem;
-
-      .card-row {
-        margin-bottom: 0.4rem;
-
-        strong {
-          margin-right: 0.5rem;
-        }
-      }
-
-      .expanded-content {
-        margin-top: 0.75rem;
-        background: #f8f8f8;
-        padding: 0.5rem;
-        border-radius: 4px;
-      }
-    }
-
-    .card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #e0e0e0;
-
-  .expand-text {
-    background: none;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-  }
-
-  .go-button {
-    cursor: pointer;
-  }
-}
-
-  }
-}
-
-      `}</style>
     </div>
   );
 }

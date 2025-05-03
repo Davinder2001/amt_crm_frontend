@@ -6,13 +6,17 @@
 }
 
 .outer-div {
-  width: 1439px;
+  max-width: 1439px;
   margin: auto;
+  width: 100%;
 }
 
 .header-outer {
   border-bottom: 0.4px solid #00969338;
-
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 999;
 }
 
 /* Header */
@@ -21,7 +25,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0rem;
-  width: 1439px;
+  max-width: 1439px;
   margin: auto;
 }
 
@@ -52,6 +56,10 @@
 
   &:hover {
     text-decoration: underline;
+    color: $primary-color;
+  }
+  &:active{
+    color: $primary-color;
   }
 }
 
@@ -78,9 +86,8 @@
 
 /* Hero */
 .hero {
-  display: flex;
-  justify-content: space-between;
-  padding: 3rem 0rem;
+  display: grid;
+grid-template-columns: 1fr 1fr;  padding: 3rem 0rem;
   flex-wrap: wrap;
 }
 
@@ -155,13 +162,25 @@
 
 /* Hero image section */
 .hero-right {
-  position: relative;
-  max-width: 50%;
+  position: absolute;
+  right: 0;
 }
+.hero-right-inner {
+  position: relative;
 
+  .top-left {
+    top: 30px;
+    left: 30px;
+  }
+  
+  .bottom-right {
+    bottom: 30px;
+    right: 30px;
+  }
+}
 .hero-right .main-image {
   width: 100%;
-  border-radius: 15px;
+  border-radius: 15px 0px 0px 15px;
 }
 
 .chart {
@@ -172,22 +191,13 @@
   padding: 0.5rem;
 }
 
-.top-left {
-  top: 10%;
-  left: 5%;
-  width: 30%;
-}
 
-.bottom-right {
-  bottom: 15%;
-  right: 5%;
-  width: 35%;
-}
 
 /* Stats section */
 .stats-section {
   background: #f3f8f7;
   padding: 3rem 2rem;
+  margin-top: 60px;
 }
 
 .stats-section h2 {
@@ -260,6 +270,7 @@ nav.feature-card-nav-bar {
   display: flex;
   gap: 20px;
   margin-top: 40px;
+  padding: 0px 10px;
 
   a {
     color: #222222;
@@ -570,6 +581,9 @@ img.absilute-image1 {
   gap: 2px;
   color: white;
   text-decoration: none;
+  &:hover{
+    text-decoration: none;
+  }
 }
 
 
@@ -577,3 +591,178 @@ img.absilute-image1 {
   max-width: 1439px;
   margin: auto
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Responsive Styles ===== */
+
+
+@media (max-width: 1174px) {
+  .hero-right .main-image {
+    max-width: 600px;
+    height: auto;
+}
+.hero-left h1 {
+  font-size: 35px;
+
+}
+
+.chart {
+  width: 130px;
+  height: auto;
+}
+
+
+
+
+.stat-box {
+  padding: 20px 40px;
+}
+.stats-grids {
+  justify-content: center;
+}
+}
+
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 991px) {
+  .outer-div,
+  .header2 {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .hero {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
+
+  .hero-right {
+    position: relative;
+    margin-top: 2rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-right .main-image {
+    border-radius: 15px;
+    width: 100%;
+  }
+
+  .features-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .manage-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .manage-image img {
+    max-width: 100%;
+    right: 0;
+    transform: none;
+    padding: 0;
+    border-radius: 30px;
+  }
+
+  .comparison-table {
+    font-size: 12px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small devices (phones, less than 768px) */
+@media (max-width: 767px) {
+  .nav a {
+    margin: 0 0.5rem;
+    font-size: 14px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+
+}
+  .hero-left h1 {
+    font-size: 32px;
+  }
+
+  .categories li {
+    font-size: 16px;
+  }
+
+  .stat-box {
+    padding: 20px;
+    min-width: unset;
+    flex: 1 1 100%;
+  }
+
+  .feature-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .feature-card img {
+    height: auto;
+    width: 180px;
+  }
+
+  .manage-text h2 {
+    font-size: 28px;
+  }
+
+  .comparison-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .faq-section h2 {
+    font-size: 22px;
+  }
+
+  .footer-columns {
+    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+
+  .footer-columns li {
+    margin-bottom: 10px;
+  }
+
+  .header-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .categories {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+img.absilute-image2, img.absilute-image3 {
+  position: unset;
+}
+
+
+.stats-section h2 {
+  font-size: 32px;
+}
+.stat-box h3 {
+  font-size: 25px;
+}
+}
+

@@ -1,194 +1,527 @@
+// @use '../variables' as *;
+
+// // General Layout Styles
+// .login-page-container {
+//     padding: 10px;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     position: relative;
+//     min-height: 500px;
+// }
+
+// .c-logo {
+//     position: absolute;
+//     top: 10px;
+//     left: 10px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     cursor: pointer;
+
+//     h1 {
+//         font-size: $font-size-extra-large;
+//         font-weight: $font-weight-bold;
+//         color: $dark-color;
+//     }
+// }
+
+// .login-header {
+//     text-align: center;
+//     margin: 60px 0px 40px 0px;
+// }
+
+// .login-form-wrapper {
+//     background: $white;
+//     padding: 30px;
+//     border-radius: 0px 5px 5px 0px;
+//     width: 100%;
+//     max-width: 500px;
+//     margin: 0 auto;
+//     min-height: 200px;
+//     height: auto;
+//     overflow: hidden;
+//     box-shadow: $box-shadow;
+//     border-radius: 5px;
+
+// }
+
+// .login-header h1 {
+//     font-size: $font-size-extra-large;
+//     font-weight: $font-weight-bold;
+//     color: $dark-color;
+// }
+
+// .login-header p {
+//     font-size: $font-size;
+//     color: $dark-color;
+//     margin-top: 10px;
+// }
+
+// .login-form {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 20px;
+// }
+
+// .login-input,
+// .password-input {
+//     padding: 12px;
+//     border: 1px solid #ddd;
+//     border-radius: $border-radius;
+//     width: 100%;
+//     font-size: $font-size;
+//     font-family: $font-family;
+//     color: $dark-color;
+//     background-color: $light-color;
+
+// }
+
+// .password-input-container {
+//     position: relative;
+// }
+
+// .password-toggle-btn {
+//     position: absolute;
+//     right: 10px;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     background: transparent;
+//     border: none;
+//     cursor: pointer;
+//     color: $dark-color;
+// }
+
+// .login-button {
+//     cursor: pointer;
+//     padding: 12px;
+//     background-color: $primary-color;
+//     color: $white;
+//     border: none;
+//     border-radius: $border-radius;
+//     cursor: pointer;
+//     font-size: $font-size;
+//     font-weight: $font-weight-medium;
+//     transition: background-color $transition;
+
+//     &:hover {
+//         background-color: #45a049;
+//     }
+
+//     &:disabled {
+//         background-color: #ccc;
+//         cursor: not-allowed;
+//     }
+// }
+
+// .links {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-top: 15px;
+//     font-size: $font-size-small;
+//     text-align: center;
+// }
+
+// .forgot-password-link,
+// .register-company-link {
+//     color: $primary-color;
+//     text-decoration: none;
+//     font-weight: $font-weight-medium;
+
+//     &:hover {
+//         text-decoration: underline;
+//     }
+// }
+
+// .features-section,
+// .testimonials {
+//     width: 90%;
+//     margin: 30px auto;
+//     text-align: center;
+// }
+
+// .features-container,
+// .testimonial-container {
+//     display: grid;
+//     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+//     gap: 20px;
+//     margin-top: 30px;
+// }
+
+// .feature {
+//     padding: 15px;
+//     background: $white;
+//     border-radius: $border-radius;
+//     box-shadow: $box-shadow;
+// }
+
+// .testimonial {
+//     padding: 15px;
+//     background: $light-color;
+//     border-radius: $border-radius;
+//     box-shadow: $box-shadow;
+// }
+
+// .formfooter {
+//     margin-top: 40px;
+//     text-align: center;
+//     font-size: $font-size-small;
+//     color: $dark-color;
+// }
+
+// .store-t-e-e-icons {
+//     display: flex;
+//     justify-content: space-around;
+//     border: none;
+// }
+// .stor-table{
+// overflow: scroll;
+// }
+
+// @media (max-width:768px) {
+
+//     .features-section,
+//     .testimonials {
+//         width: 100%;
+//         margin: 50px auto;
+
+//         .features-container,
+//         .testimonial-container {
+//             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
 @use '../variables' as *;
 
-// General Layout Styles
-.login-page-container {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    min-height: 500px;
-}
-
-.c-logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    h1 {
-        font-size: $font-size-extra-large;
-        font-weight: $font-weight-bold;
-        color: $dark-color;
-    }
-}
-
-.login-header {
-    text-align: center;
-    margin: 60px 0px 40px 0px;
-}
-
-.login-form-wrapper {
-    background: $white;
-    padding: 30px;
-    border-radius: 0px 5px 5px 0px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    min-height: 200px;
-    height: auto;
-    overflow: hidden;
-    box-shadow: $box-shadow;
-    border-radius: 5px;
-
-}
-
-.login-header h1 {
-    font-size: $font-size-extra-large;
-    font-weight: $font-weight-bold;
-    color: $dark-color;
-}
-
-.login-header p {
-    font-size: $font-size;
-    color: $dark-color;
-    margin-top: 10px;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.login-input,
-.password-input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: $border-radius;
-    width: 100%;
-    font-size: $font-size;
-    font-family: $font-family;
-    color: $dark-color;
-    background-color: $light-color;
-    
-}
-
-.password-input-container {
-    position: relative;
-}
-
-.password-toggle-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: $dark-color;
-}
-
-.login-button {
-    cursor: pointer;
-    padding: 12px;
-    background-color: $primary-color;
-    color: $white;
-    border: none;
-    border-radius: $border-radius;
-    cursor: pointer;
-    font-size: $font-size;
-    font-weight: $font-weight-medium;
-    transition: background-color $transition;
-
-    &:hover {
-        background-color: #45a049;
-    }
-
-    &:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-}
-
-.links {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    font-size: $font-size-small;
-    text-align: center;
-}
-
-.forgot-password-link,
-.register-company-link {
-    color: $primary-color;
-    text-decoration: none;
-    font-weight: $font-weight-medium;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-.features-section,
-.testimonials {
-    width: 90%;
-    margin: 30px auto;
-    text-align: center;
-}
-
-.features-container,
-.testimonial-container {
+.login-container2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
-}
+    grid-template-columns: 50% 50%;
 
-.feature {
-    padding: 15px;
-    background: $white;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-}
+    .left-panel {
+        padding: 60px 80px;
 
-.testimonial {
-    padding: 15px;
-    background: $light-color;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-}
 
-.formfooter {
-    margin-top: 40px;
-    text-align: center;
-    font-size: $font-size-small;
-    color: $dark-color;
-}
+        .form-box {
+            width: 100%;
+        }
 
-.store-t-e-e-icons {
-    display: flex;
-    justify-content: space-around;
-    border: none;
-}
-.stor-table{
-overflow: scroll;
-}
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: $primary-color;
+            margin-bottom: 10px;
+        }
 
-@media (max-width:768px) {
+        .subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
 
-    .features-section,
-    .testimonials {
-        width: 100%;
-        margin: 50px auto;
+        .description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
-        .features-container,
-        .testimonial-container {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .input-group {
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+            }
+             svg {
+                cursor: pointer;
+                color: $primary-color;
+            }
+        }
+
+        .input-wrapper {
+            display: grid;
+            align-items: center;
+            gap: 5px;
+            grid-template-columns: 5% 90% 5%;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            transition: border-color .3s ease, box-shadow .3s ease;
+
+            &:focus-within {
+                box-shadow: 0 0 6px $primary-color(138, 43, 226, .3);
+                border-color: $primary-color;
+            }
+
+            .input-icon {
+                color: gray;
+                transition: color 0.3s ease, background 0.3s ease;
+            }
+
+            &.filled {
+
+                input,
+                .input-icon {
+                    color: $primary-color;
+                    background-color: #f1f9f9;
+                }
+            }
+
+            input {
+                padding: 0;
+                background-color: #f1f9f9;
+                width: 100%;
+                border: none;
+                outline: none;
+                font-size: 14px;
+                color: #333;
+
+                &::placeholder {
+                    color: #333;
+                    font-size: 14px;
+                    font-weight: 500;
+                    background-color: #f1f9f9;
+                }
+            }
+
+            .password-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .login-button {
+            background: linear-gradient(to right, $primary-color, $orange-color);
+            color: $white;
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            &:hover{
+                box-shadow: $box-shadow;
+            }
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin-bottom: 20px;
+
+            .forgot-password-link {
+                font-size: 14px;
+                color: $danger-color;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+        }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 1rem;
+
+            a {
+                color: $primary-color;
+                font-weight: bold;
+            }
+        }
+
+        .login-footer-links {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            justify-content: center;
+            a {
+                color: #4c4c4c;
+                font-size: 16px;
+                font-weight: 600;
+                &:hover{
+                    color: $primary-color;
+                    font-size: 17px;
+                }
+            }
+
         }
     }
+
+    .right-panel {
+        flex: 1;
+        background: linear-gradient(to bottom right, darken($primary-color, 10%), #b86040);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .illustration {
+            max-width: 90%;
+            height: auto;
+        }
+    }
+
+
+
+    .custom-checkbox {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+        color: $primary-color;
+      }
+      
+      .custom-checkbox input {
+        display: none;
+      }
+      
+      .custom-checkbox .checkmark {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #009693;
+        border-radius: 50px;
+        display: inline-block;
+        position: relative;
+        margin-right: 8px;
+        background-color: #fff;
+        transition: all 0.2s ease;
+      }
+      
+      .custom-checkbox input:checked + .checkmark::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 10px;
+        height: 10px;
+        background-color: #009693;
+        border-radius: 50px;
+      }
+      
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 1024px) {
+    .login-container2 {
+      grid-template-columns: 100%;
+  
+      .right-panel {
+        display: none; // Hide illustration on smaller screens
+      }
+  
+      .left-panel {
+        padding: 40px 40px;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .login-container2 {
+      .left-panel {
+        padding: 30px 20px;
+  
+        .title {
+          font-size: 26px;
+        }
+  
+        .subtitle {
+          font-size: 18px;
+        }
+  
+        .description {
+          font-size: 13px;
+        }
+  
+        .input-wrapper {
+          grid-template-columns: 10% 80% 10%;
+          padding: 10px;
+        }
+  
+        .login-button {
+          font-size: 16px;
+          padding: 0.65rem;
+        }
+  
+        .remember-forgot {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+  
+        .login-footer-links {
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .login-container2 {
+      .left-panel {
+        padding: 20px 15px;
+  
+        .title {
+          font-size: 22px;
+        }
+  
+        .subtitle {
+          font-size: 16px;
+        }
+  
+        .description {
+          font-size: 12px;
+          margin-bottom: 20px;
+        }
+  
+        .input-wrapper {
+          grid-template-columns: 12% 76% 12%;
+          padding: 8px;
+        }
+  
+        .login-button {
+          font-size: 14px;
+          padding: 0.6rem;
+        }
+  
+        .custom-checkbox {
+          font-size: 12px;
+        }
+  
+        .forgot-password-link {
+          font-size: 12px !important;
+        }
+  
+        .login-footer-links a {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  

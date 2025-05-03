@@ -1,8 +1,9 @@
 'use client';
-import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage, homeimg1, homeimg2, homeimg3, homelogo, manageimage } from '@/assets/useImage';
+import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage,homeimg1,homeimg2,homeimg3,homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import Link from 'next/link'
+import Image from 'next/image';
 
 export const UserNavbar = () => {
   const router = useRouter();
@@ -54,10 +55,14 @@ export default function Homepage() {
               </div>
             </div>
             <div className="hero-right">
-              <img src={homeimg2.src} alt="Woman working" className="main-image" />
-              <img src={homeimg1.src} alt="Chart 1" className="chart top-left" />
-              <img src={homeimg3.src} alt="Chart 2" className="chart bottom-right" />
+              <div className='hero-right-inner'>
+
+              <Image src={homeimg2.src} alt="Woman working" className="main-image" width={841} height={523}/>
+              <Image src={homeimg1.src} alt="Chart 1" className="chart top-left" width={287} height={144}/>
+              <Image src={homeimg3.src} alt="Chart 2" className="chart bottom-right" width={236} height={214} />
             </div>
+            </div>
+
           </section>
         </div>
         {/* Stats Section */}

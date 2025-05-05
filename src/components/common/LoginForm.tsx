@@ -153,6 +153,7 @@ import { FiLock } from 'react-icons/fi';
 import { loginPageimage } from '@/assets/useImage';
 import { MdSmartphone, MdLogin } from 'react-icons/md';
 import Loader from './Loader';
+import { encodeStorage } from '@/utils/Company';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -173,7 +174,9 @@ const LoginForm = () => {
       // Set cookies
       Cookies.set('access_token', result.access_token, { path: '/' });
       Cookies.set('user_type', result.user.user_type, { path: '/' });
-
+      // Store the data in localStorage with encoding
+      localStorage.setItem('access_token', encodeStorage(result.access_token));
+      localStorage.setItem('user_type', encodeStorage(result.user.user_type));
       // Update user in context
       setUser(result.user);
 
@@ -184,6 +187,7 @@ const LoginForm = () => {
       } else if (result.user.user_type === 'employee') {
         const companySlug = result.user.companies[0].company_slug;
         Cookies.set('company_slug', companySlug, { path: '/' });
+        localStorage.setItem('company_slug', encodeStorage(companySlug));
         router.push(`/${companySlug}/employee/dashboard`);
       } else if (result.user.user_type === 'super-admin') {
         router.push('/superadmin/dashboard')
@@ -210,12 +214,12 @@ const LoginForm = () => {
     }
   }, [setUser, user]);
 
-  
+
 
   return (
     <>
       <div className="login-container2">
-        {isLoading && <Loader/>}
+        {isLoading && <Loader />}
         <div className="left-panel">
           <div className="form-box">
             <h1 className="title">SecurePanel</h1>

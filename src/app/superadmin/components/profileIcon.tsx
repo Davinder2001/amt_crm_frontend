@@ -4,17 +4,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
-import { useCompany } from "@/utils/Company";
+import { clearStorage, useCompany } from "@/utils/Company";
 
 const ProfileIcon: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logout] = useLogoutMutation();
   const router = useRouter();
-  const { userType } = useCompany();
+  const { userType, accessToken } = useCompany();
 
   const { setUser } = useUser();
 
@@ -38,9 +37,8 @@ const ProfileIcon: React.FC = () => {
 
       if (response?.data?.message) {
         toast.success(response.data.message);
-        Cookies.remove("access_token");
-        Cookies.remove("user_type");
-        Cookies.remove("company_slug");
+
+        clearStorage();
 
         setIsAuthenticated(false);
         setUser(null);
@@ -62,8 +60,6 @@ const ProfileIcon: React.FC = () => {
   };
 
   useEffect(() => {
-    const accessToken = Cookies.get("access_token");
-    const userType = Cookies.get("user_type");
 
     if (!accessToken || !userType) {
       setIsAuthenticated(false);

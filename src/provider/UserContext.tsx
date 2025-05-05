@@ -2,6 +2,7 @@
 
 // import { createContext, useContext, useEffect, useState } from 'react';
 // import { useFetchProfileQuery } from '@/slices/auth/authApi';
+// import { clearStorage, useCompany } from '@/utils/Company';
 
 // type UserContextType = {
 //   user: UserProfile | null;
@@ -11,20 +12,22 @@
 // const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-//   const { data, isLoading, refetch  } = useFetchProfileQuery();
-//   const [user, setUser] = useState<UserProfile | null>(data?.user || null);
+//   const { accessToken } = useCompany();
 
-//   // console.log('message:...', data?.message);
-  
+//   // Only fetch profile if accessToken exists
+//   const { data, isLoading, refetch } = useFetchProfileQuery(undefined, {
+//     skip: !accessToken,
+//   });
 
-//   // Trigger data fetch when the component mounts
+//   const [user, setUser] = useState<UserProfile | null>(null);
+
 //   useEffect(() => {
-//     if (!data && !isLoading) { // If no data is present, trigger fetch manually
+//     if (accessToken && !data && !isLoading) {
 //       refetch();
 //     } else if (data?.user) {
 //       setUser(data.user);
 //     }
-//   }, [data, isLoading, refetch]);
+//   }, [accessToken, data, isLoading, refetch]);
 
 //   useEffect(() => {
 //     if (data?.user) {
@@ -58,15 +61,12 @@
 
 
 
-
-
-
-
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
-import { useCompany } from '@/utils/Company';
+import { clearStorage, useCompany } from '@/utils/Company';
+import { useRouter } from 'next/navigation';
 
 type UserContextType = {
   user: UserProfile | null;
@@ -77,13 +77,27 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { accessToken } = useCompany();
+  const router = useRouter();
 
-  // Only fetch profile if accessToken exists
-  const { data, isLoading, refetch } = useFetchProfileQuery(undefined, {
+  const {
+    data,
+    error,
+    isLoading,
+    refetch,
+  } = useFetchProfileQuery(undefined, {
     skip: !accessToken,
   });
 
   const [user, setUser] = useState<UserProfile | null>(null);
+
+  // 🔐 If API returns 401, clear storage and optionally redirect to login
+  useEffect(() => {
+    if (error && 'status' in error && error.status === 401) {
+      clearStorage();
+      setUser(null);
+      router.push('/login'); // optional: redirect to login
+    }
+  }, [error, router]);
 
   useEffect(() => {
     if (accessToken && !data && !isLoading) {
@@ -92,6 +106,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(data.user);
     }
   }, [accessToken, data, isLoading, refetch]);
+
 
   useEffect(() => {
     if (data?.user) {

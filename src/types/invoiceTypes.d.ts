@@ -1,17 +1,34 @@
 interface InvoiceItem {
+  id: number;
   item_id: number | null;
   invoice_id?: number;
   name: string;
   description: string;
-  unit_price: number;
+  unit_price: number | string;
   price: number;
   total: number;
   quantity: number;
   measurement: string;
   date_of_manufacture: string;
   date_of_expiry: string;
+  tax_percentage: string;
+  tax_amount: string;
+  total: string;
+  created_at: string;
+  updated_at: string;
 }
 
+interface InvoiceCredit {
+  id: number;
+  customer_id: number;
+  invoice_id: number;
+  total_due: string;
+  amount_paid: string;
+  outstanding: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 
 interface Invoice {
   id: number;
@@ -25,6 +42,7 @@ interface Invoice {
   created_at: string;
   updated_at: string;
   items: InvoiceItem[];
+  credit: InvoiceCredit;
 }
 
 interface InvoicesResponse {

@@ -1,27 +1,31 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useParams } from "next/navigation";
-import { useGetInvoiceByIdQuery } from "@/slices/invoices/invoice";
+import React from 'react';
+import { useParams } from 'next/navigation';
+import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoice';
 
 const InvoiceViewPage = () => {
   const params = useParams();
   const id = params?.id;
 
-  const { data: invoice, isLoading, isError } = useGetInvoiceByIdQuery(id as string, {
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useGetInvoiceByIdQuery(id as string, {
     skip: !id,
   });
 
   if (isLoading) return <div>Loading invoice...</div>;
-  if (isError || !invoice) return <div>Failed to load invoice.</div>;
+  if (isError || !data?.invoice) return <div>Failed to load invoice.</div>;
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Invoice #{invoice.invoice_number}</h1>
-      <p><strong>Client Name:</strong> {invoice.client_name}</p>
-      <p><strong>Email:</strong> {invoice.client_email || "N/A"}</p>
-      <p><strong>Date:</strong> {invoice.invoice_date}</p>
-      <p><strong>Total:</strong> ₹{invoice.total_amount}</p>
+      <h1 className="text-xl font-bold mb-4">Invoice #{data.invoice.invoice_number}</h1>
+      <p><strong>Client Name:</strong> {data.invoice.client_name || "N/A"}</p>
+      <p><strong>Email:</strong> {data.invoice.client_email || "N/A"}</p>
+      <p><strong>Date:</strong> {data.invoice.invoice_date}</p>
+      <p><strong>Total:</strong> ₹{data.invoice.total_amount}</p>
 
       <h2 className="mt-4 font-semibold text-lg">Items</h2>
       <table className="mt-2 w-full border text-sm">
@@ -34,7 +38,7 @@ const InvoiceViewPage = () => {
           </tr>
         </thead>
         <tbody>
-          {invoice.items.map((item, index) => (
+          {(data.invoice.items ?? []).map((item, index) => (
             <tr key={index}>
               <td className="p-2 border">{item.description}</td>
               <td className="p-2 border">{item.quantity}</td>

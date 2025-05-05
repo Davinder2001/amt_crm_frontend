@@ -9,12 +9,13 @@ import Logout from '../common/Logout';
 import { useRouter } from 'next/navigation';
 import { homelogo } from '@/assets/useImage';
 import Image from 'next/image';
+import { encodeStorage, useCompany } from '@/utils/Company';
 
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
     const [companies, setCompanies] = useState<Company[]>([]);
-    const userType = profile?.user?.user_type;
+    const { userType } = useCompany();
     const router = useRouter();
 
     useEffect(() => {
@@ -31,6 +32,7 @@ const AdminHome = () => {
         }
 
         Cookies.set('company_slug', companySlug, { path: '/' });
+        localStorage.setItem('company_slug', encodeStorage(companySlug));
 
         try {
             await sendCompanyId({ id }).unwrap();

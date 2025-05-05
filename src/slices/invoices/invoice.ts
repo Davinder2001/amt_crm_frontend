@@ -65,7 +65,7 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Invoice"],
     }),
 
-    getInvoiceById: builder.query<Invoice, string | number>({
+    getInvoiceById: builder.query<{ invoice: Invoice }, string | number>({
       query: (id) => `invoices/${id}`,
       providesTags: (result, error, id) => [{ type: "Invoice", id }],
     }),

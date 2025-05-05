@@ -1,23 +1,19 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useUser } from '@/provider/UserContext';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { useCompany } from '@/utils/Company';
+import { clearStorage, useCompany } from '@/utils/Company';
 
 function Logout() {
     const { setUser } = useUser();
     const router = useRouter();
-    const { userType } = useCompany();
+    const { userType, accessToken } = useCompany();
 
     const handleLogout = async () => {
         // Clear the user context
         setUser(null);
 
-        // Remove cookies
-        Cookies.remove('access_token');
-        Cookies.set('user_type', 'user');
-        Cookies.remove('company_slug');
+        clearStorage();
 
         if (userType === 'user') {
             // Redirect to home page
@@ -29,9 +25,6 @@ function Logout() {
     }
 
     useEffect(() => {
-        const accessToken = Cookies.get('access_token');
-        const userType = Cookies.get('user_type');
-
         if (!accessToken || !userType) {
             setUser(null); // Clear context if cookies are missing
         }

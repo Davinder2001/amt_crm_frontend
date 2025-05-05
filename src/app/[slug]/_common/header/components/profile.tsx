@@ -4,11 +4,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
-import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
-import { useCompany } from "@/utils/Company";
+import { clearStorage, useCompany } from "@/utils/Company";
 
 
 const Profile: React.FC = () => {
@@ -17,7 +16,7 @@ const Profile: React.FC = () => {
   const [logout] = useLogoutMutation();
 
   const { setUser } = useUser();
-  const { companySlug, userType } = useCompany();
+  const { companySlug, userType, accessToken } = useCompany();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -39,9 +38,8 @@ const Profile: React.FC = () => {
 
       if (response?.data?.message) {
         toast.success(response?.data?.message);
-        Cookies.remove('access_token');
-        Cookies.set('user_type', 'user');
-        Cookies.remove('company_slug');
+
+        clearStorage();
 
         setIsAuthenticated(false);
 
@@ -62,8 +60,6 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    const accessToken = Cookies.get('access_token');
-    const userType = Cookies.get('user_type');
     if (!accessToken || !userType) {
       setIsAuthenticated(false);
       setUser(null);

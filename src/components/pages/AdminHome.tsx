@@ -83,32 +83,18 @@ const AdminHome = () => {
                                     <div className='company-card-content'>
                                         <div className='company-header'>
                                             <h2>{company.company_name}</h2>
-                                            <span className={`status ${company.verification_status}`}>
-                                                {company.verification_status}
-                                            </span>
+                                            <span className={`status ${company.verification_status}`}>{company.verification_status}</span>
                                         </div>
-                                        <p className='company-description'>
-                                            {company.description || "No description available."}
-                                        </p>
+                                        <p className='company-description'>{company.description || "No description available."}</p>
                                         <div className='company-info'>
                                             <p><strong>ID:</strong> {company.company_id}</p>
                                             <p><strong>Location:</strong> {company.location || "N/A"}</p>
                                         </div>
                                         <div className='company-actions'>
-                                            <button
-                                                className='btn-action'
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    handleClick(
-                                                        company.company_slug,
-                                                        company.id,
-                                                        company.verification_status === 'verified',
-                                                        e
-                                                    );
-                                                }}
-                                            >
-                                                Manage
-                                            </button>
+                                            <button className='btn-action' onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
+                                            }}>Manage</button>
                                         </div>
                                     </div>
                                 </Link>

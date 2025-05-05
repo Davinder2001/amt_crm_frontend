@@ -151,7 +151,7 @@ import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import { loginPageimage } from '@/assets/useImage';
-import { MdSmartphone, MdLogin } from 'react-icons/md';
+import { MdSmartphone } from 'react-icons/md';
 import Loader from './Loader';
 import { encodeStorage } from '@/utils/Company';
 

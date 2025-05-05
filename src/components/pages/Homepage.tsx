@@ -1,30 +1,41 @@
 'use client';
 import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage,homeimg1,homeimg2,homeimg3,homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link'
 import Image from 'next/image';
 
 export const UserNavbar = () => {
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
   return (
     <>
-      {/* Header */}
       <div className='header-outer'>
         <header className="header2">
           <div className="logo">
-            <Link href="/"><img src={homelogo.src} alt="Logo" />
-              <span>Asset Management Technology</span></Link>
+            <Link href="/">
+              <img src={homelogo.src} alt="Logo" />
+              <span>Asset Management Technology</span>
+            </Link>
           </div>
-          <nav className="nav">
+
+          {/* Hamburger Icon */}
+          {/* Hamburger or Close Icon */}
+          <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? '✖' : '☰'}
+          </div>
+
+          <nav className={`nav ${menuOpen ? 'open' : ''}`}>
             <Link href="/">Home</Link>
             <Link href="/about">Company</Link>
-            <Link href="#">Dashboard</Link>
+            <Link href="/about">Dashboard</Link>
             <Link href="#">Price</Link>
           </nav>
+
           <div className="header-buttons">
-            <button className="btn-outline">Sing Up</button>
-            <button className="btn-filled" onClick={() => router.push('/login')}>Get Started</button>
+            <button className="btn-outline buttons">Sign Up</button>
+            <button className="btn-filled buttons" onClick={() => router.push('/login')}>Get Started</button>
           </div>
         </header>
       </div>
@@ -50,8 +61,8 @@ export default function Homepage() {
                 <li>Families</li>
               </ul>
               <div className="hero-actions">
-                <button className="btn-filled">Talk to an Advisor</button>
-                <button className="btn-outline" onClick={() => router.push('/login')}>Try The Deshboard</button>
+                <button className="btn-filled buttons">Talk to an Advisor</button>
+                <button className="btn-outline buttons" onClick={() => router.push('/login')}>Try The Deshboard</button>
               </div>
             </div>
             <div className="hero-right">

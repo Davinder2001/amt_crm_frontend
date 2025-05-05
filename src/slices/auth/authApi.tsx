@@ -85,10 +85,6 @@ const authApi = userCreateApiSlice.injectEndpoints({
         url: "admin-register",
         method: "POST",
         body: formData,
-        headers: {
-          'Content-Type': 'application/json', // ❌ breaks boundary auto-handling
-        }
-        
       }),
     }),
 

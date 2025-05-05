@@ -17,9 +17,6 @@
 @use './tasks/recurring_tasks.scss' as *;
 
 
-
-
-
 // hr  section
 @use './Hr/Hr_dashbord.scss' as *;
 @use './Hr/status_view.scss' as *;
@@ -46,6 +43,7 @@
 @use './forms/add_employes_form.scss' as *;
 @use './forms/role_form.scss' as *;
 @use './forms/forms.scss' as *;
+@use './registerCompany.scss' as *;
 
 // admin store section
 @use './store/storedashbord.scss' as *;

@@ -5,10 +5,15 @@ import AdminHome from '@/components/pages/AdminHome';
 import UserHome from '@/components/pages/UserHome';
 import EmployeeHome from '@/components/pages/EmployeeHome';
 import SuperAdminHome from '@/components/pages/SuperAdminHome';
+import Loader from '@/components/common/Loader';
 import { useCompany } from '@/utils/Company';
 
 function Page() {
-  const { userType } = useCompany();
+  const { userType, accessToken } = useCompany();
+
+  if (!accessToken) {
+    return <Loader />;
+  }
 
   switch (userType) {
     case 'admin':

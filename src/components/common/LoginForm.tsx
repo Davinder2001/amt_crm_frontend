@@ -281,7 +281,7 @@ const LoginForm = () => {
                 <button type="submit" className="login-button" disabled={isLoading}>
                   {isLoading ? 'Logging in...' : (
                     <>
-                      Login <MdLogin size={18} />
+                      Login
                     </>
                   )}
                 </button>

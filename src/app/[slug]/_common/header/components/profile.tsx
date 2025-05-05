@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
   const router = useRouter();
   const [logout] = useLogoutMutation();
 
-  const { setUser } = useUser();
+  const { setUser} = useUser();
   const { companySlug, userType, accessToken } = useCompany();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

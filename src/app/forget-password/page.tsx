@@ -1,21 +1,22 @@
 'use client';
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForgotPasswordMutation, useVerifyOtpMutation } from "@/slices/auth/authApi";
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "react-toastify/dist/ReactToastify.css";
-import { forgotPageimage } from "@/assets/useImage";
 import { FiMail } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
-import { MdCheckCircle, MdClose, MdPassword, MdPhonelinkLock } from "react-icons/md";
+import { MdCheckCircle, MdPassword, MdPhonelinkLock } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
+import "react-toastify/dist/ReactToastify.css";
+import { forgotPageimage } from "@/assets/useImage";
 
 // Define the error response structure
 interface ErrorResponse {
   data?: {
     errors?: {
-      [key: string]: string[]; // For example, email or otp error fields
+      [key: string]: string[];
     };
   };
   message?: string;
@@ -24,27 +25,23 @@ interface ErrorResponse {
 const ResetPasswordForm = () => {
   const router = useRouter();
 
-  // State variables for the form
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [stage, setStage] = useState<"email" | "otp" | "reset">("email");
-  const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  // API hooks
   const [forgotPassword, { isLoading: isSendingOtp }] = useForgotPasswordMutation();
   const [verifyOtp, { isLoading: isVerifyingOtp }] = useVerifyOtpMutation();
 
-  // Send OTP when email is submitted
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await forgotPassword({ email }).unwrap();
       toast.success("OTP sent to your email.");
-      setStage("otp"); // Switch to OTP verification step
+      setStage("otp");
     } catch (err) {
       const error = err as ErrorResponse;
       const errorMessage = error?.data?.errors?.email?.[0] || "Failed to send OTP.";
@@ -52,23 +49,13 @@ const ResetPasswordForm = () => {
     }
   };
 
-  // Verify OTP and reset password
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-      });
+      toast.error("Passwords do not match.");
       return;
     }
-
 
     try {
       await verifyOtp({
@@ -94,19 +81,15 @@ const ResetPasswordForm = () => {
         <div className="forgot-p-form-container">
           <div className="login-container2">
             <div className="left-panel">
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="back-button"
-              >
-                <IoArrowBack size={18} />
-                Back
+              <button type="button" onClick={() => router.back()} className="back-button">
+                <IoArrowBack size={18} /> Back
               </button>
+
               <div className="left-panel-inner">
                 {stage === "email" && (
                   <form onSubmit={handleEmailSubmit}>
                     <h1 className="title">Forgot your password?</h1>
-                    <p className="description">Don’t worry, we’ll help you reset it in a few steps.</p>
+                    <p className="description">We’ll help you reset it in a few steps.</p>
 
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
@@ -158,10 +141,7 @@ const ResetPasswordForm = () => {
                           required
                           placeholder="New Password"
                         />
-                        <span
-                          className="password-toggle"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
+                        <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
                           {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                       </div>
@@ -170,8 +150,6 @@ const ResetPasswordForm = () => {
                     <div className="form-group">
                       <label htmlFor="confirmPassword">Confirm Password:</label>
                       <div className="password-container input-wrapper filled">
-
-                        {/* Dynamic Icon Logic */}
                         {
                           confirmPassword ? (
                             confirmPassword === newPassword ? (
@@ -184,7 +162,6 @@ const ResetPasswordForm = () => {
                           )
                         }
 
-                        {/* Confirm Password Input */}
                         <input
                           type={showPasswordConfirmation ? "text" : "password"}
                           id="confirmPassword"
@@ -194,25 +171,13 @@ const ResetPasswordForm = () => {
                           placeholder="Confirm New Password"
                         />
 
-                        {/* Toggle Password Visibility */}
-                        <span
-                          className="password-toggle"
-                          onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                        >
+                        <span className="password-toggle" onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}>
                           {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
                         </span>
-
                       </div>
                     </div>
 
-
-                    {error && <p style={{ color: "red" }}>{error}</p>}
-
-                    <button
-                      type="submit"
-                      className="submit-button sendOTP-button"
-                      disabled={isVerifyingOtp}
-                    >
+                    <button type="submit" className="submit-button sendOTP-button" disabled={isVerifyingOtp}>
                       {isVerifyingOtp ? "Verifying OTP..." : "Verify OTP & Reset Password"}
                     </button>
                   </form>
@@ -221,16 +186,15 @@ const ResetPasswordForm = () => {
                 {stage === "reset" && <p>Password has been reset successfully!</p>}
               </div>
             </div>
-            <div className="right-panel">
-              <img src={forgotPageimage.src} alt="Doctors" className="illustration" />
-            </div>
 
+            <div className="right-panel">
+              <img src={forgotPageimage.src} alt="Illustration" className="illustration" />
+            </div>
           </div>
         </div>
-
       </section>
-      <ToastContainer />
 
+      <ToastContainer />
     </>
   );
 };

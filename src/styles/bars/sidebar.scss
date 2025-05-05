@@ -130,7 +130,7 @@
     .sidebar {
         max-width: 100%;
         width: 100% !important;
-        height: 50vh;
+        height: 60vh;
         position: fixed;
         bottom: 0;
         border-radius: 20px 20px 0 0;
@@ -143,18 +143,18 @@
         ul.menu-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            padding: 20px 10px 200px 10px;
+            padding: 10px 10px 200px 10px;
             overflow: auto;
             height: auto;
             min-height: 0vh;
-            max-height: 50vh;
+            max-height: 60vh;
 
             li {
-                padding: 15px 10px;
+                padding: 10px;
                 box-shadow: $box-shadow;
 
                 a {
-                    gap: 10px;
+                    gap: 8px;
                 }
             }
         }
@@ -165,6 +165,6 @@
     }
 
     .show-sidebar {
-        transform: translateY(50vh);
+        transform: translateY(40vh);
     }
 }

@@ -82,6 +82,14 @@
 .nav a {
   text-decoration: none;
   color: #333;
+  cursor: pointer;
+  &:hover{
+    color: $primary-color;
+  }
+
+  &:active{
+    color: $primary-color;
+  }
 }
 .header-buttons {
   display: flex;
@@ -156,7 +164,8 @@ grid-template-columns: 1fr 1fr;
   font-size: 20px;
   font-weight: 400;
   color: #262626;
-  padding: 5px 0px;
+  padding: 5px;
+  width: fit-content;
 
   &:active {
     color: $primary-color;
@@ -341,7 +350,7 @@ nav.feature-card-nav-bar {
   background: #fff;
   box-shadow: 0px 4px 16px 0px #00000026;
   border-radius: 16px;
-  padding: 20px 20px;
+  padding: 20px 10px;
   display: grid;
   grid-template-columns: 65% 35%;
   gap: 8px;
@@ -642,7 +651,8 @@ img.absilute-image1 {
 @media (max-width: 1174px) {
   .hero-right .main-image {
     max-width: 600px;
-    height: auto;
+    object-fit: cover;
+    
 }
 .hero-left h1 {
   font-size: 35px;
@@ -671,7 +681,6 @@ img.absilute-image1 {
   .outer-div,
   .header2 {
     width: 100%;
-    padding: 0 1rem;
   }
 
   .hero {
@@ -717,15 +726,27 @@ img.absilute-image1 {
   }
 
   .manage-image{
-    padding: 3rem 1rem;
+    padding:0px;
   img {
     display: none;
 }
+}
+.manage-text {
+  padding: 40px 0px;
 }
 }
 
 /* Small devices (phones, less than 768px) */
 @media (max-width: 767px) {
+  .outer-div{
+    padding: 0px 10px;
+  }
+  .hero-right .main-image {
+    border-radius: 15px;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
   .nav a {
     margin: 0 0.5rem;
     font-size: 24px;
@@ -753,6 +774,7 @@ padding: 10px 20px 0px 20px;
 }
   .categories li {
     font-size: 16px;
+
   }
 
   .stat-box {
@@ -768,7 +790,7 @@ padding: 10px 20px 0px 20px;
 
   .feature-card img {
     height: auto;
-    width: 180px;
+    width: 100%;
   }
 
   .manage-text h2 {
@@ -783,6 +805,10 @@ padding: 10px 20px 0px 20px;
 
   .faq-section h2 {
     font-size: 22px;
+  }
+  .faq-section {
+    background-color: #397C6A0F;
+    padding: 40px 10px;
   }
 
   .footer-columns {
@@ -800,8 +826,8 @@ padding: 10px 20px 0px 20px;
 
   .header-buttons {
     display: flex;
-    flex-direction: column;
     gap: 10px;
+    justify-content: center;
   }
   .categories {
     display: flex;
@@ -813,13 +839,14 @@ padding: 10px 20px 0px 20px;
 }
 .comparison-section {
   overflow: scroll;
+  margin: 40px 0px;
 }
 img.absilute-image2, img.absilute-image3 {
   position: unset;
 }
 
 .manage-section{
-  padding: 20px;
+  padding: 0px;
 }
 .stats-section{
 
@@ -834,7 +861,10 @@ img.absilute-image2, img.absilute-image3 {
 }
 
 
-
+.comparison-table th, .comparison-table td {
+  padding: 5px 10px;
+  border: 1px solid #e5e5e5;
+}
 
 
 

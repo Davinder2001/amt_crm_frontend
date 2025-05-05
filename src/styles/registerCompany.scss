@@ -35,7 +35,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 1rem 1.5rem;
+            padding: 10px 20px;
             border-radius: 50px;
             background: #f5f7fa;
             color: #666;
@@ -75,7 +75,7 @@
         background: white;
         border-radius: 16px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        padding: 2.5rem;
+        padding: 20px;
     }
 
     .form-section {
@@ -84,8 +84,8 @@
         h2 {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
+            gap: 10px;
+            font-size: 22px;
             font-weight: 600;
             color: $dark-color;
             margin-bottom: 1.5rem;
@@ -101,14 +101,14 @@
     .form-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
+        gap: 15px;
+        margin-bottom: 10px;
     }
 
     .document-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
+        gap: 15px;
     }
 
     .document-section {
@@ -116,11 +116,13 @@
         border-radius: 12px;
         padding: 1.5rem;
         border: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
 
         h3 {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
             color: $dark-color;
             display: flex;
             align-items: center;
@@ -134,7 +136,7 @@
     }
 
     .form-group {
-        margin-bottom: 1.25rem;
+        margin-bottom: 0px;
 
         label {
             display: flex;
@@ -160,12 +162,13 @@
         select,
         textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 0.95rem;
             transition: all 0.2s ease;
             background: white;
+            height: 40px;
 
             &:focus {
                 border-color: $primary-color;
@@ -183,7 +186,6 @@
     }
 
     .file-upload-group {
-        margin-bottom: 1.5rem;
 
         label {
             display: flex;
@@ -211,6 +213,13 @@
             opacity: 0;
             cursor: pointer;
         }
+
+        &:hover {
+            .file-upload-box {
+                border-color: $primary-color;
+                background: rgba($primary-color, 0.03);
+            }
+        }
     }
 
     .file-upload-box {
@@ -218,7 +227,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem 1rem;
+        padding: 10px;
         border: 2px dashed #ddd;
         border-radius: 8px;
         background: #fafafa;
@@ -231,13 +240,13 @@
         }
 
         .upload-icon {
-            font-size: 1.5rem;
+            font-size: 15px;
             color: #666;
             margin-bottom: 0.5rem;
         }
 
         span {
-            font-size: 0.9rem;
+            font-size: 14px;
             color: #666;
         }
 
@@ -273,7 +282,7 @@
     .primary-button,
     .secondary-button,
     .submit-button {
-        padding: 0.875rem 1.75rem;
+        padding: 8px 12px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 1rem;
@@ -311,10 +320,11 @@
         background: $primary-color;
         color: white;
         border: none;
-        padding: 1rem;
-        font-size: 1.1rem;
+        padding: 8px 12px;
+        font-size: 1rem;
         font-weight: 600;
         border-radius: 8px;
+        cursor: pointer;
 
         &:hover:not(:disabled) {
             background: darken($primary-color, 5%);

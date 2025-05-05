@@ -5,6 +5,7 @@ import { useFetchCategoriesAndItemsQuery } from '@/slices/store/storeApi';
 import CheckoutPanel from './CheckoutPanel';
 import CategoriesMenu from './CategoriesMenu';
 import InvoiceItems from './InvoiceItems';
+import Loader from '@/components/common/Loader';
 
 function POSPage() {
     const { data: categories } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined };
@@ -20,7 +21,7 @@ function POSPage() {
         }
     }, [categories]);
 
-    if (!categories) return <div>Loading...</div>;
+    if (!categories) return <Loader />;
 
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
     const selectedTopCategory = topCategories.find((cat: { id: number | null; }) => cat.id === selectedTopCatId);

@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import { FaEye } from 'react-icons/fa';
+import Loader from '@/components/common/Loader';
 
 const statusOptions = ['active', 'blocked'];
 
@@ -19,7 +20,7 @@ const AdminList = () => {
     return (
         <div className="p-4 allAdmin-table-outer">
 
-            {isLoading && <p>Loading...</p>}
+            {isLoading && <Loader />}
             {error && <p className="text-red-500">Failed to fetch admins.</p>}
 
             <div className="overflow-x-auto">

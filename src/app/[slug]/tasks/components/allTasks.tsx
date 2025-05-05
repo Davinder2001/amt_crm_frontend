@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import Loader from '@/components/common/Loader';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
@@ -27,7 +28,7 @@ const AllTasks: React.FC = () => {
     }
   };
 
-  if (profileLoading || tasksLoading) return <p>Loading...</p>;
+  if (profileLoading || tasksLoading) return <Loader />;
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
   if (!companySlug) return <p>Company slug not found.</p>;
@@ -61,27 +62,27 @@ const AllTasks: React.FC = () => {
                 <td>{task.end_date}</td>
                 <td>{task.assigned_by_name}</td>
                 <td>{task.status}</td>
-        
+
                 <td className='store-t-e-e-icons'>
-                    <Link
-                      href={`/${companySlug}/tasks/view-task/${task.id}`}
-                      className="table-e-d-v-buttons"
-                    >
-                      <FaEye color="#222" />
-                    </Link>
-                    <Link
-                      href={`/${companySlug}/tasks/edit-task/${task.id}`}
-                      className="table-e-d-v-buttons"
-                    >
-                      <FaEdit color="#222" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(task.id)}
-                      disabled={isDeleting}
-                      className="table-e-d-v-buttons"
-                    >
-                      <FaTrash color="#222" />
-                    </button>
+                  <Link
+                    href={`/${companySlug}/tasks/view-task/${task.id}`}
+                    className="table-e-d-v-buttons"
+                  >
+                    <FaEye color="#222" />
+                  </Link>
+                  <Link
+                    href={`/${companySlug}/tasks/edit-task/${task.id}`}
+                    className="table-e-d-v-buttons"
+                  >
+                    <FaEdit color="#222" />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(task.id)}
+                    disabled={isDeleting}
+                    className="table-e-d-v-buttons"
+                  >
+                    <FaTrash color="#222" />
+                  </button>
                 </td>
               </tr>
             ))}

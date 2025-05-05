@@ -7,9 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import Loader from '@/components/common/Loader';
 
 const AllTasks: React.FC = () => {
-  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch} = useGetTasksQuery();
+  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
@@ -27,7 +28,7 @@ const AllTasks: React.FC = () => {
     }
   };
 
-  if (profileLoading || tasksLoading) return <p>Loading...</p>;
+  if (profileLoading || tasksLoading) return <Loader />;
   if (profileError) return <p>Error fetching profile.</p>;
   if (tasksError) return <p>Error fetching tasks.</p>;
 
@@ -59,14 +60,14 @@ const AllTasks: React.FC = () => {
                 <td>{task.assigned_to_name}</td>
                 <td>{task.deadline}</td>
                 <td >
-                  
-                <button className='table-e-d-v-buttons' onClick={() => handleDelete(task.id)} disabled={isDeleting}>
+
+                  <button className='table-e-d-v-buttons' onClick={() => handleDelete(task.id)} disabled={isDeleting}>
                     <FaTrash color='#222' />
                   </button>
-                  <Link className='table-e-d-v-buttons'  href={`/${companySlug}/employee/tasks/edit-task/${task.id}`}>
+                  <Link className='table-e-d-v-buttons' href={`/${companySlug}/employee/tasks/edit-task/${task.id}`}>
                     <FaEdit color='#222' />
                   </Link>
-                  
+
                   <Link className='table-e-d-v-buttons' href={`/${companySlug}/employee/tasks/view-task/${task.id}`}>
                     <FaEye color='#222' />
                   </Link>

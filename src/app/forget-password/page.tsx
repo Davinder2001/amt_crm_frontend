@@ -5,9 +5,12 @@ import { useForgotPasswordMutation, useVerifyOtpMutation } from "@/slices/auth/a
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
-import { forgotPageimage} from "@/assets/useImage";
+import { forgotPageimage } from "@/assets/useImage";
 import { FiMail } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
+import { MdCheckCircle, MdClose, MdPassword, MdPhonelinkLock } from "react-icons/md";
+import { IoMdCloseCircle } from "react-icons/io";
+
 // Define the error response structure
 interface ErrorResponse {
   data?: {
@@ -54,9 +57,18 @@ const ResetPasswordForm = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      toast.error("Passwords do not match.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
       return;
     }
+
 
     try {
       await verifyOtp({
@@ -91,107 +103,128 @@ const ResetPasswordForm = () => {
                 Back
               </button>
               <div className="left-panel-inner">
-              {stage === "email" && (
-                <form onSubmit={handleEmailSubmit}>
-                  <h1 className="title">Forgot your password?</h1>
-            <p className="description">Don’t worry, we’ll help you reset it in a few steps.</p>
+                {stage === "email" && (
+                  <form onSubmit={handleEmailSubmit}>
+                    <h1 className="title">Forgot your password?</h1>
+                    <p className="description">Don’t worry, we’ll help you reset it in a few steps.</p>
 
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <div className="input-wrapper filled">
-                      <FiMail size={18} className="input-icon" />
-                      <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Enter your email..."
-                      />
+                    <div className="form-group">
+                      <label htmlFor="email">Email</label>
+                      <div className="input-wrapper filled">
+                        <FiMail size={18} className="input-icon" />
+                        <input
+                          type="email"
+                          id="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          placeholder="Enter your email..."
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <button type="submit" className="sendOTP-button" disabled={isSendingOtp}>
-                    {isSendingOtp ? "Sending OTP..." : "Send OTP"}
-                  </button>
-                </form>
-              )}
+                    <button type="submit" className="sendOTP-button" disabled={isSendingOtp}>
+                      {isSendingOtp ? "Sending OTP..." : "Send OTP"}
+                    </button>
+                  </form>
+                )}
 
-              {stage === "otp" && (
-                <form onSubmit={handleOtpSubmit}>
-                  <div className="form-group">
-                    <label htmlFor="otp">OTP:</label>
-                    <input
-                      type="text"
-                      id="otp"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      required
-                      placeholder="Enter OTP"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="newPassword">New Password:</label>
-                    <div className="password-container">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                        placeholder="New Password"
-                      />
-                      <button
-                        type="button"
-                        className="password-toggle"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </button>
+                {stage === "otp" && (
+                  <form onSubmit={handleOtpSubmit}>
+                    <div className="form-group otp-lable-input-wraper">
+                      <label htmlFor="otp">OTP:</label>
+                      <div className="password-container input-wrapper filled">
+                        <MdPhonelinkLock size={18} className="input-icon" />
+                        <input
+                          type="text"
+                          id="otp"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                          required
+                          placeholder="Enter OTP"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="form-group">
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <div className="password-container">
-                      <input
-                        type={showPasswordConfirmation ? "text" : "password"}
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        placeholder="Confirm New Password"
-                      />
-                      <button
-                        type="button"
-                        className="password-toggle"
-                        onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                      >
-                        {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
-                      </button>
+                    <div className="form-group">
+                      <label htmlFor="newPassword">New Password:</label>
+                      <div className="password-container input-wrapper filled">
+                        <MdPassword size={18} className="input-icon" />
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          id="newPassword"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          required
+                          placeholder="New Password"
+                        />
+                        <span
+                          className="password-toggle"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  {error && <p style={{ color: "red" }}>{error}</p>}
+                    <div className="form-group">
+                      <label htmlFor="confirmPassword">Confirm Password:</label>
+                      <div className="password-container input-wrapper filled">
 
-                  <button
-                    type="submit"
-                    className="submit-button"
-                    disabled={isVerifyingOtp}
-                  >
-                    {isVerifyingOtp ? "Verifying OTP..." : "Verify OTP & Reset Password"}
-                  </button>
-                </form>
-              )}
+                        {/* Dynamic Icon Logic */}
+                        {
+                          confirmPassword ? (
+                            confirmPassword === newPassword ? (
+                              <MdCheckCircle size={18} className="input-icon" style={{ color: "#01A601" }} />
+                            ) : (
+                              <IoMdCloseCircle size={18} className="input-icon" style={{ color: "#f62020" }} />
+                            )
+                          ) : (
+                            <MdCheckCircle size={18} className="input-icon" style={{ color: "#009693" }} />
+                          )
+                        }
 
-              {stage === "reset" && <p>Password has been reset successfully!</p>}
-            </div>
+                        {/* Confirm Password Input */}
+                        <input
+                          type={showPasswordConfirmation ? "text" : "password"}
+                          id="confirmPassword"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          required
+                          placeholder="Confirm New Password"
+                        />
+
+                        {/* Toggle Password Visibility */}
+                        <span
+                          className="password-toggle"
+                          onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                        >
+                          {showPasswordConfirmation ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+
+                      </div>
+                    </div>
+
+
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+
+                    <button
+                      type="submit"
+                      className="submit-button sendOTP-button"
+                      disabled={isVerifyingOtp}
+                    >
+                      {isVerifyingOtp ? "Verifying OTP..." : "Verify OTP & Reset Password"}
+                    </button>
+                  </form>
+                )}
+
+                {stage === "reset" && <p>Password has been reset successfully!</p>}
+              </div>
             </div>
             <div className="right-panel">
               <img src={forgotPageimage.src} alt="Doctors" className="illustration" />
             </div>
-            
+
           </div>
         </div>
 

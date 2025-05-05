@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { forgotPageimage } from "@/assets/useImage";
 import { FiMail } from "react-icons/fi";
 import { IoArrowBack } from "react-icons/io5";
-import { MdCheckCircle, MdClose, MdPassword, MdPhonelinkLock } from "react-icons/md";
+import { MdCheckCircle, MdPassword, MdPhonelinkLock } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
 
 // Define the error response structure

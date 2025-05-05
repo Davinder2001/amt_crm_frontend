@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useFetchProfileQuery, useLoginMutation } from "@/slices/auth/authApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "@/components/common/Loader";
 
 interface User {
   name: string;
@@ -62,7 +63,7 @@ const CompanyPage = ({ params }: { params: Promise<{ slug: string }> }) => {
     }
   };
 
-  if (isFetching) return <p>Loading...</p>;
+  if (isFetching) return <Loader />;
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

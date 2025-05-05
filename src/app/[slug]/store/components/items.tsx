@@ -14,6 +14,7 @@ import { FaEdit, FaEye, FaTrash, FaPlus, FaUserPlus, FaFileInvoice, FaUsers } fr
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/common/Loader';
 
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
@@ -156,7 +157,7 @@ const Items: React.FC = () => {
       return col;
     });
 
-  if (isLoading) return <p>Loading items...</p>;
+  if (isLoading) return <Loader />;
   if (error) return <p>Error fetching items.</p>;
 
   return (

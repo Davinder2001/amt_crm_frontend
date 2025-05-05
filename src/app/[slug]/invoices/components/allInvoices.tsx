@@ -101,6 +101,7 @@ import { useFetchInvoicesQuery, useLazyDownloadInvoicePdfQuery } from "@/slices/
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // Make sure this is reusable
 import { toast } from "react-toastify";
 import { useCompany } from "@/utils/Company";
+import Loader from "@/components/common/Loader";
 
 const AllInvoices = () => {
   const { data, isLoading, isError } = useFetchInvoicesQuery();
@@ -154,7 +155,7 @@ const AllInvoices = () => {
     },
   ];
 
-  if (isLoading) return <p>Loading invoices…</p>;
+  if (isLoading) return <Loader />;
   if (isError) return <p>Failed to load invoices.</p>;
   if (invoices.length === 0) return <p>No invoices found.</p>;
 

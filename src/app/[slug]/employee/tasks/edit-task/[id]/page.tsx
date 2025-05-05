@@ -7,6 +7,7 @@ import { useFetchUsersQuery } from '@/slices/users/userApi'; // Import for fetch
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCompany } from '@/utils/Company';
+import Loader from '@/components/common/Loader';
 
 const EditTask: React.FC = () => {
   const { id } = useParams();
@@ -72,7 +73,7 @@ const EditTask: React.FC = () => {
     }
   };
 
-  if (tasksLoading || usersLoading) return <p>Loading...</p>;
+  if (tasksLoading || usersLoading) return <Loader />;
   if (tasksError) return <p>Error loading task details.</p>;
   if (usersError) return <p>Error loading users.</p>;
 

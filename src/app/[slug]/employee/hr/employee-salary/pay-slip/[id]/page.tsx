@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useFetchPaySlipByIdQuery } from '@/slices/employe/employe';
+import Loader from '@/components/common/Loader';
 
 function Page() {
   const { setTitle } = useBreadcrumb();
@@ -57,7 +58,7 @@ function Page() {
     window.URL.revokeObjectURL(url);
   };
 
-  if (!employee) return <p>Loading...</p>;
+  if (!employee) return <Loader />;
 
   return (
     <div className="pay-slip-page">

@@ -1,8 +1,10 @@
 @use '../variables' as *;
 
 .login-container2 {
-  display: grid;
-  grid-template-columns: 50% 50%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    position: relative;
+    overflow: hidden;
 
   .left-panel {
     padding: 60px 80px;

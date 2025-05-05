@@ -17,8 +17,14 @@ interface RegisterForm {
   business_id: string;
   aadhar_number: string;
   pan_number: string;
+  website_url: string;
   business_proof_image_front: File | null;
   business_proof_image_back?: File | null;
+  aadhar_image_front?: File | null;
+  aadhar_image_back?: File | null;
+  pan_image_front?: File | null;
+  pan_image_back?: File | null;
+  office_electricity_bill?: File | null;
 }
 
 const RegisterForm: React.FC = () => {
@@ -36,20 +42,26 @@ const RegisterForm: React.FC = () => {
     business_id: '',
     aadhar_number: '',
     pan_number: '',
+    website_url: '',
     business_proof_image_front: null,
     business_proof_image_back: null,
+    aadhar_image_front: null,
+    aadhar_image_back: null,
+    pan_image_front: null,
+    pan_image_back: null,
+    office_electricity_bill: null,
   });
 
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: 'business_proof_image_front' | 'business_proof_image_back'
+    field: keyof RegisterForm
   ) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -59,10 +71,8 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const data = new FormData();
 
-    // Append fields
     Object.entries(formData).forEach(([key, value]) => {
       if (value instanceof File) {
         data.append(key, value, value.name);
@@ -73,16 +83,17 @@ const RegisterForm: React.FC = () => {
       }
     });
 
-    // Debug: Log FormData
-    for (const [key, value] of data.entries()) {
-      console.log(`${key}:`, value);
+    // ✅ Log each key-value pair in FormData
+    console.log('🚀 FormData being submitted:');
+    for (const [key, val] of data.entries()) {
+      console.log(`${key}:`, val);
     }
 
     try {
       const response = await adminRegister(data).unwrap();
       console.log('✅ Registration successful:', response);
     } catch (error) {
-      const err = error as { data?: { errors?: unknown } };
+      const err = error as { data?: { message?: string; errors?: Record<string, string[]> } };
       if (err?.data?.errors) {
         console.error('❌ Backend Validation Errors:', err.data.errors);
       } else {
@@ -91,8 +102,9 @@ const RegisterForm: React.FC = () => {
     }
   };
 
+
   return (
-    <section className="form-wrapper">
+    <div className="register-company-form">
       <form onSubmit={handleSubmit} className="form-container">
         <div className="form-grid">
           {[
@@ -105,10 +117,8 @@ const RegisterForm: React.FC = () => {
             ['Mobile Number', 'number', 'text', true],
             ['Business Address', 'business_address', 'text', true],
             ['Pin Code', 'pin_code', 'text', true],
-            ['Business Proof Type', 'business_proof_type', 'text', true],
             ['Business ID', 'business_id', 'text', true],
-            ['Aadhar Number', 'aadhar_number', 'text', false],
-            ['Pan Number', 'pan_number', 'text', false],
+            ['Website URL', 'website_url', 'url', false],
           ].map(([label, name, type, required]) => (
             <div className="form-group" key={String(name)}>
               <label>{label}</label>
@@ -122,88 +132,124 @@ const RegisterForm: React.FC = () => {
             </div>
           ))}
 
-          <div className="form-group">
-            <label>Front Image (Required)</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={e => handleFileChange(e, 'business_proof_image_front')}
-              required
-            />
-          </div>
+          {/* Office Electricity Bill */}
+          <section className="office-bill-section">
+            <h2>Office Electricity Bill (Optional)</h2>
+            <div className="form-group">
+              <label>Upload Bill</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'office_electricity_bill')}
+              />
+            </div>
+          </section>
 
-          <div className="form-group">
-            <label>Back Image (Optional)</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={e => handleFileChange(e, 'business_proof_image_back')}
-            />
-          </div>
+          {/* Business Proof Files */}
+          <section className="business-proof-section">
+            <h2>Business Proof:</h2>
+            {/* Business Proof Type Select */}
+            <div className="form-group">
+              <label>Business Proof Type</label>
+              <select
+                name="business_proof_type"
+                value={formData.business_proof_type}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Type</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Business Proof Front (Required)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'business_proof_image_front')}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Business Proof Back (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'business_proof_image_back')}
+              />
+            </div>
+          </section>
+
+          {/* Aadhar Details */}
+          <section className="aadhar-section">
+            <h2>Aadhar Details:</h2>
+            <div className="form-group">
+              <label>Aadhar Number</label>
+              <input
+                type="text"
+                name="aadhar_number"
+                value={formData.aadhar_number}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Aadhar Front (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'aadhar_image_front')}
+              />
+            </div>
+            <div className="form-group">
+              <label>Aadhar Back (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'aadhar_image_back')}
+              />
+            </div>
+          </section>
+
+          {/* PAN Details */}
+          <section className="pan-section">
+            <h2>PAN Details:</h2>
+            <div className="form-group">
+              <label>PAN Number</label>
+              <input
+                type="text"
+                name="pan_number"
+                value={formData.pan_number}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>PAN Front (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'pan_image_front')}
+              />
+            </div>
+            <div className="form-group">
+              <label>PAN Back (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={e => handleFileChange(e, 'pan_image_back')}
+              />
+            </div>
+          </section>
+
+
         </div>
 
         <button type="submit" disabled={isLoading} className="submit-button">
           {isLoading ? 'Registering...' : 'Register'}
         </button>
       </form>
-
-      <style jsx>{`
-        .form-wrapper {
-          justify-content: center;
-          align-items: center;
-          padding: 50px 0;
-          background: none;
-          max-width: 1440px;
-          margin: auto;
-        }
-        .form-container {
-          padding: 30px;
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-        .form-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
-          margin-top: 20px;
-        }
-        .form-group {
-          display: flex;
-          flex-direction: column;
-        }
-        label {
-          font-weight: 600;
-          margin-bottom: 8px;
-          color: #333;
-        }
-        input {
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          font-size: 16px;
-          transition: border 0.3s;
-        }
-        input:focus {
-          border-color: #009693;
-          outline: none;
-        }
-        .submit-button {
-          width: 100%;
-          padding: 12px;
-          background: #009693;
-          border: none;
-          border-radius: 8px;
-          color: #fff;
-          font-size: 18px;
-          margin-top: 30px;
-          cursor: pointer;
-        }
-        .submit-button:hover {
-          background: #01a601;
-        }
-      `}</style>
-    </section>
+    </div>
   );
 };
 

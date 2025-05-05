@@ -359,9 +359,8 @@ const RegisterForm: React.FC = () => {
     type: string,
     required: boolean,
     icon: React.ReactNode,
-    colSpan = 1
   ) => (
-    <div className={`form-group ${colSpan === 2 ? 'col-span-2' : ''}`}>
+    <div className="form-group">
       <label>
         {icon}
         <span>{label}</span>
@@ -428,21 +427,21 @@ const RegisterForm: React.FC = () => {
       </div>
 
       <div className="register-stepper">
-        <div 
+        <div
           className={`step ${activeSection === 'personal' ? 'active' : ''}`}
           onClick={() => setActiveSection('personal')}
         >
           <span>1</span>
           Personal Details
         </div>
-        <div 
+        <div
           className={`step ${activeSection === 'company' ? 'active' : ''}`}
           onClick={() => setActiveSection('company')}
         >
           <span>2</span>
           Company Details
         </div>
-        <div 
+        <div
           className={`step ${activeSection === 'documents' ? 'active' : ''}`}
           onClick={() => setActiveSection('documents')}
         >
@@ -477,7 +476,7 @@ const RegisterForm: React.FC = () => {
             </h2>
             <div className="form-grid">
               {renderInputField('Company Name', 'company_name', 'text', true, <FiHome />)}
-              {renderInputField('Business Address', 'business_address', 'text', true, <FiHome />, 2)}
+              {renderInputField('Business Address', 'business_address', 'text', true, <FiHome />)}
               {renderInputField('Pin Code', 'pin_code', 'text', true, <FiHome />)}
               {renderInputField('Business ID', 'business_id', 'text', true, <FiFileText />)}
               {renderInputField('Website URL', 'website_url', 'url', false, <FiGlobe />)}
@@ -540,8 +539,8 @@ const RegisterForm: React.FC = () => {
 
         <div className="form-navigation">
           {activeSection !== 'personal' && (
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="secondary-button"
               onClick={() => setActiveSection(activeSection === 'company' ? 'personal' : 'company')}
             >
@@ -549,8 +548,8 @@ const RegisterForm: React.FC = () => {
             </button>
           )}
           {activeSection !== 'documents' ? (
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="primary-button"
               onClick={() => setActiveSection(activeSection === 'personal' ? 'company' : 'documents')}
             >

@@ -177,9 +177,7 @@
     resize: vertical;
   }
 
-  &.col-span-2 {
-    grid-column: span 2;
-  }
+ 
 }
 
 .file-upload-group {
@@ -353,9 +351,6 @@
     grid-template-columns: 1fr;
   }
 
-  .form-group.col-span-2 {
-    grid-column: span 1;
-  }
 
   .document-grid {
     grid-template-columns: 1fr;

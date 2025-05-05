@@ -108,7 +108,7 @@ const Loader = () => {
       alignItems: 'center',
       backgroundColor: 'rgba(255, 255, 255, 0.9)',
       zIndex: 9999
-    }}>
+    }} className='main-loader-container'>
       <div style={{
         fontSize: '3rem',
         color: '#009693',

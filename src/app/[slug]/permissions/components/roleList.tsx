@@ -105,6 +105,7 @@ import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
 import { FaEdit, FaPlus, FaTrash, FaEye } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import ResponsiveTable
+import Loader from "@/components/common/Loader";
 
 const RoleList: React.FC = () => {
   const router = useRouter();
@@ -128,7 +129,7 @@ const RoleList: React.FC = () => {
     }
   };
 
-  if (isLoading) return <div>Loading roles...</div>;
+  if (isLoading) return <Loader />;
   if (error) {
     toast.error("Error loading roles");
     return <div>Error loading roles.</div>;

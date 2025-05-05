@@ -151,6 +151,7 @@ import { useUser } from '@/provider/UserContext';
 import { FaEye, FaEyeSlash, FaPhone } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import { loginPageimage } from '@/assets/useImage';
+import Loader from './Loader';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -208,9 +209,12 @@ const LoginForm = () => {
     }
   }, [setUser, user]);
 
+  
+
   return (
     <>
       <div className="login-container2">
+        {isLoading && <Loader/>}
         <div className="left-panel">
           <div className="form-box">
             <h1 className="title">SecurePanel</h1>

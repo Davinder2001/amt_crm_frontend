@@ -637,6 +637,9 @@ table {
 @media (max-width: 768px) {
 
     /* ResponsiveTable.css */
+    .responsive-table{
+        background-color: transparent;
+    }
 
     .card-row {
         display: flex;

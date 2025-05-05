@@ -19,9 +19,9 @@ type Props<T extends { id: number; name?: string }> = {
   data: T[];
   columns: Column<T>[];
   itemsPerPage?: number;
-  onDelete: (id: number) => void;
-  onEdit: (id: number) => void;
-  onView: (id: number) => void;
+  onDelete?: (id: number) => void;
+  onEdit?: (id: number) => void;
+  onView?: (id: number) => void;
 };
 
 
@@ -74,7 +74,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </thead>
           <tbody>
             {currentData.map((item, index) => (
-              <tr key={index} onClick={() => onView(item.id)}>
+              <tr key={index} onClick={() => onView && onView(item.id)}>
                 {columns.map((col, i) => (
                   <td key={i}>
                     {col.render
@@ -106,11 +106,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                 <div className="card-actions">
                   <FaEdit
                     className="action-icon edit"
-                    onClick={() => onEdit(item.id)}
+                    onClick={() => onEdit && onEdit(item.id)}
                   />
                   <FaTrash
                     className="action-icon delete"
-                    onClick={() => onDelete(item.id)}
+                    onClick={() => onDelete && onDelete(item.id)}
                   />
                 </div>
               )}
@@ -154,9 +154,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               <button className="expand-text" onClick={() => toggleExpand(index)}>
                 {expandedCard === index ? 'Collapse' : 'Expand'}
               </button>
-              <div className="go-button" onClick={() => onView(item.id)}>
-                <FaExternalLinkAlt color="#007bff" size={18} />
-              </div>
+              {onView && (
+                <div className="go-button" onClick={() => onView(item.id)}>
+                  <FaExternalLinkAlt color="#007bff" size={18} />
+                </div>
+              )}
             </div>
           </div>
         ))}

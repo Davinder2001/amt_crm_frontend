@@ -208,16 +208,21 @@
 
         input[type="file"] {
             position: absolute;
-            z-index: -1;
             width: 100%;
-            height: 0;
+            height: 100%;
             opacity: 0;
             cursor: pointer;
+        }
+
+        &:hover {
+            .file-upload-box {
+                border-color: $primary-color;
+                background: rgba($primary-color, 0.03);
+            }
         }
     }
 
     .file-upload-box {
-        z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;

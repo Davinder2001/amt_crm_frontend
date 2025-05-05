@@ -8,7 +8,7 @@ import Image from 'next/image';
 export const UserNavbar = () => {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+  // const [submenuOpen, setSubmenuOpen] = useState(false);
   return (
     <>
       <div className='header-outer'>

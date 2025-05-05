@@ -148,9 +148,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
-import { FaEye, FaEyeSlash, FaPhone } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import { loginPageimage } from '@/assets/useImage';
+import { MdSmartphone, MdLogin } from 'react-icons/md';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -224,7 +225,7 @@ const LoginForm = () => {
                 <div className="input-group">
                   <label>Mobile Number</label>
                   <div className="input-wrapper filled">
-                    <FaPhone size={18} className="input-icon" />
+                    <MdSmartphone size={18} className="input-icon" />
                     <input
                       type="text"
                       placeholder="Enter your mobile number..."
@@ -270,12 +271,17 @@ const LoginForm = () => {
                 </div>
 
                 <button type="submit" className="login-button" disabled={isLoading}>
-                  {isLoading ? 'Logging in...' : 'Login'}
+                  {isLoading ? 'Logging in...' : (
+                    <>
+                      Login <MdLogin size={18} />
+                    </>
+                  )}
                 </button>
+
               </form>
             )}
 
-            
+
 
             <div className="login-footer-links">
               <Link href="/register-your-company" className="register-company-link">

@@ -6,6 +6,9 @@
 // homepage styling
 @use './homepage.scss' as *;
 
+// forgot password page styling
+@use './forms/forgotPassword.scss' as *;
+
 
 // admin dashboard section
 @use './adminDashboard/dashboard.scss' as *;

@@ -34,8 +34,8 @@ export const UserNavbar = () => {
           </nav>
 
           <div className="header-buttons">
-            <button className="btn-outline buttons">Sign Up</button>
-            <button className="btn-filled buttons" onClick={() => router.push('/login')}>Get Started</button>
+            <button className="btn-outline ">Sign Up</button>
+            <button className="btn-filled " onClick={() => router.push('/login')}>Get Started</button>
           </div>
         </header>
       </div>

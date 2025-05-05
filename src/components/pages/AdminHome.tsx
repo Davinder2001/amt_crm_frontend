@@ -7,6 +7,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Logout from '../common/Logout';
 import { useRouter } from 'next/navigation';
+import { homelogo } from '@/assets/useImage';
+import Image from 'next/image';
 
 const AdminHome = () => {
     const { data: profile, refetch } = useFetchProfileQuery();
@@ -56,8 +58,16 @@ const AdminHome = () => {
         <>
             <ToastContainer />
             <div className='admin-home-container'>
-                <Logout />
                 <div className='admin-header'>
+                    <div className="admin-header-inner">
+                        <Link href="/" className="logo-link">
+                            <Image src={homelogo} alt="Logo" width={20} height={20} />
+                            <span>Asset Management Technology</span>
+                        </Link>
+                        <Logout />
+                    </div>
+                </div>
+                <div className="admin-home-intro">
                     <h1>Welcome to Your Admin Dashboard</h1>
                     <p>Select a company to manage or view details</p>
                 </div>
@@ -73,25 +83,46 @@ const AdminHome = () => {
                                     <div className='company-card-content'>
                                         <div className='company-header'>
                                             <h2>{company.company_name}</h2>
-                                            <span className={`status ${company.verification_status}`}>{company.verification_status}</span>
+                                            <span className={`status ${company.verification_status}`}>
+                                                {company.verification_status}
+                                            </span>
                                         </div>
-                                        <p className='company-description'>{company.description || "No description available."}</p>
+                                        <p className='company-description'>
+                                            {company.description || "No description available."}
+                                        </p>
                                         <div className='company-info'>
                                             <p><strong>ID:</strong> {company.company_id}</p>
                                             <p><strong>Location:</strong> {company.location || "N/A"}</p>
                                         </div>
                                         <div className='company-actions'>
-                                            <button className='btn-action' onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
-                                            }}>Manage</button>
+                                            <button
+                                                className='btn-action'
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleClick(
+                                                        company.company_slug,
+                                                        company.id,
+                                                        company.verification_status === 'verified',
+                                                        e
+                                                    );
+                                                }}
+                                            >
+                                                Manage
+                                            </button>
                                         </div>
                                     </div>
                                 </Link>
                             </div>
                         ))
                     ) : (
-                        <p>No companies available.</p>
+                        <div className="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <p>No companies available</p>
+                        </div>
                     )}
                 </div>
             </div>

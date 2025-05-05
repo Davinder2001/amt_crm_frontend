@@ -420,7 +420,7 @@ const RegisterForm: React.FC = () => {
   );
 
   return (
-    <div className="register-container">
+    <div className="register-company-container">
       <div className="register-header">
         <h1>Create Your Business Account</h1>
         <p>Register your company to get started with our platform</p>

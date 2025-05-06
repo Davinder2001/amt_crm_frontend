@@ -6,6 +6,7 @@ import { useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/sto
 import Image from 'next/image';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useCompany } from '@/utils/Company';
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -14,7 +15,11 @@ const ViewItem = () => {
   console.log('images', item?.images);
   const [showConfirm, setShowConfirm] = useState(false);
   const router = useRouter();
-  const {companySlug} = useCompany();
+  const { companySlug } = useCompany();
+
+  // fetch the selected company info
+  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
+  const companyName = selectedCompany?.selected_company?.company_name ?? '';
 
   const handleDelete = async () => {
     try {
@@ -32,7 +37,11 @@ const ViewItem = () => {
 
   return (
     <div className="view-item-container">
-
+      <div className="view-inner-item-container">
+        <div className='view-item-header'>
+        {companyName}
+        </div>
+      
       <div className="view-item-inner-container">
         <p><strong>Item Code:</strong> {item.item_code}</p>
         <p><strong>Name:</strong> {item.name}</p>
@@ -71,9 +80,10 @@ const ViewItem = () => {
             })}
           </div>
         </div>
+        
       )}
 
-      <div className="buttons-container">
+      <div className="buttons-container viev-item-buttons-container">
         <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
           <button className="buttons" >
             Edit Item
@@ -81,7 +91,7 @@ const ViewItem = () => {
         </Link>
         <button
           onClick={() => setShowConfirm(true)}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          className=" buttons"
         >
           Delete Item
         </button>
@@ -92,6 +102,7 @@ const ViewItem = () => {
         onConfirm={handleDelete}
         onCancel={() => setShowConfirm(false)}
       />
+    </div>
     </div>
   );
 };

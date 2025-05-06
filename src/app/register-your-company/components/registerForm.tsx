@@ -1,33 +1,59 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAdminRegisterMutation } from '@/slices/auth/authApi';
-import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText, FiCreditCard, FiEyeOff, FiEye, FiFile } from 'react-icons/fi';
+import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText, FiCreditCard, FiEyeOff, FiEye, FiFile, FiXCircle } from 'react-icons/fi';
+
+
+const LOCAL_STORAGE_KEY = 'adminregistration';
+
+const getStoredFormData = () => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  }
+  return null;
+};
+
+const saveFormData = (data: Partial<RegisterForm>) => {
+  if (typeof window !== 'undefined') {
+    const dataToStore = { ...data };
+    // Remove File fields
+    Object.keys(dataToStore).forEach(key => {
+      if (dataToStore[key as keyof RegisterForm] instanceof File) {
+        delete dataToStore[key as keyof RegisterForm];
+      }
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToStore));
+  }
+};
+
+const getDefaultFormData = (): RegisterForm => ({
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+  company_name: '',
+  number: '',
+  business_address: '',
+  pin_code: '',
+  business_proof_type: '',
+  business_id: '',
+  aadhar_number: '',
+  pan_number: '',
+  website_url: '',
+  business_proof_image_front: null,
+  business_proof_image_back: null,
+  aadhar_image_front: null,
+  aadhar_image_back: null,
+  pan_image_front: null,
+  pan_image_back: null,
+  office_electricity_bill: null,
+});
 
 const RegisterForm: React.FC = () => {
-  const [formData, setFormData] = useState<RegisterForm>({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    company_name: '',
-    number: '',
-    business_address: '',
-    pin_code: '',
-    business_proof_type: '',
-    business_id: '',
-    aadhar_number: '',
-    pan_number: '',
-    website_url: '',
-    business_proof_image_front: null,
-    business_proof_image_back: null,
-    aadhar_image_front: null,
-    aadhar_image_back: null,
-    pan_image_front: null,
-    pan_image_back: null,
-    office_electricity_bill: null,
-  });
+  const [formData, setFormData] = useState<RegisterForm>(getDefaultFormData());
 
   const [activeSection, setActiveSection] = useState<'personal' | 'company' | 'documents'>('personal');
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
@@ -35,6 +61,13 @@ const RegisterForm: React.FC = () => {
     password: false,
     password_confirmation: false
   });
+
+  useEffect(() => {
+    const stored = getStoredFormData();
+    if (stored) {
+      setFormData(prev => ({ ...prev, ...stored }));
+    }
+  }, []);
 
   const togglePasswordVisibility = (field: 'password' | 'password_confirmation') => {
     setShowPassword(prev => ({
@@ -45,7 +78,11 @@ const RegisterForm: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      saveFormData(updated);
+      return updated;
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof RegisterForm) => {
@@ -173,6 +210,13 @@ const RegisterForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="register-form">
+        <span className="clear-button"
+        title='clear'
+          onClick={() => {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            setFormData(getDefaultFormData());
+          }}><FiXCircle /> </span>
+
         {activeSection === 'personal' && (
           <div className="form-section">
             <h2>
@@ -283,16 +327,16 @@ const RegisterForm: React.FC = () => {
 
               <div className="document-section">
                 <h3>Identity Proof</h3>
-                {renderInputField('Aadhar Number', 'aadhar_number', 'text', false, <FiCreditCard />)}
-                {renderFileUpload('Aadhar Front', 'aadhar_image_front', false)}
-                {renderFileUpload('Aadhar Back', 'aadhar_image_back', false)}
+                {renderInputField('Aadhar Number', 'aadhar_number', 'text', true, <FiCreditCard />,)}
+                {renderFileUpload('Aadhar Front', 'aadhar_image_front', true)}
+                {renderFileUpload('Aadhar Back', 'aadhar_image_back', true)}
               </div>
 
               <div className="document-section">
                 <h3>Tax Information</h3>
-                {renderInputField('PAN Number', 'pan_number', 'text', false, <FiFileText />)}
-                {renderFileUpload('PAN Front', 'pan_image_front', false)}
-                {renderFileUpload('PAN Back', 'pan_image_back', false)}
+                {renderInputField('PAN Number', 'pan_number', 'text', true, <FiFileText />)}
+                {renderFileUpload('PAN Front', 'pan_image_front', true)}
+                {renderFileUpload('PAN Back', 'pan_image_back', true)}
               </div>
 
               <div className="document-section">

@@ -7,6 +7,8 @@ import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AddEmployeeForm: React.FC = () => {
   const router = useRouter();
@@ -70,19 +72,47 @@ const AddEmployeeForm: React.FC = () => {
     }
   };
 
-  const renderField = (label: string, name: string, type = "text", placeholder = "") => (
+const renderField = (label: string, name: string, type = "text", placeholder = "") => {
+  return (
     <div className="employee-field">
       <label htmlFor={name}>{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={formData[name as keyof typeof formData] || ""}
-        onChange={handleChange}
-        placeholder={placeholder}
-      />
+
+      {type === "date" ? (
+        <DatePicker
+          selected={
+            formData[name as keyof typeof formData]
+              ? new Date(formData[name as keyof typeof formData] as string)
+              : null
+          }
+          onChange={(date: Date | null) =>
+            setFormData((prev) => ({
+              ...prev,
+              [name]: date ? date.toISOString().split("T")[0] : "",
+            }))
+          }
+          dateFormat="yyyy-MM-dd"
+          placeholderText={placeholder}
+          className="your-input-class"
+          showYearDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={100}
+          maxDate={new Date()}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={formData[name as keyof typeof formData] || ""}
+          onChange={handleChange}
+          placeholder={placeholder}
+        />
+      )}
+
       {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
     </div>
   );
+};
+
 
   return (
     <div>

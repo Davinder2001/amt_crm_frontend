@@ -181,7 +181,14 @@ const UpdateItem = () => {
           <button type="submit" disabled={isUpdating}>
             {isUpdating ? 'Updating...' : 'Update Item'}
           </button>
-          <button type="button" className="cancel-btn">Cancel</button>
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() => router.push(`/${companySlug}/store/view-item/${id}`)}
+          >
+            Cancel
+          </button>
+
         </div>
       </form>
     </div>

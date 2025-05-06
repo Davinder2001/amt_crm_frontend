@@ -2,12 +2,9 @@
 
 /* Main container for the page */
 .tax-page-outer-container {
-    padding: 30px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 1200px;
-    margin: auto;
 
 /* Heading */
 h2, h3 {
@@ -22,6 +19,7 @@ ul {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 15px;
+        padding: 20px;
 }
 
 li {
@@ -39,13 +37,27 @@ li {
         transform: scale(1.02);
     }
 
-
+    strong {
+        text-transform: capitalize;
+        color: $primary-color;
+        font-size: 18px;
+    }
 
     .texrate-buttons-inner {
         display: flex;
         flex-direction: column;
         gap: 15px;
+
+        .tex-wrapper {
+            color: green;
+            font-weight: 600;
+        }
+        .text-card-outer {
+            display: flex;
+            gap: 10px;
+        }
     }
+
 }
 
 /* Edit and Delete buttons */
@@ -53,7 +65,7 @@ button {
     background-color: $primary-color;
     color: white;
     border: none;
-    padding: 9px 22px;
+    padding: 5px 22px;
     border-radius: 50px;
     cursor: pointer;
     font-size: 15px;
@@ -82,8 +94,11 @@ input {
     &::placeholder {
         color: #aaa; /* Placeholder text color */
     }
-
-    
+    &:focus {
+        border-color: #009693;
+        background: #ffffff;
+        transform: scale(1);
+      }
         
 }
 
@@ -91,8 +106,7 @@ input {
 .create-tax-section {
     display: flex;
     flex-direction: column;
-
-    gap: 15px;
+    padding: 0px 20px;
     
     .create-tax-inputs {
         display: flex;
@@ -109,6 +123,7 @@ input {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin: 20px;
 
     button {
         padding: 9px 22px !important;
@@ -127,9 +142,7 @@ input {
 }
 
 /* Buttons positioning inside each li */
-li button {
-    // margin-left: 10px;
-}
+// Uncomment and add styles here if needed
 
 /* Confirm delete dialog */
 .confirm-delete {
@@ -144,7 +157,6 @@ li button {
 @media (max-width: 768px) {
     .tax-page-outer-container {
         padding: 20px;
-    }
 
     .create-tax-inputs {
         flex-direction: column;
@@ -154,4 +166,6 @@ li button {
     input {
         width: 100%;
     }
+}
+
 }

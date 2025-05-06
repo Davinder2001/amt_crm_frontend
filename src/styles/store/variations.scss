@@ -1,73 +1,4 @@
 @use '../variables' as *;
-
-
-// .variation-block {
-//   padding: 16px;
-//   border: 1px solid $primary-color;
-//   border-radius: 8px;
-//   margin: 45px 0 20px;
-//   background-color: #f1f9f9;
-//   display: flex;
-//   flex-wrap: wrap;
-
-//     label {
-//       display: block;
-//       font-weight: 500;
-//       margin-bottom: 6px;
-//       color: #333;
-//       font-size: 20px
-//     }
-  
-//     select,
-//     input {
-//       width: 200px;
-//       padding: 8px 10px;
-//       font-size: 14px;
-//       border: 1px solid $primary-color;
-//       border-radius: 6px;
-//       margin-top: 4px;
-//     }
-//   }
-  
-//   .remove-button {
-//     background-color: #ff4d4d;
-//     color: #fff;
-//     border: none;
-//     padding: 8px 12px;
-//     border-radius: 6px;
-//     cursor: pointer;
-//     margin-top: 20px;
-//     font-size: 14px;
-//     transition: background-color 0.3s ease;
-  
-//     &:hover {
-//       background-color: #e60000;
-//     }
-//   }
-  
-  
-  
-//   .variation-buttons-container {
-//     display: flex;
-//     justify-content: flex-end;
-//     gap: 10px;
-//     margin-top: 20px;
-//   }
-  
-//   hr {
-//     margin-top: 20px;
-//     margin-bottom: 20px;
-//     border: none;
-//     border-top: 1px solid #eee;
-//   }
-
-
-
-
-
-
-
-@use '../variables' as *;
 .variation-container {
   margin-top: 30px;
 }
@@ -97,7 +28,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    border: 1px solid #00969357;
     padding: 10px 14px;
     padding-right: 40px;
     border-radius: 8px;
@@ -108,11 +39,10 @@
     background-position: right 12px center;
     background-size: 14px;
     transition: border-color 0.3s, box-shadow 0.3s;
-  
-    
-  
-    &:hover {
+    &:focus {
       border-color: #009693;
+      background: #ffffff;
+      transform: scale(1);
     }
   }
   

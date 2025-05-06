@@ -79,7 +79,6 @@ function TaxesPage() {
                     </div>
                 </div>
             )}
-            <h2>Taxes List</h2>
             <div className='taxes-list-outer'>
                 <ul>
                 {taxesData?.data.map((tax) => (
@@ -106,7 +105,9 @@ function TaxesPage() {
                                 <strong>{tax.name}</strong> 
                                 <div className='texrate-buttons-outer'>
                                 <div className='texrate-buttons-inner'>
+                                <div className='tex-wrapper'>
                                 - {tax.rate}%
+                                </div>
                                 
                                 <div className='text-card-outer'>
                                 <button onClick={() => {

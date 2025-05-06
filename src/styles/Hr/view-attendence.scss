@@ -1,0 +1,29 @@
+@use '../variables' as *;
+.attendamce-t-btns-outer {
+    display: flex;
+    gap: 10px;
+
+
+
+
+.approve-btn, .reject-btn {
+    color: white;
+    padding: 4px 5px;
+    border-radius: 50px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.approve-btn{
+    background-color: $success-color;
+
+}
+
+.reject-btn{
+    background-color: $danger-color;
+}
+
+
+
+}

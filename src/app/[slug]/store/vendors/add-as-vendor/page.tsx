@@ -177,6 +177,7 @@ const Page = () => {
           </tbody>
         </table>
 
+        <div className='add-as-vendor-select-tex-outer'>
         {items.length > 0 && (
           <div style={{ marginTop: '20px' }}>
             <label><strong>Tax Type:</strong></label><br />
@@ -209,6 +210,7 @@ const Page = () => {
             </select>
           </div>
         )}
+        </div>
 
         <div className='add-as-a-v-button c-s-buttons-outers'>
           <span className='buttons c-s-buttons'>Cancel</span>

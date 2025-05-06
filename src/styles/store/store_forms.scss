@@ -133,8 +133,13 @@ overflow: scroll;
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid $border-color;
+    border: 1px solid #00969357;  
     border-radius: 10px;
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1);
+    }
     
   }
 }
@@ -224,13 +229,18 @@ overflow: scroll;
   .add-as-a-v-inputs {
     margin-bottom: 5px;
     display: flex;
-    gap: 50px;
+    gap: 15px;
 
     input {
-      border: 1px solid $primary-color;
+      border: 1px solid #00969357;  
       padding: 9px;
       width: 100%;
       border-radius: 5px;
+      &:focus {
+        border-color: #009693;
+        background: #ffffff;
+        transform: scale(1);
+      }
     }
   }
 
@@ -259,6 +269,12 @@ overflow: scroll;
 
     }
   }
+
+  .add-as-vendor-select-tex-outer {
+    display: flex;
+    gap: 20px;
+    padding: 0px 20px;
+}
 }
 
 // Add Items Section
@@ -280,11 +296,15 @@ overflow: scroll;
 
   input {
     padding: 9px;
-    border: 1px solid $primary-color;
+    border: 1px solid #00969357;  
     border-radius: 5px;
     width: 100%;
     margin-top: 5px;
-
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1);
+    }
   }
 
 }

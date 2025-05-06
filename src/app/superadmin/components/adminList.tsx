@@ -3,7 +3,6 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
-import { FaEye } from 'react-icons/fa';
 import Loader from '@/components/common/Loader';
 
 const statusOptions = ['active', 'blocked'];

@@ -65,7 +65,7 @@ const ProfileIcon: React.FC = () => {
       setIsAuthenticated(false);
       setUser(null);
     }
-  }, [setUser]);
+  }, [setUser, accessToken, userType]);
 
   return (
     <div className="account">

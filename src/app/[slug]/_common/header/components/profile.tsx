@@ -64,7 +64,7 @@ const Profile: React.FC = () => {
       setIsAuthenticated(false);
       setUser(null);
     }
-  }, [setUser]);
+  }, [setUser, accessToken, userType]);
 
 
   return (

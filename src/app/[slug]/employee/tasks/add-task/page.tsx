@@ -63,7 +63,7 @@ const Page: React.FC = () => {
               required
             >
               <option value="">Select a user</option>
-                {usersData?.user.map((user: UserProfile) => (
+                {usersData?.users.map((user: UserProfile) => (
                 <option key={user.id} value={user.id}>
                   {user.name}
                 </option>

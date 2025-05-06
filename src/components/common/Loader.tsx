@@ -39,7 +39,7 @@ const Loader = () => {
         }, 300); // Change icon every 300ms
 
         return () => clearInterval(interval);
-    }, []);
+    }, [icons.length]);
 
     const CurrentIcon = icons[currentIconIndex];
 

@@ -500,8 +500,12 @@
 @media (max-width: 480px) {
     .overview-grid-container {
         grid-template-columns: repeat(2, 1fr);
-    }
 
+        .value-count{
+            font-size: 18px;
+        }
+    }
+ 
     .card {
         flex-direction: column;
         text-align: center;
@@ -533,14 +537,13 @@
 
 @media (max-width: 375px) {
     .overview-grid-container {
-        grid-template-columns: 1fr;
-    }
-
+        grid-template-columns: 1fr 1fr;
+    padding: 0px;
     .card {
-        flex-direction: row;
+        flex-direction: column;
         text-align: left;
         padding: 16px;
-
+        align-items: flex-start;
         &::before {
             width: 4px;
             height: 100%;
@@ -548,4 +551,4 @@
             bottom: auto;
         }
     }
-}
+}}

@@ -72,46 +72,46 @@ const AddEmployeeForm: React.FC = () => {
     }
   };
 
-const renderField = (label: string, name: string, type = "text", placeholder = "") => {
-  return (
-    <div className="employee-field">
-      <label htmlFor={name}>{label}</label>
+  const renderField = (label: string, name: string, type = "text", placeholder = "") => {
+    return (
+      <div className="employee-field">
+        <label htmlFor={name}>{label}</label>
 
-      {type === "date" ? (
-        <DatePicker
-          selected={
-            formData[name as keyof typeof formData]
-              ? new Date(formData[name as keyof typeof formData] as string)
-              : null
-          }
-          onChange={(date: Date | null) =>
-            setFormData((prev) => ({
-              ...prev,
-              [name]: date ? date.toISOString().split("T")[0] : "",
-            }))
-          }
-          dateFormat="yyyy-MM-dd"
-          placeholderText={placeholder}
-          className="your-input-class"
-          showYearDropdown
-          scrollableYearDropdown
-          yearDropdownItemNumber={100}
-          maxDate={new Date()}
-        />
-      ) : (
-        <input
-          type={type}
-          name={name}
-          value={formData[name as keyof typeof formData] || ""}
-          onChange={handleChange}
-          placeholder={placeholder}
-        />
-      )}
+        {type === "date" ? (
+          <DatePicker
+            selected={
+              formData[name as keyof typeof formData]
+                ? new Date(formData[name as keyof typeof formData] as string)
+                : null
+            }
+            onChange={(date: Date | null) =>
+              setFormData((prev) => ({
+                ...prev,
+                [name]: date ? date.toISOString().split("T")[0] : "",
+              }))
+            }
+            dateFormat="yyyy-MM-dd"
+            placeholderText={placeholder}
+            className="your-input-class"
+            showYearDropdown
+            scrollableYearDropdown
+            yearDropdownItemNumber={100}
+            maxDate={new Date()}
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={formData[name as keyof typeof formData] || ""}
+            onChange={handleChange}
+            placeholder={placeholder}
+          />
+        )}
 
-      {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
-    </div>
-  );
-};
+        {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
+      </div>
+    );
+  };
 
 
   return (
@@ -120,52 +120,54 @@ const renderField = (label: string, name: string, type = "text", placeholder = "
         <form onSubmit={handleSubmit}>
           {step === 1 && (
             <div className="employee-fields-wrapper">
-              {renderField("Name", "name")}
-              {renderField("Phone Number", "number", "text", "0000 000 000")}
-              {renderField("Address", "address")}
-              {renderField("Nationality", "nationality")}
-              {renderField("Date of Birth", "dob", "date")}
-              {renderField("Religion", "religion")}
-              {renderField("Marital Status", "maritalStatus")}
-              {renderField("Passport No", "passportNo")}
-              {renderField("Emergency Contact", "emergencyContact")}
-              {renderField("Emergency Contact Relation", "emergencyContactRelation")}
+              {renderField("Name", "name", "text", "Enter full name")}
+              {renderField("Phone Number", "number", "text", "Enter phone number")}
+              {renderField("Address", "address", "text", "Enter residential address")}
+              {renderField("Nationality", "nationality", "text", "Enter nationality")}
+              {renderField("Date of Birth", "dob", "date", "Select date of birth")}
+              {renderField("Religion", "religion", "text", "Enter religion")}
+              {renderField("Marital Status", "maritalStatus", "text", "Enter marital status")}
+              {renderField("Passport No", "passportNo", "text", "Enter passport number")}
+              {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number")}
+              {renderField("Emergency Contact Relation", "emergencyContactRelation", "text", "Enter relationship")}
+
             </div>
           )}
 
           {step === 2 && (
             <div className="employee-fields-wrapper">
-              {renderField("Email", "email", "email")}
-              {renderField("Password", "password", "password")}
-              {renderField("Salary", "salary")}
-              {renderField("Current Salary", "currentSalary")}
-              {renderField("Date of Hiring", "dateOfHire", "date")}
-              {renderField("Work Location", "workLocation")}
-              {renderField("Joining Date", "joiningDate", "date")}
+              {renderField("Email", "email", "email", "Enter email address")}
+              {renderField("Password", "password", "password", "Create a password")}
+              {renderField("Salary", "salary", "text", "Enter expected salary")}
+              {renderField("Current Salary", "currentSalary", "text", "Enter current salary")}
+              {renderField("Date of Hiring", "dateOfHire", "date", "Select hiring date")}
+              {renderField("Work Location", "workLocation", "text", "Enter work location")}
+              {renderField("Joining Date", "joiningDate", "date", "Select joining date")}
+
               <div className="employee-field">
-                  <label htmlFor="shiftTimings">Shift Timings</label>
-                  <select
-                    name="shiftTimings"
-                    value={formData.shiftTimings}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Shift</option>
-                    {shiftLoading ? (
-                      <option disabled>Loading shifts...</option>
-                    ) : shiftError ? (
-                      <option disabled>Error loading shifts</option>
-                    ) : (
-                      shiftData?.data?.map((shift: { id: number; shift_name: string; start_time: string; end_time: string }) => (
-                        <option key={shift.id} value={shift.id}>
-                          {`${shift.shift_name} (${shift.start_time} - ${shift.end_time})`}
-                        </option>
-                      ))
-                    )}
-                  </select>
-                  {errors.shiftTimings && (
-                    <div className="text-red-500 text-sm">{errors.shiftTimings}</div>
+                <label htmlFor="shiftTimings">Shift Timings</label>
+                <select
+                  name="shiftTimings"
+                  value={formData.shiftTimings}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Shift</option>
+                  {shiftLoading ? (
+                    <option disabled>Loading shifts...</option>
+                  ) : shiftError ? (
+                    <option disabled>Error loading shifts</option>
+                  ) : (
+                    shiftData?.data?.map((shift: { id: number; shift_name: string; start_time: string; end_time: string }) => (
+                      <option key={shift.id} value={shift.id}>
+                        {`${shift.shift_name} (${shift.start_time} - ${shift.end_time})`}
+                      </option>
+                    ))
                   )}
-                </div>
+                </select>
+                {errors.shiftTimings && (
+                  <div className="text-red-500 text-sm">{errors.shiftTimings}</div>
+                )}
+              </div>
 
 
               <div className="employee-field">
@@ -209,19 +211,22 @@ const renderField = (label: string, name: string, type = "text", placeholder = "
 
           {step === 3 && (
             <div className="employee-fields-wrapper">
-              {renderField("Bank Name", "bankName")}
-              {renderField("Account No", "accountNo")}
-              {renderField("IFSC Code", "ifscCode")}
-              {renderField("PAN No", "panNo")}
-              {renderField("UPI ID", "upiId")}
-              {renderField("Address Proof (e.g. Aadhar Number)", "addressProof")}
+              {renderField("Bank Name", "bankName", "text", "Enter bank name")}
+              {renderField("Account No", "accountNo", "text", "Enter bank account number")}
+              {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code")}
+              {renderField("PAN No", "panNo", "text", "Enter PAN number")}
+              {renderField("UPI ID", "upiId", "text", "Enter UPI ID")}
+              {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number")}
+
               <div className="employee-field">
                 <label htmlFor="profilePicture">Profile Picture</label>
                 <input
                   type="file"
                   name="profilePicture"
+                  accept="image/*"
                   onChange={handleChange}
                 />
+
                 {errors.profilePicture && (
                   <div className="text-red-500 text-sm">{errors.profilePicture}</div>
                 )}

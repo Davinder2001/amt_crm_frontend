@@ -29,11 +29,15 @@
       select,
       textarea {
         padding: 10px;
-        border: 1px solid $primary-color;
+        border: 1px solid #00969357;
         border-radius:10px;
         font-size: 1rem;
         transition: all 0.3s ease;
-
+        &:focus {
+          border-color: #009693;
+          background: #ffffff;
+          transform: scale(1);
+        }
         
       }
 

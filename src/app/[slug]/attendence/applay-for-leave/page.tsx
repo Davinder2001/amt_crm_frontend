@@ -70,58 +70,63 @@ const Page = () => {
 
   return (
     <>
-  <Link href={`/${companySlug}/attendence`} className="back-button">
-    <FaArrowLeft size={20} color="#fff" />
-  </Link>
+      <Link href={`/${companySlug}/attendence`} className="back-button">
+        <FaArrowLeft size={20} color="#fff" />
+      </Link>
 
-  <div className="apply-leave-page">
-    <div className="form-card">
-      <h1 className="page-title">Apply for Leave</h1>
+      <div className="apply-leave-page">
+        <div className="form-card">
+          <h1 className="page-title">Apply for Leave</h1>
+          <div className='aply-for-leave-form-outer'>
+            <div className="datepicker-container">
+              <DatePicker
+                inline
+                selected={null}
+                onChange={(date: Date | null) => date && handleDateClick(date)}
+                highlightDates={selectedDates}
+              />
+            
 
-      <div className="datepicker-container">
-        <DatePicker
-          inline
-          selected={null}
-          onChange={(date: Date | null) => date && handleDateClick(date)}
-          highlightDates={selectedDates}
-        />
+            {selectedDates.length > 0 && (
+              <p className="date-range">
+                <strong>Date Range:</strong> {getFormattedRange()}
+              </p>
+            )}
+            </div>
+<div className='aply-for-leave-input-wrapper'>
+            <div className="input-group">
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Subject"
+              />
+            </div>
+
+            <div className="input-group">
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Write your reason for leave..."
+              />
+            </div>
+            <div className='aply-for-leave-btn-wrapper'>
+          <button
+            className="apply-button"
+            onClick={handleApplyLeave}
+            disabled={isLoading || selectedDates.length === 0 || !subject || !description}
+          >
+            {isLoading ? 'Applying...' : 'Apply for Leave'}
+          </button>
+          </div>
+            </div>
+          </div>
+          
+
+          <ToastContainer />
+        </div>
       </div>
-
-      {selectedDates.length > 0 && (
-        <p className="date-range">
-          <strong>Date Range:</strong> {getFormattedRange()}
-        </p>
-      )}
-
-      <div className="input-group">
-        <input
-          type="text"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          placeholder="Subject"
-        />
-      </div>
-
-      <div className="input-group">
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Write your reason for leave..."
-        />
-      </div>
-
-      <button
-        className="apply-button"
-        onClick={handleApplyLeave}
-        disabled={isLoading || selectedDates.length === 0 || !subject || !description}
-      >
-        {isLoading ? 'Applying...' : 'Apply for Leave'}
-      </button>
-
-      <ToastContainer />
-    </div>
-  </div>
-</>
+    </>
 
   );
 };

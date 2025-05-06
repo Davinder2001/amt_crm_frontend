@@ -1,234 +1,250 @@
 @use '../variables' as *;
+
 .apply-leave-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f6f7fb; // Light background
-    
-    .form-card {
-      width: 100%;
-      max-width: 550px;
-      padding: 30px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-  
-      &:hover {
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-      }
+  display: flex;
+  justify-content: center;
+  background: #f6f7fb;
+
+  .form-card {
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
     }
-  
+
     .page-title {
       text-align: center;
       font-size: 28px;
       font-weight: 600;
-      color: $primary-color; // Primary color
+      color: $white;
+      background: $primary-color;
+      padding: 25px 0px;
+      border-radius: 15px 15px 0px 0px;
       margin-bottom: 25px;
     }
-  
-    .datepicker-container {
-      margin-bottom: 30px;
-    }
-  
-    .date-range {
-      text-align: center;
-      font-size: 16px;
-      color: grey; // Grey text
-      margin-bottom: 30px;
-      
-      strong {
-        font-weight: 600;
-        color: green; // Green text for emphasis
+
+    .aply-for-leave-form-outer {
+      display: flex;
+      gap: 20px;
+      padding: 30px;
+      .datepicker-container {
+        display: flex;
+        flex-direction: column;
+
+        .date-range {
+          text-align: center;
+          font-size: 16px;
+          color: grey;
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+
+          strong {
+            font-weight: 600;
+            color: green;
+          }
+        
+
+
+
       }
     }
-  
-    .input-group {
-      margin-bottom: 25px;
-  
-      input,
-      textarea {
-        width: 100%;
-        padding: 14px 18px;
-        font-size: 16px;
-        background: #f9f9f9; // Light grey background
-        border: 1px solid $primary-color; // Light border
-        border-radius: 12px;
-        outline: none;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  
-        &:focus {
-          border-color: #009693;
-          background: #ffffff;
-          transform: scale(1.02);
+
+    .aply-for-leave-input-wrapper {
+      width: 100%;
+
+      .input-group {
+        margin-bottom: 25px;
+
+        input,
+        textarea {
+          width: 100%;
+          padding: 14px 18px;
+          font-size: 16px;
+          background: #f9f9f9;
+          border: 1px solid #00969357;
+          border-radius: 12px;
+          outline: none;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+          &:focus {
+            border-color: #009693;
+            background: #ffffff;
+          }
+        }
+
+        textarea {
+          min-height: 150px;
+          resize: vertical;
         }
       }
-  
-      textarea {
-        min-height: 150px;
-        resize: vertical;
+
+      .aply-for-leave-btn-wrapper {
+        display: flex;
+        justify-content: flex-end;
+
+        .apply-button {
+          padding: 10px 15px;
+          font-size: 17px;
+          font-weight: 600;
+          color: white;
+          background-color: teal;
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            background-color: darkcyan;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          }
+
+          &:disabled {
+            background-color: lightgrey;
+            cursor: not-allowed;
+          }
+        }
       }
     }
-  
-    .apply-button {
-      width: 100%;
-      padding: 16px;
-      font-size: 17px;
-      font-weight: 600;
-      color: white; // White text
-      background-color: teal; // Teal background
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  
-      &:hover {
-        background-color: darkcyan; // Dark cyan on hover
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      }
-  
-      &:disabled {
-        background-color: lightgrey; // Light grey for disabled state
-        cursor: not-allowed;
-      }
-    }
-  
-    // .back-button {
-    //   position: absolute;
-    //   top: 20px;
-    //   left: 20px;
-    //   background-color: teal; 
-    //   color: white;
-    //   padding: 8px 14px;
-    //   border-radius: 20px;
-    //   display: inline-flex;
-    //   justify-content: center;
-    //   align-items: center;
-    //   transition: all 0.3s ease;
-  
-    //   &:hover {
-    //     background-color: darkcyan; 
-    //     transform: scale(1.1);
-    //   }
-    // }
   }
-  
+}
+
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  border-top-right-radius: .3rem;
+  background-color: $primary-color;
+}
+
+h2.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: white !important;
+}
+.react-datepicker__month-container {
+  float: left;
+  width: 100%;
+}
+
+}
+
+// apply_for_leave styling end ........................................................
 
 
 
-
-/* General Container */
+/* ========== Container ========== */
 .attendance-container {
-    padding: 1rem;
-    background-color: #f4f7fc;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-  
-    .page-title {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 1.5rem;
-    }
-  }
-  
-  /* Button Group */
-  .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .button {
-    padding: 12px 20px;
-    font-size: 1rem;
+  background-color: #f4f7fc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  padding-bottom: 2rem;
+  .page-title {
+    font-size: 2rem;
     font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  
-    &:hover {
-      transform: scale(1.05);
-    }
+    color: #ffffff;
+    background-color: $primary-color;
+    padding: 20px 0px;
+    margin-bottom: 1.5rem;
+    border-radius: 15px 15px 0px 0px;
+
   }
-  
-  .webcam-button {
-    background-color: #0096a5;
+}
+
+/* ========== Buttons ========== */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
   }
-  
-  .upload-button {
-    background-color: #4caf50;
-  }
-  
-  .webcam-button:hover {
+}
+
+.webcam-button {
+  background-color: #0096a5;
+
+  &:hover {
     background-color: #007f7b;
   }
-  
-  .upload-button:hover {
+}
+
+.upload-button {
+  background-color: #4caf50;
+
+  &:hover {
     background-color: #388e3c;
   }
-  
-  /* Webcam Capture Section */
-  .webcam-container {
-    margin-bottom: 1rem;
+}
+
+.capture-button {
+  background-color: #4caf50;
+
+  &:hover {
+    background-color: #388e3c;
   }
-  
+}
+
+.cancel-button {
+  background-color: #f44336;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
+}
+
+/* ========== Webcam Section ========== */
+.webcam-container {
+  margin-bottom: 1rem;
+
   .webcam {
     width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-  
+
   .webcam-actions {
     margin-top: 1rem;
     display: flex;
     justify-content: space-around;
   }
-  
-  .capture-button {
-    background-color: #4caf50;
-  }
-  
-  .cancel-button {
-    background-color: #f44336;
-  }
-  
-  .capture-button:hover {
-    background-color: #388e3c;
-  }
-  
-  .cancel-button:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* File Upload Input */
-  .upload-input {
-    display: none;
-  }
-  
-  /* Preview Section - New Design */
-  .preview-container {
-    margin-top: 2rem;
-    text-align: center;
-  }
-  
+}
+
+/* ========== File Upload ========== */
+.upload-input {
+  display: none;
+}
+
+/* ========== Image Preview ========== */
+.preview-container {
+  margin-top: 2rem;
+  text-align: center;
+
   .preview-text {
     font-size: 1.1rem;
     font-weight: bold;
     color: #333;
     margin-bottom: 1rem;
   }
-  
+
   .image-preview-card {
     display: inline-block;
     width: 300px;
@@ -237,56 +253,125 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
     &:hover {
       transform: scale(1.05);
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
   }
-  
-  .preview-image {
+}
+
+/* ========== Submit Button ========== */
+.submit-button {
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #388e3c;
+  }
+
+  &:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+}
+
+/* ========== Datepicker Custom ========== */
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  border-top-right-radius: 0.3rem;
+  background-color: $primary-color;
+}
+
+h2.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: white !important;
+}
+
+/* ==========Add attendance  Responsive ========== */
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image-preview-card {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
+    height: auto;
   }
-  
-  /* Submit Button */
+
+  .button {
+    width: 100%;
+    text-align: center;
+  }
+
   .submit-button {
     width: 100%;
-    padding: 12px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: background-color 0.3s ease;
-  
-    &:hover {
-      background-color: #388e3c;
-    }
-  
-    &:disabled {
-      background-color: #ddd;
-      cursor: not-allowed;
-    }
   }
+}
+
+
+
+
+/* ========== apply_for_leave Responsive ========== */
+
+@media (max-width: 991px) {
+  .aply-for-leave-form-outer {
+    gap: 20px;
+
+    .datepicker-container,
+    .aply-for-leave-input-wrapper {
+      width: 100%;
+      
+    }
+   
+  }
+  .react-datepicker__week {
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+}
+  .form-card {
+    margin: 0 15px;
+  }
+
+
+}
+
+@media (max-width: 576px) {
+  .page-title {
+    font-size: 22px;
+    padding: 20px 0;
+  }
+  .aply-for-leave-form-outer {
+    flex-direction: column;
   
-  /* Back Button */
-  // .back-button {
-  //   position: absolute;
-  //   top: 20px;
-  //   left: 20px;
-  //   background-color: transparent;
-  //   border: none;
-  //   cursor: pointer;
-  //   transition: transform 0.3s ease;
-  
-  //   &:hover {
-  //     transform: scale(1.1);
-  //   }
-  // }
-  
+  }
+  .input-group input,
+  .input-group textarea {
+    font-size: 14px;
+    padding: 9px 14px !important;
+  }
+  .input-group textarea{
+    min-height: unset !important;
+  }
+
+  .apply-button {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+}

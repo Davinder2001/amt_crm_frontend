@@ -49,22 +49,22 @@ const RoleList: React.FC = () => {
           : "None",
     },
     { label: "Company ID", key: "company_id" as keyof Role },
-    {
-      label: "Actions",
-      render: (role: Role) => (
-        <div className="permissions-form-actions-icons-outer">
-          <Link href={`/${companySlug}/permissions/view-role/${role.id}`}>
-            <span><FaEye color="#222" /></span>
-          </Link>
-          <Link href={`/${companySlug}/permissions/edit-role/${role.id}`}>
-            <span><FaEdit color="#222" /></span>
-          </Link>
-          <span onClick={() => handleDeleteRole(role.id)} className="cursor-pointer">
-            <FaTrash color="#222" />
-          </span>
-        </div>
-      ),
-    },
+    // {
+    //   label: "Actions",
+    //   render: (role: Role) => (
+    //     <div className="permissions-form-actions-icons-outer">
+    //       <Link href={`/${companySlug}/permissions/view-role/${role.id}`}>
+    //         <span><FaEye color="#222" /></span>
+    //       </Link>
+    //       <Link href={`/${companySlug}/permissions/edit-role/${role.id}`}>
+    //         <span><FaEdit color="#222" /></span>
+    //       </Link>
+    //       <span onClick={() => handleDeleteRole(role.id)} className="cursor-pointer">
+    //         <FaTrash color="#222" />
+    //       </span>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (

@@ -86,8 +86,8 @@ const authApi = userCreateApiSlice.injectEndpoints({
         method: "POST",
         body: formData,
       }),
+      invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
     }),
-
   }),
 });
 

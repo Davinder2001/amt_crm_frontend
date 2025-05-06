@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAdminRegisterMutation } from '@/slices/auth/authApi';
 import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText, FiCreditCard, FiEyeOff, FiEye, FiFile, FiXCircle } from 'react-icons/fi';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 
 const LOCAL_STORAGE_KEY = 'adminregistration';
@@ -54,7 +55,7 @@ const getDefaultFormData = (): RegisterForm => ({
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<RegisterForm>(getDefaultFormData());
-
+  const [showConfirm, setShowConfirm] = useState(false);
   const [activeSection, setActiveSection] = useState<'personal' | 'company' | 'documents'>('personal');
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
   const [showPassword, setShowPassword] = useState({
@@ -92,23 +93,48 @@ const RegisterForm: React.FC = () => {
     }
   };
 
+  const handleClearForm = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    setFormData(getDefaultFormData());
+    setShowConfirm(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const data = new FormData();
 
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value instanceof File) {
-        data.append(key, value, value.name);
-      } else if (value !== null && value !== undefined) {
-        data.append(key, value);
-      }
-    });
+    // Append all text fields
+    data.append('first_name', formData.first_name);
+    data.append('last_name', formData.last_name);
+    data.append('email', formData.email);
+    data.append('password', formData.password);
+    data.append('password_confirmation', formData.password_confirmation);
+    data.append('company_name', formData.company_name);
+    data.append('number', formData.number);
+    data.append('business_address', formData.business_address);
+    data.append('pin_code', formData.pin_code);
+    data.append('business_proof_type', formData.business_proof_type);
+    data.append('business_id', formData.business_id);
+    data.append('aadhar_number', formData.aadhar_number);
+    data.append('pan_number', formData.pan_number);
+    data.append('website_url', formData.website_url);
+
+    // Append files conditionally
+    if (formData.business_proof_image_front) data.append('business_proof_image_front', formData.business_proof_image_front);
+    if (formData.business_proof_image_back) data.append('business_proof_image_back', formData.business_proof_image_back);
+    if (formData.aadhar_image_front) data.append('aadhar_image_front', formData.aadhar_image_front);
+    if (formData.aadhar_image_back) data.append('aadhar_image_back', formData.aadhar_image_back);
+    if (formData.pan_image_front) data.append('pan_image_front', formData.pan_image_front);
+    if (formData.pan_image_back) data.append('pan_image_back', formData.pan_image_back);
+    if (formData.office_electricity_bill) data.append('office_electricity_bill', formData.office_electricity_bill);
 
     try {
       const response = await adminRegister(data).unwrap();
       console.log('Registration successful:', response);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration failed:', error);
+      alert(error?.data?.message || 'Something went wrong. Please check the form and try again.');
     }
   };
 
@@ -210,12 +236,13 @@ const RegisterForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="register-form">
-        <span className="clear-button"
-        title='clear'
-          onClick={() => {
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
-            setFormData(getDefaultFormData());
-          }}><FiXCircle /> </span>
+        <ConfirmDialog
+          isOpen={showConfirm}
+          message="Are you sure you want to clear the form?"
+          onConfirm={handleClearForm}
+          onCancel={() => setShowConfirm(false)}
+        />
+        <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
 
         {activeSection === 'personal' && (
           <div className="form-section">

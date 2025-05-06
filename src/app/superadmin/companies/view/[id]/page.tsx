@@ -56,44 +56,44 @@ const ViewCompanyPage = () => {
 
         <dl className="vc-grid">
           <div className="vc-item">
-            <dt>Verification Status</dt>
+            <dt>Verification Status:</dt>
             <dd>{company.verification_status.replace('_', ' ')}</dd>
           </div>
           <div className="vc-item">
-            <dt>Payment Status</dt>
+            <dt>Payment Status:</dt>
             <dd>{company.payment_status.replace('_', ' ')}</dd>
           </div>
           <div className="vc-item">
-            <dt>Business Address</dt>
+            <dt>Business Address:</dt>
             <dd>{company.business_address}</dd>
           </div>
           <div className="vc-item">
-            <dt>Business ID</dt>
+            <dt>Business ID:</dt>
             <dd>{company.business_id}</dd>
           </div>
           <div className="vc-item">
-            <dt>Proof Type</dt>
+            <dt>Proof Type:</dt>
             <dd>{company.business_proof_type}</dd>
           </div>
           <div className="vc-item">
-            <dt>PIN Code</dt>
+            <dt>PIN Code:</dt>
             <dd>{company.pin_code}</dd>
           </div>
         </dl>
         <div className="Vcompany-edit-delete-btn-outer">
-  <div className="Vcompany-edit-delete-btn-inner">
-  <FaEdit
-    onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
-    className="cursor-pointer text-green-500 text-xl hover:scale-110 transition-transform"
-    title="Edit"
-  />
-  <FaTrash
-    onClick={() => router.push(`/superadmin/companies/delete/${company.company_id}`)}
-    className="cursor-pointer text-red-500 text-xl hover:scale-110 transition-transform"
-    title="Delete"
-  />
-  </div>
-</div>
+          <div className="Vcompany-edit-delete-btn-inner">
+            <span onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
+              className="buttons"
+              title="Edit">
+              Edit item
+            </span>
+            <span onClick={() => router.push(`/superadmin/companies/delete/${company.company_id}`)}
+              className="buttons"
+              title="Delete">
+              Delete item
+            </span>
+          </div>
+        </div>
 
         {(company.business_proof_front || company.business_proof_back) && (
           <div className="vc-proofs">

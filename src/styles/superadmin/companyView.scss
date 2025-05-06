@@ -1,99 +1,111 @@
 @use '../variables' as *;
+
 // ViewCompany.scss
-.vc-container{
-  
-    .vc-inner-container {
-        margin: 2rem auto;
-        background: $white;
-        border-radius: 10px;
-        box-shadow: $box-shadow ;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        
-  .vc-header {
-    background: #009693;
-    color: $white;
-    padding: 1rem;
-    .vc-title {
-      margin: 0;
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-    .vc-subtitle {
+.vc-container {
+
+  .vc-inner-container {
+    margin: 2rem auto;
+    background: $white;
+    border-radius: 10px;
+    box-shadow: $box-shadow ;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    .vc-header {
+      background: #009693;
+      color: $white;
+      padding: 1rem;
+
+      .vc-title {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+
+      .vc-subtitle {
         color: white;
         font-size: 16px;
         margin: 5px 0px;
-    }
-  }
-  .vc-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px 10px;
-    padding: 1.5rem;
-  
-    .vc-item {
-      dt {
-        font-size: 18px;
-        font-weight: 500;
-        color: $dark-color;
-        margin-bottom: 0.25rem;
-      }
-      dd {
-        margin: 0;
-        font-size: 16px;
-        color: $para-color;
-        text-transform: capitalize;
       }
     }
+
+    .vc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      padding: 1.5rem;
+      gap: 20px;
+
+
+      .vc-item {
+        display: flex;
+        gap: 5px;
+        border-bottom: 1px dashed #6bfffca1;
+        padding-bottom: 15px;
+
+        dt {
+          font-size: 17px;
+          font-weight: 700;
+          color: $primary-color;
+          margin-bottom: 0.25rem;
+        }
+
+        dd {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #575757;
+          text-transform: capitalize;
+        }
+
+      }
+    }
+
+    .vc-proofs {
+      border-top: 1px solid #eee;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      .vc-proof {
+        flex: 1 1 45%;
+
+        figcaption {
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          color: $para-color;
+        }
+
+        img {
+          width: 100%;
+          height: auto;
+          border-radius: 6px;
+          box-shadow: $box-shadow;
+        }
+      }
+    }
+
+    .vc-loading,
+    .vc-error {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    .vc-error {
+      color: $danger-color;
+    }
   }
-  
-  .vc-proofs {
-    border-top: 1px solid #eee;
-    padding: 1.5rem;
+
+  .Vcompany-edit-delete-btn-outer {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  
-    .vc-proof {
-      flex: 1 1 45%;
-  
-      figcaption {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: $para-color;
-      }
-  
-      img {
-        width: 100%;
-        height: auto;
-        border-radius: 6px;
-        box-shadow: $box-shadow;
-      }
+    justify-content: end;
+    padding: 20px;
+
+    .Vcompany-edit-delete-btn-inner {
+      display: flex;
+      gap: 20px;
+      color: $primary-color;
     }
   }
-  
-  .vc-loading,
-  .vc-error {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-  }
-  
-  .vc-error {
-    color: $danger-color;
-  }
 }
-
-.Vcompany-edit-delete-btn-outer {
-  display: flex;
-  justify-content: end;
-  padding: 20px;
-
-  .Vcompany-edit-delete-btn-inner {
-    display: flex;
-    gap: 20px;
-}
-}
-}
-
-  

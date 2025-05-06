@@ -12,7 +12,7 @@ export const UserNavbar = () => {
   return (
     <>
       <div className='header-outer'>
-        <header className="header2">
+        <div className="header2">
           <div className="logo">
             <Link href="/">
               <img src={homelogo.src} alt="Logo" />
@@ -37,7 +37,7 @@ export const UserNavbar = () => {
             <button className="btn-outline ">Sign Up</button>
             <button className="btn-filled " onClick={() => router.push('/login')}>Get Started</button>
           </div>
-        </header>
+        </div>
       </div>
     </>
   )

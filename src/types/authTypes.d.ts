@@ -33,10 +33,10 @@ interface RegisterForm {
     website_url: string;
     business_proof_image_front: File | null;
     business_proof_image_back?: File | null;
-    aadhar_image_front?: File | null;
-    aadhar_image_back?: File | null;
-    pan_image_front?: File | null;
-    pan_image_back?: File | null;
+    aadhar_image_front: File | null;
+    aadhar_image_back: File | null;
+    pan_image_front: File | null;
+    pan_image_back: File | null;
     office_electricity_bill?: File | null;
 }
 

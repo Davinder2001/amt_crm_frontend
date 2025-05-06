@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 interface Company {

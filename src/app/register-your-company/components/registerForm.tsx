@@ -132,9 +132,8 @@ const RegisterForm: React.FC = () => {
     try {
       const response = await adminRegister(data).unwrap();
       console.log('Registration successful:', response);
-    } catch (error: any) {
-      console.error('Registration failed:', error);
-      alert(error?.data?.message || 'Something went wrong. Please check the form and try again.');
+    } catch {
+      alert('Something went wrong. Please check the form and try again.');
     }
   };
 

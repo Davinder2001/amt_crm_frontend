@@ -24,11 +24,12 @@ const Page: React.FC = () => {
 
   const [createTask, { isLoading }] = useCreateTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
-  // const { data: profileData } = useFetchProfileQuery();
+  console.log("Users data:", usersData);
+
 
   useEffect(() => {
-    if (formData.assignedTo && usersData?.user.length) {
-      const selectedUser = usersData.user.find(
+    if (formData.assignedTo && Array.isArray(usersData?.users) && usersData.users.length) {
+      const selectedUser = usersData.users.find(
         (user: { id: { toString: () => string; }; }) => user.id.toString() === formData.assignedTo
       );
       if (selectedUser) {
@@ -92,7 +93,7 @@ const Page: React.FC = () => {
             required
           >
             <option value="">Select a user</option>
-            {usersData?.user.map((user: UserProfile) => (
+            {Array.isArray(usersData?.users) && usersData.users.map((user: UserProfile) => (
               <option key={user.id} value={user.id}>
                 {user.name}
               </option>

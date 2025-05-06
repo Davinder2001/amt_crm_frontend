@@ -21,7 +21,7 @@ const Profile = () => {
       <p><strong>UID:</strong> {user?.uid}</p>
       <p><strong>User Type:</strong> {user?.user_type}</p>
 
-      {user?.meta && user.meta.length > 0 && (
+      {user?.meta && Array.isArray(user.meta) && user.meta.length > 0 && (
         <div className="meta-section">
           <h2 className="section-title">Additional Info</h2>
           {Object.entries(user.meta).map(([key, value]) => (
@@ -32,11 +32,11 @@ const Profile = () => {
         </div>
       )}
 
-      {user?.companies?.length > 0 && (
+      {(user?.companies ?? []).length > 0 && (
         <div className="companies-section">
           <h2 className="section-title">Associated Companies</h2>
           <div className="company-grid">
-            {user.companies.map((company: Company) => (
+            {(user?.companies ?? []).map((company: Company) => (
               <div key={company.id} className="company-card">
                 <h3>{company.company_name}</h3>
                 <p><strong>Slug:</strong> {company.company_slug}</p>

@@ -103,7 +103,7 @@ const EditTask: React.FC = () => {
             required
           >
             <option value="">Select a user</option>
-            {usersData?.user.map((user: UserProfile) => (
+            {usersData?.users.map((user: UserProfile) => (
               <option key={user.id} value={user.name}>
                 {user.name}
               </option>

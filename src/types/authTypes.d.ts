@@ -41,7 +41,9 @@ interface RegisterForm {
 }
 
 interface UserProfile {
+    roles: Role[];
     id: number;
+    email: string;
     name: string;
     number: string;
     company_id: number;
@@ -50,12 +52,14 @@ interface UserProfile {
     meta: Meta;
     user_type: "admin" | "employee" | "user" | "super-admin"; // Union type for user_type
     password: string;
-    companies: Company[]; // Updated to array of Company objects
+    companies: Company[];
+    uid: string;
 }
 
 interface UsersResponse {
     message: string;
-    user: Profile;
+    user: UserProfile;
+    users: UserProfile[];
 }
 
 interface CreateUserRequest {

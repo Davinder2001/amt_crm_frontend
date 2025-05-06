@@ -28,7 +28,7 @@ function Logout() {
         if (!accessToken || !userType) {
             setUser(null); // Clear context if cookies are missing
         }
-    }, [setUser]);
+    }, [setUser, accessToken, userType]);
 
     return (
         <div className="logout-button"><button onClick={handleLogout} className='buttons'>Logout</button></div>

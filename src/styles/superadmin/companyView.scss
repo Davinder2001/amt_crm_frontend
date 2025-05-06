@@ -83,6 +83,17 @@
     color: $danger-color;
   }
 }
+
+.Vcompany-edit-delete-btn-outer {
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+
+  .Vcompany-edit-delete-btn-inner {
+    display: flex;
+    gap: 20px;
+}
+}
 }
 
   

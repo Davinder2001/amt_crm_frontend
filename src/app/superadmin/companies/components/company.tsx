@@ -73,17 +73,16 @@ const { setTitle } = useBreadcrumb();
             <th className="border p-2">Slug</th>
             <th className="border p-2">Payment</th>
             <th className="border p-2">Verification</th>
-            <th className="border p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {localCompanies.map((c) => (
             <tr key={c.id}>
-              <td className="border p-2">{c.id}</td>
-              <td className="border p-2">{c.company_id}</td>
-              <td className="border p-2">{c.company_name}</td>
-              <td className="border p-2">{c.company_slug}</td>
-              <td className="border p-2">
+              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.id}</td>
+              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_id}</td>
+              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_name}</td>
+              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_slug}</td>
+              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>
                 <select
                   className={`payment-select ${c.payment_status} border rounded px-2 py-1`}
                   value={c.payment_status}
@@ -111,24 +110,6 @@ const { setTitle } = useBreadcrumb();
                     </option>
                   ))}
                 </select>
-              </td>
-
-              <td className="border p-2 flex space-x-2 store-t-e-e-icons">
-                <FaEye
-                  onClick={() => handleNavigation(`companies/view/${c.id}`)}
-                  className="cursor-pointer text-blue-500"
-                  title="View"
-                />
-                <FaEdit
-                  onClick={() => handleNavigation(`companies/edit/${c.id}`)}
-                  className="cursor-pointer text-green-500"
-                  title="Edit"
-                />
-                <FaTrash
-                  onClick={() => handleNavigation(`/companies/delete/${c.id}`)}
-                  className="cursor-pointer text-red-500"
-                  title="Delete"
-                />
               </td>
             </tr>
           ))}

@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { useCompany } from '@/utils/Company';
 import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
-// import { useFetchProfileQuery } from '@/slices/auth/authApi';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -24,8 +23,6 @@ const Page: React.FC = () => {
 
   const [createTask, { isLoading }] = useCreateTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
-  console.log("Users data:", usersData);
-
 
   useEffect(() => {
     if (formData.assignedTo && Array.isArray(usersData?.users) && usersData.users.length) {
@@ -61,9 +58,11 @@ const Page: React.FC = () => {
     };
 
     try {
-      await createTask(newTask).unwrap();
+
+     const www= await createTask(newTask).unwrap();
       toast.success('Task created successfully');
       router.push(`/${companySlug}/tasks`);
+      console.log('werewrwerffwewer', www)
     } catch (err) {
       console.error('Failed to create task:', err);
       toast.error('Error creating task');

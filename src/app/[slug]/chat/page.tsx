@@ -266,10 +266,10 @@
 
 
 'use client';
-import { useFetchConversationsQuery } from '@/slices/chat/chatApi';
 import React from 'react'
+import { useFetchConversationsQuery } from '@/slices/chat/chatApi';
 
-function page() {
+function Page() {
   const { data, isLoading } = useFetchConversationsQuery();
   return (
     <>
@@ -286,4 +286,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

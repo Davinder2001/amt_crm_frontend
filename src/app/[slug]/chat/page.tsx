@@ -542,7 +542,7 @@ const ChatPage = () => {
         sender: 'them',
         text: replyMessage,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        status: 'delivered' as 'delivered', // Explicitly cast to the correct literal type
+        status: 'delivered', // Explicitly cast to the correct literal type
         type: 'text'
       };
 

@@ -110,16 +110,17 @@ const RegisterForm: React.FC = () => {
     }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => {
-      const updated = { ...prev, [name]: value };
-      saveFormData(updated);
-      return updated;
-    });
-
+  
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+    saveFormData(updatedFormData);
+  
     const newErrors: Record<string, string> = { ...fieldErrors };
-
+  
     if (name === 'password') {
       if (!value) {
         newErrors.password = 'Password is required';
@@ -128,33 +129,56 @@ const RegisterForm: React.FC = () => {
       } else {
         delete newErrors.password;
       }
-
-      // Also validate confirmation again when password changes
-      if (
-        formData.password_confirmation &&
-        value !== formData.password_confirmation
-      ) {
-        newErrors.password_confirmation = 'Passwords do not match';
-      } else {
-        delete newErrors.password_confirmation;
+  
+      if (updatedFormData.password_confirmation) {
+        if (updatedFormData.password_confirmation.length < 8) {
+          newErrors.password_confirmation = 'Confirm password must be at least 8 characters';
+        } else if (value !== updatedFormData.password_confirmation) {
+          newErrors.password_confirmation = 'Passwords do not match';
+        } else {
+          delete newErrors.password_confirmation;
+        }
       }
-    }
-
-    if (name === 'password_confirmation') {
+  
+    } else if (name === 'password_confirmation') {
       if (!value) {
         newErrors.password_confirmation = 'Please confirm your password';
       } else if (value.length < 8) {
-        newErrors.password_confirmation =
-          'Confirm password must be at least 8 characters';
-      } else if (value !== formData.password) {
+        newErrors.password_confirmation = 'Confirm password must be at least 8 characters';
+      } else if (value !== updatedFormData.password) {
         newErrors.password_confirmation = 'Passwords do not match';
       } else {
         delete newErrors.password_confirmation;
       }
+  
+    } else if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value.trim()) {
+        newErrors.email = 'Email is required';
+      } else if (!emailRegex.test(value)) {
+        newErrors.email = 'Invalid email format';
+      } else {
+        delete newErrors.email;
+      }
+  
+    } else if (name === 'number') {
+      const numberRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
+      if (!value.trim()) {
+        newErrors.number = 'Phone number is required';
+      } else if (!numberRegex.test(value)) {
+        newErrors.number = 'Enter a valid 10-digit number';
+      } else {
+        delete newErrors.number;
+      }
+  
+    } else {
+      if (value.trim()) {
+        delete newErrors[name];
+      }
     }
-
+  
     setFieldErrors(newErrors);
-  };
+  };  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof RegisterForm) => {
     const files = e.target.files;
@@ -174,42 +198,22 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const isPersonalValid = validatePersonalSection();
-    const isCompanyValid = validateCompanySection();;
-
-    if (!isPersonalValid || !isCompanyValid) {
-      return;
-    }
+    if (!validatePersonalSection() || !validateCompanySection()) return;
 
     const data = new FormData();
 
-    // Append all text fields
-    data.append('first_name', formData.first_name);
-    data.append('last_name', formData.last_name);
-    data.append('email', formData.email);
-    data.append('password', formData.password);
-    data.append('password_confirmation', formData.password_confirmation);
-    data.append('company_name', formData.company_name);
-    data.append('number', formData.number);
-    data.append('business_address', formData.business_address);
-    data.append('pin_code', formData.pin_code);
-    data.append('business_proof_type', formData.business_proof_type);
-    data.append('business_id', formData.business_id);
-    data.append('aadhar_number', formData.aadhar_number);
-    data.append('pan_number', formData.pan_number);
-    data.append('website_url', formData.website_url);
-
-    // Append files conditionally
-    if (formData.business_proof_image_front) data.append('business_proof_image_front', formData.business_proof_image_front);
-    if (formData.business_proof_image_back) data.append('business_proof_image_back', formData.business_proof_image_back);
-    if (formData.aadhar_image_front) data.append('aadhar_image_front', formData.aadhar_image_front);
-    if (formData.aadhar_image_back) data.append('aadhar_image_back', formData.aadhar_image_back);
-    if (formData.pan_image_front) data.append('pan_image_front', formData.pan_image_front);
-    if (formData.pan_image_back) data.append('pan_image_back', formData.pan_image_back);
-    if (formData.office_electricity_bill) data.append('office_electricity_bill', formData.office_electricity_bill);
+    // Auto-append all string/number fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        data.append(key, value);
+      }
+    });
 
     try {
       const response = await adminRegister(data).unwrap();
+      localStorage.removeItem('adminregistration');
+      setActiveSection('personal');
+      setFormData(getDefaultFormData());
       console.log('Registration successful:', response);
     } catch {
       alert('Something went wrong. Please check the form and try again.');

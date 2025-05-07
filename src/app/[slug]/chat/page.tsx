@@ -260,7 +260,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { FaPlus, FaSearch, FaSmile, FaPaperclip, FaCheck, FaCheckDouble, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaSearch, FaSmile, FaPaperclip, FaCheck, FaCheckDouble, FaTimes, FaPhone, FaVideo, FaEllipsisH, FaUserPlus, FaTrash, FaBan } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
 import EmojiPicker from 'emoji-picker-react';
 import { EmojiClickData } from 'emoji-picker-react';
@@ -685,6 +685,23 @@ const ChatPage = () => {
     }
   }, [selectedUser.messages]);
 
+  const clearChat = () => {
+    const updatedUser = {
+      ...selectedUser,
+      messages: [], // Clear all messages
+      lastMessage: '', // Clear last message
+      time: '' // Clear time
+    };
+
+    setSelectedUser(updatedUser);
+
+    // Also update the usersList to reflect this change
+    const updatedUsers = usersList.map(user =>
+      user.id === updatedUser.id ? updatedUser : user
+    );
+    setUsersList(updatedUsers);
+  };
+
   const renderMessageContent = (msg: Message) => {
     switch (msg.type) {
       case 'image':
@@ -820,21 +837,52 @@ const ChatPage = () => {
       {/* Chat Area */}
       <div className="chatArea">
         <div className="chatHeader">
-          <div className="avatar-container">
-            <img src={selectedUser.avatar} alt="avatar" className="avatar" />
-            <div className={`status-indicator ${selectedUser.status}`}>
-              {selectedUser.status === 'typing' && <div className="typing-dots"><div></div><div></div><div></div></div>}
+          <div className="header-left">
+            <div className="avatar-container">
+              <img src={selectedUser.avatar} alt="avatar" className="avatar" />
+              <div className={`status-indicator ${selectedUser.status}`}>
+                {selectedUser.status === 'typing' && <div className="typing-dots"><div></div><div></div><div></div></div>}
+              </div>
+            </div>
+            <div className="user-info">
+              <div className="chatName">{selectedUser.name}</div>
+              <div className="onlineStatus">
+                {selectedUser.status === 'online' ? 'Online' :
+                  selectedUser.status === 'offline' ? 'Offline' : 'Typing...'}
+              </div>
             </div>
           </div>
-          <div>
-            <div className="chatName">{selectedUser.name}</div>
-            <div className="onlineStatus">
-              {selectedUser.status === 'online' ? 'Online' :
-                selectedUser.status === 'offline' ? 'Offline' : 'Typing...'}
+
+          <div className="header-right">
+            {/* Voice Call Button */}
+            <button className="header-button" title="Voice call">
+              <FaPhone size={18} color="#009693" />
+            </button>
+
+            {/* Video Call Button */}
+            <button className="header-button" title="Video call">
+              <FaVideo size={18} color="#009693" />
+            </button>
+
+            {/* More Options Menu */}
+            <div className="chatheader-dropdown">
+              <button className="header-button" title="More options">
+                <FaEllipsisH size={18} color="#009693" />
+              </button>
+              <div className="chatheader-dropdown-content">
+                <button className="dropdown-item">
+                  <FaUserPlus size={14} /> Add to contacts
+                </button>
+                <button className="dropdown-item" onClick={clearChat}>
+                  <FaTrash size={14} /> Clear chat
+                </button>
+                <button className="dropdown-item">
+                  <FaBan size={14} /> Block user
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
         <div className="chatMessages">
           {selectedUser.messages.map((msg) => (
             <div

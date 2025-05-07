@@ -58,6 +58,7 @@ const RegisterForm: React.FC = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [activeSection, setActiveSection] = useState<'personal' | 'company' | 'documents'>('personal');
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof RegisterForm, string>>>({});
   const [showPassword, setShowPassword] = useState({
     password: false,
     password_confirmation: false
@@ -69,6 +70,38 @@ const RegisterForm: React.FC = () => {
       setFormData(prev => ({ ...prev, ...stored }));
     }
   }, []);
+
+
+  const validatePersonalSection = () => {
+    const errors: Partial<Record<keyof RegisterForm, string>> = {};
+    if (!formData.first_name) errors.first_name = 'First name is required';
+    if (!formData.email) errors.email = 'Email is required';
+    if (!formData.number) errors.number = 'Mobile number is required';
+    if (!formData.password) errors.password = 'Password is required';
+
+    // Confirm password logic
+    if (!formData.password_confirmation) {
+      errors.password_confirmation = 'Please confirm your password';
+    } else if (formData.password !== formData.password_confirmation) {
+      errors.password_confirmation = 'Passwords do not match';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateCompanySection = () => {
+    const errors: Partial<Record<keyof RegisterForm, string>> = {};
+
+    if (!formData.company_name) errors.company_name = 'Company name is required';
+    if (!formData.business_address) errors.business_address = 'Business address is required';
+    if (!formData.pin_code) errors.pin_code = 'Pin code is required';
+    if (!formData.business_id) errors.business_id = 'Business ID is required';
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
 
   const togglePasswordVisibility = (field: 'password' | 'password_confirmation') => {
     setShowPassword(prev => ({
@@ -84,6 +117,43 @@ const RegisterForm: React.FC = () => {
       saveFormData(updated);
       return updated;
     });
+
+    const newErrors: Record<string, string> = { ...fieldErrors };
+
+    if (name === 'password') {
+      if (!value) {
+        newErrors.password = 'Password is required';
+      } else if (value.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters';
+      } else {
+        delete newErrors.password;
+      }
+
+      // Also validate confirmation again when password changes
+      if (
+        formData.password_confirmation &&
+        value !== formData.password_confirmation
+      ) {
+        newErrors.password_confirmation = 'Passwords do not match';
+      } else {
+        delete newErrors.password_confirmation;
+      }
+    }
+
+    if (name === 'password_confirmation') {
+      if (!value) {
+        newErrors.password_confirmation = 'Please confirm your password';
+      } else if (value.length < 8) {
+        newErrors.password_confirmation =
+          'Confirm password must be at least 8 characters';
+      } else if (value !== formData.password) {
+        newErrors.password_confirmation = 'Passwords do not match';
+      } else {
+        delete newErrors.password_confirmation;
+      }
+    }
+
+    setFieldErrors(newErrors);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof RegisterForm) => {
@@ -97,10 +167,19 @@ const RegisterForm: React.FC = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setFormData(getDefaultFormData());
     setShowConfirm(false);
+    setActiveSection('personal')
+    setFieldErrors({})
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const isPersonalValid = validatePersonalSection();
+    const isCompanyValid = validateCompanySection();;
+
+    if (!isPersonalValid || !isCompanyValid) {
+      return;
+    }
 
     const data = new FormData();
 
@@ -167,6 +246,7 @@ const RegisterForm: React.FC = () => {
           required={required}
         />
       )}
+      {fieldErrors[name] && <p className="input-error">{fieldErrors[name]}</p>}
     </div>
   );
 
@@ -213,26 +293,40 @@ const RegisterForm: React.FC = () => {
       <div className="register-stepper">
         <div
           className={`step ${activeSection === 'personal' ? 'active' : ''}`}
-          onClick={() => setActiveSection('personal')}
+          onClick={() => { setActiveSection('personal'); }}
         >
           <span>1</span>
           Personal Details
         </div>
         <div
           className={`step ${activeSection === 'company' ? 'active' : ''}`}
-          onClick={() => setActiveSection('company')}
+          onClick={() => {
+            if (activeSection === 'personal' && validatePersonalSection()) {
+              setActiveSection('company');
+            } else if (activeSection !== 'personal') {
+              setActiveSection('company');
+            }
+          }}
         >
           <span>2</span>
           Company Details
         </div>
         <div
           className={`step ${activeSection === 'documents' ? 'active' : ''}`}
-          onClick={() => setActiveSection('documents')}
+          onClick={() => {
+            if (
+              validatePersonalSection() &&
+              validateCompanySection()
+            ) {
+              setActiveSection('documents');
+            }
+          }}
         >
           <span>3</span>
           Documents
         </div>
       </div>
+
 
       <form onSubmit={handleSubmit} className="register-form">
         <ConfirmDialog
@@ -275,6 +369,7 @@ const RegisterForm: React.FC = () => {
                     {showPassword.password ? <FiEyeOff /> : <FiEye />}
                   </span>
                 </div>
+                {fieldErrors.password && <p className="input-error">{fieldErrors.password}</p>}
               </div>
 
               <div className="form-group password-group">
@@ -298,8 +393,8 @@ const RegisterForm: React.FC = () => {
                     {showPassword.password_confirmation ? <FiEyeOff /> : <FiEye />}
                   </span>
                 </div>
+                {fieldErrors.password_confirmation && <p className="input-error">{fieldErrors.password_confirmation}</p>}
               </div>
-
             </div>
           </div>
         )}
@@ -387,7 +482,13 @@ const RegisterForm: React.FC = () => {
             <button
               type="button"
               className="primary-button"
-              onClick={() => setActiveSection(activeSection === 'personal' ? 'company' : 'documents')}
+              onClick={() => {
+                if (activeSection === 'personal' && validatePersonalSection()) {
+                  setActiveSection('company');
+                } else if (activeSection === 'company' && validateCompanySection()) {
+                  setActiveSection('documents');
+                }
+              }}
             >
               Next
             </button>

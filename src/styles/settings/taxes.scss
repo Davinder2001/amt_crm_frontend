@@ -1,171 +1,208 @@
 @use '../variables' as *;
 
-/* Main container for the page */
 .tax-page-outer-container {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-/* Heading */
-h2, h3 {
-    color: #333;
-    font-size: 24px;
-    margin: 20px 0px;
-
-}
-
-/* Tax List */
-ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 15px;
-        padding: 20px;
-}
-
-li {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    padding: 20px 15px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    justify-content: space-between;
-    transition: all 0.3s ease;
-    gap: 10px;
-    &:hover {
-        transform: scale(1.02);
-    }
-
-    strong {
-        text-transform: capitalize;
-        color: $primary-color;
-        font-size: 18px;
-    }
-
-    .texrate-buttons-inner {
+    .tax-page-header {
+        justify-content: space-between;
+        margin-bottom: 20px;
         display: flex;
-        flex-direction: column;
-        gap: 15px;
+        align-items: center;
 
-        .tex-wrapper {
-            color: green;
-            font-weight: 600;
+        .create-tax-button {
+            button {
+                padding: 9px 22px;
+                border-radius: 50px;
+                border: unset;
+                color: $white;
+                font-size: 15px;
+                background-color: $primary-color;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: #007a70;
+                }
+            }
         }
-        .text-card-outer {
+    }
+
+    .create-tax-section {
+        background-color: #fff;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+        h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .create-tax-inputs {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+
+            input {
+                flex: 1;
+                padding: 10px;
+                font-size: 16px;
+                border: 1px solid #00969357;
+                border-radius: 10px;
+
+                &::placeholder {
+                    color: #aaa;
+                }
+
+                &:focus {
+                    border-color: #009693;
+                    background: #ffffff;
+                }
+            }
+        }
+
+        .create-tax-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+
+            button {
+                padding: 9px 22px;
+                border-radius: 50px;
+                font-size: 15px;
+                background-color: $primary-color;
+                color: $white;
+                cursor: pointer;
+                border: none;
+
+                &:hover {
+                    background-color: #007a70;
+                }
+            }
         }
     }
 
-}
+    .tax-page-inner-container {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
 
-/* Edit and Delete buttons */
-button {
-    background-color: $primary-color;
-    color: white;
-    border: none;
-    padding: 5px 22px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    
-    &:hover {
-        background-color: #007a70;
-        transform: scale(1.05);
-    }
-    
-    &.cancel {
-        background-color: #ff6f61;
-        &:hover {
-            background-color: #e55b52;
+        h2,
+        h3 {
+            color: #333;
+            font-size: 24px;
+            margin: 20px 0;
         }
-    }
-}
 
-/* Input fields */
-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #00969357;
-    border-radius: 10px;
-    &::placeholder {
-        color: #aaa; /* Placeholder text color */
-    }
-    &:focus {
-        border-color: #009693;
-        background: #ffffff;
-        transform: scale(1);
-      }
         
-}
-
-/* Create New Tax Section */
-.create-tax-section {
-    display: flex;
-    flex-direction: column;
-    padding: 0px 20px;
-    
-    .create-tax-inputs {
-        display: flex;
-        gap: 10px;
-        input {
-            width: 100%;
-            margin-bottom: 10px;
-        }
     }
 
-    
-}
-.create-tax-button {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 20px;
-
-    button {
-        padding: 9px 22px !important;
-        border-radius: 50px;
-        border: unset;
-        color: $white;
-        font-size: 15px;
-        gap: 5px;
+    .confirm-delete {
+        color: #ff6f61;
+        font-size: 16px;
+        margin-top: 10px;
         cursor: pointer;
-        background-color: $primary-color;
+    }
+    .taxes-list-outer {
+        ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 0;
 
-        &:hover {
-            background-color: #007a70;
+            li {
+                display: flex;
+                flex-direction: column;
+                background-color: #fff;
+                padding: 20px 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+                gap: 10px;
+
+                &:hover {
+                    transform: scale(1.02);
+                }
+
+                strong {
+                    text-transform: capitalize;
+                    color: $primary-color;
+                    font-size: 18px;
+                }
+
+                input {
+                    padding: 8px;
+                    font-size: 16px;
+                    border-radius: 8px;
+                    border:1px solid #00969357; 
+                    &:focus {
+                        outline: none;
+                        border-color: $primary-color;
+                        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+                      }
+                }
+
+                button {
+                    background-color: $primary-color;
+                    color: white;
+                    border: none;
+                    padding: 5px 22px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    font-size: 15px;
+                    transition: background-color 0.3s ease, transform 0.2s ease;
+
+                    &:hover {
+                        background-color: #007a70;
+                        transform: scale(1.05);
+                    }
+
+                    &.cancel {
+                        background-color: #ff6f61;
+
+                        &:hover {
+                            background-color: #e55b52;
+                        }
+                    }
+                }
+
+                .texrate-buttons-outer {
+                    .texrate-buttons-inner {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 15px;
+
+                        .tex-wrapper {
+                            color: green;
+                            font-weight: 600;
+                        }
+
+                        .text-card-outer {
+                            display: flex;
+                            gap: 10px;}
+
+                            
+                        
+                    }
+                }
+            }
         }
     }
 }
 
-/* Buttons positioning inside each li */
-// Uncomment and add styles here if needed
-
-/* Confirm delete dialog */
-.confirm-delete {
-    color: #ff6f61;
-    font-size: 16px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-}
-
-/* Mobile responsiveness */
 @media (max-width: 768px) {
     .tax-page-outer-container {
         padding: 20px;
 
-    .create-tax-inputs {
-        flex-direction: column;
-        gap: 15px;
-    }
+        .create-tax-inputs {
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    input {
-        width: 100%;
+        input {
+            width: 100%;
+        }
     }
-}
-
 }

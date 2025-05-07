@@ -135,7 +135,7 @@ const Attributes = () => {
                         </div>
 
                         <button type="button" onClick={handleCreate} className="buttons">
-                            <FaPlus /> Add Attribute
+                            Add Attribute
                         </button>
                         <button type="button" onClick={() => setIsCanvasOpen(false)} className="close-btn">
                             <FaTimes />

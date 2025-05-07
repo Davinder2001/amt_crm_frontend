@@ -1,17 +1,20 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
     useFetchTaxesQuery,
     useCreateTaxMutation,
     useUpdateTaxMutation,
     useDeleteTaxMutation,
 } from '@/slices/company/companyApi';
+import { FaArrowLeft } from 'react-icons/fa';
 
 function TaxesPage() {
     const { data: taxesData, isLoading } = useFetchTaxesQuery();
     const [createTax] = useCreateTaxMutation();
     const [updateTax] = useUpdateTaxMutation();
     const [deleteTax] = useDeleteTaxMutation();
+    const router = useRouter();
 
     const [newTax, setNewTax] = useState({ name: '', rate: '' });
     const [editingTaxId, setEditingTaxId] = useState<number | null>(null);
@@ -44,17 +47,20 @@ function TaxesPage() {
     return (
         <div className="tax-page-outer-container">
             <div className='tax-page-header'>
-             {/* Button to toggle the create tax form */}
-            <div className="create-tax-button">
-                <button onClick={() => setShowCreateForm(!showCreateForm)}>
-                    {showCreateForm ? 'Cancel' : 'Create New Tax'}
-                </button>
-            </div>
+            <button className="back-button" onClick={() => router.back()}>
+                <FaArrowLeft size={20} color="#fff" />
+            </button>
+                {/* Button to toggle the create tax form */}
+                <div className="create-tax-button">
+                    <button onClick={() => setShowCreateForm(!showCreateForm)}>
+                        {showCreateForm ? 'Cancel' : 'Create New Tax'}
+                    </button>
+                </div>
 
             </div>
-            
 
-           
+
+
 
             {/* Conditionally render the form when showCreateForm is true */}
             {showCreateForm && (
@@ -79,51 +85,54 @@ function TaxesPage() {
                     </div>
                 </div>
             )}
-            <div className='taxes-list-outer'>
-                <ul>
-                {taxesData?.data.map((tax) => (
-                    <li key={tax.id}>
-                        {editingTaxId === tax.id ? (
-                            <>
-                                <input
-                                    type="text"
-                                    value={editTax.name}
-                                    onChange={(e) => setEditTax({ ...editTax, name: e.target.value })}
-                                    placeholder="Tax name"
-                                />
-                                <input
-                                    type="number"
-                                    value={editTax.rate}
-                                    onChange={(e) => setEditTax({ ...editTax, rate: e.target.value })}
-                                    placeholder="Tax rate"
-                                />
-                                <button onClick={() => handleUpdate(tax.id)}>Save</button>
-                                <button className="cancel" onClick={() => setEditingTaxId(null)}>Cancel</button>
-                            </>
-                        ) : (
-                            <>
-                                <strong>{tax.name}</strong> 
-                                <div className='texrate-buttons-outer'>
-                                <div className='texrate-buttons-inner'>
-                                <div className='tex-wrapper'>
-                                - {tax.rate}%
-                                </div>
-                                
-                                <div className='text-card-outer'>
-                                <button onClick={() => {
-                                    setEditingTaxId(tax.id);
-                                    setEditTax({ name: tax.name, rate: tax.rate.toString() });
-                                }}>Edit</button>
-                                <button onClick={() => handleDelete(tax.id)}>Delete</button>
 
-                                </div>
-                                </div>
-                                </div>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul>
+            <div className='tax-page-inner-container'>
+                <div className='taxes-list-outer'>
+                    <ul>
+                        {taxesData?.data.map((tax) => (
+                            <li key={tax.id}>
+                                {editingTaxId === tax.id ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={editTax.name}
+                                            onChange={(e) => setEditTax({ ...editTax, name: e.target.value })}
+                                            placeholder="Tax name"
+                                        />
+                                        <input
+                                            type="number"
+                                            value={editTax.rate}
+                                            onChange={(e) => setEditTax({ ...editTax, rate: e.target.value })}
+                                            placeholder="Tax rate"
+                                        />
+                                        <button onClick={() => handleUpdate(tax.id)}>Save</button>
+                                        <button className="cancel" onClick={() => setEditingTaxId(null)}>Cancel</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <strong>{tax.name}</strong>
+                                        <div className='texrate-buttons-outer'>
+                                            <div className='texrate-buttons-inner'>
+                                                <div className='tex-wrapper'>
+                                                    - {tax.rate}%
+                                                </div>
+
+                                                <div className='text-card-outer'>
+                                                    <button onClick={() => {
+                                                        setEditingTaxId(tax.id);
+                                                        setEditTax({ name: tax.name, rate: tax.rate.toString() });
+                                                    }}>Edit</button>
+                                                    <button onClick={() => handleDelete(tax.id)}>Delete</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );

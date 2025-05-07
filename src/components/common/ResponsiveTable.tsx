@@ -74,7 +74,19 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </thead>
           <tbody>
             {currentData.map((item, index) => (
-              <tr key={index} onClick={() => onView && onView(item.id)}>
+              <tr key={index} onClick={(e) => {
+                // Don't trigger onView if the click is on a button or icon
+                const target = e.target as HTMLElement;
+                if (
+                  target.closest('button') ||
+                  target.closest('svg') ||
+                  target.closest('.action-icon') ||
+                  target.closest('.ellipsis-icon')
+                ) {
+                  return;
+                }
+                onView && onView(item.id);
+              }}>
                 {columns.map((col, i) => (
                   <td key={i}>
                     {col.render

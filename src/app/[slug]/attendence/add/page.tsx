@@ -234,11 +234,6 @@ function AddAttendancePage() {
           <FaArrowLeft />
         </Link>
         <div className="attendance-page">
-      <header className="attendance-header">
-        
-        <h1>Record Attendance</h1>
-      </header>
-
       <main className="attendance-main">
         {!selectedFile ? (
           <div className="capture-options">

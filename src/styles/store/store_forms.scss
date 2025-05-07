@@ -134,7 +134,7 @@ overflow: scroll;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #00969357;  
-    border-radius: 10px;
+    border-radius: 5px;
     &:focus {
       border-color: #009693;
       background: #ffffff;
@@ -183,41 +183,155 @@ overflow: scroll;
 }
 
 // Add vendors section
-.stor-add-v-form-container {
+.vendor-creation-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: $font-family;
+  color: $dark-color;
 
-  form.stor-add-v-form-inner {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+  .creation-header {
+    position: relative;
+    margin-bottom: 2rem;
+    text-align: center;
 
-    .buttons {
+    .back-button {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $white;
+      text-decoration: none;
+      font-weight: $font-weight-medium;
+      padding: 0.5rem 1rem;
+      border-radius: $border-radius;
+      transition: $transition;
+
+      &:hover {
+        background: rgba($primary-color, 0.1);
+        color: $primary-color;
+      }
+    }
+
+    h1 {
+      font-size: $font-size-extra-large;
+      font-weight: $font-weight-bold;
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-description {
+      color: $gray-color;
       margin: 0;
-      cursor: pointer;
+      font-size: $font-size;
     }
   }
 
-  input {
-    padding: 7px;
-    margin-left: 5px;
-    border: 1px solid $primary-color;
-    border-radius: 5px;
+  .vendor-form {
+    .form-section {
+      background: $white;
+      padding: 2rem;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: $font-weight-medium;
+        margin-bottom: 0.5rem;
+        color: $dark-color;
+
+        .input-icon {
+          color: $primary-color;
+        }
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid 1px solid #00969357;
+        border-radius: $border-radius;
+        font-size: $font-size;
+        transition: $transition;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+        }
+
+        &::placeholder {
+          color: lighten($gray-color, 20%);
+        }
+      }
+
+      .required-asterisk {
+        font-weight: bold;
+        margin-left: 2px;
+      }
+      
+      .required-asterisk.unfilled {
+        color: #ff4444; /* Red color for unfilled required fields */
+      }
+      
+      .required-asterisk.filled {
+        color: #00C851; /* Green color for filled required fields */
+      }
+
+    }
   }
 
-  label {
-    font-size: 17px;
-    font-weight: 600;
-  }
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 
-  .buttons {
-    padding: 7px 22px;
-    border-radius: 50px;
-    border: unset;
-    background-color: $primary-color;
-    color: $white;
-    font-size: 16px;
-    cursor: pointer;
+    .primary-button {
+      background: $primary-color;
+      color: $white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: $border-radius;
+      font-weight: $font-weight-semi-bold;
+      cursor: pointer;
+      transition: $transition;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
+      &:hover:not(:disabled) {
+        background: darken($primary-color, 5%);
+        transform: translateY(-2px);
+        box-shadow: $secondary-shadow;
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba($white, 0.3);
+        border-top-color: $white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
   }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 // Add as a vendors section
@@ -371,11 +485,11 @@ overflow: scroll;
   border: 1px solid #009693;
   padding-left: 10px;
   margin: 0px 20px 20px 20px;
-
+border-radius: 5px;
   input{
     border: none;
     background-color: transparent;
-  
+  width: 100%;
   }
 }
 

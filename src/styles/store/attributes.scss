@@ -341,6 +341,7 @@
 
   .canvas.open {
     left: 0;
+    z-index: 999999;
   }
 
   .canvas-title {
@@ -366,10 +367,15 @@
   .input {
     padding: 0.6rem 0.8rem;
     font-size: 0.95rem;
-    border: 1px solid $primary-color;  
+    border:1px solid #00969357;  
     border-radius: 6px;
     background-color: #fff;
-    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
   }
 
   .values-container {

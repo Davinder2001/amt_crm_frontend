@@ -1,5 +1,5 @@
 'use client';
-import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage,homeimg1,homeimg2,homeimg3,homelogo, manageimage } from '@/assets/useImage';
+import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage, homeimg1, homeimg2, homeimg3, homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export const UserNavbar = () => {
   const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const [menuOpen, setMenuOpen] = useState(false);
   // const [submenuOpen, setSubmenuOpen] = useState(false);
   return (
     <>
@@ -22,20 +22,20 @@ export const UserNavbar = () => {
 
           {/* Hamburger Icon */}
           {/* Hamburger or Close Icon */}
-          <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          {/* <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? '✖' : '☰'}
-          </div>
+          </div> */}
 
-          <nav className={`nav ${menuOpen ? 'open' : ''}`}>
+          {/* <nav className={`nav ${menuOpen ? 'open' : ''}`}>
             <Link href="/">Home</Link>
             <Link href="/about">Company</Link>
             <Link href="/about">Dashboard</Link>
             <Link href="#">Price</Link>
-          </nav>
+          </nav> */}
 
           <div className="header-buttons">
-            <button className="btn-outline " onClick={() => router.push('/register-your-company')}>Sign Up</button>
-            <button className="btn-filled " onClick={() => router.push('/login')}>Get Started</button>
+            <button className="btn-outline " onClick={() => router.push('/login')}>Sign In</button>
+            <button className="btn-filled " onClick={() => router.push('/register-your-company')}>Get Started</button>
           </div>
         </div>
       </div>
@@ -61,17 +61,17 @@ export default function Homepage() {
                 <li>Families</li>
               </ul>
               <div className="hero-actions">
-                <button className="btn-filled buttons">Talk to an Advisor</button>
-                <button className="btn-outline buttons" onClick={() => router.push('/login')}>Try The Deshboard</button>
+                {/* <button className="btn-filled buttons">Talk to an Advisor</button> */}
+                <button className="btn-outline buttons" onClick={() => router.push('/register-your-company')}>Try The Deshboard</button>
               </div>
             </div>
             <div className="hero-right">
               <div className='hero-right-inner'>
 
-              <Image src={homeimg2.src} alt="Woman working" className="main-image" width={841} height={523}/>
-              <Image src={homeimg1.src} alt="Chart 1" className="chart top-left" width={287} height={144}/>
-              <Image src={homeimg3.src} alt="Chart 2" className="chart bottom-right" width={236} height={214} />
-            </div>
+                <Image src={homeimg2.src} alt="Woman working" className="main-image" width={841} height={523} />
+                <Image src={homeimg1.src} alt="Chart 1" className="chart top-left" width={287} height={144} />
+                <Image src={homeimg3.src} alt="Chart 2" className="chart bottom-right" width={236} height={214} />
+              </div>
             </div>
 
           </section>
@@ -258,7 +258,7 @@ export default function Homepage() {
 
 
         {/* FAQ Section */}
-        <section className="faq-section">
+        {/* <section className="faq-section">
           <div className="outer-div">
             <h2>FAQ</h2>
             <div className="faq-list">
@@ -281,7 +281,7 @@ export default function Homepage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
 
       </div>
@@ -300,32 +300,32 @@ export const UserFooter = () => {
             <div>
               <h3>Resources</h3>
               <ul>
-                <li>Investment Research</li>
-                <li>The Manual</li>
-                <li>The Archives</li>
-                <li>Other calculators</li>
+                <li><Link href="/investment-research">Investment Research</Link></li>
+                <li><Link href="/manual">The Manual</Link></li>
+                <li><Link href="/archives">The Archives</Link></li>
+                <li><Link href="/other-calculators">Other calculators</Link></li>
               </ul>
             </div>
             <div>
               <h3>Company</h3>
               <ul>
-                <li>Team</li>
+                <li><Link href={'/team'}>Team</Link></li>
                 <li><Link href={'/about'}>About</Link></li>
-                <li>Careers</li>
-                <li>Newsroom</li>
-                <li>FAQ</li>
+                <li><Link href={'/careers'}>Careers</Link></li>
+                <li><Link href={'/newsroom'}>Newsroom</Link></li>
+                <li><Link href={'/faq'}>FAQ</Link></li>
                 <li><Link href={'/contact'}>Contact Us</Link></li>
               </ul>
             </div>
             <div>
               <h3>Legal</h3>
               <ul>
-                <li>Disclosures</li>
+                <li><Link href="/disclosures">Disclosures</Link></li>
                 <li><Link href={'/privacy-policy'}>Privacy</Link></li>
                 <li><Link href={'/terms-services'}>Terms of Service</Link></li>
                 <li><Link href={'/refund'}>Cancelation and refund</Link></li>
                 <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li>
-                <li>Security</li>
+                <li><Link href="/security">Security</Link></li>
               </ul>
             </div>
             <div>

@@ -9,16 +9,16 @@ import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
 const Page = () => {
-  const [invoiceNo,       setInvoiceNo]       = useState('');
-  const [vendorName,      setVendorName]      = useState('');
-  const [vendorNo,        setVendorNo]        = useState('');
-  const [items,           setItems]           = useState<{ name: string; price: string; quantity: string; subTotal: string; }[]>([]);
-  const [newItem,         setNewItem]         = useState({ name: '', price: '', quantity: '', subTotal: '' });
-  const [image,           setImage]           = useState<File | null>(null);
-  const [showItemFields,  setShowItemFields]  = useState(false);
-  const [selectedTaxId,   setSelectedTaxId]   = useState<number | null>(null);
-  const [taxMode,         setTaxMode]         = useState('overall');
-  const [itemTaxes,       setItemTaxes]       = useState<(number | null)[]>([]);
+  const [invoiceNo, setInvoiceNo] = useState('');
+  const [vendorName, setVendorName] = useState('');
+  const [vendorNo, setVendorNo] = useState('');
+  const [items, setItems] = useState<{ name: string; price: string; quantity: string; subTotal: string; }[]>([]);
+  const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
+  const [image, setImage] = useState<File | null>(null);
+  const [showItemFields, setShowItemFields] = useState(false);
+  const [selectedTaxId, setSelectedTaxId] = useState<number | null>(null);
+  const [taxMode, setTaxMode] = useState('overall');
+  const [itemTaxes, setItemTaxes] = useState<(number | null)[]>([]);
 
   const { companySlug } = useCompany();
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
@@ -68,11 +68,11 @@ const Page = () => {
     formData.append('vendor_name', vendorName);
     formData.append('vendor_no', vendorNo);
     if (image) formData.append('image', image);
-  
+
     formData.append('tax_mode', taxMode);
-  
+
     let itemsToSend = [...items];
-  
+
     if (taxMode === 'overall' && selectedTaxId) {
 
       itemsToSend = items.map((item) => ({
@@ -89,17 +89,17 @@ const Page = () => {
         };
       });
     }
-  
+
     formData.append('items', JSON.stringify(itemsToSend));
-  
+
     try {
       await bulkCreateStoreItem(formData).unwrap();
       toast.success('Items saved successfully.');
-    } catch{
+    } catch {
       toast.error('Saving failed.');
     }
   };
-  
+
 
   return (
     <>
@@ -119,7 +119,7 @@ const Page = () => {
             <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
           </label>
           <input style={{ display: 'none' }} id="file-upload" type="file" onChange={handleImageUpload} />
-          <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus/> Add Items</button>
+          <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus /> Add Items</button>
         </div>
 
         {showItemFields && (
@@ -178,38 +178,38 @@ const Page = () => {
         </table>
 
         <div className='add-as-vendor-select-tex-outer'>
-        {items.length > 0 && (
-          <div style={{ marginTop: '20px' }}>
-            <label><strong>Tax Type:</strong></label><br />
-            <label>
-              <input type="radio" value="individual" checked={taxMode === 'individual'} onChange={() => setTaxMode('individual')} /> Individual Tax
-            </label>{' '}
-            <label>
-              <input type="radio" value="overall" checked={taxMode === 'overall'} onChange={() => setTaxMode('overall')} /> Overall Tax
-            </label>
-          </div>
-        )}
+          {items.length > 0 && (
+            <div style={{ marginTop: '20px' }}>
+              <label><strong>Tax Type:</strong></label><br />
+              <label>
+                <input type="radio" value="individual" checked={taxMode === 'individual'} onChange={() => setTaxMode('individual')} /> Individual Tax
+              </label>{' '}
+              <label>
+                <input type="radio" value="overall" checked={taxMode === 'overall'} onChange={() => setTaxMode('overall')} /> Overall Tax
+              </label>
+            </div>
+          )}
 
-        {taxMode === 'overall' && items.length > 0 && (
-          <div style={{ marginTop: '20px' }}>
-            <label htmlFor="tax-select"><strong>Select Overall Tax</strong></label><br />
-            <select
-              id="tax-select"
-              value={selectedTaxId ?? ''}
-              onChange={(e) => setSelectedTaxId(Number(e.target.value))}
-              style={{ padding: '8px', marginTop: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
-            >
-              <option value=''>-- Select Tax --</option>
-              {taxLoading ? (
-                <option>Loading...</option>
-              ) : (
-                taxData?.data?.map((tax) => (
-                  <option key={tax.id} value={tax.id}>{tax.name} ({tax.rate}%)</option>
-                ))
-              )}
-            </select>
-          </div>
-        )}
+          {taxMode === 'overall' && items.length > 0 && (
+            <div style={{ marginTop: '20px' }}>
+              <label htmlFor="tax-select"><strong>Select Overall Tax</strong></label><br />
+              <select
+                id="tax-select"
+                value={selectedTaxId ?? ''}
+                onChange={(e) => setSelectedTaxId(Number(e.target.value))}
+                style={{ padding: '8px', marginTop: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
+              >
+                <option value=''>-- Select Tax --</option>
+                {taxLoading ? (
+                  <option>Loading...</option>
+                ) : (
+                  taxData?.data?.map((tax) => (
+                    <option key={tax.id} value={tax.id}>{tax.name} ({tax.rate}%)</option>
+                  ))
+                )}
+              </select>
+            </div>
+          )}
         </div>
 
         <div className='add-as-a-v-button c-s-buttons-outers'>

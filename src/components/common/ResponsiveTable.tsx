@@ -75,7 +75,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           <tbody>
             {currentData.map((item, index) => (
               <tr key={index} onClick={(e) => {
-                // Don't trigger onView if the click is on a button or icon
                 const target = e.target as HTMLElement;
                 if (
                   target.closest('button') ||
@@ -85,7 +84,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                 ) {
                   return;
                 }
-                onView && onView(item.id);
+                if (onView) onView(item.id);
               }}>
                 {columns.map((col, i) => (
                   <td key={i}>

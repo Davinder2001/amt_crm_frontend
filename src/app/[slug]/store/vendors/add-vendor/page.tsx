@@ -71,17 +71,11 @@ import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
-import { FaArrowLeft, FaStore, FaUserTie, FaIndustry, FaPhone, FaEnvelope, FaGlobe } from 'react-icons/fa';
+import { FaArrowLeft, FaStore } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const VendorCreationPage: React.FC = () => {
   const [vendorName, setVendorName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [industry, setIndustry] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [website, setWebsite] = useState('');
-  const [activeTab, setActiveTab] = useState<'basic' | 'details'>('basic');
   const [createVendor, { isLoading }] = useCreateVendorMutation();
   const router = useRouter();
   const { companySlug } = useCompany();
@@ -111,7 +105,7 @@ const VendorCreationPage: React.FC = () => {
 
       <form className="vendor-form" onSubmit={handleSubmit}>
         <div>
-          {activeTab === 'basic' ? (
+          
             <div className="form-section">
               <div className="input-group">
                 <label>
@@ -129,7 +123,6 @@ const VendorCreationPage: React.FC = () => {
                 />
               </div>
             </div>
-          ) : null}
 
           <div className="form-actions">
             <button 

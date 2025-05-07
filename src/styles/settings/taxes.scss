@@ -29,15 +29,12 @@
     .create-tax-section {
         background-color: #fff;
         padding: 20px;
-        margin: 20px 0;
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
 
-        h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #333;
-        }
 
         .create-tax-inputs {
             display: flex;
@@ -75,6 +72,7 @@
                 color: $white;
                 cursor: pointer;
                 border: none;
+                width: 100%;
 
                 &:hover {
                     background-color: #007a70;
@@ -88,15 +86,18 @@
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
+        display: grid;
+        grid-template-columns: 20% 80%;
+        gap: 10px;
 
         h2,
         h3 {
-            color: #333;
-            font-size: 24px;
-            margin: 20px 0;
+            color: $primary-color;
+            font-size: 25px;
+
         }
 
-        
+
     }
 
     .confirm-delete {
@@ -105,6 +106,7 @@
         margin-top: 10px;
         cursor: pointer;
     }
+
     .taxes-list-outer {
         ul {
             display: grid;
@@ -119,7 +121,6 @@
                 padding: 20px 15px;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
                 gap: 10px;
 
                 &:hover {
@@ -136,12 +137,13 @@
                     padding: 8px;
                     font-size: 16px;
                     border-radius: 8px;
-                    border:1px solid #00969357; 
+                    border: 1px solid #00969357;
+
                     &:focus {
                         outline: none;
                         border-color: $primary-color;
                         box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
-                      }
+                    }
                 }
 
                 button {
@@ -181,11 +183,17 @@
 
                         .text-card-outer {
                             display: flex;
-                            gap: 10px;}
+                            gap: 10px;
+                        }
 
-                            
-                        
+
+
                     }
+                }
+
+                .text-edit-buttons {
+                    display: flex;
+                    justify-content: space-between;
                 }
             }
         }
@@ -194,7 +202,6 @@
 
 @media (max-width: 768px) {
     .tax-page-outer-container {
-        padding: 20px;
 
         .create-tax-inputs {
             flex-direction: column;
@@ -205,4 +212,119 @@
             width: 100%;
         }
     }
+}
+
+@media (max-width: 615px) {
+    .tax-page-outer-container {
+
+        .taxes-list-outer {
+
+            ul {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+                li {
+                    padding: 10px 8px;
+
+                    button {
+                        padding: 5px 15px;
+                        font-size: 12px;
+                    }
+
+                    .texrate-buttons-outer {
+
+                        .texrate-buttons-inner {
+                            gap: 10px;
+                        }
+
+                    }
+
+                    strong {
+                        font-size: 15px;
+                    }
+
+                    input {
+                        font-size: 10px;
+                        padding: 8px;
+                    }
+                }
+            }
+        }
+
+        .tax-page-inner-container {
+            padding: 10px 5px;
+        }
+
+        .tax-page-header {
+
+            .create-tax-button {
+
+                button {
+                    padding: 5px 11px;
+                }
+
+            }
+
+        }
+
+
+    }
+
+}
+
+
+@media (max-width: 444px) {
+    .tax-page-outer-container {
+
+        .taxes-list-outer {
+
+            ul {
+                grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+
+                li {
+                    align-items: center;
+                    text-align: center;
+                    gap: 5px;
+
+                    button {
+                        padding: 4px 15px;
+                        font-size: 12px;
+                    }
+
+                    .texrate-buttons-outer {
+
+                        .texrate-buttons-inner {
+                            gap: 10px;
+                        }
+
+                    }
+
+                    strong {
+                        font-size: 15px;
+                    }
+
+                    input {
+                        font-size: 10px;
+                        padding: 8px;
+                    }
+                }
+            }
+        }
+
+        .tax-page-inner-container {
+            padding: 10px 5px;
+        }
+
+        .tax-page-header {
+
+            .create-tax-button {
+
+                button {
+                    padding: 5px 11px;
+                }
+
+            }
+
+        }
+    }
+
 }

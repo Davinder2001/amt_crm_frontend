@@ -20,14 +20,12 @@ function TaxesPage() {
     const [editingTaxId, setEditingTaxId] = useState<number | null>(null);
     const [editTax, setEditTax] = useState({ name: '', rate: '' });
 
-    const [showCreateForm, setShowCreateForm] = useState(false); // State to toggle form visibility
 
     const handleCreate = async () => {
         if (!newTax.name || !newTax.rate) return;
 
         await createTax({ name: newTax.name, rate: parseFloat(newTax.rate) });
         setNewTax({ name: '', rate: '' });
-        setShowCreateForm(false); // Hide form after creation
     };
 
     const handleUpdate = async (id: number) => {
@@ -50,21 +48,11 @@ function TaxesPage() {
             <button className="back-button" onClick={() => router.back()}>
                 <FaArrowLeft size={20} color="#fff" />
             </button>
-                {/* Button to toggle the create tax form */}
-                <div className="create-tax-button">
-                    <button onClick={() => setShowCreateForm(!showCreateForm)}>
-                        {showCreateForm ? 'Cancel' : 'Create New Tax'}
-                    </button>
-                </div>
+               
 
             </div>
-
-
-
-
-            {/* Conditionally render the form when showCreateForm is true */}
-            {showCreateForm && (
-                <div className="create-tax-section">
+            <div className='tax-page-inner-container'>
+            <div className="create-tax-section">
                     <h3>Add New Tax</h3>
                     <div className='create-tax-inputs'>
                         <input
@@ -84,9 +72,6 @@ function TaxesPage() {
                         <button onClick={handleCreate}>Create</button>
                     </div>
                 </div>
-            )}
-
-            <div className='tax-page-inner-container'>
                 <div className='taxes-list-outer'>
                     <ul>
                         {taxesData?.data.map((tax) => (
@@ -105,8 +90,10 @@ function TaxesPage() {
                                             onChange={(e) => setEditTax({ ...editTax, rate: e.target.value })}
                                             placeholder="Tax rate"
                                         />
+                                        <div className='text-edit-buttons'>
                                         <button onClick={() => handleUpdate(tax.id)}>Save</button>
                                         <button className="cancel" onClick={() => setEditingTaxId(null)}>Cancel</button>
+                                        </div>
                                     </>
                                 ) : (
                                     <>

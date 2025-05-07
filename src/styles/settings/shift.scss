@@ -8,7 +8,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
 
 // Glassmorphism Effect
 .glass-panel {
@@ -282,6 +281,7 @@
     to {
         transform: rotate(360deg);
     }
+}
 }
 
 // Responsive Adjustments

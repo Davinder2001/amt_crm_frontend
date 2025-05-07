@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
-import { FaEdit, FaPlus, FaTrash, FaEye } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import ResponsiveTable
 import Loader from "@/components/common/Loader";
 

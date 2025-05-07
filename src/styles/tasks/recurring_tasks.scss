@@ -3,16 +3,15 @@
     max-width: 1000px;
     margin: 50px auto;
     padding: 30px;
-    background: white;
+    background: $white;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     background-color: #fefefe; // slight off-white
     transition: all 0.3s ease;
-    
     &:hover {
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
     }
-  
+
     .header {
       display: flex;
       justify-content: space-between;
@@ -27,7 +26,7 @@
   
       .add-btn {
         background-color: teal;
-        color: white;
+        color: $white;
         padding: 10px 18px;
         font-size: 16px;
         font-weight: 600;
@@ -67,7 +66,7 @@
   
       th {
         background-color: teal;
-        color: white;
+        color: $white;
         font-weight: 600;
       }
   
@@ -131,15 +130,18 @@
       input,
       select,
       textarea {
-        padding: 15px;
-        border: 1px solid $primary-color;
+        padding: 12px 18px;
+        border: 1px solid #00969357;
         border-radius: 0.7rem;
         font-size: 1rem;
         transition: all 0.3s ease;
-
+        &:focus {
+          border-color: #009693;
+          background: $white;
+        }
         
       }
-  
+      
      
   
       label {
@@ -167,6 +169,10 @@
           transform: none;
         }
       }
+    }
+    .Recurring-form-btn-wrapper{
+      display: flex;
+      justify-content: flex-end;
     }
   }
   

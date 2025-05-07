@@ -41,7 +41,8 @@ const Page = () => {
   return (
     <div className="Recurring-form-wrapper">
       <h2>Create Recurring Task</h2>
-      <form onSubmit={handleSubmit} className="form-container">
+      <form onSubmit={handleSubmit}>
+      <div className="form-container">
         <input name="name" placeholder="Task Name" value={formData.name} onChange={handleChange} required />
         <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
         <input name="assigned_by" placeholder="Assigned By (User ID)" value={formData.assigned_by} onChange={handleChange} required />
@@ -60,10 +61,12 @@ const Page = () => {
         <label>
           <input type="checkbox" name="notify" checked={formData.notify} onChange={handleChange} /> Notify
         </label>
-
-        <button type="submit" className='buttons' disabled={isLoading}>Create</button>
+        </div>
+        
       </form>
-
+    <div className="Recurring-form-btn-wrapper">
+    <button type="submit" className='buttons' disabled={isLoading}>Create</button>
+    </div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 function TermsServices() {
@@ -60,7 +61,7 @@ function TermsServices() {
           <section>
             <h2>8. Contact</h2>
             <p>
-              For questions about these Terms, please contact us via our <a href="/contact">Contact page</a>.
+              For questions about these Terms, please contact us via our <Link href="/contact">Contact page</Link>.
             </p>
           </section>
         </div>

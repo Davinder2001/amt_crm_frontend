@@ -12,7 +12,7 @@ function PrivacyPolicy() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              Welcome to Asset Management Technology ("Company", "we", "our", "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
+              Welcome to Asset Management Technology (&quot;Company&quot;, &quot;we&quot;, &quot;our&quot;, &quot;us&quot;). We are committed to protecting your personal information and your right to privacy. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
             </p>
           </section>
 
@@ -79,7 +79,7 @@ function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2>9. Children's Privacy</h2>
+            <h2>9. Children&quot;s Privacy</h2>
             <p>Our services are not intended for children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us data, please contact us immediately.</p>
           </section>
 

@@ -11,7 +11,7 @@ function Refund() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              At Asset Management Technology, we strive to provide high-quality products and services. If you are not entirely satisfied with your purchase, we're here to help.
+              At Asset Management Technology, we strive to provide high-quality products and services. If you are not entirely satisfied with your purchase, we&quot;re here to help.
             </p>
           </section>
 
@@ -51,7 +51,7 @@ function Refund() {
               <li>Check your bank account again</li>
               <li>Contact your credit card company—it may take some time before your refund is officially posted</li>
               <li>Contact your bank—there is often some processing time</li>
-              <li>If you've done all of this and still haven't received your refund, contact us</li>
+              <li>If you&quot;ve done all of this and still haven&quot;t received your refund, contact us</li>
             </ul>
           </section>
 

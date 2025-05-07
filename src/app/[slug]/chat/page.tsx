@@ -499,7 +499,7 @@ const ChatPage = () => {
         };
       } else {
         // Multiple files message (gallery)
-        const allImages = selectedFiles.every(f => f.type.startsWith('image/'));
+        // const allImages = selectedFiles.every(f => f.type.startsWith('image/'));
         newMessage = {
           id: generateId(),
           sender: 'me',

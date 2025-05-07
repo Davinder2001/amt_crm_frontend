@@ -34,7 +34,7 @@ export const UserNavbar = () => {
           </nav>
 
           <div className="header-buttons">
-            <button className="btn-outline ">Sign Up</button>
+            <button className="btn-outline " onClick={() => router.push('/register-your-company')}>Sign Up</button>
             <button className="btn-filled " onClick={() => router.push('/login')}>Get Started</button>
           </div>
         </div>
@@ -322,7 +322,9 @@ export const UserFooter = () => {
               <ul>
                 <li>Disclosures</li>
                 <li><Link href={'/privacy-policy'}>Privacy</Link></li>
-                <li>Terms of Service</li>
+                <li><Link href={'/terms-services'}>Terms of Service</Link></li>
+                <li><Link href={'/refund'}>Cancelation and refund</Link></li>
+                <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li>
                 <li>Security</li>
               </ul>
             </div>

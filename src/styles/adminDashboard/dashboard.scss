@@ -541,14 +541,21 @@
     padding: 0px;
     .card {
         flex-direction: column;
-        text-align: left;
-        padding: 16px;
-        align-items: flex-start;
+        text-align: center;
+        padding: 5px 10px;
+        align-items: center;
+        gap: 8px;
         &::before {
             width: 4px;
             height: 100%;
             top: 0;
             bottom: auto;
         }
+    }
+
+        .icon-shell {
+        width: 30px;
+        height: 30px;
+        padding: 2px;
     }
 }}

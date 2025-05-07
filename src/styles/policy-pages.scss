@@ -1,0 +1,73 @@
+@use './variables' as *;
+
+.privacy-policy-page,
+.terms-service-page,
+.refund-page,
+.shipping-policy-page {
+  font-family: $font-family;
+  background-color: $secondary-color;
+  color: $para-color;
+  padding: 3rem 1.5rem;
+
+  .outer-div {
+    padding: 2rem 2rem;
+
+    h1 {
+      font-size: 40px;
+      font-weight: $font-weight-bold;
+      color: $primary-color;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    p {
+      font-size: $font-size;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    section {
+      margin-top: 2rem;
+
+      h2 {
+        font-size: $font-size-extra-large;
+        color: $dark-color;
+        font-weight: $font-weight-semi-bold;
+        margin-bottom: 0.5rem;
+      }
+
+      ul {
+        margin-left: 1.5rem;
+        list-style-type: disc;
+
+        li {
+          font-size: $font-size;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      a {
+        color: $primary-color;
+        text-decoration: underline;
+
+        &:hover {
+          color: darken($primary-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+// Responsive tweaks
+@media screen and (max-width: 768px) {
+  .privacy-policy-page,
+  .terms-service-page,
+  .refund-page,
+  .shipping-policy-page {
+    padding: 2rem 1rem;
+
+    .outer-div {
+      padding: 1.5rem 1rem;
+    }
+  }
+}

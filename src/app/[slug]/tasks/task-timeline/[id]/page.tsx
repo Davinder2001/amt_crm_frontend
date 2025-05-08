@@ -1,11 +1,11 @@
-import React from 'react'
+  import React from 'react'
 
-const Page = () => {
-  return (
-    <>
-        View
-    </>
-  )
-}
+  const viewPage = () => {
+    return (
+      <>
+          View
+      </>
+    )
+  }
 
-export default Page
+  export default viewPage

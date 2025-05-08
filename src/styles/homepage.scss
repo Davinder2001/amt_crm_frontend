@@ -16,7 +16,7 @@
   position: sticky;
   top: 0;
   background-color: white;
-  z-index: 999;
+  z-index: 9999999;
 }
 
 .header-buttons {
@@ -508,7 +508,7 @@ nav.feature-card-nav-bar {
 }
 
 .comparison-section {
-  padding: 60px 10;
+  padding: 40px 10px;
   background-color: #fff;
 }
 
@@ -659,6 +659,7 @@ nav.feature-card-nav-bar {
     list-style: none;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
 
     a {
@@ -677,6 +678,7 @@ nav.feature-card-nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 20px;
   max-width: 1439px;
   margin: auto;
@@ -731,12 +733,117 @@ nav.feature-card-nav-bar {
 }
 
 
+.pricing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f0f9f9;
+
+  .outer-div {
+    padding: 0px 10px;
+  }
+
+
+  .price-heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+  }
+
+  .plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .planCard {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 320px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .planTitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .planPrice {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .features {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 20px;
+    }
+
+    .features li {
+      margin-bottom: 8px;
+    }
+
+    .pricing-buttons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    .btnPrimary {
+      background-color: #00b39f;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: default;
+    }
+
+    .btnSecondary {
+      background-color: #e0f8f7;
+      color: #00b39f;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btnOnline {
+      background-color: green;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+  }
+}
+
+
 /* Medium devices (tablets, 768px and up) */
 @media (max-width: 991px) {
+  .footer-bottom-inner {
+    justify-content: center;
+  }
 
-  .outer-div,
-  .header2 {
+  .outer-div {
     width: 100%;
+
   }
 
   .hero {
@@ -758,6 +865,7 @@ nav.feature-card-nav-bar {
 
   .features-wrapper {
     grid-template-columns: 1fr;
+    margin: 20px 0px 20px;
   }
 
   .manage-container {
@@ -765,39 +873,65 @@ nav.feature-card-nav-bar {
     align-items: center;
   }
 
-  .manage-image img {
-    max-width: 100%;
-    right: 0;
-    transform: none;
-    padding: 0;
-    border-radius: 30px;
+  .pricing-container {
+    padding: 20px 0px;
   }
 
   .comparison-table {
     font-size: 12px;
+    margin-bottom: 10px;
   }
 
   .footer-top {
     grid-template-columns: 1fr;
   }
 
+  .manage-text {
+    padding: 20px 0;
+  }
+
   .manage-image {
     padding: 0px;
+    transform: none;
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 200px;
+    margin-bottom: 20px;
 
     img {
-      display: none;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
     }
   }
 
   .manage-text {
-    padding: 40px 0px;
+    padding: 20px 0px;
   }
 }
 
 /* Small devices (phones, less than 768px) */
 @media (max-width: 767px) {
+  .logo span {
+    display: none;
+  }
+
+  .footer-bottom .policy-links {
+    justify-content: center;
+  }
+
+  .manage-container {
+    display: flex;
+  }
+
   .outer-div {
     padding: 0px 10px;
+  }
+
+  .business-section .outer-div {
+    padding: 0;
   }
 
   .hero-right .main-image {
@@ -819,9 +953,7 @@ nav.feature-card-nav-bar {
   }
 
   .header2 {
-    display: grid;
-    grid-template-columns: 97% 3%;
-    padding: 10px 20px 0px 20px;
+    padding: 10px;
 
     .buttons {
       padding: 5px 15px;
@@ -829,7 +961,7 @@ nav.feature-card-nav-bar {
   }
 
   .hero-left h1 {
-    font-size: 32px;
+    font-size: 30px;
   }
 
   .hero-left {
@@ -907,7 +1039,7 @@ nav.feature-card-nav-bar {
 
   .comparison-section {
     overflow: scroll;
-    margin: 40px 0px;
+    margin: 20px 0px;
   }
 
   img.absilute-image2,
@@ -940,15 +1072,6 @@ nav.feature-card-nav-bar {
     border: 1px solid #e5e5e5;
   }
 
-
-
-
-
-
-
-
-
-
   .nav {
     display: none;
     flex-direction: column;
@@ -970,12 +1093,21 @@ nav.feature-card-nav-bar {
     left: 0;
   }
 
-  .header-buttons {
-    flex-direction: row;
-    margin-bottom: 10px;
-  }
-
   .menu-toggle {
     display: block;
+  }
+}
+
+
+@media (max-width: 680px) {
+  .pricing-container .planCard {
+    max-width: 100%;
+  }
+}
+
+
+@media (max-width:468px) {
+  .header-buttons .btn-outline {
+    padding: 5px 10px;
   }
 }

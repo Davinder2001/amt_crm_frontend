@@ -1022,23 +1022,6 @@ import EmojiPicker from 'emoji-picker-react';
 import { EmojiClickData } from 'emoji-picker-react';
 import { useFetchConversationsQuery } from '@/slices/chat/chatApi';
 
-// Interfaces
-interface SenderReceiver {
-  id: number | null;
-  name: string;
-  last_read: string | null;
-}
-
-interface ChatListItem {
-  user_id: number | null;
-  name: string;
-  last_message: string | null;
-  last_message_time?: string | null;
-  sender: SenderReceiver;
-  receiver: SenderReceiver;
-  messages?: { text: string; time: string; sender: string }[]; // Add messages here for demo
-}
-
 function ChatPage() {
   const [selectedUser, setSelectedUser] = useState<ChatListItem | null>(null);
   const { data } = useFetchConversationsQuery();
@@ -1047,7 +1030,6 @@ function ChatPage() {
   const [message, setMessage] = useState('');
   const emojiRef = useRef<HTMLDivElement>(null);
   const smileyRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleUserClick = (user: ChatListItem) => {
     setSelectedUser(user);
@@ -1075,11 +1057,6 @@ function ChatPage() {
     setMessage('');
   };
 
-  // Assume "chat partner" is whoever is NOT the current user.
-  const getChatPartner = (chat: ChatListItem): SenderReceiver => {
-    const currentUserId = 1; // Replace with actual logged-in user ID
-    return chat.sender.id === currentUserId ? chat.receiver : chat.sender;
-  };
 
   useEffect(() => {
     if (!selectedUser && filteredUsers.length > 0) {
@@ -1107,7 +1084,6 @@ function ChatPage() {
         <div className="chatList">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((chat, index) => {
-              const chatPartner = getChatPartner(chat);
               return (
                 <div
                   key={index}
@@ -1120,7 +1096,7 @@ function ChatPage() {
                     className="avatar"
                   />
                   <div>
-                    <div className="chatName">{chatPartner.name}</div>
+                    <div className="chatName">{chat.name}</div>
                     <div className="chatMessage">{chat.last_message}</div>
                   </div>
                   <div className="chatTime">{chat.last_message_time}</div>
@@ -1155,30 +1131,13 @@ function ChatPage() {
         <div className="chatHeader">
           <div className="header-left">
             <div className="avatar-container">
-              {selectedUser && (
-                <>
-                  <h1>{getChatPartner(selectedUser).name.charAt(0).toUpperCase()}</h1>
-                  <div>
-                    <div className="chatName">{getChatPartner(selectedUser).name}</div>
-                    <div className="onlineStatus">Online</div>
-                  </div>
-                </>
-              )}
+             
             </div>
           </div>
         </div>
 
         <div className="chatMessages">
-          {selectedUser?.messages?.map((msg, index) => (
-            <div
-              key={index}
-              className={msg.sender === 'me' ? 'messageRight' : 'messageLeft'}
-            >
-              <p>{msg.text}</p>
-              <span className="timestamp">{msg.time}</span>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
+
         </div>
 
         <div className="inputBox">

@@ -63,10 +63,11 @@ const Page = () => {
         </label>
         </div>
         
-      </form>
+      
     <div className="Recurring-form-btn-wrapper">
     <button type="submit" className='buttons' disabled={isLoading}>Create</button>
     </div>
+    </form>
     </div>
   );
 };

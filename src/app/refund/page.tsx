@@ -6,8 +6,6 @@ function Refund() {
       <div className="refund-page">
         <div className="outer-div">
           <h1>Refund Policy</h1>
-          <p>Effective Date: May 7, 2025</p>
-
           <section>
             <h2>1. Introduction</h2>
             <p>
@@ -38,7 +36,7 @@ function Refund() {
           <section>
             <h2>4. Refund Process</h2>
             <p>
-              Once your request is received and inspected, we will notify you of the status of your refund. If approved, the refund will be processed within 7–10 business days to your original payment method.
+              Once your request is received and inspected, we will notify you of the status of your refund. If approved, the refund will be processed within 5-7 business days to your original payment method.
             </p>
           </section>
 
@@ -60,11 +58,12 @@ function Refund() {
             <p>
               If you have any questions about our refund policy, please contact us:
               <br />
-              Email: <a href="mailto:support@assettech.com">support@assettech.com</a>
+              Email: <a href="mailto:support@himmanav.com">support@himmanav.com</a>
               <br />
-              Phone: +91-XXXXXXXXXX
+              Phone: <a href="tel:+919459679357">+91-9459679357</a>
               <br />
-              Address: 123 Tech Street, Bengaluru, India
+              Address: Manla, PO Kiarkoti, T&amp;D Shimla, 171007
+              <br />
             </p>
           </section>
         </div>

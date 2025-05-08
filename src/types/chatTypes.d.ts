@@ -38,14 +38,19 @@ interface Message {
     };
 }
 
+interface SenderReceiver {
+    id: number | null;
+    name: string;
+    last_read: string | null;
+}
 
 interface ChatListItem {
-    user_id: number;
-    user_name: string;
+    user_id: number | null;
+    name: string;
     last_message: string | null;
-    last_message_time: string | null;
-    is_read: boolean;
-    unread_count: number;
+    last_message_time?: string | null;
+    sender: SenderReceiver;
+    receiver: SenderReceiver;
 }
 
 

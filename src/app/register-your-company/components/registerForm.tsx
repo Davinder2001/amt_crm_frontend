@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAdminRegisterMutation } from '@/slices/auth/authApi';
 import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText, FiCreditCard, FiEyeOff, FiEye, FiFile, FiXCircle } from 'react-icons/fi';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { toast } from 'react-toastify';
 
 
 const LOCAL_STORAGE_KEY = 'adminregistration';
@@ -77,17 +78,23 @@ const RegisterForm: React.FC = () => {
     if (!formData.first_name) errors.first_name = 'First name is required';
     if (!formData.email) errors.email = 'Email is required';
     if (!formData.number) errors.number = 'Mobile number is required';
+
+    // Check if the phone number is exactly 10 digits
+    const numberRegex = /^[0-9]{10}$/;
+    if (formData.number && !numberRegex.test(formData.number)) {
+      errors.number = 'Phone number must be exactly 10 digits';
+    }
+
     if (!formData.password) errors.password = 'Password is required';
 
-    // Confirm password logic
     if (!formData.password_confirmation) {
       errors.password_confirmation = 'Please confirm your password';
     } else if (formData.password !== formData.password_confirmation) {
       errors.password_confirmation = 'Passwords do not match';
     }
 
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
+    setFieldErrors(prev => ({ ...prev, ...errors }));
+    return errors;
   };
 
   const validateCompanySection = () => {
@@ -98,10 +105,9 @@ const RegisterForm: React.FC = () => {
     if (!formData.pin_code) errors.pin_code = 'Pin code is required';
     if (!formData.business_id) errors.business_id = 'Business ID is required';
 
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
+    setFieldErrors(prev => ({ ...prev, ...errors }));
+    return errors;
   };
-
 
   const togglePasswordVisibility = (field: 'password' | 'password_confirmation') => {
     setShowPassword(prev => ({
@@ -114,13 +120,13 @@ const RegisterForm: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
+
     const updatedFormData = { ...formData, [name]: value };
     setFormData(updatedFormData);
     saveFormData(updatedFormData);
-  
+
     const newErrors: Record<string, string> = { ...fieldErrors };
-  
+
     if (name === 'password') {
       if (!value) {
         newErrors.password = 'Password is required';
@@ -129,7 +135,7 @@ const RegisterForm: React.FC = () => {
       } else {
         delete newErrors.password;
       }
-  
+
       if (updatedFormData.password_confirmation) {
         if (updatedFormData.password_confirmation.length < 8) {
           newErrors.password_confirmation = 'Confirm password must be at least 8 characters';
@@ -139,7 +145,7 @@ const RegisterForm: React.FC = () => {
           delete newErrors.password_confirmation;
         }
       }
-  
+
     } else if (name === 'password_confirmation') {
       if (!value) {
         newErrors.password_confirmation = 'Please confirm your password';
@@ -150,7 +156,7 @@ const RegisterForm: React.FC = () => {
       } else {
         delete newErrors.password_confirmation;
       }
-  
+
     } else if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value.trim()) {
@@ -160,7 +166,6 @@ const RegisterForm: React.FC = () => {
       } else {
         delete newErrors.email;
       }
-  
     } else if (name === 'number') {
       const numberRegex = /^[0-9]{10}$/; // Example: 10-digit phone number
       if (!value.trim()) {
@@ -170,15 +175,14 @@ const RegisterForm: React.FC = () => {
       } else {
         delete newErrors.number;
       }
-  
     } else {
       if (value.trim()) {
         delete newErrors[name];
       }
     }
-  
+
     setFieldErrors(newErrors);
-  };  
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof RegisterForm) => {
     const files = e.target.files;
@@ -210,13 +214,13 @@ const RegisterForm: React.FC = () => {
     });
 
     try {
-      const response = await adminRegister(data).unwrap();
+      await adminRegister(data).unwrap();
       localStorage.removeItem('adminregistration');
       setActiveSection('personal');
       setFormData(getDefaultFormData());
-      console.log('Registration successful:', response);
+      toast.success('Registration successful')
     } catch {
-      alert('Something went wrong. Please check the form and try again.');
+      toast.error('Something went wrong. Please check the form and try again.')
     }
   };
 
@@ -297,17 +301,19 @@ const RegisterForm: React.FC = () => {
       <div className="register-stepper">
         <div
           className={`step ${activeSection === 'personal' ? 'active' : ''}`}
-          onClick={() => { setActiveSection('personal'); }}
+          onClick={() => {
+            setActiveSection('personal');
+          }}
         >
           <span>1</span>
           Personal Details
         </div>
+
         <div
           className={`step ${activeSection === 'company' ? 'active' : ''}`}
           onClick={() => {
-            if (activeSection === 'personal' && validatePersonalSection()) {
-              setActiveSection('company');
-            } else if (activeSection !== 'personal') {
+            const personalErrors = validatePersonalSection();
+            if (Object.keys(personalErrors).length === 0) {
               setActiveSection('company');
             }
           }}
@@ -315,12 +321,15 @@ const RegisterForm: React.FC = () => {
           <span>2</span>
           Company Details
         </div>
+
         <div
           className={`step ${activeSection === 'documents' ? 'active' : ''}`}
           onClick={() => {
+            const personalErrors = validatePersonalSection();
+            const companyErrors = validateCompanySection();
             if (
-              validatePersonalSection() &&
-              validateCompanySection()
+              Object.keys(personalErrors).length === 0 &&
+              Object.keys(companyErrors).length === 0
             ) {
               setActiveSection('documents');
             }
@@ -330,7 +339,6 @@ const RegisterForm: React.FC = () => {
           Documents
         </div>
       </div>
-
 
       <form onSubmit={handleSubmit} className="register-form">
         <ConfirmDialog
@@ -477,20 +485,31 @@ const RegisterForm: React.FC = () => {
             <button
               type="button"
               className="secondary-button"
-              onClick={() => setActiveSection(activeSection === 'company' ? 'personal' : 'company')}
+              onClick={() =>
+                setActiveSection(
+                  activeSection === 'company' ? 'personal' : 'company'
+                )
+              }
             >
               Previous
             </button>
           )}
+
           {activeSection !== 'documents' ? (
             <button
               type="button"
               className="primary-button"
               onClick={() => {
-                if (activeSection === 'personal' && validatePersonalSection()) {
-                  setActiveSection('company');
-                } else if (activeSection === 'company' && validateCompanySection()) {
-                  setActiveSection('documents');
+                if (activeSection === 'personal') {
+                  const personalErrors = validatePersonalSection();
+                  if (Object.keys(personalErrors).length === 0) {
+                    setActiveSection('company');
+                  }
+                } else if (activeSection === 'company') {
+                  const companyErrors = validateCompanySection();
+                  if (Object.keys(companyErrors).length === 0) {
+                    setActiveSection('documents');
+                  }
                 }
               }}
             >

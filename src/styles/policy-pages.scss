@@ -3,13 +3,15 @@
 .privacy-policy-page,
 .terms-service-page,
 .refund-page,
-.shipping-policy-page {
+.shipping-policy-page,
+.about-page {
   font-family: $font-family;
   background-color: $secondary-color;
   color: $para-color;
-  padding: 3rem 1.5rem;
 
   .outer-div {
+    max-width: 1439px;
+    margin: auto;
     padding: 2rem 2rem;
 
     h1 {
@@ -60,6 +62,7 @@
 
 // Responsive tweaks
 @media screen and (max-width: 768px) {
+
   .privacy-policy-page,
   .terms-service-page,
   .refund-page,

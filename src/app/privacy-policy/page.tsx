@@ -1,5 +1,5 @@
-'use client'
-import React from 'react'
+'use client';
+import React from 'react';
 
 function PrivacyPolicy() {
   return (
@@ -7,8 +7,6 @@ function PrivacyPolicy() {
       <div className="privacy-policy-page">
         <div className="outer-div">
           <h1>Privacy Policy</h1>
-          <p>Effective Date: May 7, 2025</p>
-
           <section>
             <h2>1. Introduction</h2>
             <p>
@@ -70,7 +68,7 @@ function PrivacyPolicy() {
               <li>Request correction or deletion of your data</li>
               <li>Withdraw consent or object to data processing</li>
             </ul>
-            <p>To exercise these rights, please contact us at <a href="mailto:support@assettech.com">support@assettech.com</a>.</p>
+            <p>To exercise these rights, please contact us at <a href="mailto:support@himmanav.com">support@himmanav.com</a>.</p>
           </section>
 
           <section>
@@ -79,7 +77,7 @@ function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2>9. Children&quot;s Privacy</h2>
+            <h2>9. Children&apos;s Privacy</h2>
             <p>Our services are not intended for children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us data, please contact us immediately.</p>
           </section>
 
@@ -93,17 +91,24 @@ function PrivacyPolicy() {
             <p>
               If you have any questions or concerns about this Privacy Policy, please contact us:
               <br />
-              Email: <a href="mailto:support@assettech.com">support@assettech.com</a>
+              Email: <a href="mailto:support@himmanav.com">support@himmanav.com</a>
               <br />
-              Phone: +91-XXXXXXXXXX
+              Phone: <a href="tel:+919459679357">+91-9459679357</a>
               <br />
-              Address: 123 Tech Street, Bengaluru, India
+              Address: Manla, PO Kiarkoti, T&amp;D Shimla, 171007
+            </p>
+          </section>
+
+          <section>
+            <h2>12. Data Controller</h2>
+            <p>
+              The data controller responsible for processing your personal information is Monika Sharma. If you have any questions regarding your personal data or this Privacy Policy, you can contact  directly at the email and phone numbers provided above.
             </p>
           </section>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default PrivacyPolicy
+export default PrivacyPolicy;

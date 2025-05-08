@@ -36,7 +36,7 @@ function Refund() {
           <section>
             <h2>4. Refund Process</h2>
             <p>
-              Once your request is received and inspected, we will notify you of the status of your refund. If approved, the refund will be processed within 5-7 business days to your original payment method.
+              Once your request is received and inspected, we will notify you of the status of your refund. If approved, the refund will be credited within 5-7 business days to your original payment method.
             </p>
           </section>
 

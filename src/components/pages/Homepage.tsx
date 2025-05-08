@@ -367,6 +367,7 @@ import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, foo
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import Image from 'next/image';
+import Pricing from './PricingPage';
 
 export const UserNavbar = () => {
   const router = useRouter();
@@ -422,45 +423,6 @@ export default function Homepage() {
           </section>
         </div>
 
-        {/* Business Solutions Section */}
-        {/* <div className='business-section'>
-          <div className='outer-div'>
-            <nav className='feature-card-nav-bar'>
-              <Link href="">CRM Management</Link>
-              <Link href="">Operational Tools</Link>
-              <Link href="">Team Collaboration</Link>
-            </nav>
-            <section className="features-sections">
-              <div className="features-wrapper">
-                <div className="feature-card">
-                  <div className='feature-card-text'>
-                    <h3>Manage Your Clients Effectively</h3>
-                    <p>Our platform helps businesses manage their customer relationships and sales pipelines in one place. Easily track leads, customer interactions, and sales progress.</p>
-                    <p>With automatic updates and real-time data, you can provide your clients with timely responses and personalized service.</p>
-                    <p>Our CRM solution is designed to scale as your business grows, offering advanced features to automate routine tasks and improve client satisfaction.</p>
-                  </div>
-                  <div className='feature-card-image'>
-                    <img src={featurecardimg1.src} alt="CRM Management" />
-                    <img src={featurecardimg2.src} alt="Client Management" className='absilute-image1' />
-                  </div>
-                </div>
-                <div className="feature-card">
-                  <div className='feature-card-text'>
-                    <h3>Enhance Operational Efficiency</h3>
-                    <p>Centralize all your business processes in one platform. Manage tasks, meetings, and documents with ease. Automate workflows to save time and reduce human error.</p>
-                    <p>Our platform integrates multiple tools and systems into a seamless dashboard, helping businesses run smoothly and efficiently.</p>
-                    <p>With powerful analytics and reporting tools, gain insights into performance, track KPIs, and make data-driven decisions to boost productivity.</p>
-                  </div>
-                  <div className='feature-card-image'>
-                    <img src={featurecardimg3.src} alt="Business Operations" className='absilute-image2' />
-                    <img src={featurecardimg4.src} alt="Business Dashboard" className='absilute-image3' />
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div> */}
-
         <div className='business-section'>
           <div className='outer-div'>
             <nav className='feature-card-nav-bar'>
@@ -475,7 +437,7 @@ export default function Homepage() {
                   <div className="feature-card">
                     <div className='feature-card-text'>
                       <h3>Manage Your Clients Effectively</h3>
-                      <p>Our platform helps businesses manage their customer relationships and sales pipelines in one place. Easily track leads, customer interactions, and sales progress.</p>
+                      <p>Our platform helps businesses manage their customer relationships and sales pipelines in one place. Easily track customer interactions, and sales progress.</p>
                       <p>With automatic updates and real-time data, you can provide your clients with timely responses and personalized service.</p>
                       <p>Our CRM solution is designed to scale as your business grows, offering advanced features to automate routine tasks and improve client satisfaction.</p>
                       <p>Additionally, you can set up custom notifications for follow-ups, track customer behavior, and even integrate with other marketing tools.</p>
@@ -596,6 +558,9 @@ export default function Homepage() {
             </tbody>
           </table>
         </div>
+
+        <Pricing />
+        
       </div>
     </div>
   );
@@ -618,9 +583,9 @@ export const UserFooter = () => {
               <li><Link href={'/privacy-policy'}>Privacy</Link></li>
               <li><Link href={'/terms-services'}>Terms of Service</Link></li>
               <li><Link href={'/refund'}>Cancellation and Refund</Link></li>
-              <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li>
+              {/* <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li> */}
             </ul>
-            <p>Copyright 2025 © Business Management Technology</p>
+            <p>Copyright 2025 © Asset Management Technology</p>
           </div>
         </div>
       </footer>

@@ -95,7 +95,7 @@ import { useFetchUsersQuery } from '@/slices/users/userApi';
 import { toast } from 'react-toastify';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaBell, FaBellSlash } from "react-icons/fa";
+
 const CreateRecurringTask: React.FC = () => {
   const [createTask, { isLoading }] = useCreatePredefinedTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
@@ -215,21 +215,25 @@ const CreateRecurringTask: React.FC = () => {
           {renderField("End Date", "recurrence_end_date", "date", "YYY-MM-DD (optional)")}
 
 
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              name="notify"
-              checked={formData.notify}
-              onChange={handleChange}
-            />
-            <span className="slider">
-              {formData.notify ? <FaBell size={16} /> : <FaBellSlash  size={16} />}
-            </span>
-          </label>
+          <div className="form-group">
+            <label htmlFor="notify">Notification</label>
+            <button
+              type="button"
+              id="notify"
+              onClick={() =>
+                setFormData((prev) => ({ ...prev, notify: !prev.notify }))
+              }
+              className={`toggle-button  ${formData.notify ? 'on' : 'off'}`}
+            >
+              {formData.notify ? 'ON 🔔' : 'OFF 🔕'}
+            </button>
+          </div>
+
+
         </div>
 
         <div className="create-employess-action">
-          <button className="buttons" type="submit" disabled={isLoading}>
+          <button className="form-button" type="submit" disabled={isLoading}>
             {isLoading ? "Creating..." : "Create Task"}
           </button>
         </div>

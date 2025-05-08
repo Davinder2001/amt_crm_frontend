@@ -1,82 +1,33 @@
 @use '../variables' as *;
 
 .recurring-wrapper {
-  .toggle-switch {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    user-select: none;
-    cursor: pointer;
-  }
-  
-  .toggle-switch input {
-    display: none;
-  }
-  
-  .slider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 24px;
+  .toggle-button {
+    padding: 8px 16px;
     border-radius: 20px;
-    background-color:#009693 ;
-    color: red;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    font-size: 14px;
+    width: fit-content !important;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  
+    &.on {
+      background-color: #009693;
+      color: white;
+    }
+  
+    &.off {
+      background-color: #e0e0e0;
+      color: #555;
+    }
+  
+    &:hover {
+      opacity: 0.9;
+    }
   }
   
-  /* Change background color when checkbox is checked */
-  .toggle-switch input:checked + .slider {
-    color: #ffffff;
-  }
-  
-  .slider svg {
-    font-size: 16px;
-  }
-  
-  .label-text {
-    color: #333;
-  }
   
 
   }  
 
 
-
-
-  .custom-time-input {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px;
-  }
-  
-  .time-select {
-    padding: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: white;
-    cursor: pointer;
-  }
-  .ampm-button {
-    padding: 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  .ampm-button:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .react-datepicker__input-container input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
- 

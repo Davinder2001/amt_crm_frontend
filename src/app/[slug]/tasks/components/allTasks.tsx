@@ -1,3 +1,122 @@
+// 'use client';
+
+// import React from 'react';
+// import Link from 'next/link';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
+// import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+// import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+// import Loader from '@/components/common/Loader';
+
+// const AllTasks: React.FC = () => {
+//   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
+//   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
+//   const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
+//   const companySlug = selectedCompany?.selected_company?.company_slug;
+
+//   const handleDelete = async (id: number) => {
+//     if (confirm('Are you sure you want to delete this task?')) {
+//       try {
+//         await deleteTask(id).unwrap();
+//         toast.success('Task deleted successfully');
+//         refetch();
+//       } catch (err) {
+//         console.error('Error deleting task:', err);
+//         toast.error('Error deleting task');
+//       }
+//     }
+//   };
+
+//   if (profileLoading || tasksLoading) return <Loader />;
+//   if (profileError) return <p>Error fetching profile.</p>;
+//   if (tasksError) return <p>Error fetching tasks.</p>;
+//   if (!companySlug) return <p>Company slug not found.</p>;
+
+//   return (
+//     <>
+//       <ToastContainer />
+//       {tasks?.data && tasks.data.length > 0 ? (
+//         // …inside AllTasks’s return:
+
+//         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+//           <thead>
+//             <tr>
+//               <th>Employee Name</th>
+//               <th>Employee Role</th>
+//               <th>Task Name</th>
+//               <th>Start Date</th>
+//               <th>End Date</th>
+//               <th>Assigned By</th>
+//               <th>Status</th>
+//               <th>Actions</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {tasks.data.map((task) => (
+//               <tr key={task.id}>
+//                 <td>{task.assigned_to_name}</td>
+//                 <td>{task.assigned_role}</td>
+//                 <td>{task.name}</td>
+//                 <td>{task.start_date}</td>
+//                 <td>{task.end_date}</td>
+//                 <td>{task.assigned_by_name}</td>
+//                 <td>{task.status}</td>
+
+//                 <td className='store-t-e-e-icons'>
+//                   <Link
+//                     href={`/${companySlug}/tasks/view-task/${task.id}`}
+//                     className="table-e-d-v-buttons"
+//                   >
+//                     <FaEye color="#222" />
+//                   </Link>
+//                   <Link
+//                     href={`/${companySlug}/tasks/edit-task/${task.id}`}
+//                     className="table-e-d-v-buttons"
+//                   >
+//                     <FaEdit color="#222" />
+//                   </Link>
+//                   <button
+//                     onClick={() => handleDelete(task.id)}
+//                     disabled={isDeleting}
+//                     className="table-e-d-v-buttons"
+//                   >
+//                     <FaTrash color="#222" />
+//                   </button>
+//                 </td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+
+//       ) : (
+//         <p>No tasks available.</p>
+//       )}
+//     </>
+//   );
+// };
+
+// export default AllTasks;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use client';
 
 import React from 'react';
@@ -8,6 +127,7 @@ import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi'
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import Loader from '@/components/common/Loader';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
@@ -33,62 +153,73 @@ const AllTasks: React.FC = () => {
   if (tasksError) return <p>Error fetching tasks.</p>;
   if (!companySlug) return <p>Company slug not found.</p>;
 
+  // Define columns for the responsive table
+  const columns = [
+    {
+      label: 'Employee Name',
+      key: 'assigned_to_name' as keyof Task,
+    },
+    {
+      label: 'Employee Role',
+      key: 'assigned_role' as keyof Task,
+    },
+    {
+      label: 'Task Name',
+      key: 'name' as keyof Task,
+    },
+    {
+      label: 'Start Date',
+      key: 'start_date' as keyof Task,
+    },
+    {
+      label: 'End Date',
+      key: 'end_date' as keyof Task,
+    },
+    {
+      label: 'Assigned By',
+      key: 'assigned_by_name' as keyof Task,
+    },
+    {
+      label: 'Status',
+      key: 'status' as keyof Task,
+    },
+    {
+      label: 'Actions',
+      render: (task: Task) => (
+        <div className='store-t-e-e-icons'>
+          <Link
+            href={`/${companySlug}/tasks/edit-task/${task.id}`}
+            className="table-e-d-v-buttons"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <FaEdit color="#222" />
+          </Link>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(task.id);
+            }}
+            disabled={isDeleting}
+            className="table-e-d-v-buttons"
+          >
+            <FaTrash color="#222" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <ToastContainer />
       {tasks?.data && tasks.data.length > 0 ? (
-        // …inside AllTasks’s return:
-
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead>
-            <tr>
-              <th>Employee Name</th>
-              <th>Employee Role</th>
-              <th>Task Name</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Assigned By</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tasks.data.map((task) => (
-              <tr key={task.id}>
-                <td>{task.assigned_to_name}</td>
-                <td>{task.assigned_role}</td>
-                <td>{task.name}</td>
-                <td>{task.start_date}</td>
-                <td>{task.end_date}</td>
-                <td>{task.assigned_by_name}</td>
-                <td>{task.status}</td>
-
-                <td className='store-t-e-e-icons'>
-                  <Link
-                    href={`/${companySlug}/tasks/view-task/${task.id}`}
-                    className="table-e-d-v-buttons"
-                  >
-                    <FaEye color="#222" />
-                  </Link>
-                  <Link
-                    href={`/${companySlug}/tasks/edit-task/${task.id}`}
-                    className="table-e-d-v-buttons"
-                  >
-                    <FaEdit color="#222" />
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(task.id)}
-                    disabled={isDeleting}
-                    className="table-e-d-v-buttons"
-                  >
-                    <FaTrash color="#222" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
+        <ResponsiveTable
+          data={tasks.data}
+          columns={columns}
+          onDelete={handleDelete}
+          onEdit={(id) => window.location.href = `/${companySlug}/tasks/edit-task/${id}`}
+          onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
+        />
       ) : (
         <p>No tasks available.</p>
       )}

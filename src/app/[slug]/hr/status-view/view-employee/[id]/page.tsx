@@ -178,20 +178,16 @@
 
 
 
-
-
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchEmployeByIdQuery } from '@/slices/employe/employe';
+import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import HrNavigation from '../../../components/hrNavigation';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useDeleteEmployeMutation } from '@/slices/employe/employe';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 
@@ -214,17 +210,17 @@ const ViewUserPage: React.FC = () => {
   } = useFetchEmployeByIdQuery(Number(id));
 
   const user = data;
+  const employee = user?.employee;
+  const details = employee?.employee_details;
 
   useEffect(() => {
-    if (usersError) {
-      toast.error('Failed to fetch user data');
-    }
+    if (usersError) toast.error('Failed to fetch user data');
   }, [usersError]);
 
   if (usersLoading) return <div className="loading-spinner">Loading...</div>;
-  if (!user) return <div className="not-found">User not found</div>;
+  if (!employee) return <div className="not-found">User not found</div>;
 
-  const firstLetter = user?.name?.[0]?.toUpperCase();
+  const firstLetter = employee?.name?.[0]?.toUpperCase();
 
   const handleDelete = async () => {
     try {
@@ -236,189 +232,119 @@ const ViewUserPage: React.FC = () => {
     }
   };
 
+  const formatDate = (date: string | null | undefined) =>
+    date ? new Date(date).toLocaleDateString('en-IN') : 'N/A';
+
   return (
     <div className="employee-profile-container">
       <HrNavigation />
-<div className='employee-profile-inner-container'>
-      <div className="profile-header">
-        <div className="profile-avatar">
-          {user?.profile_picture ? (
-            <Image
-              src={user.profile_picture}
-              alt={user.name}
-              className="avatar-image"
-              width={120}
-              height={120}
-              priority
-            />
-          ) : (
-            <div className="avatar-initial">{firstLetter}</div>
-          )}
+      <div className="employee-profile-inner-container">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {employee?.profilePicture && employee.profilePicture !== 'http://localhost:8000/' ? (
+              <Image
+                src={employee.profilePicture}
+                alt={employee.name}
+                className="avatar-image"
+                width={120}
+                height={120}
+                priority
+              />
+            ) : (
+              <div className="avatar-initial">{firstLetter}</div>
+            )}
+          </div>
+
+          <div className="profile-header-content">
+            <div className="profile-title">
+              <h1>{employee.name}</h1>
+              <div className="profile-meta">
+                <span className="badge role">{employee.roles?.[0]?.name || 'N/A'}</span>
+                <span className="badge status">{employee.user_status}</span>
+              </div>
+            </div>
+
+            <div className="profile-actions">
+              <button
+                onClick={() => router.push(`/${companySlug}/hr/status-view/EditUserPage/${id}`)}
+                className="btn primary"
+              >
+                Edit Profile
+              </button>
+              <button onClick={() => setShowConfirm(true)} className="btn danger">
+                Delete Profile
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="profile-header-content">
-          <div className="profile-title">
-            <h1>{user.name}</h1>
-            <div className="profile-meta">
-              <span className="badge role">{user.roles?.[0]?.name || 'N/A'}</span>
-              <span className="badge status">{user.user_status}</span>
+        <div className="profile-grid">
+          {/* Basic Info */}
+          <div className="profile-card basic-info">
+            <h2 className="card-title"><i className="icon-user"></i> Basic Information</h2>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Employee ID</span><span className="info-value">{employee.id}</span></div>
+              <div className="info-item"><span className="info-label">Company</span><span className="info-value">{employee.company_name || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Mobile</span><span className="info-value">{employee.number || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Email</span><span className="info-value">{employee.email}</span></div>
+              <div className="info-item"><span className="info-label">Birth Date</span><span className="info-value">{formatDate(details?.dob)}</span></div>
+              <div className="info-item"><span className="info-label">City</span><span className="info-value">{details?.address || 'N/A'}</span></div>
             </div>
           </div>
 
-          <div className="profile-actions">
-            <button
-              onClick={() => router.push(`/${companySlug}/hr/status-view/EditUserPage/${id}`)}
-              className="btn primary"
-            >
-              Edit Profile
-            </button>
-            <button
-              onClick={() => setShowConfirm(true)}
-              className="btn danger"
-            >
-              Delete Profile
-            </button>
+          {/* Employment Info */}
+          <div className="profile-card employment-info">
+            <h2 className="card-title"><i className="icon-briefcase"></i> Employment Details</h2>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Department</span><span className="info-value">{details?.department || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Joining Date</span><span className="info-value">{formatDate(details?.joiningDate)}</span></div>
+              <div className="info-item"><span className="info-label">Joining Type</span><span className="info-value">{details?.joiningType || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Current Salary</span><span className="info-value">₹{details?.currentSalary || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Salary</span><span className="info-value">₹{details?.salary || 'N/A'}</span></div>
+              {details?.shiftTimings && (
+                <div className="info-item"><span className="info-label">Shift Timings</span><span className="info-value">{details.shiftTimings}</span></div>
+              )}
+              {details?.previousEmployer && (
+                <div className="info-item"><span className="info-label">Previous Employer</span><span className="info-value">{details.previousEmployer}</span></div>
+              )}
+            </div>
+          </div>
+
+          {/* Personal Info */}
+          <div className="profile-card personal-info">
+            <h2 className="card-title"><i className="icon-id-card"></i> Personal Information</h2>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Nationality</span><span className="info-value">{details?.nationality || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Religion</span><span className="info-value">{details?.religion || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Marital Status</span><span className="info-value">{details?.maritalStatus || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Passport No</span><span className="info-value">{details?.passportNo || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Emergency Contact</span><span className="info-value">{details?.emergencyContact || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Emergency Relation</span><span className="info-value">{details?.emergencyContactRelation || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          {/* Financial Info */}
+          <div className="profile-card financial-info">
+            <h2 className="card-title"><i className="icon-credit-card"></i> Financial Information</h2>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Bank Name</span><span className="info-value">{details?.bankName || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Account No</span><span className="info-value">{details?.accountNo || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">IFSC Code</span><span className="info-value">{details?.ifscCode || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Pan No</span><span className="info-value">{details?.panNo || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">UPI Id</span><span className="info-value">{details?.upiId || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Address Proof</span><span className="info-value">{details?.addressProof || 'N/A'}</span></div>
+            </div>
           </div>
         </div>
+
+        <ConfirmDialog
+          isOpen={showConfirm}
+          message="Are you sure you want to delete this employee profile? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setShowConfirm(false)}
+        />
       </div>
-
-      <div className="profile-grid">
-        <div className="profile-card basic-info">
-          <h2 className="card-title">
-            <i className="icon-user"></i> Basic Information
-          </h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <span className="info-label">Employee ID</span>
-              <span className="info-value">{user.id}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Company</span>
-              <span className="info-value">{user.company_name || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Mobile</span>
-              <span className="info-value">{user.number || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Email</span>
-              <span className="info-value">{user.email}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Birth Date</span>
-              <span className="info-value">{user.employee_details?.dob || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">City</span>
-              <span className="info-value">{user.employee_details?.address || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="profile-card employment-info">
-          <h2 className="card-title">
-            <i className="icon-briefcase"></i> Employment Details
-          </h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <span className="info-label">Department</span>
-              <span className="info-value">{user.employee_details?.department || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Work Location</span>
-              <span className="info-value">{user.employee_details?.workLocation || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Joining Date</span>
-              <span className="info-value">{user.employee_details?.joiningDate || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Joining Type</span>
-              <span className="info-value">{user.employee_details?.joiningType || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Current Salary</span>
-              <span className="info-value">₹{user.employee_details?.currentSalary || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Salary</span>
-              <span className="info-value">₹{user.employee_details?.salary || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="profile-card personal-info">
-          <h2 className="card-title">
-            <i className="icon-id-card"></i> Personal Information
-          </h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <span className="info-label">Nationality</span>
-              <span className="info-value">{user.employee_details?.nationality || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Religion</span>
-              <span className="info-value">{user.employee_details?.religion || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Marital Status</span>
-              <span className="info-value">{user.employee_details?.maritalStatus || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Passport No</span>
-              <span className="info-value">{user.employee_details?.passportNo || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Emergency Contact</span>
-              <span className="info-value">{user.employee_details?.emergencyContact || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Emergency Relation</span>
-              <span className="info-value">{user.employee_details?.emergencyContactRelation || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="profile-card financial-info">
-          <h2 className="card-title">
-            <i className="icon-credit-card"></i> Financial Information
-          </h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <span className="info-label">Bank Name</span>
-              <span className="info-value">{user.employee_details?.bankName || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Account No</span>
-              <span className="info-value">{user.employee_details?.accountNo || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">IFSC Code</span>
-              <span className="info-value">{user.employee_details?.ifscCode || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Pan No</span>
-              <span className="info-value">{user.employee_details?.panNo || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">UPI Id</span>
-              <span className="info-value">{user.employee_details?.upiId || 'N/A'}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Address Proof</span>
-              <span className="info-value">{user.employee_details?.addressProof || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <ConfirmDialog
-        isOpen={showConfirm}
-        message="Are you sure you want to delete this employee profile? This action cannot be undone."
-        onConfirm={handleDelete}
-        onCancel={() => setShowConfirm(false)}
-      />
-    </div>
     </div>
   );
 };

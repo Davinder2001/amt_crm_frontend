@@ -1,23 +1,117 @@
+// 'use client';
+// import React, { useState } from 'react';
+// import { useCreatePredefinedTaskMutation } from '@/slices/tasks/taskApi';
+// import { useRouter } from 'next/navigation';
+// import { useFetchUsersQuery } from '@/slices/users/userApi';
+
+// const Page = () => {
+//   const [createTask, { isLoading }] = useCreatePredefinedTaskMutation();
+//   const { data: usersData } = useFetchUsersQuery();
+//   const router = useRouter();
+
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     description: '',
+//     assigned_to: '',
+//     recurrence_type: 'daily',
+//     recurrence_start_date: '',
+//     recurrence_end_date: '',
+//     notify: true,
+//   });
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+//     const { name, value, type } = e.target as HTMLInputElement;
+//     const checked = (e.target as HTMLInputElement).checked;
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: type === 'checkbox' ? checked : value
+//     }));
+//   };
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     try {
+//       await createTask(formData).unwrap();
+//       router.push('/recurring-tasks');
+//     } catch (error) {
+//       console.error('Creation failed', error);
+//     }
+//   };
+
+//   return (
+//     <div className="Recurring-form-wrapper">
+//       <h2>Create Recurring Task</h2>
+//       <form onSubmit={handleSubmit}>
+//         <div className="form-container">
+//           <input name="name" placeholder="Task Name" value={formData.name} onChange={handleChange} required />
+//           <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
+//           <select
+//             name="assignedTo"
+//             value={formData.assigned_to}
+//             onChange={handleChange}
+//             required
+//           >
+//             <option value="">Assigned To</option>
+//             {Array.isArray(usersData?.users) && usersData.users.map((user: UserProfile) => (
+//               <option key={user.id} value={user.id}>
+//                 {user.name}
+//               </option>
+//             ))}
+//           </select>
+
+//           <select name="recurrence_type" value={formData.recurrence_type} onChange={handleChange}>
+//             <option value="daily">Daily</option>
+//             <option value="weekly">Weekly</option>
+//             <option value="monthly">Monthly</option>
+//           </select>
+
+//           <input type="date" name="recurrence_start_date" value={formData.recurrence_start_date} onChange={handleChange} required />
+//           <input type="date" name="recurrence_end_date" value={formData.recurrence_end_date} onChange={handleChange} />
+
+//           <label>
+//             <input type="checkbox" name="notify" checked={formData.notify} onChange={handleChange} /> Notify
+//           </label>
+//         </div>
+//         <div className="Recurring-form-btn-wrapper">
+//           <button type="submit" className='buttons' disabled={isLoading}>Create</button>
+//         </div>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default Page;
+
+
+
+
+
+
 'use client';
 import React, { useState } from 'react';
 import { useCreatePredefinedTaskMutation } from '@/slices/tasks/taskApi';
 import { useRouter } from 'next/navigation';
-
-const Page = () => {
+import { useFetchUsersQuery } from '@/slices/users/userApi';
+import { toast } from 'react-toastify';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { FaBell, FaBellSlash } from "react-icons/fa";
+const CreateRecurringTask: React.FC = () => {
   const [createTask, { isLoading }] = useCreatePredefinedTaskMutation();
+  const { data: usersData } = useFetchUsersQuery();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    assigned_by: '',
     assigned_to: '',
-    company_id: '',
     recurrence_type: 'daily',
     recurrence_start_date: '',
     recurrence_end_date: '',
     notify: true,
   });
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -28,48 +122,120 @@ const Page = () => {
     }));
   };
 
+  const handleDateChange = (date: Date | null, fieldName: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [fieldName]: date ? date.toISOString().split('T')[0] : ''
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
     try {
       await createTask(formData).unwrap();
+      toast.success("Recurring task created successfully!");
       router.push('/recurring-tasks');
-    } catch (error) {
-      console.error('Creation failed', error);
+    } catch (err) {
+      console.error("Error creating task:", err);
+      toast.error("Failed to create recurring task");
     }
   };
 
+  const renderField = (label: string, name: string, type = "text", placeholder = "", options?: { value: string, label: string }[]) => {
+    return (
+      <div className="employee-field">
+        <label htmlFor={name}>{label}</label>
+
+        {type === 'date' ? (
+          <DatePicker
+            selected={typeof formData[name as keyof typeof formData] === 'string' && formData[name as keyof typeof formData] ? new Date(formData[name as keyof typeof formData] as string) : null}
+            onChange={(date) => handleDateChange(date, name)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText={placeholder}
+            className="date-input"
+          />
+        ) : type === 'select' && options ? (
+          <select
+            name={name}
+            value={String(formData[name as keyof typeof formData])}
+            onChange={handleChange}
+          >
+            {options.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : type === 'checkbox' ? (
+          <input
+            type="checkbox"
+            name={name}
+            checked={formData[name as keyof typeof formData] as boolean}
+            onChange={handleChange}
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={formData[name as keyof typeof formData] as string}
+            onChange={handleChange}
+            placeholder={placeholder}
+          />
+        )}
+
+        {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
+      </div>
+    );
+  };
+
   return (
-    <div className="Recurring-form-wrapper">
+    <div className="add-employee-form recurring-wrapper">
       <h2>Create Recurring Task</h2>
       <form onSubmit={handleSubmit}>
-      <div className="form-container">
-        <input name="name" placeholder="Task Name" value={formData.name} onChange={handleChange} required />
-        <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
-        <input name="assigned_by" placeholder="Assigned By (User ID)" value={formData.assigned_by} onChange={handleChange} required />
-        <input name="assigned_to" placeholder="Assigned To (User ID)" value={formData.assigned_to} onChange={handleChange} required />
-        <input name="company_id" placeholder="Company ID" value={formData.company_id} onChange={handleChange} required />
+        <div className="employee-fields-wrapper">
+          {renderField("Task Name", "name", "text", "Enter task name")}
+          {renderField("Description", "description", "text", "Enter description")}
 
-        <select name="recurrence_type" value={formData.recurrence_type} onChange={handleChange}>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
+          {renderField("Assigned To", "assigned_to", "select", "",
+            usersData?.users?.map((user: any) => ({
+              value: user.id,
+              label: user.name
+            })) || []
+          )}
 
-        <input type="date" name="recurrence_start_date" value={formData.recurrence_start_date} onChange={handleChange} required />
-        <input type="date" name="recurrence_end_date" value={formData.recurrence_end_date} onChange={handleChange} />
+          {renderField("Recurrence Type", "recurrence_type", "select", "", [
+            { value: 'daily', label: 'Daily' },
+            { value: 'weekly', label: 'Weekly' },
+            { value: 'monthly', label: 'Monthly' }
+          ])}
 
-        <label>
-          <input type="checkbox" name="notify" checked={formData.notify} onChange={handleChange} /> Notify
-        </label>
+          {renderField("Start Date", "recurrence_start_date", "date", "YYY-MM-DD")}
+          {renderField("End Date", "recurrence_end_date", "date", "YYY-MM-DD (optional)")}
+
+
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              name="notify"
+              checked={formData.notify}
+              onChange={handleChange}
+            />
+            <span className="slider">
+              {formData.notify ? <FaBell size={16} /> : <FaBellSlash  size={16} />}
+            </span>
+          </label>
         </div>
-        
-      
-    <div className="Recurring-form-btn-wrapper">
-    <button type="submit" className='buttons' disabled={isLoading}>Create</button>
-    </div>
-    </form>
+
+        <div className="create-employess-action">
+          <button className="buttons" type="submit" disabled={isLoading}>
+            {isLoading ? "Creating..." : "Create Task"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default Page;
+export default CreateRecurringTask;

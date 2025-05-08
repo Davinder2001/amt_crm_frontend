@@ -49,7 +49,7 @@
            display: flex;
            justify-content: center;
            align-items: center;
-           font-size: $font-size-extra-extra-large;
+           font-size: 50px;
            font-weight: $font-weight-bold;
            color: $primary-color;
          }
@@ -136,7 +136,7 @@
        .profile-card {
          background: $white;
          border-radius: $border-radius;
-         padding: 20px;
+         padding: 10px;
          box-shadow: $secondary-shadow;
          transition: $transition;
 

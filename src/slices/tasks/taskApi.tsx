@@ -15,6 +15,7 @@ export const tasksApi = apiSlice.injectEndpoints({
       providesTags: ['Task'],
     }),
 
+
     createTask: builder.mutation<Task, Partial<Task>>({
       query: (newTask) => ({
         url: 'tasks',
@@ -49,6 +50,13 @@ export const tasksApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Task'],
     }),
+
+  viewTaskTimeline: builder.query<TasksResponse, string | number>({
+    query: (id) => `tasks/history/${id}`, // correct usage — no quotes around {id}
+    providesTags: ['Task'],
+  }),
+
+    
 
     approveHistory: builder.mutation<{ message: string }, number>({
       query: (historyId) => ({
@@ -122,6 +130,15 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
+    endTask: builder.mutation<{ message: string; task: Task }, number>({
+      query: (id) => ({
+        url: `tasks/${id}/end`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Task'],
+    }),
+    
+
   }),
   overrideExisting: false,
 });
@@ -132,6 +149,7 @@ export const {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
   useSubmitTaskMutation,
+  useViewTaskTimelineQuery,
   useApproveHistoryMutation,
   useRejectHistoryMutation,
   useGetPendingTasksQuery,
@@ -144,4 +162,5 @@ export const {
   useCreatePredefinedTaskMutation,
   useUpdatePredefinedTaskMutation,
   useDeletePredefinedTaskMutation,
+  useEndTaskMutation
 } = tasksApi;

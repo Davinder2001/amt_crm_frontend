@@ -16,6 +16,9 @@ const InvoicesNavigation = () => {
                 <li>
                     <Link href="invoices/credits" className='buttons' >Credits</Link>
                 </li>
+                <li>
+                    <Link href="invoices/qutations" className='buttons' >Qutations</Link>
+                </li>
             </ul>
         </nav>
     </>

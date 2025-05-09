@@ -40,6 +40,16 @@
 
   .viev-item-buttons-container {
     padding: 0 20px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+
+    a{
+      text-decoration: none ;
+    }
+
+
+
   }
 }
 
@@ -162,11 +172,17 @@
       flex-direction: row;
       gap: 10px;
       padding: 20px 0px 0px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
 
       button {
         padding: 6px 10px;
         font-size: 13px;
+        
       }
+      
+      
     }
   }
 }

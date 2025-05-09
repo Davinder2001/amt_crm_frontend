@@ -137,10 +137,10 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
   };
 
   return (
-    <div>
+    <div className='tab-content'>
       {/* Existing Combinations */}
       {existingCombinations.map((combo, index) => (
-        <div key={`existing-${index}`} className="variation-block">
+        <div key={`existing-${index}`} className="variation-block attributes-table">
           {combo.attributes.map(attr => (
             <div key={attr.attribute} style={{ marginBottom: '12px' }}>
               <label>{attr.attribute}</label>
@@ -240,7 +240,7 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
                   onChange={e => handleFieldChange(index, 'regular_price', +e.target.value, true)}
                 />
               </div>
-              <button type="button" onClick={() => handleRemoveNewCombo(index)}>
+              <button type="button" onClick={() => handleRemoveNewCombo(index)} className='remove-button'>
                 Remove
               </button>
               <hr />
@@ -250,17 +250,17 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
       )}
 
       {/* Always visible "Add New" */}
-      <button type="button" onClick={handleAddNewCombination}>
+      <button type="button" onClick={handleAddNewCombination} className='buttons'>
         Add New
       </button>
 
       {/* Show Done/Reset if needed */}
       {hasChanges() && (
-        <div style={{ marginTop: '1rem' }}>
-          <button type="button" onClick={handleReset}>
+        <div className='variation-buttons-container'>
+          <button type="button" onClick={handleReset} className='buttons'>
             Reset New
           </button>
-          <button type="button" onClick={handleDone}>
+          <button type="button" onClick={handleDone} className='buttons'>
             Done
           </button>
         </div>

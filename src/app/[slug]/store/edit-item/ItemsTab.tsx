@@ -2,17 +2,15 @@
 import React, { useState, ReactNode } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
-import UpdateCategory from './UpdateCategory';
 import UpdateVariations from './UpdateVariations';
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
     variations: variations[];
     setSelectedCategories: (categories: Category[]) => void;
-    selectedCategories: Category[];
 }
 
-const ItemsTab: React.FC<Props> = ({ setVariants, variations, setSelectedCategories, selectedCategories }) => {
+const ItemsTab: React.FC<Props> = ({ setVariants, variations }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 
@@ -27,12 +25,6 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variations, setSelectedCategor
             label: 'Variations',
             content: <UpdateVariations setVariants={setVariants} variants={variations} />
         },
-        {
-            key: 'categories',
-            label: 'Categories',
-            content: <UpdateCategory setSelectedCategories={setSelectedCategories}
-                selectedCategories={selectedCategories} />
-        }
     ];
 
     return (

@@ -1,4 +1,5 @@
 interface StoreItem {
+  tax_id: number;
   id: number;
   name: string;
   quantity_count: number;

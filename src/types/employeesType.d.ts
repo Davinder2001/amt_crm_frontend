@@ -8,7 +8,8 @@ interface Role {
   }
 
 
-  interface EmployeeFormData {
+  interface employee {
+    id?: any;
     // Personal Information
     name: string;
     number: string;

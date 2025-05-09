@@ -431,7 +431,6 @@
 
 
 // ...................................................................................................................................................................................................................................
-
 "use client";
 
 import React, { useState } from "react";
@@ -453,7 +452,7 @@ const AddEmployeeForm: React.FC = () => {
   const { companySlug } = useCompany();
 
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<EmployeeFormData>({
+  const [formData, setFormData] = useState<employee>({
     name: "",
     number: "",
     address: "",

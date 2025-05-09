@@ -210,8 +210,8 @@ const ViewUserPage: React.FC = () => {
   } = useFetchEmployeByIdQuery(Number(id));
 
   const user = data;
-  const employee = user?.employee;
-  const details = employee?.employee_details;
+  const employee = user;
+  const details = employee;
 
   useEffect(() => {
     if (usersError) toast.error('Failed to fetch user data');
@@ -266,7 +266,7 @@ const ViewUserPage: React.FC = () => {
 
             <div className="profile-actions">
               <button
-                onClick={() => router.push(`/${companySlug}/hr/status-view/EditUserPage/${id}`)}
+                onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
                 className="btn primary"
               >
                 Edit Profile

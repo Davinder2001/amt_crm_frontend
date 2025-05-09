@@ -1032,6 +1032,9 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
     border-bottom: 1px solid #00969329;
+    .message-time{
+        color: #888888;
+    }
 }
 
 .chat-item:hover {

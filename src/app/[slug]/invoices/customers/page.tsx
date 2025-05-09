@@ -3,7 +3,7 @@ import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useCompany } from '@/utils/Company';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { FaEye } from 'react-icons/fa';
+import { FaArrowLeft, FaEye } from 'react-icons/fa';
 
 const CustomerList = () => {
   const { data } = useFetchAllCustomersQuery();
@@ -12,7 +12,12 @@ const CustomerList = () => {
 
   return (
     <div>
-      <h1>All Customers</h1>
+      <button
+              onClick={() => router.back()}
+              className="back-button"
+            >
+              <FaArrowLeft size={20} color="#fff" />
+            </button>
       <table cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
         <thead>
           <tr>

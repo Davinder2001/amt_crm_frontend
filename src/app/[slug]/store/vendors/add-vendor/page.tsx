@@ -70,7 +70,6 @@ import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import Link from 'next/link';
 import { FaArrowLeft, FaStore } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -93,12 +92,17 @@ const VendorCreationPage: React.FC = () => {
   };
 
   return (
-    <div className="vendor-creation-page">
+    <div className="vendor-creation-page-outer">
+      <button
+          onClick={() => router.back()}
+          className="back-button"
+        >
+          <FaArrowLeft size={20} color="#fff" />
+        </button>
+      <div className='vendor-creation-page'>
+      
       <div className="creation-header">
-        <Link href={`/${companySlug}/store`} className="back-button">
-          <FaArrowLeft />
-          <span>Back to Store</span>
-        </Link>
+        
         <h1>Add New Vendor</h1>
         <p className="header-description">Fill in vendor details to add them to your system</p>
       </div>
@@ -142,7 +146,8 @@ const VendorCreationPage: React.FC = () => {
           </div>
         </div>
       </form>
-    </div>
+      </div>
+    </div >
   );
 };
 

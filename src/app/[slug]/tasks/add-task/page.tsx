@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useCompany } from '@/utils/Company';
 import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -71,6 +72,12 @@ const Page: React.FC = () => {
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
+      <button
+              onClick={() => router.back()}
+              className="back-button"
+            >
+              <FaArrowLeft  size={20} color="#fff" />
+            </button>
       <div className="add-task-form">
         <div className="form-group">
           <label>Assign Task Name</label>

@@ -7,6 +7,7 @@ import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Page: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -15,7 +16,7 @@ const Page: React.FC = () => {
   }, [setTitle]);
 
   const { data } = useFetchPermissionsQuery();
-  
+
   // Memoize permissionsData to avoid recalculating on each render
   const permissionsData = useMemo(() => data || [], [data]);
 
@@ -63,7 +64,14 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="add-role-form">
+    <div className="add-role-form-outer">
+      <button
+        onClick={() => router.back()}
+        className="back-button"
+      >
+        <FaArrowLeft size={20} color="#fff" />
+      </button>
+      <div className="add-role-form">
       <h2>Create a Role</h2>
 
       <form onSubmit={handleCreateRole}>
@@ -134,6 +142,7 @@ const Page: React.FC = () => {
           </button>
         </div>
       </form>
+      </div>
     </div>
   );
 };

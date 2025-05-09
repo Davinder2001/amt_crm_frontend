@@ -2,14 +2,17 @@
 @use './attributes.scss' as *;
 @use './uploadImages.scss' as *;
 
+// ==============================
+// Store Add Item Main Section....................................................................................
+// ==============================
 .store-add-item {
-
   border-radius: 10px;
+
+  // ---------- Category Section ----------
   .categories-filds-outer {
     display: grid;
     gap: 20px;
     grid-template-columns: 70% 30%;
-
 
     .category-container {
       margin-right: 10px;
@@ -19,59 +22,57 @@
 
       .create-button {
         margin-left: 10px;
-    }
+      }
+
       .category-sidebarheader {
         display: flex;
         justify-content: space-between;
         margin-bottom: 30px;
+      }
+
+      .categories-list-outer-div {
+        width: 100%;
+        margin-bottom: 15px;
+        overflow: scroll;
+        min-height: 350px;
+        max-height: 350px;
+
+        label.category-lable {
+          display: flex;
+          gap: 12px;
+        }
+      }
+
+      label {
+        border-bottom: 1px solid #e0e0e0;
+        cursor: pointer;
+        padding-left: 10px;
+        padding-bottom: 7px;
+      }
+
+      .parent-category-list {
+        background-color: #fff;
+        border-radius: 6px;
+        min-height: 350px;
+        max-height: 350px;
+        overflow: scroll;
+
+        .categories-inner {
+          width: 100%;
+          max-height: 250px;
+          overflow-y: auto;
+          margin-top: 8px;
+          z-index: 999;
+
+          .categories-inner {
+            margin-top: 5px;
+          }
+        }
+      }
     }
-
-      
-.categories-list-outer-div {
-  width: 100%;
-  margin-bottom: 15px;
-  overflow: scroll;
-  min-height: 350px;
-  max-height: 350px;
-  label.category-lable {
-    display: flex;
-    gap: 12px;
-  }}
- 
-    label {
-      border-bottom: 1px solid #e0e0e0;
-      cursor: pointer;
-      padding-left: 10px;
-      padding-bottom: 7px;
   }
 
-
- .parent-category-list {
-  background-color: #fff;
-  border-radius: 6px;
-min-height: 350px;
-max-height: 350px;
-overflow: scroll;
-.categories-inner {
-    
-    width: 100%;
-    max-height: 250px;
-    overflow-y: auto;
-    margin-top: 8px;
-    z-index: 999;
-
-  //   .search-categories-input-field {
-  
-  // }
-  .categories-inner {
-    margin-top: 5px;
-}
-}
-}
-
-
-  }
-}
+  // ---------- Vendor Dropdown ----------
   .addvendor-dropdown {
     position: relative;
 
@@ -99,10 +100,7 @@ overflow: scroll;
         cursor: pointer;
         transition: background-color 0.2s ease;
 
-        &:hover {
-          background-color: $light-color;
-        }
-
+        &:hover,
         &.active {
           background-color: $light-color;
         }
@@ -124,26 +122,41 @@ overflow: scroll;
       }
     }
   }
-  .add-items-form-container{
 
- 
+  // ---------- Add Items Form ----------
+  .add-items-form-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: $white;
+    border-radius: 15px;
+    box-shadow: $box-shadow;
+  }
+
+  .add-items-form-input-label-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
   input,
   select,
   .addvendor-dropdown {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #00969357;  
+    border: 1px solid #00969357;
     border-radius: 5px;
+
     &:focus {
       border-color: #009693;
       background: #ffffff;
       transform: scale(1);
     }
-    
   }
-}
 
+  // ---------- Buttons ----------
   .save-cancel-button {
     display: flex;
     align-items: center;
@@ -158,31 +171,16 @@ overflow: scroll;
   }
 
   .store-add-item-form-img-container {
-
     img {
       object-fit: cover;
       height: 100px;
     }
   }
-
-  .add-items-form-container {
-    display: grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-    background-color: $white;
-    border-radius: 15px;
-    box-shadow: $box-shadow;
-  }
-
-  .add-items-form-input-label-container {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
 }
 
-// Add vendors section
+// ==============================
+// Vendor Creation Section....................................................................................
+// ==============================
 .vendor-creation-page {
   max-width: 800px;
   margin: 0 auto;
@@ -195,28 +193,8 @@ overflow: scroll;
     margin-bottom: 2rem;
     text-align: center;
 
-    .back-button {
-      position: absolute;
-      left: 0;
-      top: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: $white;
-      text-decoration: none;
-      font-weight: $font-weight-medium;
-      padding: 0.5rem 1rem;
-      border-radius: $border-radius;
-      transition: $transition;
-
-      &:hover {
-        background: rgba($primary-color, 0.1);
-        color: $primary-color;
-      }
-    }
-
     h1 {
-      font-size: $font-size-extra-large;
+      font-size: 34px;
       font-weight: $font-weight-bold;
       color: $primary-color;
       margin-bottom: 0.5rem;
@@ -276,16 +254,15 @@ overflow: scroll;
       .required-asterisk {
         font-weight: bold;
         margin-left: 2px;
-      }
-      
-      .required-asterisk.unfilled {
-        color: #ff4444; /* Red color for unfilled required fields */
-      }
-      
-      .required-asterisk.filled {
-        color: #00C851; /* Green color for filled required fields */
-      }
 
+        &.unfilled {
+          color: #ff4444;
+        }
+
+        &.filled {
+          color: #00C851;
+        }
+      }
     }
   }
 
@@ -299,7 +276,7 @@ overflow: scroll;
       color: $white;
       border: none;
       padding: 0.75rem 2rem;
-      border-radius: $border-radius;
+      border-radius: 50px;
       font-weight: $font-weight-semi-bold;
       cursor: pointer;
       transition: $transition;
@@ -331,32 +308,61 @@ overflow: scroll;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-// Add as a vendors section
+// ==============================
+// Add As a Vendor Section....................................................................................
+// ==============================
 .add-as-a-v-container {
-  display: flex;
   flex-direction: column;
   gap: 20px;
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px;
 
   .add-as-a-v-inputs {
     margin-bottom: 5px;
     display: flex;
     gap: 15px;
 
-    input {
-      border: 1px solid #00969357;  
-      padding: 9px;
-      width: 100%;
-      border-radius: 5px;
-      &:focus {
-        border-color: #009693;
-        background: #ffffff;
-        transform: scale(1);
+    .input-with-label {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: 500;
+        font-size: 15px;
+        margin-bottom: 4px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        svg {
+          color: $primary-color;
+        }
+      }
+
+      input {
+        border: 1px solid #00969357;
+        padding: 9px;
+        width: 100%;
+        border-radius: 5px;
+
+        &:focus {
+          border-color: #009693;
+          background: #ffffff;
+          transform: scale(1);
+        }
       }
     }
   }
+
 
   .add-as-a-v-button {
     display: flex;
@@ -364,7 +370,6 @@ overflow: scroll;
     gap: 15px;
     align-items: center;
     cursor: pointer;
-
 
     .c-s-buttons-outers {
       justify-content: end;
@@ -379,8 +384,6 @@ overflow: scroll;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-
-
     }
   }
 
@@ -388,10 +391,12 @@ overflow: scroll;
     display: flex;
     gap: 20px;
     padding: 0px 20px;
-}
+  }
 }
 
-// Add Items Section
+// ==============================
+// Add Item Inputs (Mini Form).................................................................................
+// ==============================
 .add-as-a-v-items-container {
   .buttons {
     padding: 7px 35px;
@@ -407,20 +412,42 @@ overflow: scroll;
 .add-as-a-v-items-inner {
   display: flex;
   gap: 5px;
+  flex-wrap: wrap;
 
-  input {
-    padding: 9px;
-    border: 1px solid #00969357;  
-    border-radius: 5px;
+  .input-with-label {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    margin-top: 5px;
-    &:focus {
-      border-color: #009693;
-      background: #ffffff;
-      transform: scale(1);
+    flex: 1; // allows even spacing across
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #333;
+
+      svg {
+        color: $primary-color;
+      }
+    }
+
+    input {
+      padding: 9px;
+      border: 1px solid #00969357;
+      border-radius: 5px;
+      width: 100%;
+      margin-top: 5px;
+
+      &:focus {
+        border-color: #009693;
+        background: #ffffff;
+        transform: scale(1);
+      }
     }
   }
-
 }
 
 .clear-image-button {
@@ -431,7 +458,9 @@ overflow: scroll;
 }
 
 
-
+// ==============================
+// Modern Checkbox Style....................................................................................
+// ==============================
 .modern-box-checkbox {
   display: flex;
   align-items: center;
@@ -441,43 +470,41 @@ overflow: scroll;
   cursor: pointer;
   user-select: none;
   margin-bottom: 12px;
+
+  input[type='checkbox'] {
+    display: none;
+  }
+
+  .box {
+    width: 18px;
+    height: 19px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input[type='checkbox']:checked+.box {
+    border-color: $primary-color;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3.5px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      background-color: $primary-color;
+      border-radius: 2px;
+      transition: all 0.2s ease-in-out;
+    }
+  }
 }
 
-.modern-box-checkbox input[type="checkbox"] {
-  display: none;
-}
-
-.modern-box-checkbox .box {
-  width: 18px;
-  height: 19px;
-  border: 1.5px solid #ccc;
-  border-radius: 4px;
-  display: inline-block;
-  position: relative;
-  transition: all 0.2s ease-in-out;
-  
-}
-/* Keep your existing styles, just add this new rule below */
-.modern-box-checkbox input[type="checkbox"]:checked + .box {
-  border-color: $primary-color;
-}
-
-.modern-box-checkbox input[type="checkbox"]:checked + .box::after {
-  content: "";
-  position: absolute;
-  top: 3.5px;
-  left: 3px;
-  width: 10px;
-  height: 10px;
-  background-color: $primary-color;
-  border-radius: 2px;
-  transition: all 0.2s ease-in-out;
-}
-
-
-
-
-/* Inside your CSS or SCSS file */
+// ==============================
+// Search Bar Group....................................................................................
+// ==============================
 .search-bar-group {
   position: relative;
   display: flex;
@@ -485,11 +512,12 @@ overflow: scroll;
   border: 1px solid #009693;
   padding-left: 10px;
   margin: 0px 20px 20px 20px;
-border-radius: 5px;
-  input{
+  border-radius: 5px;
+
+  input {
     border: none;
     background-color: transparent;
-  width: 100%;
+    width: 100%;
   }
 }
 
@@ -502,19 +530,21 @@ border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
 }
-// Responsive styles
+
+// ==============================
+// Media Queries (Section-wise)......................................................................
+// ==============================
+
 @media (max-width: 1024px) {
   .store-add-item {
     .add-items-form-container {
-      grid-template-columns: repeat(3, 1fr); 
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .store-add-item-form-img-inner {
       flex-direction: column;
       gap: 10px;
     }
-
-
   }
 
   .stor-add-v-form-container {
@@ -543,7 +573,6 @@ border-radius: 5px;
         border: 1px solid $primary-color;
       }
     }
-
   }
 
   .add-as-a-v-items-inner {
@@ -555,9 +584,8 @@ border-radius: 5px;
 @media (max-width: 600px) {
   .store-add-item {
     .add-items-form-container {
-      grid-template-columns: 1fr 1fr; // Stack fields on mobile
+      grid-template-columns: 1fr 1fr;
     }
-
   }
 
   .stor-add-v-form-container {
@@ -577,7 +605,6 @@ border-radius: 5px;
     }
 
     .add-as-a-v-button {
-      flex-direction: column;
       align-items: stretch;
       gap: 5px;
     }
@@ -586,52 +613,126 @@ border-radius: 5px;
   .add-as-a-v-items-inner {
     gap: 10px;
   }
-}
 
+  ////////////////////////////
 
-@media (max-width: 460px) {
-  .store-add-item {
+  // Vendor Creation Section.responsive
 
+  ///////////////////////////
+  .vendor-creation-page {
+    padding: 0rem;
 
-    .add-items-form-container {
+    .form-section {
+      margin-bottom: 1rem;
+      padding: 1rem;
+    }
 
-      .add-as-a-v-inputs {
-        display: flex;
-        flex-direction: column;
-      }
-
-      grid-template-columns: 1fr;
-
+    .creation-header {
+      margin-bottom: 1rem;
     }
 
   }
 
 
 
+
+
+
+
+
+}
+
+@media (max-width: 460px) {
+  .store-add-item {
+    .add-items-form-container {
+      grid-template-columns: 1fr;
+
+      .add-as-a-v-inputs {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
   .add-as-a-v-container {
     .add-as-a-v-inputs {
-      display: flex;
       flex-direction: column;
     }
 
     .buttons {
       padding: 5px 20px;
-      margin: 7px 0;
+      margin: 3px 0;
     }
   }
 
   .add-as-a-v-items-inner {
     display: flex;
     flex-direction: column;
+    margin-bottom: 15px;
   }
+
+
+
+  ////////////////////////////
+  // Vendor Creation Section.responsive
+  ///////////////////////////
+  .vendor-creation-page {
+    padding: 0rem;
+
+    .vendor-form {
+      .form-section {
+        margin-bottom: 1rem;
+        padding: 10px;
+      }
+
+      .input-group {
+
+        label {
+          font-size: 14px;
+        }
+
+      }
+    }
+
+    .creation-header {
+      margin-bottom: 1rem;
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .header-description {
+        font-size: 13px;
+      }
+
+    }
+
+    .form-actions {
+      .primary-button {
+        padding: 10px;
+      }
+    }
+
+  }
+
+
+
 
 
 }
 
 
+@media (max-width: 380px) {
+
+  .add-as-a-v-container {
+    .add-as-a-v-button {
+      display: flex;
+      flex-direction: column;
 
 
 
+    }
 
+  }
 
-
+}

@@ -1,64 +1,80 @@
 @use '../variables' as *;
+
 .add-employee-form {
-    background-color: white;
-    border-radius: 20px;
-    padding: 43px 36px 73px 36px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 43px 36px 73px 36px;
 
-    .employee-fields-wrapper{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px 30px;
+  .employee-fields-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 30px;
 
-        .employee-field{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 16px;
-        }
-    }
-    
-     input,select  {
-        padding: 16px 13px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #00969357;  
-        width: 100%;
-        &:focus {
-          border-color: #009693;
-          background: #ffffff;
-          transform: scale(1);
-        }
-    }
-    label{
-        font-size:$font-size-one;
-        font-weight: $font-weight-regular;
-        color: #222222;
-    }
-    
+    .employee-field {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
 
-
-    .create-employess-action {
+      label {
         display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-
-        .form-button {
-            background-color:$primary-color;
-            border: unset;
-            padding: 10px 30px;
-            border-radius: 43px;
-            color: $white;
-            font-size: $font-size;
-            font-weight: $font-weight-medium;
-            margin-top: 62px;
-           
-        }
+        align-items: center;
+        gap: 0.5rem;
+      }
+      svg{
+        color: $primary-color;
+        font-size: 18px;
+      }
 
     }
 
+  }
 
-    
-  
+  input,
+  select {
+    padding: 16px 13px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #00969357;
+    width: 100%;
+
+    &:focus {
+      border-color: #009693;
+      background: #ffffff;
+      transform: scale(1);
+    }
+  }
+
+  label {
+    font-size: $font-size-one;
+    font-weight: $font-weight-regular;
+    color: #222222;
+  }
+
+
+
+  .create-employess-action {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    .form-button {
+      background-color: $primary-color;
+      border: unset;
+      padding: 10px 30px;
+      border-radius: 43px;
+      color: $white;
+      font-size: $font-size;
+      font-weight: $font-weight-medium;
+      margin-top: 62px;
+
+    }
+
+  }
+
+
+
+
 }
 
 
@@ -66,56 +82,58 @@
 
 
 @media (max-width: 992px) {
-    .add-employee-form {
-      padding: 32px 24px 56px 24px;
-  
-      .employee-fields-wrapper {
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        .employee-field{
-            gap: 8px;
-        }
-      }
-  
-      
-    }
-  }
-  
-  @media (max-width: 576px) {
-    
-      .add-employee-form {
-      padding: 24px 16px 40px 16px;
-      .employee-fields-wrapper {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-  
-      input,
-      select {
-        padding: 14px 12px;
-        font-size: 15px;
-        border: 1px solid $primary-color;  
+  .add-employee-form {
+    padding: 32px 24px 56px 24px;
 
+    .employee-fields-wrapper {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+
+      .employee-field {
+        gap: 8px;
       }
-  
-      label {
-        font-size: 14px;
+    }
+
+
+  }
+}
+
+@media (max-width: 576px) {
+
+  .add-employee-form {
+    padding: 24px 16px 40px 16px;
+
+    .employee-fields-wrapper {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    input,
+    select {
+      padding: 14px 12px;
+      font-size: 15px;
+      border: 1px solid $primary-color;
+
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    .create-employess-action {
+      .form-button {
+        font-size: 15px;
       }
-  
-      .create-employess-action {
-        .form-button {
-          font-size: 15px;
-        }
-      }
-      .create-employess-action {
-        justify-content: center;
-  
-        .form-button {
-          width: 100%;
-          padding: 12px 0;
-          margin-top: 40px;
-        }
+    }
+
+    .create-employess-action {
+      justify-content: center;
+
+      .form-button {
+        width: 100%;
+        padding: 12px 0;
+        margin-top: 40px;
       }
     }
   }
-  
+}

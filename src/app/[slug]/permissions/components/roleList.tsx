@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
-import { FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import ResponsiveTable
 import Loader from "@/components/common/Loader";
 
@@ -69,6 +69,12 @@ const RoleList: React.FC = () => {
 
   return (
     <div className="permissions-form-outer">
+      <button
+        onClick={() => router.back()}
+        className="back-button"
+      >
+        <FaArrowLeft size={20} color="#fff" />
+      </button>
       <div className="navigation-buttons">
         <Link className="navigation-button" href={`/${companySlug}/permissions/add-role`}>
           <FaPlus /> Add Role

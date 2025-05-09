@@ -4,7 +4,7 @@ import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { FaArrowLeft, FaPlus } from 'react-icons/fa';
+import { FaArrowLeft, FaCalculator, FaFileInvoice, FaHashtag, FaPhoneAlt, FaPlus, FaRupeeSign, FaTag, FaUserAlt } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
@@ -109,9 +109,20 @@ const Page = () => {
 
       <div className='add-as-a-v-container'>
         <div className='add-as-a-v-inputs'>
-          <input placeholder="Invoice No" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} />
-          <input placeholder="Vendor Name" value={vendorName} onChange={(e) => setVendorName(e.target.value)} />
-          <input placeholder="Vendor No" value={vendorNo} onChange={(e) => setVendorNo(e.target.value)} />
+          <div className="input-with-label">
+            <label><FaFileInvoice style={{ marginRight: 3 }} /> Invoice No</label>
+            <input placeholder="Invoice No" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} />
+          </div>
+
+          <div className="input-with-label">
+            <label><FaUserAlt style={{ marginRight: 3 }} /> Vendor Name</label>
+            <input placeholder="Vendor Name" value={vendorName} onChange={(e) => setVendorName(e.target.value)} />
+          </div>
+
+          <div className="input-with-label">
+            <label><FaPhoneAlt style={{ marginRight: 3 }} /> Vendor No</label>
+            <input placeholder="Vendor No" value={vendorNo} onChange={(e) => setVendorNo(e.target.value)} />
+          </div>
         </div>
 
         <div className='add-as-a-v-button'>
@@ -125,10 +136,41 @@ const Page = () => {
         {showItemFields && (
           <div className='add-as-a-v-items-container'>
             <div className='add-as-a-v-items-inner'>
-              <input placeholder="Name" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} />
-              <input placeholder="Price" value={newItem.price} onChange={(e) => setNewItem({ ...newItem, price: e.target.value })} />
-              <input placeholder="Quantity" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })} />
-              <input placeholder="Sub Total" value={newItem.subTotal} onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })} />
+              <div className="input-with-label">
+                <label><FaTag /> Name</label>
+                <input
+                  placeholder="Name"
+                  value={newItem.name}
+                  onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+                />
+              </div>
+
+              <div className="input-with-label">
+                <label><FaRupeeSign /> Price</label>
+                <input
+                  placeholder="Price"
+                  value={newItem.price}
+                  onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                />
+              </div>
+
+              <div className="input-with-label">
+                <label><FaHashtag /> Quantity</label>
+                <input
+                  placeholder="Quantity"
+                  value={newItem.quantity}
+                  onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+                />
+              </div>
+
+              <div className="input-with-label">
+                <label><FaCalculator /> Sub Total</label>
+                <input
+                  placeholder="Sub Total"
+                  value={newItem.subTotal}
+                  onChange={(e) => setNewItem({ ...newItem, subTotal: e.target.value })}
+                />
+              </div>
             </div>
             <button className='buttons' onClick={handleAddItemToList}>Add</button>
           </div>

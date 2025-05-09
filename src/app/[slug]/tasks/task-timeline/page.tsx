@@ -1,25 +1,10 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client';
 
 import React from 'react';
 import { useGetWorkingTasksQuery } from '@/slices/tasks/taskApi';
 import { useRouter } from 'next/navigation';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaPaperPlane } from 'react-icons/fa';
+import { FaArrowLeft, FaPaperPlane } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 // Define the Task type based on your API response
@@ -91,8 +76,12 @@ const Page = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Task Timeline</h2>
-
+      <button
+        onClick={() => router.back()}
+        className="back-button"
+      >
+        <FaArrowLeft size={20} color="#fff" />
+      </button>
       {tasks.length === 0 ? (
         <p>No working tasks found.</p>
       ) : (

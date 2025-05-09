@@ -1,41 +1,196 @@
 @use '../variables' as *;
+
 .view-item-container {
-    width: 100%;
-    margin: auto;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: $box-shadow;
-    .view-item-header {
-        padding: 35px 0px;
-        display: flex;
-        justify-content: center;
-        font-size: 25px;
-        color: white;
-        font-weight: 600;
-        background-color: $primary-color;
-        border-radius: 15px 15px 0px 0px;
-        margin-bottom: 20px;
-    }
-.view-item-inner-container {
+  width: 100%;
+  margin: auto;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: $box-shadow;
+
+  .view-item-header {
+    padding: 35px 0;
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    color: white;
+    font-weight: 600;
+    background-color: $primary-color;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 20px;
+  }
+
+  .view-item-inner-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    padding: 0px 20px 20px 20px;
-   
+    padding: 0 20px 20px;
 
     p {
-        color: #575757;
-        font-weight: 600;
-        border-bottom: 1px dashed #6bfffca1;
-        padding-bottom: 15px;
-    
-        strong {
-            color: $primary-color;
-            font-size: 17px;
-        }
+      color: #575757;
+      font-weight: 600;
+      border-bottom: 1px dashed #6bfffca1;
+      padding-bottom: 15px;
+
+      strong {
+        color: $primary-color;
+        font-size: 17px;
+      }
     }
+  }
+
+  .viev-item-buttons-container {
+    padding: 0 20px 20px;
+  }
 }
-.viev-item-buttons-container{
-    padding: 0px 20px 20px 20px;
+
+// Responsive Glassmorphism Style for ≤668px
+@media screen and (max-width: 668px) {
+  .view-item-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, $primary-color, lighten($primary-color, 15%));
+      border-radius: 50%;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .view-item-header {
+      padding: 10px;
+      font-size: 22px;
+      text-align: center;
+      background: linear-gradient(135deg, $primary-color, darken($primary-color, 10%));
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+      z-index: 1;
+    }
+
+    .view-item-inner-container {
+      gap: 18px;
+      padding: 0 10px 20px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      z-index: 1;
+
+      p {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 15px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: #444;
+        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+        border-right: 1px solid #6bfffca1;
+        border-left: 1px solid #6bfffca1;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+
+        strong {
+          display: block;
+          margin-top: 6px;
+          font-size: 16px;
+          color: $primary-color;
+        }
+      }
+    }
+
+    .viev-item-buttons-container {
+      padding: 0 10px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 1;
+
+      button {
+        padding: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 14px;
+        border: none;
+        background: linear-gradient(to right, $primary-color, lighten($primary-color, 10%));
+        color: white;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(to right, lighten($primary-color, 10%), $primary-color);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
 }
+
+// Responsive tweaks for ≤425px
+@media screen and (max-width: 425px) {
+  .view-item-container {
+    .view-item-header {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .view-item-inner-container {
+      gap: 10px;
+      padding: 0;
+
+      p {
+        padding: 10px 15px;
+        font-size: 11px;
+
+        strong {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .viev-item-buttons-container {
+      flex-direction: row;
+      gap: 10px;
+      padding: 20px 0px 0px;
+
+      button {
+        padding: 6px 10px;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+// Mobile stacking for ≤325px
+@media screen and (max-width: 325px) {
+  .view-item-container {
+    .view-item-header {
+      font-size: 14px;
+    }
+
+    .view-item-inner-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      p {
+        padding: 10px 15px;
+        font-size: 11px;
+
+        strong {
+          font-size: 12px;
+        }
+      }
+    }
+  }
 }

@@ -1,10 +1,8 @@
 import invoiceCreateApiSlice from "./invoiceCreateSlice";
 
-
 const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-
     fetchInvoices: builder.query<InvoicesResponse, void>({
       query: () => "invoices",
       providesTags: ["Invoice"],
@@ -76,6 +74,16 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
         responseHandler: (response) => response.blob(),
       }),
     }),
+
+    sendInvoiceToWhatsapp: builder.mutation<
+      { status: boolean; message: string },
+      number
+    >({
+      query: (id) => ({
+        url: `invoices/${id}/whatsapp`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -86,6 +94,7 @@ export const {
   useMailInvoiceMutation,
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
+  useSendInvoiceToWhatsappMutation,
 } = invoiceApi;
 
 export default invoiceApi;

@@ -46,6 +46,11 @@ const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
       providesTags: ["Attendance"],
     }),
 
+    fetchMyAttenances: builder.query<AttendanceResponse, void>({
+      query: () => "attendance/my",
+      providesTags: ["Attendance"],
+    }),
+
     recordAttendance: builder.mutation<Attendance, { image: File | Blob }>({
       query: (data) => {
         const formData = new FormData();
@@ -98,6 +103,7 @@ const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
 
 export const {
   useFetchAttenancesQuery,
+  useFetchMyAttenancesQuery,
   useRecordAttendanceMutation,
   useUpdateAttendanceMutation,
   useApproveAttendanceMutation,

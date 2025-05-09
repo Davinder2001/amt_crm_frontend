@@ -378,7 +378,7 @@ export const UserNavbar = () => {
           <div className="logo">
             <Link href="/">
               <img src={homelogo.src} alt="Logo" />
-              <span>Asset Management Technology Himmanav</span>
+              <span>Himmanav Asset Management Technology </span>
             </Link>
           </div>
 
@@ -575,7 +575,7 @@ export const UserFooter = () => {
             <div className="footer-logo">
               <div className='footer-logo-text'>
                 <Link href="/"><img src={footerlogoimage.src} alt="Logo" />
-                  <span>Asset Management Technology Himmanav</span></Link>
+                  <span>Himmanav Asset Management Technology </span></Link>
               </div>
             </div>
             <ul className='policy-links'>
@@ -585,7 +585,7 @@ export const UserFooter = () => {
               <li><Link href={'/refund'}>Cancellation and Refund</Link></li>
               {/* <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li> */}
             </ul>
-            <p>Copyright 2025 © Asset Management Technology Himmanav</p>
+            <p>Copyright 2025 © Himmanav Asset Management Technology </p>
           </div>
         </div>
       </footer>

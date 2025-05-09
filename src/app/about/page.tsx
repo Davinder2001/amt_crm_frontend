@@ -10,7 +10,7 @@ function AboutPage() {
 
           <section>
             <p>
-              At Asset Management Technology Himmanav, we are committed to empowering businesses with the tools they need to succeed. Our platform combines intuitive business management tools, data-driven insights, and personalized support to help you streamline operations and enhance your business performance.
+              At Himmanav Asset Management Technology , we are committed to empowering businesses with the tools they need to succeed. Our platform combines intuitive business management tools, data-driven insights, and personalized support to help you streamline operations and enhance your business performance.
             </p>
           </section>
 

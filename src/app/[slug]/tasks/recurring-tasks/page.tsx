@@ -1,10 +1,19 @@
 'use client';
+
 import React from 'react';
-import {
-  useGetPredefinedTasksQuery,
-  useDeletePredefinedTaskMutation,
-} from '@/slices/tasks/taskApi';
+import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
 import { FaPlus } from 'react-icons/fa';
+
+// You can adjust or import this type from your models
+interface PredefinedTask {
+  id: number;
+  name: string;
+  description: string;
+  recurrence_type: string;
+  recurrence_start_date: string;
+  recurrence_end_date?: string;
+  notify: boolean;
+}
 
 const Page = () => {
   const { data, isLoading, error, refetch } = useGetPredefinedTasksQuery();
@@ -15,7 +24,7 @@ const Page = () => {
       try {
         await deleteTask(id).unwrap();
         refetch();
-      } catch{
+      } catch {
         alert('Delete failed!');
       }
     }
@@ -37,7 +46,7 @@ const Page = () => {
       {isLoading && <p>Loading...</p>}
       {error && <p>Failed to load tasks.</p>}
 
-      {data?.data?.length ?? 0 > 0 ? (
+      {data?.length > 0 ? (
         <table className="task-table">
           <thead>
             <tr>
@@ -50,16 +59,16 @@ const Page = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.data.map((task: PredefinedTask) => (
+            {data.map((task: PredefinedTask) => (
               <tr key={task.id}>
                 <td>{task.name}</td>
                 <td>{task.recurrence_type}</td>
-                <td>{task.recurrence_start_date}</td>
-                <td>{task.recurrence_end_date || '—'}</td>
+                <td>{new Date(task.recurrence_start_date).toLocaleDateString()}</td>
+                <td>{task.recurrence_end_date ? new Date(task.recurrence_end_date).toLocaleDateString() : '—'}</td>
                 <td>{task.notify ? 'Yes' : 'No'}</td>
                 <td>
-                  <button>Edit</button>
-                  <button onClick={() => handleDelete(task.id)} style={{ color: 'red' }}>
+                  <button onClick={() => window.location.href = `recurring-tasks/${task.id}/edit`}>Edit</button>
+                  <button onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
                     Delete
                   </button>
                 </td>

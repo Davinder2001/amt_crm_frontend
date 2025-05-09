@@ -9,7 +9,7 @@ function Refund() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              At Asset Management Technology, we strive to provide high-quality products and services. If you are not entirely satisfied with your purchase, we&quot;re here to help.
+              At Asset Management Technology Himmanav, we strive to provide high-quality products and services. If you are not entirely satisfied with your purchase, we&quot;re here to help.
             </p>
           </section>
 

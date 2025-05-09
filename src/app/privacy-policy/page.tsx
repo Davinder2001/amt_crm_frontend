@@ -10,7 +10,7 @@ function PrivacyPolicy() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              Welcome to Asset Management Technology (&quot;Company&quot;, &quot;we&quot;, &quot;our&quot;, &quot;us&quot;). We are committed to protecting your personal information and your right to privacy. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
+              Welcome to Asset Management Technology Himmanav (&quot;Company&quot;, &quot;we&quot;, &quot;our&quot;, &quot;us&quot;). We are committed to protecting your personal information and your right to privacy. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
             </p>
           </section>
 

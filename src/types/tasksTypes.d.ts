@@ -17,8 +17,14 @@ interface Task {
     recurrence_start_date: string;
     recurrence_end_date: string
     attachment_url: string;
+    attachments: Attachment[];
     created_at: string;
     updated_at: string;
+}
+interface Attachment {
+    url: string;
+    name?: string;
+    type?: string;
 }
 
 interface TasksResponse {

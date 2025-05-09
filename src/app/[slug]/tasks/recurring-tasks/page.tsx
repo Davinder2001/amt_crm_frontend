@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { FaPlus } from 'react-icons/fa';
 
 // You can adjust or import this type from your models
@@ -16,7 +17,12 @@ interface PredefinedTask {
 }
 
 const Page = () => {
-  const { data, isLoading, error, refetch } = useGetPredefinedTasksQuery();
+  const { data, isLoading, error, refetch } = useGetPredefinedTasksQuery() as {
+    data?: PredefinedTask[];
+    isLoading: boolean;
+    error: FetchBaseQueryError | undefined;
+    refetch: () => void;
+  };
   const [deleteTask] = useDeletePredefinedTaskMutation();
 
   const handleDelete = async (id: number) => {
@@ -46,7 +52,7 @@ const Page = () => {
       {isLoading && <p>Loading...</p>}
       {error && <p>Failed to load tasks.</p>}
 
-      {data?.length > 0 ? (
+      {data && data.length > 0 ? (
         <table className="task-table">
           <thead>
             <tr>

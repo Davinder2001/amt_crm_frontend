@@ -16,15 +16,18 @@ const chatApi = chatCreateSlice.injectEndpoints({
         }),
 
         // 3. Send message to an existing conversation
-        sendMessage: builder.mutation<SendMessageResponse, { id: number; message: string }>({
-            query: ({ id, message }) => ({
-                url: `chats/${id}/message`,
+        sendMessage: builder.mutation<SendMessageResponse, { recipient_id: number; message: string }>({
+            query: ({ recipient_id, message }) => ({
+                url: `chats/${recipient_id}/message`,
                 method: "POST",
-                body: { message },
+                body: { recipient_id, message },
             }),
-            invalidatesTags: (_result, _error, { id }) => [
-                { type: "Chat", id },
-            ],
+        }),
+
+        // 4. Fetch all chat users
+        fetchChatUsers: builder.query<ChatUser[], void>({
+            query: () => "chats/users",
+            providesTags: ["Chat"],
         }),
     }),
 });
@@ -33,6 +36,7 @@ export const {
     useFetchChatListQuery,
     useFetchMessagesQuery,
     useSendMessageMutation,
+    useFetchChatUsersQuery,
 } = chatApi;
 
 export default chatApi;

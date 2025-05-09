@@ -19,7 +19,7 @@ const AllQuotations = () => {
       a.download = `quotation-${id}.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       alert('Download failed!');
     }
   };
@@ -31,7 +31,7 @@ const AllQuotations = () => {
       {isLoading && <p>Loading...</p>}
       {error && <p>Failed to load quotations.</p>}
 
-      {data?.length > 0 ? (
+      {(data ?? []).length > 0 ? (
         <table className="quotation-table">
           <thead>
             <tr>
@@ -42,13 +42,13 @@ const AllQuotations = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((quotation) => (
+            {(data ?? []).map((quotation) => (
               <tr key={quotation.id}>
                 <td>{quotation.id}</td>
                 <td>{quotation.customer_name}</td>
                 <td>{quotation.items?.length ?? 0}</td>
                 <td>
-                  <button onClick={() => handleDownload(quotation.id)}>
+                  <button onClick={() => handleDownload(quotation.id || 0)}>
                     Download PDF
                   </button>
                 </td>

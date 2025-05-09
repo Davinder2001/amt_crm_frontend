@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCog, FaFileInvoice, FaStore, FaTachometerAlt, FaTasks, FaUserShield, FaUserTie } from "react-icons/fa";
+import { FaCog, FaComments, FaFileInvoice, FaStore, FaTachometerAlt, FaTasks, FaUserShield, FaUserTie } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
@@ -23,6 +23,7 @@ const EmployeeNavs: React.FC<empNavProps> = ({ isSidebarExpanded, openMenu }) =>
         { name: "Task", path: "tasks", icon: <FaTasks /> },
         // { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
         // { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
+        { name: "Chat", path: "chat", icon: <FaComments /> },
         { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
         // { name: "Orders", path: "orders", icon: <FaBox /> },
         { name: "Settings", path: "settings", icon: <FaCog /> },

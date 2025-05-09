@@ -138,7 +138,7 @@
 //       >
 //         Delete Profile
 //       </button>
-      
+
 
 //       </div>
 
@@ -241,9 +241,9 @@ const ViewUserPage: React.FC = () => {
       <div className="employee-profile-inner-container">
         <div className="profile-header">
           <div className="profile-avatar">
-            {employee?.profilePicture && employee.profilePicture !== 'http://localhost:8000/' ? (
+            {employee.profile_picture && employee.profile_picture !== 'http://localhost:8000/' ? (
               <Image
-                src={employee.profilePicture}
+                src={employee.profile_picture}
                 alt={employee.name}
                 className="avatar-image"
                 width={120}

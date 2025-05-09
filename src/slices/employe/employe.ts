@@ -9,7 +9,7 @@ type PaySlipResponse = {
     url: string;
     filename: string;
   };
-  
+
 };
 
 
@@ -23,7 +23,7 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
     }),
 
 
-    fetchEmployeById: builder.query<Employee, number>({
+    fetchEmployeById: builder.query<PaySlipResponse, number>({
       query: (id) => `employee/${id}`,
       providesTags: ["Employe"],
     }),
@@ -80,7 +80,7 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       providesTags: ["Employe"],
     }),
 
-    
+
     downloadPaySlipPdf: builder.query<Employee, number>({
       query: (id) => `employee/downloadSlip/${id}`,
       providesTags: ["Employe"],

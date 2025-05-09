@@ -4,12 +4,18 @@ import { useCreateQuotationMutation } from '@/slices/quotation/quotationApi';
 
 const Page = () => {
   const [customerName, setCustomerName] = useState('');
-  const [items, setItems] = useState([{ name: '', quantity: 1, price: 0 }]);
+  const [items, setItems] = useState<{ name: string; quantity: number; price: number }[]>([{ name: '', quantity: 1, price: 0 }]);
   const [createQuotation, { isLoading, isSuccess }] = useCreateQuotationMutation();
 
-  const handleItemChange = (index: number, field: string, value: string | number) => {
+  const handleItemChange = (index: number, field: 'name' | 'quantity' | 'price', value: string | number) => {
     const updatedItems = [...items];
-    updatedItems[index][field as keyof typeof updatedItems[0]] = field === 'name' ? value : Number(value);
+    if (field === 'name') {
+      updatedItems[index].name = value as string;
+    } else if (field === 'quantity') {
+      updatedItems[index].quantity = Number(value);
+    } else if (field === 'price') {
+      updatedItems[index].price = Number(value);
+    }
     setItems(updatedItems);
   };
 

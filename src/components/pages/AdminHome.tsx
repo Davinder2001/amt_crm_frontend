@@ -64,7 +64,7 @@ const AdminHome = () => {
                     <div className="admin-header-inner">
                         <Link href="/" className="logo-link">
                             <Image src={homelogo} alt="Logo" width={20} height={20} />
-                            <span>Asset Management Technology</span>
+                            <span>Himmanav Asset Management Technology </span>
                         </Link>
                         <Logout />
                     </div>

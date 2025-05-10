@@ -4,6 +4,7 @@ interface User {
     name: string;
     email: string;
     number: string;
+    role: string;
     uid: string;
     profile_image: string | null;
     user_type: string;
@@ -23,6 +24,13 @@ interface LatestMessage {
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+}
+
+interface ChatUser {
+    id: number;
+    name: string;
+    role: string;
+    user_status: 'online' | 'offline' | 'away' | 'busy' | string;
 }
 
 // Participant inside chat list

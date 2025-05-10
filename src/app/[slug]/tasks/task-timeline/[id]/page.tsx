@@ -33,11 +33,11 @@ const ViewPage = () => {
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Task Timeline for ID: {id}</h1>
 
-      {data.histories.length === 0 ? (
+      {data?.data?.length === 0 ? (
         <p>No history entries found.</p>
       ) : (
         <ul className="space-y-4">
-          {data.histories.map((history: any) => (
+          {data?.data.map((history: Task) => (
             <li key={history.id} className="border p-4 rounded shadow-sm">
               <p><strong>Status:</strong> {history.status}</p>
               <p><strong>Description:</strong> {history.description}</p>
@@ -47,10 +47,10 @@ const ViewPage = () => {
                 <div className="mt-2">
                   <strong>Attachments:</strong>
                   <div className="flex gap-2 mt-1 flex-wrap">
-                    {history.attachments.map((url: string, index: number) => (
+                    {history.attachments.map((attachment: Attachment, index: number) => (
                       <Image
                         key={index}
-                        src={url}
+                        src={attachment.url}
                         alt={`Attachment ${index + 1}`}
                         width={200}
                         height={200}

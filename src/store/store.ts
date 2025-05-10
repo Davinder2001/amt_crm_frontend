@@ -16,6 +16,7 @@ import companyCreateSlice from '@/slices/company/companyCreateSlice';
 import adminManageApi from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import notificationApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
+import quotationApi from '@/slices/quotation/quotationCreateSlice';
 
 
 const store = configureStore({
@@ -37,7 +38,7 @@ const store = configureStore({
     [adminManageApi.reducerPath]: adminManageApi.reducer,
     [notificationApi.reducerPath]: notificationApi.reducer,
     [chatApi.reducerPath]: chatApi.reducer,
-    
+    [quotationApi.reducerPath]: quotationApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -58,6 +59,7 @@ const store = configureStore({
       .concat(adminManageApi.middleware)
       .concat(notificationApi.middleware)
       .concat(chatApi.middleware)
+      .concat(quotationApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

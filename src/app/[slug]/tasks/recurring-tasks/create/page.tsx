@@ -199,8 +199,8 @@ const CreateRecurringTask: React.FC = () => {
           {renderField("Description", "description", "text", "Enter description")}
 
           {renderField("Assigned To", "assigned_to", "select", "",
-            usersData?.users?.map((user: any) => ({
-              value: user.id,
+            usersData?.users?.map((user: { id: number; name: string }) => ({
+              value: String(user.id),
               label: user.name
             })) || []
           )}

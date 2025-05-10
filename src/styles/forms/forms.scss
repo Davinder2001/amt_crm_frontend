@@ -1,11 +1,10 @@
 @use '../variables' as *;
 
 .login-container2 {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    position: relative;
-    overflow: hidden;
-
+  display: grid;
+  grid-template-columns: 50% 50%;
+  position: relative;
+  overflow: hidden;
   .left-panel {
     padding: 60px 80px;
 
@@ -102,7 +101,7 @@
     }
 
     .login-button {
-      background: linear-gradient(to right, #009693, coral);
+      background: linear-gradient(135deg, $primary-color, darken($primary-color, 8%));
       color: #fff;
       width: 100%;
       padding: .75rem;
@@ -111,106 +110,107 @@
       font-weight: bold;
       font-size: 18px;
       cursor: pointer;
-    &:hover {
-      box-shadow: $box-shadow;
-    }
-  }
-
-  .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    margin-bottom: 20px;
-
-    .forgot-password-link {
-      font-size: 14px;
-      color: $danger-color;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-  }
-
-  .signup-text {
-    text-align: center;
-    margin-top: 1rem;
-
-    a {
-      color: $primary-color;
-      font-weight: bold;
-    }
-  }
-
-  .login-footer-links {
-    margin-top: 40px;
-    display: flex;
-    gap: 20px;
-    font-size: 13px;
-    justify-content: center;
-
-    a {
-      color: #4c4c4c;
-      font-size: 16px;
-      font-weight: 600;
 
       &:hover {
-        color: $primary-color;
-        font-size: 17px;
+        box-shadow: $box-shadow;
       }
     }
 
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 20px;
+
+      .forgot-password-link {
+        font-size: 14px;
+        color: $danger-color;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+    }
+
+    .signup-text {
+      text-align: center;
+      margin-top: 1rem;
+
+      a {
+        color: $primary-color;
+        font-weight: bold;
+      }
+    }
+
+    .login-footer-links {
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      font-size: 13px;
+      justify-content: center;
+
+      a {
+        color: #4c4c4c;
+        font-size: 16px;
+        font-weight: 600;
+
+        &:hover {
+          color: $primary-color;
+          font-size: 17px;
+        }
+      }
+
+    }
   }
-}
 
-.right-panel {
-  flex: 1;
-  background: linear-gradient(to bottom right, darken($primary-color, 10%), #b86040);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .right-panel {
+    flex: 1;
+    background: linear-gradient(to bottom right, darken($primary-color, 10%), #b86040);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  .illustration {
-    max-width: 90%;
-    height: auto;
+    .illustration {
+      max-width: 90%;
+      height: auto;
+    }
   }
-}
 
 
 
-.custom-checkbox {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  color: $primary-color;
-}
+  .custom-checkbox {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: $primary-color;
+  }
 
-.custom-checkbox input {
-  display: none;
-}
+  .custom-checkbox input {
+    display: none;
+  }
 
-.custom-checkbox .checkmark {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #009693;
-  border-radius: 50px;
-  display: inline-block;
-  position: relative;
-  margin-right: 8px;
-  background-color: #fff;
-  transition: all 0.2s ease;
-}
+  .custom-checkbox .checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #009693;
+    border-radius: 50px;
+    display: inline-block;
+    position: relative;
+    margin-right: 8px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+  }
 
-.custom-checkbox input:checked+.checkmark::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 10px;
-  height: 10px;
-  background-color: #009693;
-  border-radius: 50px;
-}
+  .custom-checkbox input:checked+.checkmark::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background-color: #009693;
+    border-radius: 50px;
+  }
 
 }
 

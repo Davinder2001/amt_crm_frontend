@@ -207,7 +207,7 @@
 
 
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
@@ -219,7 +219,12 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import ItemsTab from '../ItemsTab';
 import AddCategory from '../../add-item/AddCategory';
-
+interface Props {
+  setVariants: Dispatch<SetStateAction<variations[]>>;
+  variations: variations[];
+  setSelectedCategories: (categories: Category[]) => void;
+  selectedCategories: Category[];
+}
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
   const { companySlug } = useCompany();
@@ -228,6 +233,7 @@ const UpdateItem = () => {
   const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
+  
 
   interface UpdateStoreItemRequest {
     id: number;
@@ -249,7 +255,6 @@ const UpdateItem = () => {
     variants: variations[];
     categories: Category[];
   }
-
   const [formData, setFormData] = useState<UpdateStoreItemRequest>({
     id: Number(id),
     name: '',
@@ -270,6 +275,7 @@ const UpdateItem = () => {
     variants: [],
     categories: [],
   });
+
 
   const [vendorsList, setVendorsList] = useState<string[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
@@ -356,6 +362,7 @@ const UpdateItem = () => {
     form.append('cost_price', formData.cost_price.toString());
     form.append('selling_price', formData.selling_price.toString());
     form.append('tax_id', formData.tax_id.toString());
+    
 
     // Ensure formData.images is always treated as an array.
 const images = Array.isArray(formData.images) ? formData.images : [];
@@ -389,6 +396,7 @@ images.forEach((img) => {
     // Send category IDs
     selectedCategories.forEach((category, index) => {
       form.append(`categories[${index}]`, category.id.toString());
+      
     });
 
     try {
@@ -409,6 +417,7 @@ images.forEach((img) => {
         selling_price: formData.selling_price,
         images: formData.images,
         variants: variants,
+        tax_id: formData.tax_id,
         categories: selectedCategories,
       }).unwrap();
       router.push(`/${companySlug}/store/view-item/${id}`);
@@ -628,7 +637,9 @@ images.forEach((img) => {
                 setVariants={setVariants}
                 variations={variants} setSelectedCategories={function (categories: Category[]): void {
                   throw new Error('Function not implemented.');
-                }} selectedCategories={[]} />
+                  }}
+                  selectedCategories={selectedCategories}
+                />
             </div>
           </div>
 

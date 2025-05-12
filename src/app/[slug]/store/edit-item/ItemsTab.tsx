@@ -8,9 +8,10 @@ interface Props {
     setVariants: (combinations: variations[]) => void;
     variations: variations[];
     setSelectedCategories: (categories: Category[]) => void;
+    selectedCategories: Category[];
 }
 
-const ItemsTab: React.FC<Props> = ({ setVariants, variations }) => {
+const ItemsTab: React.FC<Props> = ({ setVariants, variations,selectedCategories }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 

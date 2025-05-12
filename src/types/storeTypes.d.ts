@@ -136,6 +136,7 @@ interface UpdateStoreItemRequest {
   updated_at?: string;
   images?: (string | File)[];
   categories?: Category[];
+  tax_id: number;
   variants?: variations[];
 }
 

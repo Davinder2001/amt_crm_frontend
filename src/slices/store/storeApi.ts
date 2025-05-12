@@ -45,6 +45,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
+
     // Bulk create store items
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
@@ -144,6 +145,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Store"],
     }),
+
 
     // 🆕 Delete category
     deleteCategory: builder.mutation<void, number>({

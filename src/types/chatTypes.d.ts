@@ -79,6 +79,11 @@ interface Message {
     thread: Thread;
 }
 
+interface UserStatus {
+    user_id: number;
+    status: 'online' | 'offline' | 'away';
+}
+
 // API response for sending a message
 interface SendMessageResponse {
     status: string;
@@ -106,6 +111,9 @@ interface ChatMessage {
     created_at: string;
 }
 
+interface DeleteMessage {
+    messageId: number | string;
+}
 // API response for chat with a specific user
 interface ChatWithUserResponse {
     status: string;

@@ -210,8 +210,8 @@ const ViewUserPage: React.FC = () => {
   } = useFetchEmployeByIdQuery(Number(id));
 
   const user = data;
-  const employee = user;
-  const details = employee;
+  const employee = user?.employee;
+  const details = user?.employee.employee_details;
 
   useEffect(() => {
     if (usersError) toast.error('Failed to fetch user data');

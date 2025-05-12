@@ -29,6 +29,25 @@ const chatApi = chatCreateSlice.injectEndpoints({
             query: () => "chats/users",
             providesTags: ["Chat"],
         }),
+
+        // 4. delete single message
+        deleteSingleMessage: builder.mutation<{ success: boolean }, number | string>({
+            query: (messageId) => ({
+                url: `chats/message/${messageId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ["Chat"],
+        }),
+
+        // 4. delete all messages in chat
+        deleteAllMessages: builder.mutation<{ success: boolean }, number | string>({
+            query: (id) => ({
+                url: `chats/with-user/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ["Chat"],
+        }),
+
     }),
 });
 
@@ -37,6 +56,8 @@ export const {
     useFetchMessagesQuery,
     useSendMessageMutation,
     useFetchChatUsersQuery,
+    useDeleteSingleMessageMutation,
+    useDeleteAllMessagesMutation,
 } = chatApi;
 
 export default chatApi;

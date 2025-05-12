@@ -1,4 +1,4 @@
-import ChatPage from '@/components/common/Chat'
+import ChatPage from '@/components/chat/ChatPage'
 import React from 'react'
 
 export default function page() {

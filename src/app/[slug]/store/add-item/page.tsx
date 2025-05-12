@@ -11,7 +11,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import ItemsTab from './ItemsTab';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import AddCategory from './AddCategory';
-
+import DatePicker from "react-datepicker";
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
   const { currentData } = useFetchVendorsQuery();
@@ -140,204 +140,361 @@ const AddItem: React.FC = () => {
 
       <form onSubmit={handleSubmit}>
         <div className='categories-filds-outer'>
-        <div className='add-items-form-container'>
-          <div className='add-items-form-input-label-container'>
-            <label>Item Name*</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="e.g. Samsung Monitor 24 inch"
-              required
-            />
-          </div>
+          <div className='add-items-form-container'>
+            <div className='add-items-form-input-label-container'>
+              <label>Item Name*</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. Samsung Monitor 24 inch"
+                required
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Quantity Count*</label>
-            <input
-              type="number"
-              name="quantity_count"
-              value={formData.quantity_count === 0 ? '' : formData.quantity_count}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                setFormData((prev) => ({
-                  ...prev,
-                  quantity_count: isNaN(val) ? 0 : val,
-                }));
-              }}
-              placeholder="e.g. 100"
-              required
-            />
-          </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Quantity Count*</label>
+              <input
+                type="number"
+                name="quantity_count"
+                value={formData.quantity_count === 0 ? '' : formData.quantity_count}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    quantity_count: isNaN(val) ? 0 : val,
+                  }));
+                }}
+                placeholder="e.g. 100"
+                required
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Measurement</label>
-            <input
-              type="text"
-              name="measurement"
-              value={formData.measurement}
-              onChange={handleChange}
-              placeholder="e.g. kg, pcs, liters"
-            />
-          </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Measurement</label>
+              <input
+                type="text"
+                name="measurement"
+                value={formData.measurement}
+                onChange={handleChange}
+                placeholder="e.g. kg, pcs, liters"
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Purchase Date</label>
-            <input
-              type="date"
-              name="purchase_date"
-              value={formData.purchase_date}
-              onChange={handleChange}
-              placeholder="Select purchase date"
-              onFocus={(e) => e.target.showPicker?.()}
-            />
-          </div>
+            {/* Purchase Date */}
+            <div className='add-items-form-input-label-container'>
+              <label>Purchase Date</label>
+              <DatePicker
+                selected={formData.purchase_date ? new Date(formData.purchase_date) : null}
+                onChange={(date: Date | null) =>
+                  setFormData(prev => ({
+                    ...prev,
+                    purchase_date: date ? date.toISOString().split('T')[0] : ''
+                  }))
+                }
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Select purchase date"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                wrapperClassName="w-full"
+                popperClassName="!z-[10000]"
+                showYearDropdown
+                scrollableYearDropdown
+                yearDropdownItemNumber={100}
+                maxDate={new Date()}
+                showMonthDropdown
+                dropdownMode="select"
+                dayClassName={date =>
+                  date.getDay() === 0 ? "datepicker-sunday" : ""
+                }
+                renderCustomHeader={({
+                  date,
+                  changeYear,
+                  changeMonth,
+                  decreaseMonth,
+                  increaseMonth,
+                  prevMonthButtonDisabled,
+                  nextMonthButtonDisabled,
+                }) => (
+                  <div className="date-p-header">
+                    <button
+                      onClick={decreaseMonth}
+                      disabled={prevMonthButtonDisabled}
+                      className="date-p-btn"
+                    >
+                      {"<"}
+                    </button>
+                    <select
+                      value={date.getFullYear()}
+                      onChange={({ target: { value } }) => changeYear(Number(value))}
+                      className="date-p-year"
+                    >
+                      {Array.from({ length: 100 }, (_, i) => (
+                        <option key={i} value={new Date().getFullYear() - 99 + i}>
+                          {new Date().getFullYear() - 99 + i}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={date.toLocaleString("default", { month: "long" })}
+                      onChange={({ target: { value } }) =>
+                        changeMonth(new Date(Date.parse(value + " 1, 2000")).getMonth())
+                      }
+                      className="date-p-header-month"
+                    >
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i} value={new Date(0, i).toLocaleString("default", { month: "long" })}>
+                          {new Date(0, i).toLocaleString("default", { month: "long" })}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={increaseMonth}
+                      disabled={nextMonthButtonDisabled}
+                      className="date-p-btn"
+                    >
+                      {">"}
+                    </button>
+                  </div>
+                )}
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Date Of Manufacture*</label>
-            <input
-              type="date"
-              name="date_of_manufacture"
-              value={formData.date_of_manufacture}
-              onChange={handleChange}
-              placeholder="Select manufacture date"
-              required
-            />
-          </div>
+            {/* Date of Manufacture */}
+            <div className='add-items-form-input-label-container'>
+              <label>Date Of Manufacture*</label>
+              <DatePicker
+                selected={formData.date_of_manufacture ? new Date(formData.date_of_manufacture) : null}
+                onChange={(date: Date | null) =>
+                  setFormData(prev => ({
+                    ...prev,
+                    date_of_manufacture: date ? date.toISOString().split('T')[0] : ''
+                  }))
+                }
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Select manufacture date"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                wrapperClassName="w-full"
+                popperClassName="!z-[10000]"
+                showYearDropdown
+                scrollableYearDropdown
+                yearDropdownItemNumber={100}
+                maxDate={new Date()}
+                showMonthDropdown
+                dropdownMode="select"
+                required
+                dayClassName={date => date.getDay() === 0 ? 'datepicker-sunday' : ''}
+                renderCustomHeader={({ date, changeYear, changeMonth, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) => (
+                  <div className="date-p-header">
+                    <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} className="date-p-btn">{"<"}</button>
+                    <select
+                      value={date.getFullYear()}
+                      onChange={({ target: { value } }) => changeYear(Number(value))}
+                      className="mr-2 p-1 bg-white border rounded"
+                    >
+                      {Array.from({ length: 100 }, (_, i) => (
+                        <option key={i} value={new Date().getFullYear() - 99 + i}>
+                          {new Date().getFullYear() - 99 + i}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={date.toLocaleString("default", { month: "long" })}
+                      onChange={({ target: { value } }) =>
+                        changeMonth(new Date(Date.parse(value + " 1, 2000")).getMonth())
+                      }
+                      className="p-1 bg-white border rounded"
+                    >
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i} value={new Date(0, i).toLocaleString("default", { month: "long" })}>
+                          {new Date(0, i).toLocaleString("default", { month: "long" })}
+                        </option>
+                      ))}
+                    </select>
+                    <button onClick={increaseMonth} disabled={nextMonthButtonDisabled} className="date-p-btn">{">"}</button>
+                  </div>
+                )}
+              />
 
-          <div className='add-items-form-input-label-container'>
-            <label>Date Of Expiry</label>
-            <input
-              type="date"
-              name="date_of_expiry"
-              value={formData.date_of_expiry}
-              onChange={handleChange}
-              placeholder="Select expiry date"
-            />
-          </div>
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Brand Name*</label>
-            <input
-              type="text"
-              name="brand_name"
-              value={formData.brand_name}
-              onChange={handleChange}
-              placeholder="e.g. Samsung, LG"
-              required
-            />
-          </div>
+            {/* Date of Expiry */}
+            <div className='add-items-form-input-label-container'>
+              <label>Date Of Expiry</label>
+              <DatePicker
+                selected={formData.date_of_expiry ? new Date(formData.date_of_expiry) : null}
+                onChange={(date: Date | null) =>
+                  setFormData(prev => ({
+                    ...prev,
+                    date_of_expiry: date ? date.toISOString().split('T')[0] : ''
+                  }))
+                }
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Select expiry date"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                wrapperClassName="w-full"
+                popperClassName="!z-[10000]"
+                showYearDropdown
+                scrollableYearDropdown
+                yearDropdownItemNumber={100}
+                minDate={new Date()}
+                showMonthDropdown
+                dropdownMode="select"
+                dayClassName={date => date.getDay() === 0 ? 'datepicker-sunday' : ''}
+                renderCustomHeader={({ date, changeYear, changeMonth, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) => (
+                  <div className="date-p-header">
+                    <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled} className="date-p-btn">{"<"}</button>
+                    <select
+                      value={date.getFullYear()}
+                      onChange={({ target: { value } }) => changeYear(Number(value))}
+                      className="mr-2 p-1 bg-white border rounded"
+                    >
+                      {Array.from({ length: 100 }, (_, i) => (
+                        <option key={i} value={new Date().getFullYear() - 99 + i}>
+                          {new Date().getFullYear() - 99 + i}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={date.toLocaleString("default", { month: "long" })}
+                      onChange={({ target: { value } }) =>
+                        changeMonth(new Date(Date.parse(value + " 1, 2000")).getMonth())
+                      }
+                      className="p-1 bg-white border rounded"
+                    >
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i} value={new Date(0, i).toLocaleString("default", { month: "long" })}>
+                          {new Date(0, i).toLocaleString("default", { month: "long" })}
+                        </option>
+                      ))}
+                    </select>
+                    <button onClick={increaseMonth} disabled={nextMonthButtonDisabled} className="date-p-btn">{">"}</button>
+                  </div>
+                )}
+              />
 
-          <div className='add-items-form-input-label-container'>
-            <label>Replacement</label>
-            <input
-              type="text"
-              name="replacement"
-              value={formData.replacement}
-              onChange={handleChange}
-              placeholder="e.g. Replace after 2 years"
-            />
-          </div>
+            </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Brand Name*</label>
+              <input
+                type="text"
+                name="brand_name"
+                value={formData.brand_name}
+                onChange={handleChange}
+                placeholder="e.g. Samsung, LG"
+                required
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Cost Price*</label>
-            <input
-              type="number"
-              name="cost_price"
-              value={formData.cost_price === 0 ? '' : formData.cost_price}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                setFormData((prev) => ({
-                  ...prev,
-                  cost_price: isNaN(val) ? 0 : val,
-                }));
-              }}
-              placeholder="e.g. 250.00"
-              required
-            />
-          </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Replacement</label>
+              <input
+                type="text"
+                name="replacement"
+                value={formData.replacement}
+                onChange={handleChange}
+                placeholder="e.g. Replace after 2 years"
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Selling Price*</label>
-            <input
-              type="number"
-              name="selling_price"
-              value={formData.selling_price === 0 ? '' : formData.selling_price}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                setFormData((prev) => ({
-                  ...prev,
-                  selling_price: isNaN(val) ? 0 : val,
-                }));
-              }}
-              placeholder="e.g. 300.00"
-              required
-            />
-          </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Cost Price*</label>
+              <input
+                type="number"
+                name="cost_price"
+                value={formData.cost_price === 0 ? '' : formData.cost_price}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    cost_price: isNaN(val) ? 0 : val,
+                  }));
+                }}
+                placeholder="e.g. 250.00"
+                required
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Availability Stock</label>
-            <input
-              type="number"
-              name="availability_stock"
-              value={formData.availability_stock === 0 ? '' : formData.availability_stock}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                setFormData((prev) => ({
-                  ...prev,
-                  availability_stock: isNaN(val) ? 0 : val,
-                }));
-              }}
-              placeholder="e.g. 50"
-            />
-          </div>
-          <div className='add-items-form-input-label-container'>
-            <label>Tax</label>
-            <select
-              name="tax_id"
-              value={formData.tax_id}
-              onChange={(e) => setFormData(prev => ({ ...prev, tax_id: parseInt(e.target.value) }))}
-            >
-              <option value="">Select Tax</option>
-              {taxesData?.data?.map((tax: Tax) => (
-                <option key={tax.id} value={tax.id}>
-                  {tax.name} - {tax.rate}%
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Selling Price*</label>
+              <input
+                type="number"
+                name="selling_price"
+                value={formData.selling_price === 0 ? '' : formData.selling_price}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    selling_price: isNaN(val) ? 0 : val,
+                  }));
+                }}
+                placeholder="e.g. 300.00"
+                required
+              />
+            </div>
 
-          <div className='add-items-form-input-label-container'>
-            <label>Vendor Name*</label>
-            <AddVendor
-              vendors={vendors}
-              selectedVendor={formData.vendor_name || ''}
-              onVendorSelect={(vendorName) =>
-                setFormData(prev => ({ ...prev, vendor_name: vendorName }))
-              }
-              onVendorAdded={(vendorName) => {
-                setVendors(prev => [...prev, vendorName]);
-                setFormData(prev => ({ ...prev, vendor_name: vendorName }));
-              }}
-            />
-          </div>
-        
+            <div className='add-items-form-input-label-container'>
+              <label>Availability Stock</label>
+              <input
+                type="number"
+                name="availability_stock"
+                value={formData.availability_stock === 0 ? '' : formData.availability_stock}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    availability_stock: isNaN(val) ? 0 : val,
+                  }));
+                }}
+                placeholder="e.g. 50"
+              />
+            </div>
+            <div className='add-items-form-input-label-container'>
+              <label>Tax</label>
+              <select
+                name="tax_id"
+                value={formData.tax_id}
+                onChange={(e) => setFormData(prev => ({ ...prev, tax_id: parseInt(e.target.value) }))}
+              >
+                <option value="">Select Tax</option>
+                {taxesData?.data?.map((tax: Tax) => (
+                  <option key={tax.id} value={tax.id}>
+                    {tax.name} - {tax.rate}%
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <ImageUpload
-            images={formData.images}
-            handleImageChange={handleImageChange}
-            handleClearImages={handleClearImages}
-            handleRemoveImage={handleRemoveImage}
-          />
-          <div >
-            <ItemsTab
-              onChange={setVariants}
-              variations={variants}
+            <div className='add-items-form-input-label-container'>
+              <label>Vendor Name*</label>
+              <AddVendor
+                vendors={vendors}
+                selectedVendor={formData.vendor_name || ''}
+                onVendorSelect={(vendorName) =>
+                  setFormData(prev => ({ ...prev, vendor_name: vendorName }))
+                }
+                onVendorAdded={(vendorName) => {
+                  setVendors(prev => [...prev, vendorName]);
+                  setFormData(prev => ({ ...prev, vendor_name: vendorName }));
+                }}
+              />
+            </div>
+
+
+            <ImageUpload
+              images={formData.images}
+              handleImageChange={handleImageChange}
+              handleClearImages={handleClearImages}
+              handleRemoveImage={handleRemoveImage}
             />
+            <div >
+              <ItemsTab
+                onChange={setVariants}
+                variations={variants}
+              />
+            </div>
           </div>
-        </div>
-        <AddCategory onCategoryChange={setSelectedCategories} selectedCategories={selectedCategories} />
+          <AddCategory onCategoryChange={setSelectedCategories} selectedCategories={selectedCategories} />
         </div>
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button

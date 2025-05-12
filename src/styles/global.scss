@@ -101,7 +101,7 @@
 @use './policy-pages.scss' as *;
 
 
-    
+
 
 
 * {
@@ -285,6 +285,132 @@ textarea {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+// datepicker-styling start...............................................................................
+.react-datepicker-popper {
+    z-index: 999999;
+    box-shadow: $box-shadow;
+
+    .react-datepicker {
+        border: 1px solid $primary-color;
+        border-radius: 5px;
+        background-color: $white;
+
+        &__popper {
+            background-color: white;
+            z-index: 99999;
+        }
+
+        &__week {
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 1px solid #f4f4f4;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 5px 0;
+            display: grid;
+        }
+
+        &__day-names {
+            text-align: center;
+            border-bottom: .5px solid #009693;
+            grid-template-columns: repeat(7, 1fr);
+            display: grid;
+        }
+
+
+        &__month {
+            padding: 5px;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        &__header--custom {
+            background-color: $primary-color;
+            color: white;
+        }
+
+        span.react-datepicker__aria-live {
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .react-datepicker__day-name {
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    }
+
+    .date-p-header {
+        display: flex;
+        gap: 2px;
+        padding: 10px 5px;
+    }
+
+    .date-p-btn {
+        font-size: 29px;
+        color: rgb(255, 255, 255);
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+    }
+
+    .date-p-year,
+    .date-p-header-month,
+    select.p-1.bg-white.border.rounded,
+    select.mr-2.p-1.bg-white.border.rounded {
+        padding: 5px;
+    }
+
+    .datepicker-sunday {
+        color: red !important;
+    }
+}
+
+svg.react-datepicker__triangle {
+    color: $primary-color;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    color: #fff;
+    background-color: #216ba5;
+    border-radius: 0.3rem;
+}
+
+.react-datepicker__day--selected.datepicker-sunday,
+.react-datepicker__day--keyboard-selected.datepicker-sunday {
+    color: white !important;
+    background-color: #216ba5; // or any color you prefer for selected Sundays
+    border-radius: 0.3rem;
+}
+
+.react-datepicker__day {
+    padding: 5px 0px;
+    font-size: 13px;
+    font-weight: 500;   
+}
+
+// datepicker-styling End...............................................................................
+
+
+
+
+
+
+
 
 @media (max-width:468px) {
     .buttons {

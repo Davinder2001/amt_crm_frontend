@@ -17,6 +17,8 @@ import adminManageApi from '@/slices/superadminSlices/adminManagement/adminManag
 import notificationApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
+import hrApi from '@/slices/hr/hrCreateSlice';
+import chatReducer from '@/slices/chat/chatCreateSocket';
 
 
 const store = configureStore({
@@ -39,6 +41,8 @@ const store = configureStore({
     [notificationApi.reducerPath]: notificationApi.reducer,
     [chatApi.reducerPath]: chatApi.reducer,
     [quotationApi.reducerPath]: quotationApi.reducer,
+    [hrApi.reducerPath]: hrApi.reducer,
+    // chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -60,6 +64,7 @@ const store = configureStore({
       .concat(notificationApi.middleware)
       .concat(chatApi.middleware)
       .concat(quotationApi.middleware)
+      .concat(hrApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

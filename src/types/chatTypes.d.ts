@@ -79,6 +79,11 @@ interface Message {
     thread: Thread;
 }
 
+interface UserStatus {
+    user_id: number;
+    status: 'online' | 'offline' | 'away';
+}
+
 // API response for sending a message
 interface SendMessageResponse {
     status: string;

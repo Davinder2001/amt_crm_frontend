@@ -8,7 +8,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 const AttendancesList: React.FC = () => {
   const { data: attendanceData, error, isLoading } = useFetchMyAttenancesQuery();
 
-  const attendanceList: Attendance[] = attendanceData?.attendance ?? [];
+  const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance) ? attendanceData.attendance : [];
 
   if (isLoading) return <p>Loading attendances...</p>;
   if (error) return <p>Error fetching attendances.</p>;

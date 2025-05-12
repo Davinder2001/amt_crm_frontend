@@ -24,6 +24,7 @@ type Shift = {
   shift_name: string;
   start_time: string;
   end_time: string;
+  weekly_off_day: string;
   created_at: string;
   updated_at: string;
 };

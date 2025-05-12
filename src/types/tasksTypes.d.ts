@@ -1,4 +1,5 @@
 interface Task {
+    assignedTo: string;
     id: number;
     name: string;
     company_name: string;

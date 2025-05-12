@@ -1,14 +1,20 @@
 'use client';
 
 import React from 'react';
-import { useFetchMyAttenancesQuery, Attendance } from '@/slices/attendance/attendance';
+import {
+  useFetchMyAttenancesQuery,
+  Attendance,
+} from '@/slices/attendance/attendance';
 import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const AttendancesList: React.FC = () => {
   const { data: attendanceData, error, isLoading } = useFetchMyAttenancesQuery();
 
-  const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance) ? attendanceData.attendance : [];
+  // ✅ Safely parse attendance array
+  const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance)
+    ? attendanceData.attendance
+    : [];
 
   if (isLoading) return <p>Loading attendances...</p>;
   if (error) return <p>Error fetching attendances.</p>;
@@ -45,10 +51,10 @@ const AttendancesList: React.FC = () => {
               attendance.status === 'present'
                 ? '#009693'
                 : attendance.status === 'leave'
-                  ? 'yellow'
-                  : attendance.status === 'absent'
-                    ? 'red'
-                    : 'gray',
+                ? 'yellow'
+                : attendance.status === 'absent'
+                ? 'red'
+                : 'gray',
             color: attendance.status === 'leave' ? 'black' : 'white',
           }}
         >
@@ -66,10 +72,10 @@ const AttendancesList: React.FC = () => {
               attendance.approval_status === 'approved'
                 ? '#009693'
                 : attendance.approval_status === 'pending'
-                  ? 'yellow'
-                  : attendance.approval_status === 'unapproved'
-                    ? 'red'
-                    : 'gray',
+                ? 'yellow'
+                : attendance.approval_status === 'unapproved'
+                ? 'red'
+                : 'gray',
             color: attendance.approval_status === 'pending' ? 'black' : 'white',
           }}
         >
@@ -79,12 +85,7 @@ const AttendancesList: React.FC = () => {
     },
   ];
 
-  return (
-    <ResponsiveTable
-      data={attendanceList}
-      columns={columns}
-    />
-  );
+  return <ResponsiveTable data={attendanceList} columns={columns} />;
 };
 
 export default AttendancesList;

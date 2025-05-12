@@ -16,6 +16,7 @@ const Page = () => {
     shift_name: "",
     start_time: "",
     end_time: "",
+    weekly_off_day: "",
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -24,11 +25,12 @@ const Page = () => {
     setIsFormValid(
       form.shift_name.trim() !== "" &&
       form.start_time !== "" &&
-      form.end_time !== ""
+      form.end_time !== "" &&
+      form.weekly_off_day !== ""
     );
   }, [form]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -38,7 +40,7 @@ const Page = () => {
     try {
       await createShift(form).unwrap();
       toast.success("Shift created successfully!");
-      setForm({ shift_name: "", start_time: "", end_time: "" });
+      setForm({ shift_name: "", start_time: "", end_time: "", weekly_off_day: "" });
       refetch();
     } catch (err) {
       console.error(err);
@@ -48,7 +50,7 @@ const Page = () => {
 
   return (
     <div className="shift-management-container">
-      <div className="glass-panel glass-panel-one ">
+      <div className="glass-panel glass-panel-one">
         <h1 className="main-heading">
           <FiClock className="icon-spin" /> Shift Management
         </h1>
@@ -61,7 +63,7 @@ const Page = () => {
           <h2 className="section-title">
             <FiPlus /> Create New Shift
           </h2>
-          
+
           <form onSubmit={handleCreate} className="shift-form">
             <div className="form-grid">
               <div className={`form-group ${form.shift_name ? "filled" : ""}`}>
@@ -121,6 +123,33 @@ const Page = () => {
                   </span>
                 </div>
               </div>
+
+              <div className={`form-group ${form.weekly_off_day ? "filled" : ""}`}>
+                <label>
+                  Weekly Off Day <span className="required-asterisk">*</span>
+                </label>
+                <div className="input-wrapper">
+                  <select
+                    name="weekly_off_day"
+                    value={form.weekly_off_day}
+                    onChange={handleChange}
+                    required
+                    className="form-input"
+                  >
+                    <option value="">Select Day</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                  </select>
+                  <span className="input-icon">
+                    <FiCalendar />
+                  </span>
+                </div>
+              </div>
             </div>
 
             <button
@@ -161,14 +190,11 @@ const Page = () => {
                   <div className="shift-content">
                     <h3 className="shift-name">{shift.shift_name}</h3>
                     <div className="shift-time">
-                      <span className="time-badge start-time">
-                        {shift.start_time}
-                      </span>
+                      <span className="time-badge start-time">{shift.start_time}</span>
                       <span className="time-separator">→</span>
-                      <span className="time-badge end-time">
-                        {shift.end_time}
-                      </span>
+                      <span className="time-badge end-time">{shift.end_time}</span>
                     </div>
+                    <p className="weekly-off">Weekly Off: {shift.weekly_off_day}</p>
                   </div>
                 </div>
               ))}

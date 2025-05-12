@@ -140,7 +140,7 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
     <div className='tab-content'>
       {/* Existing Combinations */}
       {existingCombinations.map((combo, index) => (
-        <div key={`existing-${index}`} className="variation-block attributes-table">
+        <div key={`existing-${index}`} className="variation-block attributes-table ">
           {combo.attributes.map(attr => (
             <div key={attr.attribute} style={{ marginBottom: '12px' }}>
               <label>{attr.attribute}</label>
@@ -186,7 +186,7 @@ const UpdateVariations: React.FC<Props> = ({ variants, setVariants }) => {
               onChange={e => handleFieldChange(index, 'regular_price', +e.target.value, false)}
             />
           </div>
-          <button type="button" onClick={() => handleRemoveExistingCombo(index)}>
+          <button type="button" onClick={() => handleRemoveExistingCombo(index)} className="remove-button">
             Remove
           </button>
           <hr />

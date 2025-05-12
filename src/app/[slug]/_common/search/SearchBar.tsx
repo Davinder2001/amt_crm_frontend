@@ -20,7 +20,7 @@ const SearchBar: React.FC = () => {
                     <FaSearch size={15} color='#009693'/>
                     <input
                         type="text"
-                        placeholder="Search"
+                        placeholder="Search Store Item..."
                         value={searchTerm}
                         onChange={handleChange}
                         className="search-input"

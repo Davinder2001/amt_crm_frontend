@@ -1,4 +1,3 @@
-// socketService.ts
 import { io, Socket } from 'socket.io-client';
 
 class SocketService {
@@ -13,6 +12,11 @@ class SocketService {
 
     public connect() {
         this.socket.connect();
+        this.socket.on('disconnect', () => {
+            setTimeout(() => {
+                this.socket.connect();
+            }, 3000);
+        });
     }
 
     public disconnect() {

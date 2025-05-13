@@ -11,7 +11,7 @@ interface Props {
     selectedCategories: Category[];
 }
 
-const ItemsTab: React.FC<Props> = ({ setVariants, variations,selectedCategories }) => {
+const ItemsTab: React.FC<Props> = ({ setVariants, variations, selectedCategories }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState('variations');
 
@@ -64,7 +64,7 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variations,selectedCategories 
                         <section className="tab-content">
                             {tabs.find(tab => tab.key === activeTab)?.content}
                         </section>
-                        
+
                         <div className="modal-footer" style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: '10px' }}>
                             <button
                                 type="button"

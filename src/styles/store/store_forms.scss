@@ -138,6 +138,12 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    position: relative;
+
+    .react-datepicker__tab-loop {
+      position: absolute;
+      width: 100%;
+    }
   }
 
   input,

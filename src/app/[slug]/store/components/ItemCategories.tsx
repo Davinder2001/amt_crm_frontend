@@ -53,7 +53,7 @@ const filterCategories = (categories: CategoryNode[], term: string): CategoryNod
     .filter(Boolean) as CategoryNode[];
 };
 
-const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) => {
+const ItemCategories: React.FC<Props> = ({ onCategoryChange, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
@@ -269,4 +269,4 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
   );
 };
 
-export default AddCategory;
+export default ItemCategories;

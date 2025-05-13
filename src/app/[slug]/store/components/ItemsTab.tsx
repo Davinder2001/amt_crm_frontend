@@ -2,7 +2,7 @@
 import React, { useState, ReactNode } from 'react';
 import { FaBox, FaTag, FaTimes } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
-import Variations from './Variations';
+import Variations from '../add-item/Variations';
 
 interface Props {
     onChange: (combinations: variations[]) => void;

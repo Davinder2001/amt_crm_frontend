@@ -38,6 +38,8 @@ interface RegisterForm {
     pan_image_front: File | null;
     pan_image_back: File | null;
     office_electricity_bill?: File | null;
+    redirect_url?: string;
+    order_id?: string;
 }
 
 interface UserProfile {

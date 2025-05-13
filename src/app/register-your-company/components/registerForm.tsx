@@ -214,11 +214,18 @@ const RegisterForm: React.FC = () => {
     });
 
     try {
-      await adminRegister(data).unwrap();
-      localStorage.removeItem('adminregistration');
-      setActiveSection('personal');
-      setFormData(getDefaultFormData());
-      toast.success('Registration successful')
+      const response = await adminRegister(data).unwrap();
+      // localStorage.removeItem('adminregistration');
+      // setActiveSection('personal');
+      // setFormData(getDefaultFormData());
+      // toast.success('Registration successful')
+      // Check if response has redirect_url
+      if (response.redirect_url) {
+        // Redirect to the provided URL
+        window.location.href = response.redirect_url;
+      } else {
+        toast.success('Registration successful!');
+      }
     } catch {
       toast.error('Something went wrong. Please check the form and try again.')
     }
@@ -454,22 +461,22 @@ const RegisterForm: React.FC = () => {
                     <option value="incorporation">Certificate of Incorporation</option>
                   </select>
                 </div>
-                {renderFileUpload('Business Proof Front', 'business_proof_image_front', true, 'Max 5MB, JPG/PNG/PDF')}
+                {renderFileUpload('Business Proof Front', 'business_proof_image_front', false, 'Max 5MB, JPG/PNG/PDF')}
                 {renderFileUpload('Business Proof Back', 'business_proof_image_back', false, 'Optional')}
               </div>
 
               <div className="document-section">
                 <h3>Identity Proof</h3>
-                {renderInputField('Aadhar Number', 'aadhar_number', 'text', true, <FiCreditCard />,)}
-                {renderFileUpload('Aadhar Front', 'aadhar_image_front', true)}
-                {renderFileUpload('Aadhar Back', 'aadhar_image_back', true)}
+                {renderInputField('Aadhar Number', 'aadhar_number', 'text', false, <FiCreditCard />,)}
+                {renderFileUpload('Aadhar Front', 'aadhar_image_front', false)}
+                {renderFileUpload('Aadhar Back', 'aadhar_image_back', false)}
               </div>
 
               <div className="document-section">
                 <h3>Tax Information</h3>
-                {renderInputField('PAN Number', 'pan_number', 'text', true, <FiFileText />)}
-                {renderFileUpload('PAN Front', 'pan_image_front', true)}
-                {renderFileUpload('PAN Back', 'pan_image_back', true)}
+                {renderInputField('PAN Number', 'pan_number', 'text', false, <FiFileText />)}
+                {renderFileUpload('PAN Front', 'pan_image_front', false)}
+                {renderFileUpload('PAN Back', 'pan_image_back', false)}
               </div>
 
               <div className="document-section">

@@ -439,24 +439,12 @@
     display: contents;
   }
 
-  //   .attribute-card {
-  //     background: white;
-  //     border: 1px solid #e5e7eb;
-  //     border-radius: 10px;
-  //     padding: 1.2rem;
-  //     box-shadow: $box-shadow;
-  //     display: flex;
-  //     flex-direction: column;
-  //     gap: 0.5rem;
-  //   }
-
-
   .attribute-card {
     background: white;
     border: 1px solid #fafafa;
     border-radius: 10px;
     padding: 1.2rem 1.2rem 1rem 1.2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: $box-shadow;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -484,12 +472,6 @@
   
     }
 
-  }
-
-  .attribute-card:hover {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 16px 32px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
   }
 
 
@@ -565,7 +547,7 @@
   }
 
   .toggle-switch.inactive {
-    background-color: $primary-color;
+    background-color: #e5e7eb;
     /* red-400 */
   }
 

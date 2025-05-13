@@ -1,213 +1,5 @@
-// 'use client'
-// import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-// import { useParams, useRouter } from 'next/navigation';
-// import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
-// import { toast } from 'react-toastify';
-// import Link from 'next/link';
-// import { FaArrowLeft } from 'react-icons/fa';
-// import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
-// import ItemsTab from '../ItemsTab';
-// import { useCompany } from '@/utils/Company';
-
-// const UpdateItem = () => {
-//   const { id } = useParams() as { id: string; };
-//   const { companySlug } = useCompany();
-//   const router = useRouter();
-//   const { data: item, error, isLoading } = useFetchStoreItemQuery(Number(id));
-//   const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
-//   const { data: vendors } = useFetchVendorsQuery();
-
-//   const [variants, setVariants] = useState<variations[]>([]);
-//   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-
-//   const [formData, setFormData] = useState<UpdateStoreItemRequest>({
-//     id: Number(id),
-//     name: '',
-//     quantity_count: 0,
-//     measurement: '',
-//     purchase_date: '',
-//     date_of_manufacture: '',
-//     date_of_expiry: '',
-//     description: '',
-//     brand_name: '',
-//     replacement: '',
-//     vendor_name: '',
-//     availability_stock: 0,
-//     variants: [],
-//     categories: [],
-//   });
-
-//   useEffect(() => {
-//     if (item) {
-//       setFormData({
-//         id: item.id,
-//         name: item.name || '',
-//         quantity_count: item.quantity_count || 0,
-//         measurement: item.measurement || '',
-//         purchase_date: item.purchase_date || '',
-//         date_of_manufacture: item.date_of_manufacture || '',
-//         date_of_expiry: item.date_of_expiry || '',
-//         description: item.description || '',
-//         brand_name: item.brand_name || '',
-//         replacement: item.replacement || '',
-//         cost_price: item.cost_price || 0,
-//         selling_price: item.selling_price || 0,
-//         availability_stock: item.availability_stock || 0,
-//         vendor_name: item.vendor_name || '',
-//         variants: item.variants || [],
-//         categories: item.categories || [],
-//       });
-//       setVariants(item.variants || []);
-//       setSelectedCategories(item.categories || []);
-//     }
-//   }, [item]);
-
-//   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({
-//       ...prev,
-//       [name]: name === 'cost_price' || name === 'selling_price' || name === 'availability_stock' || name === 'quantity_count'
-//         ? Number(value)
-//         : value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-
-//     try {
-//       await updateStoreItem({
-//         ...formData,
-//         id: Number(id),
-//         // If API supports categories and variants in update, include them
-//         categories: selectedCategories,
-//         variants: variants,
-//       }).unwrap(); // Adjust typing as needed for API shape
-
-//       toast.success('Item updated successfully');
-//       router.push(`/${companySlug}/store/view-item/${id}`);
-//     } catch (err) {
-//       console.error('Error updating item:', err);
-//       toast.error('Failed to update item');
-//     }
-//   };
-
-//   if (isLoading) return <p>Loading item details...</p>;
-//   if (error) return <p>Error loading item details.</p>;
-
-//   return (
-//     <div className="form-wrapper">
-//       <Link href={`/${companySlug}/store`} className='back-button'>
-//         <FaArrowLeft size={20} color='#fff' />
-//       </Link>
-//       <form onSubmit={handleSubmit} className="item-form">
-//         <div className="form-group">
-//           <label>Item Name*</label>
-//           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Quantity Count*</label>
-//           <input type="number" name="quantity_count" value={formData.quantity_count} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Measurement*</label>
-//           <input type="text" name="measurement" value={formData.measurement || ''} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Purchase Date*</label>
-//           <input type="date" name="purchase_date" value={formData.purchase_date || ''} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Date Of Manufacture*</label>
-//           <input type="date" name="date_of_manufacture" value={formData.date_of_manufacture || ''} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Date Of Expiry*</label>
-//           <input type="date" name="date_of_expiry" value={formData.date_of_expiry || ''} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Brand Name*</label>
-//           <input type="text" name="brand_name" value={formData.brand_name} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Replacement*</label>
-//           <input type="text" name="replacement" value={formData.replacement || ''} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Cost Price*</label>
-//           <input type="number" name="cost_price" value={formData.cost_price || 0} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Selling Price*</label>
-//           <input type="number" name="selling_price" value={formData.selling_price || 0} onChange={handleChange} required />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Availability Stock</label>
-//           <input type="number" name="availability_stock" value={formData.availability_stock || 0} onChange={handleChange} />
-//         </div>
-
-//         <div className="form-group">
-//           <label>Vendor Name</label>
-//           <select name="vendor_name" value={formData.vendor_name || ''} onChange={handleChange} required>
-//             <option value="">Select a Vendor</option>
-//             {vendors?.map((vendor) => (
-//               <option key={vendor.id} value={vendor.vendor_name}>
-//                 {vendor.vendor_name}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="form-group">
-//           <ItemsTab
-//             setVariants={setVariants}
-//             variations={variants}
-//             setSelectedCategories={setSelectedCategories}
-//             selectedCategories={selectedCategories}
-//           />
-//         </div>
-
-//         <div className="form-actions">
-//           <button type="submit" disabled={isUpdating}>
-//             {isUpdating ? 'Updating...' : 'Update Item'}
-//           </button>
-//           <button
-//             type="button"
-//             className="cancel-btn"
-//             onClick={() => router.push(`/${companySlug}/store/view-item/${id}`)}
-//           >
-//             Cancel
-//           </button>
-
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default UpdateItem;
-
-
-
-
-
-
-
-
-
-
 'use client';
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
@@ -217,14 +9,12 @@ import ImageUpload from '../../components/ImageUpload';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
-import ItemsTab from '../ItemsTab';
-import AddCategory from '../../add-item/AddCategory';
-interface Props {
-  setVariants: Dispatch<SetStateAction<variations[]>>;
-  variations: variations[];
-  setSelectedCategories: (categories: Category[]) => void;
-  selectedCategories: Category[];
-}
+import ItemsTab from '../../components/ItemsTab';
+import ItemCategories from '../../components/ItemCategories';
+import { FormInput } from '@/components/common/FormInput';
+import DatePickerField from '@/components/common/DatePickerField';
+import { FormSelect } from '@/components/common/FormSelect';
+
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
   const { companySlug } = useCompany();
@@ -233,28 +23,9 @@ const UpdateItem = () => {
   const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
-  
 
-  interface UpdateStoreItemRequest {
-    id: number;
-    name: string;
-    quantity_count: number;
-    measurement: string;
-    purchase_date: string;
-    date_of_manufacture: string;
-    date_of_expiry: string;
-    brand_name: string;
-    replacement: string;
-    category: string;
-    vendor_name: string;
-    availability_stock: number;
-    cost_price: number;
-    selling_price: number;
-    tax_id: number; // Added tax_id here
-    images: (File | string)[];
-    variants: variations[];
-    categories: Category[];
-  }
+  console.log('werwerwerwer', item)
+
   const [formData, setFormData] = useState<UpdateStoreItemRequest>({
     id: Number(id),
     name: '',
@@ -306,14 +77,14 @@ const UpdateItem = () => {
         cost_price: item.cost_price || 0,
         selling_price: item.selling_price || 0,
         tax_id: item.tax_id || 0,
-        images: item.images || [],
+        images: Array.isArray(item.images) ? item.images : [],
         variants: item.variants || [],
         categories: item.categories || [],
       });
       setVariants(item.variants || []);
       setSelectedCategories(item.categories || []);
     }
-  }, [item]);
+  }, [item, id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -322,8 +93,7 @@ const UpdateItem = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-      const newImages = selectedFiles.slice(0, 5);
+      const newImages = Array.from(e.target.files).slice(0, 5);
       const updatedImages = [...(formData.images || []), ...newImages].slice(-5);
       setFormData(prev => ({ ...prev, images: updatedImages }));
     }
@@ -347,6 +117,8 @@ const UpdateItem = () => {
     e.preventDefault();
 
     const form = new FormData();
+
+    // Append simple fields
     form.append('id', formData.id.toString());
     form.append('name', formData.name);
     form.append('quantity_count', formData.quantity_count.toString());
@@ -361,68 +133,37 @@ const UpdateItem = () => {
     form.append('availability_stock', formData.availability_stock.toString());
     form.append('cost_price', formData.cost_price.toString());
     form.append('selling_price', formData.selling_price.toString());
-    form.append('tax_id', formData.tax_id.toString());
-    
+    form.append('tax_id', (formData.tax_id ?? 0).toString());
 
-    // Ensure formData.images is always treated as an array.
-const images = Array.isArray(formData.images) ? formData.images : [];
+    // Append images
+    formData.images?.forEach((img, index) => {
+      if (img instanceof File) {
+        form.append(`images`, img);
+      } else if (typeof img === 'string') {
+        form.append(`existingImages[${index}]`, img);
+      }
 
-images.forEach((img) => {
-  if (img instanceof File) {
-    form.append('images[]', img);
-  } else if (typeof img === 'string') {
-    // Handle existing image URLs if needed
-    form.append('existing_images[]', img);
-  }
-});
-
-
-    // Attach variants
-    variants.forEach((variant, i) => {
-      form.append(`variants[${i}][price]`, variant.price.toString());
-
-      variant.attributes.forEach((attr, attrIndex) => {
-        form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
-        form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());
-      });
-
-      Object.entries(variant).forEach(([key, val]) => {
-        if (!['price', 'attributes'].includes(key)) {
-          form.append(`variants[${i}][${key}]`, val.toString());
-        }
-      });
     });
 
-    // Send category IDs
-    selectedCategories.forEach((category, index) => {
-      form.append(`categories[${index}]`, category.id.toString());
-      
+    // Append variants as JSON string
+    if (variants.length > 0) {
+      form.append('variants', JSON.stringify(variants));
+    }
+
+    // Append categories
+    selectedCategories.forEach(cat => {
+      form.append('categories[]', cat.id.toString());
     });
 
     try {
       await updateStoreItem({
         id: formData.id,
-        name: formData.name,
-        quantity_count: formData.quantity_count,
-        measurement: formData.measurement,
-        purchase_date: formData.purchase_date,
-        date_of_manufacture: formData.date_of_manufacture,
-        date_of_expiry: formData.date_of_expiry,
-        brand_name: formData.brand_name,
-        replacement: formData.replacement,
-        category: formData.category,
-        vendor_name: formData.vendor_name,
-        availability_stock: formData.availability_stock,
-        cost_price: formData.cost_price,
-        selling_price: formData.selling_price,
-        images: formData.images,
-        variants: variants,
-        tax_id: formData.tax_id,
-        categories: selectedCategories,
+        formData: form,
       }).unwrap();
-      router.push(`/${companySlug}/store/view-item/${id}`);
+      router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error updating item:', err);
+      // Add error handling here (e.g., show toast notification)
     }
   };
 
@@ -437,173 +178,140 @@ images.forEach((img) => {
       <form onSubmit={handleSubmit}>
         <div className='categories-filds-outer'>
           <div className='add-items-form-container'>
-            <div className='add-items-form-input-label-container'>
-              <label>Item Name*</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="e.g. Samsung Monitor 24 inch"
-                required
-              />
-            </div>
 
-            <div className='add-items-form-input-label-container'>
-              <label>Quantity Count*</label>
-              <input
-                type="number"
-                name="quantity_count"
-                value={formData.quantity_count === 0 ? '' : formData.quantity_count}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    quantity_count: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 100"
-                required
-              />
-            </div>
+            <FormInput
+              label="Item Name*"
+              name="name"
+              type="text"
+              value={formData.name || ''}
+              onChange={handleChange}
+              placeholder="e.g. Samsung Monitor 24 inch"
+              required
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Measurement</label>
-              <input
-                type="text"
-                name="measurement"
-                value={formData.measurement}
-                onChange={handleChange}
-                placeholder="e.g. kg, pcs, liters"
-              />
-            </div>
+            <FormInput
+              label="Quantity Count*"
+              name="quantity_count"
+              type="number"
+              value={formData.quantity_count === 0 || formData.quantity_count === undefined ? '' : formData.quantity_count}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  quantity_count: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 100"
+              required
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Purchase Date</label>
-              <input
-                type="date"
-                name="purchase_date"
-                value={formData.purchase_date}
-                onChange={handleChange}
-                placeholder="Select purchase date"
-                onFocus={(e) => e.target.showPicker?.()}
-              />
-            </div>
+            <FormInput
+              label="Measurement"
+              name="measurement"
+              value={formData.measurement || ''}
+              onChange={handleChange}
+              placeholder="e.g. kg, pcs, liters"
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Date Of Manufacture*</label>
-              <input
-                type="date"
-                name="date_of_manufacture"
-                value={formData.date_of_manufacture}
-                onChange={handleChange}
-                placeholder="Select manufacture date"
-                required
-              />
-            </div>
+            <DatePickerField
+              label="Purchase Date"
+              selectedDate={formData.purchase_date || null}
+              onChange={(date) => setFormData(prev => ({ ...prev, purchase_date: date }))}
+              maxDate={new Date()}
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Date Of Expiry</label>
-              <input
-                type="date"
-                name="date_of_expiry"
-                value={formData.date_of_expiry}
-                onChange={handleChange}
-                placeholder="Select expiry date"
-              />
-            </div>
+            <DatePickerField
+              label="Date Of Manufacture*"
+              selectedDate={formData.date_of_manufacture || null}
+              onChange={(date) => setFormData(prev => ({ ...prev, date_of_manufacture: date }))}
+              maxDate={new Date()}
+              required
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Brand Name*</label>
-              <input
-                type="text"
-                name="brand_name"
-                value={formData.brand_name}
-                onChange={handleChange}
-                placeholder="e.g. Samsung, LG"
-                required
-              />
-            </div>
+            <DatePickerField
+              label="Date Of Expiry"
+              selectedDate={formData.date_of_expiry || null}
+              onChange={(date) => setFormData(prev => ({ ...prev, date_of_expiry: date }))}
+              minDate={new Date()}
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Replacement</label>
-              <input
-                type="text"
-                name="replacement"
-                value={formData.replacement}
-                onChange={handleChange}
-                placeholder="e.g. Replace after 2 years"
-              />
-            </div>
+            <FormInput
+              label="Brand Name*"
+              name="brand_name"
+              value={formData.brand_name || ''}
+              onChange={handleChange}
+              placeholder="e.g. Samsung, LG"
+              required
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Cost Price*</label>
-              <input
-                type="number"
-                name="cost_price"
-                value={formData.cost_price === 0 ? '' : formData.cost_price}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    cost_price: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 250.00"
-                required
-              />
-            </div>
+            <FormInput
+              label="Replacement"
+              name="replacement"
+              value={formData.replacement || ''}
+              onChange={handleChange}
+              placeholder="e.g. Replace after 2 years"
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Selling Price*</label>
-              <input
-                type="number"
-                name="selling_price"
-                value={formData.selling_price === 0 ? '' : formData.selling_price}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    selling_price: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 300.00"
-                required
-              />
-            </div>
 
-            <div className='add-items-form-input-label-container'>
-              <label>Availability Stock</label>
-              <input
-                type="number"
-                name="availability_stock"
-                value={formData.availability_stock === 0 ? '' : formData.availability_stock}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    availability_stock: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 50"
-              />
-            </div>
+            <FormInput
+              label="Cost Price*"
+              name="cost_price"
+              type="number"
+              value={formData.cost_price === 0 || formData.cost_price === undefined ? '' : formData.cost_price}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  cost_price: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 250.00"
+              required
+            />
 
-            <div className='add-items-form-input-label-container'>
-              <label>Tax</label>
-              <select
+            <FormInput
+              label="Selling Price*"
+              name="selling_price"
+              type="number"
+              value={formData.selling_price === 0 || formData.selling_price === undefined ? '' : formData.selling_price}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  selling_price: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 300.00"
+              required
+            />
+
+            <FormInput
+              label="Availability Stock"
+              name="availability_stock"
+              type="number"
+              value={formData.availability_stock === 0 || formData.availability_stock === undefined ? '' : formData.availability_stock}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  availability_stock: isNaN(val) ? 0 : val,
+                }));
+              }}
+              placeholder="e.g. 50"
+            />
+
+            {taxesData?.data && (
+              <FormSelect<number>
+                label="Tax"
                 name="tax_id"
-                value={formData.tax_id}
-                onChange={(e) => setFormData(prev => ({ ...prev, tax_id: parseInt(e.target.value) }))}
-              >
-                <option value="">Select Tax</option>
-                {taxesData?.data?.map((tax: Tax) => (
-                  <option key={tax.id} value={tax.id}>
-                    {tax.name} - {tax.rate}%
-                  </option>
-                ))}
-              </select>
-            </div>
+                value={formData.tax_id ?? 0}
+                onChange={(value) => setFormData(prev => ({ ...prev, tax_id: value }))}
+                options={taxesData.data.map((tax: Tax) => ({
+                  value: tax.id,
+                  label: `${tax.name} - ${tax.rate}%`
+                }))}
+              />
+            )}
 
             <div className='add-items-form-input-label-container'>
               <label>Vendor Name*</label>
@@ -621,30 +329,21 @@ images.forEach((img) => {
             </div>
 
             <ImageUpload
-              images={
-                Array.isArray(formData.images)
-                  ? formData.images.filter((img): img is File => img instanceof File)
-                  : []
-              }
+              images={formData.images ?? []}
               handleImageChange={handleImageChange}
               handleClearImages={handleClearImages}
               handleRemoveImage={handleRemoveImage}
             />
 
-
             <div>
               <ItemsTab
-                setVariants={setVariants}
-                variations={variants} setSelectedCategories={function (categories: Category[]): void {
-                  throw new Error('Function not implemented.');
-                  }}
-                  selectedCategories={selectedCategories}
-                />
+                setVariants={setVariants} variants={variants}
+              />
             </div>
           </div>
 
-          <AddCategory
-            onCategoryChange={setSelectedCategories}
+          <ItemCategories
+            setSelectedCategories={setSelectedCategories}
             selectedCategories={selectedCategories}
           />
         </div>

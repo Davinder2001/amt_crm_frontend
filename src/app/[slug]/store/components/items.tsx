@@ -60,7 +60,7 @@ const Items: React.FC = () => {
 
   const allColumns = [
     // { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
-    { label: 'HSN Code', key: 'item_code' as keyof StoreItem },
+    // { label: 'HSN Code', key: 'item_code' as keyof StoreItem },
     { label: 'Name', key: 'name' as keyof StoreItem },
     // { label: 'Purchase Date', key: 'purchase_date' as keyof StoreItem },
     { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },

@@ -88,7 +88,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useChangePasswordMutation } from '@/slices/auth/authApi';
-import { FaCheck, FaEye, FaEyeSlash, FaKey, FaLock } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaKey, FaLock } from 'react-icons/fa';
 import { changepass } from '@/assets/useImage';
 import { FaCircleCheck } from 'react-icons/fa6';
 

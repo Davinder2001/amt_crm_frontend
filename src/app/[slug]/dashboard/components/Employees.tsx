@@ -20,7 +20,7 @@ const Employees = () => {
                 <button className="add-btn" onClick={() => router.push(`/${companySlug}/hr/add-employee`)}><FaPlusCircle size={16} color='#009693' /></button>
             </div>
             <ul className="employee-list">
-                {employeeList.slice(0, 5).map((emp: any, i: number) => (
+                {employeeList.slice(0, 5).map((emp: Employee, i: number) => (
                     <li key={i} className="employee-item">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div className="avatar">

@@ -7,7 +7,7 @@ import {
 import { FaSearch } from 'react-icons/fa'; // Importing search icon from react-icons
 
 interface Props {
-  onCategoryChange: (categories: Category[]) => void;
+  setSelectedCategories: (categories: Category[]) => void;
   selectedCategories: Category[];
 }
 
@@ -17,6 +17,8 @@ type CategoryNode = {
   name: string;
   parent_id: number | null;
   children?: CategoryNode[];
+  created_at?: string;
+  updated_at?: string;
 };
 
 const flattenCategories = (
@@ -53,7 +55,7 @@ const filterCategories = (categories: CategoryNode[], term: string): CategoryNod
     .filter(Boolean) as CategoryNode[];
 };
 
-const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) => {
+const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
@@ -114,10 +116,10 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
         name: cat.name,
         company_id: cat.company_id,
         parent_id: cat.parent_id,
-        created_at: '',
-        updated_at: '',
+        created_at: cat.created_at || new Date().toISOString(),
+        updated_at: cat.updated_at || new Date().toISOString(), 
       }));
-    onCategoryChange(selectedCats);
+    setSelectedCategories(selectedCats);
     setHasChanges(false);
   };
 
@@ -177,15 +179,15 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
             <>
               {/* Search Bar with Icon */}
               <div className=" search-bar-group">
-                  <FaSearch className="search-icon" color=' #009693' />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search categories..."
-                    className="input-fields"
-                  />
-                
+                <FaSearch className="search-icon" color=' #009693' />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search categories..."
+                  className="input-fields"
+                />
+
               </div>
 
               <div className="categories-list-outer-div">
@@ -269,4 +271,4 @@ const AddCategory: React.FC<Props> = ({ onCategoryChange, selectedCategories }) 
   );
 };
 
-export default AddCategory;
+export default ItemCategories;

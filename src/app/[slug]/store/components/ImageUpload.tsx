@@ -4,7 +4,7 @@ import { FiUpload } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 interface ImageUploadProps {
-    images: File[] | null;
+    images: (string | File)[];
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleClearImages: () => void;
     handleRemoveImage: (index: number) => void;
@@ -59,7 +59,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                             <div key={index} className="preview-image-wrapper">
                                 <div className="preview-image">
                                     <Image
-                                        src={URL.createObjectURL(file)}
+                                        src={typeof file === 'string' ? file : URL.createObjectURL(file)}
                                         alt={`preview-${index}`}
                                         width={50}
                                         height={50}

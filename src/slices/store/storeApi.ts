@@ -36,15 +36,14 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Update a store item
-    updateStoreItem: builder.mutation<StoreItem, UpdateStoreItemRequest>({
-      query: ({ id, ...patch }) => ({
+    updateStoreItem: builder.mutation<StoreItem, { id: number; formData: FormData }>({
+      query: ({ id, formData }) => ({
         url: `store/items/${id}`,
-        method: "PUT",
-        body: patch,
+        method: 'PUT',
+        body: formData,
       }),
-      invalidatesTags: ["Store"],
+      invalidatesTags: ['Store'],
     }),
-
 
     // Bulk create store items
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({

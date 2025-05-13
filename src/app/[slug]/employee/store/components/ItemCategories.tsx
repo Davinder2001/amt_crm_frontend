@@ -4,6 +4,7 @@ import {
   useCreateCategoryMutation,
   useFetchCategoriesQuery,
 } from '@/slices/store/storeApi';
+import { FaSearch } from 'react-icons/fa'; // Importing search icon from react-icons
 
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
@@ -16,6 +17,8 @@ type CategoryNode = {
   name: string;
   parent_id: number | null;
   children?: CategoryNode[];
+  created_at?: string;
+  updated_at?: string;
 };
 
 const flattenCategories = (
@@ -32,15 +35,35 @@ const flattenCategories = (
   }, [] as Array<CategoryNode & { level: number }>);
 };
 
-const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
+const filterCategories = (categories: CategoryNode[], term: string): CategoryNode[] => {
+  if (!term.trim()) return categories;
+
+  const lowerTerm = term.toLowerCase();
+
+  return categories
+    .map((cat) => {
+      const matched = cat.name.toLowerCase().includes(lowerTerm);
+      const filteredChildren = filterCategories(cat.children || [], term);
+      if (matched || filteredChildren.length > 0) {
+        return {
+          ...cat,
+          children: filteredChildren,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean) as CategoryNode[];
+};
+
+const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
-  const [createCategory, { isLoading: isCreating }] =
-    useCreateCategoryMutation();
+  const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
   const [selectedListCategories, setSelectedListCategories] = useState<number[]>([]);
   const [selectedParents, setSelectedParents] = useState<number[]>([]);
   const [name, setName] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleListCheckboxChange = (id: number) => {
     setHasChanges(true);
@@ -60,7 +83,6 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       setSelectedListCategories(selectedCategories.map((cat) => cat.id));
     }
   }, [selectedCategories]);
-
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -85,22 +107,36 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     }
   };
 
-  const renderCategoriesWithChildren = (
-    cats: CategoryNode[],
-    level: number = 0
-  ) =>
+  const handleDoneClick = () => {
+    const allFlattened = flattenCategories(data?.data || []);
+    const selectedCats = allFlattened
+      .filter(cat => selectedListCategories.includes(cat.id))
+      .map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+        company_id: cat.company_id,
+        parent_id: cat.parent_id,
+        created_at: cat.created_at || new Date().toISOString(),
+        updated_at: cat.updated_at || new Date().toISOString(), 
+      }));
+    setSelectedCategories(selectedCats);
+    setHasChanges(false);
+  };
+
+  const renderCategoriesWithChildren = (cats: CategoryNode[], level: number = 0) =>
     cats.map((cat) => (
       <div
         key={cat.id}
         style={{ marginLeft: `${level * 20}px`, marginBottom: '6px' }}
+        className='category-input-lable-outer'
       >
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <label className="modern-box-checkbox">
           <input
             type="checkbox"
             checked={selectedListCategories.includes(cat.id)}
             onChange={() => handleListCheckboxChange(cat.id)}
-            style={{ width: 'auto' }}
           />
+          <span className="box"></span>
           {cat.name}
         </label>
         {(cat.children ?? []).length > 0 &&
@@ -118,13 +154,13 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           marginLeft: `${cat.level * 20}px`,
         }}
       >
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <label className="modern-box-checkbox">
           <input
             type="checkbox"
             checked={selectedParents.includes(cat.id)}
             onChange={() => handleParentCheckboxChange(cat.id)}
-            style={{ width: 'auto' }}
           />
+          <span className="box"></span>
           {cat.name}
         </label>
       </div>
@@ -132,87 +168,76 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   };
 
   return (
-    <div style={{ maxWidth: '500px', padding: '1rem' }}>
+    <div className="category-container">
       {!isCreatingNewCategory ? (
-        <div>
-          <h2>All Categories</h2>
+        <>
+          <h2 className="category-title">All Categories</h2>
+
           {isLoading && <p>Loading categories...</p>}
+
           {!isLoading && data?.data?.length ? (
-            <div>
-              {renderCategoriesWithChildren(data.data as CategoryNode[])}
+            <>
+              {/* Search Bar with Icon */}
+              <div className=" search-bar-group">
+                <FaSearch className="search-icon" color=' #009693' />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search categories..."
+                  className="input-fields"
+                />
 
-              {hasChanges && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const allFlattened = flattenCategories(data?.data || []) as (Category & { level: number })[];
+              </div>
 
-                    const selectedCats: Category[] = allFlattened
-                      .filter(cat => selectedListCategories.includes(cat.id))
-                      .map(({ ...rest }) => rest);
-
-                    setSelectedCategories(selectedCats);
-                    setHasChanges(false);
-                  }}
-                  style={{
-                    padding: '10px 16px',
-                    backgroundColor: '#4caf50',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    marginTop: '20px',
-                    display: 'block',
-                  }}
-                >
-                  Done
-                </button>
-              )}
-            </div>
+              <div className="categories-list-outer-div">
+                {renderCategoriesWithChildren(
+                  filterCategories(data.data as CategoryNode[], searchTerm)
+                )}
+              </div>
+            </>
           ) : (
             !isLoading && <p>No categories found.</p>
           )}
-          <button
-            type="button"
-            onClick={() => setIsCreatingNewCategory(true)}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#009693',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginTop: '20px',
-            }}
-          >
-            Create New Category
-          </button>
-        </div>
+
+          <div className='done-category-button-outer'>
+            <button
+              type="button"
+              onClick={() => setIsCreatingNewCategory(true)}
+              className="buttons create-button"
+            >
+              Create New Category
+            </button>
+
+            {hasChanges && (
+              <button
+                type="button"
+                onClick={handleDoneClick}
+                className="category-button done-button"
+              >
+                Done
+              </button>
+            )}
+          </div>
+        </>
       ) : (
         <div>
-          <h2>Create New Category</h2>
+          <h2 className="category-title">Create New Category</h2>
 
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="form-group">
             <label>Category Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter category name"
-              style={{
-                display: 'block',
-                width: '100%',
-                padding: '8px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                marginTop: '4px',
-              }}
+              className="input-field"
             />
           </div>
 
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="form-group">
             <label>Select Parent Category</label>
-            <div style={{ marginTop: '8px' }}>
+            <div className="parent-category-list">
               {isLoading && <p>Loading...</p>}
               {!isLoading && data?.data?.length ? (
                 renderParentCategories(data.data as CategoryNode[])
@@ -222,40 +247,28 @@ const UpdateCategory: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isCreating}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#009693',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-            }}
-          >
-            {isCreating ? 'Creating...' : 'Create Category'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsCreatingNewCategory(false)}
-            style={{
-              padding: '10px 16px',
-              backgroundColor: '#ccc',
-              color: '#000',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              marginLeft: '10px',
-            }}
-          >
-            Cancel
-          </button>
+          <div className="button-group">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isCreating}
+              className="buttons create-button"
+            >
+              {isCreating ? 'Creating...' : 'Create Category'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsCreatingNewCategory(false)}
+              className="buttons cancel-button"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default UpdateCategory;
+export default ItemCategories;

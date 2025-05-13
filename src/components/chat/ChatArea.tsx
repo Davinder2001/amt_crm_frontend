@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaSmile, FaEllipsisV, FaPaperclip, FaArrowLeft, FaArrowDown } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import { useFetchMessagesQuery, useSendMessageMutation } from '@/slices/chat/chatApi';
+import { useDeleteSingleMessageMutation, useFetchMessagesQuery, useSendMessageMutation } from '@/slices/chat/chatApi';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -33,6 +33,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
     const selectedUserId = selectedUser?.other_participant?.user?.id;
+    const [deleteMessage] = useDeleteSingleMessageMutation();
 
     const {
         data: messagesData,
@@ -41,6 +42,17 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     } = useFetchMessagesQuery(selectedUserId!, {
         skip: !selectedUserId,
     });
+
+    const handleDelete = async (messageId: number | string) => {
+        if (!confirm("Are you sure you want to delete this message?")) return;
+
+        try {
+            await deleteMessage(messageId).unwrap();
+            await refetchMessages();
+        } catch (error) {
+            console.error("Failed to delete message", error);
+        }
+    };
 
     const formatTime = (timestamp: string) => {
         try {
@@ -208,10 +220,29 @@ const ChatArea: React.FC<ChatAreaProps> = ({
                         return (
                             <React.Fragment key={msg.id}>
                                 {renderDateLabel(msg, prevDate)}
-                                <div className={`message ${msg.sent_by_me ? 'sent' : 'received'}`}>
+                                <div className={`message ${msg.sent_by_me ? 'sent' : 'received'}`}
+                                    onContextMenu={(e) => {
+                                        e.preventDefault();
+                                        if (isMobile) handleDelete(msg.id);
+                                    }}
+                                    onTouchStart={(e) => {
+                                        if (isMobile) {
+                                            const timeout = setTimeout(() => handleDelete(msg.id), 800);
+                                            const clear = () => clearTimeout(timeout);
+                                            e.currentTarget.addEventListener('touchend', clear, { once: true });
+                                            e.currentTarget.addEventListener('touchmove', clear, { once: true });
+                                        }
+                                    }}>
                                     <div className="message-content">
                                         <p>{msg.body}</p>
-                                        <span className="message-time">{formatTime(msg.created_at)}</span>
+                                        <span className="message-time">{formatTime(msg.created_at)}
+                                            {!isMobile && msg.sent_by_me && (
+                                                <div className="message-options">
+                                                    <FaEllipsisV onClick={() => handleDelete(msg.id)} color='#fff' />
+                                                </div>
+                                            )}
+                                        </span>
+
                                     </div>
                                 </div>
                             </React.Fragment>

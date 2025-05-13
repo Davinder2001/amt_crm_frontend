@@ -1,4 +1,5 @@
 'use client';
+import { useDeleteAllMessagesMutation } from '@/slices/chat/chatApi';
 import React from 'react';
 import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa';
 import Skeleton from 'react-loading-skeleton';
@@ -33,6 +34,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     onToggleUsers,
     onSearchChange,
 }) => {
+
+    const [deleteMessages] = useDeleteAllMessagesMutation();
+
     const formatTime = (timestamp: string) => {
         try {
             const date = new Date(timestamp);

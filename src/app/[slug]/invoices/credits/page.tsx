@@ -1,9 +1,10 @@
 import React from 'react'
+import CreditList from '../components/creditList'
 
 const Page = () => {
   return (
     <>
-    <h2>Credits </h2>
+    <CreditList/>
     </>
   )
 }

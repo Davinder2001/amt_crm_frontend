@@ -111,6 +111,9 @@ interface ChatMessage {
     created_at: string;
 }
 
+interface DeleteMessage {
+    messageId: number | string;
+}
 // API response for chat with a specific user
 interface ChatWithUserResponse {
     status: string;

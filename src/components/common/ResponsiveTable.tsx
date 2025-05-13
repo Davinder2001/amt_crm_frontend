@@ -67,36 +67,41 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
         <table>
           <thead>
             <tr>
+              <th>S.N.</th>
               {columns.map((col, i) => (
                 <th key={i}>{col.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item, index) => (
-              <tr key={index} onClick={(e) => {
-                const target = e.target as HTMLElement;
-                if (
-                  target.closest('button') ||
-                  target.closest('svg') ||
-                  target.closest('.action-icon') ||
-                  target.closest('.ellipsis-icon')
-                ) {
-                  return;
-                }
-                if (onView) onView(item.id);
-              }}>
-                {columns.map((col, i) => (
-                  <td key={i}>
-                    {col.render
-                      ? col.render(item, index)
-                      : col.key
-                        ? String(item[col.key])
-                        : ''}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {currentData.map((item, index) => {
+              const serialNumber = startIndex + index + 1;
+              return (
+                <tr key={index} onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (
+                    target.closest('button') ||
+                    target.closest('svg') ||
+                    target.closest('.action-icon') ||
+                    target.closest('.ellipsis-icon')
+                  ) {
+                    return;
+                  }
+                  if (onView) onView(item.id);
+                }}>
+                  <td>{serialNumber}</td>
+                  {columns.map((col, i) => (
+                    <td key={i}>
+                      {col.render
+                        ? col.render(item, index)
+                        : col.key
+                          ? String(item[col.key])
+                          : ''}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

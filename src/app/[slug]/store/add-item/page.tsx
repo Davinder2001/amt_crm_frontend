@@ -249,11 +249,11 @@ const AddItem: React.FC = () => {
               handleRemoveImage={handleRemoveImage}
             />
 
-            <ItemsTab onChange={setVariants} variations={variants} />
+            <ItemsTab setVariants={setVariants} variants={variants} />
           </div>
 
           <ItemCategories
-            onCategoryChange={setSelectedCategories}
+            setSelectedCategories={setSelectedCategories}
             selectedCategories={selectedCategories}
           />
         </div>

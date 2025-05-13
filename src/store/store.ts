@@ -18,7 +18,7 @@ import notificationApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
-import chatReducer from '@/slices/chat/chatCreateSocket';
+// import chatReducer from '@/slices/chat/chatCreateSocket';
 
 
 const store = configureStore({

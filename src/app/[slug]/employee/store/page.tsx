@@ -2,7 +2,7 @@
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
 import Items from './components/items';
-import StoreNavigation from './components/storeNavigation';
+// import StoreNavigation from './components/storeNavigation';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
@@ -12,7 +12,7 @@ const Page = () => {
   }, [setTitle]);
   return (
     <>
-      <StoreNavigation/>
+      {/* <StoreNavigation/> */}
       <Items/>
     </>
   )

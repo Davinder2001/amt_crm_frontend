@@ -180,7 +180,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -190,6 +190,8 @@ import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
+import Link from 'next/link'
 
 const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -197,6 +199,27 @@ const ViewUserPage: React.FC = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { companySlug } = useCompany();
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     setTitle('Employee Profile');
@@ -237,7 +260,12 @@ const ViewUserPage: React.FC = () => {
 
   return (
     <div className="employee-profile-container">
+      <div className='employee-profile-nav'>
+        <Link href={`/${companySlug}/hr/status-view`} className='back-button'>
+        <FaArrowLeft size={20} color='#fff' />
+      </Link>
       <HrNavigation />
+      </div>
       <div className="employee-profile-inner-container">
         <div className="profile-header">
           <div className="profile-avatar">
@@ -264,7 +292,7 @@ const ViewUserPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="profile-actions">
+            {/* <div className="profile-actions">
               <button
                 onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
                 className="btn primary"
@@ -274,7 +302,53 @@ const ViewUserPage: React.FC = () => {
               <button onClick={() => setShowConfirm(true)} className="btn danger">
                 Delete Profile
               </button>
+            </div> */}
+
+            <div className="profile-actions">
+              {/* Desktop Buttons */}
+              <div className="action-buttons desktop-only">
+                <button
+                  onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
+                  className="btn primary"
+                >
+                  <FaEdit />Edit Profile
+                </button>
+                <button onClick={() => setShowConfirm(true)} className="btn danger">
+                  <FaTrash /> Delete Profile
+                </button>
+              </div>
+
+              {/* Mobile Menu */}
+              <div className="mobile-menu mobile-only" ref={menuRef}>
+                <button className="dots-button" onClick={() => setMenuOpen(!menuOpen)}>
+                  ⋮
+                </button>
+                {menuOpen && (
+                  <div className="dropdown-menu">
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`);
+                      }}
+                      className='dropdown-edit-btn'
+                    >
+                      <FaEdit /> Edit Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setShowConfirm(true);
+                      }}
+                      className='dropdown-delete-btn'
+                    >
+                      <FaTrash /> Delete Profile
+                    </button>
+                  </div>
+                )}
+              </div>
+
             </div>
+
           </div>
         </div>
 

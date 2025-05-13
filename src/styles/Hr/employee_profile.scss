@@ -1,235 +1,406 @@
- @use '../variables' as *;
+@use '../variables' as *;
 
- .employee-profile-container {
+.employee-profile-container {
+  color: $para-color;
 
-   color: $para-color;
+  .employee-profile-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-   .employee-profile-inner-container {
-     background: $white;
-     border-radius: $border-radius;
-     box-shadow: $secondary-shadow;
-     padding: 20px;
 
-     .loading-spinner {
-       display: flex;
-       justify-content: center;
-       align-items: center;
-       height: 200px;
-       font-size: $font-size-large;
-       color: $primary-color;
-     }
+  .employee-profile-inner-container {
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $secondary-shadow;
+    padding: 20px;
 
-     .not-found {
-       text-align: center;
-       padding: 40px;
-       font-size: $font-size-large;
-       color: $danger-color;
-     }
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      font-size: $font-size-large;
+      color: $primary-color;
+    }
 
-     .profile-header {
-       display: flex;
-       align-items: center;
-       gap: 30px;
-       padding: 0px 15px 15px 15px;
+    .not-found {
+      text-align: center;
+      padding: 40px;
+      font-size: $font-size-large;
+      color: $danger-color;
+    }
 
-       .profile-avatar {
-         .avatar-image {
-           width: 100px;
-           height: 100px;
-           border-radius: 50%;
-           object-fit: cover;
-           border: 3px solid rgba($primary-color, 0.1);
-         }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      padding: 0px 15px 15px 15px;
 
-         .avatar-initial {
-           width: 100px;
-           height: 100px;
-           border-radius: 50%;
-           background: linear-gradient(135deg, rgba($primary-color, 0.2), rgba($orange-color, 0.2));
-           display: flex;
-           justify-content: center;
-           align-items: center;
-           font-size: 50px;
-           font-weight: $font-weight-bold;
-           color: $primary-color;
-         }
-       }
+      .profile-avatar {
+        .avatar-image {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid rgba($primary-color, 0.1);
+        }
 
-       .profile-header-content {
-         flex: 1;
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
+        .avatar-initial {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, rgba($primary-color, 0.2), rgba($orange-color, 0.2));
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 50px;
+          font-weight: $font-weight-bold;
+          color: $primary-color;
+        }
+      }
 
-         .profile-title {
-           h1 {
-             margin: 0;
-             font-size: $font-size-extra-large;
-             font-weight: $font-weight-semi-bold;
-             color: $dark-color;
-           }
+      .profile-header-content {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-           .profile-meta {
-             margin-top: 10px;
-             display: flex;
-             gap: 10px;
+        .profile-title {
+          h1 {
+            margin: 0;
+            font-size: $font-size-extra-large;
+            font-weight: $font-weight-semi-bold;
+            color: $dark-color;
+          }
 
-             .badge {
-               padding: 4px 12px;
-               border-radius: 20px;
-               font-size: $font-size-small;
-               font-weight: $font-weight-medium;
+          .profile-meta {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
 
-               &.role {
-                 background: rgba($primary-color, 0.1);
-                 color: $primary-color;
-               }
+            .badge {
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: $font-size-small;
+              font-weight: $font-weight-medium;
 
-               &.status {
-                 background: rgba($success-color, 0.1);
-                 color: $success-color;
-               }
-             }
-           }
-         }
+              &.role {
+                background: rgba($primary-color, 0.1);
+                color: $primary-color;
+              }
 
-         .profile-actions {
-           display: flex;
-           gap: 15px;
+              &.status {
+                background: rgba($success-color, 0.1);
+                color: $success-color;
+              }
+            }
+          }
+        }
 
-           .btn {
-             padding: 8px 20px;
-             border-radius: $border-radius;
-             font-weight: $font-weight-medium;
-             cursor: pointer;
-             transition: $transition;
-             border: none;
-             font-size: $font-size-small;
+        .profile-actions {
+          display: flex;
+          gap: 15px;
 
-             &.primary {
-               background: $primary-color;
-               color: $white;
+          .btn {
+            padding: 8px 20px;
+            border-radius: $border-radius;
+            font-weight: $font-weight-medium;
+            cursor: pointer;
+            transition: $transition;
+            border: none;
+            font-size: $font-size-small;
+            display: flex;
+            align-items: center;
+            gap: 5px;
 
-               &:hover {
-                 background: darken($primary-color, 10%);
-               }
-             }
+            &.primary {
+              background: $primary-color;
+              color: $white;
 
-             &.danger {
-               background: rgba($danger-color, 0.1);
-               color: $danger-color;
+              &:hover {
+                background: darken($primary-color, 10%);
+              }
+            }
 
-               &:hover {
-                 background: rgba($danger-color, 0.2);
-               }
-             }
-           }
-         }
-       }
-     }
+            &.danger {
+              background: rgba($danger-color, 0.1);
+              color: $danger-color;
 
-     .profile-grid {
-       display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-       gap: 20px;
+              &:hover {
+                background: rgba($danger-color, 0.2);
+              }
+            }
+          }
+        }
+      }
+    }
 
-       .profile-card {
-         background: $white;
-         border-radius: $border-radius;
-         padding: 10px;
-         box-shadow: $secondary-shadow;
-         transition: $transition;
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
 
-         &:hover {
-           transform: translateY(-3px);
-           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-         }
+      .profile-card {
+        background: $white;
+        border-radius: $border-radius;
+        padding: 10px;
+        box-shadow: $secondary-shadow;
+        transition: $transition;
 
-         .card-title {
-           display: flex;
-           align-items: center;
-           gap: 10px;
-           margin-top: 0;
-           margin-bottom: 20px;
-           font-size: $font-size-large;
-           font-weight: $font-weight-semi-bold;
-           color: $dark-color;
-           padding-bottom: 10px;
-           border-bottom: 1px solid $border-color;
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-           i {
-             color: $primary-color;
-           }
-         }
+        .card-title {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 0;
+          margin-bottom: 20px;
+          font-size: $font-size-large;
+          font-weight: $font-weight-semi-bold;
+          color: $dark-color;
+          padding-bottom: 10px;
+          border-bottom: 1px solid $border-color;
 
-         .info-grid {
-           display: grid;
-           grid-template-columns: 1fr 1fr;
-           gap: 15px;
+          i {
+            color: $primary-color;
+          }
+        }
 
-           .info-item {
-             .info-label {
-               display: block;
-               font-size: $font-size-small;
-               color: $gray-color;
-               margin-bottom: 5px;
-               font-weight: $font-weight-medium;
-             }
+        .info-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
 
-             .info-value {
-               display: block;
-               font-size: $font-size-one;
-               font-weight: $font-weight-regular;
-               color: $para-color;
-               word-break: break-word;
-             }
-           }
-         }
-       }
+          .info-item {
+            .info-label {
+              display: block;
+              font-size: $font-size-small;
+              color: $gray-color;
+              margin-bottom: 5px;
+              font-weight: $font-weight-medium;
+            }
 
-       .basic-info {
-         border-top: 3px solid $primary-color;
-       }
+            .info-value {
+              display: block;
+              font-size: $font-size-one;
+              font-weight: $font-weight-regular;
+              color: $para-color;
+              word-break: break-word;
+            }
+          }
+        }
+      }
 
-       .employment-info {
-         border-top: 3px solid $orange-color;
-       }
+      .basic-info {
+        border-top: 3px solid $primary-color;
+      }
 
-       .personal-info {
-         border-top: 3px solid $success-color;
-       }
+      .employment-info {
+        border-top: 3px solid $orange-color;
+      }
 
-       .financial-info {
-         border-top: 3px solid $warning-color;
-       }
-     }
-   }
- }
+      .personal-info {
+        border-top: 3px solid $success-color;
+      }
 
- @media (max-width: 768px) {
-   .employee-profile-container {
-     .profile-header {
-       flex-direction: column;
-       text-align: center;
-       padding: 20px;
+      .financial-info {
+        border-top: 3px solid $warning-color;
+      }
+    }
+  }
+}
 
-       .profile-header-content {
-         flex-direction: column;
-         gap: 20px;
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
 
-         .profile-actions {
-           width: 100%;
-           justify-content: center;
-         }
-       }
-     }
+.desktop-only {
+  display: flex;
+  gap: 15px;
+}
 
-     .profile-grid {
-       grid-template-columns: 1fr;
+.mobile-only {
+  display: none;
+}
 
-       .info-grid {
-         grid-template-columns: 1fr !important;
-       }
-     }
-   }
- }
+.dots-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 27px;
+  font-weight: 700;
+  color: $primary-color;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  border-radius: 4px;
+  width: 150px;
+  padding: 10px 0px;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+
+  &:active {
+    background-color: rgb(241, 249, 249);
+    border-right: 2px solid $primary-color;
+  }
+
+  svg {
+    color: $success-color;
+  }
+
+
+}
+
+.dropdown-delete-btn {
+  color: $danger-color;
+
+  svg {
+    color: $danger-color !important;
+  }
+
+}
+
+.dropdown-edit-btn {
+  border-bottom: 1px solid gray;
+  color: green;
+}
+
+
+
+
+
+
+
+@media (max-width: 668px) {
+  .employee-profile-container {
+    .employee-profile-inner-container {
+      padding: 10px;
+
+      .profile-grid {
+        gap: 20px;
+      }
+
+      .profile-header {
+        gap: 20px;
+        padding: 0px 0px 20px;
+
+        .profile-avatar {
+          .avatar-initial {
+            width: 80px;
+            height: 80px;
+          }
+        }
+
+        .profile-header-content {
+          .profile-title {
+            h1 {
+              font-size: 22px;
+            }
+
+            .profile-meta {
+              .badge {
+                font-size: 12px;
+              }
+            }
+          }
+
+          .profile-actions {
+            .btn {
+              padding: 10px;
+              font-size: 13px;
+
+              &.primary {
+                color: #fff;
+                background: #009693;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 525px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .employee-profile-container {
+    .employee-profile-inner-container {
+      .profile-header {
+        .profile-header-content {
+          align-items: self-start;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 425px) {
+  .employee-profile-container {
+    .employee-profile-inner-container {
+      .profile-header {
+        .profile-avatar {
+          .avatar-initial {
+            width: 70px;
+            height: 70px;
+          }
+        }
+      }
+
+
+
+      .profile-grid {
+        display: flex;
+        flex-direction: column;
+
+        .profile-card {
+          &:hover {
+            transform: unset;
+          }
+
+          .info-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            display: grid;
+          }
+
+          .card-title {
+            flex-direction: column;
+          }
+        }
+      }
+    }
+  }
+}

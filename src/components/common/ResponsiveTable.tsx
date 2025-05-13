@@ -7,6 +7,7 @@ import {
   FaTrash,
   FaExternalLinkAlt,
 } from 'react-icons/fa';
+import ConfirmDialog from './ConfirmDialog'; // adjust path if needed
 
 type Column<T> = {
   label: string;
@@ -37,6 +38,10 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [openActionCard, setOpenActionCard] = useState<number | null>(null);
 
+
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentData = data.slice(startIndex, endIndex);
@@ -59,6 +64,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const toggleExpand = (index: number) => {
     setExpandedCard(expandedCard === index ? null : index);
   };
+
 
   return (
     <div className="responsive-table">
@@ -121,8 +127,13 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   />
                   <FaTrash
                     className="action-icon delete"
-                    onClick={() => onDelete && onDelete(item.id)}
+                    onClick={() => {
+                      setDeleteTargetId(item.id);
+                      setShowConfirmDialog(true);
+                    }}
                   />
+
+
                 </div>
               )}
             </div>
@@ -211,6 +222,21 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </div>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        message="Are you sure you want to delete this item?"
+        onConfirm={async () => {
+          if (deleteTargetId !== null && onDelete) {
+            await onDelete(deleteTargetId);
+          }
+          setShowConfirmDialog(false);
+          setDeleteTargetId(null);
+        }}
+        onCancel={() => {
+          setShowConfirmDialog(false);
+          setDeleteTargetId(null);
+        }}
+      />
     </div>
   );
 }

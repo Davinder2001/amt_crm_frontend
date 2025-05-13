@@ -168,7 +168,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     )}
                 </div>
                 {/* Reset Button */}
-                <div className="reset-group">
+                {/* <div className="reset-group">
                     <button
                         onClick={handleReset}
                         className="reset-btn"
@@ -181,7 +181,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         )}
                         <span>Reset</span>
                     </button>
-                </div>
+                </div> */}
                 <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('actions')}
                         className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}

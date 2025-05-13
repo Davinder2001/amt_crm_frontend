@@ -5,6 +5,7 @@ import {
   useGetAllQuotationsQuery,
   useGenerateQuotationPdfMutation,
 } from '@/slices/quotation/quotationApi';
+import { FaDownload } from 'react-icons/fa';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();
@@ -26,8 +27,6 @@ const AllQuotations = () => {
 
   return (
     <div className="quotation-wrapper">
-      <h2>All Quotations</h2>
-
       {isLoading && <p>Loading...</p>}
       {error && <p>Failed to load quotations.</p>}
 
@@ -48,9 +47,15 @@ const AllQuotations = () => {
                 <td>{quotation.customer_name}</td>
                 <td>{quotation.items?.length ?? 0}</td>
                 <td>
-                  <button onClick={() => handleDownload(quotation.id || 0)}>
+                  <button
+                    className="quotations-download-btn"
+                    onClick={() => handleDownload(quotation.id || 0)}
+                  >
+                    <FaDownload />
                     Download PDF
                   </button>
+
+
                 </td>
               </tr>
             ))}

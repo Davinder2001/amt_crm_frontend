@@ -170,19 +170,14 @@ import {
 import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
 import "react-toastify/dist/ReactToastify.css";
+import { useCompany } from "@/utils/Company";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
   const { data: employeesData, error, isLoading, refetch } = useFetchEmployeesSalaryQuery();
   const [deleteEmployee] = useDeleteEmployeMutation();
+  const { companySlug } = useCompany();
 
-  const navigateTo = (path: string, message: string) => {
-    if (!path) {
-      toast.error(message);
-      return;
-    }
-    router.push(path);
-  };
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this employee?")) return;
@@ -245,9 +240,8 @@ const SalaryView: React.FC = () => {
       render: (employee: Employee) => (
         <button
           onClick={() =>
-            navigateTo(
-              `/${employee.company_slug}/hr/employee-salary/monthly/${employee.id}`,
-              "Company slug not found"
+            router.push(
+              `/${employee.company_slug}/hr/employee-salary/monthly/${employee.id}`
             )
           }
           className="btn-primary salary-view-button"
@@ -257,36 +251,34 @@ const SalaryView: React.FC = () => {
       ),
     },
     { label: "Status", key: "user_status" as keyof Employee },
-    {
-      label: "Action",
-      render: (employee: Employee) => (
-        <div className="store-t-e-e-icons">
-          <span
-            onClick={() =>
-              navigateTo(
-                `/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`,
-                "Company slug not found"
-              )
-            }
-          >
-            <FaEye color="#222" />
-          </span>
-          <span
-            onClick={() =>
-              navigateTo(
-                `/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`,
-                "Company slug not found"
-              )
-            }
-          >
-            <FaEdit color="#222" />
-          </span>
-          <span onClick={() => handleDelete(employee.id)}>
-            <FaTrash color="#222" />
-          </span>
-        </div>
-      ),
-    },
+    // {
+    //   label: "Action",
+    //   render: (employee: Employee) => (
+    //     <div className="store-t-e-e-icons">
+    //       <span
+    //         onClick={() =>
+    //           router.push(
+    //             `/${employee.company_slug}/hr/status-view/view-employee/${employee.id}`
+    //           )
+    //         }
+    //       >
+    //         <FaEye color="#222" />
+    //       </span>
+    //       <span
+    //         onClick={() =>
+    //           router.push(
+    //             `/${employee.company_slug}/hr/status-view/edit-employee/${employee.id}`
+    //           )
+    //         }
+    //       >
+    //         <FaEdit color="#222" />
+    //       </span>
+    //       <span onClick={() => handleDelete(employee.id)}>
+    //         <FaTrash color="#222" />
+    //       </span>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -294,8 +286,7 @@ const SalaryView: React.FC = () => {
       data={employeesData.data}
       columns={columns}
       onDelete={(id) => handleDelete(id)}
-      onEdit={(id) => navigateTo(`/${id}/edit`, "Employee not found")} // not much used here
-      onView={(id) => navigateTo(`/${id}/view`, "Employee not found")} // not much used here
+      onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)} // not much used here
     />
   );
 };

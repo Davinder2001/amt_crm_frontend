@@ -167,10 +167,10 @@ import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
 } from "@/slices/employe/employe";
-import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
+import { FaEnvelope } from "react-icons/fa";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();

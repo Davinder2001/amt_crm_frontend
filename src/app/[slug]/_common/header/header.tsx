@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
-import GoogleTranslate from "@/components/common/GoogleTranslate";
+// import GoogleTranslate from "@/components/common/GoogleTranslate";
 
 
 interface headerProps {
@@ -86,7 +86,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
             </span>
           )}
         </Link>
-        <GoogleTranslate />
+        {/* <GoogleTranslate /> */}
 
         <Profile />
       </div>

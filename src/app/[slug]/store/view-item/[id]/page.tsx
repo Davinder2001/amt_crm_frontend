@@ -128,7 +128,7 @@ import { useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/sto
 import Image from 'next/image';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useCompany } from '@/utils/Company';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+// import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaArrowLeft, FaEdit, FaInfoCircle, FaMoneyBillWave, FaTags, FaTrash } from 'react-icons/fa';
 import { BsGearWideConnected } from 'react-icons/bs';
 
@@ -139,7 +139,7 @@ const ViewItem = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const router = useRouter();
   const { companySlug } = useCompany();
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
+  // const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleDelete = async () => {

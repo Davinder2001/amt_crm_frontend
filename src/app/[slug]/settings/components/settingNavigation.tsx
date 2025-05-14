@@ -38,15 +38,6 @@ const settingItems = [
 ];
 
 const SettingNavigation = () => {
-  const [toggles, setToggles] = useState<{ [key: string]: boolean }>({});
-
-  const handleToggle = (label: string) => {
-    setToggles((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
-  };
-
   return (
     <div className="settings-wrapper">
       <ul className="settings-list">

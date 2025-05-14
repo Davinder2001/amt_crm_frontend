@@ -2,9 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import {
   useCreateCategoryMutation,
+  useDeleteCategoryMutation,
   useFetchCategoriesQuery,
 } from '@/slices/store/storeApi';
-import { FaSearch } from 'react-icons/fa'; // Importing search icon from react-icons
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  InputAdornment,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+  Typography,
+  Collapse
+} from '@mui/material';
+import { FaSearch, FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash } from 'react-icons/fa';
 
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
@@ -21,253 +36,401 @@ type CategoryNode = {
   updated_at?: string;
 };
 
-const flattenCategories = (
-  categories: CategoryNode[],
-  level: number = 0
-): Array<CategoryNode & { level: number }> => {
-  return categories.reduce((acc, cat) => {
-    acc.push({ ...cat, level });
-    const kids = cat.children ?? [];
-    if (kids.length > 0) {
-      acc.push(...flattenCategories(kids, level + 1));
-    }
-    return acc;
-  }, [] as Array<CategoryNode & { level: number }>);
-};
-
-const filterCategories = (categories: CategoryNode[], term: string): CategoryNode[] => {
-  if (!term.trim()) return categories;
-
-  const lowerTerm = term.toLowerCase();
-
-  return categories
-    .map((cat) => {
-      const matched = cat.name.toLowerCase().includes(lowerTerm);
-      const filteredChildren = filterCategories(cat.children || [], term);
-      if (matched || filteredChildren.length > 0) {
-        return {
-          ...cat,
-          children: filteredChildren,
-        };
-      }
-      return null;
-    })
-    .filter(Boolean) as CategoryNode[];
-};
-
 const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
+  const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
-  const [selectedListCategories, setSelectedListCategories] = useState<number[]>([]);
-  const [selectedParents, setSelectedParents] = useState<number[]>([]);
+  const [selectedCategoriesIds, setSelectedCategoriesIds] = useState<number[]>([]);
+  const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
   const [name, setName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
+  const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
 
-  const handleListCheckboxChange = (id: number) => {
-    setHasChanges(true);
-    setSelectedListCategories((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-  };
-
-  const handleParentCheckboxChange = (id: number) => {
-    setSelectedParents((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-  };
-
+  // Initialize with selected categories
   useEffect(() => {
     if (selectedCategories.length > 0) {
-      setSelectedListCategories(selectedCategories.map((cat) => cat.id));
+      setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
     }
   }, [selectedCategories]);
 
+  // Toggle category expansion
+  const handleExpand = (id: number) => {
+    setExpandedCategories(prev =>
+      prev.includes(id)
+        ? prev.filter(item => item !== id)
+        : [...prev, id]
+    );
+  };
+
+  // Handle category selection
+  const handleCategorySelect = (id: number) => {
+    setHasChanges(true);
+    setSelectedCategoriesIds(prev =>
+      prev.includes(id)
+        ? prev.filter(item => item !== id)
+        : [...prev, id]
+    );
+  };
+
+  // Handle parent selection for new category
+  const handleParentSelect = (id: number) => {
+    setSelectedParentId(prev => prev === id ? null : id);
+  };
+
+  // Create new category
   const handleSubmit = async () => {
     if (!name.trim()) {
-      alert('Please enter a category name.');
+      alert('Please enter a category name');
       return;
     }
+
     try {
-      if (selectedParents.length === 0) {
-        await createCategory({ name, parent_id: null });
-      } else {
-        for (const pid of selectedParents) {
-          await createCategory({ name, parent_id: pid });
-        }
-      }
+      await createCategory({
+        name,
+        parent_id: selectedParentId
+      }).unwrap();
       setName('');
-      setSelectedParents([]);
+      setSelectedParentId(null);
       setIsCreatingNewCategory(false);
-      alert('Category created!');
     } catch (err) {
-      console.error(err);
+      console.error('Error creating category:', err);
       alert('Error creating category');
     }
   };
 
+  // Finalize category selection
   const handleDoneClick = () => {
-    const allFlattened = flattenCategories(data?.data || []);
-    const selectedCats = allFlattened
-      .filter(cat => selectedListCategories.includes(cat.id))
-      .map((cat) => ({
+    if (!data?.data) return;
+
+    const flattenCategories = (categories: CategoryNode[]): CategoryNode[] => {
+      return categories.reduce<CategoryNode[]>((acc, category) => {
+        if (selectedCategoriesIds.includes(category.id)) {
+          acc.push(category);
+        }
+        if (category.children) {
+          acc.push(...flattenCategories(category.children));
+        }
+        return acc;
+      }, []);
+    };
+
+    const selected = flattenCategories(data.data);
+    setSelectedCategories(
+      selected.map(cat => ({
         id: cat.id,
         name: cat.name,
         company_id: cat.company_id,
         parent_id: cat.parent_id,
         created_at: cat.created_at || new Date().toISOString(),
-        updated_at: cat.updated_at || new Date().toISOString(), 
-      }));
-    setSelectedCategories(selectedCats);
+        updated_at: cat.updated_at || new Date().toISOString(),
+        children: cat.children?.map(child => ({
+          id: child.id,
+          name: child.name,
+          company_id: child.company_id,
+          parent_id: child.parent_id,
+          created_at: child.created_at || new Date().toISOString(),
+          updated_at: child.updated_at || new Date().toISOString(),
+        })),
+      }))
+    );
     setHasChanges(false);
   };
 
-  const renderCategoriesWithChildren = (cats: CategoryNode[], level: number = 0) =>
-    cats.map((cat) => (
-      <div
-        key={cat.id}
-        style={{ marginLeft: `${level * 20}px`, marginBottom: '6px' }}
-        className='category-input-lable-outer'
-      >
-        <label className="modern-box-checkbox">
-          <input
-            type="checkbox"
-            checked={selectedListCategories.includes(cat.id)}
-            onChange={() => handleListCheckboxChange(cat.id)}
-          />
-          <span className="box"></span>
-          {cat.name}
-        </label>
-        {(cat.children ?? []).length > 0 &&
-          renderCategoriesWithChildren(cat.children!, level + 1)}
-      </div>
-    ));
+  // Filter categories based on search term
+  const filteredCategories = (data?.data?.filter(category =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    category.children?.some(child =>
+      child.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )) || []);
 
-  const renderParentCategories = (cats: CategoryNode[]) => {
-    const flat = flattenCategories(cats);
-    return flat.map((cat) => (
-      <div
-        key={cat.id}
-        style={{
-          marginBottom: '6px',
-          marginLeft: `${cat.level * 20}px`,
-        }}
+  // Render category tree
+  const renderCategory = (category: CategoryNode) => {
+    const hasChildren = category.children && category.children.length > 0;
+    const isExpanded = expandedCategories.includes(category.id);
+    const isSelected = selectedCategoriesIds.includes(category.id);
+    const isHovered = hoveredCategoryId === category.id;
+
+    return (
+      <Box key={category.id}
+        onMouseEnter={() => setHoveredCategoryId(category.id)}
+        onMouseLeave={() => setHoveredCategoryId(null)}
+        sx={{ position: 'relative' }}
       >
-        <label className="modern-box-checkbox">
-          <input
-            type="checkbox"
-            checked={selectedParents.includes(cat.id)}
-            onChange={() => handleParentCheckboxChange(cat.id)}
+        <ListItemButton
+          onClick={() => handleExpand(category.id)}
+          sx={{ pl: category.parent_id ? 4 : 2 }}
+        >
+          {hasChildren && (
+            <ListItemIcon sx={{ minWidth: 32 }}>
+              {isExpanded ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />}
+            </ListItemIcon>
+          )}
+          {!hasChildren && <Box sx={{ width: 32 }} />}
+          <Checkbox
+            edge="start"
+            checked={isSelected}
+            onChange={() => handleCategorySelect(category.id)}
+            tabIndex={-1}
+            disableRipple
+            sx={{
+              color: '#009693',
+              '&.Mui-checked': {
+                color: '#009693',
+              },
+            }}
           />
-          <span className="box"></span>
-          {cat.name}
-        </label>
-      </div>
-    ));
+          <ListItemText primary={category.name} />
+          {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
+            <FaTrash
+              size={14}
+              color="#009693"
+              style={{ marginLeft: 'auto', cursor: 'pointer' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                  deleteCategory(category.id)
+                    .unwrap()
+                    .catch((err) => {
+                      console.error('Delete failed:', err);
+                      alert('Failed to delete category');
+                    });
+                }
+              }}
+            />
+          )}
+        </ListItemButton>
+        {hasChildren && (
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {category.children?.map(renderCategory)}
+            </List>
+          </Collapse>
+        )}
+      </Box>
+    );
+  };
+
+  // Render parent categories for selection when creating new category
+  const renderParentOptions = (category: CategoryNode) => {
+    const hasChildren = category.children && category.children.length > 0;
+    const isExpanded = expandedCategories.includes(category.id);
+    const isSelected = selectedParentId === category.id;
+    const isHovered = hoveredCategoryId === category.id;
+    return (
+      <Box key={category.id}
+        onMouseEnter={() => setHoveredCategoryId(category.id)}
+        onMouseLeave={() => setHoveredCategoryId(null)}
+        sx={{ position: 'relative' }}
+      >
+        <ListItemButton
+          onClick={() => {
+            handleExpand(category.id);
+          }}
+          sx={{ pl: category.parent_id ? 4 : 2 }}
+        >
+          <ListItemIcon sx={{ minWidth: 32 }}>
+            {hasChildren ? (
+              isExpanded ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />
+            ) : null}
+          </ListItemIcon>
+
+          <Checkbox
+            edge="start"
+            checked={isSelected}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleParentSelect(category.id);
+              handleExpand(category.id);
+            }}
+            tabIndex={-1}
+            disableRipple
+            sx={{
+              color: '#009693',
+              '&.Mui-checked': {
+                color: '#009693',
+              },
+            }}
+          />
+          <ListItemText primary={category.name} />
+          {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
+            <FaTrash
+              size={14}
+              color="#009693"
+              style={{ marginLeft: 'auto', cursor: 'pointer' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                  deleteCategory(category.id)
+                    .unwrap()
+                    .catch((err) => {
+                      console.error('Delete failed:', err);
+                      alert('Failed to delete category');
+                    });
+                }
+              }}
+            />
+          )}
+        </ListItemButton>
+
+        {hasChildren && (
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {category.children?.map(renderParentOptions)}
+            </List>
+          </Collapse>
+        )}
+      </Box>
+    );
   };
 
   return (
-    <div className="category-container">
+    <Box sx={{ width: '100%' }}>
       {!isCreatingNewCategory ? (
         <>
-          <h2 className="category-title">All Categories</h2>
+          <Typography variant="h6" gutterBottom>
+            Select Categories
+          </Typography>
 
-          {isLoading && <p>Loading categories...</p>}
+          <TextField
+            variant="outlined"
+            placeholder="Search categories..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FaSearch color="#009693" />
+                </InputAdornment>
+              ),
+              sx: {
+                height: 40,
+                paddingRight: 1,
+              },
+            }}
+            sx={{
+              maxWidth: 500,
+              width: '100%',
+              mb: 2,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: '#009693',
+                },
+              },
+            }}
+          />
 
-          {!isLoading && data?.data?.length ? (
-            <>
-              {/* Search Bar with Icon */}
-              <div className=" search-bar-group">
-                <FaSearch className="search-icon" color=' #009693' />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search categories..."
-                  className="input-fields"
-                />
-
-              </div>
-
-              <div className="categories-list-outer-div">
-                {renderCategoriesWithChildren(
-                  filterCategories(data.data as CategoryNode[], searchTerm)
-                )}
-              </div>
-            </>
+          {isLoading ? (
+            <Box display="flex" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          ) : filteredCategories.length === 0 ? (
+            <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
+              No categories found
+            </Typography>
           ) : (
-            !isLoading && <p>No categories found.</p>
+            <List sx={{ maxHeight: 400, overflow: 'auto' }}>
+              {filteredCategories.map(renderCategory)}
+            </List>
           )}
 
-          <div className='done-category-button-outer'>
-            <button
-              type="button"
+          <Box display="flex" justifyContent="space-between" mt={2}>
+            <Button
+              variant="outlined"
+              startIcon={<FaPlus />}
               onClick={() => setIsCreatingNewCategory(true)}
-              className="buttons create-button"
+              sx={{ borderColor: '#009693', color: '#009693', '&:hover': { backgroundColor: '#e0f7f6' } }}
             >
-              Create New Category
-            </button>
-
+              Create New
+            </Button>
             {hasChanges && (
-              <button
-                type="button"
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<FaCheck />}
                 onClick={handleDoneClick}
-                className="category-button done-button"
+                sx={{ backgroundColor: '#009693', '&:hover': { backgroundColor: '#007c7a' } }}
               >
                 Done
-              </button>
+              </Button>
             )}
-          </div>
+          </Box>
         </>
       ) : (
-        <div>
-          <h2 className="category-title">Create New Category</h2>
+        <>
+          <Typography variant="h6" gutterBottom>
+            Create New Category
+          </Typography>
 
-          <div className="form-group">
-            <label>Category Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter category name"
-              className="input-field"
-            />
-          </div>
+          <TextField
+            fullWidth
+            label="Category Name"
+            variant="outlined"
+            size="small"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            InputLabelProps={{
+              sx: {
+                color: '#009693',
+                '&.Mui-focused': {
+                  color: '#009693',
+                },
+              },
+            }}
+            InputProps={{
+              sx: {
+                paddingRight: 1,
+              },
+            }}
+            sx={{
+              maxWidth: 500,
+              width: '100%',
+              mb: 2,
+              '& .MuiOutlinedInput-root.Mui-focused': {
+                '& fieldset': {
+                  borderColor: '#009693',
+                },
+              },
+            }}
+          />
 
-          <div className="form-group">
-            <label>Select Parent Category</label>
-            <div className="parent-category-list">
-              {isLoading && <p>Loading...</p>}
-              {!isLoading && data?.data?.length ? (
-                renderParentCategories(data.data as CategoryNode[])
-              ) : (
-                <p>No parent categories found.</p>
-              )}
-            </div>
-          </div>
+          <Typography variant="subtitle1" gutterBottom>
+            Parent Category (optional)
+          </Typography>
 
-          <div className="button-group">
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isCreating}
-              className="buttons create-button"
-            >
-              {isCreating ? 'Creating...' : 'Create Category'}
-            </button>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
+              {data?.data?.map(renderParentOptions)}
+            </List>
+          )}
 
-            <button
-              type="button"
+          <Box display="flex" justifyContent="flex-end" gap={1}>
+            <Button
+              variant="outlined"
+              startIcon={<FaTimes />}
               onClick={() => setIsCreatingNewCategory(false)}
-              className="buttons cancel-button"
+              sx={{ borderColor: '#009693', color: '#009693', '&:hover': { backgroundColor: '#e0f7f6' } }}
             >
               Cancel
-            </button>
-          </div>
-        </div>
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<FaCheck />}
+              onClick={handleSubmit}
+              disabled={isCreating || !name.trim()}
+              sx={{ backgroundColor: '#009693', '&:hover': { backgroundColor: '#007c7a' } }}
+            >
+              {isCreating ? 'Creating...' : 'Create'}
+            </Button>
+          </Box>
+        </>
       )}
-    </div>
+    </Box>
   );
 };
 

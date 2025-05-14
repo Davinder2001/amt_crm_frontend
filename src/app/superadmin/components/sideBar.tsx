@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { FaTachometerAlt, FaBuilding, FaUserTie, FaCogs, FaTimesCircle } from "react-icons/fa";
+import { FaTachometerAlt, FaBuilding, FaUserTie, FaCogs, FaTimesCircle, FaCube } from "react-icons/fa";
 import Image from "next/image";
 import { logo } from "@/assets/useImage";
 import { usePathname } from "next/navigation";
@@ -19,6 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
     { name: "Business Users", path: "admins", icon: <FaUserTie /> },
     { name: "Companies", path: "companies", icon: <FaBuilding /> },
+    { name: "packages", path: "packages", icon: <FaCube /> },
     { name: "Settings", path: "settings", icon: <FaCogs /> },
   ];
 

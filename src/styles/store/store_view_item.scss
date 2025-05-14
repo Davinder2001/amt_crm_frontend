@@ -331,7 +331,7 @@
 @use '../variables' as *;
 
 .view-item-container {
-  background-color: white;
+  background-color: $white;
   padding: 10px;
   border-radius: 10px;
 
@@ -492,7 +492,7 @@
       margin-bottom: 8px;
       font-size: $font-size-small;
       flex-wrap: wrap;
-      border-bottom: 1px solid #eaeaea;
+      border-bottom: 1px solid #e5e5e58f;
       padding-bottom: 5px;
     }
 

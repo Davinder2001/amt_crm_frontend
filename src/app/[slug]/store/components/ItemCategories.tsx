@@ -39,7 +39,7 @@ type CategoryNode = {
 const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
-  const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
   const [selectedCategoriesIds, setSelectedCategoriesIds] = useState<number[]>([]);

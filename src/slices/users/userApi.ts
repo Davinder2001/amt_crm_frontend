@@ -41,6 +41,37 @@ const userApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+
+    fetchPackagesPlans: builder.query<PackagePlanResponse, void>({
+      query: () => ({
+        url: "all-packages",
+        credentials: "include",
+      }),
+      providesTags: ["Auth"],
+    }),
+
+    fetchBusinessCategories: builder.query<BusinessCategory[], void>({
+      query: () => ({
+        url: "all-business-categories",
+        credentials: "include",
+      }),
+      providesTags: ["Auth"],
+    }),
+
+    sendOtp: builder.mutation<void, { number: number }>({
+      query: () => ({
+        url: "send-wp-otp",
+        method: "POST",
+      }),
+    }),
+
+    verifyOtp: builder.mutation<void, { number: number, otp: string }>({
+      query: () => ({
+        url: "verify-wp-otp",
+        method: "POST",
+      }),
+    }),
+
   }),
 });
 
@@ -49,6 +80,10 @@ export const {
   useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
+  useFetchPackagesPlansQuery,
+  useFetchBusinessCategoriesQuery,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
 } = userApi;
 
 export default userApi;

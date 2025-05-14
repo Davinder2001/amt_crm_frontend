@@ -90,9 +90,9 @@ const AddItem: React.FC = () => {
       case 2:
         return formData.date_of_manufacture !== '';
       case 3:
-        return variants && variants.length > 0;
-      case 4:
         return selectedCategories.length > 0;
+      case 4:
+        return variants && variants.length > 0;
       default:
         return false;
     }
@@ -182,8 +182,8 @@ const AddItem: React.FC = () => {
             <Tab label="Basic Info" disabled={!tabCompletion[0]} />
             <Tab label="Pricing & Inventory" disabled={!tabCompletion[1]} />
             <Tab label="Media & Dates" disabled={!tabCompletion[2]} />
-            <Tab label="Product Options" disabled={!tabCompletion[3]} />
-            <Tab label="Categories" disabled={!tabCompletion[4]} />
+            <Tab label="Categories" disabled={!tabCompletion[3]} />
+            <Tab label="Product Options" disabled={!tabCompletion[4]} />
           </Tabs>
 
 
@@ -331,17 +331,17 @@ const AddItem: React.FC = () => {
           )}
 
           {activeTab === 3 && (
-            <div className="items-tab-container">
-              <ItemsTab setVariants={setVariants} variants={variants} />
-            </div>
-          )}
-
-          {activeTab === 4 && (
             <div className='categories-container'>
               <ItemCategories
                 setSelectedCategories={setSelectedCategories}
                 selectedCategories={selectedCategories}
               />
+            </div>
+          )}
+
+          {activeTab === 4 && (
+            <div className="items-tab-container">
+              <ItemsTab setVariants={setVariants} variants={variants} />
             </div>
           )}
         </Box>

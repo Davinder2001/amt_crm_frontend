@@ -194,8 +194,8 @@ const UpdateItem = () => {
             <Tab label="Basic Info" />
             <Tab label="Pricing & Inventory" />
             <Tab label="Media & Dates" />
-            <Tab label="Product Options" />
             <Tab label="Categories" />
+            <Tab label="Product Options" />
           </Tabs>
         </div>
 
@@ -368,17 +368,17 @@ const UpdateItem = () => {
           )}
 
           {activeTab === 3 && (
-            <div className="items-tab-container">
-              <ItemsTab setVariants={setVariants} variants={variants} />
-            </div>
-          )}
-
-          {activeTab === 4 && (
             <div className='categories-container'>
               <ItemCategories
                 setSelectedCategories={setSelectedCategories}
                 selectedCategories={selectedCategories}
               />
+            </div>
+          )}
+
+          {activeTab === 4 && (
+            <div className="items-tab-container">
+              <ItemsTab setVariants={setVariants} variants={variants} />
             </div>
           )}
         </Box>

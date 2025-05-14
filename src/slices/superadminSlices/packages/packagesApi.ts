@@ -3,7 +3,7 @@ import companyCreateApiSlice from "./packagesCreateSlice";
 const packagesApi = companyCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // GET: Fetch all packages
-    fetchPackages: builder.query<any, void>({
+    fetchPackages: builder.query<PackagePlan[], void>({
       query: () => ({
         url: "pricing-packages",
         credentials: "include",
@@ -12,7 +12,7 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
     }),
 
     // GET: Fetch a single package
-    fetchSinglePackage: builder.query<any, string>({
+    fetchSinglePackage: builder.query<PackagePlan, string>({
       query: (id) => ({
         url: `pricing-packages/${id}`,
         credentials: "include",
@@ -21,18 +21,18 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
     }),
 
     // POST: Create a new package
-    createPackage: builder.mutation<any, Partial<any>>({
-      query: (newPackage) => ({
+    createPackage: builder.mutation<createPackagePlan, FormData>({
+      query: (formdata) => ({
         url: "pricing-packages",
         method: "POST",
-        body: newPackage,
+        body: formdata,
         credentials: "include",
       }),
       invalidatesTags: ["Package"],
     }),
 
     // PUT: Update an existing package
-    updatePackage: builder.mutation<any, { id: string; data: Partial<any> }>({
+    updatePackage: builder.mutation<PackagePlan, { id: number; data: PackagePlan }>({
       query: ({ id, data }) => ({
         url: `pricing-packages/${id}`,
         method: "PUT",

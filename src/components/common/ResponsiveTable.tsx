@@ -7,6 +7,7 @@ import {
   FaTrash,
   FaExternalLinkAlt,
 } from 'react-icons/fa';
+import ConfirmDialog from './ConfirmDialog'; // adjust path if needed
 
 type Column<T> = {
   label: string;
@@ -37,6 +38,10 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [openActionCard, setOpenActionCard] = useState<number | null>(null);
 
+
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentData = data.slice(startIndex, endIndex);
@@ -60,6 +65,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
     setExpandedCard(expandedCard === index ? null : index);
   };
 
+
   return (
     <div className="responsive-table">
       {/* Table View */}
@@ -67,36 +73,41 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
         <table>
           <thead>
             <tr>
+              <th>S.N.</th>
               {columns.map((col, i) => (
                 <th key={i}>{col.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item, index) => (
-              <tr key={index} onClick={(e) => {
-                const target = e.target as HTMLElement;
-                if (
-                  target.closest('button') ||
-                  target.closest('svg') ||
-                  target.closest('.action-icon') ||
-                  target.closest('.ellipsis-icon')
-                ) {
-                  return;
-                }
-                if (onView) onView(item.id);
-              }}>
-                {columns.map((col, i) => (
-                  <td key={i}>
-                    {col.render
-                      ? col.render(item, index)
-                      : col.key
-                        ? String(item[col.key])
-                        : ''}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {currentData.map((item, index) => {
+              const serialNumber = startIndex + index + 1;
+              return (
+                <tr key={index} onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (
+                    target.closest('button') ||
+                    target.closest('svg') ||
+                    target.closest('.action-icon') ||
+                    target.closest('.ellipsis-icon')
+                  ) {
+                    return;
+                  }
+                  if (onView) onView(item.id);
+                }}>
+                  <td>{serialNumber}</td>
+                  {columns.map((col, i) => (
+                    <td key={i}>
+                      {col.render
+                        ? col.render(item, index)
+                        : col.key
+                          ? String(item[col.key])
+                          : ''}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -121,8 +132,13 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   />
                   <FaTrash
                     className="action-icon delete"
-                    onClick={() => onDelete && onDelete(item.id)}
+                    onClick={() => {
+                      setDeleteTargetId(item.id);
+                      setShowConfirmDialog(true);
+                    }}
                   />
+
+
                 </div>
               )}
             </div>
@@ -211,6 +227,21 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </div>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        message="Are you sure you want to delete this item?"
+        onConfirm={async () => {
+          if (deleteTargetId !== null && onDelete) {
+            await onDelete(deleteTargetId);
+          }
+          setShowConfirmDialog(false);
+          setDeleteTargetId(null);
+        }}
+        onCancel={() => {
+          setShowConfirmDialog(false);
+          setDeleteTargetId(null);
+        }}
+      />
     </div>
   );
 }

@@ -38,8 +38,8 @@
 
         .create-tax-inputs {
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            flex-wrap: wrap;
 
             input {
                 flex: 1;
@@ -87,7 +87,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
         display: grid;
-        grid-template-columns: 20% 80%;
+        grid-template-columns: 30% 70%;
         gap: 10px;
 
         h2,
@@ -110,7 +110,7 @@
     .taxes-list-outer {
         ul {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             padding: 0;
 
@@ -200,6 +200,15 @@
     }
 }
 
+@media (max-width: 1467px) {
+
+
+
+
+
+
+
+}
 @media (max-width: 768px) {
     .tax-page-outer-container {
 

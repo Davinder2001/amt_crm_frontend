@@ -1,9 +1,9 @@
-// Correct format
-export default function EditEmployeePage({ params }: { params: { id: string } }) {
-  
-  // Your component logic
+import React from 'react'
+
+function page() {
   return (
-    <>
-    </>
-  );
+    <div>page</div>
+  )
 }
+
+export default page

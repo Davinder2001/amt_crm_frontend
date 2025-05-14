@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface DatePickerFieldProps {
-    label: string;
+    label?: string;
     selectedDate: string | null;
     onChange: (date: string) => void;
     required?: boolean;

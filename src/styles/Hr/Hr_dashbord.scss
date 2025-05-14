@@ -5,7 +5,6 @@
   gap: 15px;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 30px;
   flex-wrap: wrap;
 
   a {
@@ -27,6 +26,7 @@
   justify-content: space-between;
   gap: 20px;
   border-radius: 16px;
+  margin-top: 30px;
 }
 
 .time-stats-wrapper {
@@ -224,10 +224,10 @@
 }
 
 @media (max-width: 768px) {
-  
+
   .time-stats-wrapper {
     flex-direction: column;
-}
+  }
 
   .time {
     font-size: 18px;
@@ -251,7 +251,7 @@
     max-width: 100%;
     width: 100%;
     flex-direction: row;
-}
+  }
 
 
   .stat-card-box {
@@ -285,6 +285,8 @@
 
     a {
       justify-content: center;
+      font-size: 16px;
+      padding: 7px 12px;
     }
   }
 }
@@ -294,13 +296,14 @@
 @media (max-width: 500px) {
 
   .time-section {
-    flex-direction: column; 
-}
+    flex-direction: column;
+  }
 
 
 
 
 }
+
 @media (max-width: 480px) {
   .stat-card-box {
     padding: 12px;
@@ -324,9 +327,13 @@
     font-size: 11px;
   }
 
-  .hr_navigation a {
-    padding: 8px 16px;
-    font-size: 14px;
+  .hr_navigation {
+    gap: 8px;
+
+    a {
+      padding: 5px 10px;
+      font-size: 10px;
+    }
   }
 
   .attendance-btn {

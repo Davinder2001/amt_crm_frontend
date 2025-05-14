@@ -99,13 +99,15 @@
             }
         }
     }
-    .dropdown-left{
-        .dropdown-content{
+
+    .dropdown-left {
+        .dropdown-content {
             padding: 20px;
             display: flex;
             gap: 20px;
         }
     }
+
     .dropdown-right {
         .dropdown-content {
             right: 0;
@@ -292,8 +294,16 @@
 
     .toolbar {
         justify-content: flex-start;
-        gap: 10px;
+        gap: 8px;
+        padding: 10px;
+
+        .right-group {
+            gap: 10px;
+
+        }
+
     }
+
 }
 
 
@@ -637,7 +647,7 @@ table {
 @media (max-width: 768px) {
 
     /* ResponsiveTable.css */
-    .responsive-table{
+    .responsive-table {
         background-color: transparent;
     }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiFilter, FiColumns, FiSettings, FiRefreshCw } from 'react-icons/fi';
+import { FiFilter, FiColumns, FiSettings } from 'react-icons/fi';
 
 type FilterOptions = Record<string, string[]>;
 
@@ -43,7 +43,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             return columns.map(col => col.key); // Default to all columns being visible
         }
     });
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     // Toggling dropdown visibility
     const toggleDropdown = (name: string) => {
@@ -83,14 +83,14 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     };
 
     // Reset to default state
-    const handleReset = () => {
-        setLoading(true);
-        setSelectedFilters({});
-        setSelectedColumns(columns.map(col => col.key)); // Reset to default all columns
-        localStorage.removeItem('selectedFilters');
-        localStorage.setItem('selectedColumns', JSON.stringify(columns.map(col => col.key))); // Reset to default columns
-        setTimeout(() => setLoading(false), 1000); // Simulate reset delay
-    };
+    // const handleReset = () => {
+    //     setLoading(true);
+    //     setSelectedFilters({});
+    //     setSelectedColumns(columns.map(col => col.key)); // Reset to default all columns
+    //     localStorage.removeItem('selectedFilters');
+    //     localStorage.setItem('selectedColumns', JSON.stringify(columns.map(col => col.key))); // Reset to default columns
+    //     setTimeout(() => setLoading(false), 1000); // Simulate reset delay
+    // };
 
     // Syncing localStorage with state on changes
     useEffect(() => {
@@ -168,7 +168,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     )}
                 </div>
                 {/* Reset Button */}
-                <div className="reset-group">
+                {/* <div className="reset-group">
                     <button
                         onClick={handleReset}
                         className="reset-btn"
@@ -181,7 +181,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         )}
                         <span>Reset</span>
                     </button>
-                </div>
+                </div> */}
                 <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('actions')}
                         className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}

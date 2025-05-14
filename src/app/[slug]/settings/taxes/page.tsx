@@ -101,7 +101,7 @@ function TaxesPage() {
                                         <div className='texrate-buttons-outer'>
                                             <div className='texrate-buttons-inner'>
                                                 <div className='tex-wrapper'>
-                                                    - {tax.rate}%
+                                                     {tax.rate}%
                                                 </div>
 
                                                 <div className='text-card-outer'>

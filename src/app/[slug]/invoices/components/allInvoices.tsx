@@ -41,7 +41,7 @@ const AllInvoices = () => {
 
   const handleSendWhatsapp = async (invoiceId: number) => {
     try {
-      const res = await sendToWhatsapp(invoiceId).unwrap();
+      const res = await sendToWhatsapp(invoiceId).unwrap() as unknown as { pdf_base64: string; filename: string; whatsapp_url: string };
 
       const byteCharacters = atob(res.pdf_base64);
       const byteNumbers = new Array(byteCharacters.length)

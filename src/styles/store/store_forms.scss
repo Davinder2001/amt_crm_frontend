@@ -123,6 +123,25 @@
     }
   }
 
+  .add-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .items-tab-container {
+    background-color: $white;
+    border-radius: 15px;
+    box-shadow: $box-shadow;
+    position: relative;
+
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
   // ---------- Add Items Form ----------
   .add-items-form-container {
     display: grid;

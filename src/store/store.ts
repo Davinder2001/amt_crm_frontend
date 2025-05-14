@@ -18,7 +18,6 @@ import notificationApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
-import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
 import chatReducer from '@/slices/chat/chatCreateSocket';
 
 

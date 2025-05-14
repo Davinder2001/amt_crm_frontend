@@ -22,7 +22,7 @@ interface StoreItem {
   availability_stock: number;
   created_at: string;
   updated_at: string;
-  images: (string | File)[];
+  images: (string | File)[] | File[];
   final_cost: number;
   categories: Category[];
   variants: variations[];
@@ -95,7 +95,7 @@ interface CreateStoreItemRequest {
   cost_price: number;
   selling_price: number;
   tax_id: number;
-  images: File[],
+  images: (string | File)[] | File[];
   variants: variations[],
   categories: Category[]
 }
@@ -124,7 +124,7 @@ interface UpdateStoreItemRequest {
   cost_price: number;
   selling_price: number;
   tax_id: number;
-  images: File[],
+  images: (string | File)[] | File[];
   variants: variations[],
   categories: Category[]
 }

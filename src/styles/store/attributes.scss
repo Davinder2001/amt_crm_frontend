@@ -105,8 +105,9 @@
   }
 
   .tab-content {
-    flex: 1;
-    overflow-y: auto;
+    overflow: auto;
+    min-height: 0px;
+    max-height: 500px;
   }
 
   .variation-block {

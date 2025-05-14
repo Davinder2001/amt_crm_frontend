@@ -71,7 +71,7 @@ const Attributes = () => {
     if (isError) return <p>Failed to load attributes.</p>;
 
     return (
-        <div className="container">
+        <>
             <h1 className="title">Variations</h1>
 
             {/* Open Canvas Button */}
@@ -175,7 +175,7 @@ const Attributes = () => {
                     </div>
                 ))}
             </div>
-        </div>
+        </>
 
     );
 };

@@ -6,6 +6,10 @@ import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText,
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
 
+interface RegisterFormProps {
+  packageId: number;
+  categoryId: number | null;
+}
 
 const LOCAL_STORAGE_KEY = 'adminregistration';
 
@@ -30,7 +34,10 @@ const saveFormData = (data: Partial<RegisterForm>) => {
   }
 };
 
-const getDefaultFormData = (): RegisterForm => ({
+
+const getDefaultFormData = (packageId: number, categoryId: number | null): RegisterForm => ({
+  packageId: packageId,
+  categoryId: categoryId,
   first_name: '',
   last_name: '',
   email: '',
@@ -54,8 +61,9 @@ const getDefaultFormData = (): RegisterForm => ({
   office_electricity_bill: null,
 });
 
-const RegisterForm: React.FC = () => {
-  const [formData, setFormData] = useState<RegisterForm>(getDefaultFormData());
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) => {
+  const [formData, setFormData] = useState<RegisterForm>(getDefaultFormData(packageId, categoryId));
   const [showConfirm, setShowConfirm] = useState(false);
   const [activeSection, setActiveSection] = useState<'personal' | 'company' | 'documents'>('personal');
   const [adminRegister, { isLoading }] = useAdminRegisterMutation();
@@ -64,6 +72,9 @@ const RegisterForm: React.FC = () => {
     password: false,
     password_confirmation: false
   });
+
+  console.log('pID', packageId, 'catID', categoryId);
+  
 
   useEffect(() => {
     const stored = getStoredFormData();
@@ -193,7 +204,7 @@ const RegisterForm: React.FC = () => {
 
   const handleClearForm = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-    setFormData(getDefaultFormData());
+    setFormData(getDefaultFormData(packageId, categoryId));
     setShowConfirm(false);
     setActiveSection('personal')
     setFieldErrors({})

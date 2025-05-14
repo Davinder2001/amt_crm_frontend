@@ -1,40 +1,50 @@
 'use client';
 import React from 'react';
-import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi'; // Import the hook
-
+import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
+import Loader from '@/components/common/Loader';
+import { useRouter } from 'next/navigation';
 const PackagesView = () => {
-  // Fetch packages data
+  // Fetch packages data using RTK Query hook
   const { data, error, isLoading } = useFetchPackagesQuery();
+  const router = useRouter();
 
-  console.log(data);
-
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
   if (error) return <div>Error loading packages.</div>;
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-      <h1>Packages</h1>
-      {data?.map((packageItem: any) => (
-        <div
-          key={packageItem.id}
-          style={{
-            width: '250px',
-            padding: '20px',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            backgroundColor: '#fff',
-          }}
-        >
-          <h3 style={{ textAlign: 'center', color: '#333' }}>{packageItem.name}</h3>
-          <div style={{ marginBottom: '10px' }}>
-            <p><strong>Employees:</strong> {packageItem.employee_numbers}</p>
-            <p><strong>Items:</strong> {packageItem.items_number}</p>
-            <p><strong>Daily Tasks:</strong> {packageItem.daily_tasks_number}</p>
-            <p><strong>Invoices:</strong> {packageItem.invoices_number}</p>
-          </div>
+    <div className="pricing-container">
+      <div className="outer-div">
+        <h2 className="price-heading">Pick Your Perfect Plan</h2>
+        <button onClick={() => router.push(`/superadmin/packages/create`)} className='buttons'>Create new package</button>
+        <div className="plans">
+          {/* Render the plans */}
+          {data && data.map((plan) => (
+            <div key={plan.id} className="planCard">
+              <h3 className="planTitle">1 Year Plan</h3>
+              <p className="planPrice">₹ {plan.price ?? 0} / Year</p>
+              <ul className="features">
+                <li>✓ {plan.employee_numbers} Employees</li>
+                <li>✓ {plan.items_number} Items</li>
+                <li>✓ {plan.daily_tasks_number} Tasks/day</li>
+                <li>✓ {plan.invoices_number} Invoices</li>
+              </ul>
+              {/* Render business categories */}
+              {plan.business_categories && plan.business_categories.length > 0 && (
+                <div className="business-categories">
+                  <h4>Business Categories</h4>
+                  <ul>
+                    {plan.business_categories.map((category) => (
+                      <li key={category.id}>
+                        {category.name} {category.name && `- ${category.name}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 };

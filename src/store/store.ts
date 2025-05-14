@@ -19,7 +19,7 @@ import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
 import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
-import chatReducer from '@/slices/chat/chatCreateSocket';
+import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 
 
 const store = configureStore({
@@ -44,7 +44,7 @@ const store = configureStore({
     [quotationApi.reducerPath]: quotationApi.reducer,
     [hrApi.reducerPath]: hrApi.reducer,
     [packagesCreateApiSlice.reducerPath]: packagesCreateApiSlice.reducer,
-    // chat: chatReducer,
+    [businesscategoryCreateApiSlice.reducerPath]: businesscategoryCreateApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -68,6 +68,7 @@ const store = configureStore({
       .concat(quotationApi.middleware)
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
+      .concat(businesscategoryCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

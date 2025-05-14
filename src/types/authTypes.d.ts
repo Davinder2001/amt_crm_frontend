@@ -17,6 +17,8 @@ interface Company {
 }
 
 interface RegisterForm {
+    packageId?: number;
+    categoryId?: number | null;
     first_name: string;
     last_name: string;
     email: string;
@@ -75,4 +77,39 @@ interface CreateUserRequest {
 interface SelectedCompanyResponse {
     company_user_role: "admin" | "employee" | "user" | "super-admin";
     selected_company: Profile;
+}
+
+interface createPackagePlan {
+    name: string;
+    price: number;
+    employee_numbers: number;
+    items_number: number;
+    daily_tasks_number: number;
+    invoices_number: number;
+    business_categories: { id: number; name: string }[];
+}
+
+interface PackagePlan {
+    id: number;
+    name: string;
+    price: number;
+    employee_numbers: number;
+    items_number: number;
+    daily_tasks_number: number;
+    invoices_number: number;
+    created_at: string;
+    updated_at: string;
+    business_categories: { id: number, name: string }[];
+}
+
+interface PackagePlanResponse {
+    data: PackagePlan[];
+}
+
+interface BusinessCategory {
+    id: number;
+    name: string;
+    description: string | null;
+    created_at: string;
+    updated_at: string;
 }

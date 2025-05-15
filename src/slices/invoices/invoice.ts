@@ -1,5 +1,15 @@
 import invoiceCreateApiSlice from "./invoiceCreateSlice";
 
+type CreditUser = {
+  name: string;
+  number: string;
+  total_invoices: number;
+  total_due: number;
+  amount_paid: number;
+  outstanding: number;
+};
+
+
 const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
@@ -84,6 +94,14 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+
+    getCreditUsers: builder.query<
+      { status: boolean; message: string; data: CreditUser[] },
+      void
+    >({
+      query: () => "invoices/credits/users",
+      providesTags: ["Invoice"],
+    }),
   }),
 });
 
@@ -95,6 +113,7 @@ export const {
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,
+  useGetCreditUsersQuery
 } = invoiceApi;
 
 export default invoiceApi;

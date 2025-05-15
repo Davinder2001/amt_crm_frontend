@@ -58,17 +58,19 @@ const userApi = userCreateApiSlice.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    sendOtp: builder.mutation<void, { number: number }>({
-      query: () => ({
+    sendOtp: builder.mutation<void, { number: string }>({
+      query: (otp) => ({
         url: "send-wp-otp",
         method: "POST",
+        body: otp,
       }),
     }),
 
-    verifyOtp: builder.mutation<void, { number: number, otp: string }>({
-      query: () => ({
+    verifyOtp: builder.mutation<void, { number: string, otp: string }>({
+      query: (otp) => ({
         url: "verify-wp-otp",
         method: "POST",
+        body: otp,
       }),
     }),
 

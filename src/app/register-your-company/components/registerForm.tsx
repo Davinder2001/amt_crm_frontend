@@ -5,10 +5,14 @@ import { useAdminRegisterMutation } from '@/slices/auth/authApi';
 import { FiUpload, FiUser, FiMail, FiPhone, FiLock, FiHome, FiGlobe, FiFileText, FiCreditCard, FiEyeOff, FiEye, FiFile, FiXCircle } from 'react-icons/fi';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
+import { useSendOtpMutation, useVerifyOtpMutation } from '@/slices/users/userApi';
+import { FaCheckCircle, FaWhatsapp } from 'react-icons/fa';
+
 
 interface RegisterFormProps {
   packageId: number;
   categoryId: number | null;
+  onBack: () => void;
 }
 
 const LOCAL_STORAGE_KEY = 'adminregistration';
@@ -62,7 +66,7 @@ const getDefaultFormData = (packageId: number, categoryId: number | null): Regis
 });
 
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBack }) => {
   const [formData, setFormData] = useState<RegisterForm>(getDefaultFormData(packageId, categoryId));
   const [showConfirm, setShowConfirm] = useState(false);
   const [activeSection, setActiveSection] = useState<'personal' | 'company' | 'documents'>('personal');
@@ -72,9 +76,32 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) =>
     password: false,
     password_confirmation: false
   });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpVerified, setOtpVerified] = useState(false);
 
-  console.log('pID', packageId, 'catID', categoryId);
-  
+  const [sendOtp, { isLoading: sendingOtp }] = useSendOtpMutation();
+  const [verifyOtp, { isLoading: verifyingOtp }] = useVerifyOtpMutation();
+
+  const handleSendOtp = async () => {
+    try {
+      await sendOtp({ number: formData.number }).unwrap();
+      toast.success('OTP sent successfully!');
+      setOtpSent(true);
+    } catch {
+      toast.error('Failed to send OTP');
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      await verifyOtp({ number: formData.number, otp }).unwrap();
+      toast.success('OTP verified successfully!');
+      setOtpVerified(true);
+    } catch {
+      toast.error('Invalid OTP');
+    }
+  };
 
   useEffect(() => {
     const stored = getStoredFormData();
@@ -316,6 +343,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) =>
         <p>Register your company to get started with our platform</p>
       </div>
 
+      <button className="back-button" onClick={onBack}>
+        ← Back to Packages
+      </button>
+
       <div className="register-stepper">
         <div
           className={`step ${activeSection === 'personal' ? 'active' : ''}`}
@@ -331,10 +362,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) =>
           className={`step ${activeSection === 'company' ? 'active' : ''}`}
           onClick={() => {
             const personalErrors = validatePersonalSection();
-            if (Object.keys(personalErrors).length === 0) {
+            if (otpVerified || Object.keys(personalErrors).length === 0) {
               setActiveSection('company');
+            } else {
+              toast.error('Please complete personal info or verify OTP to proceed.');
             }
           }}
+          aria-disabled={!otpVerified}
         >
           <span>2</span>
           Company Details
@@ -377,7 +411,69 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) =>
               {renderInputField('First Name', 'first_name', 'text', true, <FiUser />)}
               {renderInputField('Last Name', 'last_name', 'text', false, <FiUser />)}
               {renderInputField('Email', 'email', 'email', true, <FiMail />)}
-              {renderInputField('Mobile Number', 'number', 'tel', true, <FiPhone />)}
+              <div className="form-group custom-number-field">
+                <label>
+                  <FiPhone />
+                  <span>Mobile Number</span>
+                  <span className="required">*</span>
+                </label>
+
+                <div className="number-otp-row">
+                  {/* Conditionally show number input */}
+                  {!otpSent || otpVerified ? (
+                    <>
+                      <input
+                        type="tel"
+                        name="number"
+                        value={formData.number}
+                        onChange={handleChange}
+                        maxLength={10}
+                        disabled={otpVerified}
+                        placeholder="Enter 10-digit mobile number"
+                        required
+                      />
+                      {otpVerified && (
+                        <span className="otp-verified-success">
+                          <FaCheckCircle className="verified-icon" color="green" size={24} />
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    // Show OTP input + Verify button when OTP is sent but not yet verified
+                    <div className="otp-verification">
+                      <input
+                        type="text"
+                        name="otp"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        placeholder="Enter OTP"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerifyOtp}
+                        disabled={verifyingOtp}
+                      >
+                        {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Show "Send OTP" button only if number is 10 digits and OTP not yet sent */}
+                  {!otpSent && formData.number.length === 10 && (
+                    <button
+                      type="button"
+                      onClick={handleSendOtp}
+                      disabled={sendingOtp}
+                      className="send-otp-btn"
+                    >
+                      <FaWhatsapp size={16} style={{ marginRight: '6px' }} />
+                      {sendingOtp ? 'Sending...' : 'Send OTP'}
+                    </button>
+                  )}
+                </div>
+
+                {fieldErrors.number && <p className="input-error">{fieldErrors.number}</p>}
+              </div>
               <div className="form-group password-group">
                 <label>
                   <FiLock />
@@ -498,54 +594,56 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId }) =>
           </div>
         )}
 
-        <div className="form-navigation">
-          {activeSection !== 'personal' && (
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={() =>
-                setActiveSection(
-                  activeSection === 'company' ? 'personal' : 'company'
-                )
-              }
-            >
-              Previous
-            </button>
-          )}
 
-          {activeSection !== 'documents' ? (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => {
-                if (activeSection === 'personal') {
-                  const personalErrors = validatePersonalSection();
-                  if (Object.keys(personalErrors).length === 0) {
-                    setActiveSection('company');
-                  }
-                } else if (activeSection === 'company') {
-                  const companyErrors = validateCompanySection();
-                  if (Object.keys(companyErrors).length === 0) {
-                    setActiveSection('documents');
-                  }
+        {otpVerified &&
+          <div className="form-navigation">
+            {activeSection !== 'personal' && (
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() =>
+                  setActiveSection(
+                    activeSection === 'company' ? 'personal' : 'company'
+                  )
                 }
-              }}
-            >
-              Next
-            </button>
-          ) : (
-            <button type="submit" className="complete-registration" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <span className="spinner"></span>
-                  Processing...
-                </>
-              ) : (
-                'Complete Registration'
-              )}
-            </button>
-          )}
-        </div>
+              >
+                Previous
+              </button>
+            )}
+
+            {activeSection !== 'documents' ? (
+              <button
+                type="button"
+                className="primary-button"
+                onClick={() => {
+                  if (activeSection === 'personal') {
+                    const personalErrors = validatePersonalSection();
+                    if (Object.keys(personalErrors).length === 0) {
+                      setActiveSection('company');
+                    }
+                  } else if (activeSection === 'company') {
+                    const companyErrors = validateCompanySection();
+                    if (Object.keys(companyErrors).length === 0) {
+                      setActiveSection('documents');
+                    }
+                  }
+                }}
+              >
+                Next
+              </button>
+            ) : (
+              <button type="submit" className="complete-registration" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Processing...
+                  </>
+                ) : (
+                  'Complete Registration'
+                )}
+              </button>
+            )}
+          </div>}
       </form>
     </div>
   );

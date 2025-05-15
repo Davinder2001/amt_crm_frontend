@@ -11,7 +11,7 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
-
+  devIndicators: false,
   experimental: {
     appDir: true,
   },

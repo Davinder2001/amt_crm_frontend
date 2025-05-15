@@ -71,6 +71,35 @@
         }
     }
 
+    .number-otp-row {
+        white-space: nowrap;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        .otp-verification {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            gap: 10px
+        }
+
+        button {
+            background-color: $primary-color;
+            color: $white;
+            font-size: 12px;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            
+        }
+    }
+
     .register-form {
         background: white;
         border-radius: 16px;
@@ -213,10 +242,12 @@
             }
         }
     }
-    
-    .input-group,.form-group{
+
+    .input-group,
+    .form-group {
         position: relative;
-        .input-error{
+
+        .input-error {
             position: absolute;
             bottom: -15px;
             left: 0;
@@ -482,7 +513,7 @@
 }
 
 @media (max-width: 600px) {
-    .register-company-container{
+    .register-company-container {
         padding: 20px 10px;
     }
 }

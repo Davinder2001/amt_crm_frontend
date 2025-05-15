@@ -1,6 +1,7 @@
 @use '../variables' as *;
 
 .allAdmin-table-outer {
+
   select,
   input {
     padding: 3px 11px;
@@ -15,21 +16,21 @@
 
   // Status-select modifiers
   .status-select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+
     &.active {
-      color: green;          // text color for Active
-      border: 1px solid green;
+      color: #22c55e; // Tailwind green-500
+      border: 1px solid #22c55e;
+      background-color: #f0fdf4; // Optional: light green bg
     }
+
     &.blocked {
-      color: #d93025;        // text color for Blocked
-      border: 1px solid #d93025;
-    }
-    // fallback for any other statuses (if needed)
-    &:not(.active):not(.blocked) {
-      color: #333;
-      border: 1px solid #ccc;
+      color: #ef4444; // Tailwind red-500
+      border: 1px solid #ef4444;
+      background-color: #fef2f2; // Optional: light red bg
     }
   }
+
 }
-
-
-

@@ -15,6 +15,7 @@ import { FormInput } from '@/components/common/FormInput';
 import DatePickerField from '@/components/common/DatePickerField';
 import { FormSelect } from '@/components/common/FormSelect';
 import { Tabs, Tab, Box } from '@mui/material';
+import { toast } from 'react-toastify';
 
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
@@ -25,7 +26,7 @@ const UpdateItem = () => {
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
 
-  const [formData, setFormData] = useState<UpdateStoreItemRequest>({
+  const getDefaultFormData = (): UpdateStoreItemRequest => ({
     id: Number(id),
     name: '',
     quantity_count: 0,
@@ -44,7 +45,9 @@ const UpdateItem = () => {
     images: [],
     variants: [],
     categories: [],
-  });
+  })
+
+  const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
 
   const [vendorsList, setVendorsList] = useState<string[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
@@ -75,10 +78,10 @@ const UpdateItem = () => {
         availability_stock: item.availability_stock || 0,
         cost_price: item.cost_price || 0,
         selling_price: item.selling_price || 0,
-        tax_id: item.tax_id || 0,
+        tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
         images: Array.isArray(item.images) ? item.images : [],
         variants: item.variants || [],
-        categories: item.categories || [],
+        categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
       });
       setVariants(item.variants || []);
       setSelectedCategories(item.categories || []);
@@ -114,54 +117,45 @@ const UpdateItem = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = new FormData();
-
-    // Append simple fields
-    form.append('id', formData.id.toString());
-    form.append('name', formData.name);
-    form.append('quantity_count', formData.quantity_count.toString());
-    form.append('measurement', formData.measurement || '');
-    form.append('purchase_date', formData.purchase_date || '');
-    form.append('date_of_manufacture', formData.date_of_manufacture);
-    form.append('date_of_expiry', formData.date_of_expiry || '');
-    form.append('brand_name', formData.brand_name);
-    form.append('replacement', formData.replacement || '');
-    form.append('category', formData.category || '');
-    form.append('vendor_name', formData.vendor_name || '');
-    form.append('availability_stock', formData.availability_stock.toString());
-    form.append('cost_price', formData.cost_price.toString());
-    form.append('selling_price', formData.selling_price.toString());
-    form.append('tax_id', (formData.tax_id ?? 0).toString());
-
-    // Append images
-    formData.images?.forEach((img, index) => {
-      if (img instanceof File) {
-        form.append(`images`, img);
-      } else if (typeof img === 'string') {
-        form.append(`existingImages[${index}]`, img);
-      }
-
-    });
-
-    // Append variants as JSON string
-    if (variants.length > 0) {
-      form.append('variants', JSON.stringify(variants));
+    // Validation: Check for valid tax
+    if (!formData.tax_id || formData.tax_id === 0) {
+      toast.error("No valid tax selected.");
+      setActiveTab(1);
+      return;
     }
 
-    // Append categories
-    selectedCategories.forEach(cat => {
-      form.append('categories[]', cat.id.toString());
-    });
-
     try {
-      await updateStoreItem({
-        id: formData.id,
-        formData: form,
-      }).unwrap();
-      router.push(`/${companySlug}/store`);
+
+      const validatedVariants = variants.filter((v) => {
+        return (
+          v &&
+          typeof v.price === 'number' &&
+          !isNaN(v.price) &&
+          Array.isArray(v.attributes) &&
+          v.attributes.length > 0 &&
+          v.attributes.every(attr =>
+            attr.attribute_id &&
+            attr.attribute_value_id
+          )
+        );
+      });
+
+      // Prepare payload
+      const payload: UpdateStoreItemRequest = {
+        ...formData,
+        id: Number(id),
+        categories: selectedCategories.map((cat) => cat.id), // IDs only
+        variants: validatedVariants,
+        images: formData.images.filter((img: (File | string)) => typeof img !== 'string'), // Send only new File images
+      };
+
+      await updateStoreItem(payload).unwrap();
+
+      toast.success('Item updated successfully!');
+      router.push(`/${companySlug}/store`); // Redirect on success
     } catch (err) {
       console.error('Error updating item:', err);
-      // Add error handling here (e.g., show toast notification)
+      toast.error('Failed to update item.');
     }
   };
 
@@ -176,6 +170,8 @@ const UpdateItem = () => {
             <FaArrowLeft size={16} color='#fff' />
           </Link>
           <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
             style={{
               backgroundColor: '#f1f9f9',
             }}
@@ -288,18 +284,7 @@ const UpdateItem = () => {
                 required
               />
 
-              {taxesData?.data && (
-                <FormSelect<number>
-                  label="Tax"
-                  name="tax_id"
-                  value={formData.tax_id ?? 0}
-                  onChange={(value) => setFormData(prev => ({ ...prev, tax_id: value }))}
-                  options={taxesData.data.map((tax: Tax) => ({
-                    value: tax.id,
-                    label: `${tax.name} - ${tax.rate}%`
-                  }))}
-                />
-              )}
+
 
               <FormInput
                 label="Quantity Count*"
@@ -331,6 +316,20 @@ const UpdateItem = () => {
                 }}
                 placeholder="e.g. 50"
               />
+
+              {taxesData?.data && (
+                <FormSelect<number>
+                  label="Tax"
+                  name="tax_id"
+                  value={formData.tax_id ?? 0}
+                  onChange={(value) => setFormData(prev => ({ ...prev, tax_id: value }))}
+                  options={taxesData.data.map((tax: Tax) => ({
+                    value: tax.id,
+                    label: `${tax.name} - ${tax.rate}%`
+                  }))}
+                />
+              )}
+
             </div>
           )}
 

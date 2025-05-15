@@ -83,7 +83,9 @@
 // super admin dashbord sectiion 
 @use './superadmin/sDashbord.scss' as *;
 // super admin package sectiion 
-@use './superadmin/packageView.scss' as *;
+@use './superadmin/packages/packageView.scss' as *;
+@use './superadmin/BusinessCategories.scss' as *;
+@use './superadmin/packages/createPackages.scss' as *;
 
 
 

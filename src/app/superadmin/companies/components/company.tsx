@@ -1,8 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import TableToolbar from '@/components/common/TableToolbar';
+import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 interface Company {
@@ -16,104 +19,145 @@ interface Company {
   updated_at: string;
 }
 
-const CompanyComponent: React.FC = () => {
-  const { data, error, isLoading } = useFetchCompaniesQuery();
-  const router = useRouter();
+const paymentStatusOptions = ['pending', 'processing', 'completed', 'failed'];
+const verificationStatusOptions = ['pending', 'under_review', 'verified', 'rejected'];
 
-  const [localCompanies, setLocalCompanies] = useState<Company[]>([]);
-const { setTitle } = useBreadcrumb();
-  
-    useEffect(() => {
-      setTitle('All Companies'); // Update breadcrumb title
-    }, [setTitle]);
+const CompanyComponent = () => {
+  const { data, error, isLoading } = useFetchCompaniesQuery();
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>([
+    'company_id',
+    'company_name',
+    'company_slug',
+    'payment_status',
+    'verification_status'
+  ]);
+  const router = useRouter();
+  const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
-    if (data?.data) {
-      setLocalCompanies(data.data);
-    }
+    setTitle('All Companies');
+  }, [setTitle]);
+
+  useEffect(() => {
+    if (data?.data) setCompanies(data.data);
   }, [data]);
 
-  const paymentStatusOptions = ['pending', 'processing', 'completed', 'failed'];
-  const verificationStatusOptions = ['pending', 'under_review', 'verified', 'rejected'];
-
-  const handleNavigation = (route: string) => {
-    router.push(route);
-  };
-
-  const handlePaymentChange = (companyId: number, value: string) => {
-    setLocalCompanies((prev) =>
-      prev.map((c) =>
-        c.id === companyId ? { ...c, payment_status: value } : c
+  const handlePaymentChange = (id: number, status: string) => {
+    setCompanies((prev) =>
+      prev.map((company) =>
+        company.id === id ? { ...company, payment_status: status } : company
       )
     );
-    toast.success(`Payment marked as "${value}" successfully.`);
+    toast.success(`Payment marked as "${status}"`);
   };
 
-  const handleVerificationChange = (companyId: number, value: string) => {
-    setLocalCompanies((prev) =>
-      prev.map((c) =>
-        c.id === companyId ? { ...c, verification_status: value } : c
+  const handleVerificationChange = (id: number, status: string) => {
+    setCompanies((prev) =>
+      prev.map((company) =>
+        company.id === id ? { ...company, verification_status: status } : company
       )
     );
-    toast.success(`Verification marked as "${value}" successfully.`);
+    toast.success(`Verification marked as "${status}"`);
   };
 
-  if (isLoading) return <div>Loading companies...</div>;
-  if (error) return <div>Error loading companies.</div>;
+  const handleFilterChange = (field: string, value: string, checked: boolean) => {
+    setFilters((prev) => {
+      const current = new Set(prev[field] || []);
+      if (checked) current.add(value);
+      else current.delete(value);
+      return { ...prev, [field]: [...current] };
+    });
+  };
+
+  const toggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
+    );
+  };
+
+  const filterData = (data: Company[]): Company[] => {
+    return data.filter((company) => {
+      return Object.entries(filters).every(([field, values]) => {
+        const value = company[field as keyof Company];
+        return values.length === 0 || values.includes(String(value));
+      });
+    });
+  };
+
+  const columns = [
+    {
+      label: 'Company Code',
+      key: 'company_id' as keyof Company,
+    },
+    {
+      label: 'Name',
+      key: 'company_name' as keyof Company,
+    },
+    {
+      label: 'Slug',
+      key: 'company_slug' as keyof Company,
+    },
+    {
+      label: 'Payment Status',
+      key: 'payment_status' as keyof Company,
+      render: (company: Company) => (
+        <select
+          className={`payment-select ${company.payment_status}`}
+          value={company.payment_status}
+          onChange={(e) => handlePaymentChange(company.id, e.target.value)}
+        >
+          {paymentStatusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+            </option>
+          ))}
+        </select>
+      )
+    },
+    {
+      label: 'Verification Status',
+      key: 'verification_status' as keyof Company,
+      render: (company: Company) => (
+        <select
+          className={`verification-select ${company.verification_status}`}
+          value={company.verification_status}
+          onChange={(e) => handleVerificationChange(company.id, e.target.value)}
+        >
+          {verificationStatusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+            </option>
+          ))}
+        </select>
+      )
+    }
+  ].filter((col) => visibleColumns.includes(col.key as string));
+
+  if (isLoading) return <Loader />;
+  if (error) return <p className="text-red-500">Error loading companies.</p>;
+
+  const filteredData = filterData(companies);
 
   return (
     <div className="company-table-outer">
-      <table className="min-w-full border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Code</th>
-            <th className="border p-2">Name</th>
-            <th className="border p-2">Slug</th>
-            <th className="border p-2">Payment</th>
-            <th className="border p-2">Verification</th>
-          </tr>
-        </thead>
-        <tbody>
-          {localCompanies.map((c) => (
-            <tr key={c.id}>
-              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.id}</td>
-              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_id}</td>
-              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_name}</td>
-              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>{c.company_slug}</td>
-              <td className="border p-2" onClick={() => handleNavigation(`companies/view/${c.id}`)}>
-                <select
-                  className={`payment-select ${c.payment_status} border rounded px-2 py-1`}
-                  value={c.payment_status}
-                  onChange={(e) => handlePaymentChange(c.id, e.target.value)}
-                >
-                  {paymentStatusOptions.map((status) => (
-                    <option key={status} value={status}>
-                      {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
-                    </option>
-                  ))}
-                </select>
-              </td>
-
-              <td className="border p-2">
-                <select
-                  className={`verification-select ${c.verification_status} border rounded px-2 py-1`}
-                  value={c.verification_status}
-                  onChange={(e) => handleVerificationChange(c.id, e.target.value)}
-                >
-                  {verificationStatusOptions.map((status) => (
-                    <option key={status} value={status}>
-                      {status
-                        .charAt(0)
-                        .toUpperCase() + status.slice(1).replace('_', ' ')}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableToolbar
+        filters={{
+          payment_status: [...new Set(companies.map((c) => c.payment_status))],
+          verification_status: [...new Set(companies.map((c) => c.verification_status))]
+        }}
+        onFilterChange={handleFilterChange}
+        columns={columns}
+        visibleColumns={visibleColumns}
+        onColumnToggle={toggleColumn}
+        actions={[]}
+      />
+      <ResponsiveTable
+        data={filteredData}
+        columns={columns}
+        onView={(id) => router.push(`/superadmin/companies/view/${id}`)}
+      />
     </div>
   );
 };

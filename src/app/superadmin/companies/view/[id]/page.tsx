@@ -4,8 +4,9 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useParams } from 'next/navigation';
 import { useFetchSingleCompanyQuery } from '@/slices/superadminSlices/company/companyApi';
 import { useRouter } from 'next/navigation';
-import { FaArrowLeft} from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -38,12 +39,9 @@ const ViewCompanyPage = () => {
   return (
     <div className="vc-container">
       <div className='vC-back-btn'>
-        <button
-          onClick={() => router.back()}
-          className="buttons"
-        >
-          <FaArrowLeft />Back
-        </button>
+        <Link href="/superadmin/companies" className='back-button'>
+          <FaArrowLeft size={16} color='#fff' />
+        </Link>
       </div>
       <div className="vc-inner-container">
 

@@ -82,6 +82,9 @@
 
 // super admin dashbord sectiion 
 @use './superadmin/sDashbord.scss' as *;
+// super admin package sectiion 
+@use './superadmin/packageView.scss' as *;
+
 
 
 // permissions section

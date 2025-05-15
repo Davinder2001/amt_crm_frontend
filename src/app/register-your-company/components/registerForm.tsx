@@ -88,7 +88,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
       await sendOtp({ number: formData.number }).unwrap();
       toast.success('OTP sent successfully!');
       setOtpSent(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to send OTP');
     }
   };
@@ -98,7 +98,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
       await verifyOtp({ number: formData.number, otp }).unwrap();
       toast.success('OTP verified successfully!');
       setOtpVerified(true);
-    } catch (error) {
+    } catch {
       toast.error('Invalid OTP');
     }
   };

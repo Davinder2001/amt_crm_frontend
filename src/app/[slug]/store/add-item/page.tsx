@@ -115,7 +115,7 @@ const AddItem: React.FC = () => {
       const lastValidTab = newTabCompletion.lastIndexOf(true);
       setActiveTab(lastValidTab);
     }
-  }, [formData, variants, selectedCategories]);
+  }, [formData, variants, selectedCategories, activeTab, validateTab]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

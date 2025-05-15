@@ -249,7 +249,7 @@ const InfoCard = ({
   icon: Icon
 }: {
   title: string;
-  data: { label: string; value: any; className?: string }[];  // support className
+  data: { label: string; value: string | number; className?: string }[];  // support className
   className?: string;
   icon?: React.ElementType;
 }) => (

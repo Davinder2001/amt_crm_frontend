@@ -1,4 +1,4 @@
-@use '../variables' as *;
+@use '../../variables' as *;
 
 .superadmin-packages-container {
 
@@ -42,9 +42,11 @@
         transition: transform $transition, box-shadow $transition;
         overflow: hidden;
         border-top: 2px solid $primary-color;
+        max-width: 330px;
+        width: 100%;
 
         &:hover {
-            transform: translateY(-6px);
+            transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         }
 

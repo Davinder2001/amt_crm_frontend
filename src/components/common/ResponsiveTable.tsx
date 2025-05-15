@@ -89,7 +89,8 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                     target.closest('button') ||
                     target.closest('svg') ||
                     target.closest('.action-icon') ||
-                    target.closest('.ellipsis-icon')
+                    target.closest('.ellipsis-icon')||
+                    target.closest('select')
                   ) {
                     return;
                   }

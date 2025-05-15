@@ -1,12 +1,177 @@
+// "use client";
+
+// import React, { useState } from "react";
+// import {
+//     useGetBusinessCategoriesQuery,
+//     useCreateBusinessCategoryMutation,
+//     useUpdateBusinessCategoryMutation,
+//     useDeleteBusinessCategoryMutation,
+// } from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
+
+// import {
+//     Box,
+//     Button,
+//     TextField,
+//     Typography,
+//     Paper,
+//     IconButton,
+//     Stack,
+//     CircularProgress,
+// } from "@mui/material";
+// import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
+
+// const BusinessCategoriesPage = () => {
+//     const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();
+//     const [createCategory] = useCreateBusinessCategoryMutation();
+//     const [updateCategory] = useUpdateBusinessCategoryMutation();
+//     const [deleteCategory] = useDeleteBusinessCategoryMutation();
+
+//     const [form, setForm] = useState({ id: null as number | null, name: "" });
+
+//     const handleSubmit = async () => {
+//         if (form.id) {
+//             await updateCategory({ id: form.id, name: form.name });
+//         } else {
+//             await createCategory({ name: form.name });
+//         }
+//         setForm({ id: null, name: "" });
+//     };
+
+//     const handleEdit = (category: BusinessCategory) => {
+//         setForm({ id: category.id, name: category.name });
+//     };
+
+//     const handleCancel = () => {
+//         setForm({ id: null, name: "" });
+//     };
+
+//     const handleDelete = async (id: number) => {
+//         if (confirm("Are you sure you want to delete this category?")) {
+//             await deleteCategory(id);
+//         }
+//     };
+
+//     return (
+//         <Box sx={{ maxWidth: 800, margin: "0 auto", p: 3 }}>
+//             <Typography variant="h5" gutterBottom>
+//                 Business Categories
+//             </Typography>
+
+//             <Paper sx={{ p: 2, mb: 3, backgroundColor: "#f1f9f9" }}>
+//                 <Stack direction="row" spacing={2} alignItems="center">
+//                     <TextField
+//                         fullWidth
+//                         label="Category Name"
+//                         value={form.name}
+//                         onChange={(e) => setForm({ ...form, name: e.target.value })}
+//                         sx={{
+//                             backgroundColor: "#f1f9f9",
+//                         }}
+//                     />
+//                     <Button
+//                         variant="contained"
+//                         color="primary"
+//                         startIcon={<FaPlus />}
+//                         onClick={handleSubmit}
+//                         sx={{
+//                             backgroundColor: "#009693",
+//                             "&:hover": {
+//                                 backgroundColor: "#007f72",
+//                             },
+//                         }}
+//                     >
+//                         {form.id ? "Update" : "Add"}
+//                     </Button>
+//                     {form.id && (
+//                         <Button
+//                             variant="outlined"
+//                             color="secondary"
+//                             onClick={handleCancel}
+//                             sx={{
+//                                 borderColor: "#009693",
+//                                 color: "#009693",
+//                                 "&:hover": {
+//                                     borderColor: "#007f72",
+//                                     color: "#007f72",
+//                                 },
+//                             }}
+//                         >
+//                             Cancel
+//                         </Button>
+//                     )}
+//                 </Stack>
+//             </Paper>
+
+//             {isLoading ? (
+//                 <Box display="flex" justifyContent="center">
+//                     <CircularProgress />
+//                 </Box>
+//             ) : isError ? (
+//                 <Typography color="error">Failed to load categories.</Typography>
+//             ) : (
+//                 categories?.map((cat) => (
+//                     <Paper
+//                         key={cat.id}
+//                         sx={{
+//                             p: 2,
+//                             mb: 1,
+//                             display: "flex",
+//                             justifyContent: "space-between",
+//                             alignItems: "center",
+//                             backgroundColor: "#f1f9f9",
+//                         }}
+//                     >
+//                         <Typography>{cat.name}</Typography>
+//                         <Box>
+//                             <IconButton
+//                                 color="primary"
+//                                 onClick={() => handleEdit(cat)}
+//                                 sx={{
+//                                     color: "#009693",
+//                                     "&:hover": {
+//                                         color: "#007f72",
+//                                     },
+//                                 }}
+//                             >
+//                                 <FaEdit />
+//                             </IconButton>
+//                             <IconButton
+//                                 color="error"
+//                                 onClick={() => handleDelete(cat.id)}
+//                             >
+//                                 <FaTrash />
+//                             </IconButton>
+//                         </Box>
+//                     </Paper>
+//                 ))
+//             )}
+//         </Box>
+//     );
+// };
+
+// export default BusinessCategoriesPage;
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
     useGetBusinessCategoriesQuery,
     useCreateBusinessCategoryMutation,
     useUpdateBusinessCategoryMutation,
     useDeleteBusinessCategoryMutation,
 } from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 import {
     Box,
@@ -15,7 +180,6 @@ import {
     Typography,
     Paper,
     IconButton,
-    Stack,
     CircularProgress,
 } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
@@ -25,17 +189,22 @@ const BusinessCategoriesPage = () => {
     const [createCategory] = useCreateBusinessCategoryMutation();
     const [updateCategory] = useUpdateBusinessCategoryMutation();
     const [deleteCategory] = useDeleteBusinessCategoryMutation();
+    const [isUpdating, setIsUpdating] = useState(false);
+  const { setTitle } = useBreadcrumb();
 
     const [form, setForm] = useState({ id: null as number | null, name: "" });
 
     const handleSubmit = async () => {
         if (form.id) {
+            setIsUpdating(true);
             await updateCategory({ id: form.id, name: form.name });
+            setIsUpdating(false);
         } else {
             await createCategory({ name: form.name });
         }
         setForm({ id: null, name: "" });
     };
+
 
     const handleEdit = (category: BusinessCategory) => {
         setForm({ id: category.id, name: category.name });
@@ -50,100 +219,91 @@ const BusinessCategoriesPage = () => {
             await deleteCategory(id);
         }
     };
+      useEffect(() => {
+    setTitle('Manage Categories');
+  }, [setTitle]);
 
     return (
-        <Box sx={{ maxWidth: 800, margin: "0 auto", p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                Business Categories
-            </Typography>
+        <Box className="business-category-page">
 
-            <Paper sx={{ p: 2, mb: 3, backgroundColor: "#f1f9f9" }}>
-                <Stack direction="row" spacing={2} alignItems="center">
-                    <TextField
-                        fullWidth
-                        label="Category Name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        sx={{
-                            backgroundColor: "#f1f9f9",
-                        }}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<FaPlus />}
-                        onClick={handleSubmit}
-                        sx={{
-                            backgroundColor: "#009693",
-                            "&:hover": {
-                                backgroundColor: "#007f72",
+            <Paper className="glass-form">
+
+                <TextField
+                    fullWidth
+                    label="Category Name"
+                    variant="outlined"
+                    size="small"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    InputLabelProps={{
+                        sx: {
+                            color: '#009693',
+                            '&.Mui-focused': {
+                                color: '#009693',
                             },
-                        }}
-                    >
-                        {form.id ? "Update" : "Add"}
-                    </Button>
+                        },
+                    }}
+                    InputProps={{
+                        sx: {
+                            paddingRight: 1,
+                        },
+                    }}
+                    sx={{
+                        maxWidth: 500,
+                        width: '100%',
+                        '& .MuiOutlinedInput-root.Mui-focused': {
+                            '& fieldset': {
+                                borderColor: '#009693',
+                            },
+                        },
+                    }}
+                />
+
+                <Box className="form-actions">
                     {form.id && (
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={handleCancel}
-                            sx={{
-                                borderColor: "#009693",
-                                color: "#009693",
-                                "&:hover": {
-                                    borderColor: "#007f72",
-                                    color: "#007f72",
-                                },
-                            }}
-                        >
+                        <Button className="cancel-btn" onClick={handleCancel}>
                             Cancel
                         </Button>
                     )}
-                </Stack>
+                    <Button
+                        className="add-btn"
+                        onClick={handleSubmit}
+                        startIcon={!form.id ? <FaPlus /> : null}
+                        disabled={isUpdating}
+                    >
+                        {form.id ? (isUpdating ? "Updating..." : "Update") : "Add"}
+                    </Button>
+
+
+
+                </Box>
             </Paper>
 
+
+
+
             {isLoading ? (
-                <Box display="flex" justifyContent="center">
+                <Box className="loading-center">
                     <CircularProgress />
                 </Box>
             ) : isError ? (
                 <Typography color="error">Failed to load categories.</Typography>
             ) : (
-                categories?.map((cat) => (
-                    <Paper
-                        key={cat.id}
-                        sx={{
-                            p: 2,
-                            mb: 1,
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            backgroundColor: "#f1f9f9",
-                        }}
-                    >
-                        <Typography>{cat.name}</Typography>
-                        <Box>
-                            <IconButton
-                                color="primary"
-                                onClick={() => handleEdit(cat)}
-                                sx={{
-                                    color: "#009693",
-                                    "&:hover": {
-                                        color: "#007f72",
-                                    },
-                                }}
-                            >
-                                <FaEdit />
-                            </IconButton>
-                            <IconButton
-                                color="error"
-                                onClick={() => handleDelete(cat.id)}
-                            >
-                                <FaTrash />
-                            </IconButton>
-                        </Box>
-                    </Paper>
-                ))
+                <div className="category-grid">
+                    {categories?.map((cat) => (
+                        <Paper key={cat.id} className="category-box">
+                            <Typography className="category-name">{cat.name}</Typography>
+                            <Box className="action-buttons">
+                                <IconButton className="edit-btn" onClick={() => handleEdit(cat)}>
+                                    <FaEdit />
+                                </IconButton>
+                                <IconButton className="delete-btn" onClick={() => handleDelete(cat.id)}>
+                                    <FaTrash />
+                                </IconButton>
+                            </Box>
+                        </Paper>
+                    ))}
+                </div>
             )}
         </Box>
     );

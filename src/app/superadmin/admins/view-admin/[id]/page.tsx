@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useGetAdminByIdQuery } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
@@ -15,7 +15,6 @@ const ViewAdminPage = () => {
   }, [setTitle]);
 
   const { id } = useParams();
-  const router = useRouter(); // ✅ Correct usage
 
   const { data, isLoading, error } = useGetAdminByIdQuery(id as string);
 

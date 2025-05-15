@@ -20,7 +20,7 @@ import { FiXCircle } from 'react-icons/fi';
 
 const LOCAL_STORAGE_KEY = 'storeItemForm';
 
-const getDefaultFormData = () => ({
+const getDefaultFormData = (): CreateStoreItemRequest => ({
   name: '',
   quantity_count: 0,
   measurement: '',
@@ -78,7 +78,7 @@ const AddItem: React.FC = () => {
     const updated = { ...formData, [name]: value };
     setFormData(updated);
 
-    const { images, ...rest } = updated;
+    const { ...rest } = updated;
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(rest));
   };
 
@@ -203,6 +203,8 @@ const AddItem: React.FC = () => {
             onChange={(e, newValue) => {
               if (tabCompletion[newValue]) setActiveTab(newValue);
             }}
+            variant="scrollable"
+            scrollButtons="auto"
             style={{ backgroundColor: '#f1f9f9' }}
             sx={{
               '& .MuiTab-root': {

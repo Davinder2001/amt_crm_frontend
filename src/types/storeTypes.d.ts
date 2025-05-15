@@ -26,7 +26,7 @@ interface StoreItem {
   final_cost: number;
   categories: Category[];
   variants: variations[];
-  taxes?: { name: string; rate: number }[];
+  taxes: Tax[];
 }
 
 interface Category {
@@ -71,6 +71,7 @@ interface AttributeOption {
 }
 
 interface variations {
+  attribute_value_id: number;
   id?: number;
   regular_price?: number;
   price: number;
@@ -126,7 +127,7 @@ interface UpdateStoreItemRequest {
   tax_id: number;
   images: (string | File)[] | File[];
   variants: variations[],
-  categories: Category[]
+  categories: number[];
 }
 
 

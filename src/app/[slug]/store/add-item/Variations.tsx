@@ -34,15 +34,21 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                 }) || [];
 
                 return {
+                    attribute_value_id: mappedAttributes[0]?.attribute_value_id
+                        ? Number(mappedAttributes[0].attribute_value_id)
+                        : 0,
                     attributes: mappedAttributes,
                     price: Number(v.price) || 0,
                     regular_price: Number(v.regular_price) || 0,
                 };
             });
-
+            setCombinations([{ attribute_value_id: 0, attributes: [], price: 0, regular_price: 0 }]);
             setCombinations(mappedVariants);
         } else {
-            setCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
+            setCombinations([{
+                attributes: [], price: 0, regular_price: 0,
+                attribute_value_id: 0
+            }]);
         }
     }, [variants, attributes]);
 
@@ -83,7 +89,10 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     };
 
     const handleAddCombination = () => {
-        setCombinations(prev => [...prev, { attributes: [], price: 0, regular_price: 0 }]);
+        setCombinations(prev => [
+            ...prev,
+            { attribute_value_id: 0, attributes: [], price: 0, regular_price: 0 }
+        ]);
     };
 
     const handleRemoveCombination = (index: number) => {
@@ -96,7 +105,10 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     };
 
     const handleReset = () => {
-        setCombinations([{ attributes: [], price: 0, regular_price: 0 }]);
+        setCombinations([{
+            attributes: [], price: 0, regular_price: 0,
+            attribute_value_id: 0
+        }]);
     };
 
     return (

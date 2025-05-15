@@ -59,7 +59,7 @@ interface CreateInvoicePayload {
   invoice_date: string;
   email?: string;
   discount_price?: number;
-  percentage?: number;
+  discount_percentage?: number;
   discount_type?: string;
   serviceChargeAmount?: number;
   serviceChargePercent?: number;

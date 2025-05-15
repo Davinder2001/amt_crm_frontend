@@ -1,5 +1,30 @@
 @use './variables.scss' as *;
 
+form .clear-button {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: #fff;
+    border: 1px solid #ccc;
+    border-right: none;
+    padding: 10px 12px;
+    border-radius: 8px 0 0 8px;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1000;
+    transition: background 0.3s;
+
+    &:hover {
+        background: #f9f9f9;
+    }
+
+    svg {
+        font-size: 20px;
+        color: #d9363e;
+    }
+}
+
 .register-company-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -96,7 +121,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            
+
         }
     }
 
@@ -107,30 +132,7 @@
         padding: 20px;
         position: relative;
 
-        .clear-button {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            background: #fff;
-            border: 1px solid #ccc;
-            border-right: none;
-            padding: 10px 12px;
-            border-radius: 8px 0 0 8px;
-            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            z-index: 1000;
-            transition: background 0.3s;
 
-            &:hover {
-                background: #f9f9f9;
-            }
-
-            svg {
-                font-size: 20px;
-                color: #d9363e;
-            }
-        }
     }
 
     .form-section {

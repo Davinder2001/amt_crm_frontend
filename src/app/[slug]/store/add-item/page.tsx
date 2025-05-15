@@ -15,6 +15,30 @@ import ImageUpload from '../components/ImageUpload';
 import ItemsTab from '../components/ItemsTab';
 import ItemCategories from '../components/ItemCategories';
 import { Tabs, Tab, Box } from '@mui/material';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FiXCircle } from 'react-icons/fi';
+
+const LOCAL_STORAGE_KEY = 'storeItemForm';
+
+const getDefaultFormData = (): CreateStoreItemRequest => ({
+  name: '',
+  quantity_count: 0,
+  measurement: '',
+  purchase_date: '',
+  date_of_manufacture: '',
+  date_of_expiry: '',
+  brand_name: '',
+  replacement: '',
+  category: '',
+  vendor_name: '',
+  availability_stock: 0,
+  cost_price: 0,
+  selling_price: 0,
+  tax_id: 0,
+  images: [],
+  variants: [],
+  categories: [],
+})
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
@@ -24,32 +48,26 @@ const AddItem: React.FC = () => {
   const { companySlug } = useCompany();
   const [activeTab, setActiveTab] = useState(0);
 
-  const [formData, setFormData] = useState<CreateStoreItemRequest>({
-    name: '',
-    quantity_count: 0,
-    measurement: '',
-    purchase_date: '',
-    date_of_manufacture: '',
-    date_of_expiry: '',
-    brand_name: '',
-    replacement: '',
-    category: '',
-    vendor_name: '',
-    availability_stock: 0,
-    cost_price: 0,
-    selling_price: 0,
-    tax_id: 0,
-    images: [],
-    variants: [],
-    categories: [],
-  });
+  const [formData, setFormData] = useState<CreateStoreItemRequest>(getDefaultFormData());
 
   const [vendors, setVendors] = useState<string[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false, false, false]);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
+    const savedFormData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (savedFormData) {
+      const parsed = JSON.parse(savedFormData);
+      delete parsed.images;
+      setFormData(prev => ({ ...prev, ...parsed }));
+
+      if (parsed.categories) {
+        setSelectedCategories(parsed.categories);
+      }
+    }
+
     if (vendorsData) {
       setVendors(vendorsData.map((vendor: { vendor_name: string }) => vendor.vendor_name));
     }
@@ -57,13 +75,19 @@ const AddItem: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+
+    const { ...rest } = updated;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(rest));
   };
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const numValue = value === '' ? 0 : Number(value);
-    setFormData(prev => ({ ...prev, [name]: isNaN(numValue) ? 0 : numValue }));
+    const newFormData = { ...formData, [name]: isNaN(numValue) ? 0 : numValue };
+    setFormData(newFormData);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newFormData));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +103,15 @@ const AddItem: React.FC = () => {
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+  };
+
+  const handleCategoryChange = (categories: Category[]) => {
+    setSelectedCategories(categories);
+
+    // Store in localStorage
+    const existing = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+    const updated = { ...existing, categories };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
   const validateTab = (index: number): boolean => {
@@ -117,6 +150,12 @@ const AddItem: React.FC = () => {
     }
   }, [formData, variants, selectedCategories]);
 
+  const handleClearForm = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    setFormData(getDefaultFormData());
+    setShowConfirm(false);
+    setActiveTab(0)
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = new FormData();
@@ -145,6 +184,7 @@ const AddItem: React.FC = () => {
 
     try {
       await createStoreItem(form).unwrap();
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
       router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error creating item:', err);
@@ -163,6 +203,8 @@ const AddItem: React.FC = () => {
             onChange={(e, newValue) => {
               if (tabCompletion[newValue]) setActiveTab(newValue);
             }}
+            variant="scrollable"
+            scrollButtons="auto"
             style={{ backgroundColor: '#f1f9f9' }}
             sx={{
               '& .MuiTab-root': {
@@ -231,10 +273,20 @@ const AddItem: React.FC = () => {
                 <AddVendor
                   vendors={vendors}
                   selectedVendor={formData.vendor_name || ''}
-                  onVendorSelect={(vendorName) => setFormData(prev => ({ ...prev, vendor_name: vendorName }))}
+                  onVendorSelect={(vendorName) => {
+                    setFormData(prev => {
+                      const updated = { ...prev, vendor_name: vendorName };
+                      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                      return updated;
+                    });
+                  }}
                   onVendorAdded={(vendorName) => {
                     setVendors(prev => [...prev, vendorName]);
-                    setFormData(prev => ({ ...prev, vendor_name: vendorName }));
+                    setFormData(prev => {
+                      const updated = { ...prev, vendor_name: vendorName };
+                      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                      return updated;
+                    });
                   }}
                 />
               </div>
@@ -287,7 +339,11 @@ const AddItem: React.FC = () => {
                   label="Tax"
                   name="tax_id"
                   value={formData.tax_id}
-                  onChange={(value) => setFormData(prev => ({ ...prev, tax_id: value }))}
+                  onChange={(value) => {
+                    const updated = { ...formData, tax_id: value };
+                    setFormData(updated);
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                  }}
                   options={taxesData.data.map((tax: Tax) => ({
                     value: tax.id,
                     label: `${tax.name} - ${tax.rate}%`
@@ -309,14 +365,22 @@ const AddItem: React.FC = () => {
               <DatePickerField
                 label="Purchase Date"
                 selectedDate={formData.purchase_date || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, purchase_date: date }))}
+                onChange={(date) => {
+                  const updated = { ...formData, purchase_date: date };
+                  setFormData(updated);
+                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                }}
                 maxDate={new Date()}
               />
 
               <DatePickerField
                 label="Date Of Manufacture*"
                 selectedDate={formData.date_of_manufacture || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, date_of_manufacture: date }))}
+                onChange={(date) => {
+                  const updated = { ...formData, date_of_manufacture: date };
+                  setFormData(updated);
+                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                }}
                 maxDate={new Date()}
                 required
               />
@@ -324,7 +388,11 @@ const AddItem: React.FC = () => {
               <DatePickerField
                 label="Date Of Expiry"
                 selectedDate={formData.date_of_expiry || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, date_of_expiry: date }))}
+                onChange={(date) => {
+                  const updated = { ...formData, date_of_expiry: date };
+                  setFormData(updated);
+                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                }}
                 minDate={new Date()}
               />
             </div>
@@ -333,7 +401,7 @@ const AddItem: React.FC = () => {
           {activeTab === 3 && (
             <div className='categories-container'>
               <ItemCategories
-                setSelectedCategories={setSelectedCategories}
+                setSelectedCategories={handleCategoryChange}
                 selectedCategories={selectedCategories}
               />
             </div>
@@ -345,6 +413,14 @@ const AddItem: React.FC = () => {
             </div>
           )}
         </Box>
+
+        <ConfirmDialog
+          isOpen={showConfirm}
+          message="Are you sure you want to clear the form?"
+          onConfirm={handleClearForm}
+          onCancel={() => setShowConfirm(false)}
+        />
+        <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
 
         <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button

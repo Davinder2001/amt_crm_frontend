@@ -58,7 +58,7 @@ export default function CheckoutPanel({
         email: email,
         invoice_date: new Date().toISOString().split('T')[0],
         discount_price: discountAmount,
-        percentage: discountPercent,
+        discount_percentage: discountPercent,
         discount_type: discountType,
         serviceChargeAmount: serviceChargeAmount,
         serviceChargePercent: serviceChargePercent,

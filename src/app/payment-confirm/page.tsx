@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const ConfirmPage = () => {
     const [confirmAdminRegister] = useConfirmAdminRegisterMutation();
     const router = useRouter();
-
+ 
     useEffect(() => {
         const confirmRegistration = async () => {
             const urlParams = new URLSearchParams(window.location.search);

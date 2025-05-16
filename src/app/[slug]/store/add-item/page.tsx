@@ -185,6 +185,7 @@ const AddItem: React.FC = () => {
     try {
       await createStoreItem(form).unwrap();
       localStorage.removeItem(LOCAL_STORAGE_KEY);
+      setFormData(getDefaultFormData());
       router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error creating item:', err);

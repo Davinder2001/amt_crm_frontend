@@ -36,11 +36,11 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Update a store item
-    updateStoreItem: builder.mutation<StoreItem, UpdateStoreItemRequest>({
-      query: ({ id, ...body }) => ({
+    updateStoreItem: builder.mutation<StoreItem, { id: number, formdata: FormData }>({
+      query: ({ id, formdata }) => ({
         url: `store/items/${id}`,
-        method: "PUT",
-        body,
+        method: "POST",
+        body: formdata,
       }),
       invalidatesTags: ["Store"],
     }),

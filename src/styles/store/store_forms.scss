@@ -5,6 +5,15 @@
 // ==============================
 // Store Add Item Main Section....................................................................................
 // ==============================
+
+.add-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  overflow: auto;
+}
+
 .store-add-item {
   border-radius: 10px;
 
@@ -123,13 +132,6 @@
     }
   }
 
-  .add-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    overflow: auto;
-  }
 
   .categories-container {
     background-color: $white;

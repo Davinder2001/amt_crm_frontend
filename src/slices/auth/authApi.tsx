@@ -91,7 +91,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
 
     confirmAdminRegister: builder.mutation<RegisterForm, { orderId: string, formData: FormData }>({
       query: ({ orderId, formData }) => ({
-        url: `admin-register-confirm?orderId=${orderId}`,
+        url: `admin-register-confirm/${orderId}`,
         method: "POST",
         body: formData,
       }),

@@ -59,10 +59,12 @@ const AddEmployeeForm: React.FC = () => {
   const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
   const { data: shiftData, isLoading: shiftLoading, error: shiftError } = useFetchCompanyShiftsQuery();
   const { companySlug } = useCompany();
-  const [step, setStep] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
+  const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false]);
   const [formData, setFormData] = useState(getDefaultEmployeeForm());
   const [hasLoadedFromLS, setHasLoadedFromLS] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -72,24 +74,75 @@ const AddEmployeeForm: React.FC = () => {
     setHasLoadedFromLS(true);
   }, []);
 
-  const validateStep = (currentStep: number) => {
-    const stepFields = {
-      1: ["name", "number", "address", "nationality", "dob", "religion", "maritalStatus", "emergencyContact", "emergencyContactRelation"],
-      2: ["email", "password", "salary", "currentSalary", "dateOfHire", "workLocation", "joiningDate", "shiftTimings", "role", "department", "joiningType"],
-      3: ["bankName", "accountNo", "ifscCode", "panNo", "upiId", "addressProof"]
-    };
 
-    const newErrors: { [key: string]: string } = {};
-    stepFields[currentStep as keyof typeof stepFields].forEach(field => {
-      if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = "This field is required";
-      }
-    });
+  const validateTab = (index: number): boolean => {
+    switch (index) {
+      case 0: // Personal Info Tab
+        return (
+          formData.name.trim() !== '' &&
+          formData.number.trim() !== '' &&
+          formData.address.trim() !== '' &&
+          formData.nationality.trim() !== '' &&
+          formData.dob.trim() !== '' &&
+          formData.religion.trim() !== '' &&
+          formData.maritalStatus.trim() !== '' &&
+          formData.emergencyContact.trim() !== '' &&
+          formData.emergencyContactRelation.trim() !== '' &&
+          formData.idProofType.trim() !== '' &&
+          (
+            (formData.idProofType === "bill" && formData.idProofImage !== null) ||
+            (formData.idProofType !== "bill" && formData.idProofValue.trim() !== '')
+          )
+        );
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+      case 1: // Job Info Tab
+        return (
+          formData.email.trim() !== '' &&
+          formData.password.trim() !== '' &&
+          formData.salary.trim() !== '' &&
+          formData.currentSalary.trim() !== '' &&
+          formData.dateOfHire.trim() !== '' &&
+          formData.workLocation.trim() !== '' &&
+          formData.joiningDate.trim() !== '' &&
+          formData.shiftTimings !== '' &&
+          formData.role !== '' &&
+          formData.department.trim() !== '' &&
+          formData.joiningType !== ''
+        );
+
+      case 2: // Bank Info Tab
+        return (
+          formData.bankName.trim() !== '' &&
+          formData.accountNo.trim() !== '' &&
+          formData.ifscCode.trim() !== '' &&
+          formData.panNo.trim() !== '' &&
+          formData.upiId.trim() !== '' &&
+          formData.addressProof.trim() !== ''
+        );
+
+      default:
+        return false;
+    }
   };
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    const newTabCompletion = [true];
+    for (let i = 0; i < 3; i++) {
+      if (validateTab(i)) {
+        newTabCompletion[i + 1] = true;
+      } else {
+        break;
+      }
+    }
+
+    setTabCompletion(newTabCompletion);
+
+    if (!newTabCompletion[activeTab]) {
+      const lastValidTab = newTabCompletion.lastIndexOf(true);
+      setActiveTab(lastValidTab);
+    }
+  }, [formData]);
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -107,7 +160,7 @@ const AddEmployeeForm: React.FC = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setFormData(getDefaultEmployeeForm());
     setShowConfirm(false);
-    setStep(1)
+    setActiveTab(0)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -242,42 +295,43 @@ const AddEmployeeForm: React.FC = () => {
 
   return (
     <div>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-        <div className="add-item-header">
-          <Link href={`/${companySlug}/hr`} className='back-button'>
-            <FaArrowLeft size={16} color='#fff' />
-          </Link>
-          <Tabs
-            value={step - 1}
-            onChange={(e, newValue) => {
-              if (validateStep(step)) setStep(newValue + 1);
-            }}
-            variant="scrollable"
-            scrollButtons="auto"
-            style={{ backgroundColor: '#f1f9f9' }}
-            sx={{
-              '& .MuiTab-root': {
+
+      <div className="add-item-header">
+        <Link href={`/${companySlug}/hr`} className='back-button'>
+          <FaArrowLeft size={16} color='#fff' />
+        </Link>
+        <Tabs
+          value={activeTab}
+          onChange={(e, newValue) => {
+            if (tabCompletion[newValue]) setActiveTab(newValue);
+          }}
+          variant="scrollable"
+          scrollButtons="auto"
+          style={{ backgroundColor: '#f1f9f9' }}
+          sx={{
+            '& .MuiTab-root': {
+              color: '#009693',
+              '&.Mui-disabled': {
+                color: '#ccc',
+              },
+              '&.Mui-selected': {
                 color: '#009693',
-                '&.Mui-disabled': {
-                  color: '#ccc',
-                },
-                '&.Mui-selected': {
-                  color: '#009693',
-                },
               },
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#009693',
-              },
-            }}
-          >
-            <Tab label="Personal Info" disabled={step < 1} />
-            <Tab label="Job Info" disabled={step < 2 || !validateStep(1)} />
-            <Tab label="Bank Info" disabled={step < 3 || !validateStep(2)} />
-          </Tabs>
-        </div>
-        <div className="add-employee-form">
-          <form onSubmit={handleSubmit}>
-            {step === 1 && (
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#009693',
+            },
+          }}
+        >
+          <Tab label="Personal Info" disabled={!tabCompletion[0]} />
+          <Tab label="Job Info" disabled={!tabCompletion[1]} />
+          <Tab label="Bank Info" disabled={!tabCompletion[2]} />
+        </Tabs>
+      </div>
+      <div className="add-employee-form">
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+            {activeTab === 0 && (
               <div className="employee-fields-wrapper">
                 {renderField("Name", "name", "text", "Enter full name", FaUser)}
                 {renderField("Phone Number", "number", "text", "Enter phone number", FaPhoneAlt)}
@@ -423,7 +477,7 @@ const AddEmployeeForm: React.FC = () => {
               </div>
             )}
 
-            {step === 2 && (
+            {activeTab === 1 && (
               <div className="employee-fields-wrapper">
                 {renderField("Email", "email", "email", "Enter email address", FaEnvelope)}
                 {renderField("Password", "password", "password", "Create a password", FaLock)}
@@ -505,7 +559,7 @@ const AddEmployeeForm: React.FC = () => {
               </div>
             )}
 
-            {step === 3 && (
+            {activeTab === 2 && (
               <div className="employee-fields-wrapper">
                 {renderField("Bank Name", "bankName", "text", "Enter bank name", FaUniversity)}
                 {renderField("Account No", "accountNo", "text", "Enter bank account number", FaCreditCard)}
@@ -534,27 +588,25 @@ const AddEmployeeForm: React.FC = () => {
 
               </div>
             )}
+          </Box>
+          <div className="create-employess-action">
+            {activeTab === 3 && (
+              <button className="form-button" type="submit" disabled={isLoading}>
+                {isLoading ? "Creating..." : "Submit"}
+              </button>
+            )}
+          </div>
 
-            <div className="create-employess-action">
-              {step === 3 && (
-                <button className="form-button" type="submit" disabled={isLoading}>
-                  {isLoading ? "Creating..." : "Submit"}
-                </button>
-              )}
-            </div>
-
-            <ConfirmDialog
-              isOpen={showConfirm}
-              message="Are you sure you want to clear the form?"
-              onConfirm={handleClearForm}
-              onCancel={() => setShowConfirm(false)}
-            />
-            <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
-          </form>
-        </div>
-
-      </Box>
-    </div>
+          <ConfirmDialog
+            isOpen={showConfirm}
+            message="Are you sure you want to clear the form?"
+            onConfirm={handleClearForm}
+            onCancel={() => setShowConfirm(false)}
+          />
+          <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
+        </form>
+      </div>
+    </div >
   );
 };
 

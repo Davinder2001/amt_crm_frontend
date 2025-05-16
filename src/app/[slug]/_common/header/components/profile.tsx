@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUserCircle, FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
   const router = useRouter();
   const [logout] = useLogoutMutation();
 
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const { companySlug, userType, accessToken } = useCompany();
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -98,14 +98,25 @@ const Profile: React.FC = () => {
     <div className="account" ref={dropdownRef}>
       {isAuthenticated ? (
         <div className="dropdown">
-
-          <FaUserCircle
-            size={30}
-            color='#009693'
-            className="profile-icon"
+          <div
+            className="profile-initial"
             onClick={() => setIsOpen(!isOpen)}
-          />
-
+            style={{
+              width: '30px',
+              height: '30px',
+              borderRadius: '50%',
+              backgroundColor: '#009693',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '20px',
+            }}
+          >
+            {user?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
           {isOpen && (
             <div className="custom-dropdown">
               <Link
@@ -129,8 +140,6 @@ const Profile: React.FC = () => {
                 <FaSignOutAlt className="dropdown-icon" /> Logout
               </button>
             </div>
-
-
           )}
         </div>
       ) : (

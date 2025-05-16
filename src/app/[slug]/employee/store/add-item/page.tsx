@@ -114,24 +114,29 @@ const AddItem: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const validateTab = (index: number): boolean => {
-    switch (index) {
-      case 0:
-        return formData.name.trim() !== '' && formData.brand_name.trim() !== '' && (formData.vendor_name?.trim() ?? '') !== '';
-      case 1:
-        return formData.cost_price > 0 && formData.selling_price > 0 && formData.quantity_count > 0;
-      case 2:
-        return formData.date_of_manufacture !== '';
-      case 3:
-        return selectedCategories.length > 0;
-      case 4:
-        return variants && variants.length > 0;
-      default:
-        return false;
-    }
-  };
 
   useEffect(() => {
+    // Move validateTab inside the effect
+    const validateTab = (index: number): boolean => {
+      switch (index) {
+        case 0:
+          return formData.name.trim() !== '' &&
+            formData.brand_name.trim() !== '' &&
+            (formData.vendor_name?.trim() ?? '') !== '';
+        case 1:
+          return formData.cost_price > 0 &&
+            formData.selling_price > 0 &&
+            formData.quantity_count > 0;
+        case 2:
+          return formData.date_of_manufacture !== '';
+        case 3:
+          return selectedCategories.length > 0;
+        case 4:
+          return variants && variants.length > 0;
+        default:
+          return false;
+      }
+    };
     const newTabCompletion = [true]; // First tab is always enabled
     for (let i = 0; i < 4; i++) {
       if (validateTab(i)) {
@@ -148,7 +153,7 @@ const AddItem: React.FC = () => {
       const lastValidTab = newTabCompletion.lastIndexOf(true);
       setActiveTab(lastValidTab);
     }
-  }, [formData, variants, selectedCategories]);
+  }, [formData, variants, selectedCategories, activeTab]); // Add activeTab to dependencies
 
   const handleClearForm = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);

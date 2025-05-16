@@ -1,339 +1,122 @@
-@use '../variables' as *;
+.tax-page {
+    font-family: 'Segoe UI', sans-serif;
+    padding: 20px;
 
-.tax-page-outer-container {
-
-    .tax-page-header {
-        justify-content: space-between;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-
-        .create-tax-button {
-            button {
-                padding: 9px 22px;
-                border-radius: 50px;
-                border: unset;
-                color: $white;
-                font-size: 15px;
-                background-color: $primary-color;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-
-                &:hover {
-                    background-color: #007a70;
-                }
-            }
-        }
-    }
-
-    .create-tax-section {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    .glass-form {
+        background: unset;
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 150, 147, 0.1);
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 1.5rem;
 
-
-        .create-tax-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            input {
-                flex: 1;
-                padding: 10px;
-                font-size: 16px;
-                border: 1px solid #00969357;
-                border-radius: 10px;
-
-                &::placeholder {
-                    color: #aaa;
-                }
-
-                &:focus {
+        .MuiTextField-root {
+            .MuiOutlinedInput-root.Mui-focused {
+                fieldset {
                     border-color: #009693;
-                    background: #ffffff;
-                }
-            }
-        }
-
-        .create-tax-button {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 15px;
-
-            button {
-                padding: 9px 22px;
-                border-radius: 50px;
-                font-size: 15px;
-                background-color: $primary-color;
-                color: $white;
-                cursor: pointer;
-                border: none;
-                width: 100%;
-
-                &:hover {
-                    background-color: #007a70;
                 }
             }
         }
     }
 
-    .tax-page-inner-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+    }
+
+    .add-btn {
+        background-color: #00a9a5 !important;
+        color: white !important;
+        text-transform: none;
+        padding: 0px 25px;
+        border-radius: 5px;
+        font-size: 20px;
+
+        &:hover {
+            background-color: #008f8b !important;
+        }
+    }
+
+    .cancel-btn {
+        border: 1px solid #00a9a5 !important;
+        color: #00a9a5 !important;
+        text-transform: none;
+        padding: 2px 10px;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: rgba(0, 169, 165, 0.05) !important;
+        }
+    }
+
+    .loading-center {
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .tax-grid {
         display: grid;
-        grid-template-columns: 30% 70%;
-        gap: 10px;
-
-        h2,
-        h3 {
-            color: $primary-color;
-            font-size: 25px;
-
-        }
-
-
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
     }
 
-    .confirm-delete {
-        color: #ff6f61;
-        font-size: 16px;
-        margin-top: 10px;
-        cursor: pointer;
-    }
+    .tax-box {
+        background-color: #ffffff;
+        padding: 1.2rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-    .taxes-list-outer {
-        ul {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            padding: 0;
-
-            li {
-                display: flex;
-                flex-direction: column;
-                background-color: #fff;
-                padding: 20px 15px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                gap: 10px;
-
-                &:hover {
-                    transform: scale(1.02);
-                }
-
-                strong {
-                    text-transform: capitalize;
-                    color: $primary-color;
-                    font-size: 18px;
-                }
-
-                input {
-                    padding: 8px;
-                    font-size: 16px;
-                    border-radius: 8px;
-                    border: 1px solid #00969357;
-
-                    &:focus {
-                        outline: none;
-                        border-color: $primary-color;
-                        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
-                    }
-                }
-
-                button {
-                    background-color: $primary-color;
-                    color: white;
-                    border: none;
-                    padding: 5px 22px;
-                    border-radius: 50px;
-                    cursor: pointer;
-                    font-size: 15px;
-                    transition: background-color 0.3s ease, transform 0.2s ease;
-
-                    &:hover {
-                        background-color: #007a70;
-                        transform: scale(1.05);
-                    }
-
-                    &.cancel {
-                        background-color: #ff6f61;
-
-                        &:hover {
-                            background-color: #e55b52;
-                        }
-                    }
-                }
-
-                .texrate-buttons-outer {
-                    .texrate-buttons-inner {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 15px;
-
-                        .tex-wrapper {
-                            color: green;
-                            font-weight: 600;
-                        }
-
-                        .text-card-outer {
-                            display: flex;
-                            gap: 10px;
-                        }
-
-
-
-                    }
-                }
-
-                .text-edit-buttons {
-                    display: flex;
-                    justify-content: space-between;
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 1467px) {
-
-
-
-
-
-
-
-}
-@media (max-width: 768px) {
-    .tax-page-outer-container {
-
-        .create-tax-inputs {
-            flex-direction: column;
-            gap: 15px;
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        input {
-            width: 100%;
-        }
-    }
-}
-
-@media (max-width: 615px) {
-    .tax-page-outer-container {
-
-        .taxes-list-outer {
-
-            ul {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-
-                li {
-                    padding: 10px 8px;
-
-                    button {
-                        padding: 5px 15px;
-                        font-size: 12px;
-                    }
-
-                    .texrate-buttons-outer {
-
-                        .texrate-buttons-inner {
-                            gap: 10px;
-                        }
-
-                    }
-
-                    strong {
-                        font-size: 15px;
-                    }
-
-                    input {
-                        font-size: 10px;
-                        padding: 8px;
-                    }
-                }
-            }
+        .tax-name {
+            font-weight: 600;
+            color: #494949;
+            margin-bottom: 0.25rem;
+            text-transform: capitalize;
         }
 
-        .tax-page-inner-container {
-            padding: 10px 5px;
-        }
-
-        .tax-page-header {
-
-            .create-tax-button {
-
-                button {
-                    padding: 5px 11px;
-                }
-
-            }
-
-        }
-
-
-    }
-
-}
-
-
-@media (max-width: 444px) {
-    .tax-page-outer-container {
-
-        .taxes-list-outer {
-
-            ul {
-                grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-
-                li {
-                    align-items: center;
-                    text-align: center;
-                    gap: 5px;
-
-                    button {
-                        padding: 4px 15px;
-                        font-size: 12px;
-                    }
-
-                    .texrate-buttons-outer {
-
-                        .texrate-buttons-inner {
-                            gap: 10px;
-                        }
-
-                    }
-
-                    strong {
-                        font-size: 15px;
-                    }
-
-                    input {
-                        font-size: 10px;
-                        padding: 8px;
-                    }
-                }
-            }
-        }
-
-        .tax-page-inner-container {
-            padding: 10px 5px;
-        }
-
-        .tax-page-header {
-
-            .create-tax-button {
-
-                button {
-                    padding: 5px 11px;
-                }
-
-            }
-
+        .tax-rate {
+            color: green;
+            font-size: 0.9rem;
         }
     }
 
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+
+        svg {
+            font-size: 16px;
+        }
+    }
+
+    .edit-btn {
+        color: #00a9a5 !important;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #008f8b !important;
+        }
+    }
+
+    .delete-btn {
+        color: #e53935 !important;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #c62828 !important;
+        }
+    }
 }

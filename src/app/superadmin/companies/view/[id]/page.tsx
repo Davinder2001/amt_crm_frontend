@@ -83,12 +83,12 @@ const ViewCompanyPage = () => {
             <span onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
               className="buttons"
               title="Edit">
-              Edit item
+             Edit Company
             </span>
             <span onClick={() => router.push(`/superadmin/companies/delete/${company.company_id}`)}
               className="buttons"
               title="Delete">
-              Delete item
+              Delete Company
             </span>
           </div>
         </div>

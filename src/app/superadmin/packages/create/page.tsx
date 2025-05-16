@@ -35,7 +35,18 @@ const CreatePackages = () => {
   });
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-
+  const [] = useState(false);
+  const isFormValid = () => {
+    return (
+      formData.name.trim() !== '' &&
+      formData.price > 0 &&
+      formData.employee_numbers > 0 &&
+      formData.items_number > 0 &&
+      formData.daily_tasks_number > 0 &&
+      formData.invoices_number > 0 &&
+      formData.business_categories.length > 0
+    );
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -329,14 +340,26 @@ const CreatePackages = () => {
           </div>
         )}
 
-        <div className="form-actions">
-          <button type="submit" className="submit-button" disabled={isCreating}>
+        <div className="tooltip-container">
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={!isFormValid() || isCreating}
+            aria-label={!isFormValid() ? "Fill all required fields" : ""}
+          >
             {isCreating ? 'Creating Package...' : 'Create Package'}
           </button>
+          {!isFormValid() && (
+            <div className="hover-tooltip">
+              Please fill all required fields
+              <div className="tooltip-arrow"></div>
+            </div>
+          )}
         </div>
-      </form>
 
-    </div>
+      </form >
+
+    </div >
   );
 };
 

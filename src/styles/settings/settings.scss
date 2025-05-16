@@ -12,25 +12,41 @@
     margin: 0;
 
     .settings-item {
-      align-items: center;
       padding: 12px 16px;
       border-bottom: 1px solid #00969357;
+      transition: background-color 0.2s ease;
 
       &:hover {
         background-color: #f9fafb;
+        cursor: pointer;
+
+        .settings-link {
+          &:hover {
+            text-decoration: none;
+
+          }
+        }
+      }
+
+      &:first-child {
+        border-radius: 8px 8px 0px 0px ;
       }
 
       &:last-child {
-        border-bottom: unset;
+        border-bottom: none;
+        border-radius: 0px 0px 8px 8px;
+
       }
 
-      .settings-info {
-        a {
-          text-decoration: none;
+      .settings-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+        height: 100%;
 
-          &:hover {
-            text-decoration: none;
-          }
+        &:hover {
+          text-decoration: none;
         }
 
         .settings-info-inner {
@@ -39,30 +55,28 @@
           align-items: center;
           justify-content: space-between;
 
-          svg {
-            font-size: 20px;
-            color: $primary-color;
+          &:hover {
+            text-decoration: none;
           }
 
-          .settings-link {
+          .settings-label {
             font-size: 16px;
             font-weight: 500;
-            color: #374151;
+            color: $para-color;
 
             &:hover {
-              text-decoration: underline;
+              text-decoration: none;
             }
           }
 
           .settings-btn-outer {
-            .settings-icon {
-              color: #6b7280;
-              cursor: pointer;
-              font-size: 16px;
+            display: flex;
+            align-items: center;
 
-              &:hover {
-                color: #374151;
-              }
+            .settings-icon {
+              color: $primary-color;
+              font-size: 16px;
+              transition: color 0.2s ease;
             }
           }
         }

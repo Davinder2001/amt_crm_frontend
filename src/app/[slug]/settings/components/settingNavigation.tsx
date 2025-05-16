@@ -1,32 +1,3 @@
-// import React from 'react'
-// import Link from 'next/link';
-
-
-// const SettingNavigation = () => {
-//     return (
-//         <>
-//             <ul className=''>
-//                 <li className=''>
-//                     <Link href="settings/store-settings">Store Settings</Link>
-//                 </li>
-//                 <li className=''>
-//                     <Link href="settings/shifts">Shifts</Link>
-//                 </li>
-//                 <li className=''>
-//                     <Link href="settings/taxes">Taxes</Link>
-//                 </li>
-//             </ul>
-//         </>
-//     )
-// }
-
-// export default SettingNavigation
-
-
-
-
-
-
 import React from 'react';
 import Link from 'next/link';
 import { FaCog } from 'react-icons/fa';
@@ -42,21 +13,15 @@ const SettingNavigation = () => {
     <div className="settings-wrapper">
       <ul className="settings-list">
         {settingItems.map((item) => (
-          <li key={item.label} className="settings-item">
-            <div className="settings-info">
-              {/* Left side: label + icon */}
+          <li key={item.href} className="settings-item">
+            <Link href={item.href} className="settings-link">
               <div className="settings-info-inner">
-                <Link href={item.href} className="settings-link">
-                  {item.label}
-                </Link>
-                <div className='settings-btn-outer'>
-                <Link href={item.href} className="settings-icon" aria-label={`Open ${item.label}`}>
-                  <FaCog />
-                </Link>
+                <span className="settings-label">{item.label}</span>
+                <div className="settings-btn-outer">
+                  <FaCog className="settings-icon" />
+                </div>
               </div>
-</div>
-              
-            </div>
+            </Link>
           </li>
         ))}
       </ul>

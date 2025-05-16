@@ -80,12 +80,13 @@ const Page: React.FC = () => {
             </button>
       <div className="add-task-form">
         <div className="form-group">
-          <label>Assign Task Name</label>
+          <label> Task Name</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
+            placeholder='Enter task name'
             required
           />
         </div>
@@ -109,7 +110,7 @@ const Page: React.FC = () => {
 
         <div className="form-group">
           <label>Assign Task to Role</label>
-          <input type="text" value={formData.role} readOnly />
+          <input type="text" value={formData.role} readOnly placeholder='' />
         </div>
 
         <div className="form-group">

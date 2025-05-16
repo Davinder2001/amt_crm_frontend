@@ -114,10 +114,55 @@ const UpdateItem = () => {
     setFormData(prev => ({ ...prev, images: [] }));
   };
 
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   // Validation: Check for valid tax
+  //   if (!formData.tax_id || formData.tax_id === 0) {
+  //     toast.error("No valid tax selected.");
+  //     setActiveTab(1);
+  //     return;
+  //   }
+
+  //   try {
+
+  //     const validatedVariants = variants.filter((v) => {
+  //       return (
+  //         v &&
+  //         typeof v.price === 'number' &&
+  //         !isNaN(v.price) &&
+  //         Array.isArray(v.attributes) &&
+  //         v.attributes.length > 0 &&
+  //         v.attributes.every(attr =>
+  //           attr.attribute_id &&
+  //           attr.attribute_value_id
+  //         )
+  //       );
+  //     });
+
+  //     // Prepare payload
+  //     const payload: UpdateStoreItemRequest = {
+  //       ...formData,
+  //       id: Number(id),
+  //       categories: selectedCategories.map((cat) => cat.id), // IDs only
+  //       variants: validatedVariants,
+  //       images: formData.images.filter((img: (File | string)) => typeof img !== 'string'), // Send only new File images
+  //     };
+
+  //     await updateStoreItem(payload).unwrap();
+
+  //     toast.success('Item updated successfully!');
+  //     router.push(`/${companySlug}/store`); // Redirect on success
+  //   } catch (err) {
+  //     console.error('Error updating item:', err);
+  //     toast.error('Failed to update item.');
+  //   }
+  // };
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validation: Check for valid tax
     if (!formData.tax_id || formData.tax_id === 0) {
       toast.error("No valid tax selected.");
       setActiveTab(1);
@@ -125,7 +170,6 @@ const UpdateItem = () => {
     }
 
     try {
-
       const validatedVariants = variants.filter((v) => {
         return (
           v &&
@@ -140,19 +184,39 @@ const UpdateItem = () => {
         );
       });
 
-      // Prepare payload
-      const payload: UpdateStoreItemRequest = {
-        ...formData,
-        id: Number(id),
-        categories: selectedCategories.map((cat) => cat.id), // IDs only
-        variants: validatedVariants,
-        images: formData.images.filter((img: (File | string)) => typeof img !== 'string'), // Send only new File images
-      };
+      const formdata = new FormData();
 
-      await updateStoreItem(payload).unwrap();
+      formdata.append('name', formData.name);
+      formdata.append('brand_name', formData.brand_name);
+      formdata.append('measurement', formData.measurement || '');
+      formdata.append('replacement', formData.replacement || '');
+      formdata.append('vendor_name', formData.vendor_name || '');
+      formdata.append('purchase_date', formData.purchase_date || '');
+      formdata.append('date_of_manufacture', formData.date_of_manufacture);
+      formdata.append('date_of_expiry', formData.date_of_expiry || '');
+      formdata.append('quantity_count', String(formData.quantity_count));
+      formdata.append('availability_stock', String(formData.availability_stock));
+      formdata.append('cost_price', String(formData.cost_price));
+      formdata.append('selling_price', String(formData.selling_price));
+      formdata.append('tax_id', String(formData.tax_id));
+
+      // Categories as array of IDs
+      selectedCategories.forEach(cat => formdata.append('categories[]', String(cat.id)));
+
+      // Variants: append JSON string
+      formdata.append('variants', JSON.stringify(validatedVariants));
+
+      // Images (only new files)
+      formData.images?.forEach((img) => {
+        if (img instanceof File) {
+          formdata.append('images', img);
+        }
+      });
+
+      await updateStoreItem({ id: formData.id, formdata }).unwrap();
 
       toast.success('Item updated successfully!');
-      router.push(`/${companySlug}/store`); // Redirect on success
+      router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error updating item:', err);
       toast.error('Failed to update item.');

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCreateEmployeMutation } from "@/slices/employe/employe";
 import { useGetRolesQuery } from "@/slices/roles/rolesApi";
 import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
@@ -9,7 +9,49 @@ import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaUser, FaMapMarkerAlt, FaFlag, FaBirthdayCake, FaVenusMars, FaPassport, FaPhoneAlt, FaEnvelope, FaLock, FaMoneyBillWave, FaBuilding, FaCalendarAlt, FaBriefcase, FaHospital, FaUniversity, FaIdCard, FaCreditCard, FaQrcode, FaImage, FaUpload, FaAddressCard, } from "react-icons/fa";
+import { FaUser, FaMapMarkerAlt, FaFlag, FaBirthdayCake, FaVenusMars, FaPassport, FaPhoneAlt, FaEnvelope, FaLock, FaMoneyBillWave, FaBuilding, FaCalendarAlt, FaBriefcase, FaHospital, FaUniversity, FaIdCard, FaCreditCard, FaQrcode, FaImage, FaUpload, FaAddressCard, FaArrowLeft, } from "react-icons/fa";
+import { Tabs, Tab, Box } from "@mui/material";
+import Link from "next/link";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import { FiXCircle } from "react-icons/fi";
+
+const LOCAL_STORAGE_KEY = "addEmpForm";
+
+const getDefaultEmployeeForm = () => ({
+  name: "",
+  number: "",
+  address: "",
+  nationality: "",
+  dob: "",
+  religion: "",
+  maritalStatus: "",
+  passportNo: "",
+  emergencyContact: "",
+  emergencyContactRelation: "",
+  email: "",
+  password: "",
+  salary: "",
+  role: "",
+  department: "",
+  currentSalary: "",
+  shiftTimings: "",
+  dateOfHire: "",
+  workLocation: "",
+  joiningDate: "",
+  joiningType: "",
+  previousEmployer: "",
+  medicalInfo: "",
+  bankName: "",
+  accountNo: "",
+  ifscCode: "",
+  panNo: "",
+  upiId: "",
+  addressProof: "",
+  profilePicture: "",
+  idProofType: "",
+  idProofValue: "",
+  idProofImage: null as File | null,
+});
 
 const AddEmployeeForm: React.FC = () => {
   const router = useRouter();
@@ -17,49 +59,55 @@ const AddEmployeeForm: React.FC = () => {
   const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
   const { data: shiftData, isLoading: shiftLoading, error: shiftError } = useFetchCompanyShiftsQuery();
   const { companySlug } = useCompany();
-
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: "",
-    number: "",
-    address: "",
-    nationality: "",
-    dob: "",
-    religion: "",
-    maritalStatus: "",
-    passportNo: "",
-    emergencyContact: "",
-    emergencyContactRelation: "",
-    email: "",
-    password: "",
-    salary: "",
-    role: "",
-    department: "",
-    currentSalary: "",
-    shiftTimings: "",
-    dateOfHire: "",
-    workLocation: "",
-    joiningDate: "",
-    joiningType: "",
-    previousEmployer: "",
-    medicalInfo: "",
-    bankName: "",
-    accountNo: "",
-    ifscCode: "",
-    panNo: "",
-    upiId: "",
-    addressProof: "",
-    profilePicture: "",
-    idProofType: "",
-    idProofValue: "",
-    idProofImage: null as File | null,
-  });
+  const [formData, setFormData] = useState(getDefaultEmployeeForm());
+  const [hasLoadedFromLS, setHasLoadedFromLS] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
+  useEffect(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (saved) {
+      setFormData(JSON.parse(saved));
+    }
+    setHasLoadedFromLS(true);
+  }, []);
+
+  const validateStep = (currentStep: number) => {
+    const stepFields = {
+      1: ["name", "number", "address", "nationality", "dob", "religion", "maritalStatus", "emergencyContact", "emergencyContactRelation"],
+      2: ["email", "password", "salary", "currentSalary", "dateOfHire", "workLocation", "joiningDate", "shiftTimings", "role", "department", "joiningType"],
+      3: ["bankName", "accountNo", "ifscCode", "panNo", "upiId", "addressProof"]
+    };
+
+    const newErrors: { [key: string]: string } = {};
+    stepFields[currentStep as keyof typeof stepFields].forEach(field => {
+      if (!formData[field as keyof typeof formData]) {
+        newErrors[field] = "This field is required";
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+
+    if (hasLoadedFromLS) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+    }
+  };
+
+  const handleClearForm = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    setFormData(getDefaultEmployeeForm());
+    setShowConfirm(false);
+    setStep(1)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,6 +117,8 @@ const AddEmployeeForm: React.FC = () => {
     try {
       await createEmployee(formData).unwrap();
       toast.success("Employee created successfully!");
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      setFormData(getDefaultEmployeeForm());
       router.push(`/${companySlug}/hr/status-view`);
     } catch (err) {
       console.error("Error creating employee:", err);
@@ -81,12 +131,13 @@ const AddEmployeeForm: React.FC = () => {
     name: string,
     type = "text",
     placeholder = "",
-    Icon?: React.ElementType
+    Icon?: React.ElementType,
+    iconSize: number = 14,
   ) => {
     return (
       <div className="employee-field">
         <label htmlFor={name} className="flex items-center gap-2">
-          {Icon && <Icon className="text-gray-600" />} {label}
+          {Icon && <Icon size={iconSize} />} {label}
         </label>
 
         {type === "date" ? (
@@ -189,291 +240,320 @@ const AddEmployeeForm: React.FC = () => {
     );
   };
 
-
-
   return (
     <div>
-      <div className="add-employee-form">
-        <form onSubmit={handleSubmit}>
-          {step === 1 && (
-            <div className="employee-fields-wrapper">
-              {renderField("Name", "name", "text", "Enter full name", FaUser)}
-              {renderField("Phone Number", "number", "text", "Enter phone number", FaPhoneAlt )}
-              {renderField("Address", "address", "text", "Enter residential address", FaMapMarkerAlt)}
-              {/* {renderField("Nationality", "nationality", "text", "Enter nationality", FaFlag)} */}
-              <div className="employee-field">
-                <label htmlFor="nationality" className="flex items-center gap-2">
-                  <FaFlag className="text-gray-600" /> Nationality
-                </label>
-                <select name="nationality" value={formData.nationality} onChange={handleChange}>
-                  <option value="">Select Nationality</option>
-                  <option value="Indian">Indian</option>
-                  <option value="Foreigner">Foreigner</option>
-                  <option value="NRI">NRI</option>
-                </select>
-                {errors.nationality && <div className="text-red-500 text-sm">{errors.nationality}</div>}
-              </div>
-
-              {renderField("Date of Birth", "dob", "date", "Select date of birth", FaBirthdayCake)}
-              {/* {renderField("Religion", "religion", "text", "Enter religion", FaVenusMars)} */}
-              <div className="employee-field">
-                <label htmlFor="religion" className="flex items-center gap-2">
-                  <FaVenusMars className="text-gray-600" /> Religion
-                </label>
-                <select name="religion" value={formData.religion} onChange={handleChange}>
-                  <option value="">Select Religion</option>
-                  <option value="Hinduism">Hinduism</option>
-                  <option value="Islam">Islam</option>
-                  <option value="Christianity">Christianity</option>
-                  <option value="Sikhism">Sikhism</option>
-                  <option value="Buddhism">Buddhism</option>
-                  <option value="Jainism">Jainism</option>
-                  <option value="Judaism">Judaism</option>
-                  <option value="Other">Other</option>
-                </select>
-                {errors.religion && <div className="text-red-500 text-sm">{errors.religion}</div>}
-              </div>
-
-              {/* {renderField("Marital Status", "maritalStatus", "text", "Enter marital status", FaVenusMars)} */}
-              <div className="employee-field">
-                <label htmlFor="maritalStatus" className="flex items-center gap-2">
-                  <FaVenusMars className="text-gray-600" /> Marital Status
-                </label>
-                <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange}>
-                  <option value="">Select Marital Status</option>
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                  <option value="Divorced">Divorced</option>
-                  <option value="Widowed">Widowed</option>
-                  <option value="Separated">Separated</option>
-                  <option value="Other">Other</option>
-                </select>
-                {errors.maritalStatus && <div className="text-red-500 text-sm">{errors.maritalStatus}</div>}
-              </div>
-
-              {/* {renderField("Passport No", "passportNo", "text", "Enter passport number", FaPassport)} */}
-
-              <div className="employee-field">
-                <label htmlFor="idProofType" className="flex items-center gap-2">
-                  <FaIdCard className="text-gray-600" /> ID Proof Type
-                </label>
-                <select
-                  name="idProofType"
-                  value={formData.idProofType}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      idProofType: e.target.value,
-                      idProofValue: "", // reset previous input
-                      idProofImage: null,
-                    }));
-                  }}
-                >
-                  <option value="">Select ID Proof</option>
-                  <option value="aadhar">Aadhar Number</option>
-                  <option value="license">License</option>
-                  <option value="passport">Passport Number</option>
-                  <option value="bill">Utility Bill</option>
-                </select>
-                {errors.idProofType && <div className="text-red-500 text-sm">{errors.idProofType}</div>}
-              </div>
-
-              {/* Conditional input based on selection */}
-              {formData.idProofType && formData.idProofType !== "bill" && (
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+        <div className="add-item-header">
+          <Link href={`/${companySlug}/hr`} className='back-button'>
+            <FaArrowLeft size={16} color='#fff' />
+          </Link>
+          <Tabs
+            value={step - 1}
+            onChange={(e, newValue) => {
+              if (validateStep(step)) setStep(newValue + 1);
+            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            style={{ backgroundColor: '#f1f9f9' }}
+            sx={{
+              '& .MuiTab-root': {
+                color: '#009693',
+                '&.Mui-disabled': {
+                  color: '#ccc',
+                },
+                '&.Mui-selected': {
+                  color: '#009693',
+                },
+              },
+              '& .MuiTabs-indicator': {
+                backgroundColor: '#009693',
+              },
+            }}
+          >
+            <Tab label="Personal Info" disabled={step < 1} />
+            <Tab label="Job Info" disabled={step < 2 || !validateStep(1)} />
+            <Tab label="Bank Info" disabled={step < 3 || !validateStep(2)} />
+          </Tabs>
+        </div>
+        <div className="add-employee-form">
+          <form onSubmit={handleSubmit}>
+            {step === 1 && (
+              <div className="employee-fields-wrapper">
+                {renderField("Name", "name", "text", "Enter full name", FaUser)}
+                {renderField("Phone Number", "number", "text", "Enter phone number", FaPhoneAlt)}
+                {renderField("Address", "address", "text", "Enter residential address", FaMapMarkerAlt)}
                 <div className="employee-field">
-                  <label className="flex items-center gap-2">
-                    {formData.idProofType === "aadhar" && <FaAddressCard />}
-                    {formData.idProofType === "license" && <FaIdCard />}
-                    {formData.idProofType === "passport" && <FaPassport />}
-                    Enter {formData.idProofType.charAt(0).toUpperCase() + formData.idProofType.slice(1)} Number
+                  <label htmlFor="nationality" className="flex items-center gap-2">
+                    <FaFlag className="text-gray-600" /> Nationality
+                  </label>
+                  <select name="nationality" value={formData.nationality} onChange={handleChange}>
+                    <option value="">Select Nationality</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Foreigner">Foreigner</option>
+                    <option value="NRI">NRI</option>
+                  </select>
+                  {errors.nationality && <div className="text-red-500 text-sm">{errors.nationality}</div>}
+                </div>
+
+                {renderField("Date of Birth", "dob", "date", "Select date of birth", FaBirthdayCake)}
+                <div className="employee-field">
+                  <label htmlFor="religion" className="flex items-center gap-2">
+                    <FaVenusMars className="text-gray-600" /> Religion
+                  </label>
+                  <select name="religion" value={formData.religion} onChange={handleChange}>
+                    <option value="">Select Religion</option>
+                    <option value="Hinduism">Hinduism</option>
+                    <option value="Islam">Islam</option>
+                    <option value="Christianity">Christianity</option>
+                    <option value="Sikhism">Sikhism</option>
+                    <option value="Buddhism">Buddhism</option>
+                    <option value="Jainism">Jainism</option>
+                    <option value="Judaism">Judaism</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  {errors.religion && <div className="text-red-500 text-sm">{errors.religion}</div>}
+                </div>
+
+                {/* {renderField("Marital Status", "maritalStatus", "text", "Enter marital status", FaVenusMars)} */}
+                <div className="employee-field">
+                  <label htmlFor="maritalStatus" className="flex items-center gap-2">
+                    <FaVenusMars className="text-gray-600" /> Marital Status
+                  </label>
+                  <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange}>
+                    <option value="">Select Marital Status</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Widowed">Widowed</option>
+                    <option value="Separated">Separated</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  {errors.maritalStatus && <div className="text-red-500 text-sm">{errors.maritalStatus}</div>}
+                </div>
+
+                {/* {renderField("Passport No", "passportNo", "text", "Enter passport number", FaPassport)} */}
+
+                <div className="employee-field">
+                  <label htmlFor="idProofType" className="flex items-center gap-2">
+                    <FaIdCard className="text-gray-600" /> ID Proof Type
+                  </label>
+                  <select
+                    name="idProofType"
+                    value={formData.idProofType}
+                    onChange={(e) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        idProofType: e.target.value,
+                        idProofValue: "", // reset previous input
+                        idProofImage: null,
+                      }));
+                    }}
+                  >
+                    <option value="">Select ID Proof</option>
+                    <option value="aadhar">Aadhar Number</option>
+                    <option value="license">License</option>
+                    <option value="passport">Passport Number</option>
+                    <option value="bill">Utility Bill</option>
+                  </select>
+                  {errors.idProofType && <div className="text-red-500 text-sm">{errors.idProofType}</div>}
+                </div>
+
+                {/* Conditional input based on selection */}
+                {formData.idProofType && formData.idProofType !== "bill" && (
+                  <div className="employee-field">
+                    <label className="flex items-center gap-2">
+                      {formData.idProofType === "aadhar" && <FaAddressCard />}
+                      {formData.idProofType === "license" && <FaIdCard />}
+                      {formData.idProofType === "passport" && <FaPassport />}
+                      Enter {formData.idProofType.charAt(0).toUpperCase() + formData.idProofType.slice(1)} Number
+                    </label>
+                    <input
+                      type="text"
+                      name="idProofValue"
+                      value={formData.idProofValue}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, idProofValue: e.target.value }))
+                      }
+                      placeholder={`Enter ${formData.idProofType} number`}
+                    />
+                    {errors.idProofValue && <div className="text-red-500 text-sm">{errors.idProofValue}</div>}
+                  </div>
+                )}
+
+                {formData.idProofType === "bill" && (
+                  <div className="employee-field">
+                    <label htmlFor="idProofImage"><FaUpload /> Utility Bill</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="idProofImage"
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, idProofImage: e.target.files?.[0] || null }))
+                      }
+                    />
+                    {errors.idProofImage && <div className="text-red-500 text-sm">{errors.idProofImage}</div>}
+                  </div>
+                )}
+
+                {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", FaPhoneAlt)}
+                {/* {renderField("Emergency Contact Relation", "emergencyContactRelation", "text", "Enter relationship", FaUser)} */}
+                <div className="employee-field">
+                  <label htmlFor="emergencyContactRelation" className="flex items-center gap-2">
+                    <FaUser className="text-gray-600" /> Emergency Contact Relation
+                  </label>
+                  <select
+                    name="emergencyContactRelation"
+                    value={formData.emergencyContactRelation}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Relation</option>
+                    <option value="mother">Father</option>
+                    <option value="father">Mother</option>
+                    <option value="brother">Brother</option>
+                    <option value="sister">Sister</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {errors.emergencyContactRelation && (
+                    <div className="text-red-500 text-sm">{errors.emergencyContactRelation}</div>
+                  )}
+                </div>
+
+
+
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="employee-fields-wrapper">
+                {renderField("Email", "email", "email", "Enter email address", FaEnvelope)}
+                {renderField("Password", "password", "password", "Create a password", FaLock)}
+                {renderField("Salary", "salary", "text", "Enter expected salary", FaMoneyBillWave)}
+                {renderField("Current Salary", "currentSalary", "text", "Enter current salary", FaMoneyBillWave)}
+                {renderField("Date of Hiring", "dateOfHire", "date", "Select hiring date", FaCalendarAlt)}
+                {renderField("Work Location", "workLocation", "text", "Enter work location", FaBuilding)}
+                {renderField("Joining Date", "joiningDate", "date", "Select joining date", FaCalendarAlt)}
+
+
+                <div className="employee-field">
+                  <label htmlFor="shiftTimings">Shift Timings</label>
+                  <select
+                    name="shiftTimings"
+                    value={formData.shiftTimings}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Shift</option>
+                    {shiftLoading ? (
+                      <option disabled>Loading shifts...</option>
+                    ) : shiftError ? (
+                      <option disabled>Error loading shifts</option>
+                    ) : (
+                      shiftData?.data?.map((shift: { id: number; shift_name: string; start_time: string; end_time: string }) => (
+                        <option key={shift.id} value={shift.id}>
+                          {`${shift.shift_name} (${shift.start_time} - ${shift.end_time})`}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  {errors.shiftTimings && (
+                    <div className="text-red-500 text-sm">{errors.shiftTimings}</div>
+                  )}
+                </div>
+
+
+                <div className="employee-field">
+                  <label htmlFor="role" className="flex items-center gap-2">
+                    <FaIdCard className="text-gray-600" /> Role
+                  </label>
+                  <select name="role" value={formData.role} onChange={handleChange}>
+                    <option value="">Select Role</option>
+                    {rolesLoading ? (
+                      <option disabled>Loading...</option>
+                    ) : rolesError ? (
+                      <option disabled>Error loading roles</option>
+                    ) : (
+                      rolesData?.roles?.map((role: { id: string; name: string }) => (
+                        <option key={role.id} value={role.name}>
+                          {role.name}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  {errors.role && <div className="text-red-500 text-sm">{errors.role}</div>}
+                </div>
+
+
+                {renderField("Department", "department", "text", "Enter department", FaUniversity)}
+
+                <div className="employee-field">
+                  <label htmlFor="joiningType" className="flex items-center gap-2">
+                    <FaBriefcase className="text-gray-600" /> Joining Type
+                  </label>
+                  <select name="joiningType" value={formData.joiningType} onChange={handleChange}>
+                    <option value="">Select Joining Type</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="contract">Contract</option>
+                  </select>
+                  {errors.joiningType && (
+                    <div className="text-red-500 text-sm">{errors.joiningType}</div>
+                  )}
+                </div>
+
+
+                {renderField("Previous Employer", "previousEmployer", "text", "Enter previous employer", FaBuilding)}
+                {renderField("Medical Info (e.g., Blood Group)", "medicalInfo", "text", "Enter medical info", FaHospital)}
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="employee-fields-wrapper">
+                {renderField("Bank Name", "bankName", "text", "Enter bank name", FaUniversity)}
+                {renderField("Account No", "accountNo", "text", "Enter bank account number", FaCreditCard)}
+                {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code", FaQrcode)}
+                {renderField("PAN No", "panNo", "text", "Enter PAN number", FaIdCard)}
+                {renderField("UPI ID", "upiId", "text", "Enter UPI ID", FaQrcode)}
+                {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number", FaIdCard)}
+
+
+                <div className="employee-field">
+                  <label htmlFor="profilePicture" className="flex items-center gap-2">
+                    <FaImage className="text-gray-600" /> Profile Picture
                   </label>
                   <input
-                    type="text"
-                    name="idProofValue"
-                    value={formData.idProofValue}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, idProofValue: e.target.value }))
-                    }
-                    placeholder={`Enter ${formData.idProofType} number`}
-                  />
-                  {errors.idProofValue && <div className="text-red-500 text-sm">{errors.idProofValue}</div>}
-                </div>
-              )}
-
-              {formData.idProofType === "bill" && (
-                <div className="employee-field">
-                  <label htmlFor="idProofImage"><FaUpload /> Utility Bill</label>
-                  <input
                     type="file"
+                    name="profilePicture"
                     accept="image/*"
-                    name="idProofImage"
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, idProofImage: e.target.files?.[0] || null }))
-                    }
+                    onChange={handleChange}
+                    className="file-input" // Optional: Add your custom styling
                   />
-                  {errors.idProofImage && <div className="text-red-500 text-sm">{errors.idProofImage}</div>}
+
+                  {errors.profilePicture && (
+                    <div className="text-red-500 text-sm">{errors.profilePicture}</div>
+                  )}
                 </div>
+
+              </div>
+            )}
+
+            <div className="create-employess-action">
+              {step === 3 && (
+                <button className="form-button" type="submit" disabled={isLoading}>
+                  {isLoading ? "Creating..." : "Submit"}
+                </button>
               )}
-
-              {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", FaPhoneAlt)}
-              {/* {renderField("Emergency Contact Relation", "emergencyContactRelation", "text", "Enter relationship", FaUser)} */}
-              <div className="employee-field">
-                <label htmlFor="emergencyContactRelation" className="flex items-center gap-2">
-                  <FaUser className="text-gray-600" /> Emergency Contact Relation
-                </label>
-                <select
-                  name="emergencyContactRelation"
-                  value={formData.emergencyContactRelation}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Relation</option>
-                  <option value="mother">Father</option>
-                  <option value="father">Mother</option>
-                  <option value="brother">Brother</option>
-                  <option value="sister">Sister</option>
-                  <option value="other">Other</option>
-                </select>
-                {errors.emergencyContactRelation && (
-                  <div className="text-red-500 text-sm">{errors.emergencyContactRelation}</div>
-                )}
-              </div>
-
-
-
             </div>
-          )}
 
-          {step === 2 && (
-            <div className="employee-fields-wrapper">
-              {renderField("Email", "email", "email", "Enter email address", FaEnvelope)}
-              {renderField("Password", "password", "password", "Create a password", FaLock)}
-              {renderField("Salary", "salary", "text", "Enter expected salary", FaMoneyBillWave)}
-              {renderField("Current Salary", "currentSalary", "text", "Enter current salary", FaMoneyBillWave)}
-              {renderField("Date of Hiring", "dateOfHire", "date", "Select hiring date", FaCalendarAlt)}
-              {renderField("Work Location", "workLocation", "text", "Enter work location", FaBuilding)}
-              {renderField("Joining Date", "joiningDate", "date", "Select joining date", FaCalendarAlt)}
+            <ConfirmDialog
+              isOpen={showConfirm}
+              message="Are you sure you want to clear the form?"
+              onConfirm={handleClearForm}
+              onCancel={() => setShowConfirm(false)}
+            />
+            <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
+          </form>
+        </div>
 
-
-              <div className="employee-field">
-                <label htmlFor="shiftTimings">Shift Timings</label>
-                <select
-                  name="shiftTimings"
-                  value={formData.shiftTimings}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Shift</option>
-                  {shiftLoading ? (
-                    <option disabled>Loading shifts...</option>
-                  ) : shiftError ? (
-                    <option disabled>Error loading shifts</option>
-                  ) : (
-                    shiftData?.data?.map((shift: { id: number; shift_name: string; start_time: string; end_time: string }) => (
-                      <option key={shift.id} value={shift.id}>
-                        {`${shift.shift_name} (${shift.start_time} - ${shift.end_time})`}
-                      </option>
-                    ))
-                  )}
-                </select>
-                {errors.shiftTimings && (
-                  <div className="text-red-500 text-sm">{errors.shiftTimings}</div>
-                )}
-              </div>
-
-
-              <div className="employee-field">
-                <label htmlFor="role" className="flex items-center gap-2">
-                  <FaIdCard className="text-gray-600" /> Role
-                </label>
-                <select name="role" value={formData.role} onChange={handleChange}>
-                  <option value="">Select Role</option>
-                  {rolesLoading ? (
-                    <option disabled>Loading...</option>
-                  ) : rolesError ? (
-                    <option disabled>Error loading roles</option>
-                  ) : (
-                    rolesData?.roles?.map((role: { id: string; name: string }) => (
-                      <option key={role.id} value={role.name}>
-                        {role.name}
-                      </option>
-                    ))
-                  )}
-                </select>
-                {errors.role && <div className="text-red-500 text-sm">{errors.role}</div>}
-              </div>
-
-
-              {renderField("Department", "department", "text", "Enter department", FaUniversity)}
-
-              <div className="employee-field">
-                <label htmlFor="joiningType" className="flex items-center gap-2">
-                  <FaBriefcase className="text-gray-600" /> Joining Type
-                </label>
-                <select name="joiningType" value={formData.joiningType} onChange={handleChange}>
-                  <option value="">Select Joining Type</option>
-                  <option value="full-time">Full-time</option>
-                  <option value="part-time">Part-time</option>
-                  <option value="contract">Contract</option>
-                </select>
-                {errors.joiningType && (
-                  <div className="text-red-500 text-sm">{errors.joiningType}</div>
-                )}
-              </div>
-
-
-              {renderField("Previous Employer", "previousEmployer", "text", "Enter previous employer", FaBuilding)}
-              {renderField("Medical Info (e.g., Blood Group)", "medicalInfo", "text", "Enter medical info", FaHospital)}
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="employee-fields-wrapper">
-              {renderField("Bank Name", "bankName", "text", "Enter bank name", FaUniversity)}
-              {renderField("Account No", "accountNo", "text", "Enter bank account number", FaCreditCard)}
-              {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code", FaQrcode)}
-              {renderField("PAN No", "panNo", "text", "Enter PAN number", FaIdCard)}
-              {renderField("UPI ID", "upiId", "text", "Enter UPI ID", FaQrcode)}
-              {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number", FaIdCard)}
-
-
-              <div className="employee-field">
-                <label htmlFor="profilePicture" className="flex items-center gap-2">
-                  <FaImage className="text-gray-600" /> Profile Picture
-                </label>
-                <input
-                  type="file"
-                  name="profilePicture"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="file-input" // Optional: Add your custom styling
-                />
-
-                {errors.profilePicture && (
-                  <div className="text-red-500 text-sm">{errors.profilePicture}</div>
-                )}
-              </div>
-
-            </div>
-          )}
-
-          <div className="create-employess-action">
-            {step > 1 && (
-              <button className="form-button" type="button" onClick={() => setStep(step - 1)}>
-                Back
-              </button>
-            )}
-            {step < 3 && (
-              <button className="form-button" type="button" onClick={() => setStep(step + 1)}>
-                Next
-              </button>
-            )}
-            {step === 3 && (
-              <button className="form-button" type="submit" disabled={isLoading}>
-                {isLoading ? "Creating..." : "Submit"}
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+      </Box>
     </div>
   );
 };

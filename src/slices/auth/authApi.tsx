@@ -88,6 +88,16 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
     }),
+
+    confirmAdminRegister: builder.mutation<RegisterForm, { orderId: string, formData: FormData }>({
+      query: ({ orderId, formData }) => ({
+        url: `admin-register-confirm?orderId=${orderId}`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
+    }),
+
   }),
 });
 
@@ -101,6 +111,7 @@ export const {
   useSelectedCompanyMutation,
   useFetchSelectedCompanyQuery,
   useAdminRegisterMutation,
+  useConfirmAdminRegisterMutation,
 } = authApi;
 
 export default authApi;

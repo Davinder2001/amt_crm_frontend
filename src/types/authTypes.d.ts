@@ -16,6 +16,19 @@ interface Company {
     [key: string]: string | number; // Allow for additional fields
 }
 
+
+interface TransactionDetails {
+    merchantOrderId: string;
+    orderId: string;
+    amount: number;
+    state: string;
+    paymentMode: string;
+    transactionTimeout: number;
+    postTransactionWaitTimeout: number;
+    isRedirectionEnabled: boolean;
+    orderType: string;
+}
+
 interface RegisterForm {
     packageId?: number;
     categoryId?: number | null;
@@ -41,7 +54,8 @@ interface RegisterForm {
     pan_image_back: File | null;
     office_electricity_bill?: File | null;
     redirect_url?: string;
-    order_id?: string;
+    transactionDetails?: TransactionDetails;
+    orderId?: string;
 }
 
 interface UserProfile {

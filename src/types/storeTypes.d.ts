@@ -124,7 +124,7 @@ interface UpdateStoreItemRequest {
   availability_stock: number;
   cost_price: number;
   selling_price: number;
-  tax_id: number;
+  tax_id?: number;
   images: (string | File)[] | File[];
   variants: variations[],
   categories: number[];

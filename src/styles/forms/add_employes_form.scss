@@ -3,18 +3,19 @@
 .add-employee-form {
   background-color: white;
   border-radius: 20px;
-  padding: 43px 36px 73px 36px;
+  padding: 40px 20px;
 
   .employee-fields-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px 30px;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
 
     .employee-field {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 16px;
+      position: relative;
 
       label {
         display: flex;
@@ -23,7 +24,7 @@
       }
       svg{
         color: $primary-color;
-        font-size: 18px;
+        size: 14px;
       }
 
     }
@@ -32,7 +33,7 @@
 
   input,
   select {
-    padding: 16px 13px;
+    padding: 10px 12px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #00969357;
@@ -46,7 +47,7 @@
   }
 
   label {
-    font-size: $font-size-one;
+    font-size: 14px;
     font-weight: $font-weight-regular;
     color: #222222;
   }
@@ -87,7 +88,7 @@
 
     .employee-fields-wrapper {
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 10px;
 
       .employee-field {
         gap: 8px;
@@ -105,7 +106,7 @@
 
     .employee-fields-wrapper {
       grid-template-columns: 1fr;
-      gap: 15px;
+      
     }
 
     input,

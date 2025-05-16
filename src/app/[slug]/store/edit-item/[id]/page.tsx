@@ -138,6 +138,32 @@ const UpdateItem = () => {
     setFormData(prev => ({ ...prev, images: [] }));
   };
 
+  const isFormModified = (): boolean => {
+    if (!originalItemData) return false;
+
+    const primitiveFields: (keyof UpdateStoreItemRequest)[] = [
+      'name', 'quantity_count', 'measurement', 'purchase_date',
+      'date_of_manufacture', 'date_of_expiry', 'brand_name',
+      'replacement', 'category', 'vendor_name', 'availability_stock',
+      'cost_price', 'selling_price', 'tax_id'
+    ];
+
+    for (const field of primitiveFields) {
+      if (formData[field] !== originalItemData[field]) {
+        return true;
+      }
+    }
+
+    const categoriesChanged =
+      JSON.stringify(formData.categories) !== JSON.stringify(originalItemData.categories);
+    const variantsChanged =
+      JSON.stringify(variants) !== JSON.stringify(originalItemData.variants);
+    const newImages = formData.images.filter((img) => img instanceof File);
+    const imagesChanged = newImages.length > 0 || removedImages.length > 0;
+
+    return categoriesChanged || variantsChanged || imagesChanged;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -158,8 +184,9 @@ const UpdateItem = () => {
     ];
 
     primitiveFields.forEach((field) => {
-      const value = (formData as any)[field];
-      const originalValue = (originalItemData as any)[field];
+      const key = field as keyof UpdateStoreItemRequest;
+      const value = formData[key];
+      const originalValue = originalItemData[key];
 
       if (value !== originalValue) {
         formdata.append(field, value?.toString() ?? '');
@@ -427,7 +454,7 @@ const UpdateItem = () => {
           )}
         </Box>
 
-        <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+        {/* <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
           <button
             className='buttons'
             type="button"
@@ -439,7 +466,24 @@ const UpdateItem = () => {
           <button className='buttons' type="submit" disabled={isUpdating}>
             {isUpdating ? 'Updating...' : 'Update'}
           </button>
-        </div>
+        </div> */}
+        
+        {isFormModified() && (
+          <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+            <button
+              className='buttons'
+              type="button"
+              style={{ marginLeft: '1rem' }}
+              onClick={() => router.push(`/${companySlug}/store`)}
+            >
+              Cancel
+            </button>
+            <button className='buttons' type="submit" disabled={isUpdating}>
+              {isUpdating ? 'Updating...' : 'Update'}
+            </button>
+          </div>
+        )}
+
       </form>
     </div>
   );

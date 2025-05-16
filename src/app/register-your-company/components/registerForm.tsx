@@ -122,9 +122,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
     if (formData.number && !numberRegex.test(formData.number)) {
       errors.number = 'Phone number must be exactly 10 digits';
     }
-    // if (formData.number && !otpVerified) {
-    //   errors.number = 'Please Verify your Phone Number'
-    // }
+    if (formData.number && !otpVerified) {
+      errors.number = 'Please Verify your Phone Number'
+    }
 
     if (!formData.password) errors.password = 'Password is required';
 
@@ -213,10 +213,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
         newErrors.number = 'Phone number is required';
       } else if (!numberRegex.test(value)) {
         newErrors.number = 'Enter a valid 10-digit number';
-      } 
-      // else if (!otpVerified) {
-      //   newErrors.number = 'Please Verify your Phone Number'
-      // } 
+      }
+      else if (!otpVerified) {
+        newErrors.number = 'Please Verify your Phone Number'
+      }
       else {
         delete newErrors.number;
       }
@@ -602,7 +602,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
         )}
 
 
-        {/* {otpVerified && */}
+        {otpVerified &&
           <div className="form-navigation">
             {activeSection !== 'personal' && (
               <button
@@ -651,7 +651,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
               </button>
             )}
           </div>
-          {/* } */}
+        }
       </form>
     </div>
   );

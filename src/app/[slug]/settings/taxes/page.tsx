@@ -1,5 +1,5 @@
 'use client';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     useFetchTaxesQuery,
     useCreateTaxMutation,
@@ -51,7 +51,7 @@ function TaxesPage() {
         }
     };
 
-    const handleEdit = (tax: any) => {
+    const handleEdit = (tax: Tax) => {
         setForm({ id: tax.id, name: tax.name, rate: tax.rate.toString() });
     };
 
@@ -117,7 +117,7 @@ function TaxesPage() {
                 <Typography color="error">Failed to load taxes.</Typography>
             ) : (
                 <div className="tax-grid">
-                    {taxesData?.data?.map((tax: any) => (
+                    {taxesData?.data?.map((tax: Tax) => (
                         <Paper key={tax.id} className="tax-box">
                             <Box sx={{ flexGrow: 1 }}>
                                 <Typography className="tax-name">{tax.name}</Typography>

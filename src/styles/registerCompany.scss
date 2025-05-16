@@ -514,6 +514,130 @@ form .clear-button {
     }
 }
 
+
+.confirmation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    max-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    padding: 20px;
+
+    .confirmation-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #4f46e5, #10b981);
+        }
+
+        .confirmation-title {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .confirmation-message {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 30px;
+
+            .progress {
+                height: 100%;
+                width: 60%;
+                background: linear-gradient(90deg, #4f46e5, #10b981);
+                border-radius: 3px;
+                animation: progress-animation 2s ease-in-out infinite;
+            }
+        }
+
+
+
+        .c-spinner {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            z-index: 1;
+
+            .spinner-circle {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border: 8px solid transparent;
+                border-radius: 50%;
+                mix-blend-mode: overlay;
+                animation: spinner-rotate 1.5s ease-in-out infinite;
+
+                &:nth-child(1) {
+                    border-top-color: #4f46e5;
+                    animation-delay: 0.1s;
+                }
+
+                &:nth-child(2) {
+                    border-right-color: #10b981;
+                    animation-delay: 0.2s;
+                }
+
+                &:nth-child(3) {
+                    border-bottom-color: #f59e0b;
+                    animation-delay: 0.3s;
+                }
+
+                &:nth-child(4) {
+                    border-left-color: #ef4444;
+                    animation-delay: 0.4s;
+                }
+            }
+        }
+
+        @keyframes spinner-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes progress-animation {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+    }
+
+}
+
 @media (max-width: 600px) {
     .register-company-container {
         padding: 20px 10px;

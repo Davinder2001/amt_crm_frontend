@@ -47,10 +47,26 @@ const ConfirmPage = () => {
             }
         };
 
-        confirmRegistration(); 
+        confirmRegistration();
     }, [confirmAdminRegister, router]);
 
-    return <div className="text-center mt-10 text-lg font-semibold">Confirming your registration...</div>;
+    return (
+        <div className="confirmation-container">
+            <div className="confirmation-card">
+                <div className="c-spinner">
+                    <div className="spinner-circle"></div>
+                    <div className="spinner-circle"></div>
+                    <div className="spinner-circle"></div>
+                    <div className="spinner-circle"></div>
+                </div>
+                <h1 className="confirmation-title">Processing Your Registration</h1>
+                <p className="confirmation-message">Please wait while we confirm your details...</p>
+                <div className="progress-bar">
+                    <div className="progress"></div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default ConfirmPage;

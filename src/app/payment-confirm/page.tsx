@@ -42,7 +42,7 @@ const ConfirmPage = () => {
                 toast.success('Registration confirmed successfully!');
                 localStorage.removeItem('adminregistration');
                 router.push('/login');
-            } catch (error) {
+            } catch {
                 toast.error('Failed to confirm registration.');
             }
         };

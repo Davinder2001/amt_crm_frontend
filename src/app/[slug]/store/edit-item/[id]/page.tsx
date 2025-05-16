@@ -158,8 +158,9 @@ const UpdateItem = () => {
     ];
 
     primitiveFields.forEach((field) => {
-      const value = (formData as any)[field];
-      const originalValue = (originalItemData as any)[field];
+      const key = field as keyof UpdateStoreItemRequest;
+      const value = formData[key];
+      const originalValue = originalItemData[key];
 
       if (value !== originalValue) {
         formdata.append(field, value?.toString() ?? '');

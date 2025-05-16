@@ -16,14 +16,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     handleClearImages,
     handleRemoveImage
 }) => {
+    const isLimitReached = images.length >= 5;
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const selectedFiles = Array.from(e.target.files);
-            const totalFiles = (images ? images.length : 0) + selectedFiles.length;
+            const totalFiles = images.length + selectedFiles.length;
 
             if (totalFiles > 5) {
-                toast.error("You can only select up to 5 images.");
-                e.target.value = "";
+                toast.error("You can only upload up to 5 images.");
+                e.target.value = '';
                 return;
             }
 
@@ -33,13 +34,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
     return (
         <div className="upload-container">
-            <label>Upload Images ({images?.length || 0}/5)*</label>
+            <label>Upload Images ({images.length}/5)*</label>
+
             <div
-                className="upload-input-box"
-                onClick={() => document.getElementById('file-upload-input')?.click()}
+                className={`upload-input-box ${isLimitReached ? 'disabled-upload' : ''}`}
+                onClick={() => {
+                    if (!isLimitReached) {
+                        document.getElementById('file-upload-input')?.click();
+                    }
+                }}
+                style={{ cursor: isLimitReached ? 'not-allowed' : 'pointer', opacity: isLimitReached ? 0.5 : 1 }}
             >
                 <FiUpload size={18} />
-                <span className="upload-text">Click here to upload or drag & drop</span>
+                <span className="upload-text">
+                    {isLimitReached ? 'Maximum 5 images uploaded' : 'Click here to upload or drag & drop'}
+                </span>
                 <input
                     id="file-upload-input"
                     type="file"
@@ -48,11 +57,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     multiple
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
+                    disabled={isLimitReached}
                 />
             </div>
             <small className="upload-note">SVG, JPG, PNG up to 10MB</small>
-
-            {images && images.length > 0 && (
+            {images.length > 0 && (
                 <>
                     <div className="preview-row">
                         {images.map((file, index) => (
@@ -72,7 +81,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                                 >
                                     <FaTimes />
                                 </button>
-
                             </div>
                         ))}
                     </div>

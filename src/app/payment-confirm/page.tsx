@@ -19,6 +19,7 @@ const ConfirmPage = () => {
 
             if (!orderId) {
                 toast.error('Missing order ID in URL');
+                router.push('/register-your-company');
                 return;
             }
 

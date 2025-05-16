@@ -57,4 +57,5 @@ export const clearStorage = () => {
     Cookies.remove('company_slug', { path: '/' });
     Cookies.remove('user_type', { path: '/' });
     Cookies.remove('access_token', { path: '/' });
+    Cookies.remove('company_selection_count', { path: '/' });
 };

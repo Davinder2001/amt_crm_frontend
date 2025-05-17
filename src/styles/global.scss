@@ -13,6 +13,7 @@
 
 // admin dashboard section
 @use './adminDashboard/dashboard.scss' as *;
+@use './adminDashboard/myAccount.scss' as *;
 
 // task-details-section
 @use './tasks/task_details.scss' as *;
@@ -247,7 +248,6 @@ textarea {
 
     .main-content {
         flex: 1;
-        padding-bottom: 50px;
         overflow-y: auto;
         width: 100%;
         min-height: 0;
@@ -446,5 +446,9 @@ h2.react-datepicker__current-month,
     .buttons {
         padding: 5px 15px;
 
+    }
+
+    .main .main-content {
+        padding-bottom: 50px;
     }
 }

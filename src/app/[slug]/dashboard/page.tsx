@@ -11,6 +11,7 @@ import ListOverview from './components/ListOverview';
 import UserActivity from './components/UserActivity';
 import CustomerReview from './components/CustomerReview';
 import TotalEarnings from './components/TotalEarnings';
+import Footer from '../_common/footer/footer';
 
 function Page() {
   const { setTitle } = useBreadcrumb();
@@ -20,23 +21,26 @@ function Page() {
   }, [setTitle]);
 
   return (
-    <div className="dashboard-page">
-      <ListOverview />
-      <div className="stat-revenue-container">
-        <TotalRevenue />
-        <StoreStats />
+    <>
+      <div className="dashboard-page">
+        <ListOverview />
+        <div className="stat-revenue-container">
+          <TotalRevenue />
+          <StoreStats />
+        </div>
+        <div className="expenses-sale-container">
+          <IncomeExpense />
+          <Employees />
+          <SaleItems />
+        </div>
+        <div className='earning-review-container'>
+          <UserActivity />
+          <CustomerReview />
+          <TotalEarnings />
+        </div>
       </div>
-      <div className="expenses-sale-container">
-        <IncomeExpense />
-        <Employees />
-        <SaleItems />
-      </div>
-      <div className='earning-review-container'>
-        <UserActivity />
-        <CustomerReview />
-        <TotalEarnings />
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 

@@ -3,7 +3,7 @@ import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import React, { useEffect } from "react";
 import AddEmployeeForm from "./components/AddEmFrom";
 
-const Page: React.FC = () => {
+const AddEmployee: React.FC = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
@@ -17,4 +17,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default AddEmployee;

@@ -11,20 +11,10 @@ const Page = () => {
     setTitle('My Profile');
   }, [setTitle]);
 
-
-
   return (
     <>
       <Profile />
     </>
-
-
-
-
-
-
-
-
   );
 };
 

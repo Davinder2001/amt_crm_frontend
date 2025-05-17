@@ -1,12 +1,12 @@
 'use client'
 import React, { useState } from 'react';
-import { useAddNewCompanyMutation } from '@/slices/company/companyApi';
+import { useOrderNewCompanyMutation } from '@/slices/company/companyApi';
 import Packages from '@/app/register-your-company/components/Packages';
 import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
 
 const AddCompanyForm = () => {
   const [companyName, setCompanyName] = useState('');
-  const [addNewCompany, { isLoading, isSuccess, isError, error }] = useAddNewCompanyMutation();
+  const [addNewCompany, { isLoading, isSuccess, isError, error }] = useOrderNewCompanyMutation();
 
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
   const plans = Array.isArray(plansData) ? plansData : [];

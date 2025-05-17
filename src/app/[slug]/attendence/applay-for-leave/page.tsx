@@ -147,11 +147,11 @@ import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaFileUpload } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, isSunday } from 'date-fns';
 
 const Page = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -159,16 +159,23 @@ const Page = () => {
   const [description, setDescription] = useState('');
   const [applyForLeave, { isLoading, isSuccess, isError }] = useApplyForLeaveMutation();
   const { companySlug } = useCompany();
-
+  const [document, setDocument] = useState<File | null>(null);
   useEffect(() => {
     if (isSuccess) {
       toast.success("Leave applied successfully!");
       setSelectedDates([]);
       setSubject('');
       setDescription('');
+      setDocument(null);
     }
   }, [isSuccess]);
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setDocument(file);
+    }
+  };
   useEffect(() => {
     if (isError) {
       toast.error("Error applying leave");
@@ -196,11 +203,24 @@ const Page = () => {
   const handleDateClick = (date: Date) => {
     setSelectedDates((prev) => {
       const exists = prev.some((d) => d.toDateString() === date.toDateString());
-      return exists
-        ? prev.filter((d) => d.toDateString() !== date.toDateString())
-        : [...prev, date];
+
+      if (exists) {
+        // If date is already selected, remove it (toggle off)
+        return prev.filter((d) => d.toDateString() !== date.toDateString());
+      } else {
+        // If less than 2 dates selected, add new date
+        if (prev.length < 2) {
+          return [...prev, date];
+        } else {
+          // If already 2 dates selected, ignore additional selections
+          // Optional: You can show a toast or alert here to inform the user
+          toast.info("You can only select up to 2 dates.");
+          return prev;
+        }
+      }
     });
   };
+
 
   const getFormattedRange = () => {
     if (selectedDates.length === 0) return '';
@@ -218,7 +238,6 @@ const Page = () => {
       </Link>
       <div className='leave-application-container'>
         <div className="application-header">
-          <h1>Request For  Leave</h1>
           <div className="timeline-indicator">
             <div className="step active">Select Dates</div>
 
@@ -233,15 +252,27 @@ const Page = () => {
             </div>
 
             <DatePicker
+              key={selectedDates.length === 0 ? 'no-date' : 'has-date'}
               inline
-              selected={null}
               onChange={(date: Date | null) => date && handleDateClick(date)}
-              highlightDates={[{ "highlighted-dates": selectedDates }]}
               calendarClassName="modern-calendar"
-              dayClassName={(date) =>
-                selectedDates.some(d => isSameDay(d, date)) ? 'selected-dates' : ''
-              }
+              dayClassName={(date) => {
+                if (isSameDay(date, new Date())) {
+                  return 'current-date'; // highlight current date
+                }
+                if (isSunday(date)) {
+                  return 'sunday-date'; // red color for Sundays
+                }
+                if (selectedDates.some(d => isSameDay(d, date))) {
+                  return 'selected-green'; // your existing selected styling
+                }
+                return '';
+              }}
+              openToDate={selectedDates.length > 0 ? selectedDates[0] : new Date()}
             />
+
+
+
           </div>
 
           <div className="details-card">
@@ -274,6 +305,48 @@ const Page = () => {
                 className="modern-textarea"
               />
             </div>
+            <div className="input-group">
+              <label>Attach Document (optional)</label>
+              <div
+                className="file-upload-box"
+                onClick={() => window.document.getElementById('hidden-file-input')?.click()}
+              >
+                <FaFileUpload size={24} color="#888" />
+                <p>{document ? document.name : 'Click or drag file here to upload'}</p>
+              </div>
+              <input
+                type="file"
+                id="hidden-file-input"
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                style={{ display: 'none' }}
+                onChange={handleFileSelect}
+              />
+              {document && (
+                <div className="file-preview">
+                  {document.type.startsWith('image/') ? (
+                    <div className="thumbnail-wrapper">
+                      <img
+                        src={URL.createObjectURL(document)}
+                        alt="Preview"
+                        className="file-thumbnail"
+                      />
+                      <button
+                        className="remove-button"
+                        onClick={() => setDocument(null)}
+                        type="button"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <span>{document.name}</span>
+                  )}
+                  <span>{(document.size / 1024).toFixed(2)} KB</span>
+                </div>
+              )}
+
+            </div>
+
             <div className="date-range-display">
               {selectedDates.length > 0 && (
                 <span className="date-range-badge">

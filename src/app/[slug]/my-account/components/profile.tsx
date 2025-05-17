@@ -1,15 +1,45 @@
 'use client';
 import Loader from '@/components/common/Loader';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import { encodeStorage } from '@/utils/Company';
 
 const Profile = () => {
   const { data, isLoading, isError } = useFetchProfileQuery();
+  const [sendCompanyId] = useSelectedCompanyMutation();
+  const router = useRouter();
 
   if (isLoading) return <Loader />;
   if (isError) return <div className="error-container"><p>Failed to load profile.</p></div>;
 
   const user = data?.user;
+
+  const handleCompanySelect = async (
+    companySlug: string,
+    id: number,
+    isVerified: boolean,
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault();
+    if (!isVerified) {
+      toast.error('This company is not verified. Please contact support.');
+      return;
+    }
+
+    Cookies.set('company_slug', companySlug, { path: '/' });
+    localStorage.setItem('company_slug', encodeStorage(companySlug));
+
+    try {
+      await sendCompanyId({ id }).unwrap();
+      router.push(`/${companySlug}/dashboard`);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to select company. Please try again.');
+    }
+  };
 
   return (
     <div className="profile-page">
@@ -98,6 +128,22 @@ const Profile = () => {
                       {company.payment_status}
                     </span>
                   </div>
+
+                </div>
+                <div className="company-actions">
+                  <button
+                    className="btn-action"
+                    onClick={(e) =>
+                      handleCompanySelect(
+                        company.company_slug,
+                        company.id,
+                        company.verification_status === 'verified',
+                        e
+                      )
+                    }
+                  >
+                    Manage Company
+                  </button>
                 </div>
               </div>
             ))}

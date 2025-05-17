@@ -48,9 +48,12 @@ const Profile = () => {
 
             {/* Add Company Button */}
             <div className="company-card add-company-card">
-              <button className="add-button" onClick={() => alert('Redirect to create company')}>
+              {/* <button className="add-button" onClick={() => alert('Redirect to create company')}>
                 +
-              </button>
+              </button> */}
+              <Link href="my-account/add-company" className='add-button'>
+                +
+              </Link>
               <p className="add-text">Add Company</p>
             </div>
           </div>

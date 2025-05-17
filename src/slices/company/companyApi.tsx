@@ -68,6 +68,17 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
+    addNewCompany: builder.mutation<{ message: string; company: Company }, FormData>({
+      query: (formData) => ({
+        url: "add-new-company",
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
+
   }),
 });
 
@@ -79,6 +90,7 @@ export const {
   useCreateTaxMutation,
   useUpdateTaxMutation,
   useDeleteTaxMutation,
+  useAddNewCompanyMutation
 } = companyApi;
 
 export default companyApi;

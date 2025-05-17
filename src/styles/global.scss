@@ -408,6 +408,30 @@ svg.react-datepicker__triangle {
     font-weight: 500;
 }
 
+
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+    border-top-right-radius: .3rem;
+    background-color: $primary-color;
+}
+
+h2.react-datepicker__current-month,
+.react-datepicker__day-name {
+    color: rgb(255, 255, 255) !important;
+}
+
+.react-datepicker__month-container {
+    float: left;
+    width: 100%;
+}
+
+
+
+
+.react-datepicker__tab-loop {
+    position: absolute;
+}
+
+
 // datepicker-styling End...............................................................................
 
 

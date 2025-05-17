@@ -105,7 +105,14 @@ const Profile = () => {
           </div>
           <div className="companies-grid">
             {(user?.companies ?? []).map((company: Company) => (
-              <div key={company.id} className="company-card">
+              <div key={company.id} className="company-card" onClick={(e) =>
+                handleCompanySelect(
+                  company.company_slug,
+                  company.id,
+                  company.verification_status === 'verified',
+                  e
+                )
+              }>
                 <h3>{company.company_name}</h3>
                 <div className="company-info">
                   <div className="info-row">
@@ -130,7 +137,7 @@ const Profile = () => {
                   </div>
 
                 </div>
-                <div className="company-actions">
+                {/* <div className="company-actions">
                   <button
                     className="btn-action"
                     onClick={(e) =>
@@ -144,7 +151,7 @@ const Profile = () => {
                   >
                     Manage Company
                   </button>
-                </div>
+                </div> */}
               </div>
             ))}
 

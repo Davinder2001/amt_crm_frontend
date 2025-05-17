@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "@/app/[slug]/_common/sidebar/sidebar";
 import Header from "@/app/[slug]/_common/header/header";
-import Footer from "@/app/[slug]/_common/footer/footer";
 import { usePathname } from "next/navigation";
+import FooterBarMenu from "@/app/[slug]/_common/footer/FooterBarMenu";
 
 export const AdminEmployeeLayout = ({
   children,
@@ -15,6 +15,7 @@ export const AdminEmployeeLayout = ({
 
   const [isToggle, setIsToggle] = useState<boolean>(false); // mobile sidebar toggle state
   const [isMobile, setIsMobile] = useState<boolean>(false); // check if the device is mobile
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window !== "undefined") {
@@ -57,6 +58,28 @@ export const AdminEmployeeLayout = ({
     setIsToggle(!isToggle);  // Toggle mobile sidebar visibility
   };
 
+  // Close sidebar if click outside in mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMobile &&
+        isToggle &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        setIsToggle(false);
+      }
+    };
+
+    if (isToggle && isMobile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isToggle, isMobile]);
+
   // Render children if on the homepage
   if (pathname === "/") {
     return <>{children}</>;
@@ -64,6 +87,23 @@ export const AdminEmployeeLayout = ({
 
   return (
     <div className="main">
+      {/* Overlay that appears when mobile menu is open */}
+      {isMobile && isToggle && (
+        <div
+          className="overlay"
+          onClick={() => setIsToggle(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.13)",
+            zIndex: 9,
+            cursor: 'pointer',
+          }}
+        />
+      )}
       <div
         className={`sidebar ${isSidebarExpanded ? 'expanded-view' : 'collapse-view'} ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
         style={{
@@ -85,7 +125,7 @@ export const AdminEmployeeLayout = ({
         <div className="page-content">
           {children}
         </div>
-        <Footer openMenu={openMenu} />
+        <FooterBarMenu openMenu={openMenu} />
       </div>
     </div>
   );

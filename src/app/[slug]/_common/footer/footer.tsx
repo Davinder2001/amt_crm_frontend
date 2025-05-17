@@ -1,13 +1,8 @@
 'use client';
 import Link from 'next/link'
 import React from 'react'
-import FooterBarMenu from './FooterBarMenu';
 
-interface footerProps {
-    openMenu: () => void;
-}
-
-const Footer: React.FC<footerProps> = ({ openMenu }) => {
+const Footer = () => {
     return (
         <>
             <div style={{
@@ -20,7 +15,7 @@ const Footer: React.FC<footerProps> = ({ openMenu }) => {
                 borderTop: '1px solid #f3f3f3',
                 boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                 borderRadius: '10px',
-                margin: '20px 10px',
+                margin: '20px 0px',
             }}>
                 <div style={{
                     display: 'flex',
@@ -62,7 +57,6 @@ const Footer: React.FC<footerProps> = ({ openMenu }) => {
                     © 2025 AMT CRM. All rights reserved.
                 </div>
             </div>
-            <FooterBarMenu openMenu={openMenu} />
         </>
     )
 }

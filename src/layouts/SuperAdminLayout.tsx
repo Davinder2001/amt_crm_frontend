@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/app/superadmin/components/sideBar";
 import Header from "@/app/superadmin/components/header";
-import Footer from "@/app/[slug]/_common/footer/footer";
+import FooterBarMenu from "@/app/[slug]/_common/footer/FooterBarMenu";
 
 export const SuperAdminLayout = ({
   children,
@@ -15,6 +15,7 @@ export const SuperAdminLayout = ({
 
   const [isToggle, setIsToggle] = useState<boolean>(false); // mobile sidebar toggle state
   const [isMobile, setIsMobile] = useState<boolean>(false); // check if the device is mobile
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window !== "undefined") {
@@ -57,6 +58,28 @@ export const SuperAdminLayout = ({
     setIsToggle(!isToggle);  // Toggle mobile sidebar visibility
   };
 
+  // Close sidebar if click outside in mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMobile &&
+        isToggle &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        setIsToggle(false);
+      }
+    };
+
+    if (isToggle && isMobile) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isToggle, isMobile]);
+
   // Render children if on the homepage
   if (pathname === "/") {
     return <>{children}</>;
@@ -65,30 +88,47 @@ export const SuperAdminLayout = ({
   return (
     <div className="super-admin-layout-wrapper">
       <div className="super-admin-layout-inner">
-      <div
-        className={`sidebar ${isSidebarExpanded ? 'expanded-view' : 'collapse-view'} ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
-        style={{
-          width: isMobile ? '90%' : isSidebarExpanded ? '250px' : '60px',
-        }}
-      >
-        <Sidebar
-          isSidebarExpanded={isSidebarExpanded}
-          isMobile={isMobile}
-          openMenu={openMenu}
-        />
-      </div>
-      <div className="content-area">
-        <Header
-          handleToggleSidebar={handleToggleSidebar}
-          openMenu={openMenu}
-          isMobile={isMobile}
-        />
-        <div className="page-content">
-          {children}
+        {/* Overlay that appears when mobile menu is open */}
+        {isMobile && isToggle && (
+          <div
+            className="overlay"
+            onClick={() => setIsToggle(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              backgroundColor: "rgba(0, 0, 0, 0.13)",
+              zIndex: 9,
+              cursor: 'pointer',
+            }}
+          />
+        )}
+        <div
+          className={`sidebar ${isSidebarExpanded ? 'expanded-view' : 'collapse-view'} ${isMobile ? (isToggle ? 'show-sidebar' : 'hide-sidebar') : ''}`}
+          style={{
+            width: isMobile ? '90%' : isSidebarExpanded ? '250px' : '60px',
+          }}
+        >
+          <Sidebar
+            isSidebarExpanded={isSidebarExpanded}
+            isMobile={isMobile}
+            openMenu={openMenu}
+          />
         </div>
-        <Footer openMenu={openMenu} />
+        <div className="content-area">
+          <Header
+            handleToggleSidebar={handleToggleSidebar}
+            openMenu={openMenu}
+            isMobile={isMobile}
+          />
+          <div className="page-content">
+            {children}
+          </div>
+          <FooterBarMenu openMenu={openMenu} />
+        </div>
       </div>
-    </div>
     </div>
   );
 };

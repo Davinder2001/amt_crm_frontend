@@ -247,7 +247,6 @@ textarea {
 
     .main-content {
         flex: 1;
-        padding-bottom: 50px;
         overflow-y: auto;
         width: 100%;
         min-height: 0;
@@ -406,7 +405,7 @@ svg.react-datepicker__triangle {
 .react-datepicker__day {
     padding: 5px 0px;
     font-size: 13px;
-    font-weight: 500;   
+    font-weight: 500;
 }
 
 // datepicker-styling End...............................................................................
@@ -422,5 +421,9 @@ svg.react-datepicker__triangle {
     .buttons {
         padding: 5px 15px;
 
+    }
+
+    .main .main-content {
+        padding-bottom: 50px;
     }
 }

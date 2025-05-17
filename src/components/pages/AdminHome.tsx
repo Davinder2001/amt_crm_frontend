@@ -34,6 +34,8 @@ const AdminHome = () => {
         Cookies.set('company_slug', companySlug, { path: '/' });
         localStorage.setItem('company_slug', encodeStorage(companySlug));
 
+        Cookies.set('company_selection_count', '1', { path: '/' });
+
         try {
             await sendCompanyId({ id }).unwrap();
             router.push(`/${companySlug}/dashboard`);

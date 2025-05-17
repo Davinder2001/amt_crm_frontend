@@ -67,7 +67,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
             router.push(
               userType === 'employee'
                 ? `/${companySlug}/employee/dashboard`
-                : `/`
+                : `/${companySlug}/dashboard`
             )
           }
         />

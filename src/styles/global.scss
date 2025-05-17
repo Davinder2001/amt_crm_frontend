@@ -13,6 +13,7 @@
 
 // admin dashboard section
 @use './adminDashboard/dashboard.scss' as *;
+@use './adminDashboard/myAccount.scss' as *;
 
 // task-details-section
 @use './tasks/task_details.scss' as *;

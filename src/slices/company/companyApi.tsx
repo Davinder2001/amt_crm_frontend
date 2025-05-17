@@ -68,7 +68,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
-    addNewCompany: builder.mutation<{ message: string; company: Company }, FormData>({
+    addNewCompany: builder.mutation<void, { package_id: number | null, company_name: string }>({
       query: (formData) => ({
         url: "add-new-company",
         method: "POST",

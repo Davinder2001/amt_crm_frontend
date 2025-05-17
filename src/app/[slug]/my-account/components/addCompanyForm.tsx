@@ -1,155 +1,363 @@
-'use client'
-import React, { useState } from 'react';
-import { useOrderNewCompanyMutation } from '@/slices/company/companyApi';
-import Packages from '@/app/register-your-company/components/Packages';
-import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
+'use client';
+import React, { useEffect, useState } from "react";
+import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
-const AddCompanyForm = () => {
-  const [companyName, setCompanyName] = useState('');
-  const [addNewCompany, { isLoading, isSuccess, isError, error }] = useOrderNewCompanyMutation();
+interface addCompanyFormProps {
+  packageId: number;
+  categoryId: number | null;
+}
 
-  const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
-  const plans = Array.isArray(plansData) ? plansData : [];
+const LOCAL_STORAGE_KEY = 'addCompany';
 
-  const { data: categoriesData } = useFetchBusinessCategoriesQuery();
-  const categories = categoriesData ?? [];
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
-
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    addNewCompany({
-      company_name: companyName,
-      package_id: selectedPackageId,
-    });
-
-    setCompanyName('');
-  };
-
-
-  return (
-    <>
-      <Packages
-        plans={plans}
-        setSelectedPackageId={setSelectedPackageId}
-        selectedPackageId={selectedPackageId}
-        categories={categories}
-        selectedCategoryId={selectedCategoryId}
-        setSelectedCategoryId={setSelectedCategoryId}
-      />
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="companyName">Company Name:</label>
-        <input
-          type="text"
-          id="companyName"
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Creating...' : 'Create Company'}
-        </button>
-
-        {isSuccess && <p style={{ color: 'green' }}>Company created successfully!</p>}
-        {isError && <p style={{ color: 'red' }}>Failed to create company.</p>}
-      </form>
-    </>
-  );
+const getStoredFormData = () => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  }
+  return null;
 };
 
-export default AddCompanyForm;
+const saveFormData = (data: Partial<AddCompany>) => {
+  if (typeof window !== 'undefined') {
+    const dataToStore = { ...data };
+    Object.keys(dataToStore).forEach(key => {
+      if (dataToStore[key as keyof AddCompany] instanceof File) {
+        delete dataToStore[key as keyof AddCompany];
+      }
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToStore));
+  }
+};
 
+const getDefaultFormData = (packageId: number, categoryId: number | null): AddCompany => ({
+  company_name: '',
+  package_id: packageId,
+  category_id: categoryId,
+  company_logo: null,
+  business_address: '',
+  pin_code: '',
+  business_proof_type: '',
+  business_id: '',
+  business_proof_front: null,
+  business_proof_back: null,
+});
 
+const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
+  const [formData, setFormData] = useState<AddCompany>(getDefaultFormData(packageId, categoryId));
+  const [orderNewCompany, { isLoading}] = useOrderNewCompanyMutation();
 
+  useEffect(() => {
+    const stored = getStoredFormData();
+    if (stored) {
+      setFormData(prev => ({ ...prev, ...stored }));
+    }
+  }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+    saveFormData(updatedFormData);
+  };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    if (files && files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    }
+  };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const payload = {
+        package_id: formData.package_id,
+        company_name: formData.company_name,
+      };
+      const response = await orderNewCompany(payload).unwrap();
+      localStorage.setItem("company_form_data", JSON.stringify({ ...formData, order_id: response.orderId }));
 
+      if (response.redirect_url) {
+        window.location.href = response.redirect_url;
+      }
+    } catch (err) {
+      console.error("Failed to start payment:", err);
+    }
+  };
 
+  return (
+    <div className="add-company">
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="company-form">
+        <div className="form-grid">
+          <div className="form-group">
+            <label className="form-label">Company Name *</label>
+            <input
+              type="text"
+              name="company_name"
+              value={formData.company_name}
+              onChange={handleChange}
+              required
+              className="form-input"
+              placeholder="Enter company name"
+            />
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">Company Logo</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                name="company_logo"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <span className="file-label">
+                {formData.company_logo ? formData.company_logo.name : 'Choose file...'}
+              </span>
+              <button type="button" className="file-button">Browse</button>
+            </div>
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">PIN Code</label>
+            <input
+              type="text"
+              name="pin_code"
+              value={formData.pin_code}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Enter PIN code"
+            />
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">Business Proof Type</label>
+            <input
+              type="text"
+              name="business_proof_type"
+              value={formData.business_proof_type}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="e.g. GST, PAN, etc."
+            />
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">Business ID</label>
+            <input
+              type="text"
+              name="business_id"
+              value={formData.business_id}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Enter business ID"
+            />
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">Business Proof Front</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                name="business_proof_front"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <span className="file-label">
+                {formData.business_proof_front ? formData.business_proof_front.name : 'Choose file...'}
+              </span>
+              <button type="button" className="file-button">Browse</button>
+            </div>
+          </div>
 
+          <div className="form-group">
+            <label className="form-label">Business Proof Back</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                name="business_proof_back"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <span className="file-label">
+                {formData.business_proof_back ? formData.business_proof_back.name : 'Choose file...'}
+              </span>
+              <button type="button" className="file-button">Browse</button>
+            </div>
+          </div>
+          <div className="form-group full-width">
+            <label className="form-label">Business Address</label>
+            <textarea
+              name="business_address"
+              value={formData.business_address}
+              onChange={handleChange}
+              className="form-textarea"
+              placeholder="Enter business address"
+              rows={3}
+            />
+          </div>
+        </div>
 
+        <div className="form-actions">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="submit-button"
+          >
+            {isLoading ? "Processing..." : "Create Company"}
+          </button>
+        </div>
+      </form>
 
+      <style jsx>{`
+        .add-company {
+          padding-bottom: 20px;
+        }
+        .company-form {
+          background: #fff;
+          border-radius: 8px;
+          padding: 30px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
 
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 10px;
+          margin-bottom: 30px;
+        }
 
+        .form-group.full-width {
+          grid-column: 1 / -1;
+        }
 
-// 'use client';
+        .form-label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 500;
+          color: #34495e;
+          font-size: 14px;
+        }
 
-// import React, { useState, useEffect } from 'react';
-// import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
-// import Packages from './components/Packages';
-// import RegisterForm from './components/registerForm';
-// import Loader from '@/components/common/Loader';
+        .form-input, .form-textarea {
+          width: 100%;
+          padding: 10px 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 14px;
+          transition: border-color 0.3s;
+        }
 
-// function Page() {
-//   const { data: plansData, isLoading } = useFetchPackagesPlansQuery();
-//   const plans = Array.isArray(plansData) ? plansData : [];
+        .form-input:focus, .form-textarea:focus {
+          outline: none;
+          border-color: #009693;
+        }
 
-//   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
-//   const categories = categoriesData ?? [];
+        .form-textarea {
+          min-height: 80px;
+          resize: vertical;
+        }
 
-//   // Initialize from localStorage
-//   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(() => {
-//     const stored = localStorage.getItem('packageId');
-//     return stored ? Number(stored) : null;
-//   });
+        .file-upload {
+          display: flex;
+          align-items: center;
+        }
 
-//   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(() => {
-//     const stored = localStorage.getItem('categoryId');
-//     return stored ? Number(stored) : null;
-//   });
+        .file-input {
+          width: 0.1px;
+          height: 0.1px;
+          opacity: 0;
+          overflow: hidden;
+          position: absolute;
+          z-index: -1;
+        }
 
-//   // Store packageId in localStorage
-//   useEffect(() => {
-//     if (selectedPackageId !== null) {
-//       localStorage.setItem('packageId', selectedPackageId.toString());
-//     }
-//   }, [selectedPackageId]);
+        .file-label {
+          flex-grow: 1;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-right: none;
+          border-radius: 4px 0 0 4px;
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          background: #f9f9f9;
+        }
 
-//   // Store categoryId in localStorage
-//   useEffect(() => {
-//     if (selectedCategoryId !== null) {
-//       localStorage.setItem('categoryId', selectedCategoryId.toString());
-//     }
-//   }, [selectedCategoryId]);
+        .file-button {
+          padding: 10px 15px;
+          background: #009693;
+          color: white;
+          border: none;
+          border-radius: 0 4px 4px 0;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s;
+        }
 
-//   if (isLoading) return <Loader />;
-//   if (!plans || !categories) return <div>No plans or categories available.</div>;
+        .file-button:hover {
+          background: #2980b9;
+        }
 
-//   // ✅ If both are present, go directly to RegisterForm
-//   const hasValidSelection = selectedPackageId !== null && selectedCategoryId !== null;
+        .form-actions {
+          text-align: center;
+          margin-top: 20px;
+        }
 
-//   const handleBackToPackages = () => {
-//     localStorage.removeItem('packageId');
-//     localStorage.removeItem('categoryId');
-//     localStorage.removeItem('adminregistration');
-//     setSelectedPackageId(null);
-//     setSelectedCategoryId(null);
-//   };
+        .submit-button {
+          padding: 12px 30px;
+          background-color: #009693;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
 
-//   return (
-//     <>
-//       {hasValidSelection ? (
-//         <RegisterForm packageId={selectedPackageId} categoryId={selectedCategoryId} onBack={handleBackToPackages} />
-//       ) : (
-//         <Packages
-//           plans={plans}
-//           setSelectedPackageId={setSelectedPackageId}
-//           selectedPackageId={selectedPackageId}
-//           categories={categories}
-//           selectedCategoryId={selectedCategoryId}
-//           setSelectedCategoryId={setSelectedCategoryId}
-//         />
-//       )}
-//     </>
-//   );
-// }
+        .submit-button:hover {
+          background-color: #2980b9;
+        }
 
-// export default Page;
+        .submit-button:disabled {
+          background-color: #95a5a6;
+          cursor: not-allowed;
+        }
+
+        .success-message {
+          color: #27ae60;
+          text-align: center;
+          margin-top: 20px;
+          font-weight: 500;
+        }
+
+        .error-message {
+          color: #e74c3c;
+          text-align: center;
+          margin-top: 20px;
+          font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .company-form {
+            padding: 20px;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default Page;

@@ -69,7 +69,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
 
-    orderNewCompany: builder.mutation<void, { package_id: number | null, company_name: string }>({
+    orderNewCompany: builder.mutation<AddCompany, { package_id: number | null, company_name: string }>({
       query: (formData) => ({
         url: "add-new-company/pay",
         method: "POST",
@@ -80,11 +80,11 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
 
-    addNewCompany: builder.mutation<void, { package_id: number | null, company_name: string }>({
-      query: (formData) => ({
-        url: "add-new-company/{orderId}",
+    addNewCompany: builder.mutation<AddCompany, { orderId: string, formdata: FormData }>({
+      query: ({ orderId, formdata }) => ({
+        url: `add-new-company/${orderId}`,
         method: "POST",
-        body: formData,
+        body: formdata,
         credentials: "include",
       }),
       invalidatesTags: ["Company"],

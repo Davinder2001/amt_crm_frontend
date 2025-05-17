@@ -58,6 +58,22 @@ interface RegisterForm {
     orderId?: string;
 }
 
+interface AddCompany {
+    company_name: string;
+    company_logo?: File | null;
+    business_address?: string;
+    pin_code?: string;
+    business_proof_type?: string;
+    business_id?: string;
+    business_proof_front?: File | null;
+    business_proof_back?: File | null;
+    redirect_url?: string;
+    transactionDetails?: TransactionDetails;
+    orderId?: string;
+    category_id: number | null;
+    package_id: number,
+}
+
 interface UserProfile {
     roles: Role[];
     id: number;

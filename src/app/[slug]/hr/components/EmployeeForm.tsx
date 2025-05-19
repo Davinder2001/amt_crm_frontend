@@ -609,6 +609,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                 idProofValue: "", // reset previous input
                                                 idProofImage: null,
                                             }));
+                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+                                                ...formData,
+                                                idProofType: e.target.value,
+                                                idProofValue: "",
+                                                idProofImage: null,
+                                            }))
                                         }}
                                     >
                                         <option value="">Select ID Proof</option>
@@ -632,8 +638,24 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             type="text"
                                             name="idProofValue"
                                             value={formData.idProofValue}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, idProofValue: e.target.value }))
+                                            onChange={(e) => {
+                                                const newValue = e.target.value;
+                                                setFormData((prev) => {
+                                                    const updated = { ...prev, idProofValue: newValue };
+                                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                                    return updated;
+                                                });
+                                            }}
+                                            minLength={
+                                                formData.idProofType === "aadhar" ? 12 :
+                                                    formData.idProofType === "passport" ? 8 :
+                                                        undefined
+                                            }
+                                            maxLength={
+                                                formData.idProofType === "aadhar" ? 12 :
+                                                    formData.idProofType === "license" ? 15 :
+                                                        formData.idProofType === "passport" ? 8 :
+                                                            undefined
                                             }
                                             placeholder={`Enter ${formData.idProofType} number`}
                                         />
@@ -648,9 +670,14 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             type="file"
                                             accept="image/*"
                                             name="idProofImage"
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, idProofImage: e.target.files?.[0] || null }))
-                                            }
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0] || null;
+                                                setFormData((prev) => {
+                                                    const updated = { ...prev, idProofImage: file };
+                                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                                    return updated;
+                                                });
+                                            }}
                                         />
                                         {errors.idProofImage && <div className="error-message">{errors.idProofImage}</div>}
                                     </div>

@@ -44,7 +44,7 @@ const getDefaultFormData = (packageId: number, categoryId: number | null): AddCo
 
 const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
   const [formData, setFormData] = useState<AddCompany>(getDefaultFormData(packageId, categoryId));
-  const [orderNewCompany, { isLoading}] = useOrderNewCompanyMutation();
+  const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
   useEffect(() => {
     const stored = getStoredFormData();
@@ -267,15 +267,16 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
         .file-upload {
           display: flex;
           align-items: center;
+          position: relative;
         }
 
         .file-input {
-          width: 0.1px;
+          width: 100%;
           height: 0.1px;
           opacity: 0;
           overflow: hidden;
           position: absolute;
-          z-index: -1;
+          cursor: pointer;
         }
 
         .file-label {

@@ -1,7 +1,8 @@
 "use client";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import React, { useEffect } from "react";
-import AddEmployeeForm from "./components/AddEmFrom";
+// import AddEmployeeForm from "./components/AddEmFrom";
+import EmployeeForm from "../components/EmployeeForm";
 
 const AddEmployee: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -12,7 +13,8 @@ const AddEmployee: React.FC = () => {
 
   return (
     <>
-      <AddEmployeeForm />
+      {/* <AddEmployeeForm /> */}
+      <EmployeeForm mode="add" />
     </>
   );
 };

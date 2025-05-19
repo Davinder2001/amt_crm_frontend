@@ -107,8 +107,14 @@ const Packages: React.FC<PackagesProps> = ({
                             );
                         })
                     ) : (
-                        <div style={{ padding: '1rem', color: 'gray' }}>
-                            No packages available for this category.
+                        <div className="no-packages-message">
+                            <div className="empty-box-icon">📦</div>
+                            <h3>No packages available</h3>
+                            <p>We couldn&apos;t find any packages for this category.</p>
+                            <div className="suggestions">
+                                <p>Try selecting a different category or check back later!</p>
+                                <div className="wave-hand">👋</div>
+                            </div>
                         </div>
                     )}
                 </div>

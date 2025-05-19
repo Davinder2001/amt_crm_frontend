@@ -117,6 +117,7 @@ interface createPackagePlan {
     daily_tasks_number: number;
     invoices_number: number;
     business_categories: { id: number; name: string }[];
+    package_type: 'monthly' | 'yearly';
 }
 
 interface PackagePlan {

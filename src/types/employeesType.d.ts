@@ -76,6 +76,8 @@ interface Employee {
     addressProof?: string;
     profilePicture?: string;
   };
+  message?: string;
+  error?: string;
 }
 
 // interface employee {
@@ -128,6 +130,15 @@ interface Employee {
 //   profilePicture: File | string;
 // }
 
+
+interface PaySlipResponse {
+  message: string;
+  employee: Employee;
+  pdf?: {
+    url: string;
+    filename: string;
+  };
+};
 
 interface EmployeesResponse {
   employees: Employee[];

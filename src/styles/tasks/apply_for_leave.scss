@@ -414,7 +414,7 @@
     }
 
     .react-datepicker {
-      color: #000;
+      color: green;
       font-family: Helvetica Neue, helvetica, arial, sans-serif;
       font-size: 0.8rem;
       line-height: initial;
@@ -485,14 +485,49 @@
   }
 
   @media (max-width: 768px) {
+
+    .leave-application-container {
+      .application-header {
+        margin-bottom: 1rem;
+
+      }
+    }
+
     .application-body {
       grid-template-columns: 1fr !important;
+
     }
 
     .timeline-indicator {
       flex-wrap: wrap;
     }
   }
+
+  @media (max-width: 468px) {
+    .leave-application-container {
+
+      .application-body {
+
+
+        .details-card {
+          padding: 10px;
+
+          .input-group {
+            .type-chips {
+              .chip {
+                padding: 5px 10px;
+              }
+            }
+          }
+        }
+
+        .calendar-card {
+          padding: 10px;
+        }
+      }
+    }
+  }
+
 
   // apply_for_leave styling end ........................................................
 
@@ -722,12 +757,17 @@
     }
   }
 
+  .chip-active {
+    background-color: $primary-color;
+    color: #fff;
+  }
+
   @media (max-width: 768px) {
     .attendance-page {
       padding: 0.5rem;
 
       .attendance-header {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
 
         h1 {
           font-size: $font-size-large;

@@ -105,7 +105,6 @@ const ChangePassword = () => {
             )}
           </div>
 
-
           {error && <p className="error">{error}</p>}
           {isError && <p className="error">Something went wrong, please try again.</p>}
           {isSuccess && <p className="success">Password changed successfully!</p>}
@@ -113,10 +112,6 @@ const ChangePassword = () => {
             {isLoading ? 'Changing...' : 'Change Password'}
           </button>
         </form>
-      </div>
-      <div className="image-container">
-        <img src={changepass.src} alt="Doctors" className="illustration" />
-
       </div>
     </div>
   );

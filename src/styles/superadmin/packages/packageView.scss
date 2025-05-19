@@ -1,12 +1,16 @@
 @use '../../variables' as *;
 
+.BCategories-PView-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .superadmin-packages-container {
 
     padding: 20px;
     font-family: $font-family;
     color: $dark-color;
     background-color: white;
-    border-radius: 15px;
 
     .header {
         display: flex;
@@ -78,7 +82,6 @@
             label {
                 cursor: pointer;
                 display: flex;
-                gap: 5px;
                 justify-content: space-between;
             }
         }
@@ -222,6 +225,65 @@
                 font-size: 14px;
                 width: 100%;
             }
+
+
+            .checkbox-container {
+                display: inline-block;
+                position: relative;
+                cursor: pointer;
+                padding-left: 25px;
+                user-select: none;
+
+                input {
+                    position: absolute;
+                    opacity: 0;
+                    cursor: pointer;
+                    height: 0;
+                    width: 0;
+
+                    &:checked~.custom-checkmark {
+                        background-color: $primary-color;
+                        border-color: $primary-color;
+
+                        &:after {
+                            display: block;
+                        }
+                    }
+
+                    &:focus~.custom-checkmark {
+                        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+                    }
+                }
+
+                &:hover input~.custom-checkmark {
+                    border-color: #888;
+                }
+
+                .custom-checkmark {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 15px;
+                    width: 15px;
+                    background-color: #fff;
+                    border: 2px solid #ccc;
+                    border-radius: 4px;
+                    transition: all 0.3s ease;
+
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        display: none;
+                        top: 0px;
+                        left: 4px;
+                        width: 5px;
+                        height: 8px;
+                        border: solid white;
+                        border-width: 0 2px 2px 0;
+                        transform: rotate(45deg);
+                    }
+                }
+            }
         }
 
         .pricing-buttons {
@@ -259,6 +321,6 @@
             font-size: 14px;
         }
 
-        
+
     }
 }

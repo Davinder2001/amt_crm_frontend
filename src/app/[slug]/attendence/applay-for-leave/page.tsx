@@ -142,7 +142,7 @@
 
 
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -157,6 +157,8 @@ const Page = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [applyForLeave, { isLoading, isSuccess, isError }] = useApplyForLeaveMutation();
   const { companySlug } = useCompany();
   const [document, setDocument] = useState<File | null>(null);
@@ -276,21 +278,43 @@ const Page = () => {
             <div className="input-group">
               <label>Leave Type</label>
               <div className="type-chips">
-                <button className="chip">Vacation</button>
-                <button className="chip">Sick Leave</button>
-                <button className="chip">Personal</button>
+                {['Vacation', 'Sick Leave', 'Personal', 'Other'].map((type) => (
+                  <button
+                    key={type}
+                    className={`chip ${subject === type ? 'chip-active' : ''}`}
+                    onClick={() => {
+                      if (type === 'Other') {
+                        setSubject('');
+                        setTimeout(() => {
+                          inputRef.current?.focus();
+                        }, 0);
+                      } else {
+                        setSubject(type);
+                      }
+                    }}
+                    type="button"
+                  >
+                    {type}
+                  </button>
+                ))}
               </div>
             </div>
+
+
 
             <div className="input-group">
               <label>Subject</label>
               <input
+                ref={inputRef}
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Leave reason title"
                 className="modern-input"
+                disabled={subject !== '' && subject !== 'Other' && ['Vacation', 'Sick Leave', 'Personal'].includes(subject)}
               />
+
+
             </div>
 
             <div className="input-group">

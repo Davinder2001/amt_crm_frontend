@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import PackagesView from './components/packagesView';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import BusinessCategories from './components/Categories';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
@@ -13,7 +14,11 @@ const Page = () => {
 
   return (
     <>
+    <div className='BCategories-PView-container'>
+
       <PackagesView />
+      <BusinessCategories />
+    </div>
     </>
   );
 };

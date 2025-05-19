@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     useGetBusinessCategoriesQuery,
     useCreateBusinessCategoryMutation,
@@ -20,13 +20,13 @@ import {
 } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 
-const BusinessCategoriesPage = () => {
+const BusinessCategories = () => {
     const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();
     const [createCategory] = useCreateBusinessCategoryMutation();
     const [updateCategory] = useUpdateBusinessCategoryMutation();
     const [deleteCategory] = useDeleteBusinessCategoryMutation();
     const [isUpdating, setIsUpdating] = useState(false);
-  const { setTitle } = useBreadcrumb();
+    const { setTitle } = useBreadcrumb();
 
     const [form, setForm] = useState({ id: null as number | null, name: "" });
 
@@ -55,9 +55,9 @@ const BusinessCategoriesPage = () => {
             await deleteCategory(id);
         }
     };
-      useEffect(() => {
-    setTitle('Manage Categories');
-  }, [setTitle]);
+    useEffect(() => {
+        setTitle('Manage Categories');
+    }, [setTitle]);
 
     return (
         <Box className="business-category-page">
@@ -145,4 +145,4 @@ const BusinessCategoriesPage = () => {
     );
 };
 
-export default BusinessCategoriesPage;
+export default BusinessCategories;

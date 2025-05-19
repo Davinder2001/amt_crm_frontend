@@ -79,7 +79,6 @@ import { useFetchPackagesQuery, useUpdatePackageMutation } from '@/slices/supera
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { FaChevronDown, FaPlus } from 'react-icons/fa';
-import { Categories } from 'emoji-picker-react';
 
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
@@ -87,16 +86,13 @@ const PackagesView = () => {
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
 
   const [editId, setEditId] = useState<number | null>(null);
-  const [editableFields, setEditableFields] = useState({
+  const [editableFields] = useState({
     employee_numbers: '',
     items_number: '',
     daily_tasks_number: '',
     invoices_number: ''
   });
   const [updatePackage] = useUpdatePackageMutation();
-  const handleFieldChange = (field: string, value: string) => {
-    setEditableFields((prev) => ({ ...prev, [field]: value }));
-  };
 
   const handleSave = async (plan: PackagePlan) => {
     await updatePackage({
@@ -119,7 +115,6 @@ const PackagesView = () => {
   return (
     <div className="superadmin-packages-container">
       <div className="header">
-        <h2>Pick Your Perfect Plan</h2>
         <button onClick={() => router.push('/superadmin/packages/create')} className='buttons'>
           <FaPlus /> Create New Package
         </button>
@@ -129,7 +124,7 @@ const PackagesView = () => {
         {Array.isArray(data) && data.length > 0 ?
           (
             data.map((plan) => {
-              const isEditing = editId === plan.id;
+             
 
               const handleContentEdit = (
                 e: React.FormEvent<HTMLSpanElement>,
@@ -274,11 +269,14 @@ const PackagesView = () => {
                             return (
                               <li key={category.id}>
                                 <label>
-                                  <input
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    onChange={toggleCategory}
-                                  />
+                                  <div className="checkbox-container">
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={toggleCategory}
+                                    />
+                                    <span className="custom-checkmark"></span>
+                                  </div>
                                   {category.name}
                                 </label>
                               </li>

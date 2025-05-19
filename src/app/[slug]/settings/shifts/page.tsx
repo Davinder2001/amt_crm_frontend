@@ -61,7 +61,7 @@ const Page = () => {
         {/* Create Shift Section */}
         <section className="create-shift-section glass-panel">
           <h2 className="section-title">
-            <FiPlus /> Create New Shift
+             Create New Shift
           </h2>
 
           <form onSubmit={handleCreate} className="shift-form">

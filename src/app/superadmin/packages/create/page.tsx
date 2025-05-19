@@ -32,6 +32,7 @@ const CreatePackages = () => {
     invoices_number: 0,
     price: 0,
     business_categories: [],
+    package_type: 'monthly',
   });
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -69,11 +70,11 @@ const CreatePackages = () => {
   const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();
   const [createPackage, { isLoading: isCreating }] = useCreatePackageMutation();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'name' ? value : Number(value),
+      [name]: name === 'name' || name === 'package_type' ? value : Number(value),
     }));
   };
   const { setTitle } = useBreadcrumb();
@@ -103,6 +104,7 @@ const CreatePackages = () => {
       formDataToSubmit.append('daily_tasks_number', formData.daily_tasks_number.toString());
       formDataToSubmit.append('invoices_number', formData.invoices_number.toString());
       formDataToSubmit.append('price', formData.price.toString());
+      formDataToSubmit.append('package_type', formData.package_type);
 
       // Append business categories as an array
       formData.business_categories.forEach((category) => {
@@ -121,6 +123,7 @@ const CreatePackages = () => {
         invoices_number: 0,
         price: 0,
         business_categories: [],
+        package_type: 'monthly',
       });
     } catch (error) {
       alert('Error creating package');
@@ -184,7 +187,7 @@ const CreatePackages = () => {
 
               <div className="form-group">
                 <label className="form-label">
-                  Monthly Price ($) <span className="required">*</span>
+                  Monthly Price <span className="required">*</span>
                 </label>
                 <div className="input-with-icon">
                   <FiDollarSign className="input-icon" />
@@ -201,6 +204,22 @@ const CreatePackages = () => {
                   />
                 </div>
               </div>
+              <div className="form-group">
+                <label className="form-label">
+                  Package Type <span className="required">*</span>
+                </label>
+                <select
+                  name="package_type"
+                  value={formData.package_type}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  required
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+
             </div>
           </div>
         )}

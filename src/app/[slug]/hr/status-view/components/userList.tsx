@@ -31,10 +31,6 @@ const UserList: React.FC = () => {
   };
 
   const columns = [
-    {
-      label: 'Sr. No',
-      render: (_: Employee, index: number) => index + 1,
-    },
     { label: 'Name', key: 'name' as keyof Employee },
     { label: 'Email', key: 'email' as keyof Employee },
     {

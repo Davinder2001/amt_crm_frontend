@@ -14,8 +14,8 @@ const companyCreateSlice = createApi({
 
       const token = cookies['access_token'];
 
-      headers.set('Accept', 'application/json');
-      headers.set('Content-Type', 'application/json');
+      // headers.set('Accept', 'application/json');
+      // headers.set('Content-Type', 'application/json');
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);

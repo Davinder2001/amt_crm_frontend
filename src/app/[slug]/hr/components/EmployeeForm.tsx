@@ -131,80 +131,163 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         }
     }, [mode, employeeId, employeeData]);
 
-    const validateTab = (index: number): boolean => {
-        switch (index) {
-            case 0: // Personal Info Tab
-                return (
-                    formData.name.trim() !== '' &&
-                    formData.number.trim() !== '' &&
-                    formData.address.trim() !== '' &&
-                    formData.nationality.trim() !== '' &&
-                    formData.dob.trim() !== '' &&
-                    formData.religion.trim() !== '' &&
-                    formData.maritalStatus.trim() !== '' &&
-                    formData.emergencyContact.trim() !== '' &&
-                    formData.emergencyContactRelation.trim() !== '' &&
-                    formData.idProofType.trim() !== '' &&
-                    (
-                        (formData.idProofType === "bill" && formData.idProofImage !== null) ||
-                        (formData.idProofType !== "bill" && formData.idProofValue.trim() !== '')
-                    )
-                );
 
-            case 1: // Job Info Tab
-                return (
-                    formData.email.trim() !== '' &&
-                    (mode === "edit" || formData.password.trim() !== '') && // Password not required for edit
-                    formData.salary.trim() !== '' &&
-                    formData.currentSalary.trim() !== '' &&
-                    formData.dateOfHire.trim() !== '' &&
-                    formData.workLocation.trim() !== '' &&
-                    formData.joiningDate.trim() !== '' &&
-                    formData.shiftTimings !== '' &&
-                    formData.role !== '' &&
-                    formData.department.trim() !== '' &&
-                    formData.joiningType !== ''
-                );
+    const validateField = (name: string, value: string | File | null): string => {
+        switch (name) {
+            case 'name':
+                if (!value) return 'Name is required';
+                if (typeof value === 'string' && value.length < 3) return 'Name must be at least 3 characters';
+                break;
 
-            case 2: // Bank Info Tab
-                return (
-                    formData.bankName.trim() !== '' &&
-                    formData.accountNo.trim() !== '' &&
-                    formData.ifscCode.trim() !== '' &&
-                    formData.panNo.trim() !== '' &&
-                    formData.upiId.trim() !== '' &&
-                    formData.addressProof.trim() !== ''
-                );
+            case 'number':
+                if (!value) return 'Phone number is required';
+                if (typeof value === 'string' && !/^\d{10}$/.test(value))
+                    return 'Phone number must be 10 digits';
+                break;
+
+            case 'email':
+                if (!value) return 'Email is required';
+                if (typeof value === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                    return 'Invalid email format';
+                break;
+
+            case 'password':
+                if (mode === 'add' && !value) return 'Password is required';
+                if (typeof value === 'string' && value.length < 8)
+                    return 'Password must be at least 8 characters';
+                break;
+
+            case 'dob':
+                if (!value) return 'Date of birth is required';
+                if (typeof value === 'string') {
+                    const dobDate = new Date(value);
+                    const age = new Date().getFullYear() - dobDate.getFullYear();
+                    if (age < 18) return 'Employee must be at least 18 years old';
+                }
+                break;
+
+            case 'emergencyContact':
+                if (!value) return 'Emergency contact is required';
+                if (typeof value === 'string' && !/^\d{10}$/.test(value))
+                    return 'Emergency contact must be 10 digits';
+                break;
+
+            case 'idProofValue':
+                if (formData.idProofType && formData.idProofType !== 'bill' && !value)
+                    return `${formData.idProofType.charAt(0).toUpperCase() + formData.idProofType.slice(1)} number is required`;
+                if (formData.idProofType === 'aadhar' && typeof value === 'string' && !/^\d{12}$/.test(value))
+                    return 'Aadhar must be 12 digits';
+                if (formData.idProofType === 'pan' && typeof value === 'string' && !/^[A-Z]{5}\d{4}[A-Z]{1}$/.test(value))
+                    return 'Invalid PAN format (e.g., ABCDE1234F)';
+                break;
+
+            case 'idProofImage':
+                if (formData.idProofType === 'bill' && !value)
+                    return 'Utility bill image is required';
+                break;
+
+            case 'salary':
+            case 'currentSalary':
+                if (!value) return 'Salary is required';
+                if (typeof value === 'string' && !/^\d+$/.test(value))
+                    return 'Salary must be a number';
+                break;
+
+            case 'accountNo':
+                if (!value) return 'Account number is required';
+                if (typeof value === 'string' && !/^\d{9,18}$/.test(value))
+                    return 'Account number must be 9-18 digits';
+                break;
+
+            case 'ifscCode':
+                if (!value) return 'IFSC code is required';
+                if (typeof value === 'string' && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(value))
+                    return 'Invalid IFSC format (e.g., ABCD0123456)';
+                break;
+
+            case 'panNo':
+                if (!value) return 'PAN number is required';
+                if (typeof value === 'string' && !/^[A-Z]{5}\d{4}[A-Z]{1}$/.test(value))
+                    return 'Invalid PAN format (e.g., ABCDE1234F)';
+                break;
+
+            case 'upiId':
+                if (!value) return 'UPI ID is required';
+                if (typeof value === 'string' && !/^[\w.-]+@[\w]+$/.test(value))
+                    return 'Invalid UPI ID format (e.g., name@upi)';
+                break;
 
             default:
-                return false;
+                if (typeof value === 'string' && !value && name !== 'password')
+                    return 'This field is required';
         }
+        return '';
+    };
+
+    const tabFields = [
+        // Personal Info
+        ['name', 'number', 'address', 'nationality', 'dob', 'religion',
+            'maritalStatus', 'emergencyContact', 'emergencyContactRelation',
+            'idProofType', 'idProofValue', 'idProofImage'],
+
+        // Job Info
+        ['email', 'password', 'salary', 'currentSalary', 'dateOfHire',
+            'workLocation', 'joiningDate', 'shiftTimings', 'role',
+            'department', 'joiningType'],
+
+        // Bank Info
+        ['bankName', 'accountNo', 'ifscCode', 'panNo', 'upiId', 'addressProof']
+    ];
+
+    const validateTab = (index: number): boolean => {
+
+        // Check all fields in the tab
+        return tabFields[index].every(field => {
+            const value = formData[field as keyof typeof formData];
+            return !validateField(field, value as string | File | null);
+        });
     };
 
     useEffect(() => {
-        const newTabCompletion = [true];
-        for (let i = 0; i < 3; i++) {
-            if (validateTab(i)) {
-                newTabCompletion[i + 1] = true;
-            } else {
-                break;
+        if (mode === "edit") {
+            // In edit mode, all tabs are always enabled
+            setTabCompletion([true, true, true, true]);
+        } else {
+            const newTabCompletion = [true];
+            for (let i = 0; i < 3; i++) {
+                if (validateTab(i)) {
+                    newTabCompletion[i + 1] = true;
+                } else {
+                    break;
+                }
+            }
+            setTabCompletion(newTabCompletion);
+
+            if (!newTabCompletion[activeTab]) {
+                const lastValidTab = newTabCompletion.lastIndexOf(true);
+                setActiveTab(lastValidTab);
             }
         }
+    }, [formData, mode]);
 
-        setTabCompletion(newTabCompletion);
-
-        if (!newTabCompletion[activeTab]) {
-            const lastValidTab = newTabCompletion.lastIndexOf(true);
-            setActiveTab(lastValidTab);
-        }
-    }, [formData]);
-
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+
+        // Clear any existing error for this field
+        setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors[name];
+            return newErrors;
+        });
+
         const updated = { ...formData, [name]: value };
         setFormData(updated);
+
+        // Validate the field after update
+        const error = validateField(name, value);
+        if (error) {
+            setErrors(prev => ({ ...prev, [name]: error }));
+        }
 
         if (hasLoadedFromLS && mode === "add") {
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
@@ -228,20 +311,50 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrors({});
+
+        // Validate all tabs first to find which one has errors
+        const tabErrors: boolean[] = [];
+        const newErrors: Record<string, string> = {};
+
+        tabFields.forEach((fields, tabIndex) => {
+            let hasTabError = false;
+            fields.forEach(field => {
+                const error = validateField(field, formData[field as keyof typeof formData]);
+                if (error) {
+                    newErrors[field] = error;
+                    hasTabError = true;
+                }
+            });
+            tabErrors[tabIndex] = hasTabError;
+        });
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            // Find the first tab with errors
+            const firstErrorTab = tabErrors.findIndex(hasError => hasError);
+            if (firstErrorTab >= 0) {
+                setActiveTab(firstErrorTab);
+            }
+            toast.error('Please fix all errors before submitting');
+            return;
+        }
 
         try {
             if (mode === "add") {
+                const allTabsValid = tabCompletion.every(valid => valid);
+                if (!allTabsValid) {
+                    toast.error('Please complete all sections before submitting');
+                    return;
+                }
                 await createEmployee(formData).unwrap();
                 toast.success("Employee created successfully!");
                 localStorage.removeItem(LOCAL_STORAGE_KEY);
                 setFormData(getDefaultEmployeeForm());
             } else if (mode === "edit" && employeeId) {
-                // Only send changed fields
                 const changedFields = getChangedFields(originalData, formData);
                 await updateEmployee({ id: employeeId, ...changedFields }).unwrap();
                 toast.success("Employee updated successfully!");
-                // Update original data with new changes
                 setOriginalData(formData);
                 setHasChanges(false);
             }
@@ -258,8 +371,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         type = "text",
         placeholder = "",
         Icon?: React.ElementType,
+        min?: number,
+        max?: number,
         iconSize: number = 14,
     ) => {
+        const error = errors[name];
+        const isInvalid = !!error;
         return (
             <div className="employee-field">
                 <label htmlFor={name} className="flex items-center gap-2">
@@ -273,12 +390,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                 ? new Date(formData[name as keyof typeof formData] as string)
                                 : null
                         }
-                        onChange={(date: Date | null) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                [name]: date ? date.toISOString().split("T")[0] : "",
-                            }))
-                        }
+                        onChange={(date: Date | null) => {
+                            const value = date ? date.toISOString().split("T")[0] : "";
+                            const error = validateField(name, value);
+
+                            setErrors(prev => ({ ...prev, [name]: error }));
+                            setFormData(prev => ({ ...prev, [name]: value }));
+                        }}
                         dateFormat="yyyy-MM-dd"
                         placeholderText={placeholder}
                         className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -355,12 +473,23 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         type={type}
                         name={name}
                         value={(formData[name as keyof typeof formData] as string) || ""}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (max && val.length > max) return;
+                            handleChange(e);
+                        }}
                         placeholder={placeholder}
+                        maxLength={max}
+                        minLength={min}
+                        required
                     />
                 )}
 
-                {errors[name] && <div className="text-red-500 text-sm">{errors[name]}</div>}
+                {isInvalid && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
             </div>
         );
     };
@@ -416,7 +545,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         {activeTab === 0 && (
                             <div className="employee-fields-wrapper">
                                 {renderField("Name", "name", "text", "Enter full name", FaUser)}
-                                {renderField("Phone Number", "number", "text", "Enter phone number", FaPhoneAlt)}
+                                {renderField("Phone Number", "number", "text", "Enter phone number", FaPhoneAlt, 10, 10)}
                                 {renderField("Address", "address", "text", "Enter residential address", FaMapMarkerAlt)}
                                 <div className="employee-field">
                                     <label htmlFor="nationality" className="flex items-center gap-2">
@@ -428,7 +557,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="Foreigner">Foreigner</option>
                                         <option value="NRI">NRI</option>
                                     </select>
-                                    {errors.nationality && <div className="text-red-500 text-sm">{errors.nationality}</div>}
+                                    {errors.nationality && <div className="error-message">{errors.nationality}</div>}
                                 </div>
 
                                 {renderField("Date of Birth", "dob", "date", "Select date of birth", FaBirthdayCake)}
@@ -447,7 +576,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="Judaism">Judaism</option>
                                         <option value="Other">Other</option>
                                     </select>
-                                    {errors.religion && <div className="text-red-500 text-sm">{errors.religion}</div>}
+                                    {errors.religion && <div className="error-message">{errors.religion}</div>}
                                 </div>
 
                                 <div className="employee-field">
@@ -463,7 +592,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="Separated">Separated</option>
                                         <option value="Other">Other</option>
                                     </select>
-                                    {errors.maritalStatus && <div className="text-red-500 text-sm">{errors.maritalStatus}</div>}
+                                    {errors.maritalStatus && <div className="error-message">{errors.maritalStatus}</div>}
                                 </div>
 
                                 <div className="employee-field">
@@ -480,6 +609,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                 idProofValue: "", // reset previous input
                                                 idProofImage: null,
                                             }));
+                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+                                                ...formData,
+                                                idProofType: e.target.value,
+                                                idProofValue: "",
+                                                idProofImage: null,
+                                            }))
                                         }}
                                     >
                                         <option value="">Select ID Proof</option>
@@ -488,7 +623,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="passport">Passport Number</option>
                                         <option value="bill">Utility Bill</option>
                                     </select>
-                                    {errors.idProofType && <div className="text-red-500 text-sm">{errors.idProofType}</div>}
+                                    {errors.idProofType && <div className="error-message">{errors.idProofType}</div>}
                                 </div>
 
                                 {formData.idProofType && formData.idProofType !== "bill" && (
@@ -503,12 +638,28 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             type="text"
                                             name="idProofValue"
                                             value={formData.idProofValue}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, idProofValue: e.target.value }))
+                                            onChange={(e) => {
+                                                const newValue = e.target.value;
+                                                setFormData((prev) => {
+                                                    const updated = { ...prev, idProofValue: newValue };
+                                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                                    return updated;
+                                                });
+                                            }}
+                                            minLength={
+                                                formData.idProofType === "aadhar" ? 12 :
+                                                    formData.idProofType === "passport" ? 8 :
+                                                        undefined
+                                            }
+                                            maxLength={
+                                                formData.idProofType === "aadhar" ? 12 :
+                                                    formData.idProofType === "license" ? 15 :
+                                                        formData.idProofType === "passport" ? 8 :
+                                                            undefined
                                             }
                                             placeholder={`Enter ${formData.idProofType} number`}
                                         />
-                                        {errors.idProofValue && <div className="text-red-500 text-sm">{errors.idProofValue}</div>}
+                                        {errors.idProofValue && <div className="error-message">{errors.idProofValue}</div>}
                                     </div>
                                 )}
 
@@ -519,15 +670,20 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             type="file"
                                             accept="image/*"
                                             name="idProofImage"
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, idProofImage: e.target.files?.[0] || null }))
-                                            }
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0] || null;
+                                                setFormData((prev) => {
+                                                    const updated = { ...prev, idProofImage: file };
+                                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                                    return updated;
+                                                });
+                                            }}
                                         />
-                                        {errors.idProofImage && <div className="text-red-500 text-sm">{errors.idProofImage}</div>}
+                                        {errors.idProofImage && <div className="error-message">{errors.idProofImage}</div>}
                                     </div>
                                 )}
 
-                                {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", FaPhoneAlt)}
+                                {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", FaPhoneAlt, 10, 10)}
                                 <div className="employee-field">
                                     <label htmlFor="emergencyContactRelation" className="flex items-center gap-2">
                                         <FaUser className="text-gray-600" /> Emergency Contact Relation
@@ -545,7 +701,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="other">Other</option>
                                     </select>
                                     {errors.emergencyContactRelation && (
-                                        <div className="text-red-500 text-sm">{errors.emergencyContactRelation}</div>
+                                        <div className="error-message">{errors.emergencyContactRelation}</div>
                                     )}
                                 </div>
                             </div>
@@ -582,7 +738,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         )}
                                     </select>
                                     {errors.shiftTimings && (
-                                        <div className="text-red-500 text-sm">{errors.shiftTimings}</div>
+                                        <div className="error-message">{errors.shiftTimings}</div>
                                     )}
                                 </div>
 
@@ -604,7 +760,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             ))
                                         )}
                                     </select>
-                                    {errors.role && <div className="text-red-500 text-sm">{errors.role}</div>}
+                                    {errors.role && <div className="error-message">{errors.role}</div>}
                                 </div>
 
                                 {renderField("Department", "department", "text", "Enter department", FaUniversity)}
@@ -620,7 +776,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         <option value="contract">Contract</option>
                                     </select>
                                     {errors.joiningType && (
-                                        <div className="text-red-500 text-sm">{errors.joiningType}</div>
+                                        <div className="error-message">{errors.joiningType}</div>
                                     )}
                                 </div>
 
@@ -632,11 +788,11 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         {activeTab === 2 && (
                             <div className="employee-fields-wrapper">
                                 {renderField("Bank Name", "bankName", "text", "Enter bank name", FaUniversity)}
-                                {renderField("Account No", "accountNo", "text", "Enter bank account number", FaCreditCard)}
-                                {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code", FaQrcode)}
-                                {renderField("PAN No", "panNo", "text", "Enter PAN number", FaIdCard)}
-                                {renderField("UPI ID", "upiId", "text", "Enter UPI ID", FaQrcode)}
-                                {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number", FaIdCard)}
+                                {renderField("Account No", "accountNo", "text", "Enter bank account number", FaCreditCard, 9, 18)}
+                                {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code", FaQrcode, 11, 11)}
+                                {renderField("PAN No", "panNo", "text", "Enter PAN number", FaIdCard, 10, 10)}
+                                {renderField("UPI ID", "upiId", "text", "Enter UPI ID", FaQrcode, 8, 40)}
+                                {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number", FaIdCard, 5, 12)}
 
                                 <div className="employee-field">
                                     <label htmlFor="profilePicture" className="flex items-center gap-2">
@@ -650,7 +806,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         className="file-input"
                                     />
                                     {errors.profilePicture && (
-                                        <div className="text-red-500 text-sm">{errors.profilePicture}</div>
+                                        <div className="error-message">{errors.profilePicture}</div>
                                     )}
                                 </div>
                             </div>

@@ -10,47 +10,50 @@ const ConfirmPage = () => {
     const router = useRouter();
     const hasRun = useRef(false); // prevents duplicate execution in dev
     const { companySlug } = useCompany();
+useEffect(() => {
+  if (hasRun.current) return;
+  hasRun.current = true;
 
-    useEffect(() => {
-        if (hasRun.current) return;
-        hasRun.current = true;
+  const confirmRegistration = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId'); // ✅ fetch from URL
 
-        const confirmRegistration = async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const orderId = urlParams.get('orderId');
+    if (!orderId) {
+      toast.error('Missing order ID in URL');
+      router.push(`/${companySlug}/my-account/add-company`);
+      return;
+    }
 
-            if (!orderId) {
-                toast.error('Missing order ID in URL');
-                router.push(`/${companySlug}/my-account/add-company`);
-                return;
-            }
+    const savedFormData = localStorage.getItem('addCompany');
+    if (!savedFormData) {
+      toast.error('No form data found. Please try again.');
+      return;
+    }
 
-            const savedFormData = localStorage.getItem('addCompany');
-            if (!savedFormData) {
-                toast.error('No form data found. Please try again.');
-                return;
-            }
+    const parsedData = JSON.parse(savedFormData);
+    const formdata = new FormData();
 
-            const parsedData = JSON.parse(savedFormData);
-            const formData = new FormData();
-            Object.entries(parsedData).forEach(([key, value]) => {
-                if (value !== null && value !== undefined) {
-                    formData.append(key, String(value));
-                }
-            });
+    Object.entries(parsedData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formdata.append(key, String(value));
+      }
+    });
 
-            try {
-                await addCompany({ orderId, formdata: formData }).unwrap();
-                toast.success('Company Added successfully!');
-                localStorage.removeItem('addCompany');
-                router.push(`/${companySlug}/my-account`);
-            } catch {
-                toast.error('Failed to Add Company.');
-            }
-        };
+    try {
+      // ✅ Call mutation with both orderId and formdata
+      await addCompany({ orderId, formdata }).unwrap();
+      toast.success('Company Added successfully!');
+      localStorage.removeItem('addCompany');
+      router.push(`/${companySlug}/my-account`);
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to Add Company.');
+    }
+  };
 
-        confirmRegistration();
-    }, [addCompany, router]);
+  confirmRegistration();
+}, [addCompany, router]);
+
 
     return (
         <div className="confirmation-container">

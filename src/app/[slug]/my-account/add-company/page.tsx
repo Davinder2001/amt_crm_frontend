@@ -4,8 +4,11 @@ import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/s
 import Loader from '@/components/common/Loader';
 import AddCompanyForm from '../components/addCompanyForm'
 import Packages from '../components/Packages';
+import Link from 'next/link';
+import { useCompany } from '@/utils/Company';
 
 const Page = () => {
+  const { companySlug } = useCompany();
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
   const plans = Array.isArray(plansData) ? plansData : [];
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
@@ -23,20 +26,23 @@ const Page = () => {
 
   return (
     <>
-      <>
-        {hasValidSelection ? (
+      {hasValidSelection ? (
+        <>
+          <Link href={`/${companySlug}/my-account`} className="back-button">
+            ← Back
+          </Link>
           <AddCompanyForm packageId={selectedPackageId} categoryId={selectedCategoryId} />
-        ) : (
-          <Packages
-            plans={plans}
-            setSelectedPackageId={setSelectedPackageId}
-            selectedPackageId={selectedPackageId}
-            categories={categories}
-            selectedCategoryId={selectedCategoryId}
-            setSelectedCategoryId={setSelectedCategoryId}
-          />
-        )}
-      </>
+        </>
+      ) : (
+        <Packages
+          plans={plans}
+          setSelectedPackageId={setSelectedPackageId}
+          selectedPackageId={selectedPackageId}
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
+        />
+      )}
     </>
   )
 }

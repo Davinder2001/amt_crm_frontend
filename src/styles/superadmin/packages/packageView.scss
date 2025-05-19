@@ -23,15 +23,19 @@
 
     }
 
-    .packages-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-        max-width: 1200px;
-        margin: 50px auto;
+
+    .error-message {
+        text-align: center;
+        color: $danger-color;
+        font-size: $font-size-large;
+        margin-top: 60px;
     }
+}
 
-
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 
     .package-card {
         position: relative;
@@ -39,16 +43,10 @@
         padding: 25px;
         border-radius: 16px;
         box-shadow: $box-shadow;
-        transition: transform $transition, box-shadow $transition;
         overflow: hidden;
         border-top: 2px solid $primary-color;
         max-width: 330px;
         width: 100%;
-
-        &:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
 
         .ribbon {
             position: absolute;
@@ -63,7 +61,7 @@
             box-shadow: $box-shadow;
         }
 
-        .title {
+        .planPrice {
             font-size: $font-size-extra-large;
             color: $primary-color;
             font-weight: $font-weight-semi-bold;
@@ -99,12 +97,44 @@
                 }
             }
         }
-    }
 
-    .error-message {
-        text-align: center;
-        color: $danger-color;
-        font-size: $font-size-large;
-        margin-top: 60px;
+        .pricing-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .btnPrimary {
+            background-color: #00b39f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .btnSecondary {
+            background-color: #e0f8f7;
+            color: #00b39f;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btnOnline {
+            background-color: green;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+        }
     }
 }

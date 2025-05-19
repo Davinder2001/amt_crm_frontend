@@ -1,7 +1,8 @@
 @use "../variables.scss" as *;
 
 .profile-page {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
+
   .loading-container,
   .error-container {
     display: flex;
@@ -199,6 +200,114 @@
     border: 2px solid #3498db;
     color: #3498db;
     margin-bottom: 10px;
+  }
+}
+
+.account-packages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  .category-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+
+.no-packages-message {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  grid-column: 1 / -1;
+  margin: 2rem 0;
+  border: 1px dashed #ccc;
+
+  h3 {
+    color: #555;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #777;
+    margin-bottom: 1rem;
+  }
+}
+
+.empty-box-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  animation: pkgBounce 2s infinite;
+}
+
+.wave-hand {
+  font-size: 2rem;
+  display: inline-block;
+  animation: pkgWave 2s infinite;
+  transform-origin: 70% 70%;
+}
+
+.suggestions {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+@keyframes pkgBounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-20px);
+  }
+
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pkgWave {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  10% {
+    transform: rotate(14deg);
+  }
+
+  20% {
+    transform: rotate(-8deg);
+  }
+
+  30% {
+    transform: rotate(14deg);
+  }
+
+  40% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(10deg);
+  }
+
+  60% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
   }
 }
 

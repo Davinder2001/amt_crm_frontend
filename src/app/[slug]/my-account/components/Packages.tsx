@@ -1,4 +1,6 @@
 'use client';
+import { useCompany } from '@/utils/Company';
+import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 
 interface PackagesProps {
@@ -10,7 +12,7 @@ interface PackagesProps {
     selectedCategoryId: number | null;
 }
 
-const features = ['Store', 'Catalogue', 'Service', 'Order'];
+// const features = ['Store', 'Catalogue', 'Service', 'Order'];
 
 const Packages: React.FC<PackagesProps> = ({
     plans,
@@ -21,6 +23,7 @@ const Packages: React.FC<PackagesProps> = ({
     setSelectedCategoryId,
 }) => {
     const isInitialLoad = useRef(true); // Track initial load
+    const { companySlug } = useCompany();
 
     // Filter plans based on selected category ID
     const filteredPlans = plans.filter((plan) =>
@@ -53,11 +56,13 @@ const Packages: React.FC<PackagesProps> = ({
     }, [plans, categories, setSelectedCategoryId]);
 
     return (
-        <div className="pricing-container">
-            <div className="outer-div">
-                <h2 className="price-heading">Pick Your Perfect Plan</h2>
+        <div className="account-pricing-container">
 
-                {/* Category Filter Dropdown */}
+            {/* Category Filter Dropdown */}
+            <div className="account-packages-header">
+                <Link href={`/${companySlug}/my-account`} className="back-button">
+                    ← Back
+                </Link>
                 <div className="category-filter" style={{ marginBottom: '2rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}>
                     <label htmlFor="category-select">Filter by Category:</label>
                     <select
@@ -73,47 +78,54 @@ const Packages: React.FC<PackagesProps> = ({
                         ))}
                     </select>
                 </div>
+            </div>
 
-                {/* Display filtered plans or fallback message */}
-                <div className="plans">
-                    {filteredPlans.length > 0 ? (
-                        filteredPlans.map((plan) => {
-                            const isSelected = plan.id === selectedPackageId;
+            {/* Display filtered plans or fallback message */}
+            <div className="packages-grid">
+                {filteredPlans.length > 0 ? (
+                    filteredPlans.map((plan) => {
+                        const isSelected = plan.id === selectedPackageId;
 
-                            return (
-                                <div key={plan.id} className="planCard">
-                                    <h3 className="planTitle">1 Year Plan</h3>
-                                    <p className="planPrice">₹ {plan.price ?? 0} / Year</p>
-                                    <ul className="features">
-                                        <li>✓ {plan.employee_numbers} Employees</li>
-                                        <li>✓ {plan.items_number} Items</li>
-                                        <li>✓ {plan.daily_tasks_number} Tasks/day</li>
-                                        <li>✓ {plan.invoices_number} Invoices</li>
-                                        {features.map((feature, i) => (
+                        return (
+                            <div key={plan.id} className="package-card">
+                                <div className="ribbon">1 Year</div>
+                                <h3 className="planPrice">₹ {plan.price ?? 0} / Year</h3>
+                                <ul className="features">
+                                    <li>✓ {plan.employee_numbers} Employees</li>
+                                    <li>✓ {plan.items_number} Items</li>
+                                    <li>✓ {plan.daily_tasks_number} Tasks/day</li>
+                                    <li>✓ {plan.invoices_number} Invoices</li>
+                                    {/* {features.map((feature, i) => (
                                             <li key={i}>✓ {feature}</li>
-                                        ))}
-                                    </ul>
+                                        ))} */}
+                                </ul>
 
-                                    <div className="pricing-buttons">
-                                        <button
-                                            className={isSelected ? 'btnPrimary' : 'btnSecondary'}
-                                            onClick={() => setSelectedPackageId(plan.id)}
-                                        >
-                                            {isSelected ? 'Selected' : 'Choose Plan'}
-                                        </button>
-                                        <button className="btnOnline">✓ Online</button>
-                                    </div>
+                                <div className="pricing-buttons">
+                                    <button
+                                        className={isSelected ? 'btnPrimary' : 'btnSecondary'}
+                                        onClick={() => setSelectedPackageId(plan.id)}
+                                    >
+                                        {isSelected ? 'Selected' : 'Choose Plan'}
+                                    </button>
+                                    <button className="btnOnline">✓ Online</button>
                                 </div>
-                            );
-                        })
-                    ) : (
-                        <div style={{ padding: '1rem', color: 'gray' }}>
-                            No packages available for this category.
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div className="no-packages-message">
+                        <div className="empty-box-icon">📦</div>
+                        <h3>No packages available</h3>
+                        <p>We couldn't find any packages for this category.</p>
+                        <div className="suggestions">
+                            <p>Try selecting a different category or check back later!</p>
+                            <div className="wave-hand">👋</div>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
+
     );
 };
 

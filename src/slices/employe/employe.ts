@@ -1,18 +1,6 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
 
-
-type PaySlipResponse = {
-  message: string;
-  employee: Employee;
-  pdf?: {
-    url: string;
-    filename: string;
-  };
-
-};
-
-
 const employeCreateApi = employeCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({

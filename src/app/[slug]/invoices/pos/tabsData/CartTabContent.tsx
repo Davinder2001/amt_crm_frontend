@@ -145,10 +145,21 @@ export default function CartTabContent({
             return false;
         }
 
-        if (paymentMethod === 'credit' && !partialAmount) {
-            setCreditPaymentType('full');
-            toast.error('Partial amount not specified, defaulting to full payment.');
-            return false;
+        // Credit payment specific validation
+        if (paymentMethod === 'credit') {
+            if (creditPaymentType === 'partial') {
+                // Only validate partial amount if partial payment is selected
+                if (!partialAmount || partialAmount <= 0) {
+                    setShowPaymentDetails(true);
+                    toast.error('Please specify a valid partial payment amount.');
+                    return false;
+                }
+                if (partialAmount > parseFloat(total)) {
+                    setShowPaymentDetails(true);
+                    toast.error('Partial amount cannot be greater than total amount.');
+                    return false;
+                }
+            }
         }
 
         return true;

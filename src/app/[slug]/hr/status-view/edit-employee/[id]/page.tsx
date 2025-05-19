@@ -1,9 +1,11 @@
-import React from 'react'
+'use client';
+import { useParams } from "next/navigation";
+import EmployeeForm from "../../../components/EmployeeForm";
 
-function page() {
-  return (
-    <div>page</div>
-  )
-}
 
-export default page
+const EditEmployeePage = () => {
+  const { id } = useParams();
+  return <EmployeeForm mode="edit" employeeId={Number(id)} />;
+};
+
+export default EditEmployeePage;

@@ -238,10 +238,7 @@ const Page = () => {
       </Link>
       <div className='leave-application-container'>
         <div className="application-header">
-          <div className="timeline-indicator">
-            <div className="step active">Select Dates</div>
 
-          </div>
         </div>
 
         <div className="application-body">

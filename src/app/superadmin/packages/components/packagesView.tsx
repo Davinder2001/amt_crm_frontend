@@ -318,27 +318,16 @@
 
 'use client';
 import { useState } from 'react';
-import { useFetchPackagesQuery, useUpdatePackageMutation } from '@/slices/superadminSlices/packages/packagesApi';
+import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
-interface PackagePlan {
-  id: number;
-  price: number;
-  employee_numbers: number;
-  items_number: number;
-  daily_tasks_number: number;
-  invoices_number: number;
-  business_categories: any[];
-}
-
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
-  const [updatePackage] = useUpdatePackageMutation();
   const columns = [
     {
       label: 'Price (₹/Year)',
@@ -400,7 +389,7 @@ const PackagesView = () => {
           <span onClick={() => router.push(`/superadmin/packages/edit/${plan.id}`)} title="Edit" className='package-edit-icon' >
             <FaEdit />
           </span>
-          <span onClick={() => handleDelete(plan)} title="Delete" className='package-delete-icon'>
+          <span title="Delete" className='package-delete-icon'>
             <FaTrash />
           </span>
         </div>
@@ -430,7 +419,3 @@ const PackagesView = () => {
 };
 
 export default PackagesView;
-
-function handleDelete(plan: PackagePlan): void {
-  throw new Error('Function not implemented.');
-}

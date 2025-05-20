@@ -48,18 +48,15 @@ const AdminHome = () => {
     const isAdmin = userType === 'admin';
 
     useEffect(() => {
-        if (!isAdmin || !profile?.user?.companies) return;
+        if (!isAdmin) return;
 
-        const fetchedCompanies = profile.user.companies;
-        setCompanies(fetchedCompanies);
-
-        if (fetchedCompanies.length > 0) {
-            const firstCompany = fetchedCompanies[0];
+        if (!companies || companies.length === 0) {
+            refetch(); // Trigger refetch when companies are empty
+        } else if (companies.length > 0) {
+            const firstCompany = companies[0];
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
-        } else {
-            refetch();
         }
-    }, [isAdmin, profile]);
+    }, [companies, refetch, isAdmin]);
 
     return (
         <>

@@ -89,132 +89,160 @@
 
 // }
 
-.packages-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
 
-    .package-card {
-        position: relative;
-        background: linear-gradient(135deg, $white, $light-color);
-        padding: 25px;
-        border-radius: 16px;
-        box-shadow: $box-shadow;
-        overflow: hidden;
-        border-top: 2px solid $primary-color;
-        max-width: 330px;
-        width: 100%;
+.BCategories-PView-container {
+    background-color: $white;
+    padding: 10px 10px;
 
-        .ribbon {
-            position: absolute;
-            top: 10px;
-            right: -36px;
-            transform: rotate(45deg);
-            background-color: $orange-color;
-            color: $white;
-            padding: 6px 40px;
-            font-size: $font-size-extra-small;
-            font-weight: $font-weight-bold;
-            box-shadow: $box-shadow;
-        }
+    .superadmin-packages-container {
 
-        .planPrice {
-            font-size: $font-size-extra-large;
-            color: $primary-color;
-            font-weight: $font-weight-semi-bold;
-            margin-bottom: 16px;
-        }
-
-        .features {
-            list-style: none;
-            padding-left: 0;
-            margin: 0 0 20px 0;
-
-            li {
-                margin-bottom: 8px;
-                font-size: $font-size-one;
-                color: $para-color;
-            }
-        }
-
-
-        .pricing-buttons {
+        .header {
             display: flex;
-            gap: 20px;
+            justify-content: flex-end;
             align-items: center;
 
-            button {
-                width: 100%;
-                padding: 5px 12px;
+        }
+
+
+        .responsive-table {
+            margin: 10px 0px;
+        }
+    }
+
+    .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+
+        .package-card {
+            position: relative;
+            background: linear-gradient(135deg, $white, $light-color);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: $box-shadow;
+            overflow: hidden;
+            border-top: 2px solid $primary-color;
+            max-width: 330px;
+            width: 100%;
+
+            .ribbon {
+                position: absolute;
+                top: 10px;
+                right: -36px;
+                transform: rotate(45deg);
+                background-color: $orange-color;
+                color: $white;
+                padding: 6px 40px;
+                font-size: $font-size-extra-small;
+                font-weight: $font-weight-bold;
+                box-shadow: $box-shadow;
+            }
+
+            .planPrice {
+                font-size: $font-size-extra-large;
+                color: $primary-color;
+                font-weight: $font-weight-semi-bold;
+                margin-bottom: 16px;
+            }
+
+            .features {
+                list-style: none;
+                padding-left: 0;
+                margin: 0 0 20px 0;
+
+                li {
+                    margin-bottom: 8px;
+                    font-size: $font-size-one;
+                    color: $para-color;
+                }
+            }
+
+
+            .pricing-buttons {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+
+                button {
+                    width: 100%;
+                    padding: 5px 12px;
+                    border: none;
+                    border-radius: 20px;
+                    font-weight: 500;
+                }
+            }
+
+            .btnPrimary {
+                background-color: #00b39f;
+                color: white;
+                cursor: default;
+            }
+
+            .btnSecondary {
+                background-color: #d4f0f0;
+                color: #00b39f;
+                cursor: pointer;
+            }
+
+            .btnOnline {
+                background-color: green;
+                color: white;
+                padding: 8px 16px;
                 border: none;
                 border-radius: 20px;
-                font-weight: 500;
+                font-size: 14px;
             }
-        }
 
-        .btnPrimary {
-            background-color: #00b39f;
-            color: white;
-            cursor: default;
-        }
 
-        .btnSecondary {
-            background-color: #d4f0f0;
-            color: #00b39f;
-            cursor: pointer;
         }
+    }
 
-        .btnOnline {
-            background-color: green;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-        }
 
+
+
+
+
+    .package-edit-icon {
+        font-size: 18px;
+        color: green;
+    }
+
+    .category-dropdown {
+        z-index: 99999;
+        background-color: #fff;
+        border-radius: 5px;
+        width: fit-content;
+        min-width: 239px;
+        margin-top: 3px;
+        position: absolute;
+        overflow-y: scroll;
+        max-height: 165px;
 
     }
-}
 
+    .package-action-buttons {
+        display: flex;
+        justify-content: space-around;
+    }
 
+    .package-delete-icon {
+        color: $danger-color;
+        font-size: 16px;
+    }
 
+    .categories-toggle {
+        display: flex;
+        justify-content: space-between;
 
+    }
 
+    .category-item {
+        border-bottom: 1px solid #ebebeb;
+        padding: 5px 7px;
 
-.package-edit-icon {
-    font-size: 18px;
-    color: green;
-}
-
-.category-dropdown {
-    background-color: #fff;
-    width: fit-content;
-    min-width: 239px;
-    margin-top: 3px;
-    position: absolute;
-    z-index: 99999;
-    border-radius: 5px;
-    padding: 5px;
-    overflow-y: scroll;
-}
-
-.package-action-buttons {
-    display: flex;
-    justify-content: space-around;
-}
-
-.package-delete-icon {
-    color: red;
-    font-size: 16px;
-}
-
-.categories-toggle {
-    display: flex;
-    justify-content: space-between;
-}
-
-.category-item {
-    border-bottom: 1px solid rgb(211, 211, 211);
-    padding-bottom: 5px;
+        &:hover {
+            background-color: rgb(241, 249, 249);
+            border-right: 3px solid $primary-color;
+        }
+    }
 }

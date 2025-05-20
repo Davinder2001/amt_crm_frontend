@@ -19,6 +19,7 @@ import {
     CircularProgress,
 } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const BusinessCategories = () => {
     const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();
@@ -29,6 +30,19 @@ const BusinessCategories = () => {
     const { setTitle } = useBreadcrumb();
 
     const [form, setForm] = useState({ id: null as number | null, name: "" });
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery('(max-width:483px)');
+
+
+
+    // Add this state at the top of your component
+    const [showAll, setShowAll] = useState(false);
+    // Right after showAll
+    const visibleCategories = isMobile
+        ? (showAll ? categories : categories?.slice(0, 4))
+        : (showAll ? categories : categories?.slice(0, 6));
+
 
     const handleSubmit = async () => {
         if (form.id) {
@@ -117,7 +131,24 @@ const BusinessCategories = () => {
 
 
 
-
+            {categories && categories.length > 6 && (
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 1.5 }}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => setShowAll(!showAll)}
+                        sx={{
+                            color: '#009693',
+                            borderColor: '#009693',
+                            '&:hover': {
+                                backgroundColor: '#00969315',
+                                borderColor: '#009693'
+                            }
+                        }}
+                    >
+                        {showAll ? 'Show Less' : 'See All'}
+                    </Button>
+                </Box>
+            )}
             {isLoading ? (
                 <Box className="loading-center">
                     <CircularProgress />
@@ -126,7 +157,7 @@ const BusinessCategories = () => {
                 <Typography color="error">Failed to load categories.</Typography>
             ) : (
                 <div className="category-grid">
-                    {categories?.map((cat) => (
+                    {visibleCategories?.map((cat) => (
                         <Paper key={cat.id} className="category-box">
                             <Typography className="category-name">{cat.name}</Typography>
                             <Box className="action-buttons">
@@ -140,7 +171,9 @@ const BusinessCategories = () => {
                         </Paper>
                     ))}
                 </div>
+
             )}
+
         </Box>
     );
 };

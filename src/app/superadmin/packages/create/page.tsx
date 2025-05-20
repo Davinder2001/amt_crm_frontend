@@ -9,7 +9,6 @@ import {
   FiChevronDown,
   FiCheck,
   FiX,
-  FiDollarSign,
   FiUsers,
   FiBox,
   FiCheckCircle,
@@ -18,6 +17,7 @@ import {
   FiList,
   FiTag
 } from 'react-icons/fi';
+import { FaRupeeSign } from 'react-icons/fa';
 import { useCreatePackageMutation } from '@/slices/superadminSlices/packages/packagesApi';
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
@@ -141,32 +141,8 @@ const CreatePackages = () => {
         <p>Configure a new subscription package for businesses</p>
       </div>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={activeTab} onChange={(e, val) => setActiveTab(val)} textColor="primary" indicatorColor="primary"
-          style={{ backgroundColor: '#f1f9f9' }}
-          sx={{
-            '& .MuiTab-root': {
-              color: '#009693',
-              '&.Mui-disabled': {
-                color: '#ccc',
-              },
-              '&.Mui-selected': {
-                color: '#009693',
-              },
-            },
-            '& .MuiTabs-indicator': {
-              backgroundColor: '#009693',
-            },
-          }}
-        >
-          <Tab icon={<FiInfo />} iconPosition="start" label="Basic Info" />
-          <Tab icon={<FiList />} iconPosition="start" label="Limits" />
-          <Tab icon={<FiTag />} iconPosition="start" label="Categories" />
-        </Tabs>
-      </Box>
-
       <form onSubmit={handleSubmit} className="form">
-        {activeTab === 0 && (
+        
           <div className="form-section">
             <h2 className="section-title">Basic Information</h2>
             <div className='form-group-outer'>
@@ -190,7 +166,7 @@ const CreatePackages = () => {
                   Monthly Price <span className="required">*</span>
                 </label>
                 <div className="input-with-icon">
-                  <FiDollarSign className="input-icon" />
+                  <FaRupeeSign className="input-icon" />
                   <input
                     type="number"
                     name="price"
@@ -222,9 +198,7 @@ const CreatePackages = () => {
 
             </div>
           </div>
-        )}
-
-        {activeTab === 1 && (
+       
           <div className="form-section">
             <h2 className="section-title">Package Limits</h2>
             <div className="grids grid-cols-2 gap-6">
@@ -293,10 +267,10 @@ const CreatePackages = () => {
               </div>
             </div>
           </div>
-        )}
+        
 
 
-        {activeTab === 2 && (
+        
           <div className="form-section">
             <h2 className="section-title">Business Categories</h2>
             <div className="form-group">
@@ -357,8 +331,7 @@ const CreatePackages = () => {
               </div>
             </div>
           </div>
-        )}
-
+      
         <div className="tooltip-container">
           <button
             type="submit"

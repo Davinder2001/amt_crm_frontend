@@ -317,7 +317,7 @@
 
 
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
@@ -328,6 +328,34 @@ const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
+  const categoriesCellRef = useRef<HTMLDivElement | null>(null);
+  // Updated toggle handler with ref capture
+  const handleToggle = (event: React.MouseEvent, planId: number) => {
+    const newId = openCategoryId === planId ? null : planId;
+    setOpenCategoryId(newId);
+    if (newId) {
+      categoriesCellRef.current = (event.currentTarget as HTMLElement).closest('.categories-cell');
+    }
+  };
+
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        openCategoryId !== null &&
+        categoriesCellRef.current &&
+        !categoriesCellRef.current.contains(event.target as Node)
+      ) {
+        setOpenCategoryId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openCategoryId]);
   const columns = [
     {
       label: 'Price (₹/Year)',
@@ -354,6 +382,7 @@ const PackagesView = () => {
       key: 'invoices_number' as keyof PackagePlan,
       render: (plan: PackagePlan) => <span>{plan.invoices_number}</span>
     },
+
     {
       label: 'Categories',
       key: 'business_categories' as keyof PackagePlan,
@@ -361,9 +390,12 @@ const PackagesView = () => {
         <div className="categories-cell">
           <div
             className="categories-toggle"
-            onClick={() => setOpenCategoryId(openCategoryId === plan.id ? null : plan.id)}
+            onClick={(e) => handleToggle(e, plan.id)}
           >
-            <span>{plan.business_categories.length} Categories</span>
+            <span>
+              {plan.business_categories.length}
+              Categor{plan.business_categories.length === 1 ? 'y' : 'ies'}
+            </span>
             <FaChevronDown className={`toggle-icon ${openCategoryId === plan.id ? 'open' : ''}`} />
           </div>
 

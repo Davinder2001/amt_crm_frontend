@@ -47,16 +47,29 @@ const AdminHome = () => {
 
     const isAdmin = userType === 'admin';
 
-    useEffect(() => {
-        if (!isAdmin) return;
+    // useEffect(() => {
+    //     if (!isAdmin) return;
 
-        if (!companies || companies.length === 0) {
-            refetch(); // Trigger refetch when companies are empty
-        } else if (companies.length > 0) {
+    //     if (!companies || companies.length === 0) {
+    //         refetch(); // Trigger refetch when companies are empty
+    //     } else if (companies.length > 0) {
+    //         const firstCompany = companies[0];
+    //         Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+    //     }
+    // }, [companies, refetch, isAdmin]);
+
+    useEffect(() => {
+        if (!isAdmin || !companies || companies.length === 0) return;
+
+        const alreadySelectedCompany = Cookies.get('company_slug') || localStorage.getItem('company_slug');
+
+        // Only auto-select the first company if no selection exists
+        if (!alreadySelectedCompany) {
             const firstCompany = companies[0];
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+            localStorage.setItem('company_slug', encodeStorage(firstCompany.company_slug));
         }
-    }, [companies, refetch, isAdmin]);
+    }, [companies, isAdmin]);
 
     return (
         <>

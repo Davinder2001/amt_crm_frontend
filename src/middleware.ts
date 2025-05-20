@@ -39,7 +39,7 @@ export function middleware(request: NextRequest) {
       const selectionCount = request.cookies.get('company_selection_count')?.value;
 
       // 🔒 If count is set and trying to access "/", block access
-      if (pathname === '/' && selectionCount && parseInt(selectionCount) > 0) {
+      if (pathname === '/' && selectionCount && parseInt(selectionCount) === 1) {
         return NextResponse.redirect(new URL(`/${companySlug}/dashboard`, request.url));
       }
 

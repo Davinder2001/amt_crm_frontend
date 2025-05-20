@@ -9,13 +9,13 @@ import Logout from '../common/Logout';
 import { useRouter } from 'next/navigation';
 import { homelogo } from '@/assets/useImage';
 import Image from 'next/image';
-import { encodeStorage } from '@/utils/Company';
+import { encodeStorage, useCompany } from '@/utils/Company';
 
 const AdminHome = () => {
-    const { data: profile } = useFetchProfileQuery();
+    const { data: profile, refetch } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
     const [companies, setCompanies] = useState<Company[]>([]);
-    // const { userType } = useCompany();
+    const { userType } = useCompany();
     const router = useRouter();
 
     useEffect(() => {
@@ -45,18 +45,21 @@ const AdminHome = () => {
         }
     };
 
-    // const isAdmin = userType === 'admin';
+    const isAdmin = userType === 'admin';
 
-    // useEffect(() => {
-    //     if (!isAdmin) return;
+    useEffect(() => {
+        if (!isAdmin || !profile?.user?.companies) return;
 
-    //     if (!companies || companies.length === 0) {
-    //         refetch(); // Trigger refetch when companies are empty
-    //     } else if (companies.length > 0) {
-    //         const firstCompany = companies[0];
-    //         Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
-    //     }
-    // }, [companies, refetch, isAdmin]);
+        const fetchedCompanies = profile.user.companies;
+        setCompanies(fetchedCompanies);
+
+        if (fetchedCompanies.length > 0) {
+            const firstCompany = fetchedCompanies[0];
+            Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+        } else {
+            refetch();
+        }
+    }, [isAdmin, profile]);
 
     return (
         <>

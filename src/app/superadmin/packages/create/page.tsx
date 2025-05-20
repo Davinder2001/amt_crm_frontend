@@ -1,10 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Tabs,
-  Tab,
-  Box
-} from '@mui/material';
+
 import {
   FiChevronDown,
   FiCheck,
@@ -13,8 +9,6 @@ import {
   FiBox,
   FiCheckCircle,
   FiFileText,
-  FiInfo,
-  FiList,
   FiTag
 } from 'react-icons/fi';
 import { FaRupeeSign } from 'react-icons/fa';
@@ -23,7 +17,6 @@ import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/busines
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const CreatePackages = () => {
-  const [activeTab, setActiveTab] = useState(0);
   const [formData, setFormData] = useState<createPackagePlan>({
     name: '',
     employee_numbers: 0,

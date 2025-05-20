@@ -34,6 +34,7 @@ interface TasksResponse {
 }
 
 interface PredefinedTask {
+    assigned_to: string;
     notify: boolean;
     id: number;
     name: string;

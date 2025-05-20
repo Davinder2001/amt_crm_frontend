@@ -31,7 +31,6 @@ const BusinessCategories = () => {
 
     const [form, setForm] = useState({ id: null as number | null, name: "" });
 
-    const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:483px)');
 
 

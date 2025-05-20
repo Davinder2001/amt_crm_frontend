@@ -6,16 +6,24 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { encodeStorage } from '@/utils/Company';
-
+import { useEffect, useState } from 'react';
+import { invalidateAllCompanyApis } from '@/utils/ApiDispatch';
+import { AppDispatch } from '@/store/store';
+import { useDispatch } from 'react-redux';
 const Profile = () => {
   const { data, isLoading, isError } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation();
+  const [companies, setCompanies] = useState<Company[]>([]);
   const router = useRouter();
-
-  if (isLoading) return <Loader />;
-  if (isError) return <div className="error-container"><p>Failed to load profile.</p></div>;
+  const dispatch = useDispatch<AppDispatch>();
 
   const user = data?.user;
+
+  useEffect(() => {
+    if (user?.companies) {
+      setCompanies(user.companies);
+    }
+  }, [user]);
 
   const handleCompanySelect = async (
     companySlug: string,
@@ -34,12 +42,17 @@ const Profile = () => {
 
     try {
       await sendCompanyId({ id }).unwrap();
+      // ✅ Invalidate all API slices in one line
+      invalidateAllCompanyApis(dispatch);
       router.push(`/${companySlug}/dashboard`);
     } catch (error) {
       console.error(error);
       toast.error('Failed to select company. Please try again.');
     }
   };
+
+  if (isLoading) return <Loader />;
+  if (isError) return <div className="error-container"><p>Failed to load profile.</p></div>;
 
   return (
     <div className="profile-page">
@@ -98,13 +111,13 @@ const Profile = () => {
         )}
       </div>
 
-      {(user?.companies ?? []).length > 0 && (
+      {companies.length > 0 && (
         <div className="profile-section">
           <div className="section-header">
             <h2><span className="icon">🏢</span> Associated Companies</h2>
           </div>
           <div className="companies-grid">
-            {(user?.companies ?? []).map((company: Company) => (
+            {companies.map((company) => (
               <div key={company.id} className="company-card" onClick={(e) =>
                 handleCompanySelect(
                   company.company_slug,
@@ -135,23 +148,7 @@ const Profile = () => {
                       {company.payment_status}
                     </span>
                   </div>
-
                 </div>
-                {/* <div className="company-actions">
-                  <button
-                    className="btn-action"
-                    onClick={(e) =>
-                      handleCompanySelect(
-                        company.company_slug,
-                        company.id,
-                        company.verification_status === 'verified',
-                        e
-                      )
-                    }
-                  >
-                    Manage Company
-                  </button>
-                </div> */}
               </div>
             ))}
 

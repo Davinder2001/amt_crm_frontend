@@ -81,7 +81,7 @@ const AdminHome = () => {
                             <div key={index} className='company-card'>
                                 <Link
                                     className='company-link'
-                                    href={`/${company.company_slug}/dashboard`}
+                                    href={`/${companySlug}/dashboard`}
                                     onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
                                 >
                                     <div className='company-card-content'>

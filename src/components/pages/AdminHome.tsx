@@ -45,18 +45,18 @@ const AdminHome = () => {
         }
     };
 
-    const isAdmin = userType === 'admin';
+    // const isAdmin = userType === 'admin';
 
-    useEffect(() => {
-        if (!isAdmin) return;
+    // useEffect(() => {
+    //     if (!isAdmin) return;
 
-        if (!companies || companies.length === 0) {
-            refetch(); // Trigger refetch when companies are empty
-        } else if (companies.length > 0) {
-            const firstCompany = companies[0];
-            Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
-        }
-    }, [companies, refetch, isAdmin]);
+    //     if (!companies || companies.length === 0) {
+    //         refetch(); // Trigger refetch when companies are empty
+    //     } else if (companies.length > 0) {
+    //         const firstCompany = companies[0];
+    //         Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
+    //     }
+    // }, [companies, refetch, isAdmin]);
 
     return (
         <>

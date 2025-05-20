@@ -6,7 +6,7 @@ import {
   useFetchCompanyShiftsQuery,
 } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
-import { FiClock, FiPlus, FiCalendar, FiWatch } from "react-icons/fi";
+import { FiClock, FiCalendar, FiWatch } from "react-icons/fi";
 
 const Page = () => {
   const { data: shiftData, isLoading, refetch } = useFetchCompanyShiftsQuery();

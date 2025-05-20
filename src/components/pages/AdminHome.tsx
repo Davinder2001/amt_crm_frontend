@@ -9,13 +9,13 @@ import Logout from '../common/Logout';
 import { useRouter } from 'next/navigation';
 import { homelogo } from '@/assets/useImage';
 import Image from 'next/image';
-import { encodeStorage, useCompany } from '@/utils/Company';
+import { encodeStorage } from '@/utils/Company';
 
 const AdminHome = () => {
-    const { data: profile, refetch } = useFetchProfileQuery();
+    const { data: profile } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
     const [companies, setCompanies] = useState<Company[]>([]);
-    const { userType } = useCompany();
+    // const { userType } = useCompany();
     const router = useRouter();
 
     useEffect(() => {

@@ -103,7 +103,7 @@ const Packages: React.FC<PackagesProps> = ({
                                 <div className="pricing-buttons">
                                     <button
                                         className={isSelected ? 'btnPrimary' : 'btnSecondary'}
-                                        onClick={() => setSelectedPackageId(plan.id)}
+                                        onClick={() => setSelectedPackageId(plan.id ?? 0)}
                                     >
                                         {isSelected ? 'Selected' : 'Choose Plan'}
                                     </button>

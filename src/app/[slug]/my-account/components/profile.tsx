@@ -141,11 +141,7 @@ const Profile = () => {
                 >
                   <h3>{company.company_name}</h3>
                   <div className="company-info">
-                    <div className="info-row">
-                      <span className="info-label">Slug:</span>
-                      <span className="info-value">{company.company_slug}</span>
-                    </div>
-                    <div className="info-row">
+                    <div className="info-row" style={{gridColumn: '1/-1'}}>
                       <span className="info-label">Company ID:</span>
                       <span className="info-value">{company.company_id}</span>
                     </div>

@@ -3,16 +3,19 @@ import React from 'react';
 import { FaCheckCircle, FaRegClock, FaCalendarAlt } from 'react-icons/fa';
 import { useGetPendingTasksQuery, useMarkTaskAsWorkingMutation } from '@/slices/tasks/taskApi';
 import Loader from '@/components/common/Loader';
+import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 
 const MyTasks = () => {
   const { data, isLoading, error } = useGetPendingTasksQuery();
   const tasks = data?.data || [];
 
   const [markTaskAsWorking, { isLoading: isMarking }] = useMarkTaskAsWorkingMutation();
+  const { refetch: refetchNotifications } = useFetchNotificationsQuery();
 
   const handleCheckTask = async (taskId: number) => {
     try {
       await markTaskAsWorking(taskId).unwrap();
+      refetchNotifications();
     } catch (err) {
       console.error('Failed to update task status:', err);
     }

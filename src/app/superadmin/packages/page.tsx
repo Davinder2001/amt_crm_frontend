@@ -26,7 +26,7 @@
 // export default Page;
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PackagesView from './components/packagesView';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import BusinessCategories from './components/Categories';
@@ -40,7 +40,9 @@ const Page = () => {
     setValue(newValue);
   };
 
-  
+  useEffect(() => {
+    setTitle('All packages Plan');
+  }, [setTitle]);
 
   return (
     <div className="add-packages-conatiner">

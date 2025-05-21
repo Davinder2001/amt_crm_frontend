@@ -19,7 +19,6 @@ import {
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useRouter } from 'next/navigation';
-import { useCompany } from '@/utils/Company';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -38,7 +37,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         package_type: 'monthly',
     });
     const router = useRouter();
-    const { companySlug } = useCompany();
 
 
     const dropdownRef = useRef<HTMLDivElement>(null);

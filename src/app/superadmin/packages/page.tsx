@@ -16,8 +16,8 @@ const Page = () => {
     <>
     <div className='BCategories-PView-container'>
 
-      <PackagesView />
       <BusinessCategories />
+      <PackagesView />
     </div>
     </>
   );

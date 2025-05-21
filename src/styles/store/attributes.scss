@@ -109,7 +109,10 @@
     min-height: 0px;
     max-height: 500px;
     width: 100%;
-    input, select{
+    padding: 10px;
+
+    input,
+    select {
       width: 100%;
     }
   }
@@ -134,10 +137,10 @@
   select,
   input {
     padding: 8px;
-    border: 1px solid $primary-color;  
+    border: 1px solid $primary-color;
     border-radius: 4px;
     font-size: 14px;
-    
+
   }
 
 
@@ -262,7 +265,7 @@
     background: #fafafa;
     transition: border-color 0.3s;
 
-    
+
   }
 
   .values-container {
@@ -357,9 +360,10 @@
   .input {
     padding: 0.6rem 0.8rem;
     font-size: 0.95rem;
-    border:1px solid #00969357;  
+    border: 1px solid #00969357;
     border-radius: 6px;
     background-color: #fff;
+
     &:focus {
       outline: none;
       border-color: $primary-color;
@@ -455,11 +459,11 @@
       right: 0;
       top: 0;
     }
-  
+
     .delete-btn:hover {
       color: $danger-color;
       font-size: 1rem;
-  
+
     }
 
   }
@@ -516,7 +520,7 @@
     background: white;
   }
 
-  
+
 
   .toggle-switch {
     width: 42px;
@@ -558,14 +562,13 @@
 
 
   .floting-attributes-button {
-    transition: transform 0.3s ease-in-out;
-    /* Optional: smooth transition on hover */
-    /* Other button styles */
+    transition: transform .3s ease-in-out;
     position: absolute;
-    right: 60px;
-    bottom: 60px;
+    /* bottom: 151px; */
+    right: 18px;
     padding: 13px !important;
     font-size: 24px !important;
+    top: 18px;
   }
 
   .floting-attributes-button svg:hover {
@@ -683,6 +686,6 @@
       margin-bottom: 0;
       padding: 9px 15px;
       font-size: 12px;
-  }
+    }
 
   }

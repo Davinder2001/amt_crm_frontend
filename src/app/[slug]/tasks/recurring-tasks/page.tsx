@@ -3,7 +3,9 @@
 import React from 'react';
 import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { FaPlus } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { useCompany } from '@/utils/Company';
 
 // You can adjust or import this type from your models
 interface PredefinedTask {
@@ -24,6 +26,8 @@ const Page = () => {
     refetch: () => void;
   };
   const [deleteTask] = useDeletePredefinedTaskMutation();
+  const router = useRouter();
+  const {companySlug}= useCompany();
 
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this recurring task?')) {
@@ -73,10 +77,10 @@ const Page = () => {
                 <td>{task.recurrence_end_date ? new Date(task.recurrence_end_date).toLocaleDateString() : '—'}</td>
                 <td>{task.notify ? 'Yes' : 'No'}</td>
                 <td>
-                  <button onClick={() => window.location.href = `recurring-tasks/${task.id}/edit`}>Edit</button>
-                  <button onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
-                    Delete
-                  </button>
+                  <span onClick={() => router.push(`/${companySlug}/tasks/recurring-tasks/edit/${task.id}`) }><FaEdit /></span>
+                  <span onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
+                    <FaTrash />
+                  </span>
                 </td>
               </tr>
             ))}

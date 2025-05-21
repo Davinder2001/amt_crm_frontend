@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useChangePasswordMutation } from '@/slices/auth/authApi';
 import { FaEye, FaEyeSlash, FaKey, FaLock } from 'react-icons/fa';
-import { changepass } from '@/assets/useImage';
 import { FaCircleCheck } from 'react-icons/fa6';
 
 const ChangePassword = () => {

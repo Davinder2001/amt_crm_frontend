@@ -70,10 +70,7 @@ const AllInvoices = () => {
   };
 
   const columns = [
-    {
-      label: "Sr. No",
-      render: (_: Invoice, index: number) => index + 1,
-    },
+   
     { label: "Invoice No.", key: "invoice_number" as keyof Invoice },
     { label: "Client", key: "client_name" as keyof Invoice },
     { label: "Date", key: "invoice_date" as keyof Invoice },

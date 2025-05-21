@@ -23,8 +23,7 @@ import {
 import { Tabs, Tab, Box } from "@mui/material";
 import Link from "next/link";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
-import { FiUpload, FiXCircle } from "react-icons/fi";
-import Image from "next/image";
+import { FiXCircle } from "react-icons/fi";
 
 const LOCAL_STORAGE_KEY = "addEmpForm";
 
@@ -795,97 +794,19 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                 {renderField("UPI ID", "upiId", "text", "Enter UPI ID", FaQrcode, 8, 40)}
                                 {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "text", "Enter Aadhar or other ID number", FaIdCard, 5, 12)}
 
-                                {/* <div className="upload-container employee-field">
+                                <div className="employee-field">
                                     <label htmlFor="profilePicture" className="flex items-center gap-2">
                                         <FaImage className="text-gray-600" /> Profile Picture
                                     </label>
-                                    <div className="upload-input-box"
-                                        onClick={() => document.getElementById('file-upload-input')?.click()}
-                                    >
-                                        <FiUpload size={18} />
-                                        <span className="upload-text">Click here to upload or drag & drop</span>
-                                        <input
-                                            id="file-upload-input"
-                                            type="file"
-                                            name="images"
-                                            accept="image/*"
-                                            multiple
-                                            onChange={handleChange}
-                                            style={{ display: 'none' }}
-                                        />
-                                    </div>
-                                    {formData.profilePicture && (
-                                        <div className="preview-row">
-                                            <div className="preview-image-wrapper">
-                                                <div className="preview-image">
-                                                    <Image src={formData.profilePicture} alt="Profile Picture" width={50}
-                                                        height={50} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div> */}
-
-                                <div className="upload-container employee-field">
-                                    <label htmlFor="profilePicture" className="flex items-center gap-2">
-                                        <FaImage className="text-gray-600" /> Profile Picture
-                                    </label>
-                                    <div className="upload-input-box"
-                                        onClick={() => document.getElementById('profilePicture')?.click()}
-                                    >
-                                        <FiUpload size={18} />
-                                        <span className="upload-text">
-                                            {formData.profilePicture ? 'Change image' : 'Click here to upload'}
-                                        </span>
-                                        <input
-                                            id="profilePicture"
-                                            type="file"
-                                            name="profilePicture"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = () => {
-                                                        if (reader.result) {
-                                                            setFormData(prev => ({
-                                                                ...prev,
-                                                                profilePicture: reader.result as string
-                                                            }));
-                                                        }
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            }}
-                                            style={{ display: 'none' }}
-                                        />
-                                    </div>
-                                    {formData.profilePicture && (
-                                        <div className="preview-row">
-                                            <div className="preview-image-wrapper">
-                                                <div className="preview-image">
-                                                    <Image
-                                                        src={formData.profilePicture}
-                                                        alt="Profile Preview"
-                                                        width={100}
-                                                        height={100}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="delete-btn"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setFormData(prev => ({
-                                                                ...prev,
-                                                                profilePicture: ""
-                                                            }));
-                                                        }}
-                                                    >
-                                                        <FiXCircle />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <input
+                                        type="file"
+                                        name="profilePicture"
+                                        accept="image/*"
+                                        onChange={handleChange}
+                                        className="file-input"
+                                    />
+                                    {errors.profilePicture && (
+                                        <div className="error-message">{errors.profilePicture}</div>
                                     )}
                                 </div>
                             </div>

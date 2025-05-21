@@ -3,7 +3,7 @@
 .business-category-page {
     font-family: 'Segoe UI', sans-serif;
     padding: 10px;
-background-color: $white;
+
     .page-title {
         margin-bottom: 2rem;
         font-weight: 600;
@@ -11,15 +11,20 @@ background-color: $white;
     }
 
     .glass-form {
-        background: unset;
         backdrop-filter: blur(10px);
-        padding: 2rem;
-        border-radius: 16px;
-        margin-bottom: 2rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
         box-shadow: 0 8px 20px rgba(0, 150, 147, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+
+
+
     }
 
     .category-input input {
@@ -75,7 +80,7 @@ background-color: $white;
         background-color: #ffffff;
         padding: 1.2rem 1.5rem;
         border-radius: 12px;
-        box-shadow: $secondary-shadow;
+        box-shadow: 0 8px 20px #0096931a;
         transition: transform 0.2s ease;
         display: flex;
         justify-content: space-between;
@@ -118,4 +123,71 @@ background-color: $white;
     .delete-btn:hover {
         color: #c62828 !important;
     }
+
+
+}
+
+
+
+
+
+@media (max-width:468px) {
+    .business-category-page {
+        padding: 0px;
+
+        .category-box {
+            position: relative;
+            padding: 25px 10px;
+            flex-direction: column;
+            align-items: unset;
+        }
+
+        .category-grid {
+            gap: 10px;
+        }
+
+    
+    .action-buttons {
+        gap: .5rem;
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+
+
+    }
+}
+
+}
+
+
+
+
+
+@media (max-width: 425px) {
+    .business-category-page {
+        padding: 0px;
+
+        .category-box {
+            position: unset;
+            padding: 20px 10px;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .category-grid {
+            gap: 10px;
+        }
+
+    }
+
+    .action-buttons {
+        gap: .5rem;
+        display: flex;
+        position: unset;
+        top: 0;
+        right: 0;
+    }
+
 }

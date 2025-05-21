@@ -12,10 +12,10 @@ import Image from 'next/image';
 import { encodeStorage, useCompany } from '@/utils/Company';
 
 const AdminHome = () => {
-    const { data: profile, refetch } = useFetchProfileQuery();
+    const { data: profile } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
     const [companies, setCompanies] = useState<Company[]>([]);
-    const { userType } = useCompany();
+    const { userType, companySlug } = useCompany();
     const router = useRouter();
 
     useEffect(() => {
@@ -48,15 +48,15 @@ const AdminHome = () => {
     const isAdmin = userType === 'admin';
 
     useEffect(() => {
-        if (!isAdmin) return;
+        if (!isAdmin || !companies || companies.length === 0) return;
 
-        if (!companies || companies.length === 0) {
-            refetch(); // Trigger refetch when companies are empty
-        } else if (companies.length > 0) {
+        // Only auto-select the first company if no selection exists
+        if (!companySlug) {
             const firstCompany = companies[0];
+            localStorage.setItem('company_slug', encodeStorage(firstCompany.company_slug));
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
         }
-    }, [companies, refetch, isAdmin]);
+    }, [companies, isAdmin]);
 
     return (
         <>
@@ -81,7 +81,7 @@ const AdminHome = () => {
                             <div key={index} className='company-card'>
                                 <Link
                                     className='company-link'
-                                    href={`/${company.company_slug}/dashboard`}
+                                    href={`/${companySlug}/dashboard`}
                                     onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
                                 >
                                     <div className='company-card-content'>

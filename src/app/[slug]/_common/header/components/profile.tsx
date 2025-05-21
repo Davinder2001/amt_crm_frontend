@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaCog, FaSignOutAlt, FaChevronDown } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
-
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -27,7 +26,6 @@ const Profile: React.FC = () => {
         ? `/superadmin`
         : `/${companySlug}`;
 
-
   useEffect(() => {
     const cookies = document.cookie
       .split(";")
@@ -39,6 +37,7 @@ const Profile: React.FC = () => {
 
     setIsAuthenticated(!!cookies.access_token);
   }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -59,22 +58,19 @@ const Profile: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
   const handleLogout = async () => {
     try {
       const response = await logout();
 
       if (response?.data?.message) {
         toast.success(response?.data?.message);
-
         clearStorage();
-
         setIsAuthenticated(false);
 
         if (userType === 'user') {
-          // Redirect to login page
           router.push('/');
         } else {
-          // Redirect to login page
           router.push('/login');
         }
         router.refresh();
@@ -93,58 +89,69 @@ const Profile: React.FC = () => {
     }
   }, [setUser, accessToken, userType]);
 
-
   return (
-    <div className="account" ref={dropdownRef}>
+    <div className="profile-container" ref={dropdownRef}>
       {isAuthenticated ? (
-        <div className="dropdown">
-          <div
-            className="profile-initial"
+        <div className="profile-dropdown">
+          <button
+            className="profile-trigger"
             onClick={() => setIsOpen(!isOpen)}
-            style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '50%',
-              backgroundColor: '#009693',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              fontSize: '20px',
-            }}
+            aria-expanded={isOpen}
+            aria-label="User profile menu"
           >
-            {user?.name?.[0]?.toUpperCase() || 'U'}
-          </div>
+            <div className="profile-avatar">
+              {user?.name?.[0]?.toUpperCase() || 'U'}
+            </div>
+            <div className="profile-name">
+              {user?.name?.split(' ')[0] || 'User'}
+            </div>
+            <FaChevronDown className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
+          </button>
+
           {isOpen && (
-            <div className="custom-dropdown">
-              <Link
-                href={`${basePath}/my-account`}
-                onClick={() => setIsOpen(false)}
-                className="dropdown-item"
-              >
-                <FaUser className="dropdown-icon" /> My Account
-              </Link>
-              <Link
-                href={`${basePath}/settings`}
-                onClick={() => setIsOpen(false)}
-                className="dropdown-item"
-              >
-                <FaCog className="dropdown-icon" /> Settings
-              </Link>
-              <button
-                className="dropdown-item logout-btn"
-                onClick={handleLogout}
-              >
-                <FaSignOutAlt className="dropdown-icon" /> Logout
-              </button>
+            <div className="profile-menu">
+              <div className="menu-header">
+                <div className="menu-avatar">
+                  {user?.name?.[0]?.toUpperCase() || 'U'}
+                </div>
+                <div className="menu-user-info">
+                  <div className="menu-username">{user?.name || 'User'}</div>
+                  <div className="menu-email">{user?.email || ''}</div>
+                </div>
+              </div>
+
+              <nav className="menu-items">
+                <Link
+                  href={`${basePath}/my-account`}
+                  onClick={() => setIsOpen(false)}
+                  className="menu-item"
+                >
+                  <FaUser className="menu-icon" />
+                  <span>My Account</span>
+                </Link>
+                <Link
+                  href={`${basePath}/settings`}
+                  onClick={() => setIsOpen(false)}
+                  className="menu-item"
+                >
+                  <FaCog className="menu-icon" />
+                  <span>Settings</span>
+                </Link>
+
+                <button
+                  className="menu-item logout"
+                  onClick={handleLogout}
+                >
+                  <FaSignOutAlt className="menu-icon" />
+                  <span>Logout</span>
+                </button>
+              </nav>
             </div>
           )}
         </div>
       ) : (
         <Link href="/login" className="login-btn">
-          Login
+          Sign In
         </Link>
       )}
     </div>

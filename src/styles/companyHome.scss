@@ -310,12 +310,73 @@
 }
 
 @media (max-width: 480px) {
+    .admin-home-container {
+        padding: 0;
+
+        .logout-button button {
+            padding: 5px 10px;
+        }
+    }
+
+    .admin-home-intro {
+        text-align: center;
+        margin: 20px auto;
+
+        h1 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
     .company-grid {
         grid-template-columns: 1fr;
         gap: 15px;
+        padding: 0px 10px;
+
+        .company-card-content {
+            padding: 12px;
+            gap: 5;
+
+            .company-header {
+                h2 {
+                    width: 100%;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+                .status {
+                    font-size: 10px;
+                }
+            }
+
+            .company-actions {
+                margin: 0;
+            }
+
+            .btn-action {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+        }
     }
 
     .company-info {
         grid-template-columns: 1fr;
+    }
+
+    .admin-header {
+        margin: 0;
+
+        .admin-header-inner {
+            padding: 10px;
+
+            .logo-link span {
+                display: none;
+            }
+        }
     }
 }

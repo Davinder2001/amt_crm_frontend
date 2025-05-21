@@ -10,10 +10,12 @@ import { useEffect, useState } from 'react';
 import { invalidateAllCompanyApis } from '@/utils/ApiDispatch';
 import { AppDispatch } from '@/store/store';
 import { useDispatch } from 'react-redux';
+
 const Profile = () => {
   const { data, isLoading, isError } = useFetchProfileQuery();
   const [sendCompanyId] = useSelectedCompanyMutation();
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -25,16 +27,10 @@ const Profile = () => {
     }
   }, [user]);
 
-  const handleCompanySelect = async (
-    companySlug: string,
-    id: number,
-    isVerified: boolean,
-    e: React.MouseEvent
-  ) => {
-    e.preventDefault();
+  const selectCompany = async (companySlug: string, id: number, isVerified: boolean) => {
     if (!isVerified) {
       toast.error('This company is not verified. Please contact support.');
-      return;
+      return false;
     }
 
     Cookies.set('company_slug', companySlug, { path: '/' });
@@ -42,12 +38,40 @@ const Profile = () => {
 
     try {
       await sendCompanyId({ id }).unwrap();
-      // ✅ Invalidate all API slices in one line
       invalidateAllCompanyApis(dispatch);
-      router.push(`/${companySlug}/dashboard`);
+      return true;
     } catch (error) {
       console.error(error);
       toast.error('Failed to select company. Please try again.');
+      return false;
+    }
+  };
+
+  const handleCardClick = async (
+    companySlug: string,
+    id: number,
+    isVerified: boolean,
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault();
+    const success = await selectCompany(companySlug, id, isVerified);
+    if (success) {
+      router.push(`/${companySlug}/dashboard`);
+    }
+  };
+
+  const handleViewDetailsClick = async (
+    companySlug: string,
+    id: number,
+    isVerified: boolean,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation(); // Prevent card click
+    e.preventDefault();
+    const success = await selectCompany(companySlug, id, isVerified);
+    if (success) {
+      router.push(`/${companySlug}/company-details`);
+      setLoadingCompanyId(id); // Set loading state
     }
   };
 
@@ -69,30 +93,12 @@ const Profile = () => {
         <div className="profile-section">
           <h2><span className="icon">👤</span> Personal Information</h2>
           <div className="info-grid">
-            <div className="info-row">
-              <span className="info-label">ID:</span>
-              <span className="info-value">{user?.id}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">Name:</span>
-              <span className="info-value">{user?.name}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">Number:</span>
-              <span className="info-value">{user?.number}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">Email:</span>
-              <span className="info-value">{user?.email}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">UID:</span>
-              <span className="info-value">{user?.uid}</span>
-            </div>
-            <div className="info-row">
-              <span className="info-label">User Type:</span>
-              <span className="info-value capitalize">{user?.user_type}</span>
-            </div>
+            <div className="info-row"><span className="info-label">ID:</span><span className="info-value">{user?.id}</span></div>
+            <div className="info-row"><span className="info-label">Name:</span><span className="info-value">{user?.name}</span></div>
+            <div className="info-row"><span className="info-label">Number:</span><span className="info-value">{user?.number}</span></div>
+            <div className="info-row"><span className="info-label">Email:</span><span className="info-value">{user?.email}</span></div>
+            <div className="info-row"><span className="info-label">UID:</span><span className="info-value">{user?.uid}</span></div>
+            <div className="info-row"><span className="info-label">User Type:</span><span className="info-value capitalize">{user?.user_type}</span></div>
           </div>
         </div>
 
@@ -118,37 +124,64 @@ const Profile = () => {
           </div>
           <div className="companies-grid">
             {companies.map((company) => (
-              <div key={company.id} className="company-card" onClick={(e) =>
-                handleCompanySelect(
-                  company.company_slug,
-                  company.id,
-                  company.verification_status === 'verified',
-                  e
-                )
-              }>
-                <h3>{company.company_name}</h3>
-                <div className="company-info">
-                  <div className="info-row">
-                    <span className="info-label">Slug:</span>
-                    <span className="info-value">{company.company_slug}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Company ID:</span>
-                    <span className="info-value">{company.company_id}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Status:</span>
-                    <span className={`status-badge ${company.verification_status}`}>
-                      {company.verification_status}
-                    </span>
-                  </div>
-                  <div className="info-row">
-                    <span className="info-label">Payment:</span>
-                    <span className={`status-badge ${company.payment_status}`}>
-                      {company.payment_status}
-                    </span>
+              <div
+                key={company.id}
+                className='company-card-wrapper'
+              >
+                <div
+                  className="company-card"
+                  onClick={(e) =>
+                    handleCardClick(
+                      company.company_slug,
+                      company.id,
+                      company.verification_status === 'verified',
+                      e
+                    )
+                  }
+                >
+                  <h3>{company.company_name}</h3>
+                  <div className="company-info">
+                    <div className="info-row">
+                      <span className="info-label">Slug:</span>
+                      <span className="info-value">{company.company_slug}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">Company ID:</span>
+                      <span className="info-value">{company.company_id}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">Status:</span>
+                      <span className={`status-badge ${company.verification_status}`}>
+                        {company.verification_status}
+                      </span>
+                    </div>
+                    <div className="info-row">
+                      <span className="info-label">Payment:</span>
+                      <span className={`status-badge ${company.payment_status}`}>
+                        {company.payment_status}
+                      </span>
+                    </div>
                   </div>
                 </div>
+                {/* ✅ View Details Button */}
+                {company.verification_status === 'verified' ?
+                  <div className="card-actions">
+                    <button
+                      onClick={(e) =>
+                        handleViewDetailsClick(
+                          company.company_slug,
+                          company.id,
+                          company.verification_status === 'verified',
+                          e
+                        )
+                      }
+                      disabled={loadingCompanyId === company.id}
+                      className="btn-secondary view-details-btn"
+                    >
+                      {loadingCompanyId === company.id ? 'Loading...' : 'View Details'}
+                    </button>
+                  </div> : ''
+                }
               </div>
             ))}
 
@@ -159,7 +192,6 @@ const Profile = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

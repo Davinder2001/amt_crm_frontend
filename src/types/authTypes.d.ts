@@ -121,16 +121,19 @@ interface createPackagePlan {
 }
 
 interface PackagePlan {
-    id: number;
+    id?: number;
     name: string;
     price: number;
+    package_type: 'monthly' | 'yearly';
     employee_numbers: number;
     items_number: number;
     daily_tasks_number: number;
     invoices_number: number;
-    created_at: string;
-    updated_at: string;
-    business_categories: { id: number, name: string }[];
+    business_categories: {
+        updated_at: string;
+        created_at: string;
+        description: string; id: number, name: string 
+}[];
 }
 
 interface PackagePlanResponse {

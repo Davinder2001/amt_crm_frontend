@@ -318,7 +318,7 @@
 
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
+import { useDeletePackageMutation, useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
@@ -326,6 +326,7 @@ import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
+  const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
   const categoriesCellRef = useRef<HTMLDivElement | null>(null);
@@ -339,7 +340,27 @@ const PackagesView = () => {
   };
 
 
+  // Add this effect right after your other useEffect hooks
+  // Example state for form data (adjust fields as needed)
+  const [formData, setFormData] = useState<{ name: string; package_type: string }>({ name: '', package_type: 'yearly' });
 
+  useEffect(() => {
+    // Only modify name if package type changes and name exists
+    if (formData.name.trim()) {
+      const typeText = formData.package_type === 'monthly' ? 'Monthly' : 'Yearly';
+      const suffix = `(${typeText})`;
+
+      // Check if name already has a type suffix
+      const hasExistingSuffix = /\(\s*(Monthly|Yearly)\s*\)$/.test(formData.name);
+
+      setFormData(prev => ({
+        ...prev,
+        name: hasExistingSuffix
+          ? prev.name.replace(/\(\s*(Monthly|Yearly)\s*\)$/, suffix)
+          : `${prev.name} ${suffix}`
+      }));
+    }
+  }, [formData.package_type]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -358,9 +379,24 @@ const PackagesView = () => {
   }, [openCategoryId]);
   const columns = [
     {
-      label: 'Price (₹/Year)',
+      label: 'Package Name',
+      key: 'name' as keyof PackagePlan,
+      render: (plan: PackagePlan) => <span className='package-name'>{plan.name}</span>
+    },
+    {
+      label: 'Price',
       key: 'price' as keyof PackagePlan,
-      render: (plan: PackagePlan) => <span>{plan.price}</span>
+      render: (plan: PackagePlan) => (
+        <span>{Math.floor(Number(plan.price))}</span>
+      )
+    },
+
+    {
+      label: 'Package Type',
+      key: 'package_type' as keyof PackagePlan,
+      render: (plan: PackagePlan) => (
+        <span className="Package-type ">{plan.package_type}</span>
+      )
     },
     {
       label: 'Employees',
@@ -368,12 +404,12 @@ const PackagesView = () => {
       render: (plan: PackagePlan) => <span>{plan.employee_numbers}</span>
     },
     {
-      label: 'Items',
+      label: 'Inventory Items',
       key: 'items_number' as keyof PackagePlan,
       render: (plan: PackagePlan) => <span>{plan.items_number}</span>
     },
     {
-      label: 'Tasks/Day',
+      label: 'Daily Tasks',
       key: 'daily_tasks_number' as keyof PackagePlan,
       render: (plan: PackagePlan) => <span>{plan.daily_tasks_number}</span>
     },
@@ -382,18 +418,17 @@ const PackagesView = () => {
       key: 'invoices_number' as keyof PackagePlan,
       render: (plan: PackagePlan) => <span>{plan.invoices_number}</span>
     },
-
     {
-      label: 'Categories',
+      label: 'Applicable Categories',
       key: 'business_categories' as keyof PackagePlan,
       render: (plan: PackagePlan) => (
         <div className="categories-cell">
           <div
             className="categories-toggle"
-            onClick={(e) => handleToggle(e, plan.id)}
+            onClick={(e) => plan.id !== undefined && handleToggle(e, plan.id)}
           >
-            <span>
-              {plan.business_categories.length}
+            <span className='categories-show'>
+              <span>{plan.business_categories.length}</span>
               Categor{plan.business_categories.length === 1 ? 'y' : 'ies'}
             </span>
             <FaChevronDown className={`toggle-icon ${openCategoryId === plan.id ? 'open' : ''}`} />
@@ -442,7 +477,7 @@ const PackagesView = () => {
       </div>
 
       <ResponsiveTable
-        data={data || []}
+        data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
         columns={columns}
         onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
       />

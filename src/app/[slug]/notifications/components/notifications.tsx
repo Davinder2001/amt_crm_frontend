@@ -6,15 +6,40 @@ import {
   useMarkAllNotificationsAsReadMutation,
 } from '@/slices/notifications/notifications';
 
+type NotificationData = {
+  title?: string;
+  message?: string;
+  type?: string;
+  url?: string;
+};
+
+type NotificationType = {
+  id: string | number;
+  read_at: string | null;
+  created_at: string;
+  data: NotificationData;
+};
+
 const Notifications = () => {
-  const { data, isLoading, isError, refetch } = useFetchNotificationsQuery();
+  const {
+    data = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useFetchNotificationsQuery(undefined, {
+    selectFromResult: (result) => ({
+      ...result,
+      data: (result.data ?? []) as NotificationType[],
+    }),
+  });
+
   const [markNotificationAsRead, { isLoading: markingSingle }] = useMarkNotificationAsReadMutation();
   const [markAllNotificationsAsRead, { isLoading: markingAll }] = useMarkAllNotificationsAsReadMutation();
 
   const handleNotificationClick = async (id: string | number) => {
     try {
-      await markNotificationAsRead(id);
-      refetch(); // Refresh notifications after marking one
+      await markNotificationAsRead(id).unwrap();
+      refetch();
     } catch (error) {
       console.error('Failed to mark notification as read', error);
     }
@@ -22,8 +47,8 @@ const Notifications = () => {
 
   const handleMarkAllAsRead = async () => {
     try {
-      await markAllNotificationsAsRead();
-      refetch(); // Refresh notifications after marking all
+      await markAllNotificationsAsRead().unwrap();
+      refetch();
     } catch (error) {
       console.error('Failed to mark all notifications as read', error);
     }
@@ -33,35 +58,36 @@ const Notifications = () => {
   if (isError) return <div>Failed to load notifications!</div>;
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Notifications</h2>
-        {(data?.notifications?.length ?? 0) > 0 && (
+    <div className="">
+      <div className="">
+        <h2 className="">Notifications</h2>
+        {data.length > 0 && (
           <button
             onClick={handleMarkAllAsRead}
             disabled={markingAll}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-sm disabled:opacity-50"
+            className=""
           >
-            {markingAll ? "Marking..." : "Mark All as Read"}
+            {markingAll ? 'Marking...' : 'Mark All as Read'}
           </button>
         )}
       </div>
 
-      {data?.notifications?.length === 0 ? (
+      {data.length === 0 ? (
         <p>No notifications found.</p>
       ) : (
-        <ul className="space-y-3">
-          {data?.notifications?.map((notification) => (
+        <ul className="">
+          {data.map((notification) => (
             <li
               key={notification.id}
-              className={`p-4 rounded-lg shadow-md ${notification.read_at ? 'bg-gray-100' : 'bg-white border border-blue-400'
-                }`}
+              className={` ${
+                notification.read_at ? '' : ''
+              }`}
             >
-              <div className="flex justify-between items-center">
+              <div className="">
                 <div>
-                  <strong className="text-md">{notification.data?.title}</strong>
-                  <p className="text-sm text-gray-600">{notification.data?.message}</p>
-                  <small className="text-xs text-gray-400">
+                  <strong className="">{notification.data?.title}</strong>
+                  <p className="">{notification.data?.message}</p>
+                  <small className="">
                     {new Date(notification.created_at).toLocaleString()}
                   </small>
                 </div>
@@ -69,12 +95,12 @@ const Notifications = () => {
                   <button
                     onClick={() => handleNotificationClick(notification.id)}
                     disabled={markingSingle}
-                    className="bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full disabled:opacity-50"
+                    className=""
                   >
-                    {markingSingle ? "..." : "Mark as Read"}
+                    {markingSingle ? '...' : 'Mark as Read'}
                   </button>
                 ) : (
-                  <span className="bg-gray-400 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  <span className="">
                     Read
                   </span>
                 )}

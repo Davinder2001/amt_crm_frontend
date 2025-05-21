@@ -323,8 +323,11 @@ import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const PackagesView = () => {
+    const { setTitle } = useBreadcrumb();
+  
   const { data, error, isLoading } = useFetchPackagesQuery();
   const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
@@ -338,6 +341,20 @@ const PackagesView = () => {
       categoriesCellRef.current = (event.currentTarget as HTMLElement).closest('.categories-cell');
     }
   };
+  const handleDelete = async (id: number) => {
+    if (confirm('Are you sure you want to delete this package?')) {
+      try {
+        await deletepackage(String(id)).unwrap();
+      } catch (err) {
+        console.error('Failed to delete the package:', err);
+        alert('Failed to delete package. Please try again.');
+      }
+    }
+  };
+
+  useEffect(() => {
+    setTitle('All packages Plan');
+  }, [setTitle]);
 
 
   // Add this effect right after your other useEffect hooks
@@ -456,9 +473,14 @@ const PackagesView = () => {
           <span onClick={() => router.push(`/superadmin/packages/edit/${plan.id}`)} title="Edit" className='package-edit-icon' >
             <FaEdit />
           </span>
-          <span title="Delete" className='package-delete-icon'>
+          <span
+            title="Delete"
+            className="package-delete-icon"
+            onClick={() => { if (typeof plan.id === 'number') handleDelete(plan.id); }}
+          >
             <FaTrash />
           </span>
+
         </div>
       )
     }

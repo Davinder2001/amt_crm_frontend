@@ -10,7 +10,7 @@ import {
     FiFileText,
     FiTag
 } from 'react-icons/fi';
-import { FaRupeeSign } from 'react-icons/fa';
+import { FaArrowLeft, FaRupeeSign } from 'react-icons/fa';
 import {
     useCreatePackageMutation,
     useFetchSinglePackageQuery,
@@ -19,6 +19,7 @@ import {
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useRouter } from 'next/navigation';
+import { useCompany } from '@/utils/Company';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -37,6 +38,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         package_type: 'monthly',
     });
     const router = useRouter();
+    const { companySlug } = useCompany();
+
 
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -79,7 +82,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         ];
 
         if (numberFields.includes(name)) {
-            const digitsOnly = value.replace(/\D/g, '').slice(0,8);
+            const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
 
             setFormData(prev => ({
                 ...prev,
@@ -179,189 +182,162 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
 
     return (
-        <div className="add-packages-conatiner">
-            <div className="header">
-                <h1>{mode === 'edit' ? 'Edit Package' : 'Create New Package'}</h1>
-                <p>{mode === 'edit'
-                    ? 'Modify existing package details'
-                    : 'Configure a new subscription package for businesses'}
-                </p>
-            </div>
+        <div>
+            <button className="back-button" onClick={() => router.back()}>
+                <FaArrowLeft size={16} color="#fff" />
+            </button>
+            <div className="add-packages-conatiner">
+                <div className="header">
+                    <h2>{mode === 'edit' ? 'Edit Package' : 'Add New Plan'}</h2>
+                    <p>{mode === 'edit'
+                        ? 'Modify existing package details'
+                        : 'Configure a new subscription package for businesses'}
+                    </p>
+                </div>
 
-            <form onSubmit={handleSubmit} className="form">
-                <div className="form-section">
-                    <h2 className="section-title">Basic Information</h2>
-                    <div className='form-group-outer'>
-                        <div className="form-group">
-                            <label className="form-label">
-                                Package Name <span className="required">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                placeholder="e.g., Premium Business Package"
-                                className="form-input"
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">
-                                {formData.package_type === 'yearly' ? 'Yearly' : 'Monthly'} Price <span className="required">*</span>
-                            </label>
-                            <div className="input-with-icon">
-                                <FaRupeeSign className="input-icon" />
+                <form onSubmit={handleSubmit} className="form">
+                    <div className="form-section">
+                        <h2 className="section-title">Basic Information</h2>
+                        <div className='form-group-outer'>
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Package Name <span className="required">*</span>
+                                </label>
                                 <input
-                                    type="number"
-                                    name="price"
-                                    value={formData.price ? Math.floor(Number(formData.price)) : ''}
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
                                     onChange={handleInputChange}
-                                    placeholder="0"
+                                    placeholder="e.g., Premium Business Package"
                                     className="form-input"
-                                    min="0"
-                                    maxLength={10}
-                                    step="1"  // step 1 to restrict decimals
                                     required
                                 />
-
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">
-                                Package Type <span className="required">*</span>
-                            </label>
-                            <select
-                                name="package_type"
-                                value={formData.package_type}
-                                onChange={handleInputChange}
-                                className="form-input"
-                                required
-                            >
-                                <option value="monthly">Monthly</option>
-                                <option value="yearly">Yearly</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-section">
-                    <h2 className="section-title">Package Limits</h2>
-                    <div className="grids grid-cols-2 gap-6">
-                        {/* Employee Limit */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                <FiUsers className="icon" /> Employees
-                            </label>
-                            <input
-                                type="number"
-                                name="employee_numbers"
-                                value={formData.employee_numbers || ''}
-                                onChange={handleInputChange}
-                                className="form-input"
-                                min="0"
-                                placeholder="Max employees"
-                                required
-                            />
-                        </div>
-
-                        {/* Inventory Items Limit */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                <FiBox className="icon" /> Inventory Items
-                            </label>
-                            <input
-                                type="number"
-                                name="items_number"
-                                value={formData.items_number || ''}
-                                onChange={handleInputChange}
-                                className="form-input"
-                                min="0"
-                                placeholder="Max items allowed"
-                                required
-                            />
-                        </div>
-
-                        {/* Daily Tasks Limit */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                <FiCheckCircle className="icon" /> Daily Tasks
-                            </label>
-                            <input
-                                type="number"
-                                name="daily_tasks_number"
-                                value={formData.daily_tasks_number || ''}
-                                onChange={handleInputChange}
-                                className="form-input"
-                                min="0"
-                                placeholder="Max daily tasks"
-                                required
-                            />
-                        </div>
-
-                        {/* Invoices Limit */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                <FiFileText className="icon" /> Invoices
-                            </label>
-                            <input
-                                type="number"
-                                name="invoices_number"
-                                value={formData.invoices_number || ''}
-                                onChange={handleInputChange}
-                                className="form-input"
-                                min="0"
-                                placeholder="Max invoices/month"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-section">
-                    <h2 className="section-title">Business Categories</h2>
-                    <div className="form-group">
-                        <label className="form-label"><FiTag /> Applicable Categories</label>
-                        <div className="multi-select" ref={dropdownRef}>
-                            <div className="selected-items">
-                                {formData.business_categories.map(category => (
-                                    <span key={category.id} className="selected-item">
-                                        {category.name}
-                                        <button
-                                            type="button"
-                                            onClick={() => toggleCategory({
-                                                id: category.id,
-                                                name: category.name,
-                                                description: category.description ?? '',
-                                                created_at: category.created_at ?? '',
-                                                updated_at: category.updated_at ?? ''
-                                            })}
-                                            className="remove-item"
-                                        >
-                                            <FiX size={14} />
-                                        </button>
-                                    </span>
-                                ))}
                             </div>
 
-                            <div className="dropdown-container">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowDropdown(!showDropdown)}
-                                    className="dropdown-toggle"
+                            <div className="form-group">
+                                <label className="form-label">
+                                    {formData.package_type === 'yearly' ? 'Yearly' : 'Monthly'} Price <span className="required">*</span>
+                                </label>
+                                <div className="input-with-icon">
+                                    <FaRupeeSign className="input-icon" />
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        value={formData.price ? Math.floor(Number(formData.price)) : ''}
+                                        onChange={handleInputChange}
+                                        placeholder="0"
+                                        className="form-input"
+                                        min="0"
+                                        maxLength={10}
+                                        step="1"  // step 1 to restrict decimals
+                                        required
+                                    />
+
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Package Type <span className="required">*</span>
+                                </label>
+                                <select
+                                    name="package_type"
+                                    value={formData.package_type}
+                                    onChange={handleInputChange}
+                                    className="form-input"
+                                    required
                                 >
-                                    <span>Select categories</span>
-                                    <FiChevronDown className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
-                                </button>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-                                {showDropdown && (
-                                    <div className="dropdown-menu">
-                                        {categories?.map(category => (
-                                            <div
-                                                key={category.id}
-                                                className="dropdown-item"
+                    <div className="form-section">
+                        <h2 className="section-title">Package Limits</h2>
+                        <div className="grids grid-cols-2 gap-6">
+                            {/* Employee Limit */}
+                            <div className="form-group">
+                                <label className="form-label">
+                                    <FiUsers className="icon" /> Employees
+                                </label>
+                                <input
+                                    type="number"
+                                    name="employee_numbers"
+                                    value={formData.employee_numbers || ''}
+                                    onChange={handleInputChange}
+                                    className="form-input"
+                                    min="0"
+                                    placeholder="Max employees"
+                                    required
+                                />
+                            </div>
+
+                            {/* Inventory Items Limit */}
+                            <div className="form-group">
+                                <label className="form-label">
+                                    <FiBox className="icon" /> Inventory Items
+                                </label>
+                                <input
+                                    type="number"
+                                    name="items_number"
+                                    value={formData.items_number || ''}
+                                    onChange={handleInputChange}
+                                    className="form-input"
+                                    min="0"
+                                    placeholder="Max items allowed"
+                                    required
+                                />
+                            </div>
+
+                            {/* Daily Tasks Limit */}
+                            <div className="form-group">
+                                <label className="form-label">
+                                    <FiCheckCircle className="icon" /> Daily Tasks
+                                </label>
+                                <input
+                                    type="number"
+                                    name="daily_tasks_number"
+                                    value={formData.daily_tasks_number || ''}
+                                    onChange={handleInputChange}
+                                    className="form-input"
+                                    min="0"
+                                    placeholder="Max daily tasks"
+                                    required
+                                />
+                            </div>
+
+                            {/* Invoices Limit */}
+                            <div className="form-group">
+                                <label className="form-label">
+                                    <FiFileText className="icon" /> Invoices
+                                </label>
+                                <input
+                                    type="number"
+                                    name="invoices_number"
+                                    value={formData.invoices_number || ''}
+                                    onChange={handleInputChange}
+                                    className="form-input"
+                                    min="0"
+                                    placeholder="Max invoices/month"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="form-section">
+                        <h2 className="section-title">Business Categories</h2>
+                        <div className="form-group">
+                            <label className="form-label"><FiTag /> Applicable Categories</label>
+                            <div className="multi-select" ref={dropdownRef}>
+                                <div className="selected-items">
+                                    {formData.business_categories.map(category => (
+                                        <span key={category.id} className="selected-item">
+                                            {category.name}
+                                            <button
+                                                type="button"
                                                 onClick={() => toggleCategory({
                                                     id: category.id,
                                                     name: category.name,
@@ -369,40 +345,72 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                                     created_at: category.created_at ?? '',
                                                     updated_at: category.updated_at ?? ''
                                                 })}
+                                                className="remove-item"
                                             >
-                                                <div className="checkbox-container">
-                                                    {formData.business_categories.some(c => c.id === category.id) ? (
-                                                        <FiCheck className="checkbox checked" />
-                                                    ) : (
-                                                        <div className="checkbox unchecked" />
-                                                    )}
+                                                <FiX size={14} />
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="dropdown-container">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowDropdown(!showDropdown)}
+                                        className="dropdown-toggle"
+                                    >
+                                        <span>Select categories</span>
+                                        <FiChevronDown className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
+                                    </button>
+
+                                    {showDropdown && (
+                                        <div className="dropdown-menu">
+                                            {categories?.map(category => (
+                                                <div
+                                                    key={category.id}
+                                                    className="dropdown-item"
+                                                    onClick={() => toggleCategory({
+                                                        id: category.id,
+                                                        name: category.name,
+                                                        description: category.description ?? '',
+                                                        created_at: category.created_at ?? '',
+                                                        updated_at: category.updated_at ?? ''
+                                                    })}
+                                                >
+                                                    <div className="checkbox-container">
+                                                        {formData.business_categories.some(c => c.id === category.id) ? (
+                                                            <FiCheck className="checkbox checked" />
+                                                        ) : (
+                                                            <div className="checkbox unchecked" />
+                                                        )}
+                                                    </div>
+                                                    <span>{category.name}</span>
                                                 </div>
-                                                <span>{category.name}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="tooltip-container">
-                    <button
-                        type="submit"
-                        className="submit-button"
-                        disabled={!isFormValid()}
-                    >
-                        {mode === 'edit' ? 'Update Package' : 'Create Package'}
-                    </button>
-                    {!isFormValid() && (
-                        <div className="hover-tooltip">
-                            Please fill all required fields
-                            <div className="tooltip-arrow"></div>
-                        </div>
-                    )}
-                </div>
-            </form>
+                    <div className="tooltip-container">
+                        <button
+                            type="submit"
+                            className="submit-button"
+                            disabled={!isFormValid()}
+                        >
+                            {mode === 'edit' ? 'Update Package' : 'Create Package'}
+                        </button>
+                        {!isFormValid() && (
+                            <div className="hover-tooltip">
+                                Please fill all required fields
+                                <div className="tooltip-arrow"></div>
+                            </div>
+                        )}
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

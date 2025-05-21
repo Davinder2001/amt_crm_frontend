@@ -1,111 +1,241 @@
 @use '../variables' as *;
 
-// ViewCompany.scss
-.vc-container {
+// // ViewCompany.scss
+// .vc-container {
 
-  .vc-inner-container {
-    margin: 2rem auto;
-    background: $white;
-    border-radius: 10px;
-    box-shadow: $box-shadow ;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+//   .vc-inner-container {
+//     margin: 2rem auto;
+//     background: $white;
+//     border-radius: 10px;
+//     box-shadow: $box-shadow ;
+//     overflow: hidden;
+//     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    .vc-header {
-      background: #009693;
-      color: $white;
-      padding: 1rem;
+//     .vc-header {
+//       background: #009693;
+//       color: $white;
+//       padding: 1rem;
 
-      .vc-title {
-        margin: 0;
-        font-size: 1.8rem;
-        font-weight: 700;
-      }
+//       .vc-title {
+//         margin: 0;
+//         font-size: 1.8rem;
+//         font-weight: 700;
+//       }
 
-      .vc-subtitle {
-        color: white;
-        font-size: 16px;
-        margin: 5px 0px;
-      }
-    }
+//       .vc-subtitle {
+//         color: white;
+//         font-size: 16px;
+//         margin: 5px 0px;
+//       }
+//     }
 
-    .vc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      padding: 1.5rem;
-      gap: 20px;
+//     .vc-grid {
+//       display: grid;
+//       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+//       padding: 1.5rem;
+//       gap: 20px;
 
 
-      .vc-item {
-        display: flex;
-        gap: 5px;
-        border-bottom: 1px dashed #6bfffca1;
-        padding-bottom: 15px;
+//       .vc-item {
+//         display: flex;
+//         gap: 5px;
+//         border-bottom: 1px dashed #6bfffca1;
+//         padding-bottom: 15px;
 
-        dt {
-          font-size: 17px;
-          font-weight: 700;
-          color: $primary-color;
-          margin-bottom: 0.25rem;
-        }
+//         dt {
+//           font-size: 17px;
+//           font-weight: 700;
+//           color: $primary-color;
+//           margin-bottom: 0.25rem;
+//         }
 
-        dd {
-          margin: 0;
-          font-size: 16px;
-          font-weight: 600;
-          color: #575757;
-          text-transform: capitalize;
-        }
+//         dd {
+//           margin: 0;
+//           font-size: 16px;
+//           font-weight: 600;
+//           color: #575757;
+//           text-transform: capitalize;
+//         }
 
-      }
-    }
+//       }
+//     }
 
-    .vc-proofs {
-      border-top: 1px solid #eee;
-      padding: 1.5rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+//     .vc-proofs {
+//       border-top: 1px solid #eee;
+//       padding: 1.5rem;
+//       display: flex;
+//       gap: 1rem;
+//       flex-wrap: wrap;
 
-      .vc-proof {
-        flex: 1 1 45%;
+//       .vc-proof {
+//         flex: 1 1 45%;
 
-        figcaption {
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-          color: $para-color;
-        }
+//         figcaption {
+//           font-weight: 600;
+//           margin-bottom: 0.5rem;
+//           color: $para-color;
+//         }
 
-        img {
-          width: 100%;
-          height: auto;
-          border-radius: 6px;
-          box-shadow: $box-shadow;
-        }
-      }
-    }
+//         img {
+//           width: 100%;
+//           height: auto;
+//           border-radius: 6px;
+//           box-shadow: $box-shadow;
+//         }
+//       }
+//     }
 
-    .vc-loading,
-    .vc-error {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-    }
+//     .vc-loading,
+//     .vc-error {
+//       text-align: center;
+//       padding: 2rem;
+//       color: #666;
+//     }
 
-    .vc-error {
-      color: $danger-color;
-    }
-  }
+//     .vc-error {
+//       color: $danger-color;
+//     }
+//   }
 
-  .Vcompany-edit-delete-btn-outer {
-    display: flex;
-    justify-content: end;
-    padding: 20px;
+//   .Vcompany-edit-delete-btn-outer {
+//     display: flex;
+//     justify-content: end;
+//     padding: 20px;
 
-    .Vcompany-edit-delete-btn-inner {
-      display: flex;
-      gap: 20px;
-      color: $primary-color;
-    }
-  }
+//     .Vcompany-edit-delete-btn-inner {
+//       display: flex;
+//       gap: 20px;
+//       color: $primary-color;
+//     }
+//   }
+// }
+
+
+
+
+/* styles/viewCompany.module.css */
+
+.vC-back-btn {
+  margin-bottom: 1.5rem;
+}
+
+
+.vc-inner-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow:$box-shadow;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vc-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.vc-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 3px;
+  background: $primary-color;
+}
+
+.vc-title {
+  font-size: 2.5rem;
+  margin: 0;
+  color: $primary-color;
+}
+
+.vc-subtitle {
+  color: gray;
+  font-size: 16px;
+  margin: 0.5rem 0;
+}
+
+.vc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.vc-item {
+  background: $white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+  box-shadow: $box-shadow;
+}
+
+.vc-item:hover {
+  transform: translateY(-3px);
+}
+
+.vc-item dt {
+  font-size: 0.85rem;
+  color: $primary-color;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.vc-item dd {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #303030;
+}
+
+.vc-proofs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.vc-proof {
+  margin: 0;
+  background: rgba(40, 40, 40, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.vc-proof figcaption {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  color: #a0a0a0;
+}
+
+.vc-proof img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.vc-proof:hover img {
+  transform: scale(1.03);
+}
+
+.Vcompany-edit-delete-btn-inner {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+/* Status Badges */
+.vc-item dd[data-status="pending"] {
+  color: #f59e0b;
+}
+
+.vc-item dd[data-status="completed"] {
+  color: #10b981;
 }

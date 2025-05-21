@@ -177,7 +177,7 @@
 }
 
 
-.BCategories-PView-container {
+.add-packages-conatiner {
     background-color: $white;
     padding: 10px 10px;
 
@@ -190,9 +190,81 @@
 
         }
 
+        .categories-cell {
+            position: relative;
+
+            .categories-toggle {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                padding: 6px 10px;
+                border-radius: 6px;
+                justify-content: space-between;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: #f1f1f1;
+                }
+
+                .categories-show {
+                    font-weight: 500;
+                    margin-right: 8px;
+                }
+
+                .toggle-icon {
+                    transition: transform 0.3s ease;
+                    color: #888;
+                }
+
+                .toggle-icon.open {
+                    transform: rotate(180deg);
+                    color: $primary-color; // Optional highlight color when open
+                }
+
+                .categories-show {
+                    display: flex;
+                    gap: 5px;
+                }
+            }
+
+            .category-dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                z-index: 10;
+                background: #fff;
+                border: 1px solid rgb(206, 206, 206);
+                border-radius: 6px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+                margin-top: 6px;
+                min-width: 180px;
+                max-height: 160px;
+                overflow-y: scroll;
+
+                .category-item {
+                    padding: 4px 10px;
+                    font-size: 14px;
+                    border-bottom: 1px solid rgb(199, 199, 199);
+
+                    &:last-child {
+                        border-bottom: none;
+
+                    }
+
+                    &:hover {
+                        background-color: rgb(241, 249, 249);
+                        color: $primary-color;
+                        border-right: 3px solid $primary-color;
+                    }
+                }
+            }
+        }
+
+
 
         .responsive-table {
             margin: 10px 0px;
+            overflow: visible;
 
             .table-view {
 
@@ -206,64 +278,30 @@
                     text-transform: capitalize;
                     font-weight: 600;
                 }
+
+
+                .package-action-buttons {
+                    display: flex;
+                    justify-content: space-around;
+
+                    .package-edit-icon {
+                        color: green;
+                    }
+
+                    .package-delete-icon {
+                        color: $danger-color;
+                    }
+
+                }
             }
         }
-    }
-
-
-
-
-
-
-
-    .package-edit-icon {
-        font-size: 18px;
-        color: green;
-    }
-
-    .category-dropdown {
-        z-index: 99999;
-        background-color: #fff;
-        border-radius: 5px;
-        width: fit-content;
-        max-height: 165px;
-        margin-top: 3px;
-        position: absolute;
-        overflow-y: scroll;
-        border: 1px solid $primary-color;
-
-    }
-
-    .package-action-buttons {
-        display: flex;
-        justify-content: space-around;
-    }
-
-    .package-delete-icon {
-        color: $danger-color;
-        font-size: 16px;
-    }
-
-    .categories-toggle {
-        display: flex;
-        justify-content: space-between;
-
-        .categories-show {
-            display: flex;
-            flex-direction: row;
-            gap: 5px;
-        }
 
 
     }
 
-    .category-item {
-        border-bottom: 1px solid #ebebeb;
-        padding: 5px 7px;
 
-        &:hover {
-            background-color: rgb(241, 249, 249);
-            border-right: 3px solid $primary-color;
-        }
-    }
+
+
+
+
 }

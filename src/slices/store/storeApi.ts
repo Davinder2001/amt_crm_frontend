@@ -162,6 +162,24 @@ const storeApi = storeApiSlice.injectEndpoints({
       providesTags: ["Store"],
     }),
 
+    // 🆕 Export store items to Excel
+    exportStoreItems: builder.query<Blob, void>({
+      query: () => ({
+        url: "export-inline", // Update this if your Laravel route differs
+        method: "GET",
+        responseHandler: async (response) => response.blob(),
+      }),
+    }),
+
+    importStoreItems: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: 'import-inline',
+        method: 'POST',
+        body: formData,
+      }),
+    }),
+
+
   }),
 });
 
@@ -189,6 +207,9 @@ export const {
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useFetchCategoriesAndItemsQuery,
+  useLazyExportStoreItemsQuery,
+  useImportStoreItemsMutation,
+
 } = storeApi;
 
 export default storeApi;

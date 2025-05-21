@@ -1,6 +1,7 @@
 import invoiceCreateApiSlice from "./invoiceCreateSlice";
 
 type CreditUser = {
+  customer_id: number;
   name: string;
   number: string;
   total_invoices: number;

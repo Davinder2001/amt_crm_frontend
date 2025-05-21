@@ -171,7 +171,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
     }),
 
-    importStoreItems: builder.mutation<any, FormData>({
+    importStoreItems: builder.mutation<Record<string, unknown>, FormData>({
       query: (formData) => ({
         url: 'import-inline',
         method: 'POST',

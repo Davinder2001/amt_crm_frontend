@@ -15,12 +15,12 @@ interface Action {
 }
 
 interface TableToolbarProps {
-    filters: FilterOptions;
-    onFilterChange: (field: string, value: string, checked: boolean) => void;
-    columns: Column[];
-    visibleColumns: string[]; // Columns that should be visible
-    onColumnToggle: (columnKey: string) => void;
-    actions: Action[];
+    filters?: FilterOptions;
+    onFilterChange?: (field: string, value: string, checked: boolean) => void;
+    columns?: Column[];
+    visibleColumns?: string[]; // Columns that should be visible
+    onColumnToggle?: (columnKey: string) => void;
+    actions?: Action[];
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = ({
@@ -40,7 +40,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         if (savedColumns) {
             return JSON.parse(savedColumns);
         } else {
-            return columns.map(col => col.key); // Default to all columns being visible
+            return columns?.map(col => col.key) || []; // Default to all columns being visible
         }
     });
     // const [loading, setLoading] = useState(false);
@@ -62,7 +62,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         }
         setSelectedFilters(updatedFilters);
         localStorage.setItem('selectedFilters', JSON.stringify(updatedFilters));
-        onFilterChange(field, value, checked);
+        if (onFilterChange) {
+            onFilterChange(field, value, checked);
+        }
     };
 
     // Handle column visibility toggling
@@ -79,7 +81,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         localStorage.setItem('selectedColumns', JSON.stringify(updatedColumns));
 
         // Apply the column toggle to the table (this should call your `onColumnToggle` prop)
-        onColumnToggle(columnKey);
+        if (onColumnToggle) {
+            onColumnToggle(columnKey);
+        }
     };
 
     // Reset to default state
@@ -121,7 +125,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     </button>
                     {openDropdown === 'filter' && (
                         <div className="dropdown-content show">
-                            {Object.entries(filters).map(([field, options]) => (
+                            {Object.entries(filters ?? {}).map(([field, options]) => (
                                 <div key={field} className="section">
                                     <p className="title">{field}</p>
                                     {options.map((opt) => (
@@ -152,7 +156,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         <FiColumns />
                         <span >Columns</span>
                     </button>
-                    {openDropdown === 'columns' && (
+                    {openDropdown === 'columns' && columns && (
                         <div className="dropdown-content show">
                             {columns.map((col) => (
                                 <label key={col.key} className="option">
@@ -192,7 +196,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     {openDropdown === 'actions' && (
                         <div className="dropdown-content show">
                             <ul className="action-list">
-                                {actions.map((action, i) => (
+                                {actions && actions.map((action, i) => (
                                     <li key={i} onClick={action.onClick} className="action-item">
                                         {action.icon && <span className="a-icon">{action.icon}</span>}
                                         <span>{action.label}</span>

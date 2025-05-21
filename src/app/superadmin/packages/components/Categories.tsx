@@ -19,7 +19,7 @@ import {
     CircularProgress,
 } from "@mui/material";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
-import { useMediaQuery, useTheme } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 
 const BusinessCategories = () => {
     const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();

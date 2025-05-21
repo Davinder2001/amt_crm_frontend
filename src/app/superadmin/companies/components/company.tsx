@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
+import { useFetchCompaniesQuery, useVerifyCompanyPaymentMutation, useVerifyCompanyStatusMutation } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -24,6 +24,8 @@ const verificationStatusOptions = ['pending', 'under_review', 'verified', 'rejec
 
 const CompanyComponent = () => {
   const { data, error, isLoading } = useFetchCompaniesQuery();
+  const [verifyPayment] = useVerifyCompanyPaymentMutation();
+  const [verifyStatus] = useVerifyCompanyStatusMutation();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filters, setFilters] = useState<Record<string, string[]>>({});
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
@@ -44,22 +46,34 @@ const CompanyComponent = () => {
     if (data?.data) setCompanies(data.data);
   }, [data]);
 
-  const handlePaymentChange = (id: number, status: string) => {
-    setCompanies((prev) =>
-      prev.map((company) =>
-        company.id === id ? { ...company, payment_status: status } : company
-      )
-    );
-    toast.success(`Payment marked as "${status}"`);
+  const handlePaymentChange = async (id: number, status: string) => {
+    try {
+      await verifyPayment(String(id)).unwrap();
+      setCompanies((prev) =>
+        prev.map((company) =>
+          company.id === id ? { ...company, payment_status: status } : company
+        )
+      );
+      toast.success(`Payment marked as "${status}"`);
+    } catch (err) {
+      toast.error('Failed to verify payment status.');
+      console.error(err);
+    }
   };
 
-  const handleVerificationChange = (id: number, status: string) => {
-    setCompanies((prev) =>
-      prev.map((company) =>
-        company.id === id ? { ...company, verification_status: status } : company
-      )
-    );
-    toast.success(`Verification marked as "${status}"`);
+  const handleVerificationChange = async (id: number, status: string) => {
+    try {
+      await verifyStatus(String(id)).unwrap();
+      setCompanies((prev) =>
+        prev.map((company) =>
+          company.id === id ? { ...company, verification_status: status } : company
+        )
+      );
+      toast.success(`Verification marked as "${status}"`);
+    } catch (err) {
+      toast.error('Failed to verify company status.');
+      console.error(err);
+    }
   };
 
   const handleFilterChange = (field: string, value: string, checked: boolean) => {

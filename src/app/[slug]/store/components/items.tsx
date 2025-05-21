@@ -1,16 +1,29 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   useFetchStoreQuery,
   useDeleteStoreItemMutation,
+  useLazyExportStoreItemsQuery,
+  useImportStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import {
   useAddToCatalogMutation,
   useRemoveFromCatalogMutation,
 } from '@/slices/catalog/catalogApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaEdit, FaEye, FaTrash, FaPlus, FaUserPlus, FaFileInvoice, FaUsers } from 'react-icons/fa';
+import {
+  FaEdit,
+  FaEye,
+  FaTrash,
+  FaPlus,
+  FaUserPlus,
+  FaFileInvoice,
+  FaUsers,
+  FaDownload,
+  FaUpload,
+} from 'react-icons/fa';
+
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
@@ -21,7 +34,7 @@ const Items: React.FC = () => {
   const companySlug: string | undefined = selectedCompany?.selected_company?.company_slug;
   const router = useRouter();
 
-  const { data: items, error, isLoading } = useFetchStoreQuery();
+  const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
       ...item,
@@ -35,8 +48,22 @@ const Items: React.FC = () => {
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [addToCatalog] = useAddToCatalogMutation();
   const [removeFromCatalog] = useRemoveFromCatalogMutation();
+  const [triggerExport] = useLazyExportStoreItemsQuery();
+  const [importStoreItems] = useImportStoreItemsMutation();
 
   const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>([
+    'name',
+    'date_of_manufacture',
+    'date_of_expiry',
+    'taxes',
+    'selling_price',
+    'availability_stock',
+  ]);
+
+  const [importModalVisible, setImportModalVisible] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = async (id: number) => {
     try {
@@ -57,25 +84,6 @@ const Items: React.FC = () => {
       console.error('Error updating catalog status:', error);
     }
   };
-
-  const allColumns = [
-    // { label: 'Brand Name', key: 'brand_name' as keyof StoreItem },
-    // { label: 'HSN Code', key: 'item_code' as keyof StoreItem },
-    { label: 'Name', key: 'name' as keyof StoreItem },
-    // { label: 'Purchase Date', key: 'purchase_date' as keyof StoreItem },
-    { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },
-    { label: 'Date of Expiry', key: 'date_of_expiry' as keyof StoreItem },
-    { label: 'Taxes', key: 'taxes' as keyof StoreItem }, // ✅ taxes here instead of replacement
-    { label: 'Selling Price', key: 'selling_price' as keyof StoreItem },
-    // { label: 'Quantity', key: 'quantity_count' as keyof StoreItem },
-    { label: 'Stock Avaible', key: 'availability_stock' as keyof StoreItem },
-    // { label: 'Actions', key: 'actions' as keyof StoreItem },
-    // { label: 'Catalog', key: 'catalog' as keyof StoreItem },
-  ];
-
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    allColumns.map((col) => col.key as string)
-  );
 
   const handleFilterChange = (field: string, value: string, checked: boolean) => {
     setFilters((prev) => {
@@ -104,45 +112,57 @@ const Items: React.FC = () => {
     });
   };
 
+  const handleExportDownload = async () => {
+    try {
+      const blob = await triggerExport().unwrap();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'items_export.xlsx';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+    }
+  };
+
+  const handleImportFile = async () => {
+    const file = fileInputRef.current?.files?.[0];
+    if (!file) return alert('Please select a file.');
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const result = await importStoreItems(formData).unwrap();
+      if (result.success) {
+        alert('Import successful!');
+        setImportModalVisible(false);
+        refetch();
+      } else {
+        alert(result.message || 'Import failed.');
+      }
+    } catch (err) {
+      console.error('Import failed:', err);
+      alert('Import failed.');
+    }
+  };
+
   const filteredItems = filterData(storeItems);
+
+  const allColumns = [
+    { label: 'Name', key: 'name' as keyof StoreItem },
+    { label: 'Date of Manufacture', key: 'date_of_manufacture' as keyof StoreItem },
+    { label: 'Date of Expiry', key: 'date_of_expiry' as keyof StoreItem },
+    { label: 'Taxes', key: 'taxes' as keyof StoreItem },
+    { label: 'Selling Price', key: 'selling_price' as keyof StoreItem },
+    { label: 'Stock Avaible', key: 'availability_stock' as keyof StoreItem },
+  ];
 
   const columns = allColumns
     .filter((col) => visibleColumns.includes(col.key))
     .map((col) => {
-      if (col.key === 'actions' as string) {
-        return {
-          label: 'Actions',
-          render: (item: StoreItem) =>
-            companySlug && (
-              <div className="store-t-e-e-icons">
-                <Link href={`/${companySlug}/store/view-item/${item.id}`}>
-                  <span>
-                    <FaEye color="#222" />
-                  </span>
-                </Link>
-                <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-                  <FaEdit color="#222" />
-                </Link>
-                <span onClick={() => handleDelete(item.id)}>
-                  <FaTrash color="#222" />
-                </span>
-              </div>
-            ),
-        };
-      }
-
-      if (col.key === 'catalog') {
-        return {
-          label: 'Catalog',
-          render: (item: StoreItem) => (
-            <button className="buttons" onClick={() => handleCatalogToggle(item.id, !!item.catalog)}>
-              {item.catalog ? 'Remove from Catalog' : 'Add to Catalog'}
-            </button>
-          ),
-        };
-      }
-
-      if (col.key === 'taxes' as string) {
+      if (col.key === 'taxes') {
         return {
           label: 'Taxes',
           render: (item: StoreItem) => {
@@ -153,7 +173,6 @@ const Items: React.FC = () => {
           },
         };
       }
-
       return col;
     });
 
@@ -175,25 +194,36 @@ const Items: React.FC = () => {
           {
             label: 'Create New Item',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/store/add-item`)
+            onClick: () => router.push(`/${companySlug}/store/add-item`),
           },
           {
             label: 'Create New Vendor',
             icon: <FaUserPlus />,
-            onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`)
+            onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`),
           },
           {
             label: 'Add Purchased Bill',
             icon: <FaFileInvoice />,
-            onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`)
+            onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
           },
           {
             label: 'View All Vendors',
             icon: <FaUsers />,
-            onClick: () => router.push(`/${companySlug}/store/vendors`)
+            onClick: () => router.push(`/${companySlug}/store/vendors`),
+          },
+          {
+            label: 'Download Excel',
+            icon: <FaDownload />,
+            onClick: handleExportDownload,
+          },
+          {
+            label: 'Import Excel',
+            icon: <FaUpload />,
+            onClick: () => setImportModalVisible(true),
           },
         ]}
       />
+
       <ResponsiveTable
         data={filteredItems}
         columns={columns}
@@ -201,6 +231,70 @@ const Items: React.FC = () => {
         onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
         onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
       />
+
+      {importModalVisible && (
+        <div className="modal-backdrop">
+          <div className="popup-modal">
+            <div className="popup-modal-content">
+              <h3 className="text-lg font-semibold mb-4">Import Items from Excel</h3>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                ref={fileInputRef}
+                className="mb-4"
+              />
+              <div className="flex justify-end space-x-4">
+                <button className="bg-gray-300 px-4 py-2 rounded" onClick={() => setImportModalVisible(false)}>
+                  Cancel
+                </button>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleImportFile}>
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      )}
+      <style jsx>{`
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .popup-modal {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .popup-modal-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .popup-modal input[type='file'] {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        border-radius: 4px;
+      }
+
+      .popup-modal button {
+        transition: all 0.2s ease;
+      }
+
+      .popup-modal button:hover {
+        opacity: 0.9;
+      }
+    `}</style>
     </div>
   );
 };

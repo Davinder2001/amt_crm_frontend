@@ -7,6 +7,7 @@ import { useCompany } from '@/utils/Company';
 import { useCreateTaskMutation } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ const Page: React.FC = () => {
 
   const [createTask, { isLoading }] = useCreateTaskMutation();
   const { data: usersData } = useFetchUsersQuery();
+  const {refetch: refetchNotifications} = useFetchNotificationsQuery();
 
   useEffect(() => {
     if (formData.assignedTo && Array.isArray(usersData?.users) && usersData.users.length) {
@@ -65,6 +67,7 @@ const Page: React.FC = () => {
       const www = await createTask(newTask).unwrap();
       toast.success('Task created successfully');
       router.push(`/${companySlug}/tasks`);
+      refetchNotifications();
       console.log('werewrwerffwewer', www)
     } catch (err) {
       console.error('Failed to create task:', err);

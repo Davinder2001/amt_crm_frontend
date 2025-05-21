@@ -5,23 +5,24 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Loader from '@/components/common/Loader';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { useCompany } from '@/utils/Company';
+import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
-  const { data: selectedCompany, isLoading: profileLoading, error: profileError } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
-
+  const { companySlug } = useCompany();
+  const { refetch: refetchNotifications } = useFetchNotificationsQuery();
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this task?')) {
       try {
         await deleteTask(id).unwrap();
         toast.success('Task deleted successfully');
         refetch();
+        refetchNotifications();
       } catch (err) {
         console.error('Error deleting task:', err);
         toast.error('Error deleting task');
@@ -29,10 +30,8 @@ const AllTasks: React.FC = () => {
     }
   };
 
-  if (profileLoading || tasksLoading) return <Loader />;
-  if (profileError) return <p>Error fetching profile.</p>;
+  if (tasksLoading) return <Loader />;
   if (tasksError) return <p>Error fetching tasks.</p>;
-  if (!companySlug) return <p>Company slug not found.</p>;
 
   // Define columns for the responsive table
   const columns = [

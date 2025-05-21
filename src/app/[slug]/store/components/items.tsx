@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 import {
   useFetchStoreQuery,
   useDeleteStoreItemMutation,
@@ -8,14 +8,14 @@ import {
   useImportStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import {
-  useAddToCatalogMutation,
-  useRemoveFromCatalogMutation,
+  // useAddToCatalogMutation,
+  // useRemoveFromCatalogMutation,
 } from '@/slices/catalog/catalogApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import {
-  FaEdit,
-  FaEye,
-  FaTrash,
+  // FaEdit,
+  // FaEye,
+  // FaTrash,
   FaPlus,
   FaUserPlus,
   FaFileInvoice,
@@ -46,8 +46,8 @@ const Items: React.FC = () => {
     : [];
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
-  const [addToCatalog] = useAddToCatalogMutation();
-  const [removeFromCatalog] = useRemoveFromCatalogMutation();
+  // const [addToCatalog] = useAddToCatalogMutation();
+  // const [removeFromCatalog] = useRemoveFromCatalogMutation();
   const [triggerExport] = useLazyExportStoreItemsQuery();
   const [importStoreItems] = useImportStoreItemsMutation();
 
@@ -73,17 +73,17 @@ const Items: React.FC = () => {
     }
   };
 
-  const handleCatalogToggle = async (id: number, isInCatalog: boolean) => {
-    try {
-      if (isInCatalog) {
-        await removeFromCatalog(id).unwrap();
-      } else {
-        await addToCatalog(id).unwrap();
-      }
-    } catch (error) {
-      console.error('Error updating catalog status:', error);
-    }
-  };
+  // const handleCatalogToggle = async (id: number, isInCatalog: boolean) => {
+  //   try {
+  //     if (isInCatalog) {
+  //       await removeFromCatalog(id).unwrap();
+  //     } else {
+  //       await addToCatalog(id).unwrap();
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating catalog status:', error);
+  //   }
+  // };
 
   const handleFilterChange = (field: string, value: string, checked: boolean) => {
     setFilters((prev) => {

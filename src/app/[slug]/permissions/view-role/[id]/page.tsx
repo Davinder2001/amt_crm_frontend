@@ -43,7 +43,7 @@ const ViewRole: React.FC = () => {
           <strong>Permissions:</strong>
           <span>
             {roleData.permissions && roleData.permissions.length > 0
-              ? roleData.permissions.map((perm: { name: any; }) => perm.name).join(', ')
+              ? roleData.permissions.map((perm: { name: string; }) => perm.name).join(', ')
               : 'None'}
           </span>
         </div>

@@ -31,7 +31,9 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
   const { data } = useFetchNotificationsQuery();
 
   // ✅ Calculate unread count
-  const unreadCount = data?.notifications?.filter((n) => !n.read_at)?.length || 0;
+  // If data has a 'notifications' array property, use it; otherwise, adjust as needed
+  const notifications = Array.isArray(data) ? data : data?.notifications || [];
+  const unreadCount = notifications.filter((notification: Notification) => notification.read_at === null).length;
 
   useEffect(() => {
     const mainContent = document.querySelector('.main-content');
@@ -78,13 +80,10 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         <SearchBar />
 
         {/* Notification Icon with Unread Count */}
-        <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="relative">
+        <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="notification-icon"
+        >
           <FaRegBell size={22} color="#009693" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-              {unreadCount}
-            </span>
-          )}
+          {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
         </Link>
         {/* <GoogleTranslate /> */}
 

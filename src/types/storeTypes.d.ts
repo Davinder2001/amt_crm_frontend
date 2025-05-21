@@ -98,7 +98,7 @@ interface CreateStoreItemRequest {
   tax_id: number;
   images: (string | File)[] | File[];
   variants: variations[],
-  categories: Category[]
+  categories: Category[],
 }
 
 type StoreResponse = StoreItem[];

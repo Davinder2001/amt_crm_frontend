@@ -147,7 +147,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     data: {
                         ...rest,
                         business_category_ids: business_categories.map(c => c.id),
-                    } as any // Cast to 'any' or the correct DTO type expected by your API
+                    } as unknown as PackagePlan // Cast to 'any' or the correct DTO type expected by your API
                 }).unwrap();
                 router.back(); // Goes one step back
 

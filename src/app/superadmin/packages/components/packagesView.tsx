@@ -318,7 +318,7 @@
 
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { useDeletePackageMutation, useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
+import { useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
@@ -326,7 +326,7 @@ import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
-  const [deletepackage] = useDeletePackageMutation();
+  // const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
   const categoriesCellRef = useRef<HTMLDivElement | null>(null);

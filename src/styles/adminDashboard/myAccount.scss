@@ -142,6 +142,29 @@
     color: #2980b9;
   }
 
+  .card-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    .view-details-btn {
+      padding: 5px 10px;
+      background-color: $primary-color;
+      border-radius: 8px;
+      font-size: 14px;
+      text-decoration: none;
+      color: $white;
+      border: none;
+      box-shadow: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #027e7c;
+      }
+    }
+  }
+
   .status-badge {
     display: inline-block;
     padding: 4px 8px;

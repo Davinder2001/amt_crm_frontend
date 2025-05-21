@@ -15,6 +15,7 @@ const AdminHome = () => {
     const { data: profile } = useFetchProfileQuery();
     const [sendCompanyId] = useSelectedCompanyMutation();
     const [companies, setCompanies] = useState<Company[]>([]);
+    const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null);
     const { userType, companySlug } = useCompany();
     const router = useRouter();
 
@@ -31,6 +32,8 @@ const AdminHome = () => {
             return;
         }
 
+        setLoadingCompanyId(id); // Set loading state
+
         Cookies.set('company_slug', companySlug, { path: '/' });
         localStorage.setItem('company_slug', encodeStorage(companySlug));
 
@@ -42,6 +45,7 @@ const AdminHome = () => {
         } catch (error) {
             console.error(error);
             toast.error('Failed to select company. Please try again.');
+            setLoadingCompanyId(null); // Reset loading on error
         }
     };
 
@@ -95,10 +99,16 @@ const AdminHome = () => {
                                             <p><strong>Location:</strong> {company.location || "N/A"}</p>
                                         </div>
                                         <div className='company-actions'>
-                                            <button className='btn-action' onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
-                                            }}>Manage</button>
+                                            <button
+                                                className='btn-action'
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
+                                                }}
+                                                disabled={loadingCompanyId === company.id}
+                                            >
+                                                {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
+                                            </button>
                                         </div>
                                     </div>
                                 </Link>

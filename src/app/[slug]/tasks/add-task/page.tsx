@@ -30,9 +30,11 @@ const Page: React.FC = () => {
       const selectedUser = usersData.users.find(
         (user: { id: { toString: () => string; }; }) => user.id.toString() === formData.assignedTo
       );
-      if (selectedUser) {
-        const userRole = selectedUser.roles?.[0]?.name || '';
+      if (selectedUser && Array.isArray(selectedUser.roles) && selectedUser.roles.length > 0) {
+        const userRole = selectedUser.roles[0].name || '';
         setFormData((prev) => ({ ...prev, role: userRole }));
+      } else {
+        setFormData((prev) => ({ ...prev, role: '' }));
       }
     }
   }, [formData.assignedTo, usersData]);
@@ -60,7 +62,7 @@ const Page: React.FC = () => {
 
     try {
 
-     const www= await createTask(newTask).unwrap();
+      const www = await createTask(newTask).unwrap();
       toast.success('Task created successfully');
       router.push(`/${companySlug}/tasks`);
       console.log('werewrwerffwewer', www)
@@ -73,11 +75,11 @@ const Page: React.FC = () => {
   return (
     <form className="task-form" onSubmit={handleSubmit}>
       <button
-              onClick={() => router.back()}
-              className="back-button"
-            >
-              <FaArrowLeft  size={20} color="#fff" />
-            </button>
+        onClick={() => router.back()}
+        className="back-button"
+      >
+        <FaArrowLeft size={20} color="#fff" />
+      </button>
       <div className="add-task-form">
         <div className="form-group">
           <label> Task Name</label>

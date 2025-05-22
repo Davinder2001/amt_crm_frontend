@@ -9,6 +9,13 @@ const vendorApiSlice = storeApiSlice.injectEndpoints({
       }),
       providesTags: ['Vendor'],
     }),
+    fetchVendorById: builder.query<Vendor, number>({
+      query: (id) => ({
+        url: `store/vendors/${id}`,
+        credentials: 'include',
+      }),
+      providesTags: ['Vendor'],
+    }),
     createVendor: builder.mutation<Vendor, CreateVendorRequest>({
       query: (newVendor) => ({
         url: 'store/vendors',
@@ -40,6 +47,7 @@ const vendorApiSlice = storeApiSlice.injectEndpoints({
 
 export const {
   useFetchVendorsQuery,
+  useFetchVendorByIdQuery,
   useCreateVendorMutation,
   useDeleteVendorMutation,
   useUpdateVendorMutation,

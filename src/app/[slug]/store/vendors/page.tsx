@@ -17,8 +17,8 @@ const Page: React.FC = () => {
   const columns = [
     { label: 'ID', key: 'id' as keyof Vendor },
     { label: 'Vendor Name', key: 'vendor_name' as keyof Vendor },
-    { label: 'Created At', key: 'created_at' as keyof Vendor },
-    { label: 'Updated At', key: 'updated_at' as keyof Vendor },
+    { label: 'Vendor Number', key: 'vendor_number' as keyof Vendor },
+    { label: 'Vendor Address', key: 'vendor_address' as keyof Vendor },
     {
       label: 'Actions',
       render: (vendor: Vendor) => (
@@ -36,15 +36,19 @@ const Page: React.FC = () => {
       <Link href={`/${companySlug}/store`} className="back-button">
         <FaArrowLeft size={20} color="#fff" />
       </Link>
-      <ResponsiveTable data={vendors} columns={columns} onDelete={(id: number) => {
-        console.log('Delete attendance with ID:', id);
-      }}
-      onEdit={(id: number) => {
-        console.log('Edit attendance with ID:', id);
-      }}
-      onView={(id: number) => {
-        console.log('View attendance with ID:', id);
-      }}/>
+      <ResponsiveTable
+        data={vendors}
+        columns={columns}
+        onDelete={(id: number) => {
+          console.log('Delete vendor with ID:', id);
+        }}
+        onEdit={(id: number) => {
+          console.log('Edit vendor with ID:', id);
+        }}
+        onView={(id: number) => {
+          console.log('View vendor with ID:', id);
+        }}
+      />
     </>
   );
 };

@@ -1,81 +1,236 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useParams } from 'next/navigation'
-import Image from 'next/image'
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import {
   useViewTaskTimelineQuery,
-  useEndTaskMutation
-} from '@/slices/tasks/taskApi'
+  useEndTaskMutation,
+  useSetReminderMutation,
+  useUpdateReminderMutation,
+  useViewReminderQuery,
+} from '@/slices/tasks/taskApi';
+import { MdAccessTime } from 'react-icons/md';
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
+import Image from 'next/image';
+import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useCompany } from '@/utils/Company';
+import Link from 'next/link';
 
-const ViewPage = () => {
-  const params = useParams()
-  const id = params?.id as string
+const ViewTimeline = () => {
+  const params = useParams();
+  const id = params?.id as string;
+  const router = useRouter();
+  const { companySlug } = useCompany();
 
-  const { data, isLoading, error, refetch } = useViewTaskTimelineQuery(id)
-  const [endTask, { isLoading: isEnding }] = useEndTaskMutation()
+  const { data, isLoading, error, refetch } = useViewTaskTimelineQuery(id);
+  const { data: reminderData, refetch: refetchReminder } = useViewReminderQuery(Number(id));
+  const [endTask, { isLoading: isEnding }] = useEndTaskMutation();
+  const [setReminder] = useSetReminderMutation();
+  const [updateReminder] = useUpdateReminderMutation();
+  const { data: userData } = useFetchProfileQuery();
+  const user = userData?.user;
+
+  const [reminderAt, setReminderAt] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [showReminderForm, setShowReminderForm] = useState(false);
+
+  useEffect(() => {
+    if (reminderData?.reminder) {
+      setReminderAt(reminderData.reminder.reminder_at?.slice(0, 16) || '');
+      setEndDate(reminderData.reminder.end_date?.slice(0, 16) || '');
+    }
+  }, [reminderData]);
+
+  const handleReminderSubmit = async () => {
+    if (!reminderAt || !endDate) {
+      alert('Please provide both dates.');
+      return;
+    }
+
+    try {
+
+      if (reminderData?.reminder) {
+        await updateReminder({
+          taskId: Number(id),
+          reminder_at: reminderAt,
+          end_date: endDate,
+        }).unwrap();
+        alert('Reminder updated.');
+      } else {
+        await setReminder({
+          taskId: Number(id),
+          reminder_at: reminderAt,
+          end_date: endDate,
+        }).unwrap();
+        alert('Reminder set.');
+      }
+
+      refetchReminder();
+      setShowReminderForm(false);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to set/update reminder.');
+    }
+  };
 
   const handleEndTask = async () => {
     try {
-      await endTask(Number(id)).unwrap()
-      alert('Task marked as ended!')
-      refetch()
+      await endTask(Number(id)).unwrap();
+      alert('Task marked as ended!');
+      refetch();
     } catch (err) {
-      alert('Error ending task')
-      console.error(err)
+      alert('Error ending task');
+      console.error(err);
     }
-  }
+  };
 
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error loading task timeline</div>
+  const histories = data?.histories ?? [];
+
+  const renderTimelineItem = (history: TaskHistory) => {
+    const time = new Date(history.created_at);
+    const formattedDate = time.toLocaleDateString();
+    const formattedTime = time.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const LeftSide = () => (
+      <div className="timeline-left">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <strong className="t-date">{formattedDate}</strong>
+          <small className="t-status">{history.status}</small>
+        </div>
+
+        <div className="avatar-wrapper">
+          <div className="avatar">
+            <h3>{user?.name?.charAt(0)}</h3>
+            <Link href={`/${companySlug}/my-account`} className="av-tooltip">
+              <p><strong>Name:</strong> {user?.name}</p>
+              <p><strong>Email:</strong> {user?.email}</p>
+              <p><strong>Phone:</strong> {user?.number}</p>
+              <p><strong>Company:</strong> {user?.company_name}</p>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+
+    return (
+      <React.Fragment key={history.id}>
+        <div className="timeline-item">
+          <LeftSide />
+          <div className="timeline-content">
+            <div className="content-block time-block">
+              {formattedTime}
+              <MdAccessTime size={20} />
+            </div>
+          </div>
+        </div>
+
+        <div className="timeline-item">
+          <LeftSide />
+          <div className="timeline-content">
+            {history.description && (
+              <div className="content-block">
+                <p className="description">{history.description}</p>
+              </div>
+            )}
+            {Array.isArray(history.attachments) && history.attachments.length > 0 && (
+              <div className="content-block attachments">
+                <div className="attachment-list">
+                  {history.attachments.map((img: string, index: number) => (
+                    <Image
+                      key={index}
+                      src={img}
+                      alt={`Attachment ${index}`}
+                      className="attachment-image"
+                      width={200}
+                      height={200}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Task Timeline for ID: {id}</h1>
+    <div className="timeline-container">
+      <div className="timeline-header">
+        <h2>Task Working Timeline</h2>
+        <button onClick={() => setShowReminderForm((prev) => !prev)}>
+          {reminderData?.reminder ? 'Edit Reminder' : 'Set Reminder'}
+        </button>
+      </div>
 
-      {data?.data?.length === 0 ? (
-        <p>No history entries found.</p>
-      ) : (
-        <ul className="space-y-4">
-          {data?.data.map((history: Task) => (
-            <li key={history.id} className="border p-4 rounded shadow-sm">
-              <p><strong>Status:</strong> {history.status}</p>
-              <p><strong>Description:</strong> {history.description}</p>
-              <p><strong>Submitted At:</strong> {new Date(history.created_at).toLocaleString()}</p>
-
-              {history.attachments?.length > 0 && (
-                <div className="mt-2">
-                  <strong>Attachments:</strong>
-                  <div className="flex gap-2 mt-1 flex-wrap">
-                    {history.attachments.map((attachment: Attachment, index: number) => (
-                      <Image
-                        key={index}
-                        src={attachment.url}
-                        alt={`Attachment ${index + 1}`}
-                        width={200}
-                        height={200}
-                        className="object-cover rounded border"
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+      {showReminderForm && (
+        <div className="reminder-form" onClick={() => setShowReminderForm(false)}>
+          <div className="reminder-content" onClick={(e) => e.stopPropagation()}>
+            <h4>{reminderData?.reminder ? 'Update Reminder' : 'Set Reminder'}</h4>
+            <label>
+              Reminder At:
+              <input
+                type="datetime-local"
+                value={reminderAt}
+                onChange={(e) => setReminderAt(e.target.value)}
+              />
+            </label>
+            <label>
+              End Date:
+              <input
+                type="datetime-local"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </label>
+            <button onClick={handleReminderSubmit}>Submit</button>
+          </div>
+        </div>
       )}
 
-      <div className="mt-6">
+      {isLoading ? (
+        <div className="timeline-loading">
+          {[...Array(3)].map((_, idx) => (
+            <div key={idx} className="timeline-item skeleton-item">
+              <div className="timeline-left">
+                <Skeleton circle width={40} height={40} />
+                <Skeleton width={60} height={20} style={{ marginTop: 8 }} />
+              </div>
+              <div className="timeline-content">
+                <Skeleton width={80} height={20} />
+                <Skeleton count={2} height={16} style={{ marginTop: 8 }} />
+                <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
+                  <Skeleton width={200} height={200} />
+                  <Skeleton width={200} height={200} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <p className="error">Error loading task timeline</p>
+      ) : histories.length > 0 ? (
+        histories.map(renderTimelineItem)
+      ) : (
+        <p>No history entries found.</p>
+      )}
+
+      <div className="action-buttons">
+        <button className="button outline" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
         <button
+          className="button primary"
           onClick={handleEndTask}
           disabled={isEnding}
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded disabled:opacity-50"
         >
           {isEnding ? 'Ending Task...' : 'End Task'}
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ViewPage
+export default ViewTimeline;

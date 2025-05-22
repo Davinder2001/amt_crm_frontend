@@ -51,12 +51,12 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-  viewTaskTimeline: builder.query<TasksResponse, string | number>({
-    query: (id) => `tasks/history/${id}`, // correct usage — no quotes around {id}
-    providesTags: ['Task'],
-  }),
+    viewTaskTimeline: builder.query<TasksResponse, string | number>({
+      query: (id) => `tasks/history/${id}`, // correct usage — no quotes around {id}
+      providesTags: ['Task'],
+    }),
 
-    
+
 
     approveHistory: builder.mutation<{ message: string }, number>({
       query: (historyId) => ({
@@ -137,13 +137,35 @@ export const tasksApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Task'],
     }),
-    
+
+    // POST: Set reminder
+    setReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+      query: ({ taskId, ...reminder }) => ({
+        url: `tasks/${taskId}/set-reminder`,
+        method: 'POST',
+        body: reminder,
+      }),
+      invalidatesTags: ['Task'],
+    }),
+
+    // GET: View reminder
+    viewReminder: builder.query<ReminderResponse, number>({
+      query: (taskId) => `tasks/${taskId}/reminder`,
+      providesTags: ['Task'],
+    }),
+
+    // PUT: Update reminder
+    updateReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+      query: ({ taskId, ...reminder }) => ({
+        url: `tasks/${taskId}/update-reminder`,
+        method: 'PUT',
+        body: reminder,
+      }),
+      invalidatesTags: ['Task'],
+    }),
 
   }),
-  overrideExisting: false,
 
-
-  
 });
 
 export const {
@@ -165,5 +187,11 @@ export const {
   useCreatePredefinedTaskMutation,
   useUpdatePredefinedTaskMutation,
   useDeletePredefinedTaskMutation,
-  useEndTaskMutation
+  useEndTaskMutation,
+
+  // reminders
+  useSetReminderMutation,
+  useViewReminderQuery,
+  useUpdateReminderMutation,
+
 } = tasksApi;

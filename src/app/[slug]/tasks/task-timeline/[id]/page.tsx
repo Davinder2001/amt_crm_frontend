@@ -223,8 +223,8 @@ const ViewTimeline = () => {
                 <Skeleton width={80} height={20} />
                 <Skeleton count={2} height={16} style={{ marginTop: 8 }} />
                 <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-                  <Skeleton width={200} height={200} />
-                  <Skeleton width={200} height={200} />
+                  <Skeleton width={200} height={100} />
+                  <Skeleton width={200} height={100} />
                 </div>
               </div>
             </div>

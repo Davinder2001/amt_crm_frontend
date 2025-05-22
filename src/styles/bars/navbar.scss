@@ -485,6 +485,10 @@
 
 @media (max-width:1024px) {
   .header {
+    .header-title {
+      display: none;
+    }
+
     .desktop-header {
       margin: 0px;
 
@@ -504,8 +508,20 @@
 }
 
 @media (max-width:768px) {
-  .header-title {
-    display: none;
+  .profile-container .profile-dropdown .profile-trigger {
+    .profile-avatar {
+      height: 25px;
+      width: 25px;
+    }
+
+    .profile-name {
+      display: none;
+    }
+  }
+
+  a.notification-icon svg {
+    height: 20px;
+    width: 20px;
   }
 
   .container {

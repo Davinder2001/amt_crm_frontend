@@ -103,6 +103,24 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       query: () => "invoices/credits/users",
       providesTags: ["Invoice"],
     }),
+
+
+    payCreditInvoice: builder.mutation<
+      { status: boolean; message: string },
+      { id: number; amount: number }
+    >({
+      query: ({ id, amount }) => ({
+        url: `invoices/credits/${id}/pay`,
+        method: "POST",
+        body: { amount },
+      }),
+      invalidatesTags: ["Invoice"],
+    }),
+
+    getCreditInvoiceById: builder.query<any, number>({
+      query: (id) => `invoices/credits/${id}`,
+    }),
+
   }),
 });
 
@@ -114,7 +132,9 @@ export const {
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,
-  useGetCreditUsersQuery
+  useGetCreditUsersQuery,
+  usePayCreditInvoiceMutation,
+  useGetCreditInvoiceByIdQuery
 } = invoiceApi;
 
 export default invoiceApi;

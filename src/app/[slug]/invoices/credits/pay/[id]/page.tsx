@@ -1,8 +1,11 @@
 import React from 'react'
+import PayCreditForm from '../../../components/payCreditForm'
 
 const Page = () => {
   return (
-    <div>Page</div>
+   <>
+      <PayCreditForm/>
+   </>
   )
 }
 

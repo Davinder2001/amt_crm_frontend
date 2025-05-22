@@ -25,37 +25,39 @@ const AllQuotations = () => {
     }
   };
 
+  const quotations = (data ?? []).slice().reverse(); // 🆕 Reverse order: newest first
+
   return (
     <div className="quotation-wrapper">
       {isLoading && <p>Loading...</p>}
       {error && <p>Failed to load quotations.</p>}
 
-      {(data ?? []).length > 0 ? (
-        <table className="quotation-table">
+      {quotations.length > 0 ? (
+        <table className="quotation-table w-full border-collapse mt-4 text-sm">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Customer</th>
-              <th>Items</th>
-              <th>Actions</th>
+            <tr className="bg-gray-100 text-left">
+              <th className="border px-4 py-2">Sr. No.</th>
+              <th className="border px-4 py-2">Customer Name</th>
+              <th className="border px-4 py-2">Customer Number</th>
+              <th className="border px-4 py-2">Items</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {(data ?? []).map((quotation) => (
+            {quotations.map((quotation, index) => (
               <tr key={quotation.id}>
-                <td>{quotation.id}</td>
-                <td>{quotation.customer_name}</td>
-                <td>{quotation.items?.length ?? 0}</td>
-                <td>
+                <td className="border px-4 py-2">{index + 1}</td>
+                <td className="border px-4 py-2">{quotation.customer_name}</td>
+                <td className="border px-4 py-2">{quotation.customer_number}</td>
+                <td className="border px-4 py-2">{quotation.items?.length ?? 0}</td>
+                <td className="border px-4 py-2">
                   <button
-                    className="quotations-download-btn"
+                    className="quotations-download-btn flex items-center gap-1 text-blue-600 hover:underline"
                     onClick={() => handleDownload(quotation.id || 0)}
                   >
                     <FaDownload />
                     Download PDF
                   </button>
-
-
                 </td>
               </tr>
             ))}

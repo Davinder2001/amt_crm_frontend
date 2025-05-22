@@ -4,11 +4,15 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices/tasks/taskApi';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 
-export default function SubmitTask() {
+interface SubmitTaskProps {
+  onSubmit?: () => void;
+}
+
+export default function SubmitTask({ onSubmit }: SubmitTaskProps) {
   const params = useParams<{ id?: string | string[] }>();
   const idParam = Array.isArray(params.id) ? params.id[0] : params.id;
   const taskId = idParam ?? '';
@@ -57,6 +61,10 @@ export default function SubmitTask() {
       const result = await submitTask({ id: task.id, formData }).unwrap();
       console.log(result);
       toast.success(result.message);
+      // Trigger the onSubmit callback if it's passed
+      if (onSubmit) {
+        onSubmit(); // Call the optional callback
+      }
     } catch (err) {
       console.error(err);
     }
@@ -64,7 +72,6 @@ export default function SubmitTask() {
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: 16 }}>
-      <ToastContainer />
       <h2>Task: {task.name}</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 16 }}>

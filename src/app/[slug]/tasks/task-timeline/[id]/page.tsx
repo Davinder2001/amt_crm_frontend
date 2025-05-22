@@ -16,9 +16,9 @@ import Image from 'next/image';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
-import SubmitTask from '../../submit-task/[id]/page';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
+import SubmitTaskComponent from '../../submit-task/SubmitTaskComponent';
 
 const ViewTimeline = () => {
   const params = useParams();
@@ -256,7 +256,7 @@ const ViewTimeline = () => {
       {showSubmitTask &&
         <div className='timeline-submit-task-wrapper' onClick={() => setShowSubmitTask(false)}>
           <div className="timeline-submit-task-inner" onClick={(e) => e.stopPropagation()}>
-            <SubmitTask onSubmit={handleSubmitTaskComplete} />
+            <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} />
           </div>
         </div>
       }

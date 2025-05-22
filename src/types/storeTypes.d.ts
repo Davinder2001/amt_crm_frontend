@@ -132,6 +132,9 @@ interface UpdateStoreItemRequest {
 
 
 interface Vendor {
+  vendor_address: string;
+  vendor_email: string;
+  vendor_number: number | string;
   id: number;
   company_id: number;
   vendor_name: string;
@@ -142,6 +145,9 @@ type VendorsResponse = Vendor[];
 
 interface CreateVendorRequest {
   vendor_name: string;
+  vendor_number: string | number
+  vendor_email: string
+  vendor_address: string
 }
 
 interface AttributeValue {

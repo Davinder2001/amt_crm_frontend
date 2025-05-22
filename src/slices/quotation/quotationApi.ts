@@ -7,9 +7,13 @@ export interface QuotationItem {
 }
 
 export interface Quotation {
+  customer_number: number | string;
   id?: number;
   customer_name: string;
+  customer_email?: string;
   items: QuotationItem[];
+  tax_percent: number;
+  service_charges: number;
   user_id?: number;
 }
 
@@ -27,13 +31,13 @@ export const quotationApi = qutationCreateApiSlice.injectEndpoints({
     }),
 
     // Add to quotationApi
-  getAllQuotations: builder.query<Quotation[], void>({
-    query: () => ({
-      url: 'quotations',
-      method: 'GET',
+    getAllQuotations: builder.query<Quotation[], void>({
+      query: () => ({
+        url: 'quotations',
+        method: 'GET',
+      }),
+      providesTags: ['Qutation'],
     }),
-    providesTags: ['Qutation'],
-  }),
 
 
     // Generate Quotation PDF

@@ -1,4 +1,6 @@
 interface Task {
+    assigned_to_id: string;
+    assigned_to: string;
     assignedTo: string;
     id: number;
     name: string;

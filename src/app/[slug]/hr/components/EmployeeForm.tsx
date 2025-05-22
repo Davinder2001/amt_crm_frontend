@@ -848,6 +848,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         message="Are you sure you want to clear the form?"
                         onConfirm={handleClearForm}
                         onCancel={() => setShowConfirm(false)}
+                        type="clear"
                     />
                     {mode === "add" && (
                         <span className="clear-button" onClick={() => setShowConfirm(true)}>

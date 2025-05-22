@@ -224,6 +224,7 @@ const ViewUserPage: React.FC = () => {
           message="Are you sure you want to delete this employee profile? This action cannot be undone."
           onConfirm={handleDelete}
           onCancel={() => setShowConfirm(false)}
+          type="delete"
         />
       </div>
     </div>

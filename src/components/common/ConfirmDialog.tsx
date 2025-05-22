@@ -2,51 +2,53 @@
 import React, { useState } from 'react';
 
 interface ConfirmDialogProps {
-    isOpen: boolean;
-    title?: string;
-    message: string;
-    onConfirm: () => Promise<void> | void;
-    onCancel: () => void;
+  isOpen: boolean;
+  title?: string;
+  message: string;
+  onConfirm: () => Promise<void> | void;
+  onCancel: () => void;
+  type: string;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-    isOpen,
-    title = 'Confirm',
-    message,
-    onConfirm,
-    onCancel,
+  isOpen,
+  title = 'Confirm',
+  message,
+  onConfirm,
+  onCancel,
+  type
 }) => {
-    const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-    const handleConfirm = async () => {
-        try {
-            setIsProcessing(true);
-            await onConfirm();
-        } finally {
-            setIsProcessing(false);
-        }
-    };
+  const handleConfirm = async () => {
+    try {
+      setIsProcessing(true);
+      await onConfirm();
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-    return (
-        <>
-            <div className="dialog-overlay">
-                <div className="dialog-box">
-                    <h2 className="dialog-title">{title}</h2>
-                    <p className="dialog-message">{message}</p>
-                    <div className="dialog-actions">
-                        <button className="cancel-btn" onClick={onCancel} disabled={isProcessing}>
-                            Cancel
-                        </button>
-                        <button className="confirm-btn" onClick={handleConfirm} disabled={isProcessing}>
-                            {isProcessing ? 'Deleting...' : 'Confirm'}
-                        </button>
-                    </div>
-                </div>
-            </div>
+  return (
+    <>
+      <div className="dialog-overlay">
+        <div className="dialog-box">
+          <h2 className="dialog-title">{title}</h2>
+          <p className="dialog-message">{message}</p>
+          <div className="dialog-actions">
+            <button className="cancel-btn" onClick={onCancel} disabled={isProcessing}>
+              Cancel
+            </button>
+            <button className="confirm-btn" onClick={handleConfirm} disabled={isProcessing}>
+              {isProcessing ? `${type}ing...` : 'Confirm'}
+            </button>
+          </div>
+        </div>
+      </div>
 
-            <style jsx>{`
+      <style jsx>{`
         .dialog-overlay {
           position: fixed;
           inset: 0;
@@ -91,6 +93,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           border-radius: 4px;
           font-size: 14px;
           cursor: pointer;
+          text-transform: capitalize;
         }
 
         .cancel-btn {
@@ -117,8 +120,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           cursor: not-allowed;
         }
       `}</style>
-        </>
-    );
+    </>
+  );
 };
 
 export default ConfirmDialog;

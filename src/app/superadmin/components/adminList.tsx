@@ -83,6 +83,7 @@ const AdminList = () => {
                 padding: '3px 11px',
                 borderRadius: '50px',
                 fontWeight: 500,
+                cursor: 'pointer',
                 border: `1px solid ${admin.user_status === 'active' ? '#22c55e' : '#ef4444'
                   }`,
                 color: admin.user_status === 'active' ? '#22c55e' : '#ef4444',
@@ -146,7 +147,7 @@ const AdminList = () => {
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
         actions={[]}
-        
+
       />
       <ResponsiveTable
         data={filteredAdmins}

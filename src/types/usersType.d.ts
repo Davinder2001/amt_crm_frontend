@@ -24,6 +24,8 @@ interface MarkNotificationResponse {
 }
 
 interface Admin {
+    user_type: ReactNode;
+    profile_image: string | StaticImport;
     companies: Company[];
     created_at: string | number | Date;
     id: number | string;

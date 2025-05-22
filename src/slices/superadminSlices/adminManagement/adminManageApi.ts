@@ -23,20 +23,29 @@ const adminManageApi = adminCreateSlice.injectEndpoints({
     }),
 
     // GET: Fetch single admin by ID
-    getAdminById: builder.query<Admin, string>({
+    // getAdminById: builder.query<Admin, string>({
+    //   query: (id) => ({
+    //     url: `admins/${id}`,
+    //     credentials: "include",
+    //   }),
+    //   providesTags: ["Admin"],
+    // }),
+
+    getAdminById: builder.query<{ status: string; admin: Admin }, string>({
       query: (id) => ({
         url: `admins/${id}`,
         credentials: "include",
       }),
       providesTags: ["Admin"],
     }),
+
   }),
 });
 
 export const {
   useFetchAdminsQuery,
   useUpdateAdminStatusMutation,
-  useGetAdminByIdQuery, 
+  useGetAdminByIdQuery,
 } = adminManageApi;
 
 export default adminManageApi;

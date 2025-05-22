@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 
-export default function Page() {
+export default function SubmitTask() {
   const params = useParams<{ id?: string | string[] }>();
   const idParam = Array.isArray(params.id) ? params.id[0] : params.id;
   const taskId = idParam ?? '';

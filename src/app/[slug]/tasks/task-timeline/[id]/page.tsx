@@ -16,13 +16,17 @@ import Image from 'next/image';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
+import SubmitTask from '../../submit-task/[id]/page';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { toast } from 'react-toastify';
 
 const ViewTimeline = () => {
   const params = useParams();
   const id = params?.id as string;
   const router = useRouter();
   const { companySlug } = useCompany();
-
+  const [showSubmitTask, setShowSubmitTask] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const { data, isLoading, error, refetch } = useViewTaskTimelineQuery(id);
   const { data: reminderData, refetch: refetchReminder } = useViewReminderQuery(Number(id));
   const [endTask, { isLoading: isEnding }] = useEndTaskMutation();
@@ -44,7 +48,7 @@ const ViewTimeline = () => {
 
   const handleReminderSubmit = async () => {
     if (!reminderAt || !endDate) {
-      alert('Please provide both dates.');
+      toast.error('Please provide both dates.');
       return;
     }
 
@@ -56,31 +60,33 @@ const ViewTimeline = () => {
           reminder_at: reminderAt,
           end_date: endDate,
         }).unwrap();
-        alert('Reminder updated.');
+        toast.success('Reminder updated.');
       } else {
         await setReminder({
           taskId: Number(id),
           reminder_at: reminderAt,
           end_date: endDate,
         }).unwrap();
-        alert('Reminder set.');
+        toast.success('Reminder set.');
       }
 
       refetchReminder();
       setShowReminderForm(false);
     } catch (err) {
       console.error(err);
-      alert('Failed to set/update reminder.');
+      toast.error('Failed to set/update reminder.');
     }
   };
 
   const handleEndTask = async () => {
+    setShowConfirm(true);
     try {
       await endTask(Number(id)).unwrap();
-      alert('Task marked as ended!');
       refetch();
+      setShowConfirm(false);
+      router.push(`/${companySlug}/tasks`)
     } catch (err) {
-      alert('Error ending task');
+      toast.error('Error ending task');
       console.error(err);
     }
   };
@@ -109,7 +115,7 @@ const ViewTimeline = () => {
               <p><strong>Name:</strong> {user?.name}</p>
               <p><strong>Email:</strong> {user?.email}</p>
               <p><strong>Phone:</strong> {user?.number}</p>
-              <p><strong>Company:</strong> {user?.company_name}</p>
+              <p><strong>Company:</strong> {companySlug}</p>
             </Link>
           </div>
         </div>
@@ -160,10 +166,11 @@ const ViewTimeline = () => {
 
   return (
     <div className="timeline-container">
+
       <div className="timeline-header">
-        <h2>Task Working Timeline</h2>
+        <h2>📅 Task Working Timeline</h2>
         <button onClick={() => setShowReminderForm((prev) => !prev)}>
-          {reminderData?.reminder ? 'Edit Reminder' : 'Set Reminder'}
+          {reminderData?.reminder ? '✏️ Edit Reminder' : '⏰ Set Reminder'}
         </button>
       </div>
 
@@ -216,14 +223,47 @@ const ViewTimeline = () => {
       ) : histories.length > 0 ? (
         histories.map(renderTimelineItem)
       ) : (
-        <p>No history entries found.</p>
+        <>
+          {!showSubmitTask ? (
+            <div
+              className="submit-new-task"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: '20px auto',
+              }}
+            >
+              <p style={{ color: '#999' }}>
+                🚫 No timeline history available yet. Updates will appear here as they are logged.
+              </p>
+              <button
+                className="buttons"
+                style={{ marginTop: 20 }}
+                onClick={() => setShowSubmitTask(true)}
+              >
+                Create
+              </button>
+            </div>
+          ) : (
+            <SubmitTask />
+          )}
+        </>
       )}
 
       <div className="action-buttons">
         <button className="button outline" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
+        <ConfirmDialog
+          isOpen={showConfirm}
+          message="Are you sure want to end this Task?"
+          onConfirm={handleEndTask}
+          onCancel={() => setShowConfirm(false)}
+          type="end"
+        />
         <button
           className="button primary"
-          onClick={handleEndTask}
+          onClick={() => setShowConfirm(true)}
           disabled={isEnding}
         >
           {isEnding ? 'Ending Task...' : 'End Task'}

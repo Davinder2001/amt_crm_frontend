@@ -114,6 +114,7 @@ const ViewItem = () => {
           message="Are you sure you want to delete this item?"
           onConfirm={handleDelete}
           onCancel={() => setShowConfirm(false)}
+          type="delete"
         />
       </div>
     </div>

@@ -21,7 +21,7 @@ const VendorCreationPage: React.FC = () => {
       await createVendor({
         vendor_name: vendorName,
         vendor_number: vendorNumber,
-        vendor_email: vendorEmail || null,
+        vendor_email: vendorEmail || '',
         vendor_address: vendorAddress
       }).unwrap();
 

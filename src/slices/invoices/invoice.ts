@@ -107,17 +107,17 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
 
     payCreditInvoice: builder.mutation<
       { status: boolean; message: string },
-      { id: number; amount: number }
+      { id: number; amount: number, note: string }
     >({
-      query: ({ id, amount }) => ({
+      query: ({ id, amount, note }) => ({
         url: `invoices/credits/${id}/pay`,
         method: "POST",
-        body: { amount },
+        body: { amount, note },
       }),
       invalidatesTags: ["Invoice"],
     }),
 
-    getCreditInvoiceById: builder.query<any, number>({
+    getCreditInvoiceById: builder.query<{ status: boolean; message: string }, number>({
       query: (id) => `invoices/credits/${id}`,
     }),
 

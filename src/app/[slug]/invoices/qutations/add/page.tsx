@@ -41,11 +41,9 @@ const Page = () => {
     await createQuotation({
       customer_name: customerName,
       customer_number: customerNumber,
-      customer_email: customerEmail || null,
+      customer_email: customerEmail || undefined,
       tax_percent: taxPercent,
-      tax_amount: taxAmount,
       service_charges: serviceCharges,
-      total,
       items,
     });
 

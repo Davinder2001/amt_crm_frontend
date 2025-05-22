@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaCog, FaSignOutAlt, FaChevronDown } from "react-icons/fa";
+import { FaUser, FaCog, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
@@ -128,6 +128,14 @@ const Profile: React.FC = () => {
                 >
                   <FaUser className="menu-icon" />
                   <span>My Account</span>
+                </Link>
+                <Link
+                  href={`${basePath}/my-account/billings`}
+                  onClick={() => setIsOpen(false)}
+                  className="menu-item"
+                >
+                  <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
+                  <span>Billing</span>
                 </Link>
                 <Link
                   href={`${basePath}/settings`}

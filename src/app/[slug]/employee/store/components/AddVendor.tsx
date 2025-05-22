@@ -45,7 +45,12 @@ const AddVendor: React.FC<AddVendorProps> = ({
     if (!trimmed) return;
 
     try {
-      await createVendor({ vendor_name: trimmed }).unwrap();
+      await createVendor({
+        vendor_name: trimmed,
+        vendor_number: '',
+        vendor_email: '',
+        vendor_address: ''
+      }).unwrap();
       onVendorAdded(trimmed);
       onVendorSelect(trimmed);
       setNewVendor('');

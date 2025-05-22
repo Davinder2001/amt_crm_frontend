@@ -90,8 +90,8 @@
 // }
 .packages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 
     .package-card {
         position: relative;
@@ -101,7 +101,6 @@
         box-shadow: $box-shadow;
         overflow: hidden;
         border-top: 2px solid $primary-color;
-        max-width: 330px;
         width: 100%;
 
         .ribbon {

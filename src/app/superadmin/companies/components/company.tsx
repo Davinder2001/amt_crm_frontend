@@ -62,7 +62,7 @@ const CompanyComponent = () => {
   };
 
   const handleVerificationChange = async (id: number, status: string) => {
-    try {
+    try { 
       await verifyStatus(String(id)).unwrap();
       setCompanies((prev) =>
         prev.map((company) =>

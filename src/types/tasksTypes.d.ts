@@ -29,8 +29,33 @@ interface Attachment {
     type?: string;
 }
 
+interface TaskHistory {
+    id: string;
+    task_id: string
+    status: string;
+    description: string;
+    attachments: string[];
+    created_at: string
+}
+
+interface Reminder {
+    id: number;
+    user_id: number;
+    task_id: number;
+    reminder_at: string;
+    end_date: string;
+    created_at: string;
+    updated_at: string;
+}
+
+interface ReminderResponse {
+    message: string;
+    reminder: Reminder;
+}
+
 interface TasksResponse {
     data: Task[];
+    histories: TaskHistory[];
 }
 
 interface PredefinedTask {

@@ -602,6 +602,7 @@ const AddEmployeeForm: React.FC = () => {
             message="Are you sure you want to clear the form?"
             onConfirm={handleClearForm}
             onCancel={() => setShowConfirm(false)}
+            type="clear"
           />
           <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
         </form>

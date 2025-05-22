@@ -9,7 +9,25 @@ const PayCreditForm: React.FC = () => {
     const params = useParams();
     const id = Number(params?.id);
 
-    const { data, isLoading: isFetching } = useGetCreditInvoiceByIdQuery(id);
+    type CustomerCredit = {
+        id: number;
+        name: string;
+        number: string;
+        credits: {
+            invoice_number: string;
+            invoice_date: string;
+            final_amount: number;
+        }[];
+        total_due: number;
+    };
+
+    type CreditInvoiceResponse = {
+        status: boolean;
+        message: string;
+        customer?: CustomerCredit;
+    };
+
+    const { data, isLoading: isFetching } = useGetCreditInvoiceByIdQuery(id) as { data: CreditInvoiceResponse, isLoading: boolean };
     const [payCreditInvoice, { isLoading: isPaying }] = usePayCreditInvoiceMutation();
     const [amount, setAmount] = useState<number>(0);
     const [note, setNote] = useState<string>('');
@@ -27,8 +45,8 @@ const PayCreditForm: React.FC = () => {
             toast.success(res.message || 'Payment successful!');
             setAmount(0);
             setNote('');
-        } catch (error: any) {
-            toast.error(error?.data?.message || 'Payment failed');
+        } catch {
+            toast.error('Payment failed');
         }
     };
 
@@ -57,7 +75,7 @@ const PayCreditForm: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {customer.credits.map((credit: any, index: number) => (
+                            {customer.credits.map((credit, index: number) => (
                                 <tr key={index}>
                                     <td className="border px-3 py-2">{index + 1}</td>
                                     <td className="border px-3 py-2">{credit.invoice_number}</td>

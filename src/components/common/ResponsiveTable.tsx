@@ -242,6 +242,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           setShowConfirmDialog(false);
           setDeleteTargetId(null);
         }}
+        type="delete"
       />
     </div>
   );

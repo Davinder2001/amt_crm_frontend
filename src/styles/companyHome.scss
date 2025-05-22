@@ -163,7 +163,6 @@
     font-weight: $font-weight-semi-bold;
     padding: 3px 10px;
     border-radius: 10px;
-    color: white;
     text-transform: capitalize;
     display: inline-flex;
     align-items: center;
@@ -188,9 +187,15 @@
         color: darken($warning-color, 15%);
     }
 
-    &.unverified {
+    &.rejected {
         background: rgba($danger-color, 0.12);
         color: $danger-color;
+    }
+
+    &.block {
+        background: rgba($gray-color, 0.12);
+        color: darken($gray-color, 15%);
+        cursor: not-allowed;
     }
 }
 

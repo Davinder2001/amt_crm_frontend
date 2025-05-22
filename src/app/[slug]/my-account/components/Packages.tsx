@@ -2,6 +2,7 @@
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 
 interface PackagesProps {
     plans: PackagePlan[];
@@ -60,8 +61,8 @@ const Packages: React.FC<PackagesProps> = ({
 
             {/* Category Filter Dropdown */}
             <div className="account-packages-header">
-                <Link href={`/${companySlug}/my-account`} className="back-button">
-                    ← Back
+                <Link href={`/${companySlug}/my-account`} className='back-button'>
+                    <FaArrowLeft size={16} color='#fff' />
                 </Link>
                 <div className="category-filter" style={{ marginBottom: '2rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}>
                     <label htmlFor="category-select">Filter by Category:</label>

@@ -1,23 +1,73 @@
 @use '../variables' as *;
 
+// All Task styling start here
+.store-t-e-e-icons {
+  display: flex;
+  justify-content: space-around;
+
+  .table-e-d-v-buttons {
+    cursor: pointer;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: center;
+    transition: background-color .3s;
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+    border: unset;
+    background-color: unset;
+  }
+
+  .edit-button {
+    color: $success-color;
+
+    &:hover {
+      background-color: rgba(0, 128, 0, 0.1); // Light green background on hover
+    }
+  }
+
+  .delete-button {
+    color: $danger-color;
+
+    &:hover {
+      background-color: rgba(255, 0, 0, 0.1); // Light red background on hover
+    }
+  }
+}
+
+
+
+
+
+// All Task styling end here
+
+
+
+
+
+
 .task-form {
   width: 100%;
-  background: linear-gradient(135deg, #f9f9f9, #ffffff);
+  background-color: $white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: $box-shadow;
 
   .add-task-form {
     display: grid;
-    grid-template-columns:repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     column-gap: 15px;
     row-gap: 10px;
-    background-color: $white;
-  padding: 20px;
 
     .form-group {
       display: flex;
       flex-direction: column;
-      .buttons{
+
+      .buttons {
         padding: 8px 22px !important;
       }
+
       label {
         font-weight: 600;
         margin-bottom: 0.5rem;
@@ -30,15 +80,16 @@
       textarea {
         padding: 10px;
         border: 1px solid #00969357;
-        border-radius:10px;
+        border-radius: 10px;
         font-size: 1rem;
         transition: all 0.3s ease;
+
         &:focus {
           border-color: #009693;
           background: #ffffff;
           transform: scale(1);
         }
-        
+
       }
 
       /* Description (textarea full width) */
@@ -49,12 +100,16 @@
 
 
 
-      .buttons.off ,.buttons.on {
+      .buttons.off,
+      .buttons.on {
         width: 100px;
-    }
+      }
     }
 
-    
+    .update-outer {
+      display: flex;
+      justify-content: flex-end;
+    }
 
     /* Action Buttons */
     .form-actions {
@@ -62,15 +117,15 @@
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
-       margin-top: 2rem;
-    margin-bottom: 20px;
-      
+      margin-top: 2rem;
+      margin-bottom: 20px;
 
-      
-      
+
+
+
     }
   }
-  
+
 
 
 
@@ -79,19 +134,77 @@
 
 
 
-  /* Responsive */
-  @media (max-width: 768px) {
-    .add-task-form {
-      grid-template-columns: 1fr;
-    }
 
-    .add-task-form .form-group textarea {
-      grid-column: span 1;
-    
+
+// task View styling start here 
+
+.view-task-actions-container {
+  display: flex;
+  justify-content: space-between;
+
+
+  .view-task-check-icon,
+  .view-times-check-icon {
+    cursor: pointer;
+    border-radius: 9999px;
+    justify-content: center;
+    align-items: center;
+    transition: background-color .3s;
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+
+    /* font-size: 13px; */
+  }
+
+  .view-task-check-icon:hover {
+    background-color: rgba(0, 128, 0, 0.1); // Light green background on hover
+  }
+
+  .view-times-check-icon:hover {
+    background-color: rgba(255, 0, 0, 0.1); // Light red background on hover
+  }
+
+
+  button {
+    background-color: unset;
+    border: unset;
+  }
+
+  .view-task-check-icon{
+color: $success-color;
+  }
+  .view-times-check-icon{
+color: $danger-color;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+// task View styling End here 
+
+/* Responsive */
+@media (max-width: 768px) {
+  .add-task-form {
+    grid-template-columns: 1fr;
+  }
+
+  .add-task-form .form-group textarea {
+    grid-column: span 1;
+
 
     .add-task-form .form-actions {
       flex-direction: column;
       align-items: stretch;
     }
-  }}
-
+  }
+}

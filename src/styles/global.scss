@@ -131,7 +131,7 @@
 }
 
 body {
-    background-color: #F1F9F9;
+    background-color: var(--body-color);
 
     .content-area {
         margin: 0px 10px;

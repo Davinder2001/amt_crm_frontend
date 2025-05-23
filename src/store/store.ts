@@ -75,6 +75,7 @@ const store = configureStore({
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
       .concat(businesscategoryCreateApiSlice.middleware)
+       .concat(billingCreateApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

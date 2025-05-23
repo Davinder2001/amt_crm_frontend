@@ -32,7 +32,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     actions,
     downloadActions,
 }) => {
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [selectedFilters, setSelectedFilters] = useState<FilterOptions>(() => {
         const savedFilters = localStorage.getItem('selectedFilters');
         return savedFilters ? JSON.parse(savedFilters) : {};
@@ -45,14 +44,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             return columns?.map(col => col.key) || []; // Default to all columns being visible
         }
     });
-    // const [loading, setLoading] = useState(false);
 
-    // Toggling dropdown visibility
-    const toggleDropdown = (name: string) => {
-        setOpenDropdown(openDropdown === name ? null : name);
-    };
-
-    const closeDropdown = () => setOpenDropdown(null);
 
     // Handle filter changes
     const handleFilterChange = (field: string, value: string, checked: boolean) => {
@@ -114,56 +106,60 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     }, []);
 
     return (
-        <div className="toolbar" onMouseLeave={closeDropdown}>
+        <div className="toolbar">
             {/* Left Side: Filter */}
             <div className="left-group">
-                <div className="dropdown dropdown-left hover-group">
-                    <button className="toolbar-btn">
-                        <FiFilter />
-                        <span className='hide-mobile'>Filter</span>
-                    </button>
-                    <div className="dropdown-content">
-                        {Object.entries(filters ?? {}).map(([field, options]) => (
-                            <div key={field} className="section">
-                                <p className="title">{field}</p>
-                                {options.map((opt) => (
-                                    <label key={opt} className="option">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedFilters[field]?.includes(opt) || false}
-                                            onChange={(e) =>
-                                                handleFilterChange(field, opt, e.target.checked)
-                                            }
-                                        />
-                                        {opt}
-                                    </label>
-                                ))}
-                            </div>
-                        ))}
+                {filters && Object.keys(filters).length > 0 && (
+                    <div className="dropdown dropdown-left hover-group">
+                        <button className="toolbar-btn">
+                            <FiFilter />
+                            <span className='hide-mobile'>Filter</span>
+                        </button>
+                        <div className="dropdown-content">
+                            {Object.entries(filters ?? {}).map(([field, options]) => (
+                                <div key={field} className="section">
+                                    <p className="title">{field}</p>
+                                    {options.map((opt) => (
+                                        <label key={opt} className="option">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedFilters[field]?.includes(opt) || false}
+                                                onChange={(e) =>
+                                                    handleFilterChange(field, opt, e.target.checked)
+                                                }
+                                            />
+                                            {opt}
+                                        </label>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Right Side: Columns & Actions */}
             <div className="right-group">
-                <div className="dropdown dropdown-right hover-group">
-                    <button className="toolbar-btn">
-                        <FiColumns />
-                        <span>Columns</span>
-                    </button>
-                    <div className="dropdown-content">
-                        {columns?.map((col) => (
-                            <label key={col.key} className="option">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedColumns.includes(col.key)}
-                                    onChange={() => handleColumnToggle(col.key)}
-                                />
-                                {col.label}
-                            </label>
-                        ))}
+                {columns && columns.length > 0 && (
+                    <div className="dropdown dropdown-right hover-group">
+                        <button className="toolbar-btn">
+                            <FiColumns />
+                            <span>Columns</span>
+                        </button>
+                        <div className="dropdown-content">
+                            {columns?.map((col) => (
+                                <label key={col.key} className="option">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedColumns.includes(col.key)}
+                                        onChange={() => handleColumnToggle(col.key)}
+                                    />
+                                    {col.label}
+                                </label>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
                 {/* Reset Button */}
                 {/* <div className="reset-group">
                     <button
@@ -199,23 +195,24 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     )}
                 </div> */}
-
-                <div className="dropdown dropdown-right hover-group">
-                    <button className="toolbar-btn">
-                        <FiSettings />
-                        <span className="hide-mobile">Download</span>
-                    </button>
-                    <div className="dropdown-content">
-                        <ul className="action-list">
-                            {downloadActions && downloadActions.map((action, i) => (
-                                <li key={i} onClick={action.onClick} className="action-item">
-                                    {action.icon && <span className="a-icon">{action.icon}</span>}
-                                    <span>{action.label}</span>
-                                </li>
-                            ))}
-                        </ul>
+                {downloadActions && downloadActions.length > 0 && (
+                    <div className="dropdown dropdown-right hover-group">
+                        <button className="toolbar-btn">
+                            <FiSettings />
+                            <span className="hide-mobile">Download</span>
+                        </button>
+                        <div className="dropdown-content">
+                            <ul className="action-list">
+                                {downloadActions.map((action, i) => (
+                                    <li key={i} onClick={action.onClick} className="action-item">
+                                        {action.icon && <span className="a-icon">{action.icon}</span>}
+                                        <span>{action.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div className="action-icons-horizontal">
                     {actions && actions.map((action, i) => (

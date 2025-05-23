@@ -282,7 +282,7 @@
 
 
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useParams } from 'next/navigation';
 import { useFetchSingleCompanyQuery } from '@/slices/superadminSlices/company/companyApi';
@@ -290,6 +290,7 @@ import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaEdit, FaTrashAlt, FaFileAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
+import companylogo from './companylogo.jpg'
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -334,23 +335,25 @@ const ViewCompanyPage = () => {
         {/* Header Section */}
         <div className="vc-modern-header">
           <div className="vc-header-main">
-            {/* Logo Section */}
-            {company.Company_logo && (
-              <div className="vc-company-logo-wrapper">
-                <Image
-                  src={`/${company.Company_logo}`}
-                  alt="Company Logo"
-                  width={80}
-                  height={80}
-                  className="vc-company-logo"
-                />
-              </div>
-            )}
-            <div className="vc-header-text">
-              <h1 className="vc-company-name">{company.company_name}</h1>
-              <div className="vc-company-meta">
-                <span className="vc-company-id">ID: {company.company_id}</span>
-                <span className="vc-company-slug">Slug: {company.company_slug}</span>
+            <div className="vc-company-logo">
+              <Image
+                src={company.Company_logo && company.Company_logo.trim() !== '' ? `/${company.Company_logo}` : '/companylogo.jpg'}
+                alt={`${company.company_name} Logo`}
+                width={86}
+                height={86}
+                style={{ objectFit: 'cover', borderRadius: '50%' }}
+                priority
+              />
+
+              <div className="vc-header-text">
+                <div className="vc-company-header">
+                  <h1 className="vc-company-name">{company.company_name}</h1>
+
+                </div>
+                <div className="vc-company-meta">
+                  <span className="vc-company-id">ID: {company.company_id}</span>
+                  <span className="vc-company-slug">Slug: {company.company_slug}</span>
+                </div>
               </div>
             </div>
             <div className="vc-status-container">

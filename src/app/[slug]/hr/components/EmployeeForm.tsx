@@ -60,7 +60,7 @@
 //     profilePicture: "",
 //     idProofType: "",
 //     idProofValue: "",
-//     idProofImage: null as File | null,
+//     utility_bill_image: null as File | null,
 // });
 
 // interface EmployeeFormProps {
@@ -181,7 +181,7 @@
 //                     return 'Invalid PAN format (e.g., ABCDE1234F)';
 //                 break;
 
-//             case 'idProofImage':
+//             case 'utility_bill_image':
 //                 if (formData.idProofType === 'bill' && !value)
 //                     return 'Utility bill image is required';
 //                 break;
@@ -228,7 +228,7 @@
 //         // Personal Info
 //         ['name', 'number', 'address', 'nationality', 'dob', 'religion',
 //             'maritalStatus', 'emergencyContact', 'emergencyContactRelation',
-//             'idProofType', 'idProofValue', 'idProofImage'],
+//             'idProofType', 'idProofValue', 'utility_bill_image'],
 
 //         // Job Info
 //         ['email', 'password', 'salary', 'currentSalary', 'dateOfHire',
@@ -607,13 +607,13 @@
 //                                                 ...prev,
 //                                                 idProofType: e.target.value,
 //                                                 idProofValue: "", // reset previous input
-//                                                 idProofImage: null,
+//                                                 utility_bill_image: null,
 //                                             }));
 //                                             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
 //                                                 ...formData,
 //                                                 idProofType: e.target.value,
 //                                                 idProofValue: "",
-//                                                 idProofImage: null,
+//                                                 utility_bill_image: null,
 //                                             }))
 //                                         }}
 //                                     >
@@ -665,21 +665,21 @@
 
 //                                 {formData.idProofType === "bill" && (
 //                                     <div className="employee-field">
-//                                         <label htmlFor="idProofImage"><FaUpload /> Utility Bill</label>
+//                                         <label htmlFor="utility_bill_image"><FaUpload /> Utility Bill</label>
 //                                         <input
 //                                             type="file"
 //                                             accept="image/*"
-//                                             name="idProofImage"
+//                                             name="utility_bill_image"
 //                                             onChange={(e) => {
 //                                                 const file = e.target.files?.[0] || null;
 //                                                 setFormData((prev) => {
-//                                                     const updated = { ...prev, idProofImage: file };
+//                                                     const updated = { ...prev, utility_bill_image: file };
 //                                                     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
 //                                                     return updated;
 //                                                 });
 //                                             }}
 //                                         />
-//                                         {errors.idProofImage && <div className="error-message">{errors.idProofImage}</div>}
+//                                         {errors.utility_bill_image && <div className="error-message">{errors.utility_bill_image}</div>}
 //                                     </div>
 //                                 )}
 
@@ -961,7 +961,7 @@ const getDefaultEmployeeForm = () => ({
     profilePicture: "",
     idProofType: "",
     idProofValue: "",
-    idProofImage: null as File | null,
+    utility_bill_image: null as File | null,
 });
 
 interface EmployeeFormProps {
@@ -1091,7 +1091,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                     return 'Invalid PAN format (e.g., ABCDE1234F)';
                 break;
 
-            case 'idProofImage':
+            case 'utility_bill_image':
                 if (formData.idProofType === 'bill' && !value)
                     return 'Utility bill image is required';
                 break;
@@ -1138,7 +1138,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         // Personal Info
         ['name', 'number', 'address', 'nationality', 'dob', 'religion',
             'maritalStatus', 'emergencyContact', 'emergencyContactRelation',
-            'idProofType', 'idProofValue', 'idProofImage'],
+            'idProofType', 'idProofValue', 'utility_bill_image'],
 
         // Job Info
         ['email', 'password', 'salary', 'currentSalary', 'dateOfHire',
@@ -1259,8 +1259,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 }
                 await createEmployee(formData).unwrap();
                 toast.success("Employee created successfully!");
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-                setFormData(getDefaultEmployeeForm());
+                // localStorage.removeItem(LOCAL_STORAGE_KEY);
+                // setFormData(getDefaultEmployeeForm());
             } else if (mode === "edit" && employeeId) {
                 const changedFields = getChangedFields(originalData, formData);
                 await updateEmployee({ id: employeeId, ...changedFields }).unwrap();
@@ -1517,13 +1517,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                 ...prev,
                                                 idProofType: e.target.value,
                                                 idProofValue: "", // reset previous input
-                                                idProofImage: null,
+                                                utility_bill_image: null,
                                             }));
                                             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
                                                 ...formData,
                                                 idProofType: e.target.value,
                                                 idProofValue: "",
-                                                idProofImage: null,
+                                                utility_bill_image: null,
                                             }))
                                         }}
                                     >
@@ -1575,23 +1575,23 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
                                 {formData.idProofType === "bill" && (
                                     <div className="employee-field">
-                                        <RequiredLabel htmlFor="idProofImage">
+                                        <RequiredLabel htmlFor="utility_bill_image">
                                             <FaUpload /> Utility Bill
                                         </RequiredLabel>
                                         <input
                                             type="file"
                                             accept="image/*"
-                                            name="idProofImage"
+                                            name="utility_bill_image"
                                             onChange={(e) => {
                                                 const file = e.target.files?.[0] || null;
                                                 setFormData((prev) => {
-                                                    const updated = { ...prev, idProofImage: file };
+                                                    const updated = { ...prev, utility_bill_image: file };
                                                     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                                     return updated;
                                                 });
                                             }}
                                         />
-                                        {errors.idProofImage && <div className="error-message">{errors.idProofImage}</div>}
+                                        {errors.utility_bill_image && <div className="error-message">{errors.utility_bill_image}</div>}
                                     </div>
                                 )}
 
@@ -1711,13 +1711,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                     </RequiredLabel>
                                     <input
                                         type="file"
-                                        name="AddressProof"
+                                        name="addressProof_image"
                                         accept="image/*"
                                         onChange={handleChange}
                                         className="file-input"
                                     />
-                                    {errors.AddressProof && (
-                                        <div className="error-message">{errors.AddressProof}</div>
+                                    {errors.addressProof_image && (
+                                        <div className="error-message">{errors.addressProof_image}</div>
                                     )}
                                 </div>
                                 <div className="employee-field">

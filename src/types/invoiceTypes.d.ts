@@ -1,4 +1,5 @@
 interface InvoiceItem {
+  tax_rate: ReactNode;
   id: number;
   item_id: number | null;
   invoice_id?: number;
@@ -31,6 +32,8 @@ interface InvoiceCredit {
 }
 
 interface Invoice {
+  [x: string]: ReactNode;
+  client_phone: ReactNode;
   id: number;
   invoice_number: string;
   client_name: string;

@@ -61,28 +61,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
               <li
                 key={path}
                 className="menu-item"
-                style={{ backgroundColor: isActive ? "#F1F9F9" : "", position: "relative" }}
+                style={{ backgroundColor: isActive ? "#F1F9F9" : ""}}
                 onClick={openMenu}
               >
                 <Link href={fullPath} className="menu-link">
-                  <span className="menu-icon" style={{ color: isActive ? "#009693" : "#222" }}>
+                  <span className="menu-icon">
                     {icon}
                   </span>
                   {isSidebarExpanded && <span className="menu-text">{name}</span>}
                 </Link>
                 {!isSidebarExpanded && <div className="tooltip">{name}</div>}
                 {isActive && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      width: "3px",
-                      height: "100%",
-                      backgroundColor: "#009693",
-                      borderRadius: "2px",
-                    }}
-                  />
+                  <span className="active-indicator"/>
                 )}
               </li>
             );

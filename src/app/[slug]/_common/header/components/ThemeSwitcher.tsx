@@ -18,11 +18,13 @@ const ThemeSwitcher = () => {
 
     return (
         <div className="theme-switcher-menu-item">
-            <FaPalette className="menu-icon" />
-            <span>Theme</span>
-            <select 
-                value={currentTheme} 
-                onChange={handleThemeChange} 
+            <div className="theme-switcher-icon">
+                <FaPalette className="menu-icon" />
+                <span>Theme</span>
+            </div>
+            <select
+                value={currentTheme}
+                onChange={handleThemeChange}
                 className="theme-select"
                 aria-label="Select theme"
             >

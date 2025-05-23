@@ -44,6 +44,7 @@
         li {
             font-size: 18px;
             padding: 5px 20px;
+            position: relative;
 
             span.menu-icon {
                 display: flex;
@@ -60,6 +61,24 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+            }
+
+            .active-indicator {
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 2px;
+                height: 100%;
+                background-color: var(--primary-color);
+                border-radius: 2px;
+            }
+
+            &.active {
+                color: var(--primary-color);
+
+                svg {
+                    color: var(--primary-color);
+                }
             }
         }
     }

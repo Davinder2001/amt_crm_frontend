@@ -36,7 +36,7 @@
     background-size: 14px;
     transition: border-color 0.3s, box-shadow 0.3s;
     &:focus {
-      border-color: #009693;
+      border-color: var(--primary-color);
       background: #ffffff;
       transform: scale(1);
     }
@@ -47,7 +47,7 @@
     width: 100%;
     padding: 10px 14px;
     border-radius: 8px;
-    border: 1px solid $primary-color;
+    border: 1px solid var(--primary-color);
     font-size: 14px;
     background: #f9f9f9;
     transition: border-color 0.3s;

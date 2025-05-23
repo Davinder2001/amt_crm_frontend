@@ -58,7 +58,7 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: #009693;
+            background: var(--primary-color);
             transform: translateX(-50%);
             transition: width 0.3s ease;
         }
@@ -153,7 +153,7 @@
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 8px;
-            color: #009693;
+            color: var(--primary-color);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: flex;
@@ -165,7 +165,7 @@
                 display: block;
                 width: 4px;
                 height: 4px;
-                background: #009693;
+                background: var(--primary-color);
                 border-radius: 50%;
             }
         }
@@ -183,7 +183,7 @@
             }
 
             input[type="checkbox"] {
-                accent-color: #009693;
+                accent-color: var(--primary-color);
                 width: 16px;
                 height: 16px;
             }
@@ -218,7 +218,7 @@
 
                 &:hover {
                     background: rgba(0, 150, 147, 0.08);
-                    color: #009693;
+                    color: var(--primary-color);
                 }
             }
         }
@@ -254,7 +254,7 @@
     // Loading spinner
     .loading-spinner {
         border: 2px solid rgba(0, 150, 147, 0.2);
-        border-top: 2px solid #009693;
+        border-top: 2px solid var(--primary-color);
         border-radius: 50%;
         width: 16px;
         height: 16px;
@@ -453,7 +453,7 @@ table {
         padding: 0 12px;
         border: none;
         background: transparent;
-        color: #009693;
+        color: var(--primary-color);
         border-radius: 50%;
         cursor: pointer;
         font-size: 14px;
@@ -497,7 +497,7 @@ table {
         }
 
         &.active {
-            background: linear-gradient(135deg, #009693, #00c9c5);
+            background: linear-gradient(135deg, var(--primary-color), #00c9c5);
             color: white;
             box-shadow: 0 4px 8px rgba(0, 201, 197, 0.3);
 
@@ -518,7 +518,7 @@ table {
         &::before {
             content: '•';
             margin: 0 8px;
-            color: #009693;
+            color: var(--primary-color);
         }
     }
 

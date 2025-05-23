@@ -31,7 +31,7 @@
     font-size: 22px;
     font-weight: bold;
     color: transparent;
-    background: linear-gradient(90deg, #009693, #006d6c);
+    background: linear-gradient(90deg, var(--primary-color), #006d6c);
     -webkit-background-clip: text;
     background-clip: text;
     text-shadow:
@@ -90,7 +90,7 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    color: #009693;
+    color: var(--primary-color);
 
   }
 
@@ -102,10 +102,10 @@
     font-size: $font-size-small;
     width: 100%;
     padding: 5px;
-    color: $primary-color;
+    color: var(--primary-color);
 
     &::placeholder {
-      color: $primary-color;
+      color: var(--primary-color);
     }
   }
 
@@ -165,7 +165,7 @@
   height: 100%;
 
   .login-btn {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
@@ -175,7 +175,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
     &:hover {
-      background-color: darken($primary-color, 5%);
+      background-color: rgba(var(--primary-color), 5%);
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
@@ -205,7 +205,7 @@
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #009693, #00c9b7);
+        background: linear-gradient(135deg, var(--primary-color), #00c9b7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -255,7 +255,7 @@
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #009693, #00c9b7);
+          background: linear-gradient(135deg, var(--primary-color), #00c9b7);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -308,10 +308,10 @@
 
           &:hover {
             background-color: rgba(0, 0, 0, 0.03);
-            color: $primary-color;
+            color: var(--primary-color);
 
             .menu-icon {
-              color: $primary-color;
+              color: var(--primary-color);
             }
           }
         }
@@ -382,7 +382,7 @@
   }
 
   .title {
-    color: #009693;
+    color: var(--primary-color);
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -412,13 +412,13 @@
     transition: border-color .3s ease, box-shadow .3s ease;
 
     &:focus-within {
-      box-shadow: 0 0 6px $primary-color(138, 43, 226, .3);
-      border-color: $primary-color;
+      box-shadow: 0 0 6px var(--primary-color)(138, 43, 226, .3);
+      border-color: var(--primary-color);
     }
   }
 
   .icon {
-    color: $primary-color;
+    color: var(--primary-color);
     font-size: 20px;
   }
 
@@ -446,7 +446,7 @@
     font-size: 14px;
     border-radius: 8px;
     border: none;
-    background: linear-gradient(135deg, $primary-color, darken($primary-color, 8%));
+    background: linear-gradient(135deg, var(--primary-color), rgba(var(--primary-color), 8%));
     color: #fff;
     font-weight: 600;
     cursor: pointer;

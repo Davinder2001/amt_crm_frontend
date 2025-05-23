@@ -39,7 +39,7 @@
         border-radius: 10px;
   
         &:focus {
-          border-color: $primary-color;
+          border-color: var(--primary-color);
           outline: none;
         }
       }

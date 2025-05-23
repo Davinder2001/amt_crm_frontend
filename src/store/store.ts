@@ -20,10 +20,12 @@ import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
 import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
 import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
+import themeReducer from '@/slices/theme/themeSlice';
 
 
 const store = configureStore({
   reducer: {
+    theme: themeReducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
     [employeCreateApiSlice.reducerPath]: employeCreateApiSlice.reducer,

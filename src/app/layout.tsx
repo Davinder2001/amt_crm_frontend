@@ -6,6 +6,7 @@ import { UserProvider } from "@/provider/UserContext";
 import { BreadcrumbProvider } from "@/provider/BreadcrumbContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ThemeProvider from '@/provider/themeContext';
 
 export const metadata: Metadata = {
   title: "AMT CRM",
@@ -27,11 +28,13 @@ export default function RootLayout({
       <body>
         <ToastContainer autoClose={1500} style={{ zIndex: '999999999999999' }} />
         <Provider>
-          <BreadcrumbProvider>
-            <UserProvider>
-              <LayoutWrapper>{children}</LayoutWrapper>
-            </UserProvider>
-          </BreadcrumbProvider>
+          <ThemeProvider>
+            <BreadcrumbProvider>
+              <UserProvider>
+                <LayoutWrapper>{children}</LayoutWrapper>
+              </UserProvider>
+            </BreadcrumbProvider>
+          </ThemeProvider>
         </Provider>
       </body>
     </html>

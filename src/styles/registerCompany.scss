@@ -437,7 +437,7 @@ form .clear-button {
         border: none;
 
         &:hover {
-            background: darken($primary-color, 5%);
+            background: rgba($primary-color, 5%);
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba($primary-color, 0.2);
         }
@@ -467,7 +467,7 @@ form .clear-button {
         gap: 8px;
 
         &:hover:not(:disabled) {
-            background: darken($primary-color, 5%);
+            background: rgba($primary-color, 5%);
             box-shadow: 0 4px 12px rgba($primary-color, 0.2);
         }
 

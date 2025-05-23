@@ -29,7 +29,7 @@
     .mark-all-button {
         background: none;
         border: none;
-        color: $primary-color;
+        color: var(--primary-color);
         font-weight: 600;
         cursor: pointer;
         display: flex;
@@ -75,7 +75,7 @@
     }
 
     .notification-card.unread {
-        border-left: 2px solid $primary-color;
+        border-left: 2px solid var(--primary-color);
     }
 
     .notification-card.read {
@@ -86,7 +86,7 @@
     .notification-indicator {
         width: 8px;
         height: 8px;
-        background: $primary-color;
+        background: var(--primary-color);
         border-radius: 50%;
         flex-shrink: 0;
         margin-top: 8px;
@@ -173,7 +173,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: $primary-color;
+        color: var(--primary-color);
         transition: all 0.2s;
     }
 

@@ -16,7 +16,7 @@
         .MuiTextField-root {
             .MuiOutlinedInput-root.Mui-focused {
                 fieldset {
-                    border-color: #009693;
+                    border-color: var(--primary-color);
                 }
             }
         }

@@ -10,9 +10,9 @@
   }
 
   .qutation-button {
-    $base: $primary-color;
+    $base: var(--primary-color);
     $accent: $white;
-    $glow: $primary-color;
+    $glow: var(--primary-color);
 
     position: relative;
     display: inline-flex;
@@ -20,7 +20,7 @@
     gap: 1rem;
     padding: 10px 15px;
     border: none;
-    background: linear-gradient(135deg, $base 0%, darken($base, 5%) 100%);
+    background: linear-gradient(135deg, $base 0%, rgba($base, 5%) 100%);
     color: white;
     font-weight: 700;
     text-transform: uppercase;
@@ -139,9 +139,9 @@
 
 .quotations-download-btn {
   background-color: transparent;
-  color: #009693;
+  color: var(--primary-color);
   padding: 5px 15px;
-  border: 2px solid #009693;
+  border: 2px solid var(--primary-color);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -153,6 +153,6 @@
 }
 
 .quotations-download-btn:hover {
-  background-color: #009693;
+  background-color: var(--primary-color);
   color: white;
 }

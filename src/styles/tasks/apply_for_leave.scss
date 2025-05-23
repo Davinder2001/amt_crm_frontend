@@ -21,7 +21,7 @@
   //       font-size: 28px;
   //       font-weight: 600;
   //       color: $white;
-  //       background: $primary-color;
+  //       background: var(--primary-color);
   //       padding: 25px 0px;
   //       border-radius: 15px 15px 0px 0px;
   //       margin-bottom: 25px;
@@ -74,7 +74,7 @@
   //             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
   //             &:focus {
-  //               border-color: #009693;
+  //               border-color: var(--primary-color);
   //               background: #ffffff;
   //             }
   //           }
@@ -150,7 +150,7 @@
           font-size: 0.9rem;
 
           &.active {
-            background: $primary-color;
+            background: var(--primary-color);
             color: white;
             box-shadow: 0 4px 6px rgba(9, 132, 227, 0.2);
           }
@@ -209,7 +209,7 @@
           }
 
           .selected-green {
-            background-color: $primary-color !important;
+            background-color: var(--primary-color) !important;
             color: white !important;
             border-radius: 50px;
 
@@ -263,8 +263,8 @@
               transition: all 0.2s;
 
               &:hover {
-                border-color: $primary-color;
-                color: $primary-color;
+                border-color: var(--primary-color);
+                color: var(--primary-color);
               }
             }
           }
@@ -277,7 +277,7 @@
             transition: all 0.2s;
 
             &:focus {
-              border-color: $primary-color;
+              border-color: var(--primary-color);
               outline: none;
             }
           }
@@ -292,13 +292,13 @@
             transition: all 0.2s;
 
             &:focus {
-              border-color: $primary-color;
+              border-color: var(--primary-color);
               outline: none;
             }
           }
 
           .file-upload-box {
-            border: 2px dashed $primary-color;
+            border: 2px dashed var(--primary-color);
             padding: 20px;
             border-radius: 12px;
             text-align: center;
@@ -321,7 +321,7 @@
             }
 
             svg {
-              color: $primary-color !important;
+              color: var(--primary-color) !important;
             }
           }
 
@@ -377,7 +377,7 @@
         .submit-button {
           width: 100%;
           padding: 8px;
-          background: $primary-color;
+          background: var(--primary-color);
           color: white;
           border: none;
           border-radius: 0.8rem;
@@ -406,7 +406,7 @@
         color: $white;
 
         .date-range-badge {
-          background: $primary-color;
+          background: var(--primary-color);
           padding: 0.6rem 1rem;
           border-radius: 0.8rem;
           font-size: 0.9rem;
@@ -553,25 +553,25 @@
         cursor: pointer;
         transition: $transition;
         box-shadow: $box-shadow;
-        border: 1px solid rgba($primary-color, 0.1);
+        border: 1px solid rgba(var(--primary-color), 0.1);
 
         &:hover {
           transform: translateY(-5px);
           box-shadow: $secondary-shadow;
-          border-color: rgba($primary-color, 0.3);
+          border-color: rgba(var(--primary-color), 0.3);
         }
 
         .option-icon {
           width: 80px;
           height: 80px;
           margin: 0 auto 1rem;
-          background: rgba($primary-color, 0.1);
+          background: rgba(var(--primary-color), 0.1);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 2rem;
-          color: $primary-color;
+          color: var(--primary-color);
         }
 
         h3 {
@@ -692,12 +692,12 @@
           }
 
           .capture-button {
-            background: $primary-color;
+            background: var(--primary-color);
             color: $white;
             border: none;
 
             &:hover {
-              background: darken($primary-color, 5%);
+              background: rgba(var(--primary-color), 5%);
             }
           }
         }
@@ -709,7 +709,7 @@
       text-align: center;
 
       .submit-button {
-        background: $primary-color;
+        background: var(--primary-color);
         color: $white;
         border: none;
         padding: 1rem 2rem;
@@ -724,7 +724,7 @@
         box-shadow: $box-shadow;
 
         &:hover:not(:disabled) {
-          background: darken($primary-color, 5%);
+          background: rgba(var(--primary-color), 5%);
           transform: translateY(-2px);
           box-shadow: $secondary-shadow;
         }
@@ -759,7 +759,7 @@
   }
 
   .chip-active {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: #fff;
   }
 

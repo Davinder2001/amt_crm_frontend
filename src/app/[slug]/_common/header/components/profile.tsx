@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -137,6 +138,8 @@ const Profile: React.FC = () => {
                   <FaCog className="menu-icon" />
                   <span>Settings</span>
                 </Link>
+
+                <ThemeSwitcher />
 
                 <button
                   className="menu-item logout"

@@ -31,7 +31,7 @@
 
         .dropdown {
             font-size: $font-size-small;
-            color: $primary-color;
+            color: var(--primary-color);
             background-color: #f1f9f9;
             padding: 8px 16px;
             border-radius: 16px;
@@ -76,7 +76,7 @@
                 margin: 0 0.5rem;
 
                 &.profit {
-                    background-color: $primary-color;
+                    background-color: var(--primary-color);
                 }
 
                 &.loss {
@@ -115,7 +115,7 @@
             border-radius: $border-radius;
 
             &.active {
-                background-color: $primary-color;
+                background-color: var(--primary-color);
                 color: $white;
             }
         }
@@ -153,7 +153,7 @@
                     height: 40px;
                     border-radius: 50%;
                     background-color: $secondary-color;
-                    color: $primary-color;
+                    color: var(--primary-color);
                     overflow: hidden;
                     font-weight: 600;
                     font-size: 20px;
@@ -208,7 +208,7 @@
                     position: relative;
 
                     .bar {
-                        background-color: $primary-color;
+                        background-color: var(--primary-color);
                         height: 100%;
                         border-radius: $border-radius;
                     }
@@ -352,23 +352,23 @@
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba($primary-color, 0.1);
+        border: 1px solid rgba(var(--primary-color), 0.1);
         cursor: pointer;
 
         &:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: rgba($primary-color, 0.2);
+            border-color: rgba(var(--primary-color), 0.2);
 
             .icon-shell {
                 transform: scale(1.05);
-                background: linear-gradient(135deg, rgba($primary-color, 0.1), rgba($orange-color, 0.1));
+                background: linear-gradient(135deg, rgba(var(--primary-color), 0.1), rgba($orange-color, 0.1));
             }
         }
     }
 
     .icon-shell {
-        background-color: rgba($primary-color, 0.08);
+        background-color: rgba(var(--primary-color), 0.08);
         padding: 5px;
         border-radius: 14px;
         display: flex;
@@ -380,7 +380,7 @@
         flex-shrink: 0;
 
         svg {
-            color: $primary-color;
+            color: var(--primary-color);
         }
     }
 
@@ -440,7 +440,7 @@
     .item-loader {
         animation: loadItem 1s linear infinite;
         display: inline-block;
-        color: $primary-color;
+        color: var(--primary-color);
     }
 
     @keyframes loadItem {
@@ -611,23 +611,23 @@
     // }
     .card {
         .icon-shell {
-            background-color: rgba($primary-color, 0.1);
+            background-color: rgba(var(--primary-color), 0.1);
 
             svg {
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
 
         .value-count {
-            color: $primary-color;
+            color: var(--primary-color);
         }
 
         &[data-card-type] {
             .icon-shell {
-                background-color: rgba($primary-color, 0.1);
+                background-color: rgba(var(--primary-color), 0.1);
 
                 svg {
-                    color: $primary-color;
+                    color: var(--primary-color);
                 }
             }
 
@@ -768,7 +768,7 @@
                 height: 4px;
                 top: auto;
                 bottom: 0;
-                background: linear-gradient(to right, $primary-color, $orange-color);
+                background: linear-gradient(to right, var(--primary-color), $orange-color);
             }
         }
 

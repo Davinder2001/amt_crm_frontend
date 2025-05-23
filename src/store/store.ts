@@ -20,7 +20,7 @@ import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
 import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
 import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
-import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
+import themeReducer from '@/slices/theme/themeSlice';
 
 
 const store = configureStore({
@@ -47,7 +47,6 @@ const store = configureStore({
     [hrApi.reducerPath]: hrApi.reducer,
     [packagesCreateApiSlice.reducerPath]: packagesCreateApiSlice.reducer,
     [businesscategoryCreateApiSlice.reducerPath]: businesscategoryCreateApiSlice.reducer,
-    [billingCreateApiSlice.reducerPath]: billingCreateApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -72,7 +71,6 @@ const store = configureStore({
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
       .concat(businesscategoryCreateApiSlice.middleware)
-      .concat(billingCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

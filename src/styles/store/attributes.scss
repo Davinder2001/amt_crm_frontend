@@ -62,7 +62,7 @@
     height: 32px;
     cursor: pointer;
     font-size: 16px;
-    color: $primary-color;
+    color: var(--primary-color);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     transition: background 0.2s;
   }
@@ -94,14 +94,14 @@
 
   .tab-button:hover {
     background-color: #f1f9f9;
-    border-right: 3px solid $primary-color;
+    border-right: 3px solid var(--primary-color);
   }
 
   .tab-button.active {
     background-color: #f1f9f9;
     font-weight: 500;
-    color: $primary-color;
-    border-right: 3px solid $primary-color;
+    color: var(--primary-color);
+    border-right: 3px solid var(--primary-color);
   }
 
   .tab-content {
@@ -137,7 +137,7 @@
   select,
   input {
     padding: 8px;
-    border: 1px solid $primary-color;
+    border: 1px solid var(--primary-color);
     border-radius: 4px;
     font-size: 14px;
 
@@ -172,7 +172,7 @@
       font-size: 25px !important;
       border: unset !important;
       background-color: unset !important;
-      color: $primary-color !important;
+      color: var(--primary-color) !important;
     }
 
 
@@ -227,7 +227,7 @@
 
   .canvas-content {
     .create-attribute-title {
-      color: $primary-color;
+      color: var(--primary-color);
       font-size: 25px;
       padding: 5px 0px;
     }
@@ -260,7 +260,7 @@
     width: 100%;
     padding: 10px 14px;
     font-size: 14px;
-    border: 1px solid $primary-color;
+    border: 1px solid var(--primary-color);
     border-radius: 6px;
     background: #fafafa;
     transition: border-color 0.3s;
@@ -295,7 +295,7 @@
 
   .remove-btns {
     background: #e0e0e0;
-    color: $primary-color;
+    color: var(--primary-color);
     border: none;
     width: 32px;
     height: 32px;
@@ -366,8 +366,8 @@
 
     &:focus {
       outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
     }
 
   }
@@ -385,7 +385,7 @@
 
 
   .add-Another-value-btn {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: #fff;
     border-radius: 6px;
     padding: .5rem;
@@ -395,7 +395,7 @@
   }
 
   .submit-btn {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: 0.7rem;
@@ -448,7 +448,7 @@
 
     .delete-btn {
       background-color: unset;
-      color: $primary-color;
+      color: var(--primary-color);
       border: none;
       padding: 0.6rem 0.75rem;
       font-size: 0.8rem;
@@ -536,7 +536,7 @@
   }
 
   .toggle-switch.active {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     /* green-400 */
   }
 
@@ -640,7 +640,7 @@
 
     .tab-button.active {
       border-right: unset;
-      border-bottom: 3px solid #009693;
+      border-bottom: 3px solid var(--primary-color);
     }
 
 

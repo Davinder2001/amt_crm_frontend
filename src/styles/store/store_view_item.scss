@@ -80,7 +80,7 @@
 
     .edit-btn {
       color: $white;
-      background: $primary-color;
+      background: var(--primary-color);
     }
 
     .delete-btn {
@@ -206,7 +206,7 @@
 
     // Top border colors
     .info-card-blue {
-      border-top-color: $primary-color;
+      border-top-color: var(--primary-color);
     }
 
     .info-card-green {

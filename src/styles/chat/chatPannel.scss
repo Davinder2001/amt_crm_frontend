@@ -41,7 +41,7 @@
     }
 
     .search-icon {
-        color: #009693;
+        color: var(--primary-color);
         font-size: 14px;
         display: flex;
         justify-content: center;
@@ -54,12 +54,12 @@
         background: transparent;
         outline: none;
         font-size: 14px;
-        color: #009693;
+        color: var(--primary-color);
         padding: 0;
     }
 
     .search-input::placeholder {
-        color: #009693;
+        color: var(--primary-color);
     }
 
     .toggle-users-btn {
@@ -69,7 +69,7 @@
         width: 36px;
         height: 36px;
         border-radius: 9999px;
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         border: none;
         cursor: pointer;
@@ -102,7 +102,7 @@
 
     .badge {
         background-color: $light-color;
-        color: $primary-color;
+        color: var(--primary-color);
         font-size: 12px;
         font-weight: 600;
         padding: 2px 8px;
@@ -124,8 +124,8 @@
         }
 
         &.selected {
-            background-color: rgba($primary-color, 0.08);
-            box-shadow: inset 3px 0 0 $primary-color;
+            background-color: rgba(var(--primary-color), 0.08);
+            box-shadow: inset 3px 0 0 var(--primary-color);
         }
 
         .message-time {
@@ -144,7 +144,7 @@
         width: 40px;
         height: 40px;
         border-radius: 9999px;
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         display: flex;
         align-items: center;
@@ -188,7 +188,7 @@
     }
 
     .unread-count {
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         font-size: 12px;
         font-weight: 600;
@@ -229,7 +229,7 @@
     .clear-search-btn,
     .start-chat-btn {
         padding: 8px 16px;
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         border: none;
         border-radius: 9999px;
@@ -301,7 +301,7 @@
 
     .header-action-btn:hover {
         background-color: $light-color;
-        color: $primary-color;
+        color: var(--primary-color);
     }
 
     .messages-container {
@@ -310,8 +310,8 @@
         overflow-y: auto;
         background-color: #f9fafb;
         background-image:
-            linear-gradient(rgba($primary-color, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba($primary-color, 0.03) 1px, transparent 1px);
+            linear-gradient(rgba(var(--primary-color), 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(var(--primary-color), 0.03) 1px, transparent 1px);
         background-size: 20px 20px;
         display: flex;
         flex-direction: column;
@@ -326,21 +326,21 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: rgba($primary-color, 0.04);
+            background: rgba(var(--primary-color), 0.04);
             border-radius: 10px;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba($primary-color, 0.2);
+            background: rgba(var(--primary-color), 0.2);
             border-radius: 10px;
         }
 
         &::-webkit-scrollbar-thumb:hover {
-            background: rgba($primary-color, 0.4);
+            background: rgba(var(--primary-color), 0.4);
         }
 
         .scroll-to-bottom-btn {
-            color: #009693;
+            color: var(--primary-color);
             cursor: pointer;
             z-index: 10;
             background-color: #fff;
@@ -371,8 +371,8 @@
         span {
             display: inline-block;
             padding: 6px 14px;
-            background-color: rgba($primary-color, 0.1);
-            color: $primary-color;
+            background-color: rgba(var(--primary-color), 0.1);
+            color: var(--primary-color);
             font-size: 12px;
             font-weight: 600;
             border-radius: 14px;
@@ -434,7 +434,7 @@
             right: -20px;
             bottom: 0;
             font-size: 14px;
-            color: $primary-color;
+            color: var(--primary-color);
 
             &.read {
                 color: $gray-color;
@@ -443,7 +443,7 @@
     }
 
     .message.sent .message-content {
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         border-top-right-radius: 4px;
     }
@@ -500,7 +500,7 @@
 
     .new-chat-btn {
         padding: 10px 16px;
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         color: white;
         border: none;
         border-radius: 9999px;
@@ -533,13 +533,13 @@
         width: 40px;
         height: 40px;
         border-radius: 9999px;
-        color: #009693;
+        color: var(--primary-color);
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .attachment-btn:hover {
-        color: $primary-color;
+        color: var(--primary-color);
         background-color: $light-color;
     }
 
@@ -599,13 +599,13 @@
         gap: 10px;
 
         &:hover {
-            background-color: rgba($primary-color, 0.08);
-            color: $primary-color;
+            background-color: rgba(var(--primary-color), 0.08);
+            color: var(--primary-color);
         }
 
         .icon {
             font-size: 18px;
-            color: $primary-color;
+            color: var(--primary-color);
         }
     }
 
@@ -625,11 +625,11 @@
         outline: none;
         padding: 12px 0;
         font-size: 14px;
-        color: #009693;
+        color: var(--primary-color);
     }
 
     .message-input::placeholder {
-        color: #009693;
+        color: var(--primary-color);
     }
 
     .emoji-btn {
@@ -639,7 +639,7 @@
         width: 36px;
         height: 36px;
         border-radius: 9999px;
-        color: #009693;
+        color: var(--primary-color);
         cursor: pointer;
         transition: all 0.2s;
     }
@@ -665,17 +665,17 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, $primary-color, darken($primary-color, 5%));
+        background: linear-gradient(135deg, var(--primary-color), rgba(var(--primary-color), 5%));
         color: white;
         border: none;
         cursor: pointer;
         transition: all 0.2s;
-        box-shadow: 0 2px 6px rgba($primary-color, 0.2);
+        box-shadow: 0 2px 6px rgba(var(--primary-color), 0.2);
         flex-shrink: 0;
 
         &:disabled {
-            background: rgba($primary-color, 0.1);
-            color: rgba($primary-color, 0.5);
+            background: rgba(var(--primary-color), 0.1);
+            color: rgba(var(--primary-color), 0.5);
             cursor: not-allowed;
             box-shadow: none;
             transform: none !important;
@@ -683,7 +683,7 @@
 
         &:not(:disabled):hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba($primary-color, 0.3);
+            box-shadow: 0 4px 8px rgba(var(--primary-color), 0.3);
         }
 
         &:active {

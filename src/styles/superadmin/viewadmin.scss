@@ -174,26 +174,34 @@
 
   .company-cards-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
 
+    .role-card,
     .company-card {
-      background: white;
-      padding: 1rem;
+      background: #fff;
+      padding: 1rem 1.5rem;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
       border-left: 5px solid $primary-color;
+      display: flex;
+      flex-direction: column;
+
 
       h3 {
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.5rem 0;
         font-size: 1.1rem;
-        color: #333;
+        color: $primary-color;
       }
 
       p {
-        margin: 0;
-        font-size: 0.9rem;
-        color: #666;
+        font-size: 0.95rem;
+        color: #444;
+
+        strong {
+          font-weight: 500;
+          color: #222;
+        }
       }
     }
 

@@ -1,6 +1,8 @@
 // common styles for the application
 @use './variables' as *;
 @use './fonts.scss' as *;
+// @use './themes/base.scss' as *;
+@use './themes/themes.scss' as *;
 
 
 // homepage styling
@@ -145,7 +147,7 @@ body {
     padding: 9px 22px;
     border-radius: 50px;
     border: unset;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: $white;
     font-size: 15px;
     // margin-top: 5px;
@@ -313,7 +315,7 @@ textarea {
     box-shadow: $box-shadow;
 
     .react-datepicker {
-        border: 1px solid $primary-color;
+        border: 1px solid var(--primary-color);
         border-radius: 5px;
         background-color: $white;
 
@@ -333,7 +335,7 @@ textarea {
 
         &__day-names {
             text-align: center;
-            border-bottom: .5px solid #009693;
+            border-bottom: .5px solid var(--primary-color);
             grid-template-columns: repeat(7, 1fr);
             display: grid;
         }
@@ -348,7 +350,7 @@ textarea {
         }
 
         &__header--custom {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: white;
         }
 
@@ -392,7 +394,7 @@ textarea {
 }
 
 svg.react-datepicker__triangle {
-    color: $primary-color;
+    color: var(--primary-color);
 }
 
 .react-datepicker__day--selected,
@@ -418,7 +420,7 @@ svg.react-datepicker__triangle {
 
 .react-datepicker__header:not(.react-datepicker__header--has-time-select) {
     border-top-right-radius: .3rem;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
 }
 
 h2.react-datepicker__current-month,

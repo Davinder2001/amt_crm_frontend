@@ -16,7 +16,7 @@
 
 .add-role-form h2 {
   text-align: center;
-  background-color: $primary-color;
+  background-color: var(--primary-color);
     padding: 20px;
     border-radius: 15px 15px 0px 0px;
     color: $white;
@@ -39,7 +39,7 @@
   border-radius: 5px;
   margin-top: 5px;
   &:focus {
-    border-color: #009693;
+    border-color: var(--primary-color);
     background: #ffffff;
     transform: scale(1);
   }
@@ -64,7 +64,7 @@
 }
 
 .switch-button button.active {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   color: $white;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .tabs-box .tab.active {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   color: $white;
 }
 
@@ -105,7 +105,7 @@
 
 .icon i {
   font-size: 18px;
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 
@@ -127,8 +127,8 @@
   border-radius: 6px;
   box-shadow: 0 2px 4px #0000001a;
   cursor: pointer;
-  border-right: 1px solid $primary-color;
-  border-left: 1px solid $primary-color;
+  border-right: 1px solid var(--primary-color);
+  border-left: 1px solid var(--primary-color);
 }
 
 .permissions-container div {
@@ -142,7 +142,7 @@
 }
 
 .addrole-btn{
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   color: $white;
   padding: 10px 25px;
   border: none;
@@ -160,7 +160,7 @@
 }
 
 .addrole-btn:hover:not(:disabled) {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
 }
 
 

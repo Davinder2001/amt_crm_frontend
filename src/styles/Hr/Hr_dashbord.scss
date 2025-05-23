@@ -12,7 +12,7 @@
     display: flex;
     gap: 5px;
     color: $white;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     padding: 5px 10px;
     border-radius: 5px;
     border-radius: 50px;
@@ -87,7 +87,7 @@
 
 .attendance-btn {
   margin: 10px auto;
-  background: $primary-color;
+  background: var(--primary-color);
   color: $white;
   padding: 10px 20px;
   border-radius: 30px;
@@ -145,7 +145,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 .active-employee-box {
@@ -171,7 +171,7 @@
   width: 36px;
   height: 36px;
   background: #e6f7f5;
-  color: $primary-color;
+  color: var(--primary-color);
   font-weight: 600;
   border-radius: 50%;
   display: flex;

@@ -85,7 +85,7 @@
         transition: all 0.3s ease;
 
         &:focus {
-          border-color: #009693;
+          border-color: var(--primary-color);
           background: #ffffff;
           transform: scale(1);
         }

@@ -285,7 +285,7 @@
 import React, { useEffect, useState } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useParams } from 'next/navigation';
-import { useFetchSingleCompanyQuery } from '@/slices/superadminSlices/company/companyApi';
+import { useFetchSingleCompanyQuery, useDeleteCompanyMutation } from '@/slices/superadminSlices/company/companyApi';
 import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaEdit, FaTrashAlt, FaFileAlt } from 'react-icons/fa';
 import Image from 'next/image';
@@ -302,6 +302,27 @@ const ViewCompanyPage = () => {
   const { id } = useParams();
   const { data, isLoading, error } = useFetchSingleCompanyQuery(id as string);
   const router = useRouter();
+  const [deleteCompany] = useDeleteCompanyMutation();
+  const handleDeleteCompany = async (companyId: string) => {
+    const confirmed = window.confirm("Are you sure you want to delete this company?");
+    if (!confirmed) return;
+
+    try {
+      await deleteCompany(companyId).unwrap();
+      alert("Company deleted successfully.");
+      router.push("/superadmin/companies");
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete the company. Please try again.");
+    }
+  };
+  const getStatusClass = (status: string) => {
+    const normalized = status.toLowerCase();
+    if (normalized === 'verified') return 'vc-status-success';
+    if (normalized === 'pending') return 'vc-status-warning';
+    if (['rejected', 'blocked'].includes(normalized)) return 'vc-status-danger';
+    return 'vc-status-default';
+  };
 
   const company = data?.data as unknown as {
     id: number;
@@ -362,13 +383,20 @@ const ViewCompanyPage = () => {
                 </div>
               </div>
             </div>
-            <div className="vc-status-container">
-              <span className={`vc-status vc-status-${company.verification_status}`}>
-                {company.verification_status.replace('_', ' ')}
-              </span>
-              <span className={`vc-status vc-status-${company.payment_status}`}>
-                {company.payment_status.replace('_', ' ')}
-              </span>
+            <div className="vc-action-buttons">
+              <button
+                onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
+                className="vc-action-btn vc-edit-btn "
+              >
+                <FaEdit /> Edit
+              </button>
+              <button
+                onClick={() => handleDeleteCompany(company.company_id)}
+                className="vc-action-btn vc-delete-btn"
+              >
+                <FaTrashAlt /> Delete
+              </button>
+
             </div>
           </div>
         </div>
@@ -390,23 +418,19 @@ const ViewCompanyPage = () => {
                 <DetailItem label="PIN Code" value={company.pin_code} />
                 <DetailItem label="Business ID" value={company.business_id} />
                 <DetailItem label="Proof Type" value={company.business_proof_type} />
+                <DetailItem
+                  label="Verification Status"
+                  value={company.verification_status.replace("_", " ")}
+                  className={`vc-status ${getStatusClass(company.verification_status)}`}
+                />
+                <DetailItem label="Payment Status" value={company.payment_status} />
+
+
+
               </div>
             </div>
 
-            <div className="vc-action-buttons">
-              <button
-                onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
-                className="vc-action-btn vc-edit-btn"
-              >
-                <FaEdit /> Edit Profile
-              </button>
-              <button
-                onClick={() => router.push(`/superadmin/companies/delete/${company.company_id}`)}
-                className="vc-action-btn vc-delete-btn"
-              >
-                <FaTrashAlt /> Delete Company
-              </button>
-            </div>
+
           </div>
 
           {/* Right Column - Documents */}
@@ -436,10 +460,18 @@ const ViewCompanyPage = () => {
 };
 
 // Reusable Components
-const DetailItem = ({ label, value }: { label: string; value: string | number }) => (
+const DetailItem = ({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string | number;
+  className?: string;
+}) => (
   <div className="vc-detail-item">
     <dt className="vc-detail-label">{label}</dt>
-    <dd className="vc-detail-value">{value}</dd>
+    <dd className={`vc-detail-value ${className}`.trim()}>{value}</dd>
   </div>
 );
 
@@ -456,7 +488,7 @@ const DocumentCard = ({ title, url }: { title: string; url?: string }) => (
           className="vc-document-image"
         />
       ) : (
-        <div className="vc-document-missing">Not Available</div>
+        <div className="vc-document-missing ">Not Available</div>
       )}
     </div>
   </div>

@@ -23,7 +23,7 @@ const Cards = () => {
       <div className='overview-grid-container'>
       <div className="card clickable" onClick={() => router.push('/superadmin/admins')}>
         <span className='icon-shell'>
-        <FaUsers className="card-icon blue" />
+        <FaUsers className="card-icon" />
         </span>    
         <div className="dash-card-content">
         <h2 className="card-title ">Total Admins</h2>
@@ -32,7 +32,7 @@ const Cards = () => {
       </div>
 
       <div className="card clickable" onClick={() => router.push('/superadmin/companies')}>
-        <FaBuilding className="card-icon green" />
+        <FaBuilding className="card-icon" />
         <div className="dash-card-content">
         <h2 className="card-title">Total Companies</h2>
         <p className="card-value green">{companies.length}</p>
@@ -40,7 +40,7 @@ const Cards = () => {
       </div>
 
       <div className="card clickable" onClick={() => router.push('/companies?status=verified')}>
-        <FaCheckCircle className="card-icon emerald" />
+        <FaCheckCircle className="card-icon" />
         <div className="dash-card-content">
         <h2 className="card-title">Verified Companies</h2>
         <p className="card-value emerald">
@@ -50,7 +50,7 @@ const Cards = () => {
       </div>
 
       <div className="card clickable" onClick={() => router.push('/superadmin/companies/pending')}>
-        <FaClock className="card-icon orange" />
+        <FaClock className="card-icon" />
         <div className="dash-card-content">
         <h2 className="card-title">Pending Companies</h2>
         <p className="card-value orange">

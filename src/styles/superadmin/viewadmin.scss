@@ -83,7 +83,6 @@
 @use '../variables' as *;
 
 .vadmin-container {
-  padding: 10px;
   font-family: $font-family;
   background-color: #f7f9fa;
   min-height: 100vh;
@@ -93,12 +92,14 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    background-color: $white;
+    padding: 10px;
   }
 
   .admin-card {
     display: flex;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: $white;
+    box-shadow: $box-shadow;
     border-radius: 12px;
     overflow: hidden;
 
@@ -153,6 +154,7 @@
       gap: 1rem;
       font-size: 0.95rem;
       line-height: 1.6;
+      background-color: #fafafa;
 
       p {
         margin: 0;

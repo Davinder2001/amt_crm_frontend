@@ -186,7 +186,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         <span>Reset</span>
                     </button>
                 </div> */}
-                <div className="dropdown dropdown-right">
+                {/* <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('actions')}
                         className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
                     >
@@ -205,7 +205,81 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                             </ul>
                         </div>
                     )}
+                </div> */}
+
+                <div className="action-icons-horizontal">
+                    {actions && actions.map((action, i) => (
+                        <div key={i} className="action-tooltip">
+                            <button
+                                onClick={action.onClick}
+                                className="action-icon-btn"
+                            >
+                                <i>{action.icon}</i>
+                            </button>
+                            <span className="tooltip-text">{action.label}</span>
+                        </div>
+                    ))}
                 </div>
+
+                <style jsx>{`
+    .action-icons-horizontal {
+        display: flex;
+        gap: 10px;
+        margin-left: 10px;
+    }
+
+    .action-tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .action-icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .action-icon-btn:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+
+    i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        width: max-content;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 30px;
+        right: 0;
+        transform: translateX(-0%);
+        opacity: 0;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    .action-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+`}</style>
+
             </div>
         </div>
     );

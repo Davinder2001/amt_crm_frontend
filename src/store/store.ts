@@ -23,9 +23,9 @@ import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCa
 import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
 
 
-
 const store = configureStore({
   reducer: {
+    theme: themeReducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     [userApiSlice.reducerPath]: userApiSlice.reducer,
     [employeCreateApiSlice.reducerPath]: employeCreateApiSlice.reducer,

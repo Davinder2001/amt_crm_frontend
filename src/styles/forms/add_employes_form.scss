@@ -31,7 +31,7 @@
       }
 
       svg {
-        color: $primary-color;
+        color: var(--primary-color);
         size: 14px;
       }
 
@@ -48,7 +48,7 @@
     width: 100%;
 
     &:focus {
-      border-color: #009693;
+      border-color: var(--primary-color);
       background: #ffffff;
       transform: scale(1);
     }
@@ -68,7 +68,7 @@
     gap: 10px;
 
     .form-button {
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       border: unset;
       padding: 10px 30px;
       border-radius: 43px;
@@ -121,7 +121,7 @@
     select {
       padding: 14px 12px;
       font-size: 15px;
-      border: 1px solid $primary-color;
+      border: 1px solid var(--primary-color);
 
     }
 

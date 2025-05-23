@@ -16,7 +16,7 @@
     .title {
       font-size: 32px;
       font-weight: 700;
-      color: $primary-color;
+      color: var(--primary-color);
       margin-bottom: 10px;
     }
 
@@ -41,7 +41,7 @@
 
       svg {
         cursor: pointer;
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
 
@@ -58,8 +58,8 @@
       transition: border-color .3s ease, box-shadow .3s ease;
 
       &:focus-within {
-        box-shadow: 0 0 6px $primary-color(138, 43, 226, .3);
-        border-color: $primary-color;
+        box-shadow: 0 0 6px var(--primary-color)(138, 43, 226, .3);
+        border-color: var(--primary-color);
       }
 
       .input-icon {
@@ -71,7 +71,7 @@
 
         input,
         .input-icon {
-          color: $primary-color;
+          color: var(--primary-color);
           background-color: #f1f9f9;
         }
       }
@@ -101,7 +101,7 @@
     }
 
     .login-button {
-      background: linear-gradient(135deg, $primary-color, darken($primary-color, 8%));
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-color-dark));
       color: #fff;
       width: 100%;
       padding: .75rem;
@@ -136,7 +136,7 @@
       margin-top: 1rem;
 
       a {
-        color: $primary-color;
+        color: var(--primary-color);
         font-weight: bold;
       }
     }
@@ -154,7 +154,7 @@
         font-weight: 600;
 
         &:hover {
-          color: $primary-color;
+          color: var(--primary-color);
           font-size: 17px;
         }
       }
@@ -164,7 +164,7 @@
 
   .right-panel {
     flex: 1;
-    background: linear-gradient(to bottom right, darken($primary-color, 10%), #b86040);
+    background: linear-gradient(to bottom right, rgba(var(--primary-color), 10%), #b86040);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -182,7 +182,7 @@
     align-items: center;
     cursor: pointer;
     font-size: 14px;
-    color: $primary-color;
+    color: var(--primary-color);
   }
 
   .custom-checkbox input {
@@ -192,7 +192,7 @@
   .custom-checkbox .checkmark {
     width: 18px;
     height: 18px;
-    border: 2px solid #009693;
+    border: 2px solid var(--primary-color);
     border-radius: 50px;
     display: inline-block;
     position: relative;
@@ -208,7 +208,7 @@
     left: 3px;
     width: 10px;
     height: 10px;
-    background-color: #009693;
+    background-color: var(--primary-color);
     border-radius: 50px;
   }
 

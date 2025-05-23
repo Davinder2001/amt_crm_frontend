@@ -53,7 +53,7 @@
         text-decoration: underline;
 
         &:hover {
-          color: darken($primary-color, 10%);
+          color: rgba($primary-color, 10%);
         }
       }
     }

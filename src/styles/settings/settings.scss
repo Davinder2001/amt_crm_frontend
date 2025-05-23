@@ -74,7 +74,7 @@
             align-items: center;
 
             .settings-icon {
-              color: $primary-color;
+              color: var(--primary-color);
               font-size: 16px;
               transition: color 0.2s ease;
             }

@@ -12,7 +12,7 @@
     cursor: pointer;
   
     &.on {
-      background-color: #009693;
+      background-color: var(--primary-color);
       color: white;
     }
   

@@ -21,7 +21,7 @@
 //         h2 {
 //             font-size: $font-size-extra-extra-large;
 //             font-weight: $font-weight-bold;
-//             color: $primary-color;
+//             color: var(--primary-color);
 //         }
 
 
@@ -100,7 +100,7 @@
         border-radius: 16px;
         box-shadow: $box-shadow;
         overflow: hidden;
-        border-top: 2px solid $primary-color;
+        border-top: 2px solid var(--primary-color);
         width: 100%;
 
         .ribbon {
@@ -118,7 +118,7 @@
 
         .planPrice {
             font-size: $font-size-extra-large;
-            color: $primary-color;
+            color: var(--primary-color);
             font-weight: $font-weight-semi-bold;
             margin-bottom: 16px;
         }
@@ -217,7 +217,7 @@
 
                 .toggle-icon.open {
                     transform: rotate(180deg);
-                    color: $primary-color; // Optional highlight color when open
+                    color: var(--primary-color); // Optional highlight color when open
                 }
 
                 .categories-show {
@@ -252,8 +252,8 @@
 
                     &:hover {
                         background-color: rgb(241, 249, 249);
-                        color: $primary-color;
-                        border-right: 3px solid $primary-color;
+                        color: var(--primary-color);
+                        border-right: 3px solid var(--primary-color);
                     }
                 }
             }

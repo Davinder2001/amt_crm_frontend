@@ -2,19 +2,24 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaCog, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
+import ThemeSwitcher from "./ThemeSwitcher";
+import { setTheme } from '@/slices/theme/themeSlice';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '@/store/store';
+
 
 const Profile: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [logout] = useLogoutMutation();
-
+  const dispatch = useDispatch<AppDispatch>();
   const { user, setUser } = useUser();
   const { companySlug, userType, accessToken } = useCompany();
 
@@ -67,7 +72,8 @@ const Profile: React.FC = () => {
         toast.success(response?.data?.message);
         clearStorage();
         setIsAuthenticated(false);
-
+        dispatch(setTheme('light'));
+        
         if (userType === 'user') {
           router.push('/');
         } else {
@@ -137,14 +143,8 @@ const Profile: React.FC = () => {
                   <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
                   <span>Billing</span>
                 </Link>
-                <Link
-                  href={`${basePath}/settings`}
-                  onClick={() => setIsOpen(false)}
-                  className="menu-item"
-                >
-                  <FaCog className="menu-icon" />
-                  <span>Settings</span>
-                </Link>
+
+                <ThemeSwitcher />
 
                 <button
                   className="menu-item logout"

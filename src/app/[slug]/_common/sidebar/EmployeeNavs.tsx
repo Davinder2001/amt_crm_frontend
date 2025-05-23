@@ -51,17 +51,7 @@ const EmployeeNavs: React.FC<empNavProps> = ({ isSidebarExpanded, openMenu }) =>
                                 <div className="tooltip"> {name}</div>
                             )}
                             {isActive && (
-                                <span
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        right: 0,
-                                        width: "3px",
-                                        height: "100%",
-                                        backgroundColor: "#009693",
-                                        borderRadius: '2px'
-                                    }}
-                                />
+                                <span className="active-indicator"/>
                             )}
                         </li>
                     );

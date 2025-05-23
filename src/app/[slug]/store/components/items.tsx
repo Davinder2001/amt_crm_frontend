@@ -190,6 +190,18 @@ const Items: React.FC = () => {
         columns={allColumns}
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
+        downloadActions={[
+          {
+            label: 'Download Excel',
+            icon: <FaDownload />,
+            onClick: handleExportDownload,
+          },
+          {
+            label: 'Import Excel',
+            icon: <FaUpload />,
+            onClick: () => setImportModalVisible(true),
+          },
+        ]}
         actions={[
 
           // {
@@ -207,18 +219,9 @@ const Items: React.FC = () => {
           //   icon: <FaUsers />,
           //   onClick: () => router.push(`/${companySlug}/store/vendors`),
           // },
+
           {
-            label: 'Download Excel',
-            icon: <FaDownload />,
-            onClick: handleExportDownload,
-          },
-          {
-            label: 'Import Excel',
-            icon: <FaUpload />,
-            onClick: () => setImportModalVisible(true),
-          },
-          {
-            label: 'Create New Item',
+            label: 'Create',
             icon: <FaPlus />,
             onClick: () => router.push(`/${companySlug}/store/add-item`),
           },

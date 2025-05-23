@@ -9,7 +9,7 @@ interface Column {
 }
 
 interface Action {
-    label: string;
+    label?: string;
     icon?: React.ReactNode;
     onClick: () => void;
 }
@@ -21,6 +21,7 @@ interface TableToolbarProps {
     visibleColumns?: string[]; // Columns that should be visible
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
+    downloadActions?: Action[];
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = ({
@@ -29,8 +30,8 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     columns,
     onColumnToggle,
     actions,
+    downloadActions,
 }) => {
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [selectedFilters, setSelectedFilters] = useState<FilterOptions>(() => {
         const savedFilters = localStorage.getItem('selectedFilters');
         return savedFilters ? JSON.parse(savedFilters) : {};
@@ -43,14 +44,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             return columns?.map(col => col.key) || []; // Default to all columns being visible
         }
     });
-    // const [loading, setLoading] = useState(false);
 
-    // Toggling dropdown visibility
-    const toggleDropdown = (name: string) => {
-        setOpenDropdown(openDropdown === name ? null : name);
-    };
-
-    const closeDropdown = () => setOpenDropdown(null);
 
     // Handle filter changes
     const handleFilterChange = (field: string, value: string, checked: boolean) => {
@@ -112,19 +106,16 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     }, []);
 
     return (
-        <div className="toolbar" onMouseLeave={closeDropdown}>
+        <div className="toolbar">
             {/* Left Side: Filter */}
             <div className="left-group">
-                <div className="dropdown dropdown-left">
-                    <button
-                        onClick={() => toggleDropdown('filter')}
-                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
-                    >
-                        <FiFilter />
-                        <span className='hide-mobile'>Filter</span>
-                    </button>
-                    {openDropdown === 'filter' && (
-                        <div className="dropdown-content show">
+                {filters && Object.keys(filters).length > 0 && (
+                    <div className="dropdown dropdown-left hover-group">
+                        <button className="toolbar-btn">
+                            <FiFilter />
+                            <span className='hide-mobile'>Filter</span>
+                        </button>
+                        <div className="dropdown-content">
                             {Object.entries(filters ?? {}).map(([field, options]) => (
                                 <div key={field} className="section">
                                     <p className="title">{field}</p>
@@ -143,22 +134,20 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 </div>
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Right Side: Columns & Actions */}
             <div className="right-group">
-                <div className="dropdown dropdown-right">
-                    <button onClick={() => toggleDropdown('columns')}
-                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
-                    >
-                        <FiColumns />
-                        <span >Columns</span>
-                    </button>
-                    {openDropdown === 'columns' && columns && (
-                        <div className="dropdown-content show">
-                            {columns.map((col) => (
+                {columns && columns.length > 0 && (
+                    <div className="dropdown dropdown-right hover-group">
+                        <button className="toolbar-btn">
+                            <FiColumns />
+                            <span>Columns</span>
+                        </button>
+                        <div className="dropdown-content">
+                            {columns?.map((col) => (
                                 <label key={col.key} className="option">
                                     <input
                                         type="checkbox"
@@ -169,8 +158,8 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 </label>
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
                 {/* Reset Button */}
                 {/* <div className="reset-group">
                     <button
@@ -206,6 +195,24 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     )}
                 </div> */}
+                {downloadActions && downloadActions.length > 0 && (
+                    <div className="dropdown dropdown-right hover-group">
+                        <button className="toolbar-btn">
+                            <FiSettings />
+                            <span className="hide-mobile">Download</span>
+                        </button>
+                        <div className="dropdown-content">
+                            <ul className="action-list">
+                                {downloadActions.map((action, i) => (
+                                    <li key={i} onClick={action.onClick} className="action-item">
+                                        {action.icon && <span className="a-icon">{action.icon}</span>}
+                                        <span>{action.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
 
                 <div className="action-icons-horizontal">
                     {actions && actions.map((action, i) => (
@@ -215,8 +222,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 className="action-icon-btn"
                             >
                                 <i>{action.icon}</i>
+                                <span>{action.label}</span>
                             </button>
-                            <span className="tooltip-text">{action.label}</span>
+                            {/* <span className="tooltip-text">{action.label}</span> */}
                         </div>
                     ))}
                 </div>
@@ -242,6 +250,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         align-items: center;
         justify-content: center;
         position: relative;
+        gap: 5px;
     }
 
     .action-icon-btn:hover {

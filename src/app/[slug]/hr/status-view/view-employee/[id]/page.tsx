@@ -89,7 +89,7 @@ const ViewUserPage: React.FC = () => {
       <div className="employee-profile-inner-container">
         <div className="profile-header">
           <div className="profile-avatar">
-            {employee.profile_picture && employee.profile_picture !== 'http://localhost:8000/' ? (
+            {employee.profile_picture ? (
               <Image
                 src={employee.profile_picture}
                 alt={employee.name}

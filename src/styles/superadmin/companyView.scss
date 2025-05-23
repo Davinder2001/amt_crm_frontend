@@ -285,7 +285,7 @@
 
 /* Modern CSS using your variables */
 .vc-modern-container {
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 /* Header Styles */
@@ -300,6 +300,7 @@
 .vc-company-logo {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
 .vc-modern-back {
@@ -341,7 +342,7 @@
 
 .vc-company-name {
   font-size: $font-size-extra-extra-large;
-  color: $dark-color;
+  color: #555454;
   margin-bottom: 0.5rem;
   font-weight: $font-weight-bold;
   border-bottom: 1px solid var(--primary-color);
@@ -434,6 +435,31 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+
+  .vc-status {
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    text-transform: capitalize;
+
+    &.vc-status-success {
+      color: $success-color;
+    }
+
+    &.vc-status-warning {
+      color: $orange-color;
+    }
+
+    &.vc-status-danger {
+      color: $danger-color;
+    }
+
+    &.vc-status-default {
+      color: $danger-color;
+    }
+  }
+
 }
 
 .vc-detail-item {
@@ -451,7 +477,7 @@
 .vc-detail-value {
   font-size: $font-size-large;
   color: $dark-color;
-  font-weight: $font-weight-semi-bold;
+  font-weight: $font-weight-medium;
 }
 
 /* Action Buttons */
@@ -462,7 +488,7 @@
 }
 
 .vc-action-btn {
-  padding: 0.75rem 1.5rem;
+  padding: 5px 10px;
   border-radius: $border-radius;
   display: inline-flex;
   align-items: center;
@@ -477,7 +503,7 @@
     cursor: pointer;
 
     &:hover {
-      background: rgba(var(--primary-color), 10%);
+      background: #00969329;
     }
   }
 

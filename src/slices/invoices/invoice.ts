@@ -74,6 +74,10 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Invoice"],
     }),
 
+    // getInvoiceById: builder.query<{ invoice: Invoice }, string | number>({
+    //   query: (id) => `invoices/${id}`,
+    //   providesTags: (result, error, id) => [{ type: "Invoice", id }],
+    // }),
     getInvoiceById: builder.query<{ invoice: Invoice }, string | number>({
       query: (id) => `invoices/${id}`,
       providesTags: (result, error, id) => [{ type: "Invoice", id }],
@@ -129,6 +133,7 @@ export const {
   useCreateInvoiceMutation,
   usePrintInvoiceMutation,
   useMailInvoiceMutation,
+  // useGetInvoiceByIdQuery,
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,

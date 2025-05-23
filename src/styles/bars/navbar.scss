@@ -30,42 +30,11 @@
   .header-title {
     font-size: 22px;
     font-weight: bold;
-    color: transparent;
-    background: linear-gradient(90deg, var(--primary-color), #006d6c);
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-shadow:
-      0 0 5px rgba(0, 150, 147, 0.17),
-      0 0 10px rgba(5, 219, 230, 0.156);
+    color: var(--primary-color);
     position: relative;
     display: inline-block;
     padding: 0 10px;
     overflow: hidden;
-  }
-
-  .header-title::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent);
-    z-index: -1;
-    animation: shine 3s infinite;
-  }
-
-  @keyframes shine {
-    0% {
-      transform: translateX(-100%);
-    }
-
-    100% {
-      transform: translateX(100%);
-    }
   }
 
   .nav-container {

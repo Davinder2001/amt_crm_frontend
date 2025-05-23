@@ -57,11 +57,11 @@ const Page = () => {
 
       {/* Conditionally render the Tabs component */}
       {showTabs && (
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 2 }}>
+        <Box>
           <Tabs value={activeTab} onChange={handleTabChange} aria-label="task tabs"
             variant="scrollable"
             scrollButtons="auto"
-            style={{ backgroundColor: '#f1f9f9' }}
+            style={{ backgroundColor: '#fff' }}
             sx={{
               '& .MuiTab-root': {
                 color: '#009693',
@@ -83,7 +83,7 @@ const Page = () => {
         </Box>
       )}
 
-      <Box sx={{ mt: 2 }}>
+      <Box>
         {/* Conditionally render AllTasks or MyTasks based on the selected tab */}
         {showTabs ? (
           activeTab === 0 ? <AllTasks /> : <MyTasks />

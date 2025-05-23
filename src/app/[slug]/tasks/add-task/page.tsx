@@ -54,7 +54,7 @@ const Page: React.FC = () => {
 
     const newTask = {
       name: formData.name,
-      assigned_to: Number(formData.assignedTo),
+      assigned_to: formData.assignedTo,
       assigned_role: formData.role,
       start_date: formData.startDate,
       end_date: formData.endDate,

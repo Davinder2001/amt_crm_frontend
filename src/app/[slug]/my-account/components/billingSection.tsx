@@ -25,7 +25,7 @@ const BillingSection = () => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Billing History</h2>
-      {data?.payments?.length > 0 ? (
+      {Array.isArray(data?.payments) && data.payments.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="min-w-full border border-gray-300 text-sm">
             <thead className="bg-gray-100">
@@ -40,7 +40,7 @@ const BillingSection = () => {
               </tr>
             </thead>
             <tbody>
-              {data.payments.map((payment: any, index: number) => (
+              {data.payments.map((payment: Payment, index: number) => (
                 <tr key={payment.id} className="text-center">
                   <td className="p-2 border">{index + 1}</td>
                   <td className="p-2 border">{payment.transaction_id}</td>

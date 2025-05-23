@@ -17,9 +17,9 @@ import {
   // FaEye,
   // FaTrash,
   FaPlus,
-  FaUserPlus,
-  FaFileInvoice,
-  FaUsers,
+  // FaUserPlus,
+  // FaFileInvoice,
+  // FaUsers,
   FaDownload,
   FaUpload,
 } from 'react-icons/fa';

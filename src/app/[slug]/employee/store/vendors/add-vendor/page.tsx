@@ -15,7 +15,12 @@ const VendorCreationPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await createVendor({ vendor_name: vendorName }).unwrap();
+      await createVendor({
+        vendor_name: vendorName,
+        vendor_number: '',
+        vendor_email: '',
+        vendor_address: ''
+      }).unwrap();
       toast.success('Vendor created successfully!');
       router.push(`/${companySlug}/store/vendors`);
     } catch (err) {

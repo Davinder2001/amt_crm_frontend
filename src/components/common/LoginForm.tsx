@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { useUser } from '@/provider/UserContext';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaFingerprint } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import { loginPageimage } from '@/assets/useImage';
 import { MdSmartphone } from 'react-icons/md';
@@ -21,6 +21,7 @@ const LoginForm = () => {
   const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -131,8 +132,14 @@ const LoginForm = () => {
 
                 <div className="remember-forgot ">
                   <label className="custom-checkbox">
-                    <input type="checkbox" />
-                    <span className="checkmark"></span>
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />
+                    <span className="checkmark">
+                      <FaFingerprint className="checkmark-icon" />
+                    </span>
                     Remember me
                   </label>
                   <Link href="/forget-password" className="forgot-password-link">Forgot Password?</Link>

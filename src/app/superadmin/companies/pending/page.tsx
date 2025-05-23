@@ -122,7 +122,7 @@ const PendingCompaniesPage = () => {
       await verifyPayment({ id, status: 'verified' }).unwrap();
       alert('Payment verified successfully.');
       refetch();
-    } catch (err) {
+    } catch {
       alert('Failed to verify payment.');
     }
   };
@@ -132,19 +132,18 @@ const PendingCompaniesPage = () => {
       await verifyStatus({ id, status: 'verified' }).unwrap();
       alert('Verification status updated successfully.');
       refetch();
-    } catch (err) {
+    } catch {
       alert('Failed to verify status.');
     }
   };
 
   const columns = [
-    { label: '#', render: (_: any, index: number) => index + 1 },
     { label: 'Company Name', key: 'company_name' },
     { label: 'Payment Status', key: 'payment_status' },
     { label: 'Verification Status', key: 'verification_status' },
     {
       label: 'Actions',
-      render: (company: any) => (
+      render: (company: Company) => (
         <div className="action-buttons">
           <button onClick={() => handleVerifyPayment(company.id)} disabled={isVerifyingPayment}>
             Verify Payment

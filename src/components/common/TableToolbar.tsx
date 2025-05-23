@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiFilter, FiColumns, FiSettings } from 'react-icons/fi';
+import { FiFilter, FiColumns, FiDownloadCloud } from 'react-icons/fi';
 
 type FilterOptions = Record<string, string[]>;
 
@@ -198,8 +198,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 {downloadActions && downloadActions.length > 0 && (
                     <div className="dropdown dropdown-right hover-group">
                         <button className="toolbar-btn">
-                            <FiSettings />
-                            <span className="hide-mobile">Download</span>
+                            <FiDownloadCloud size={16} style={{strokeWidth: 3}}/>
                         </button>
                         <div className="dropdown-content">
                             <ul className="action-list">
@@ -219,7 +218,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         <div key={i} className="action-tooltip">
                             <button
                                 onClick={action.onClick}
-                                className="action-icon-btn"
+                                className="toolbar-btn"
                             >
                                 <i>{action.icon}</i>
                                 <span>{action.label}</span>
@@ -233,7 +232,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     .action-icons-horizontal {
         display: flex;
         gap: 10px;
-        margin-left: 10px;
     }
 
     .action-tooltip {

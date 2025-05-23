@@ -2,7 +2,7 @@ import userBillingApiSlice from "./payBillCreate";
 
 const userApi = userBillingApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchAdminBilling: builder.query<any, void>({
+    fetchAdminBilling: builder.query<AdminBillingResponse, void>({
       query: () => ({
         url: "billings",
         credentials: "include",

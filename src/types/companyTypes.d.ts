@@ -1,22 +1,38 @@
 // Define types for your Company and responses (adjust these interfaces as needed)
 interface Company {
-    id: number;
-    name: string;
-    company_slug: string;
-    company_name: string;
-    verification_status: string;
-    description?: string;
-    company_id: string;
-    location?: string;
+  id: number;
+  name: string;
+  company_slug: string;
+  company_name: string;
+  verification_status: string;
+  description?: string;
+  company_id: string;
+  location?: string;
 }
 
 interface CompaniesResponse {
-    companies: Company[];
-    data: Company[];
+  companies: Company[];
+  data: Company[];
 }
 
+interface Payment {
+  id: number;
+  order_id: string;
+  user_id: number;
+  transaction_id: string;
+  payment_status: 'COMPLETED' | 'FAILED' | 'PENDING';
+  payment_method: string;
+  payment_fail_reason: string | null;
+  payment_reason: string;
+  transaction_amount: string;
+  payment_date: string;
+  payment_time: string;
+}
 
-
+interface AdminBillingResponse {
+  success: boolean;
+  payments: Payment[];
+}
 
 type Shift = {
   id: number;

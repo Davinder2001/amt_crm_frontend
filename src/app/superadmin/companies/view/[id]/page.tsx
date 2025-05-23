@@ -290,7 +290,7 @@ import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaEdit, FaTrashAlt, FaFileAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
-import companylogo from './companylogo.jpg'
+import { adminlogo } from "@/assets/useImage";
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -337,10 +337,16 @@ const ViewCompanyPage = () => {
           <div className="vc-header-main">
             <div className="vc-company-logo">
               <Image
-                src={company.Company_logo && company.Company_logo.trim() !== '' ? `/${company.Company_logo}` : '/companylogo.jpg'}
+                src={
+                  company.Company_logo && company.Company_logo.trim() !== ''
+                    ? company.Company_logo.startsWith('@/assets/useImage') // full URL
+                      ? company.Company_logo
+                      : `/${company.Company_logo}` // relative to public folder
+                    : adminlogo.src // fallback imported image
+                }
                 alt={`${company.company_name} Logo`}
-                width={86}
-                height={86}
+                width={110}
+                height={110}
                 style={{ objectFit: 'cover', borderRadius: '50%' }}
                 priority
               />

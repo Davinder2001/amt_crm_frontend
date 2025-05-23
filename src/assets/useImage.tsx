@@ -15,7 +15,7 @@ import footerlogoimage from './footerlogoimage.png'
 import loginPageimage from './loginPageimage.png'
 import forgotPageimage from './forgotPageimage.png'
 import changepass from './changepass.png'
-import companylogo from './companylogo.jpg'
+import adminlogo from './adminlogo.avif'
 
 
 
@@ -23,5 +23,5 @@ import companylogo from './companylogo.jpg'
 
 
 export {
-    loginImage,companylogo, addRole, logo, placeholderImg, homeimg1, homeimg2, homeimg3, homelogo, featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, manageimage, footerlogoimage, loginPageimage, forgotPageimage, changepass
+    loginImage,adminlogo, addRole, logo, placeholderImg, homeimg1, homeimg2, homeimg3, homelogo, featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, manageimage, footerlogoimage, loginPageimage, forgotPageimage, changepass
 }

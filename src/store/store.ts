@@ -25,6 +25,7 @@ import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
 
 
 
+
 const store = configureStore({
   reducer: {
     theme: themeReducer,
@@ -74,7 +75,6 @@ const store = configureStore({
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
       .concat(businesscategoryCreateApiSlice.middleware)
-      .concat(billingCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -70,7 +70,7 @@ interface AddCompany {
     redirect_url?: string;
     transactionDetails?: TransactionDetails;
     orderId?: string;
-    category_id: number | null;
+    business_category_id: number | null;
     package_id: number,
 }
 
@@ -132,8 +132,8 @@ interface PackagePlan {
     business_categories: {
         updated_at: string;
         created_at: string;
-        description: string; id: number, name: string 
-}[];
+        description: string; id: number, name: string
+    }[];
 }
 
 interface PackagePlanResponse {

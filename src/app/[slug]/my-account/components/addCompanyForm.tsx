@@ -32,7 +32,7 @@ const saveFormData = (data: Partial<AddCompany>) => {
 const getDefaultFormData = (packageId: number, categoryId: number | null): AddCompany => ({
   company_name: '',
   package_id: packageId,
-  category_id: categoryId,
+  business_category_id: categoryId,
   company_logo: null,
   business_address: '',
   pin_code: '',
@@ -73,9 +73,14 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      if (formData.business_category_id === null) {
+        throw new Error("Business category is required.");
+      }
       const payload = {
+        business_category_id: formData.business_category_id,
         package_id: formData.package_id,
         company_name: formData.company_name,
+        buiness_id: formData.business_id ?? "",
       };
       const response = await orderNewCompany(payload).unwrap();
       localStorage.setItem("company_form_data", JSON.stringify({ ...formData, order_id: response.orderId }));
@@ -215,7 +220,7 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
         </div>
       </form>
 
-      
+
     </div>
   );
 }

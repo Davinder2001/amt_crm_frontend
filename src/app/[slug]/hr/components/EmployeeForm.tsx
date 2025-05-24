@@ -1283,7 +1283,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         Icon?: React.ElementType,
         min?: number,
         max?: number,
-        iconSize: number = 14,
     ) => {
         const error = errors[name];
         const isInvalid = !!error;

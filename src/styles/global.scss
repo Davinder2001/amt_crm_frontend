@@ -117,8 +117,8 @@
 @use './my-acount/addCompany.scss' as *;
 
 
-
-
+// company styling
+@use './company/ViewCompany.scss' as *;
 
 * {
     margin: 0;

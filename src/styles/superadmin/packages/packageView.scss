@@ -295,6 +295,13 @@
             }
         }
 
+        button {
+            &:hover {
+                background-color: var(--primary-color);
+                box-shadow: $box-shadow;
+            }
+        }
+
 
     }
 

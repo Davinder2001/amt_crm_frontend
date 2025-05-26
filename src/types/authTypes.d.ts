@@ -31,7 +31,7 @@ interface TransactionDetails {
 
 interface RegisterForm {
     packageId?: number;
-    categoryId?: number | null;
+    business_category_id?: number | null;
     first_name: string;
     last_name: string;
     email: string;

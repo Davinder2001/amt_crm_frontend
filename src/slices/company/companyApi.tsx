@@ -1,38 +1,6 @@
 import companyCreateSlice from "./companyCreateSlice";
 
 
-// types.ts or top of your file
-export interface Package {
-  id: number;
-  name: string;
-  employee_numbers: number;
-  items_number: number;
-  daily_tasks_number: number;
-  package_type: string;
-  invoices_number: number;
-  price: string;
-  business_category_id: number | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Company {
-  id: number;
-  company_name: string;
-  company_id: string;
-  package_id: number;
-  business_category: number;
-  company_slug: string;
-  [key: string]: any;
-}
-
-export interface CompanyDetailsResponse {
-  company: Company;
-  subscribed_package: Package;
-  related_packages: Package[];
-}
-
-
 const companyApi = companyCreateSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchCompanyShifts: builder.query<ShiftApiResponse, void>({

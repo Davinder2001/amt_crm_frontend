@@ -41,7 +41,7 @@ const saveFormData = (data: Partial<RegisterForm>) => {
 
 const getDefaultFormData = (packageId: number, categoryId: number | null): RegisterForm => ({
   packageId: packageId,
-  categoryId: categoryId,
+  business_category_id: categoryId,
   first_name: '',
   last_name: '',
   email: '',

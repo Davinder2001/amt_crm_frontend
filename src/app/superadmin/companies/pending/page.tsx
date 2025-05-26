@@ -145,12 +145,15 @@ const PendingCompaniesPage = () => {
       label: 'Actions',
       render: (company: Company) => (
         <div className="action-buttons">
-          <button onClick={() => handleVerifyPayment(company.id)} disabled={isVerifyingPayment}>
+          <div><button onClick={() => handleVerifyPayment(company.id)} disabled={isVerifyingPayment}>
             Verify Payment
           </button>
-          <button onClick={() => handleVerifyStatus(company.id)} disabled={isVerifyingStatus}>
+        </div>
+        <div>
+            <button onClick={() => handleVerifyStatus(company.id)} disabled={isVerifyingStatus}>
             Verify Status
           </button>
+        </div>
         </div>
       ),
     },

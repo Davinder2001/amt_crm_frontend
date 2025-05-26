@@ -1,215 +1,191 @@
-// @use '../variables' as *;
-// .vadmin-container{
-//   .Vadmin-inner-container{
-
-//     padding: 25px;
-//     background-color: $white;
-//     border-radius: 15px;
-//     box-shadow: $box-shadow;
-//     margin: 32px auto;
-//     font-family: 'Segoe UI', sans-serif;
-
-//   .admin-title {
-//     font-size: 24px;
-//     font-weight: bold;
-//   }
-
-//   .admin-card {
-//     padding: 20px;
-//     background-color: rgb(250, 250, 250);
-//     border-radius: 12px;
-//     box-shadow: $box-shadow;
-//     margin-bottom: 32px;
-
-//     p {
-//         font-size: 16px;
-//         margin-bottom: 10px;
-//         display: flex;
-
-//       strong {
-//         color: #333333;
-//         margin-right: 8px;
-//       }
-//     }
-//   }
-
-//   .admin-subtitle {
-//     font-size: 20px;
-//     font-weight: 600;
-//     margin-bottom: 20px;
-//   }
-
-//   .company-cards-wrapper {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-//     gap: 20px;
-//   }
-
-//   .company-card {
-//     padding: 16px;
-//     border: 1px solid #00969357;
-//     border-radius: 10px;
-//     background-color: #f0fefe;
-//     transition: box-shadow 0.3s ease;
-
-//     h3 {
-//       font-size: 18px;
-//       margin-bottom: 8px;
-//       color: $primary-color;
-//     }
-
-//     p {
-//       font-size: 15px;
-//       color: #333333;
-//     }
-
-//     &:hover {
-//       box-shadow: 0 4px 12px rgba(0, 150, 147, 0.1);
-//     }
-//   }
-
-//   .no-companies {
-//     font-size: 16px;
-//     color: #999999;
-//   }
-// }
-// }
-
-
-
-
-
-
 @use '../variables' as *;
 
 .vadmin-container {
   font-family: $font-family;
-  background-color: #f7f9fa;
+  background: linear-gradient(to right top, #f1fefe, #ffffff);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 
-  .Vadmin-inner-container {
+
+.Vadmin-inner-container {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  .company-cards-outer {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    background-color: $white;
-    padding: 10px;
+  }
+}
+
+.admin-card {
+  display: flex;
+  flex: 1 1 100%;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: 0.3s ease;
+  animation: fadeIn 0.5s ease;
+}
+
+.admin-image-container {
+  flex: 1;
+  background: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: white;
+
+  .admin-image {
+    object-fit: cover;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    max-width: 350px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 1rem;
+    transition: transform .3s;
+    box-shadow: 0 8px 24px #0003;
+
+    SS &:hover {
+      transform: scale(1.05);
+    }
   }
 
-  .admin-card {
-    display: flex;
+  .status {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
     background: $white;
-    box-shadow: $box-shadow;
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 999px;
+    font-weight: bold;
+    letter-spacing: 1px;
 
-    .admin-image-container {
-      flex: 0 0 200px;
-      background-color: #eef1f4;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-
-      .admin-image {
-        width: 100%;
-        max-width: 115px;
-        height: auto;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-
-
-      .status {
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-weight: bold;
-        text-transform: capitalize;
-
-        &.active {
-          background-color: #e0f7f5;
-          color: $success-color;
-        }
-
-        &.inactive {
-          background-color: #fdecea;
-          color: #d9534f;
-        }
-
-        &.pending {
-          background-color: #fff4cc;
-          color: #ff9800;
-        }
-      }
+    &.active {
+      color: $success-color;
     }
 
-    .admin-details {
-      flex: 1;
-      padding: 1.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 1rem;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      background-color: #fafafa;
+    &.inactive {
+      color: $danger-color;
+    }
+  }
+}
 
-      p {
-        margin: 0;
+.admin-details {
+  flex: 2;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 
-        strong {
-          color: $primary-color;
-        }
+  p {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+    border-bottom: 2px solid var(--primary-color);
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
 
+    strong {
+      display: block;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
 
-      }
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .admin-details-lable-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+}
+
+.admin-subtitle {
+  font-size: 1.75rem;
+  color: var(--primary-color);
+  margin: 2rem 0 1rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.company-cards-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.company-card {
+  background: linear-gradient(135deg, #ffffff, #f9fdfd);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  flex: 1 1 280px;
+  transition: transform 0.3s;
+
+  h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+
+    strong {
+      color: #666;
     }
   }
 
-  .admin-subtitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $primary-color;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 150, 147, 0.1);
+  }
+}
+
+.no-companies {
+  font-style: italic;
+  color: #aaa;
+  margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-card {
+    flex-direction: column;
+  }
+
+  .admin-details {
+    grid-template-columns: 1fr;
   }
 
   .company-cards-wrapper {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-
-    .role-card,
-    .company-card {
-      background: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      border-left: 5px solid $primary-color;
-      display: flex;
-      flex-direction: column;
-
-
-      h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-        color: $primary-color;
-      }
-
-      p {
-        font-size: 0.95rem;
-        color: #444;
-
-        strong {
-          font-weight: 500;
-          color: #222;
-        }
-      }
-    }
-
-    .no-companies {
-      font-style: italic;
-      color: #999;
-    }
+    flex-direction: column;
   }
 }

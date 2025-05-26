@@ -36,6 +36,16 @@ const employeCreateApi = employeCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Employe"],
     }),
 
+    updateEmployeeStatus: builder.mutation<void, { id: string; status: "active" | "inactive" | "blocked" }>({
+      query: ({ id, status }) => ({
+        url: `change-emp-status/${id}`,
+        method: "POST",
+        body: { status },
+      }),
+      invalidatesTags: ["Employe"],
+    }),
+
+
 
     deleteEmploye: builder.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({
@@ -81,6 +91,7 @@ export const {
   useFetchEmployesQuery,
   useFetchEmployeByIdQuery,
   useCreateEmployeMutation,
+  useUpdateEmployeeStatusMutation,
   useUpdateEmployeMutation,
   useDeleteEmployeMutation,
   useFetchPaySlipByIdQuery,

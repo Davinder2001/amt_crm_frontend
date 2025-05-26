@@ -69,13 +69,14 @@ const RoleList: React.FC = () => {
 
   return (
     <div className="permissions-form-outer">
+      <div className="navigation-buttons roll-list-navigation-btn">
       <button
         onClick={() => router.back()}
         className="back-button"
       >
         <FaArrowLeft size={20} color="#fff" />
       </button>
-      <div className="navigation-buttons">
+      
         <Link className="navigation-button" href={`/${companySlug}/permissions/add-role`}>
           <FaPlus /> Add Role
         </Link>

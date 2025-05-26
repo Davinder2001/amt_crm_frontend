@@ -1,29 +1,3 @@
-// 'use client';
-
-// import React, { useEffect } from 'react';
-// import PackagesView from './components/packagesView';
-// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-// import BusinessCategories from './components/Categories';
-
-// const Page = () => {
-//   const { setTitle } = useBreadcrumb();
-
-//   useEffect(() => {
-//     setTitle('All packages Plan');
-//   }, [setTitle]);
-
-//   return (
-//     <>
-//     <div className='BCategories-PView-container'>
-
-//       <BusinessCategories />
-//       <PackagesView />
-//     </div>
-//     </>
-//   );
-// };
-
-// export default Page;
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -71,12 +45,12 @@ const Page = () => {
                 backgroundColor: '#f8fafc'
               },
               '&.Mui-selected': {
-                color: '#2d3748',
+                color: 'var(--primary-color)',
                 fontWeight: 500,
               },
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#009693',
+              backgroundColor: 'var(--primary-color)',
               height: '2px'
             },
           }}

@@ -12,6 +12,7 @@ const UserList: React.FC = () => {
   const { companySlug } = useCompany();
 
   const [deleteEmployee] = useDeleteEmployeMutation();
+  const [updateStatus] = useUpdateEmployeeStatusMutation();
   const employees: Employee[] = employeesData?.employees ?? [];
 
   if (isLoading) return <p>Loading employees...</p>;
@@ -42,7 +43,6 @@ const UserList: React.FC = () => {
     {
       label: 'Status',
       render: (emp: Employee) => {
-        const [updateStatus] = useUpdateEmployeeStatusMutation();
 
         const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
           const newStatus = e.target.value as "active" | "inactive" | "blocked";

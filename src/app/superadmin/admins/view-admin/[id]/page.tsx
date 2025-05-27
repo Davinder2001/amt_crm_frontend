@@ -22,6 +22,7 @@ const ViewAdminPage = () => {
   if (error) return <p>Error loading admin.</p>;
 
   const admin = data?.admin;
+
   if (!admin) return <p>No admin data available.</p>;
 
   return (
@@ -49,7 +50,6 @@ const ViewAdminPage = () => {
               />
               <span className={`admin-status ${admin.user_status}`}>{admin.user_status}</span>
             </div>
-
             <div className="admin-info-side-outer">
               <h2>{admin.name}</h2>
               <div className="admin-info-side">
@@ -63,29 +63,7 @@ const ViewAdminPage = () => {
               </div>
             </div>
           </div>
-
-
-
         </div>
-
-
-
-        {/* <div className="company-cards-outer">
-          <h2 className="admin-subtitle">Associated Companies</h2>
-          <div className="company-cards-wrapper">
-            {admin.companies?.length > 0 ? (
-              admin.companies.map((company, index) => (
-                <div key={company.id} className="company-card">
-                  <h3>{index + 1}. {company.name}</h3>
-                  <p><strong>Slug:</strong> {company.slug}</p>
-                </div>
-              ))
-            ) : (
-              <p className="no-companies">No associated companies.</p>
-            )}
-          </div>
-        </div> */}
-
 
         <div className="company-cards-outer">
           <h2 className="admin-subtitle">Associated Companies</h2>
@@ -94,7 +72,7 @@ const ViewAdminPage = () => {
               admin.companies.map((company, index) => (
                 <Link
                   key={company.id}
-                  href={`/superadmin/companies/view/${id}`} // Use company_id here
+                  href={`/superadmin/companies/view/${company.id}`}
                   className="company-card-link"
                 >
                   <div className="company-card">
@@ -108,7 +86,6 @@ const ViewAdminPage = () => {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

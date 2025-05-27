@@ -1,0 +1,40 @@
+@use '../variables'as *;
+.items-page-outer{
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .popup-modal {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .popup-modal-content {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .popup-modal input[type='file'] {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .popup-modal button {
+        transition: all 0.2s ease;
+    }
+    
+    .popup-modal button:hover {
+        opacity: 0.9;
+      }
+    }

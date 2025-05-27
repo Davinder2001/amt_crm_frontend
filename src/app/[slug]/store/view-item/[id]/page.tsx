@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
@@ -9,6 +9,9 @@ import { useCompany } from '@/utils/Company';
 // import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaArrowLeft, FaEdit, FaInfoCircle, FaMoneyBillWave, FaTags, FaTrash } from 'react-icons/fa';
 import { BsGearWideConnected } from 'react-icons/bs';
+
+
+
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -20,6 +23,20 @@ const ViewItem = () => {
   // const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const categoriesRef = useRef<HTMLDivElement>(null);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (categoriesRef.current && !categoriesRef.current.contains(event.target as Node)) {
+        setShowAllCategories(false);
+      }
+    }; document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleDelete = async () => {
     try {
       await deleteStoreItem(Number(id)).unwrap();
@@ -29,7 +46,17 @@ const ViewItem = () => {
       console.error('Error deleting item:', err);
     }
   };
-
+  // Update the InfoCard props interface
+  interface InfoCardProps {
+    title: string;
+    data: {
+      label: string;
+      value: React.ReactNode;  // Changed from string|number
+      className?: string
+    }[];
+    className?: string;
+    icon?: React.ElementType;
+  }
   if (isLoading) return <p>Loading item...</p>;
   if (error) return <p>Error loading item.</p>;
   if (!item) return <p>Item not found.</p>;
@@ -74,7 +101,45 @@ const ViewItem = () => {
             ]} />
 
             <InfoCard icon={FaTags} title="Category & Vendor" className="info-card info-card-purple" data={[
-              { label: 'Categories', value: item.categories?.map(c => c.name).join(', ') || '-' },
+              // Replace the Categories line in your data array
+              {
+                label: 'Categories',
+                value: (
+                  <div className="categories-container" ref={categoriesRef}>
+                    <button
+                      type="button"
+                      className="see-all-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowAllCategories(!showAllCategories);
+                      }}
+                    >
+                      See all
+                    </button>
+                    {item.categories?.slice(0, 2).map((c, index) => (
+                      <span key={c.id || index}>
+                        {c.name}
+                        {index < 1 && item.categories.length > 2 && ', '}
+                      </span>
+                    ))}
+                    {item.categories?.length > 2 && (
+                      <>
+
+                        {showAllCategories && (
+                          <div className="categories-dropdown">
+                            {item.categories.map((c, index) => (
+                              <div key={c.id || index} className="category-item">
+                                {c.name}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+                    {!item.categories?.length && '-'}
+                  </div>
+                )
+              },
               { label: 'Vendor', value: item.vendor_name || '-' },
               { label: 'Catalog', value: item.catalog ? 'Yes' : 'No' },
               { label: 'Online Visibility', value: item.online_visibility ? 'Yes' : 'No' }
@@ -92,8 +157,8 @@ const ViewItem = () => {
                       src={imgSrc}
                       alt={`Item image ${index + 1}`}
                       className="single-item-images w-32 h-32 object-cover rounded border cursor-pointer"
-                      width={100}
-                      height={100}
+                      width={1000}
+                      height={1000}
                       onClick={() => setSelectedImage(imgSrc)}
                     />
                   );
@@ -128,7 +193,7 @@ const InfoCard = ({
   icon: Icon
 }: {
   title: string;
-  data: { label: string; value: string | number; className?: string }[];  // support className
+  data: { label: string; value: React.ReactNode; className?: string }[];  // support React.ReactNode
   className?: string;
   icon?: React.ElementType;
 }) => (

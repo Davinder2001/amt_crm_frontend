@@ -223,6 +223,7 @@ const UpdateItem = () => {
     try {
       await updateStoreItem({ id: formData.id, formdata }).unwrap();
       toast.success('Item updated successfully!');
+      router.back(); // 
       // router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error updating item:', err);

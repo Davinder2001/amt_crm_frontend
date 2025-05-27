@@ -70,6 +70,7 @@ interface PredefinedTask {
     recurrence_start_date: string;
     recurrence_end_date: string
     attachment_url: string;
+    task: Task;
     created_at: string;
     updated_at: string;
     // Add more fields if needed

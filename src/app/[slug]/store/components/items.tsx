@@ -62,7 +62,12 @@ const Items: React.FC = () => {
     );
   };
 
-  const filterData = (data: typeof storeItems): typeof storeItems => {
+  // Add this type above your component or import it if defined elsewhere
+  type StoreItem = {
+    [key: string]: any;
+  };
+
+  const filterData = (data: StoreItem[]): StoreItem[] => {
     return data.filter((item) => {
       return Object.entries(filters).every(([field, values]) => {
         const itemValue = item[field];
@@ -114,92 +119,66 @@ const Items: React.FC = () => {
 
   const columns = visibleColumns.map((key) => ({
     label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-    render: (item: any) => item[key] ?? '-',
+    render: (item: any) => {
+      const value = item[key];
+      if (value === null || value === undefined) return '-';
+      if (typeof value === 'object') {
+        // Try to display a meaningful field
+        if ('name' in value) return value.name;
+        if ('label' in value) return value.label;
+        return JSON.stringify(value); // fallback
+      }
+      return value.toString();
+    }
   }));
+
 
   if (isLoading) return <Loader />;
   if (error) return <p>Error fetching items.</p>;
 
   return (
     <div className="items-page">
-      <TableToolbar
-        filters={{}}
-        onFilterChange={handleFilterChange}
-        columns={columns.map((col) => ({ label: col.label, key: col.label }))}
-        visibleColumns={visibleColumns}
-        onColumnToggle={toggleColumn}
-        downloadActions={[
-          { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
-          { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
-        ]}
-        actions={[{ label: 'Create', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]}
-      />
+      <div className="items-page-outer">
+        <TableToolbar
+          filters={{}}
+          onFilterChange={handleFilterChange}
+          columns={columns.map((col) => ({ label: col.label, key: col.label }))}
+          visibleColumns={visibleColumns}
+          onColumnToggle={toggleColumn}
+          downloadActions={[
+            { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
+            { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
+          ]}
+          actions={[{ label: 'Create', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]}
+        />
 
-      <ResponsiveTable
-        data={filteredItems}
-        columns={columns}
-        onDelete={(id) => handleDelete(id)}
-        onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
-      />
+        <ResponsiveTable
+          data={filteredItems}
+          columns={columns}
+          onDelete={(id) => handleDelete(id)}
+          onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
+        />
 
-      {importModalVisible && (
-        <div className="modal-backdrop">
-          <div className="popup-modal">
-            <div className="popup-modal-content">
-              <h3 className="text-lg font-semibold mb-4">Import Items from Excel</h3>
-              <input type="file" accept=".xlsx, .xls" ref={fileInputRef} className="mb-4" />
-              <div className="flex justify-end space-x-4">
-                <button className="bg-gray-300 px-4 py-2 rounded" onClick={() => setImportModalVisible(false)}>
-                  Cancel
-                </button>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleImportFile}>
-                  Upload
-                </button>
+        {importModalVisible && (
+          <div className="modal-backdrop">
+            <div className="popup-modal">
+              <div className="popup-modal-content">
+                <h3 className="text-lg font-semibold mb-4">Import Items from Excel</h3>
+                <input type="file" accept=".xlsx, .xls" ref={fileInputRef} className="mb-4" />
+                <div className="flex justify-end space-x-4">
+                  <button className="bg-gray-300 px-4 py-2 rounded" onClick={() => setImportModalVisible(false)}>
+                    Cancel
+                  </button>
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleImportFile}>
+                    Upload
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      <style jsx>{`
-      .modal-backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .popup-modal {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .popup-modal-content {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .popup-modal input[type='file'] {
-        border: 1px solid #ddd;
-        padding: 0.5rem;
-        border-radius: 4px;
-      }
-
-      .popup-modal button {
-        transition: all 0.2s ease;
-      }
-
-      .popup-modal button:hover {
-        opacity: 0.9;
-      }
-    `}</style>
+        )}
+      </div>
     </div>
   );
 };

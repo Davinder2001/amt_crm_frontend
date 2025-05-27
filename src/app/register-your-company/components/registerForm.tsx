@@ -216,6 +216,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
       }
       else if (!otpVerified) {
         newErrors.number = 'Please Verify your Phone Number'
+      }else if(otpVerified){
+        delete newErrors.number;
       }
       else {
         delete newErrors.number;

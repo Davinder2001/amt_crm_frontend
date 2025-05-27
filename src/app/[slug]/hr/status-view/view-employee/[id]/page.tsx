@@ -107,7 +107,7 @@ const ViewUserPage: React.FC = () => {
             <div className="profile-title">
               <h1>{employee.name}</h1>
               <div className="profile-meta">
-                <span className="badge role">{employee.roles?.[0]?.name || 'N/A'}</span>
+                <span className="badge role employ-view-role">{employee.roles?.[0]?.name || 'N/A'}</span>
                 <span className="badge status">{employee.user_status}</span>
               </div>
             </div>

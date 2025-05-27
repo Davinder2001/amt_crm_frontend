@@ -55,27 +55,27 @@ const Page = () => {
             },
           }}
         >
-          <Tab label="Packages" id="tab-0" aria-controls="tabpanel-0" />
-          <Tab label="Categories" id="tab-1" aria-controls="tabpanel-1" />
+          <Tab label="Categories" id="tab-0" aria-controls="tabpanel-0" />
+          <Tab label="Packages" id="tab-1" aria-controls="tabpanel-1" />
         </Tabs>
       </Box>
 
-      <div className="form">
-        <div role="tabpanel" hidden={value !== 0} id="tabpanel-0" aria-labelledby="tab-0">
+        <div role="tabpane0" hidden={value !== 0} id="tabpanel-0" aria-labelledby="tab-0">
           {value === 0 && (
+            <div className="form-section-two">
+              <BusinessCategories />
+            </div>
+          )}
+        </div>
+      <div className="form">
+        <div role="tabpanel" hidden={value !== 1} id="tabpanel-1" aria-labelledby="tab-1">
+          {value === 1 && (
             <div className=" form-section-one">
               <PackagesView />
             </div>
           )}
         </div>
 
-        <div role="tabpanel" hidden={value !== 1} id="tabpanel-1" aria-labelledby="tab-1">
-          {value === 1 && (
-            <div className="form-section-two">
-              <BusinessCategories />
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

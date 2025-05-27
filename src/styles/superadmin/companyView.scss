@@ -1,287 +1,4 @@
-@use '../variables' as *;
-
-// // ViewCompany.scss
-// .vc-container {
-
-//   .vc-inner-container {
-//     margin: 2rem auto;
-//     background: $white;
-//     border-radius: 10px;
-//     box-shadow: $box-shadow ;
-//     overflow: hidden;
-//     transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-//     .vc-header {
-//       background: var(--primary-color);
-//       color: $white;
-//       padding: 1rem;
-
-//       .vc-title {
-//         margin: 0;
-//         font-size: 1.8rem;
-//         font-weight: 700;
-//       }
-
-//       .vc-subtitle {
-//         color: white;
-//         font-size: 16px;
-//         margin: 5px 0px;
-//       }
-//     }
-
-//     .vc-grid {
-//       display: grid;
-//       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-//       padding: 1.5rem;
-//       gap: 20px;
-
-
-//       .vc-item {
-//         display: flex;
-//         gap: 5px;
-//         border-bottom: 1px dashed #6bfffca1;
-//         padding-bottom: 15px;
-
-//         dt {
-//           font-size: 17px;
-//           font-weight: 700;
-//           color: var(--primary-color);
-//           margin-bottom: 0.25rem;
-//         }
-
-//         dd {
-//           margin: 0;
-//           font-size: 16px;
-//           font-weight: 600;
-//           color: #575757;
-//           text-transform: capitalize;
-//         }
-
-//       }
-//     }
-
-//     .vc-proofs {
-//       border-top: 1px solid #eee;
-//       padding: 1.5rem;
-//       display: flex;
-//       gap: 1rem;
-//       flex-wrap: wrap;
-
-//       .vc-proof {
-//         flex: 1 1 45%;
-
-//         figcaption {
-//           font-weight: 600;
-//           margin-bottom: 0.5rem;
-//           color: $para-color;
-//         }
-
-//         img {
-//           width: 100%;
-//           height: auto;
-//           border-radius: 6px;
-//           box-shadow: $box-shadow;
-//         }
-//       }
-//     }
-
-//     .vc-loading,
-//     .vc-error {
-//       text-align: center;
-//       padding: 2rem;
-//       color: #666;
-//     }
-
-//     .vc-error {
-//       color: $danger-color;
-//     }
-//   }
-
-//   .Vcompany-edit-delete-btn-outer {
-//     display: flex;
-//     justify-content: end;
-//     padding: 20px;
-
-//     .Vcompany-edit-delete-btn-inner {
-//       display: flex;
-//       gap: 20px;
-//       color: var(--primary-color);
-//     }
-//   }
-// }
-
-
-
-
-/* styles/viewCompany.module.css */
-
-// .vc-container {
-//   padding: 2rem;
-//   font-family: $font-family;
-//   background-color: $light-color;
-// }
-
-// .vC-back-btn {
-//   margin-bottom: 1.5rem;
-
-//   .back-button {
-//     display: inline-flex;
-//     align-items: center;
-//     gap: 8px;
-//     background-color: var(--primary-color);
-//     color: $white;
-//     padding: 0.5rem 1rem;
-//     border-radius: $border-radius;
-//     font-weight: $font-weight-medium;
-//     text-decoration: none;
-//     transition: $transition;
-
-//     &:hover {
-//       background-color: rgba(var(--primary-color), 10%);
-//     }
-//   }
-// }
-
-// .vc-inner-container {
-//   background: $white;
-//   border-radius: 24px;
-//   padding: 2rem;
-//   box-shadow: $secondary-shadow;
-//   border: $border;
-// }
-
-// .vc-header {
-//   text-align: center;
-//   margin-bottom: 2.5rem;
-
-//   .vc-title {
-//     font-size: $font-size-extra-extra-large;
-//     color: var(--primary-color);
-//     font-weight: $font-weight-bold;
-//   }
-
-//   .vc-subtitle {
-//     font-size: $font-size;
-//     color: $gray-color;
-//     margin-top: 0.3rem;
-//   }
-// }
-
-// .vc-grid {
-//   display: grid;
-//   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-//   gap: 1.25rem;
-//   margin-bottom: 2rem;
-// }
-
-// .vc-item {
-//   background-color: $secondary-color;
-//   border-radius: 12px;
-//   padding: 1.25rem;
-//   border: 1px solid $border-color;
-//   transition: $transition;
-
-//   &:hover {
-//     box-shadow: $box-shadow;
-//     transform: translateY(-2px);
-//   }
-
-//   dt {
-//     font-size: $font-size-small;
-//     color: var(--primary-color);
-//     font-weight: $font-weight-medium;
-//     margin-bottom: 0.4rem;
-//   }
-
-//   dd {
-//     font-size: $font-size;
-//     color: $para-color;
-//     margin: 0;
-//     font-weight: $font-weight-regular;
-
-//     &[data-status='pending'] {
-//       color: $warning-color;
-//       font-weight: $font-weight-medium;
-//     }
-
-//     &[data-status='completed'] {
-//       color: $success-color;
-//       font-weight: $font-weight-medium;
-//     }
-//   }
-// }
-
-// .Vcompany-edit-delete-btn-outer {
-//   margin-top: 1.5rem;
-//   display: flex;
-//   justify-content: flex-end;
-// }
-
-// .Vcompany-edit-delete-btn-inner {
-//   display: flex;
-//   gap: 12px;
-
-//   .buttons {
-//     background-color: var(--primary-color);
-//     color: $white;
-//     padding: 0.65rem 1.25rem;
-//     border-radius: $border-radius;
-//     font-weight: $font-weight-medium;
-//     cursor: pointer;
-//     transition: $transition;
-
-//     &:hover {
-//       background-color: rgba(var(--primary-color), 10%);
-//     }
-
-//     &[title='Delete'] {
-//       background-color: $danger-color;
-
-//       &:hover {
-//         background-color: rgba($danger-color, 10%);
-//       }
-//     }
-//   }
-// }
-
-// .vc-proofs {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 2rem;
-//   margin-top: 2.5rem;
-// }
-
-// .vc-proof {
-//   background: $white;
-//   border: 1px solid $border-color;
-//   border-radius: 12px;
-//   overflow: hidden;
-//   flex: 1 1 300px;
-//   max-width: 500px;
-//   box-shadow: $box-shadow;
-
-//   figcaption {
-//     background-color: $tertiary-color;
-//     padding: 0.75rem 1rem;
-//     font-size: $font-size-small;
-//     color: $dark-color;
-//     font-weight: $font-weight-medium;
-//     border-bottom: 1px solid $border-color;
-//   }
-
-//   img {
-//     width: 100%;
-//     height: 280px;
-//     object-fit: contain;
-//     transition: transform $transition;
-
-//     &:hover {
-//       transform: scale(1.02);
-//     }
-//   }
-// }
-
-
+@use "../variables" as *;
 
 /* Modern CSS using your variables */
 .vc-modern-container {
@@ -570,6 +287,22 @@
   font-style: italic;
 }
 
+.company-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  .company-card {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
+
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .vc-modern-grid {
@@ -579,4 +312,45 @@
   .vc-documents-card {
     position: static;
   }
+}
+
+@media (max-width: 768px) {
+  .vc-header-main {
+    flex-direction: column;
+    gap: 10px;
+
+    .vc-company-name {
+      font-size: 24px;
+    }
+  }
+
+  .vc-action-buttons {
+    margin-top: 0px;
+  }
+
+  .vc-modern-container {
+    padding: 0px;
+  }
+
+  .vc-documents-card {
+    padding: 10px;
+  }
+
+  .vc-details-card {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 448px) {
+  .vc-company-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .vc-company-id {
+    &:after {
+      display: none;
+    }
+  }
+
 }

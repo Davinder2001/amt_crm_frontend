@@ -6,7 +6,7 @@ import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import Link from "next/link";
 import Image from "next/image";
 import { adminlogo } from "@/assets/useImage";
-import { FaArrowLeft, FaBuilding, FaCalendarAlt, FaCheckCircle, FaEnvelope, FaFingerprint,  FaPhoneAlt, FaUserShield } from "react-icons/fa";
+import { FaArrowLeft, FaBuilding, FaCalendarAlt, FaCheckCircle, FaEnvelope, FaFingerprint, FaPhoneAlt, FaUserShield } from "react-icons/fa";
 
 const ViewAdminPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -53,13 +53,13 @@ const ViewAdminPage = () => {
             <div className="admin-info-side-outer">
               <h2>{admin.name}</h2>
               <div className="admin-info-side">
-                <div className="admin-field"><FaPhoneAlt /> <span className="view-admin-details"> <strong>Number:</strong> {admin.number}</span></div>
-                <div className="admin-field"><FaEnvelope /><span className="view-admin-details"><strong>Email:</strong> {admin.email}</span></div>
-                <div className="admin-field"><FaFingerprint /><span className="view-admin-details"><strong>UID:</strong>  {admin.uid}</span></div>
-                <div className="admin-field"><FaUserShield /><span className="view-admin-details"><strong>User Type:</strong> {admin.user_type}</span></div>
-                <div className="admin-field"><FaCheckCircle /><span className="view-admin-details"><strong>Email Verified:</strong>  {admin.email_verified_at ? new Date(admin.email_verified_at).toLocaleString() : "Not verified"}</span></div>
-                <div className="admin-field"><FaCalendarAlt /><span className="view-admin-details"> <strong>Created At:</strong> {new Date(admin.created_at).toLocaleString()}</span></div>
-                <div className="admin-field"><FaBuilding /><span className="view-admin-details"><strong>Company ID:</strong>  {admin.company_id || admin.roles?.[0]?.company_id || "Not available"}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaPhoneAlt /> <span className="view-admin-details"> <strong>Number:</strong></span> </span> {admin.number}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaEnvelope /><span className="view-admin-details"><strong>Email:</strong></span> </span> {admin.email}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaFingerprint /><span className="view-admin-details"><strong>UID:</strong></span> </span>  {admin.uid}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaUserShield /><span className="view-admin-details"><strong>User Type:</strong></span> </span> {admin.user_type}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaCheckCircle /><span className="view-admin-details"><strong>Email Verified:</strong></span> </span>  {admin.email_verified_at ? new Date(admin.email_verified_at).toLocaleString() : "Not verified"}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaCalendarAlt /><span className="view-admin-details"> <strong>Created At:</strong></span> </span> {new Date(admin.created_at).toLocaleString()}</span></div>
+                <div className="admin-field"><span className="admin-info-side-lable-value "><span className="admin-info-side-lable"><FaBuilding /><span className="view-admin-details"><strong>Company ID:</strong></span> </span>  {admin.company_id || admin.roles?.[0]?.company_id || "Not available"}</span></div>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ const ViewAdminPage = () => {
 
 
 
-        <div className="company-cards-outer">
+        {/* <div className="company-cards-outer">
           <h2 className="admin-subtitle">Associated Companies</h2>
           <div className="company-cards-wrapper">
             {admin.companies?.length > 0 ? (
@@ -79,6 +79,29 @@ const ViewAdminPage = () => {
                   <h3>{index + 1}. {company.name}</h3>
                   <p><strong>Slug:</strong> {company.slug}</p>
                 </div>
+              ))
+            ) : (
+              <p className="no-companies">No associated companies.</p>
+            )}
+          </div>
+        </div> */}
+
+
+        <div className="company-cards-outer">
+          <h2 className="admin-subtitle">Associated Companies</h2>
+          <div className="company-cards-wrapper">
+            {admin.companies?.length > 0 ? (
+              admin.companies.map((company, index) => (
+                <Link
+                  key={company.id}
+                  href={`/superadmin/companies/view/${id}`} // Use company_id here
+                  className="company-card-link"
+                >
+                  <div className="company-card">
+                    <h3>{index + 1}. {company.name}</h3>
+                    <p><strong>Slug:</strong> {company.slug}</p>
+                  </div>
+                </Link>
               ))
             ) : (
               <p className="no-companies">No associated companies.</p>

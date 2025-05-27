@@ -58,7 +58,7 @@
           font-size: 50px;
           font-weight: $font-weight-bold;
           color: var(--primary-color);
-          border: 1px solid  var(--primary-color);
+          border: 1px solid var(--primary-color);
         }
       }
 
@@ -80,6 +80,10 @@
             margin-top: 10px;
             display: flex;
             gap: 10px;
+
+            .employ-view-role {
+              background-color: #ececec !important;
+            }
 
             .badge {
               padding: 4px 12px;
@@ -121,7 +125,8 @@
               color: $white;
 
               &:hover {
-                background: rgba(var(--primary-color), 10%);
+                background: #00969382;
+                box-shadow: 0 8px 24px #0000001a;
               }
             }
 

@@ -16,7 +16,7 @@ const AdminList = () => {
 
   const [filters, setFilters] = useState<Record<string, string[]>>({});
   const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'uid', 'name', 'email', 'number', 'roles', 'email_verified', 'status'
+    'uid', 'name', 'email', 'number', 'email_verified', 'status'
   ]);
 
   const handleStatusChange = (id: string, status: string) => {
@@ -28,7 +28,6 @@ const AdminList = () => {
     { label: 'Name', key: 'name' },
     { label: 'Email', key: 'email' },
     { label: 'Number', key: 'number' },
-    { label: 'Roles', key: 'roles' },
     { label: 'Email Verified', key: 'email_verified' },
     { label: 'Status', key: 'status' },
   ];
@@ -110,7 +109,6 @@ const AdminList = () => {
           | "uid"
           | "name"
           | "email"
-          | "roles"
           | "id"
           | "companies"
           | "created_at"

@@ -61,6 +61,9 @@
     width: 100%;
     color: var(--primary-color);
 
+    svg {
+      color: var(--primary-color);
+    }
   }
 
   .search-input {

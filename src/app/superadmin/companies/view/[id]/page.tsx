@@ -8,6 +8,7 @@ import { FaArrowLeft, FaEdit, FaTrashAlt, FaFileAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 import { adminlogo } from "@/assets/useImage";
+import Loader from '@/components/common/Loader';
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -43,7 +44,6 @@ const ViewCompanyPage = () => {
 
   const company = data?.data as unknown as {
     id: number;
-    admin_id: number | null;
     company_name: string;
     company_id: string;
     company_slug: string;
@@ -58,8 +58,7 @@ const ViewCompanyPage = () => {
     verification_status: string;
   };
 
-  if (!company) return <div>Company not found.</div>;
-  if (isLoading) return <div>Loading company details...</div>;
+  if (isLoading) return <Loader/>;
   if (error) return <div>Error loading company details.</div>;
 
   return (
@@ -100,21 +99,6 @@ const ViewCompanyPage = () => {
                 </div>
               </div>
             </div>
-            <div className="vc-action-buttons">
-              <button
-                onClick={() => router.push(`/superadmin/companies/edit/${company.company_id}`)}
-                className="vc-action-btn vc-edit-btn "
-              >
-                <FaEdit /> Edit
-              </button>
-              <button
-                onClick={() => handleDeleteCompany(company.company_id)}
-                className="vc-action-btn vc-delete-btn"
-              >
-                <FaTrashAlt /> Delete
-              </button>
-
-            </div>
           </div>
         </div>
 
@@ -130,7 +114,6 @@ const ViewCompanyPage = () => {
 
               <div className="vc-detail-grid">
                 <DetailItem label="System ID" value={company.id} />
-                <DetailItem label="Admin ID" value={company.admin_id || 'N/A'} />
                 <DetailItem label="Business Address" value={company.business_address} />
                 <DetailItem label="PIN Code" value={company.pin_code} />
                 <DetailItem label="Business ID" value={company.business_id} />

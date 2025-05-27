@@ -48,7 +48,10 @@ const ViewAdminPage = () => {
                   target.src = adminlogo.src;
                 }}
               />
-              <span className={`admin-status ${admin.user_status}`}>{admin.user_status}</span>
+              <span className={`admin-status ${admin.user_status}`}>
+                {admin.user_status}
+              </span>
+
             </div>
             <div className="admin-info-side-outer">
               <h2>{admin.name}</h2>

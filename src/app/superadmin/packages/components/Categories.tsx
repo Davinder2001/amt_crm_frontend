@@ -131,7 +131,7 @@ const BusinessCategories = () => {
 
 
             {categories && categories.length > 6 && (
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 1.5 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 1.5, }}>
                     <Button
                         variant="outlined"
                         onClick={() => setShowAll(!showAll)}

@@ -73,7 +73,8 @@
             margin: 0;
             font-size: $font-size-extra-large;
             font-weight: $font-weight-semi-bold;
-            color: $dark-color;
+            color: var(--primary-color);
+
           }
 
           .profile-meta {
@@ -171,8 +172,13 @@
           color: $dark-color;
           padding-bottom: 10px;
           border-bottom: 1px solid $border-color;
+          align-items: center;
 
           i {
+            color: var(--primary-color);
+          }
+
+          h4 {
             color: var(--primary-color);
           }
         }

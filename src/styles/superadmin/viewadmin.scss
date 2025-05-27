@@ -224,6 +224,7 @@
     span[class*="admin-status"] {
       background: $success-color;
       color: $white;
+      position: relative;
       padding: 0.3rem 1rem;
       border-radius: 20px;
       font-size: $font-size-extra-small;
@@ -231,8 +232,20 @@
       box-shadow: $box-shadow;
       text-transform: capitalize;
 
-      &.inactive {
+      &.blocked {
         background: $danger-color;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 5;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background-color: white;
+        border-radius: 50%;
       }
     }
   }
@@ -241,7 +254,7 @@
     flex-grow: 1;
 
     h2 {
-      color: $dark-color;
+      color: var(--primary-color);
       margin-bottom: 1.5rem;
       font-size: $font-size-extra-large;
       font-weight: $font-weight-semi-bold;
@@ -270,7 +283,7 @@
 
       svg {
         color: var(--primary-color);
-        font-size: $font-size-large;
+        font-size: $font-size;
         flex-shrink: 0;
       }
 
@@ -298,7 +311,7 @@
   border: $border;
 
   .admin-subtitle {
-    color: $dark-color;
+    color: var(--primary-color);
     margin-bottom: 1.5rem;
     font-size: $font-size-extra-large;
     font-weight: $font-weight-semi-bold;
@@ -361,9 +374,10 @@
     }
 
   }
-.company-cards-outer {
-padding: 10px;
-}
+
+  .company-cards-outer {
+    padding: 10px;
+  }
 
 
 }

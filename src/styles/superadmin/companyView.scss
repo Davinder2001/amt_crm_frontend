@@ -59,7 +59,7 @@
 
 .vc-company-name {
   font-size: $font-size-extra-extra-large;
-  color: #555454;
+  color: var(--primary-color);
   margin-bottom: 0.5rem;
   font-weight: $font-weight-bold;
   border-bottom: 1px solid var(--primary-color);
@@ -138,7 +138,7 @@
   align-items: center;
   gap: 0.75rem;
   font-size: $font-size-extra-large;
-  color: $dark-color;
+  color: var(--primary-color);
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid $tertiary-color;

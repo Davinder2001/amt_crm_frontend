@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaTrash, FaUser } from 'react-icons/fa';
 import Link from 'next/link'
 
 const ViewUserPage: React.FC = () => {
@@ -82,9 +82,9 @@ const ViewUserPage: React.FC = () => {
     <div className="employee-profile-container">
       <div className='employee-profile-nav'>
         <Link href={`/${companySlug}/hr/status-view`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
-      <HrNavigation />
+          <FaArrowLeft size={20} color='#fff' />
+        </Link>
+        <HrNavigation />
       </div>
       <div className="employee-profile-inner-container">
         <div className="profile-header">
@@ -162,20 +162,20 @@ const ViewUserPage: React.FC = () => {
         <div className="profile-grid">
           {/* Basic Info */}
           <div className="profile-card basic-info">
-            <h2 className="card-title"><i className="icon-user"></i> Basic Information</h2>
+            <span className="card-title"><i className="icon-user"><FaUser className="card-title-icon" /></i> <h4>Basic Information</h4> </span>
             <div className="info-grid">
               <div className="info-item"><span className="info-label">Employee ID</span><span className="info-value">{employee.id}</span></div>
               <div className="info-item"><span className="info-label">Company</span><span className="info-value">{employee.company_name || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Mobile</span><span className="info-value">{employee.number || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Email</span><span className="info-value">{employee.email}</span></div>
               <div className="info-item"><span className="info-label">Birth Date</span><span className="info-value">{formatDate(details?.dob)}</span></div>
-              <div className="info-item"><span className="info-label">City</span><span className="info-value">{details?.address || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Cispanty</span><span className="info-value">{details?.address || 'N/A'}</span></div>
             </div>
           </div>
 
           {/* Employment Info */}
           <div className="profile-card employment-info">
-            <h2 className="card-title"><i className="icon-briefcase"></i> Employment Details</h2>
+            <span className="card-title"><i className="icon-briefcase"><FaBriefcase className="card-title-icon" /></i> <h4>Employment Details</h4></span>
             <div className="info-grid">
               <div className="info-item"><span className="info-label">Department</span><span className="info-value">{details?.department || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
@@ -194,7 +194,7 @@ const ViewUserPage: React.FC = () => {
 
           {/* Personal Info */}
           <div className="profile-card personal-info">
-            <h2 className="card-title"><i className="icon-id-card"></i> Personal Information</h2>
+            <span className="card-title"><i className="icon-id-card"><FaIdCard className="card-title-icon" /></i>  <h4>Personal Information</h4></span>
             <div className="info-grid">
               <div className="info-item"><span className="info-label">Nationality</span><span className="info-value">{details?.nationality || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Religion</span><span className="info-value">{details?.religion || 'N/A'}</span></div>
@@ -207,7 +207,7 @@ const ViewUserPage: React.FC = () => {
 
           {/* Financial Info */}
           <div className="profile-card financial-info">
-            <h2 className="card-title"><i className="icon-credit-card"></i> Financial Information</h2>
+            <span className="card-title"><i className="icon-credit-card"><FaCreditCard className="card-title-icon" /></i> <h4>Financial Information</h4></span>
             <div className="info-grid">
               <div className="info-item"><span className="info-label">Bank Name</span><span className="info-value">{details?.bankName || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Account No</span><span className="info-value">{details?.accountNo || 'N/A'}</span></div>

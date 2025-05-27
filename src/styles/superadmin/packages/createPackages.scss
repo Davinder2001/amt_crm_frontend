@@ -9,9 +9,9 @@
     
 
     .header {
-        h1 {
+        h2 {
             font-size: 1.8rem;
-            color: #2d3748;
+            color: var(--primary-color);
         }
 
         p {
@@ -33,7 +33,7 @@
 
             .section-title {
                 font-size: 1.2rem;
-                color: #2d3748;
+                color: var(--primary-color);
                 margin-bottom: 1.5rem;
                 padding-bottom: 0.5rem;
                 border-bottom: 1px solid var(--primary-color);
@@ -332,35 +332,7 @@
             cursor: not-allowed;
         }
 
-        // .form-actions {
-        //     display: flex;
-        //     justify-content: flex-end;
 
-        //     .submit-button {
-        //         background: var(--primary-color);
-        //         color: #fff;
-        //         border: none;
-        //         padding: 10px;
-        //         border-radius: 6px;
-        //         font-weight: 500;
-        //         font-size: 1rem;
-        //         cursor: pointer;
-        //         transition: background-color 0.2s;
-
-
-        //         &:disabled {
-        //             cursor: not-allowed;
-        //             opacity: 0.7;
-        //             background-color: #cccccc;
-        //             color: #505050;
-        //         }
-
-        //         &:disabled:hover {
-        //             background-color: #cccccc;
-        //             transform: none;
-        //         }
-        //     }
-        // }
     }
 
     .loading,

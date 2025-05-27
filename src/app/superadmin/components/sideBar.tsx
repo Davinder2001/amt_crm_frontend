@@ -19,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
     { name: "Business Users", path: "admins", icon: <FaUserTie /> },
     { name: "Companies", path: "companies", icon: <FaBuilding /> },
-    { name: "packages", path: "packages", icon: <FaCube /> },
+    { name: "Packages", path: "packages", icon: <FaCube /> },
     { name: "Settings", path: "settings", icon: <FaCogs /> },
   ];
 

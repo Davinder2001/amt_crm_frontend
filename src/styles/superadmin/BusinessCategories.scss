@@ -79,16 +79,17 @@
         background-color: #ffffff;
         padding: 1.2rem 1.5rem;
         border-radius: 12px;
-        box-shadow: 0 8px 20px #0096931a;
+        box-shadow: $box-shadow ;
         transition: transform 0.2s ease;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-left: 1px solid var(--primary-color);
+        border-right: 1px solid var(--primary-color);
     }
 
     .category-box:hover {
         transform: translateY(-1px);
-        box-shadow: $box-shadow;
     }
 
     .category-name {

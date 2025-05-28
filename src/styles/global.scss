@@ -65,8 +65,9 @@
 @use './store/allitems.scss' as *;
 
 // vendors section........................
-
 @use './store/vendors/view-vendor.scss' as *;
+@use './store/vendors/add-as-vemdor.scss' as *;
+
 // @use './store/attributes.scss' as *;
 
 // chat pannel styling 

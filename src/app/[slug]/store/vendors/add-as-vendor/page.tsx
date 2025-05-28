@@ -11,6 +11,13 @@ import { FaRegImage } from 'react-icons/fa6';
 const Page = () => {
   const [invoiceNo, setInvoiceNo] = useState('');
   const [vendorName, setVendorName] = useState('');
+  const [vendorEmail, setVendorEmail] = useState('');
+  const [vendorAddress, setVendorAddress] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(''); // '' | 'credit'
+  const [creditPaymentType, setCreditPaymentType] = useState('full'); // 'full' | 'partial'
+  const [partialAmount, setPartialAmount] = useState(0);
+
+
   const [vendorNo, setVendorNo] = useState('');
   const [items, setItems] = useState<{ name: string; price: string; quantity: string; subTotal: string; }[]>([]);
   const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
@@ -67,6 +74,9 @@ const Page = () => {
     formData.append('invoice_no', invoiceNo);
     formData.append('vendor_name', vendorName);
     formData.append('vendor_no', vendorNo);
+    formData.append('vendor_email', vendorEmail);
+    formData.append('vendor_address', vendorAddress);
+
     if (image) formData.append('image', image);
 
     formData.append('tax_mode', taxMode);
@@ -91,6 +101,13 @@ const Page = () => {
     }
 
     formData.append('items', JSON.stringify(itemsToSend));
+    formData.append('payment_method', paymentMethod);
+    if (paymentMethod === 'credit') {
+      formData.append('credit_payment_type', creditPaymentType);
+      if (creditPaymentType === 'partial') {
+        formData.append('partial_amount', partialAmount.toString());
+      }
+    }
 
     try {
       await bulkCreateStoreItem(formData).unwrap();
@@ -123,7 +140,26 @@ const Page = () => {
             <label><FaPhoneAlt style={{ marginRight: 3 }} /> Vendor No</label>
             <input placeholder="Vendor No" value={vendorNo} onChange={(e) => setVendorNo(e.target.value)} />
           </div>
+          <div className="input-with-label">
+            <label><FaUserAlt style={{ marginRight: 3 }} /> Email</label>
+            <input
+              placeholder="Vendor Email"
+              value={vendorEmail}
+              onChange={(e) => setVendorEmail(e.target.value)}
+              type="email"
+            />
+          </div>
+
+          <div className="input-with-label">
+            <label><FaUserAlt style={{ marginRight: 3 }} /> Address</label>
+            <input
+              placeholder="Vendor Address"
+              value={vendorAddress}
+              onChange={(e) => setVendorAddress(e.target.value)}
+            />
+          </div>
         </div>
+
 
         <div className='add-as-a-v-button'>
           <label htmlFor="file-upload" className="file-upload-button">
@@ -253,7 +289,65 @@ const Page = () => {
             </div>
           )}
         </div>
+        {items.length > 0 && (
+          <div className="payment-section">
+            <label className="section-title">Payment Details</label>
 
+            <div className="payment-methods">
+              <div
+                className={`payment-box ${paymentMethod === 'Paid' ? 'selected' : ''}`}
+                onClick={() => setPaymentMethod('Paid')}
+              >
+                <span className="icon"></span>
+                <span>Paid</span>
+              </div>
+
+              <div
+                className={`payment-box ${paymentMethod === 'credit' ? 'selected' : ''}`}
+                onClick={() => setPaymentMethod('credit')}
+              >
+                <span className="icon"></span>
+                <span>Credit</span>
+              </div>
+            </div>
+
+            {paymentMethod === 'credit' && (
+              <div className="credit-details">
+                <label className="sub-title">Credit Type</label>
+                <div className="credit-options">
+                  <button
+                    className={`credit-button ${creditPaymentType === 'full' ? 'active' : ''}`}
+                    onClick={() => setCreditPaymentType('full')}
+                  >
+                    Full Payment
+                  </button>
+                  <button
+                    className={`credit-button ${creditPaymentType === 'partial' ? 'active' : ''}`}
+                    onClick={() => setCreditPaymentType('partial')}
+                  >
+                    Partial Payment
+                  </button>
+                </div>
+
+                {creditPaymentType === 'partial' && (
+                  <div className="partial-input">
+                    <input
+                      type="number"
+                      placeholder="Enter partial amount"
+                      value={partialAmount === 0 ? '' : partialAmount}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        setPartialAmount(isNaN(val) ? 0 : val);
+                      }}
+                      min={0}
+                      step={0.01}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         <div className='add-as-a-v-button c-s-buttons-outers'>
           <span className='buttons c-s-buttons'>Cancel</span>
           <button className='buttons c-s-buttons' onClick={handleSave} disabled={isLoading}>

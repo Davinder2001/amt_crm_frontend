@@ -289,64 +289,65 @@ const Page = () => {
             </div>
           )}
         </div>
-        <div className="payment-section">
-          <label className="section-title">Payment Details</label>
+        {items.length > 0 && (
+          <div className="payment-section">
+            <label className="section-title">Payment Details</label>
 
-          <div className="payment-methods">
-            <div
-              className={`payment-box ${paymentMethod === 'cash' ? 'selected' : ''}`}
-              onClick={() => setPaymentMethod('cash')}
-            >
-              <span className="icon">💵</span>
-              <span>Cash</span>
-            </div>
-
-            <div
-              className={`payment-box ${paymentMethod === 'credit' ? 'selected' : ''}`}
-              onClick={() => setPaymentMethod('credit')}
-            >
-              <span className="icon">💳</span>
-              <span>Credit</span>
-            </div>
-          </div>
-
-          {paymentMethod === 'credit' && (
-            <div className="credit-details">
-              <label className="sub-title">Credit Type</label>
-              <div className="credit-options">
-                <button
-                  className={`credit-button ${creditPaymentType === 'full' ? 'active' : ''}`}
-                  onClick={() => setCreditPaymentType('full')}
-                >
-                  Full Payment
-                </button>
-                <button
-                  className={`credit-button ${creditPaymentType === 'partial' ? 'active' : ''}`}
-                  onClick={() => setCreditPaymentType('partial')}
-                >
-                  Partial Payment
-                </button>
+            <div className="payment-methods">
+              <div
+                className={`payment-box ${paymentMethod === 'Paid' ? 'selected' : ''}`}
+                onClick={() => setPaymentMethod('Paid')}
+              >
+                <span className="icon"></span>
+                <span>Paid</span>
               </div>
 
-              {creditPaymentType === 'partial' && (
-                <div className="partial-input">
-                  <input
-                    type="number"
-                    placeholder="Enter partial amount"
-                    value={partialAmount === 0 ? '' : partialAmount}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setPartialAmount(isNaN(val) ? 0 : val);
-                    }}
-                    min={0}
-                    step={0.01}
-                  />
-                </div>
-              )}
+              <div
+                className={`payment-box ${paymentMethod === 'credit' ? 'selected' : ''}`}
+                onClick={() => setPaymentMethod('credit')}
+              >
+                <span className="icon"></span>
+                <span>Credit</span>
+              </div>
             </div>
-          )}
-        </div>
 
+            {paymentMethod === 'credit' && (
+              <div className="credit-details">
+                <label className="sub-title">Credit Type</label>
+                <div className="credit-options">
+                  <button
+                    className={`credit-button ${creditPaymentType === 'full' ? 'active' : ''}`}
+                    onClick={() => setCreditPaymentType('full')}
+                  >
+                    Full Payment
+                  </button>
+                  <button
+                    className={`credit-button ${creditPaymentType === 'partial' ? 'active' : ''}`}
+                    onClick={() => setCreditPaymentType('partial')}
+                  >
+                    Partial Payment
+                  </button>
+                </div>
+
+                {creditPaymentType === 'partial' && (
+                  <div className="partial-input">
+                    <input
+                      type="number"
+                      placeholder="Enter partial amount"
+                      value={partialAmount === 0 ? '' : partialAmount}
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        setPartialAmount(isNaN(val) ? 0 : val);
+                      }}
+                      min={0}
+                      step={0.01}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         <div className='add-as-a-v-button c-s-buttons-outers'>
           <span className='buttons c-s-buttons'>Cancel</span>
           <button className='buttons c-s-buttons' onClick={handleSave} disabled={isLoading}>

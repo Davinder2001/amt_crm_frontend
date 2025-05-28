@@ -12,11 +12,11 @@
 }
 
 .header-outer {
-  border-bottom: 0.4px solid #00969338;
   position: sticky;
   top: 0;
   background-color: white;
   z-index: 9999999;
+  box-shadow: #e0e0e04a 0px 3px 11px 0px;
 }
 
 .header-buttons {
@@ -30,7 +30,12 @@
     background-color: $primary-color;
     border: 1px solid $primary-color;
     color: white;
-
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  &:hover {
+      background-color: $hover-color;
+      border-color: $hover-color;
+    }
   }
 
   .btn-outline {
@@ -40,7 +45,14 @@
     border: 1px solid $primary-color;
     color: $primary-color;
     background-color: white;
-    font-size: 14px !important;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    &:hover {
+      background-color: $hover-color;
+      border-color: $hover-color;
+      color: $white;
+    }
   }
 }
 
@@ -153,13 +165,13 @@
 .hero-left {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
 }
 
 .hero-left h1 {
   font-size: 40px;
   font-weight: 500;
-  color: #222222;
+  color: $dark-color;
 }
 
 .categories {
@@ -172,9 +184,10 @@
 }
 
 .category-description {
-  font-size: 14px;
-  color: #777777;
-  line-height: 1.6;
+    color: #656464;
+    font-size: 16px;
+    line-height: 27px;
+    letter-spacing: 0.3px;
 }
 
 
@@ -212,11 +225,13 @@
 .hero-actions {
   display: flex;
   gap: 10px;
+  margin-top:20px;
 
   .btn-filled {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    background-color: $primary-color;
 
   }
 
@@ -224,6 +239,7 @@
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    
   }
 }
 
@@ -233,32 +249,12 @@
   right: 0;
 }
 
-.hero-right-inner {
-  position: relative;
-
-  .top-left {
-    top: 30px;
-    left: 30px;
-  }
-
-  .bottom-right {
-    bottom: 30px;
-    right: 30px;
-  }
-}
 
 .hero-right .main-image {
   width: 100%;
   border-radius: 15px 0px 0px 15px;
 }
 
-.chart {
-  position: absolute;
-  background: $white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 0.5rem;
-}
 
 
 
@@ -323,34 +319,38 @@
 }
 
 .business-section {
-  background: #f3f8f7;
-  padding: 20px 10px;
-  margin-top: 40px;
+  background: #dee9f230;
+  padding: 50px 10px;
+  margin-top: 80px;
 
   .outer-div {
     padding: 0px 10px;
   }
 }
-
+section.features-sections {
+    margin: 40px 0 10px 0px;
+}
 .team-collaboration-content {
   background: #fff;
-  box-shadow: 0px 4px 16px 0px #00000026;
-  border-radius: 16px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
   padding: 20px;
-  margin: 26px 0 50px;
   position: relative;
   overflow: hidden;
 
   h3 {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #444;
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: $dark-color;
   }
 
   h4 {
-    font-size: 20px;
-    margin: 20px 0px 10px 0px;
-    color: #444;
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: $dark-color;
+    margin-top:30px;
   }
 
   ul {
@@ -366,14 +366,18 @@
 
   p {
     font-size: 14px;
-    line-height: 1.5;
-    color: #777777;
+    letter-spacing: 0.3px;
+    line-height: 22px;
+    margin-bottom: 10px;
+    text-align: start;
+    font-weight: 400;
+    color: #646565;
   }
 }
 
 nav.feature-card-nav-bar {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   margin-top: 10px;
 
   span {
@@ -382,11 +386,15 @@ nav.feature-card-nav-bar {
     background-color: transparent;
     cursor: pointer;
     font-size: 16px;
+    letter-spacing: 0.3px;
+    color: #656464;
+    font-weight: 500;
   }
 
   .active-tab {
     font-weight: bold;
     border-bottom: 2px solid $primary-color;
+    color: $primary-color;
   }
 }
 
@@ -395,13 +403,13 @@ nav.feature-card-nav-bar {
   gap: 20px;
   justify-content: center;
   grid-template-columns: 1fr 1fr;
-  margin: 26px 0 50px 0px;
+  margin: 50px 0 10px 0px;
 
 
   .feature-card {
     background: #fff;
-    box-shadow: 0px 4px 16px 0px #00000026;
-    border-radius: 16px;
+    border: 1px solid #efefef;
+    border-radius: 5px;
     padding: 20px;
     display: grid;
     grid-template-columns: 65% 35%;
@@ -421,15 +429,17 @@ nav.feature-card-nav-bar {
     margin-bottom: 10px;
     text-align: start;
     font-weight: 600;
-    color: #333;
+    color: $dark-color;
   }
 
   .feature-card p {
     font-size: 14px;
+    letter-spacing: 0.3px;
+    line-height: 22px;
     margin-bottom: 10px;
     text-align: start;
     font-weight: 400;
-    color: #555;
+    color: #646565;
   }
 
   .feature-card img {
@@ -457,8 +467,8 @@ nav.feature-card-nav-bar {
 }
 
 .manage-section {
-  background-color: var(--primary-color);
-  padding: 4rem 2rem;
+  background-color: $primary-color;
+  padding: 50px 10px;
   color: white;
   position: relative;
   overflow: hidden;
@@ -478,16 +488,20 @@ nav.feature-card-nav-bar {
 }
 
 .manage-text h2 {
-  font-size: 35px;
+  font-size: 40px;
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
 .manage-text p {
-  font-size: 14px;
+  letter-spacing: 0.3px;
+  text-align: start;
+  color: rgb(100, 101, 101);
+  margin-bottom: 10px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.6;
-  color: white !important;
+  line-height: 22px;
+  color: rgba(255, 255, 255, 0.878) !important;
 }
 
 .manage-image {
@@ -497,7 +511,7 @@ nav.feature-card-nav-bar {
   max-width: 900px;
   height: 900px;
   width: 100%;
-  transform: rotate(-13.75deg);
+  transform: rotate(-11.75deg);
 }
 
 .manage-image img {
@@ -510,7 +524,7 @@ nav.feature-card-nav-bar {
 }
 
 .comparison-section {
-  padding: 40px 10px;
+  padding: 50px 10px;
   background-color: #fff;
 }
 
@@ -519,11 +533,13 @@ nav.feature-card-nav-bar {
   max-width: 1439px;
   margin: 0 auto;
   border-collapse: collapse;
-  border-radius: 12px;
+  border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0px 4px 16px 0px #00000026;
   font-size: 14px;
   text-align: left;
+  tbody {
+    border: 1px solid #e5e5e5;
+}
 }
 
 .comparison-table th,
@@ -541,6 +557,7 @@ nav.feature-card-nav-bar {
 
 .comparison-table td:first-child {
   text-align: left;
+  color: $dark-color;
 }
 
 
@@ -653,9 +670,9 @@ nav.feature-card-nav-bar {
 }
 
 .footer-bottom {
-  padding: 20px 10px;
+  padding: 15px 10px;
   font-size: 13px;
-  background-color: #00615d;
+  background-color: $primary-color;
 
   .policy-links {
     list-style: none;
@@ -665,11 +682,13 @@ nav.feature-card-nav-bar {
     gap: 10px;
 
     a {
-      text-decoration: underline;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.3px;
 
       &:hover {
-        text-decoration: none;
-        border-bottom: 1px solid $orange-color;
+        text-decoration: underline;
+        border-bottom: 1px solid $primary-color;
       }
     }
   }
@@ -688,6 +707,8 @@ nav.feature-card-nav-bar {
   p {
     color: rgb(241, 240, 240) !important;
     text-align: start;
+      font-size: 13px;
+      letter-spacing: 0.3px;
   }
 }
 
@@ -702,6 +723,116 @@ nav.feature-card-nav-bar {
     text-decoration: none;
   }
 }
+
+
+.pricing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 10px;
+  background-color: #dee9f230;
+
+  .outer-div {
+    padding: 0px 10px;
+  }
+
+
+  .price-heading {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: center;
+    color: $dark-color;
+  }
+
+  .plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+  }
+
+  .planCard {
+    background: white;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 320px;
+    width: 100%;
+    border: 1px solid #efefef;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .planTitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: $dark-color;
+    }
+
+    .planPrice {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: $primary-color;
+    }
+
+    .features {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 20px;
+      color: #656464;
+    }
+
+    .features li {
+      margin-bottom: 8px;
+    }
+
+    .pricing-buttons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    .btnPrimary {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: default;
+      letter-spacing: 0.3px;
+    }
+
+    .btnSecondary {
+      background-color: #DEE9F2;
+      color:$primary-color;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    }
+
+    .btnOnline {
+      background-color: transparent;
+      color: $primary-color;
+      padding: 8px 16px;
+      border: 1px solid $primary-color;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+  }
+}
+
 
 /* ===== Responsive Styles ===== */
 
@@ -733,109 +864,6 @@ nav.feature-card-nav-bar {
     justify-content: center;
   }
 }
-
-
-.pricing-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  background-color: #f0f9f9;
-
-  .outer-div {
-    padding: 0px 10px;
-  }
-
-
-  .price-heading {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    text-align: center;
-    color: #333;
-  }
-
-  .plans {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-
-  .planCard {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 320px;
-    width: 100%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    .planTitle {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .planPrice {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .features {
-      list-style: none;
-      padding-left: 0;
-      margin-bottom: 20px;
-    }
-
-    .features li {
-      margin-bottom: 8px;
-    }
-
-    .pricing-buttons {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-
-      button {
-        width: 100%;
-      }
-    }
-
-    .btnPrimary {
-      background-color: #00b39f;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 500;
-      cursor: default;
-    }
-
-    .btnSecondary {
-      background-color: #e0f8f7;
-      color: #00b39f;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    .btnOnline {
-      background-color: green;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 20px;
-      font-size: 14px;
-    }
-  }
-}
-
 
 /* Medium devices (tablets, 768px and up) */
 @media (max-width: 991px) {

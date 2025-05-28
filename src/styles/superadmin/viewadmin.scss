@@ -1,215 +1,393 @@
 // @use '../variables' as *;
-// .vadmin-container{
-//   .Vadmin-inner-container{
 
-//     padding: 25px;
-//     background-color: $white;
-//     border-radius: 15px;
-//     box-shadow: $box-shadow;
-//     margin: 32px auto;
-//     font-family: 'Segoe UI', sans-serif;
+// .modern-admin-card {
+//   display: flex;
+//   gap: 30px;
+//   background: #fff;
+//   border-radius: 15px;
+//   padding: 30px;
+//   box-shadow: $box-shadow;
+//   align-items: center;
+//   font-family: var(--font-family);
+//   transition: all 0.3s ease;
 
-//   .admin-title {
-//     font-size: 24px;
-//     font-weight: bold;
-//   }
 
-//   .admin-card {
-//     padding: 20px;
-//     background-color: rgb(250, 250, 250);
-//     border-radius: 12px;
-//     box-shadow: $box-shadow;
-//     margin-bottom: 32px;
-
-//     p {
-//         font-size: 16px;
-//         margin-bottom: 10px;
-//         display: flex;
-
-//       strong {
-//         color: #333333;
-//         margin-right: 8px;
-//       }
+//   .admin-info-side-outer {
+//     h2 {
+//       margin-bottom: 20px;
+//       color: var(--primary-color);
 //     }
 //   }
+
+
+// }
+
+// .admin-image-side {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   position: relative;
+
+//   .admin-avatar {
+//     border-radius: 50%;
+//     object-fit: cover;
+//     border: 4px solid var(--primary-color);
+//   }
+
+//   .admin-status {
+//     margin-top: 12px;
+//     font-size: 13px;
+//     font-weight: 600;
+//     padding: 4px 10px;
+//     border-radius: 50px;
+//     text-transform: capitalize;
+//     background: #eee;
+//     position: absolute;
+//     bottom: 0;
+//   }
+
+//   .active {
+//     background: #e0f7f5;
+//     color: $success-color;
+//   }
+
+//   .pending {
+//     background: #fff3e0;
+//     color: #ff9800;
+//   }
+
+//   .inactive {
+//     background: #fdecea;
+//     color: $danger-color;
+//   }
+// }
+
+// .admin-info-side {
+//   flex: 1;
+//   gap: 15px;
+//   display: flex;
+//   flex-direction: row;
+//   flex-wrap: wrap;
+//   gap: 15px;
+
+//   h2 {
+//     font-size: 24px;
+//     color: #222;
+//     margin-bottom: 10px;
+//   }
+
+//   .admin-field {
+//     display: flex;
+//     gap: 10px;
+//     font-size: 16px;
+//     color: #555;
+//     padding: 10px 15px;
+//     background-color: rgb(243, 243, 243);
+//     border-radius: 5px;
+
+//     svg {
+//       color: var(--primary-color);
+//     }
+
+//     .view-admin-details {
+//       display: flex;
+//       flex-direction: column;
+//       gap: 5px;
+
+//       strong {
+//         font-size: 18px;
+//       }
+//     }
+
+
+//   }
+// }
+
+// .company-cards-outer {
+//   margin-top: 40px;
+//   padding: 20px;
+//   background: #f9f9f9;
+//   border-radius: 16px;
+//   box-shadow: 0 4px 16px rgba(0, 150, 147, 0.05);
 
 //   .admin-subtitle {
 //     font-size: 20px;
 //     font-weight: 600;
+//     color: var(--primary-color);
 //     margin-bottom: 20px;
+//     font-family: var(--font-family);
+//     border-bottom: 1px solid var(--primary-color);
+//     padding-bottom: 10px;
 //   }
 
 //   .company-cards-wrapper {
 //     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+//     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 //     gap: 20px;
 //   }
 
 //   .company-card {
-//     padding: 16px;
-//     border: 1px solid #00969357;
-//     border-radius: 10px;
-//     background-color: #f0fefe;
-//     transition: box-shadow 0.3s ease;
+//     background-color: #ffffff;
+//     padding: 16px 20px;
+//     border-radius: 12px;
+//     width: fit-content;
+//     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+//     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
 //     h3 {
-//       font-size: 18px;
+//       font-size: 16px;
 //       margin-bottom: 8px;
-//       color: $primary-color;
+//       color: #222;
+//       font-weight: 600;
 //     }
 
 //     p {
-//       font-size: 15px;
-//       color: #333333;
+//       font-size: 14px;
+//       color: #555;
+//       margin: 0;
 //     }
 
 //     &:hover {
-//       box-shadow: 0 4px 12px rgba(0, 150, 147, 0.1);
+//       transform: translateY(-3px);
+//       box-shadow: 0 8px 20px rgba(0, 150, 147, 0.1);
 //     }
 //   }
 
 //   .no-companies {
-//     font-size: 16px;
-//     color: #999999;
+//     font-style: italic;
+//     color: #999;
+//     text-align: center;
+//     grid-column: 1 / -1;
 //   }
 // }
-// }
 
 
 
 
 
+
+
+
+
+
+
+// ViewAdminPage.module.scss
 
 @use '../variables' as *;
 
 .vadmin-container {
-  font-family: $font-family;
-  background-color: #f7f9fa;
+  background-color: $secondary-color;
   min-height: 100vh;
+  font-family: $font-family;
+  font-size: $font-size;
 
 
-  .Vadmin-inner-container {
+}
+
+
+.modern-admin-card {
+  background: $white;
+  border-radius: $border-radius;
+  box-shadow: $secondary-shadow;
+  display: flex;
+  gap: 3rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+  border: $border;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--primary-color);
+  }
+
+  .admin-image-side {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    background-color: $white;
-    padding: 10px;
-  }
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
 
-  .admin-card {
-    display: flex;
-    background: $white;
-    box-shadow: $box-shadow;
-    border-radius: 12px;
-    overflow: hidden;
+    .admin-avatar {
+      border-radius: 50%;
+      box-shadow: $box-shadow;
+      border: 3px solid $white;
+    }
 
-    .admin-image-container {
-      flex: 0 0 200px;
-      background-color: #eef1f4;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+    span[class*="admin-status"] {
+      background: $success-color;
+      color: $white;
+      position: relative;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: $font-size-extra-small;
+      font-weight: $font-weight-semi-bold;
+      box-shadow: $box-shadow;
+      text-transform: capitalize;
 
-      .admin-image {
-        width: 100%;
-        max-width: 115px;
-        height: auto;
+      &.blocked {
+        background: $danger-color;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 5;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        background-color: white;
         border-radius: 50%;
-        object-fit: cover;
-      }
-
-
-
-      .status {
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-weight: bold;
-        text-transform: capitalize;
-
-        &.active {
-          background-color: #e0f7f5;
-          color: $success-color;
-        }
-
-        &.inactive {
-          background-color: #fdecea;
-          color: #d9534f;
-        }
-
-        &.pending {
-          background-color: #fff4cc;
-          color: #ff9800;
-        }
-      }
-    }
-
-    .admin-details {
-      flex: 1;
-      padding: 1.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 1rem;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      background-color: #fafafa;
-
-      p {
-        margin: 0;
-
-        strong {
-          color: $primary-color;
-        }
-
-
       }
     }
   }
+
+  .admin-info-side-outer {
+    flex-grow: 1;
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-size: $font-size-extra-large;
+      font-weight: $font-weight-semi-bold;
+    }
+  }
+
+  .admin-info-side {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+
+    .admin-field {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: $para-color;
+      font-size: $font-size-small;
+      border-bottom: 1px dashed var(--primary-color);
+      padding-bottom: 7px;
+
+      .admin-info-side-lable-value {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+
+      svg {
+        color: var(--primary-color);
+        font-size: $font-size;
+        flex-shrink: 0;
+      }
+
+      strong {
+        font-weight: $font-weight-medium;
+        color: $dark-color;
+      }
+
+      .admin-info-side-lable {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+
+    }
+  }
+}
+
+.company-cards-outer {
+  background: $white;
+  border-radius: $border-radius;
+  padding: 2rem;
+  box-shadow: $secondary-shadow;
+  border: $border;
 
   .admin-subtitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $primary-color;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: $font-size-extra-large;
+    font-weight: $font-weight-semi-bold;
+    border-bottom: .5px solid var(--primary-color);
+    padding-bottom: 5px;
   }
 
   .company-cards-wrapper {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
 
-    .role-card,
     .company-card {
-      background: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      border-left: 5px solid $primary-color;
-      display: flex;
-      flex-direction: column;
+      background: $tertiary-color;
+      padding: 1.5rem;
+      border-radius: $border-radius;
+      transition: all $transition;
+      border: $border;
 
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: $box-shadow;
+      }
 
       h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-        color: $primary-color;
+        color: $dark-color;
+        margin-bottom: 0.5rem;
+        font-size: $font-size-one;
+        font-weight: $font-weight-medium;
       }
 
       p {
-        font-size: 0.95rem;
-        color: #444;
-
-        strong {
-          font-weight: 500;
-          color: #222;
-        }
+        color: $gray-color;
+        font-size: $font-size-small;
       }
     }
+  }
 
-    .no-companies {
-      font-style: italic;
-      color: #999;
+  .no-companies {
+    color: $gray-color;
+    text-align: center;
+    padding: 2rem;
+    font-size: $font-size-small;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .modern-admin-card {
+    flex-direction: column;
+    padding: 20px 10px;
+    gap: 2rem;
+
+    &::before {
+      display: none;
+    }
+
+    .admin-info-side {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+  }
+
+  .company-cards-outer {
+    padding: 10px;
+  }
+
+
+}
+
+@media (max-width: 425px) {
+
+
+  .modern-admin-card {
+    .admin-info-side {
+      grid-template-columns: repeat(1, 1fr);
     }
   }
 }

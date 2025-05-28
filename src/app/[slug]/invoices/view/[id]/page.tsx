@@ -1,15 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoice';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const InvoiceViewPage = () => {
   const params = useParams();
   const id = params?.id;
+
+  const { setTitle } = useBreadcrumb(); // ✅ Move this hook to the top
+
   const { data, isLoading, isError } = useGetInvoiceByIdQuery(id as string, {
     skip: !id,
   });
+
+  useEffect(() => {
+    setTitle('Invoice');
+  }, [setTitle]);
 
   if (isLoading) return <div className="invoice-loading">Loading invoice...</div>;
   if (isError || !data?.invoice) return <div className="invoice-error">Failed to load invoice.</div>;

@@ -41,7 +41,7 @@ const saveFormData = (data: Partial<RegisterForm>) => {
 
 const getDefaultFormData = (packageId: number, categoryId: number | null): RegisterForm => ({
   packageId: packageId,
-  categoryId: categoryId,
+  business_category_id: categoryId,
   first_name: '',
   last_name: '',
   email: '',
@@ -216,6 +216,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ packageId, categoryId, onBa
       }
       else if (!otpVerified) {
         newErrors.number = 'Please Verify your Phone Number'
+      }else if(otpVerified){
+        delete newErrors.number;
       }
       else {
         delete newErrors.number;

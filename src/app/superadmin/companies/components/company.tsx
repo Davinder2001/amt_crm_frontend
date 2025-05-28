@@ -24,7 +24,7 @@ interface Company {
   updated_at: string;
 }
 
-const paymentStatusOptions = ['pending', 'processing', 'completed', 'failed'];
+const paymentStatusOptions = ['pending', 'completed', 'failed'];
 const verificationStatusOptions = ['pending', 'block', 'verified', 'rejected'];
 
 const CompanyComponent = () => {

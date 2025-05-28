@@ -39,7 +39,7 @@
     }
 
     .add-btn {
-        background-color: #00a9a5 !important;
+        background-color: var(--primary-color) !important;
         color: white !important;
         text-transform: none;
         padding: 0px 25px;
@@ -48,7 +48,7 @@
     }
 
     .add-btn:hover {
-        background-color: #008f8b !important;
+        background-color: var(--primary-color) !important;
     }
 
     .cancel-btn {
@@ -79,16 +79,17 @@
         background-color: #ffffff;
         padding: 1.2rem 1.5rem;
         border-radius: 12px;
-        box-shadow: 0 8px 20px #0096931a;
+        box-shadow: $box-shadow ;
         transition: transform 0.2s ease;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-left: 1px solid var(--primary-color);
+        border-right: 1px solid var(--primary-color);
     }
 
     .category-box:hover {
         transform: translateY(-1px);
-        box-shadow: $box-shadow;
     }
 
     .category-name {
@@ -103,10 +104,14 @@
         svg {
             font-size: 16px;
         }
+      button{
+        padding: 7px;
+
+      }
     }
 
     .edit-btn {
-        color: #00a9a5 !important;
+        color: #ffffff !important;
         transition: color 0.2s ease;
     }
 
@@ -115,7 +120,7 @@
     }
 
     .delete-btn {
-        color: #e53935 !important;
+        color: #ffffff !important;
         transition: color 0.2s ease;
     }
 
@@ -145,18 +150,18 @@
             gap: 10px;
         }
 
-    
-    .action-buttons {
-        gap: .5rem;
-        display: flex;
-        position: absolute;
-        top: 0;
-        right: 0;
+
+        .action-buttons {
+            gap: .5rem;
+            display: flex;
+            position: absolute;
+            top: 0;
+            right: 0;
 
 
 
+        }
     }
-}
 
 }
 

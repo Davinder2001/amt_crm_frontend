@@ -1,6 +1,9 @@
+@use '../variables' as *;
+
 .tax-page {
-    font-family: 'Segoe UI', sans-serif;
+    background-color: white;
     padding: 20px;
+    border-radius: 15px;
 
     .glass-form {
         background: unset;
@@ -8,7 +11,7 @@
         padding: 2rem;
         border-radius: 16px;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 20px rgba(0, 150, 147, 0.1);
+        box-shadow: $box-shadow;
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
@@ -103,7 +106,7 @@
     }
 
     .edit-btn {
-        color: #00a9a5 !important;
+        color: #ffffff !important;
         transition: color 0.2s ease;
 
         &:hover {

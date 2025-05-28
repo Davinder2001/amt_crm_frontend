@@ -19,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
     { name: "Dashboard", path: "dashboard", icon: <FaTachometerAlt /> },
     { name: "Business Users", path: "admins", icon: <FaUserTie /> },
     { name: "Companies", path: "companies", icon: <FaBuilding /> },
-    { name: "packages", path: "packages", icon: <FaCube /> },
+    { name: "Packages", path: "packages", icon: <FaCube /> },
     { name: "Settings", path: "settings", icon: <FaCogs /> },
   ];
 
@@ -60,8 +60,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
             return (
               <li
                 key={path}
-                className="menu-item"
-                style={{ backgroundColor: isActive ? "#F1F9F9" : ""}}
+                className={`menu-item  ${isActive ? "active" : ""}`}
+                style={{ backgroundColor: isActive ? "#F1F9F9" : "" }}
                 onClick={openMenu}
               >
                 <Link href={fullPath} className="menu-link">
@@ -72,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
                 </Link>
                 {!isSidebarExpanded && <div className="tooltip">{name}</div>}
                 {isActive && (
-                  <span className="active-indicator"/>
+                  <span className="active-indicator" />
                 )}
               </li>
             );

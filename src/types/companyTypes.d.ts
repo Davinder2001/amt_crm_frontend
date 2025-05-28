@@ -34,6 +34,12 @@ interface AdminBillingResponse {
   payments: Payment[];
 }
 
+interface CompanyDetailsResponse {
+  company: Company;
+  subscribed_package: PackagePlan;
+  related_packages: PackagePlan[];
+}
+
 type Shift = {
   id: number;
   company_id: number;

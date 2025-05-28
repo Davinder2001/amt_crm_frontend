@@ -15,6 +15,29 @@
     gap: 2px;
     text-decoration: none;
 }
+.status-select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.status-green {
+  background-color: #e6f5ec;
+  color: $success-color;
+}
+
+.status-orange {
+  background-color: #fff4e5;
+  color: $orange-color;
+}
+
+.status-red {
+  background-color: #fdecea;
+  color: $danger-color;
+}
 
 @media (max-width:468px) {
     .back-button {

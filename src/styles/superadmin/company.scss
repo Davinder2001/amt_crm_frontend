@@ -90,9 +90,24 @@
   }
 }
 
-.Scompany-table-action-icon {
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
   button {
     border: none;
-    font-size: 17px;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    padding: 5px 10px;
+    font-weight: 600;
+    border-radius: 50px;
+    color: white;
+    &:hover{
+      transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: rgba(var(--primary-color), 0.2);
+            cursor: pointer;
+    }
   }
 }

@@ -8,7 +8,7 @@ import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
 import { FaArrowLeft } from "react-icons/fa";
-
+import { Tabs, Tab } from "@mui/material";
 const Page: React.FC = () => {
   const { setTitle } = useBreadcrumb();
   useEffect(() => {
@@ -72,76 +72,100 @@ const Page: React.FC = () => {
         <FaArrowLeft size={20} color="#fff" />
       </button>
       <div className="add-role-form">
-      <h2>Create a Role</h2>
+        <h2>Create a Role</h2>
 
-      <form onSubmit={handleCreateRole}>
-        {/* Role Name */}
-        <div className="roll-name-input">
-          <label>Role Name:</label>
-          <input
-            type="text"
-            value={newRoleName}
-            onChange={(e) => setNewRoleName(e.target.value)}
-            placeholder="Enter role name"
-            required
-          />
-        </div>
+        <form onSubmit={handleCreateRole}>
+          {/* Role Name */}
+          <div className="roll-name-input">
+            <label>Role Name:</label>
+            <input
+              type="text"
+              value={newRoleName}
+              onChange={(e) => setNewRoleName(e.target.value)}
+              placeholder="Enter role name"
+              required
+            />
+          </div>
 
-        {/* Tab Navigation */}
-        <div className="switch-button">
-          {permissionsData.map((group) => (
-            <button
-              type="button"
-              key={group.group}
-              onClick={() => setSelectedTab(group.group)}
-              className={selectedTab === group.group ? 'active' : ''}
-            >
-              {group.group}
-            </button>
-          ))}
-        </div>
-
-        <div className="permissions-container">
-          {/* Permissions List */}
-          {permissionsData
-            .filter((group) => group.group === selectedTab) // Filter permissions based on selected tab
-            .map((group) => (
-              <div key={group.group}>
-                <div>
-                  {group.permissions.map((perm) => (
-                    <label key={perm.id}>
-                      <input
-                        type="checkbox"
-                        value={perm.name}
-                        checked={selectedPermissions.includes(perm.name)}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setSelectedPermissions((prev) =>
-                            prev.includes(value)
-                              ? prev.filter((p) => p !== value)
-                              : [...prev, value]
-                          );
-                        }}
-                      />
-                      <span>{perm.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            onMouseOver={(e) => e.currentTarget}
-            onMouseOut={(e) => e.currentTarget}
-            className="addrole-btn"
+          {/* Tab Navigation */}
+          <Tabs
+            value={permissionsData.findIndex(group => group.group === selectedTab)}
+            onChange={(e, newValue) => setSelectedTab(permissionsData[newValue].group)}
+            variant="scrollable"
+            scrollButtons="auto"
+            className="custom-mui-tabs"
+             sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontSize: '1rem',
+              color: '#718096',
+              minHeight: '48px',
+              padding: '12px 24px',
+              '&:hover': {
+                backgroundColor: '#f8fafc'
+              },
+              '&.Mui-selected': {
+                color:'var(--primary-color)',
+                fontWeight: 700,
+                backgroundColor: '#0096931f',
+              },
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'var(--primary-color)',
+              height: '2px'
+            },
+          }}
           >
-            {isLoading ? "Creating..." : "Create Role"}
-          </button>
-        </div>
-      </form>
+            {permissionsData.map((group) => (
+              <Tab
+                key={group.group}
+                label={group.group}
+                className="custom-mui-tab"
+              />
+            ))}
+          </Tabs>
+
+          <div className="permissions-container">
+            {/* Permissions List */}
+            {permissionsData
+              .filter((group) => group.group === selectedTab) // Filter permissions based on selected tab
+              .map((group) => (
+                <div key={group.group}>
+                  <div>
+                    {group.permissions.map((perm) => (
+                      <label key={perm.id}>
+                        <input
+                          type="checkbox"
+                          value={perm.name}
+                          checked={selectedPermissions.includes(perm.name)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSelectedPermissions((prev) =>
+                              prev.includes(value)
+                                ? prev.filter((p) => p !== value)
+                                : [...prev, value]
+                            );
+                          }}
+                        />
+                        <span>{perm.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              onMouseOver={(e) => e.currentTarget}
+              onMouseOut={(e) => e.currentTarget}
+              className="addrole-btn"
+            >
+              {isLoading ? "Creating..." : "Create Role"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

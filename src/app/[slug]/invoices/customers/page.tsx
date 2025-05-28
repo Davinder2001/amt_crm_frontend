@@ -34,9 +34,9 @@ const CustomerList = () => {
               <td>{customer.name}</td>
               <td>{customer.number}</td>
               <td>
-                <button onClick={() => router.push(`/${companySlug}/invoices/customers/${customer.id}`)}>
-                  <FaEye /> View
-                </button>
+                <span onClick={() => router.push(`/${companySlug}/invoices/customers/${customer.id}`)}>
+                  <FaEye />
+                </span>
               </td>
             </tr>
           ))}

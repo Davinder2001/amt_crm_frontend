@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
+import { useFetchEmployesQuery, useDeleteEmployeMutation, useUpdateEmployeeStatusMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
@@ -12,6 +12,7 @@ const UserList: React.FC = () => {
   const { companySlug } = useCompany();
 
   const [deleteEmployee] = useDeleteEmployeMutation();
+  const [updateStatus] = useUpdateEmployeeStatusMutation();
   const employees: Employee[] = employeesData?.employees ?? [];
 
   if (isLoading) return <p>Loading employees...</p>;
@@ -39,7 +40,49 @@ const UserList: React.FC = () => {
     },
     { label: 'Phone Number', key: 'number' as keyof Employee },
     { label: 'Company', key: 'company_name' as keyof Employee },
-    { label: 'Status', key: 'user_status' as keyof Employee },
+    {
+      label: 'Status',
+      render: (emp: Employee) => {
+
+        const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+          const newStatus = e.target.value as "active" | "inactive" | "blocked";
+          try {
+            await updateStatus({ id: String(emp.id), status: newStatus }).unwrap();
+            toast.success(`Status updated to ${newStatus}`);
+          } catch {
+            toast.error('Failed to update status.');
+          }
+        };
+
+        // Dynamic class based on status
+        const getStatusClass = (status: string) => {
+          switch (status) {
+            case "active":
+              return "status-green";
+            case "inactive":
+              return "status-orange";
+            case "blocked":
+              return "status-red";
+            default:
+              return "";
+          }
+        };
+
+        return (
+          <select
+            value={emp.user_status}
+            onChange={handleChange}
+            className={`status-select ${getStatusClass(emp.user_status)}`}
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        );
+      },
+    }
+
+
     // {
     //   label: 'Action',
     //   render: (emp: Employee) => (

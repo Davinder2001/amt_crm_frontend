@@ -1,29 +1,3 @@
-// 'use client';
-
-// import React, { useEffect } from 'react';
-// import PackagesView from './components/packagesView';
-// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-// import BusinessCategories from './components/Categories';
-
-// const Page = () => {
-//   const { setTitle } = useBreadcrumb();
-
-//   useEffect(() => {
-//     setTitle('All packages Plan');
-//   }, [setTitle]);
-
-//   return (
-//     <>
-//     <div className='BCategories-PView-container'>
-
-//       <BusinessCategories />
-//       <PackagesView />
-//     </div>
-//     </>
-//   );
-// };
-
-// export default Page;
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -71,37 +45,37 @@ const Page = () => {
                 backgroundColor: '#f8fafc'
               },
               '&.Mui-selected': {
-                color: '#2d3748',
+                color: 'var(--primary-color)',
                 fontWeight: 500,
               },
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#009693',
+              backgroundColor: 'var(--primary-color)',
               height: '2px'
             },
           }}
         >
-          <Tab label="Packages" id="tab-0" aria-controls="tabpanel-0" />
-          <Tab label="Categories" id="tab-1" aria-controls="tabpanel-1" />
+          <Tab label="Categories" id="tab-0" aria-controls="tabpanel-0" />
+          <Tab label="Packages" id="tab-1" aria-controls="tabpanel-1" />
         </Tabs>
       </Box>
 
-      <div className="form">
-        <div role="tabpanel" hidden={value !== 0} id="tabpanel-0" aria-labelledby="tab-0">
+        <div role="tabpane0" hidden={value !== 0} id="tabpanel-0" aria-labelledby="tab-0">
           {value === 0 && (
+            <div className="form-section-two">
+              <BusinessCategories />
+            </div>
+          )}
+        </div>
+      <div className="form">
+        <div role="tabpanel" hidden={value !== 1} id="tabpanel-1" aria-labelledby="tab-1">
+          {value === 1 && (
             <div className=" form-section-one">
               <PackagesView />
             </div>
           )}
         </div>
 
-        <div role="tabpanel" hidden={value !== 1} id="tabpanel-1" aria-labelledby="tab-1">
-          {value === 1 && (
-            <div className="form-section-two">
-              <BusinessCategories />
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

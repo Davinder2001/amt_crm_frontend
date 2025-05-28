@@ -214,7 +214,7 @@ const AddItem: React.FC = () => {
                   color: '#ccc',
                 },
                 '&.Mui-selected': {
-                  color: '#009693',
+                  color: 'var(--primary-color)',
                 },
               },
               '& .MuiTabs-indicator': {

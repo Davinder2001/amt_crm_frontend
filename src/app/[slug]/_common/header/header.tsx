@@ -82,7 +82,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         {/* Notification Icon with Unread Count */}
         <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="notification-icon"
         >
-          <FaRegBell size={22} color="#009693" />
+          <FaRegBell size={22} color='var(--primary-color)'/>
           {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
         </Link>
         {/* <GoogleTranslate /> */}

@@ -225,7 +225,8 @@ const UpdateItem = () => {
               '& .MuiTab-root': {
                 color: '#009693',
                 '&.Mui-selected': {
-                  color: '#009693',
+                  color: 'var(--primary-color)',
+
                 },
               },
               '& .MuiTabs-indicator': {

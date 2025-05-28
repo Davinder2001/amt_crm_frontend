@@ -15,6 +15,7 @@
     "@heroicons/react": "^2.2.0",
     "@mui/material": "^7.1.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.12.2",
     "js-cookie": "^3.0.5",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/axios": "^0.14.4",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.17.46",
     "@types/react": "^19.1.3",

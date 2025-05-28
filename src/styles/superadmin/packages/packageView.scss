@@ -1,93 +1,5 @@
 @use '../../variables' as *;
 
-// .BCategories-PView-container {
-//     display: grid;
-//     grid-template-columns: 1fr;
-// }
-
-// .superadmin-packages-container {
-
-//     padding: 20px;
-//     font-family: $font-family;
-//     color: $dark-color;
-//     background-color: white;
-
-//     .header {
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: center;
-//         margin-bottom: 40px;
-
-//         h2 {
-//             font-size: $font-size-extra-extra-large;
-//             font-weight: $font-weight-bold;
-//             color: var(--primary-color);
-//         }
-
-
-//     }
-
-
-//     .error-message {
-//         text-align: center;
-//         color: $danger-color;
-//         font-size: $font-size-large;
-//         margin-top: 60px;
-//     }
-
-//     .features span[contenteditable] {
-//         display: inline-block;
-//         min-width: 30px;
-//         padding: 2px 4px;
-//         border-bottom: 1px dashed transparent;
-//         transition: border 0.2s ease;
-//         cursor: text;
-//     }
-
-//     .features span[contenteditable]:focus {
-//         border-bottom: 1px dashed #000;
-//         outline: none;
-//         background-color: #f9f9f9;
-//     }
-
-//     .planPrice span[contenteditable] {
-//         display: inline-block;
-//         min-width: 30px;
-//         padding: 2px 4px;
-//         border-bottom: 1px dashed transparent;
-//         transition: border 0.2s ease;
-//         cursor: text;
-//         font-weight: bold;
-//     }
-
-//     .planPrice span[contenteditable]:focus {
-//         border-bottom: 1px dashed #000;
-//         outline: none;
-//         background-color: #f9f9f9;
-//     }
-
-//     .category-list {
-//         list-style: none;
-//         padding: 0;
-//         margin: 0;
-//         max-height: 250px;
-//         overflow-y: auto;
-
-//         li {
-//             display: flex;
-//             align-items: center;
-//             gap: 8px;
-//             border-bottom: 1px solid #eeeeee;
-
-//             label {
-//                 cursor: pointer;
-//                 display: flex;
-//                 justify-content: space-between;
-//             }
-//         }
-//     }
-
-// }
 .packages-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -292,6 +204,13 @@
                     }
 
                 }
+            }
+        }
+
+        button {
+            &:hover {
+                background-color: var(--primary-color);
+                box-shadow: $box-shadow;
             }
         }
 

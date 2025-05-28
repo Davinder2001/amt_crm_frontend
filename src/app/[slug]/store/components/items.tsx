@@ -7,7 +7,7 @@ import {
   useImportStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaPlus, FaDownload, FaUpload } from 'react-icons/fa';
+import { FaPlus, FaDownload, FaUpload, FaUsers } from 'react-icons/fa';
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -149,7 +149,10 @@ const Items: React.FC = () => {
             { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
             { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
           ]}
-          actions={[{ label: 'Create', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]}
+          actions={[
+            { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
+            { label: 'Add item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) },
+          ]}
         />
 
         <ResponsiveTable

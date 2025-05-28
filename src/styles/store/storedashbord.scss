@@ -26,6 +26,23 @@
   }
 }
 
+
+
+
+.store_column {
+    margin-bottom: 40px;
+}
+
+
+.store_outer_row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+
+
+
+
 // Tablet view
 @media (max-width: 1024px) {
   .store-nav-outer {
@@ -40,6 +57,9 @@
     }
   }
 }
+
+
+
 @media (max-width: 766px) {
    
     .store-nav-outer{

@@ -193,6 +193,7 @@ const AddItem: React.FC = () => {
   };
 
   return (
+  <div className='store_outer_row'>
     <div className='store-add-item'>
       <form onSubmit={handleSubmit}>
         <div className="add-item-header">
@@ -232,9 +233,12 @@ const AddItem: React.FC = () => {
 
         </div>
 
-        <Box>
-          {activeTab === 0 && (
+      
+          <div className='store_left_column store_column store_column'>
             <div className='add-items-form-container'>
+              <h2 className='basic_label'>Basic Name</h2>
+              <hr></hr>
+              <div className='store_input_feilds'>
               <FormInput
                 label="Item Name*"
                 name="name"
@@ -269,7 +273,7 @@ const AddItem: React.FC = () => {
                 placeholder="e.g. Replace after 2 years"
               />
 
-              <div className='add-items-form-input-label-container'>
+              <div className='add-items-form-input-label-container'>                
                 <label>Vendor Name*</label>
                 <AddVendor
                   vendors={vendors}
@@ -292,10 +296,15 @@ const AddItem: React.FC = () => {
                 />
               </div>
             </div>
-          )}
+            </div>
+            </div>
+          
 
-          {activeTab === 1 && (
-            <div className='add-items-form-container'>
+          
+            <div className='add-items-form-container store_column'>
+              <h2 className='basic_label'>Pricing & Inventory</h2>
+              <hr></hr>
+                <div className='store_input_feilds'>
               <FormInput
                 label="Cost Price*"
                 name="cost_price"
@@ -352,10 +361,14 @@ const AddItem: React.FC = () => {
                 />
               )}
             </div>
-          )}
+            </div>
+         
 
-          {activeTab === 2 && (
-            <div className='add-items-form-container'>
+          
+            <div className='add-items-form-container store_column'>
+              <h2 className='basic_label'>Media & Dates</h2>
+              <hr></hr>
+                <div className='store_input_feilds'>
               <ImageUpload
                 images={formData.images}
                 handleImageChange={handleImageChange}
@@ -397,23 +410,20 @@ const AddItem: React.FC = () => {
                 minDate={new Date()}
               />
             </div>
-          )}
-
-          {activeTab === 3 && (
-            <div className='categories-container'>
-              <ItemCategories
-                setSelectedCategories={handleCategoryChange}
-                selectedCategories={selectedCategories}
-              />
             </div>
-          )}
+         
 
-          {activeTab === 4 && (
-            <div className="items-tab-container">
+          
+           
+         
+
+          
+            <div className="items-tab-container store_column">
+              <h2 className='basic_label'>Media & Dates</h2>
+              <hr></hr>
               <ItemsTab setVariants={setVariants} variants={variants} />
             </div>
-          )}
-        </Box>
+        
 
         <ConfirmDialog
           isOpen={showConfirm}
@@ -439,6 +449,22 @@ const AddItem: React.FC = () => {
         </div>
       </form>
     </div>
+
+    <div className='right_sidebar_row'>
+
+     <div className='categories-container store_column'>
+              
+               <div className='store_input_feilds'>
+              <ItemCategories
+                setSelectedCategories={handleCategoryChange}
+                selectedCategories={selectedCategories}
+              />
+            </div>
+            </div>
+    </div>
+
+
+    </div>  
   );
 };
 

@@ -155,14 +155,44 @@
 
   // ---------- Add Items Form ----------
   .add-items-form-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
     background-color: $white;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: $box-shadow;
-  }
+    padding-bottom: 40px;
+
+  .store_input_feilds {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 70px;
+    row-gap: 20px;
+}
+
+h2.basic_label {
+    font-size: 18px;
+    margin-bottom: 11px;
+    color: rgba(128, 129, 130, 1);
+    font-family: 'DMSans';
+    font-weight: 300;
+}
+
+
+.add-items-form-container hr {
+    margin-bottom: 25px;
+    border: 0.5px solid rgba(217, 217, 217, 1);
+    border-style: dotted;
+}
+
+input::placeholder {
+    color: grey;
+    font-size: 14px;
+    text-transform: unset;
+}
+
+
+}
+
 
   .add-items-form-input-label-container {
     display: flex;

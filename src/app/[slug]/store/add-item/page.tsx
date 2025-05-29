@@ -14,7 +14,7 @@ import AddVendor from '../components/AddVendor';
 import ImageUpload from '../components/ImageUpload';
 import ItemsTab from '../components/ItemsTab';
 import ItemCategories from '../components/ItemCategories';
-import { Tabs, Tab, Box } from '@mui/material';
+import { Tabs, Tab } from '@mui/material';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { FiXCircle } from 'react-icons/fi';
 
@@ -148,7 +148,7 @@ const AddItem: React.FC = () => {
       const lastValidTab = newTabCompletion.lastIndexOf(true);
       setActiveTab(lastValidTab);
     }
-  }, [formData, variants, selectedCategories]);
+  }, [formData, variants, selectedCategories, activeTab, validateTab]);
 
   const handleClearForm = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEY);

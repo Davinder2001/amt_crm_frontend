@@ -5,6 +5,7 @@ import { useCreateEmployeMutation } from "@/slices/employe/employe";
 import { useGetRolesQuery } from "@/slices/roles/rolesApi";
 import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
+import { useCallback } from 'react';
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
 import DatePicker from "react-datepicker";
@@ -75,55 +76,58 @@ const AddEmployeeForm: React.FC = () => {
   }, []);
 
 
-  const validateTab = (index: number): boolean => {
-    switch (index) {
-      case 0: // Personal Info Tab
-        return (
-          formData.name.trim() !== '' &&
-          formData.number.trim() !== '' &&
-          formData.address.trim() !== '' &&
-          formData.nationality.trim() !== '' &&
-          formData.dob.trim() !== '' &&
-          formData.religion.trim() !== '' &&
-          formData.maritalStatus.trim() !== '' &&
-          formData.emergencyContact.trim() !== '' &&
-          formData.emergencyContactRelation.trim() !== '' &&
-          formData.idProofType.trim() !== '' &&
-          (
-            (formData.idProofType === "bill" && formData.idProofImage !== null) ||
-            (formData.idProofType !== "bill" && formData.idProofValue.trim() !== '')
-          )
-        );
 
-      case 1: // Job Info Tab
-        return (
-          formData.email.trim() !== '' &&
-          formData.password.trim() !== '' &&
-          formData.salary.trim() !== '' &&
-          formData.currentSalary.trim() !== '' &&
-          formData.dateOfHire.trim() !== '' &&
-          formData.workLocation.trim() !== '' &&
-          formData.joiningDate.trim() !== '' &&
-          formData.shiftTimings !== '' &&
-          formData.role !== '' &&
-          formData.department.trim() !== '' &&
-          formData.joiningType !== ''
-        );
 
-      case 2: // Bank Info Tab
-        return (
-          formData.bankName.trim() !== '' &&
-          formData.accountNo.trim() !== '' &&
-          formData.ifscCode.trim() !== '' &&
-          formData.panNo.trim() !== '' &&
-          formData.upiId.trim() !== '' &&
-          formData.addressProof.trim() !== ''
-        );
+const validateTab = useCallback((index: number): boolean => {
+  switch (index) {
+    case 0: // Personal Info Tab
+      return (
+        formData.name.trim() !== '' &&
+        formData.number.trim() !== '' &&
+        formData.address.trim() !== '' &&
+        formData.nationality.trim() !== '' &&
+        formData.dob.trim() !== '' &&
+        formData.religion.trim() !== '' &&
+        formData.maritalStatus.trim() !== '' &&
+        formData.emergencyContact.trim() !== '' &&
+        formData.emergencyContactRelation.trim() !== '' &&
+        formData.idProofType.trim() !== '' &&
+        (
+          (formData.idProofType === "bill" && formData.idProofImage !== null) ||
+          (formData.idProofType !== "bill" && formData.idProofValue.trim() !== '')
+        )
+      );
 
-      default:
-        return false;
-    }
-  };
+    case 1: // Job Info Tab
+      return (
+        formData.email.trim() !== '' &&
+        formData.password.trim() !== '' &&
+        formData.salary.trim() !== '' &&
+        formData.currentSalary.trim() !== '' &&
+        formData.dateOfHire.trim() !== '' &&
+        formData.workLocation.trim() !== '' &&
+        formData.joiningDate.trim() !== '' &&
+        formData.shiftTimings !== '' &&
+        formData.role !== '' &&
+        formData.department.trim() !== '' &&
+        formData.joiningType !== ''
+      );
+
+    case 2: // Bank Info Tab
+      return (
+        formData.bankName.trim() !== '' &&
+        formData.accountNo.trim() !== '' &&
+        formData.ifscCode.trim() !== '' &&
+        formData.panNo.trim() !== '' &&
+        formData.upiId.trim() !== '' &&
+        formData.addressProof.trim() !== ''
+      );
+
+    default:
+      return false;
+  }
+}, [formData]);
+
 
   useEffect(() => {
     const newTabCompletion = [true];
@@ -141,7 +145,7 @@ const AddEmployeeForm: React.FC = () => {
       const lastValidTab = newTabCompletion.lastIndexOf(true);
       setActiveTab(lastValidTab);
     }
-  }, [formData]);
+  }, [formData, activeTab, validateTab]);
 
 
   const handleChange = (

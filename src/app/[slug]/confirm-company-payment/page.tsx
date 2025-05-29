@@ -52,7 +52,7 @@ useEffect(() => {
   };
 
   confirmRegistration();
-}, [addCompany, router]);
+}, [addCompany, router, companySlug]);
 
 
     return (

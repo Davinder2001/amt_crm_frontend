@@ -104,7 +104,13 @@ const ViewItem = () => {
 
           {selectedImage && (
             <div className="image-modal" onClick={() => setSelectedImage(null)}>
-              <img src={selectedImage} alt="Full preview" className="modal-image" />
+              <Image
+                src={selectedImage}
+                alt="Full preview"
+                fill
+                className="modal-image object-contain"
+                unoptimized
+              />
             </div>
           )}
         </div>

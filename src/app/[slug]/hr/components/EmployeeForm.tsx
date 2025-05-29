@@ -11,6 +11,7 @@ import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
+import { useCallback } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -248,14 +249,15 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         ['bankName', 'accountNo', 'ifscCode', 'panNo', 'upiId', 'addressProof']
     ];
 
-    const validateTab = (index: number): boolean => {
 
+
+    const validateTab = useCallback((index: number): boolean => {
         // Check all fields in the tab
         return tabFields[index].every(field => {
             const value = formData[field as keyof typeof formData];
             return !validateField(field, value as string | File | null);
         });
-    };
+    }, [formData, tabFields, validateField]);
 
     useEffect(() => {
         if (mode === "edit") {
@@ -277,7 +279,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 setActiveTab(lastValidTab);
             }
         }
-    }, [formData, mode]);
+    }, [formData, mode, activeTab, validateTab]); // ✅ validateTab and activeTab included
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;

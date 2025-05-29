@@ -42,8 +42,15 @@
 
   &::after {
     bottom: 0;
-    background-image: url('../../assets/bottomsvg.svg'); // Replace with your SVG or data URI
+    background-image: url('../../assets/bottomsvgtwo.svg'); // Replace with your SVG or data URI
   }
+
+  &:after {
+
+  bottom: 0;
+
+  transform: scaleX(-1); // flip horizontally
+}
 }
 
 @keyframes shimmer-bg {
@@ -291,6 +298,10 @@
   color: $gray-color;
   padding: 20px;
 
+
+  p{
+    margin-bottom: 50px;
+  }
 }
 
 /* Status/Error */

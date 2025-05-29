@@ -53,76 +53,81 @@ const PayCreditForm: React.FC = () => {
     const customer = data?.customer;
 
     return (
-        <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
-            <h2 className="text-lg font-bold mb-4">Pay Credit for Customer #{customer?.id}</h2>
+        <div className="pay-credit-container">
+            <h2 className="pay-credit-header">Pay Credit for Customer #{customer?.id}</h2>
 
             {isFetching ? (
-                <p>Loading credit details...</p>
+                <p className="loading-text">Loading credit details...</p>
             ) : customer ? (
                 <>
-                    <div className="mb-4 text-sm text-gray-700">
+                    <div className="customer-info">
                         <p><strong>Customer :</strong> {customer.name}</p>
                         <p><strong>Number :</strong> {customer.number}</p>
                     </div>
 
-                    <table className="w-full text-sm mb-4 border">
-                        <thead className="bg-gray-100">
+                    <table className="credit-table">
+                        <thead className="credit-table-header">
                             <tr>
-                                <th className="border px-3 py-2 text-left">Sr No</th>
-                                <th className="border px-3 py-2 text-left">Invoice Number</th>
-                                <th className="border px-3 py-2 text-left">Date</th>
-                                <th className="border px-3 py-2 text-right">Amount (₹)</th>
+                                <th className="credit-table-cell credit-table-cell--left">Sr No</th>
+                                <th className="credit-table-cell credit-table-cell--left">Invoice Number</th>
+                                <th className="credit-table-cell credit-table-cell--left">Date</th>
+                                <th className="credit-table-cell credit-table-cell--right">Amount (₹)</th>
                             </tr>
                         </thead>
                         <tbody>
                             {customer.credits.map((credit, index: number) => (
-                                <tr key={index}>
-                                    <td className="border px-3 py-2">{index + 1}</td>
-                                    <td className="border px-3 py-2">{credit.invoice_number}</td>
-                                    <td className="border px-3 py-2">{credit.invoice_date}</td>
-                                    <td className="border px-3 py-2 text-right">{credit.final_amount}</td>
+                                <tr key={index} className="credit-row">
+                                    <td className="credit-table-cell">{index + 1}</td>
+                                    <td className="credit-table-cell">{credit.invoice_number}</td>
+                                    <td className="credit-table-cell">{credit.invoice_date}</td>
+                                    <td className="credit-table-cell credit-table-cell--right">{credit.final_amount}</td>
                                 </tr>
                             ))}
-                            <tr className="font-bold bg-gray-50">
-                                <td colSpan={3} className="px-3 py-2 text-right">Total Due:</td>
-                                <td className="px-3 py-2 text-right">₹{customer.total_due}</td>
+                            <tr className="total-due-row">
+                                <td colSpan={3} className="credit-table-cell credit-table-cell--right total-due-label">Total Due:</td>
+                                <td className="credit-table-cell credit-table-cell--right total-due-amount">₹{customer.total_due}</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label className="block font-semibold">Amount (₹)</label>
+                    <form onSubmit={handleSubmit} className="payment-form">
+                        <div className="form-group">
+                            <label className="form-label">Amount (₹)</label>
                             <input
                                 type="number"
                                 value={amount}
+                                onFocus={() => amount === 0 && setAmount(NaN)}
+                                onBlur={() => isNaN(amount) && setAmount(0)}
                                 onChange={(e) => setAmount(Number(e.target.value))}
-                                className="w-full px-3 py-2 border rounded"
+                                className="form-input"
                                 required
                             />
+
                         </div>
 
-                        <div>
-                            <label className="block font-semibold">Note (optional)</label>
+                        <div className="form-group">
+                            <label className="form-label">Note (optional)</label>
                             <textarea
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
-                                className="w-full px-3 py-2 border rounded"
+                                className="form-textarea"
                                 rows={3}
                             />
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={isPaying}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            {isPaying ? 'Processing...' : 'Submit Payment'}
-                        </button>
+                        <div className='Payment-submit-btn-outer'>
+                            <button
+                                type="submit"
+                                disabled={isPaying}
+                                className="submit-button"
+                            >
+                                {isPaying ? 'Processing...' : 'Submit Payment'}
+                            </button>
+                        </div>
                     </form>
                 </>
             ) : (
-                <p className="text-red-500">Credit data not found.</p>
+                <p className="error-text">Credit data not found.</p>
             )}
         </div>
     );

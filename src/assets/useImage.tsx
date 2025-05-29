@@ -15,6 +15,7 @@ import changepass from './changepass.png'
 import adminlogo from './adminlogo.avif'
 import headersvg from './headersvg.svg'
 import bottomsvg from './bottomsvg.svg'
+import bottomsvgtwo from './bottomsvgtwo.svg'
 
 
 
@@ -22,5 +23,5 @@ import bottomsvg from './bottomsvg.svg'
 
 
 export {
-    loginImage,headersvg,bottomsvg,adminlogo, addRole, logo, placeholderImg, homeimg2,  homelogo, featurecardimg1, featurecardimg2,  manageimage, footerlogoimage, loginPageimage, forgotPageimage, changepass
+    loginImage,headersvg,bottomsvg,bottomsvgtwo,adminlogo, addRole, logo, placeholderImg, homeimg2,  homelogo, featurecardimg1, featurecardimg2,  manageimage, footerlogoimage, loginPageimage, forgotPageimage, changepass
 }

@@ -1,0 +1,50 @@
+@use '../../variables' as *;
+.view-credits {
+  padding: 2rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'DMSans', sans-serif;
+}
+
+.view-credits__title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #009693; /* Primary color */
+  text-align: center;
+}
+
+.view-credits__loading,
+.view-credits__error,
+.view-credits__empty {
+  text-align: center;
+  font-size: 1rem;
+  color: #777777; /* Secondary text color */
+  margin-top: 2rem;
+}
+
+.view-credits__card {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.view-credits__card:hover {
+  transform: translateY(-4px);
+}
+
+.view-credits__name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #222222; /* Heading color */
+}
+
+.view-credits__info {
+  font-size: 0.95rem;
+  margin: 0.3rem 0;
+  color: #333333; /* Text color */
+}

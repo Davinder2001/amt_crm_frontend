@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { featurecardimg1, featurecardimg2, featurecardimg3, featurecardimg4, footerlogoimage, homeimg1, homeimg2, homeimg3, homelogo, manageimage } from '@/assets/useImage';
+import { featurecardimg1, featurecardimg2,  footerlogoimage,  homeimg2,  homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import Image from 'next/image';
@@ -53,8 +53,6 @@ export default function Homepage() {
             <div className="hero-right">
               <div className='hero-right-inner'>
                 <Image src={homeimg2.src} alt="Business Professional" className="main-image" width={841} height={400} />
-                <Image src={homeimg1.src} alt="Workflow chart" className="chart top-left" width={200} height={100} />
-                <Image src={homeimg3.src} alt="Team collaboration" className="chart bottom-right" width={200} height={150} />
               </div>
             </div>
           </section>
@@ -95,8 +93,8 @@ export default function Homepage() {
                       <p>Our automation tools allow you to streamline repetitive tasks, reducing overhead and ensuring you focus on what matters most for your business growth.</p>
                     </div>
                     <div className='feature-card-image'>
-                      <img src={featurecardimg3.src} alt="Business Operations" className='absilute-image2' />
-                      <img src={featurecardimg4.src} alt="Business Dashboard" className='absilute-image3' />
+                      <img src={featurecardimg2.src} alt="Business Operations" className='absilute-image2' />
+                      <img src={featurecardimg1.src} alt="Business Dashboard" className='absilute-image3' />
                     </div>
                   </div>
                 </div>

@@ -83,8 +83,7 @@ const LoginForm = () => {
         {isLoading && <Loader />}
         <div className="left-panel">
           <div className="form-box">
-            <h1 className="title">SecurePanel</h1>
-            <h2 className="subtitle">Welcome back</h2>
+            <h1 className="title">Welcome back 👋🏻</h1>
             <p className="description">Please login to manage your dashboard.</p>
 
             {!isLoggedIn && (
@@ -140,7 +139,7 @@ const LoginForm = () => {
                     <span className="checkmark">
                       <FaFingerprint className="checkmark-icon" />
                     </span>
-                    Remember me
+                    Remember me 
                   </label>
                   <Link href="/forget-password" className="forgot-password-link">Forgot Password?</Link>
                 </div>

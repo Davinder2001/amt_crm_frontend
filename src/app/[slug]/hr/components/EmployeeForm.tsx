@@ -11,6 +11,7 @@ import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
+import { useCallback, useMemo } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -140,7 +141,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
     }, [mode, employeeId, employeeData]);
 
 
-    const validateField = (name: string, value: string | File | null): string => {
+    const validateField = useCallback((name: string, value: string | File | null): string => {
+
         switch (name) {
             case 'name':
                 if (mode === 'add' && !value) return 'Name is required';
@@ -231,9 +233,10 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         }
 
         return '';
-    };
+    }, [mode, formData.idProofType])
 
-    const tabFields = [
+
+    const tabFields = useMemo(() => ([
         // Personal Info
         ['name', 'number', 'address', 'nationality', 'dob', 'religion',
             'maritalStatus', 'emergencyContact', 'emergencyContactRelation',
@@ -246,16 +249,17 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
         // Bank Info
         ['bankName', 'accountNo', 'ifscCode', 'panNo', 'upiId', 'addressProof']
-    ];
+    ]), []);
 
-    const validateTab = (index: number): boolean => {
 
+
+    const validateTab = useCallback((index: number): boolean => {
         // Check all fields in the tab
         return tabFields[index].every(field => {
             const value = formData[field as keyof typeof formData];
             return !validateField(field, value as string | File | null);
         });
-    };
+    }, [formData, tabFields, validateField]);
 
     useEffect(() => {
         if (mode === "edit") {
@@ -277,7 +281,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 setActiveTab(lastValidTab);
             }
         }
-    }, [formData, mode]);
+    }, [formData, mode, activeTab, validateTab]); // ✅ validateTab and activeTab included
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -917,3 +922,5 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 };
 
 export default EmployeeForm;
+
+// (useMemo polyfill removed; use useMemo from 'react')

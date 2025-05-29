@@ -12,8 +12,8 @@ const EditVendorPage: React.FC = () => {
     const router = useRouter();
     const vendorId = Number(params?.id);
 
-    const { data: data, isLoading, error } = useFetchVendorByIdQuery(vendorId);
-    const vendor = data?.vendor;
+    const { data, isLoading, error } = useFetchVendorByIdQuery(vendorId);
+    const vendor = data;
 
     const [updateVendor, { isLoading: isUpdating }] = useUpdateVendorMutation();
 
@@ -24,10 +24,10 @@ const EditVendorPage: React.FC = () => {
 
     useEffect(() => {
         if (vendor) {
-            setVendorName(vendor.name || '');
-            setVendorNumber(vendor.number || '');
-            setVendorEmail(vendor.email || '');
-            setVendorAddress(vendor.address || '');
+            setVendorName(vendor.vendor_name || '');
+            setVendorNumber(vendor.vendor_number ? String(vendor.vendor_number) : '');
+            setVendorEmail(vendor.vendor_email || '');
+            setVendorAddress(vendor.vendor_address || '');
         }
     }, [vendor]);
 
@@ -39,8 +39,8 @@ const EditVendorPage: React.FC = () => {
         const formdata = new FormData();
         formdata.append('_method', 'PUT');
 
-        formdata.append('vendor_name', vendorName || vendor?.name || '');
-        formdata.append('vendor_number', vendorNumber || vendor?.number || '');
+        formdata.append('vendor_name', vendorName || vendor?.vendor_name || '');
+        formdata.append('vendor_number', vendorNumber || (vendor?.vendor_number ? String(vendor.vendor_number) : '') || '');
         formdata.append('vendor_email', vendorEmail);
         formdata.append('vendor_address', vendorAddress);
 
@@ -52,9 +52,14 @@ const EditVendorPage: React.FC = () => {
 
             toast.success('Vendor updated successfully!');
             router.push(`/${companySlug}/store/vendors`);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error updating vendor:', err);
-            toast.error(err?.data?.message || 'Failed to update vendor');
+            if (err && typeof err === 'object' && 'data' in err && err.data && typeof err.data === 'object' && 'message' in err.data) {
+                // @ts-expect-error: err.data.message may not be typed
+                toast.error(err.data.message || 'Failed to update vendor');
+            } else {
+                toast.error('Failed to update vendor');
+            }
         }
     };
 

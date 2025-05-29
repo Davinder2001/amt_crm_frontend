@@ -59,7 +59,7 @@ const PackagesView = () => {
           : `${prev.name} ${suffix}`
       }));
     }
-  }, [formData.package_type]);
+  }, [formData.package_type, formData.name]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

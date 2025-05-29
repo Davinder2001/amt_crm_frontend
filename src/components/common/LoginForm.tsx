@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/slices/auth/authApi';
 import { toast } from 'react-toastify';
+import Image from "next/image";
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
@@ -139,7 +140,7 @@ const LoginForm = () => {
                     <span className="checkmark">
                       <FaFingerprint className="checkmark-icon" />
                     </span>
-                    Remember me 
+                    Remember me
                   </label>
                   <Link href="/forget-password" className="forgot-password-link">Forgot Password?</Link>
                 </div>
@@ -166,7 +167,14 @@ const LoginForm = () => {
         </div>
 
         <div className="right-panel">
-          <img src={loginPageimage.src} alt="Doctors" className="illustration" />
+          <Image
+            src={loginPageimage.src}
+            alt="Doctors"
+            className="illustration"
+            width={600} // adjust width
+            height={400} // adjust height
+            priority // optional: loads image earlier for better UX
+          />
         </div>
       </div>
 

@@ -4,6 +4,13 @@ import { useFetchCustomerByIdQuery } from '@/slices/customers/customer';
 import React from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 
+type Customer = {
+    name?: string;
+    number?: string;
+    email?: string;
+    company_id?: string | number;
+};
+
 function CustomerView() {
     const { id } = useParams();
     const router = useRouter();
@@ -12,7 +19,7 @@ function CustomerView() {
     if (isLoading) return <p className="loading">Loading...</p>;
     if (!data || !data.customer) return <p className="error">Customer not found.</p>;
 
-    const customer = data.customer;
+    const customer: Customer = data.customer;
 
     return (
         <div className="customer-view-container">

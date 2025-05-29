@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { featurecardimg1, featurecardimg2,  footerlogoimage,  homeimg2,  homelogo, manageimage } from '@/assets/useImage';
+import { featurecardimg1, featurecardimg2, footerlogoimage, homeimg2, homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import Image from 'next/image';
@@ -14,7 +14,14 @@ export const UserNavbar = () => {
         <div className="header2">
           <div className="logo">
             <Link href="/">
-              <img src={homelogo.src} alt="Logo" />
+              <Image
+                src={homelogo}
+                alt="Logo"
+                width={100}   // adjust to your preferred size
+                height={100}
+                layout='responsive'
+              />
+
               <span>Himmanav Asset Management Technology </span>
             </Link>
           </div>
@@ -78,8 +85,19 @@ export default function Homepage() {
                       <p>Additionally, you can set up custom notifications for follow-ups, track customer behavior, and even integrate with other marketing tools.</p>
                     </div>
                     <div className='feature-card-image'>
-                      <img src={featurecardimg1.src} alt="CRM Management" />
-                      <img src={featurecardimg2.src} alt="Client Management" className='absilute-image1' />
+                      <Image
+                        src={featurecardimg1.src}
+                        alt="CRM Management"
+                        width={400}
+                        height={300}
+                        unoptimized
+                      />
+
+                      <Image
+                        src={featurecardimg2}
+                        alt="Client Management"
+                        className="absilute-image1"
+                      />
                     </div>
                   </div>
 
@@ -93,8 +111,18 @@ export default function Homepage() {
                       <p>Our automation tools allow you to streamline repetitive tasks, reducing overhead and ensuring you focus on what matters most for your business growth.</p>
                     </div>
                     <div className='feature-card-image'>
-                      <img src={featurecardimg2.src} alt="Business Operations" className='absilute-image2' />
-                      <img src={featurecardimg1.src} alt="Business Dashboard" className='absilute-image3' />
+                      <Image
+                        src={featurecardimg2}
+                        alt="Business Operations"
+                        className="absilute-image2"
+                      />
+
+                      <Image
+                        src={featurecardimg1}
+                        alt="Business Dashboard"
+                        className="absilute-image3"
+                      />
+
                     </div>
                   </div>
                 </div>
@@ -142,7 +170,10 @@ export default function Homepage() {
                 </p>
               </div>
               <div className="manage-image">
-                <img src={manageimage.src} alt="Business Dashboard preview" />
+                <Image
+                  src={manageimage}
+                  alt="Business Dashboard preview"
+                />
               </div>
             </div>
           </div>
@@ -195,7 +226,7 @@ export default function Homepage() {
         </div>
 
         <Pricing />
-        
+
       </div>
     </div>
   );
@@ -209,7 +240,8 @@ export const UserFooter = () => {
           <div className='footer-bottom-inner'>
             <div className="footer-logo">
               <div className='footer-logo-text'>
-                <Link href="/"><img src={footerlogoimage.src} alt="Logo" />
+                <Link href="/">
+                  <Image src={footerlogoimage} alt="Logo" />
                   <span>Himmanav Asset Management Technology </span></Link>
               </div>
             </div>

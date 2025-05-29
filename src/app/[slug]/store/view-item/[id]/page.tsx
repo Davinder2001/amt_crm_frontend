@@ -47,16 +47,16 @@ const ViewItem = () => {
     }
   };
   // Update the InfoCard props interface
-  interface InfoCardProps {
-    title: string;
-    data: {
-      label: string;
-      value: React.ReactNode;  // Changed from string|number
-      className?: string
-    }[];
-    className?: string;
-    icon?: React.ElementType;
-  }
+  // interface InfoCardProps {
+  //   title: string;
+  //   data: {
+  //     label: string;
+  //     value: React.ReactNode;  // Changed from string|number
+  //     className?: string
+  //   }[];
+  //   className?: string;
+  //   icon?: React.ElementType;
+  // }
   if (isLoading) return <p>Loading item...</p>;
   if (error) return <p>Error loading item.</p>;
   if (!item) return <p>Item not found.</p>;
@@ -173,7 +173,14 @@ const ViewItem = () => {
 
           {selectedImage && (
             <div className="image-modal" onClick={() => setSelectedImage(null)}>
-              <img src={selectedImage} alt="Full preview" className="modal-image" />
+              <Image
+                src={selectedImage}
+                alt="Full preview"
+                className="modal-image"
+                width={400} // set desired width
+                height={300} // set desired height
+                unoptimized // required if selectedImage is a Blob or data URL
+              />
             </div>
           )}
         </div>

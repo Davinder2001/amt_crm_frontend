@@ -38,8 +38,9 @@ const EditVendorPage: React.FC = () => {
 
         const formdata = new FormData();
         formdata.append('_method', 'PUT');
-        formdata.append('vendor_name', vendorName);
-        formdata.append('vendor_number', vendorNumber);
+
+        formdata.append('vendor_name', vendorName || vendor?.name || '');
+        formdata.append('vendor_number', vendorNumber || vendor?.number || '');
         formdata.append('vendor_email', vendorEmail);
         formdata.append('vendor_address', vendorAddress);
 
@@ -51,11 +52,12 @@ const EditVendorPage: React.FC = () => {
 
             toast.success('Vendor updated successfully!');
             router.push(`/${companySlug}/store/vendors`);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error updating vendor:', err);
-            toast.error('Failed to update vendor');
+            toast.error(err?.data?.message || 'Failed to update vendor');
         }
     };
+
 
 
     if (isLoading) return <p className="loading-text">Loading vendor...</p>;
@@ -74,17 +76,17 @@ const EditVendorPage: React.FC = () => {
 
                 <form className="vendor-form" onSubmit={handleSubmit}>
                     <div className="form-section">
+
                         {/* Vendor Name */}
                         <div className="input-group">
                             <label>
                                 <FaStore className="input-icon" />
-                                Vendor Name <span className={`required-asterisk ${vendorName ? 'filled' : 'unfilled'}`}>*</span>
+                                Vendor Name
                             </label>
                             <input
                                 type="text"
                                 value={vendorName}
                                 onChange={(e) => setVendorName(e.target.value)}
-                                required
                                 className="form-input"
                             />
                         </div>
@@ -93,7 +95,7 @@ const EditVendorPage: React.FC = () => {
                         <div className="input-group">
                             <label>
                                 <FaPhone className="input-icon" />
-                                Vendor Number <span className={`required-asterisk ${vendorNumber ? 'filled' : 'unfilled'}`}>*</span>
+                                Vendor Number
                             </label>
                             <input
                                 type="tel"
@@ -104,7 +106,6 @@ const EditVendorPage: React.FC = () => {
                                         setVendorNumber(value);
                                     }
                                 }}
-                                required
                                 className="form-input"
                                 maxLength={10}
                                 placeholder="Enter 10-digit number"
@@ -129,12 +130,11 @@ const EditVendorPage: React.FC = () => {
                         <div className="input-group">
                             <label>
                                 <FaMapMarkerAlt className="input-icon" />
-                                Vendor Address <span className={`required-asterisk ${vendorAddress ? 'filled' : 'unfilled'}`}>*</span>
+                                Vendor Address
                             </label>
                             <textarea
                                 value={vendorAddress}
                                 onChange={(e) => setVendorAddress(e.target.value)}
-                                required
                                 className="form-input"
                             />
                         </div>
@@ -144,7 +144,7 @@ const EditVendorPage: React.FC = () => {
                             <button
                                 type="submit"
                                 className="primary-button"
-                                disabled={isUpdating || !vendorName || !vendorNumber || !vendorAddress}
+                                disabled={isUpdating}  // Only disable when updating (optional)
                             >
                                 {isUpdating ? (
                                     <>
@@ -161,6 +161,7 @@ const EditVendorPage: React.FC = () => {
             </div>
         </div>
     );
+
 };
 
 export default EditVendorPage;

@@ -2,30 +2,33 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchCustomerByIdQuery } from '@/slices/customers/customer';
 import React from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 
 function CustomerView() {
-    const { id } = useParams(); // Get the customer ID from the URL params
+    const { id } = useParams();
     const router = useRouter();
+    const { data, isLoading } = useFetchCustomerByIdQuery(Number(id));
 
-    // Fetch customer data by ID
-    const { data: customer } = useFetchCustomerByIdQuery(Number(id));
+    if (isLoading) return <p className="loading">Loading...</p>;
+    if (!data || !data.customer) return <p className="error">Customer not found.</p>;
 
-    if (!customer) return <div>Customer not found.</div>;
-
-    // Log the customer object to make sure data is available
-    console.log(customer);  // For debugging purposes
+    const customer = data.customer;
 
     return (
-        <div>
-            <h1>Customer Details</h1>
-            {/* Only render fields if they are available */}
-            <p><strong>Name:</strong> {customer.name || 'N/A'}</p>
-            <p><strong>Phone Number:</strong> {customer.number || 'N/A'}</p>
-            <p><strong>Email:</strong> {customer.email ? customer.email : 'N/A'}</p> {/* Handle null email case */}
-            <p><strong>Company Id:</strong> {customer.company_id}</p>
+        <div className="customer-view-container">
+            <button onClick={() => router.back()} className="back-button">
+                <FaArrowLeft size={18} />
+            </button>
 
-            {/* Back Button */}
-            <button onClick={() => router.push('/customers')}>Back to Customers</button>
+            <div className="customer-card">
+                <h2>Customer Details</h2>
+                <div className="info">
+                    <p><strong>Name:</strong> {customer.name || 'N/A'}</p>
+                    <p><strong>Phone Number:</strong> {customer.number || 'N/A'}</p>
+                    <p><strong>Email:</strong> {customer.email || 'N/A'}</p>
+                    <p><strong>Company ID:</strong> {customer.company_id}</p>
+                </div>
+            </div>
         </div>
     );
 }

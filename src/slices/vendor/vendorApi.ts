@@ -36,7 +36,7 @@ const vendorApiSlice = storeApiSlice.injectEndpoints({
     updateVendor: builder.mutation<Vendor, {id:number, formdata:FormData}>({
       query: ({ id, formdata }) => ({
         url: `store/vendors/${id}`,
-        method: 'PUT',
+        method: 'POST',
         body: formdata,
         credentials: 'include',
       }),

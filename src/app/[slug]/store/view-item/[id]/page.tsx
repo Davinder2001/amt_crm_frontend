@@ -106,24 +106,27 @@ const ViewItem = () => {
                 label: 'Categories',
                 value: (
                   <div className="categories-container" ref={categoriesRef}>
-                    <button
-                      type="button"
-                      className="see-all-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowAllCategories(!showAllCategories);
-                      }}
-                    >
-                      See all
-                    </button>
                     {item.categories?.slice(0, 2).map((c, index) => (
                       <span key={c.id || index}>
                         {c.name}
                         {index < 1 && item.categories.length > 2 && ', '}
                       </span>
                     ))}
+
                     {item.categories?.length > 2 && (
                       <>
+                        {item.categories?.length > 2 && (
+                          <button
+                            type="button"
+                            className="see-all-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAllCategories(!showAllCategories);
+                            }}
+                          >
+                            {showAllCategories ? 'See less' : 'See all categories'}
+                          </button>
+                        )}
 
                         {showAllCategories && (
                           <div className="categories-dropdown">
@@ -139,6 +142,7 @@ const ViewItem = () => {
                     {!item.categories?.length && '-'}
                   </div>
                 )
+
               },
               { label: 'Vendor', value: item.vendor_name || '-' },
               { label: 'Catalog', value: item.catalog ? 'Yes' : 'No' },

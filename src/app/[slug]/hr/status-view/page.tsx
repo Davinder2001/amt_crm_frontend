@@ -17,7 +17,6 @@ const Page = () => {
   return (
     <>
       <div className="status-view-page">
-        <Link href={`/${currentData?.selected_company.company_slug}/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
         <UserList />
       </div>
     </>

@@ -1,4 +1,5 @@
 interface Customer {
+    customer: any;
     id: number;
     name: string;
     number: string;

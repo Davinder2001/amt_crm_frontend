@@ -199,7 +199,6 @@ const ViewUserPage: React.FC = () => {
               <div className="info-item"><span className="info-label">Nationality</span><span className="info-value">{details?.nationality || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Religion</span><span className="info-value">{details?.religion || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Marital Status</span><span className="info-value">{details?.maritalStatus || 'N/A'}</span></div>
-              <div className="info-item"><span className="info-label">Passport No</span><span className="info-value">{details?.passportNo || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Emergency Contact</span><span className="info-value">{details?.emergencyContact || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Emergency Relation</span><span className="info-value">{details?.emergencyContactRelation || 'N/A'}</span></div>
             </div>

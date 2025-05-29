@@ -143,18 +143,18 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
     const validateField = (name: string, value: string | File | null): string => {
         switch (name) {
             case 'name':
-                if (!value) return 'Name is required';
+                if (mode === 'add' && !value) return 'Name is required';
                 if (typeof value === 'string' && value.length < 3) return 'Name must be at least 3 characters';
                 break;
 
             case 'number':
-                if (!value) return 'Phone number is required';
+                if (mode === 'add' && !value) return 'Phone number is required';
                 if (typeof value === 'string' && !/^\d{10}$/.test(value))
                     return 'Phone number must be 10 digits';
                 break;
 
             case 'email':
-                if (!value) return 'Email is required';
+                if (mode === 'add' && !value) return 'Email is required';
                 if (typeof value === 'string' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
                     return 'Invalid email format';
                 break;
@@ -166,7 +166,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 break;
 
             case 'dob':
-                if (!value) return 'Date of birth is required';
+                if (mode === 'add' && !value) return 'Date of birth is required';
                 if (typeof value === 'string') {
                     const dobDate = new Date(value);
                     const age = new Date().getFullYear() - dobDate.getFullYear();
@@ -175,13 +175,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 break;
 
             case 'emergencyContact':
-                if (!value) return 'Emergency contact is required';
+                if (mode === 'add' && !value) return 'Emergency contact is required';
                 if (typeof value === 'string' && !/^\d{10}$/.test(value))
                     return 'Emergency contact must be 10 digits';
                 break;
 
             case 'idProofValue':
-                if (formData.idProofType && formData.idProofType !== 'bill' && !value)
+                if (mode === 'add' && formData.idProofType && formData.idProofType !== 'bill' && !value)
                     return `${formData.idProofType.charAt(0).toUpperCase() + formData.idProofType.slice(1)} number is required`;
                 if (formData.idProofType === 'aadhar' && typeof value === 'string' && !/^\d{12}$/.test(value))
                     return 'Aadhar must be 12 digits';
@@ -190,45 +190,46 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 break;
 
             case 'utility_bill_image':
-                if (formData.idProofType === 'bill' && !value)
+                if (mode === 'add' && formData.idProofType === 'bill' && !value)
                     return 'Utility bill image is required';
                 break;
 
             case 'salary':
             case 'currentSalary':
-                if (!value) return 'Salary is required';
+                if (mode === 'add' && !value) return 'Salary is required';
                 if (typeof value === 'string' && !/^\d+$/.test(value))
                     return 'Salary must be a number';
                 break;
 
             case 'accountNo':
-                if (!value) return 'Account number is required';
+                if (mode === 'add' && !value) return 'Account number is required';
                 if (typeof value === 'string' && !/^\d{9,18}$/.test(value))
                     return 'Account number must be 9-18 digits';
                 break;
 
             case 'ifscCode':
-                if (!value) return 'IFSC code is required';
+                if (mode === 'add' && !value) return 'IFSC code is required';
                 if (typeof value === 'string' && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(value))
                     return 'Invalid IFSC format (e.g., ABCD0123456)';
                 break;
 
             case 'panNo':
-                if (!value) return 'PAN number is required';
+                if (mode === 'add' && !value) return 'PAN number is required';
                 if (typeof value === 'string' && !/^[A-Z]{5}\d{4}[A-Z]{1}$/.test(value))
                     return 'Invalid PAN format (e.g., ABCDE1234F)';
                 break;
 
             case 'upiId':
-                if (!value) return 'UPI ID is required';
+                if (mode === 'add' && !value) return 'UPI ID is required';
                 if (typeof value === 'string' && !/^[\w.-]+@[\w]+$/.test(value))
                     return 'Invalid UPI ID format (e.g., name@upi)';
                 break;
 
             default:
-                if (typeof value === 'string' && !value && name !== 'password')
+                if (mode === 'add' && typeof value === 'string' && !value && name !== 'password')
                     return 'This field is required';
         }
+
         return '';
     };
 
@@ -320,6 +321,29 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (mode === "edit") {
+            // Skip validation completely on edit mode and just update
+            try {
+                if (employeeId) {
+                    const changedFields = getChangedFields(originalData, formData);
+                    // Always include role (or any required field) when updating
+                    const updatePayload = { id: employeeId, ...changedFields, role: formData.role };
+
+                    await updateEmployee(updatePayload).unwrap();
+                    toast.success("Employee updated successfully!");
+                    setOriginalData(formData);
+                    setHasChanges(false);
+                }
+                router.push(`/${companySlug}/hr/status-view`);
+            } catch (err) {
+                console.error("Error updating employee:", err);
+                toast.error("Failed to update employee");
+            }
+            return;
+        }
+
+        // mode === "add" case, proceed with validation
+
         // Validate all tabs first to find which one has errors
         const tabErrors: boolean[] = [];
         const newErrors: Record<string, string> = {};
@@ -349,27 +373,19 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         }
 
         try {
-            if (mode === "add") {
-                const allTabsValid = tabCompletion.every(valid => valid);
-                if (!allTabsValid) {
-                    toast.error('Please complete all sections before submitting');
-                    return;
-                }
-                await createEmployee(formData).unwrap();
-                toast.success("Employee created successfully!");
-                // localStorage.removeItem(LOCAL_STORAGE_KEY);
-                // setFormData(getDefaultEmployeeForm());
-            } else if (mode === "edit" && employeeId) {
-                const changedFields = getChangedFields(originalData, formData);
-                await updateEmployee({ id: employeeId, ...changedFields }).unwrap();
-                toast.success("Employee updated successfully!");
-                setOriginalData(formData);
-                setHasChanges(false);
+            const allTabsValid = tabCompletion.every(valid => valid);
+            if (!allTabsValid) {
+                toast.error('Please complete all sections before submitting');
+                return;
             }
+            await createEmployee(formData).unwrap();
+            toast.success("Employee created successfully!");
+            // localStorage.removeItem(LOCAL_STORAGE_KEY);
+            // setFormData(getDefaultEmployeeForm());
             router.push(`/${companySlug}/hr/status-view`);
         } catch (err) {
-            console.error(`Error ${mode === "add" ? "creating" : "updating"} employee:`, err);
-            toast.error(`Failed to ${mode === "add" ? "create" : "update"} employee`);
+            console.error("Error creating employee:", err);
+            toast.error("Failed to create employee");
         }
     };
 
@@ -488,8 +504,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         placeholder={placeholder}
                         maxLength={max}
                         minLength={min}
-                        required
+                        required={mode === 'add'}  // <-- Only required in add mode
                     />
+
                 )}
 
                 {isInvalid && (
@@ -755,22 +772,31 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                     <RequiredLabel htmlFor="role" className="flex items-center gap-2">
                                         <FaIdCard className="text-gray-600" /> Role
                                     </RequiredLabel>
-                                    <select name="role" value={formData.role} onChange={handleChange}>
-                                        <option value="">Select Role</option>
-                                        {rolesLoading ? (
-                                            <option disabled>Loading...</option>
-                                        ) : rolesError ? (
-                                            <option disabled>Error loading roles</option>
-                                        ) : (
-                                            rolesData?.roles?.map((role: { id: string; name: string }) => (
-                                                <option key={role.id} value={role.name}>
-                                                    {role.name}
-                                                </option>
-                                            ))
-                                        )}
-                                    </select>
+                                    <div className="custom-select-wrapper">
+                                        <select
+                                            name="role"
+                                            value={formData.role}
+                                            onChange={handleChange}
+                                            className={errors.role ? "error" : ""}
+                                            disabled={rolesLoading || !!rolesError}
+                                        >
+                                            <option value="">Select Role</option>
+                                            {rolesLoading ? (
+                                                <option disabled>Loading...</option>
+                                            ) : rolesError ? (
+                                                <option disabled>Error loading roles</option>
+                                            ) : (
+                                                rolesData?.roles?.map((role: { id: string; name: string }) => (
+                                                    <option key={role.id} value={role.name}>
+                                                        {role.name}
+                                                    </option>
+                                                ))
+                                            )}
+                                        </select>
+                                    </div>
                                     {errors.role && <div className="error-message">{errors.role}</div>}
                                 </div>
+
 
                                 {renderField("Department", "department", "text", "Enter department", FaUniversity)}
 
@@ -778,16 +804,22 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                     <RequiredLabel htmlFor="joiningType" className="flex items-center gap-2">
                                         <FaBriefcase className="text-gray-600" /> Joining Type
                                     </RequiredLabel>
-                                    <select name="joiningType" value={formData.joiningType} onChange={handleChange}>
-                                        <option value="">Select Joining Type</option>
-                                        <option value="full-time">Full-time</option>
-                                        <option value="part-time">Part-time</option>
-                                        <option value="contract">Contract</option>
-                                    </select>
-                                    {errors.joiningType && (
-                                        <div className="error-message">{errors.joiningType}</div>
-                                    )}
+                                    <div className="custom-select-wrapper">
+                                        <select
+                                            name="joiningType"
+                                            value={formData.joiningType}
+                                            onChange={handleChange}
+                                            className={errors.joiningType ? "error" : ""}
+                                        >
+                                            <option value="">Select Joining Type</option>
+                                            <option value="full-time">Full-time</option>
+                                            <option value="part-time">Part-time</option>
+                                            <option value="contract">Contract</option>
+                                        </select>
+                                    </div>
+                                    {errors.joiningType && <div className="error-message">{errors.joiningType}</div>}
                                 </div>
+
 
                                 {renderField("Previous Employer", "previousEmployer", "text", "Enter previous employer", FaBuilding)}
                                 {renderField("Medical Info (e.g., Blood Group)", "medicalInfo", "text", "Enter medical info", FaHospital)}

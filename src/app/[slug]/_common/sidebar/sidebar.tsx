@@ -34,7 +34,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
           <>
             <Link href={`${userType === 'employee'
               ? `/${companySlug}/employee/dashboard`
-              : `/${companySlug}/dashboard`}`} className="logo-wrapper" onClick={openMenu}><Image src={logo.src} alt="logo" width={50} height={50} /> <span>AMT CRM</span></Link>
+              : `/${companySlug}/dashboard`}`} className="logo-wrapper" onClick={openMenu}><Image src={logo.src} alt="logo" width={30} height={30} /> <span>AMT CRM</span></Link>
             <FaTimesCircle
               size={20}
               style={{ cursor: "pointer" }}
@@ -45,7 +45,7 @@ const Sidebar: React.FC<sidebarProps> = ({ isSidebarExpanded, isMobile, openMenu
         ) : isSidebarExpanded ? (
           <Link href={`${userType === 'employee'
             ? `/${companySlug}/employee/dashboard`
-            : `/${companySlug}/dashboard`}`} className="logo-wrapper"><Image src={logo.src} alt="logo" width={50} height={50} /> <span>AMT CRM</span></Link>
+            : `/${companySlug}/dashboard`}`} className="logo-wrapper"><Image src={logo.src} alt="logo" width={30} height={30} /> <span>AMT CRM</span></Link>
         ) : (
           <Link href={`${userType === 'employee'
             ? `/${companySlug}/employee/dashboard`

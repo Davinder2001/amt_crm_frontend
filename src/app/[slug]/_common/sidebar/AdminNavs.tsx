@@ -39,7 +39,6 @@ const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, openMenu }) => {
                         <li
                             key={path}
                             className={`menu-item ${hasSubmenu ? "has-submenu" : ""} ${isActive ? "active" : ""}`}
-                            style={{ backgroundColor: isActive ? "#F1F9F9" : "" }}
                             onClick={openMenu}
                         >
                             <Link href={`/${companySlug}/${path}`} className="menu-link">

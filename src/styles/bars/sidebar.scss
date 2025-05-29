@@ -4,8 +4,7 @@
 .logo-wrapper {
     display: flex;
     align-items: center;
-    gap: 5px;
-    text-decoration: none;
+    gap: 8px;
 }
 
 // ********* Sidebar css ********* //
@@ -23,13 +22,14 @@
         justify-content: space-between;
         font-size: 18px;
         font-weight: bold;
-        border-bottom: 1px solid #e5e7eb;
-        height: 100px;
-        padding: 0px 20px;
-
+        height: 70px;
+        padding: 10px 20px;
+        border-bottom: 1px solid #efefef;
+        margin-bottom: 30px;
+       
         a {
             text-decoration: none;
-            color: #222222;
+            color: $primary-color;
             white-space: nowrap;
         }
     }
@@ -38,13 +38,15 @@
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
         padding: 0px;
 
         li {
-            font-size: 18px;
-            padding: 5px 20px;
+            padding: 9px 20px;
+            height: 45px;
             position: relative;
+            display: flex;
+            align-items: center;
 
             span.menu-icon {
                 display: flex;
@@ -56,11 +58,28 @@
                 text-decoration: none;
                 display: flex;
                 gap: 20px;
-                font-size: 18px;
-                color: black;
+                font-size: 16px;
+                color: $dark-color;
+                font-weight: 500;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                color:  #656464;
+                align-items: center;
+                &:hover {
+                    color: $hover-color;
+                svg {
+                    color: $hover-color;
+                }
+            }
+            svg {
+                font-size: 18px;
+                color: #656464;
+           
+            }
+            .submenu-icon {
+                font-size: 20px;
+            }
             }
 
             .active-indicator {
@@ -69,15 +88,17 @@
                 top: 0;
                 width: 2px;
                 height: 100%;
-                background-color: var(--primary-color);
-                border-radius: 2px;
+                background-color: $primary-color;
             }
-
             &.active {
-                color: var(--primary-color);
-
-                svg {
-                    color: var(--primary-color);
+                background-color: #DEE9F2;
+              
+            a {
+                color: $primary-color;
+                font-weight: 700;
+            }
+             &:hover svg ,svg {
+                    color: $primary-color;
                 }
             }
         }
@@ -95,9 +116,9 @@
     left: 100%;
     transform: translateX(10px) translateY(-50%);
     padding: 5px 10px;
-    background-color: #333;
+    background-color: $primary-color;
     color: $white;
-    border-radius: 4px;
+    border-radius: 5px;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;

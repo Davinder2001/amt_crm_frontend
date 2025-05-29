@@ -14,7 +14,14 @@ export const UserNavbar = () => {
         <div className="header2">
           <div className="logo">
             <Link href="/">
-              <Image src={homelogo} alt="Logo" />
+              <Image
+                src={homelogo}
+                alt="Logo"
+                width={100}   // adjust to your preferred size
+                height={100}
+                layout='responsive'
+              />
+
               <span>Himmanav Asset Management Technology </span>
             </Link>
           </div>

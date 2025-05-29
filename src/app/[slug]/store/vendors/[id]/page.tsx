@@ -13,8 +13,8 @@ const Page = () => {
   const vendorId = Number(params?.id);
   const { companySlug } = useCompany();
 
-  const { data: data, error, isLoading } = useFetchVendorByIdQuery(vendorId);
-  const vendor = data?.vendor;
+  const { data, error, isLoading } = useFetchVendorByIdQuery(vendorId);
+  const vendor = data;
   const [deleteVendor, { isLoading: isDeleting }] = useDeleteVendorMutation();
 
   // 🔧 Fix: Add state for confirm dialog
@@ -67,10 +67,9 @@ const Page = () => {
 
           <div className="vendor-info">
             <p><strong>ID:</strong> {vendor.id}</p>
-            <p><strong>Name:</strong> {vendor.name}</p>
-            <p><strong>Number:</strong> {vendor.number  }</p>
-            <p><strong>Email:</strong> {vendor.email}</p>
-            <p><strong>Address:</strong> {vendor.address}</p>
+            <p><strong>Name:</strong> {vendor.vendor_name}</p>
+            <p><strong>Email:</strong> {vendor.vendor_email}</p>
+            <p><strong>Address:</strong> {vendor.vendor_address}</p>
           </div>
         </div>
       </div>

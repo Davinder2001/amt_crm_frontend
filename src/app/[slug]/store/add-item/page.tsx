@@ -6,6 +6,7 @@ import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
+import { useCallback } from "react";
 import { FaArrowLeft } from 'react-icons/fa';
 import { FormInput } from '@/components/common/FormInput';
 import { FormSelect } from '@/components/common/FormSelect';
@@ -114,22 +115,29 @@ const AddItem: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const validateTab = (index: number): boolean => {
-    switch (index) {
-      case 0:
-        return formData.name.trim() !== '' && formData.brand_name.trim() !== '' && (formData.vendor_name?.trim() ?? '') !== '';
-      case 1:
-        return formData.cost_price > 0 && formData.selling_price > 0 && formData.quantity_count > 0;
-      case 2:
-        return formData.date_of_manufacture !== '';
-      case 3:
-        return selectedCategories.length > 0;
-      case 4:
-        return variants && variants.length > 0;
-      default:
-        return false;
-    }
-  };
+
+
+const validateTab = useCallback((index: number): boolean => {
+  switch (index) {
+    case 0:
+      return formData.name.trim() !== '' &&
+             formData.brand_name.trim() !== '' &&
+             (formData.vendor_name?.trim() ?? '') !== '';
+    case 1:
+      return formData.cost_price > 0 &&
+             formData.selling_price > 0 &&
+             formData.quantity_count > 0;
+    case 2:
+      return formData.date_of_manufacture !== '';
+    case 3:
+      return selectedCategories.length > 0;
+    case 4:
+      return variants && variants.length > 0;
+    default:
+      return false;
+  }
+}, [formData, selectedCategories, variants]);
+
 
   useEffect(() => {
     const newTabCompletion = [true]; // First tab is always enabled

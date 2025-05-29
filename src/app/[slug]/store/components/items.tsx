@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import { useMemo } from 'react';
 import {
   useFetchStoreQuery,
   useDeleteStoreItemMutation,
@@ -14,13 +15,31 @@ import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/common/Loader';
 
+// Add this type above your component or import it if defined elsewhere
+type StoreItem = {
+  id: number;
+  name?: string;
+  [key: string]: string | number | boolean | null | undefined | { name?: string; label?: string };
+};
+
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug: string | undefined = selectedCompany?.selected_company?.company_slug;
   const router = useRouter();
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
-  const storeItems = Array.isArray(items) ? items : [];
+  // Ensure storeItems is always StoreItem[]
+const storeItems: StoreItem[] = useMemo(() => {
+  if (!Array.isArray(items)) return [];
+  return items
+    .filter((item: unknown): item is StoreItem =>
+      typeof item === 'object' &&
+      item !== null &&
+      'id' in item &&
+      typeof (item as { id?: unknown }).id === 'number'
+    )
+    .map((item) => item as unknown as StoreItem);
+}, [items]);
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [triggerExport] = useLazyExportStoreItemsQuery();
@@ -52,7 +71,7 @@ const Items: React.FC = () => {
       const current = new Set(prev[field] || []);
       if (checked) current.add(value);
       else current.delete(value);
-      return { ...prev, [field]: [...current] };
+      return { ...prev, [field]: Array.from(current) };
     });
   };
 
@@ -60,11 +79,6 @@ const Items: React.FC = () => {
     setVisibleColumns((prev) =>
       prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
     );
-  };
-
-  // Add this type above your component or import it if defined elsewhere
-  type StoreItem = {
-    [key: string]: any;
   };
 
   const filterData = (data: StoreItem[]): StoreItem[] => {
@@ -119,13 +133,13 @@ const Items: React.FC = () => {
 
   const columns = visibleColumns.map((key) => ({
     label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-    render: (item: any) => {
+    render: (item: StoreItem) => {
       const value = item[key];
       if (value === null || value === undefined) return '-';
       if (typeof value === 'object') {
         // Try to display a meaningful field
-        if ('name' in value) return value.name;
-        if ('label' in value) return value.label;
+        if (value && typeof value === 'object' && 'name' in value) return (value as { name?: string }).name;
+        if (value && typeof value === 'object' && 'label' in value) return (value as { label?: string }).label;
         return JSON.stringify(value); // fallback
       }
       return value.toString();

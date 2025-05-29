@@ -11,7 +11,7 @@ import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -141,7 +141,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
     }, [mode, employeeId, employeeData]);
 
 
-    const validateField = (name: string, value: string | File | null): string => {
+    const validateField = useCallback((name: string, value: string | File | null): string => {
+
         switch (name) {
             case 'name':
                 if (mode === 'add' && !value) return 'Name is required';
@@ -232,9 +233,10 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         }
 
         return '';
-    };
+    }, [mode, formData.idProofType])
 
-    const tabFields = [
+
+    const tabFields = useMemo(() => ([
         // Personal Info
         ['name', 'number', 'address', 'nationality', 'dob', 'religion',
             'maritalStatus', 'emergencyContact', 'emergencyContactRelation',
@@ -247,7 +249,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
         // Bank Info
         ['bankName', 'accountNo', 'ifscCode', 'panNo', 'upiId', 'addressProof']
-    ];
+    ]), []);
 
 
 
@@ -920,3 +922,5 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 };
 
 export default EmployeeForm;
+
+// (useMemo polyfill removed; use useMemo from 'react')

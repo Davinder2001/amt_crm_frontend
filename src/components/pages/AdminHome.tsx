@@ -60,7 +60,7 @@ const AdminHome = () => {
             localStorage.setItem('company_slug', encodeStorage(firstCompany.company_slug));
             Cookies.set('company_slug', firstCompany.company_slug, { path: '/' });
         }
-    }, [companies, isAdmin]);
+    }, [companies, isAdmin, companySlug]);
 
     return (
         <>

@@ -33,15 +33,16 @@ const vendorApiSlice = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Vendor'],
     }),
-    updateVendor: builder.mutation<Vendor, { id: number; vendor_name: string }>({
-      query: ({ id, ...data }) => ({
+    updateVendor: builder.mutation<Vendor, {id:number, formdata:FormData}>({
+      query: ({ id, formdata }) => ({
         url: `store/vendors/${id}`,
         method: 'PUT',
-        body: data,
+        body: formdata,
         credentials: 'include',
       }),
       invalidatesTags: ['Vendor'],
     }),
+
   }),
 });
 

@@ -6,6 +6,13 @@
   border-radius: 10px;
 
   .item-container {
+
+    .info-card {
+      ul {
+        position: relative;
+      }
+    }
+
     .single-item-images {
       width: 100%;
       object-fit: cover;
@@ -242,44 +249,51 @@
       object-fit: cover;
     }
   }
+
+
   /* Add these styles to your CSS */
-.categories-container {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
 
-.see-all-btn {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  cursor: pointer;
-  padding: 0;
-  font-size: inherit;
-}
 
-.see-all-btn:hover {
-  text-decoration: underline;
-}
+  .categories-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-.categories-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  padding: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  z-index: 50;
-  min-width: 150px;
-  max-height: 200px;
-  overflow-y: auto;
-}
+  .see-all-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 
-.category-item {
-  padding: 4px 0;
-  white-space: nowrap;
-}
+
+  .see-all-btn:hover {
+    text-decoration: underline;
+  }
+
+  .categories-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    min-width: 150px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .category-item {
+    padding: 4px 0;
+    white-space: nowrap;
+  }
 }

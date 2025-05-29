@@ -60,7 +60,7 @@ interface Employee {
     dob?: string;
     religion?: string;
     maritalStatus?: string;
-    passportNo?: string;
+    // passportNo?: string;
     emergencyContact?: string;
     emergencyContactRelation?: string;
     workLocation?: string;
@@ -154,7 +154,7 @@ interface EmployeeFormData {
   dob: string;
   religion: string;
   maritalStatus: string;
-  passportNo: string;
+  // passportNo: string;
   emergencyContact: string;
   emergencyContactRelation: string;
   email: string;

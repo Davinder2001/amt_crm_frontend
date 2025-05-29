@@ -71,11 +71,19 @@ const VendorCreationPage: React.FC = () => {
               <input
                 type="text"
                 value={vendorNumber}
-                onChange={(e) => setVendorNumber(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Allow only digits, and max 10 characters
+                  if (/^\d{0,10}$/.test(value)) {
+                    setVendorNumber(value);
+                  }
+                }}
                 required
-                placeholder="Enter vendor phone number"
+                placeholder="Enter 10-digit vendor phone number"
                 className="form-input"
+                maxLength={10}
               />
+
             </div>
 
             {/* Vendor Email (optional) */}

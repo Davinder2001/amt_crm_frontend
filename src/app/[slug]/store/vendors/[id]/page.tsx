@@ -1,38 +1,11 @@
-// 'use client';
-// import React from 'react';
-// import { useParams } from 'next/navigation';
-// import { useFetchVendorByIdQuery } from '@/slices/vendor/vendorApi';
-
-// const Page = () => {
-//   const params = useParams();
-//   const vendorId = Number(params?.id);
-
-//   const { data: vendor, error, isLoading } = useFetchVendorByIdQuery(vendorId);
-
-//   if (isLoading) return <p>Loading vendor...</p>;
-//   if (error) return <p>Failed to fetch vendor details.</p>;
-//   if (!vendor) return <p>Vendor not found.</p>;
-
-//   return (
-//     <div className="vendor-details-page">
-//       <h1>Vendor Details</h1>
-//       <p><strong>Name:</strong> {vendor.vendor_name}</p>
-//       <p><strong>Number:</strong> {vendor.vendor_number}</p>
-//       <p><strong>Email:</strong> {vendor.vendor_email || 'N/A'}</p>
-//       <p><strong>Address:</strong> {vendor.vendor_address}</p>
-//     </div>
-//   );
-// };
-
-// export default Page;
-
 'use client';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery } from '@/slices/vendor/vendorApi';
-import { FaArrowLeft } from 'react-icons/fa';
+import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices/vendor/vendorApi';
+import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const Page = () => {
   const params = useParams();
@@ -40,7 +13,22 @@ const Page = () => {
   const vendorId = Number(params?.id);
   const { companySlug } = useCompany();
 
-  const { data: vendor, error, isLoading } = useFetchVendorByIdQuery(vendorId);
+  const { data: data, error, isLoading } = useFetchVendorByIdQuery(vendorId);
+  const vendor = data?.vendor;
+  const [deleteVendor, { isLoading: isDeleting }] = useDeleteVendorMutation();
+
+  // 🔧 Fix: Add state for confirm dialog
+  const [showConfirm, setShowConfirm] = React.useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deleteVendor(vendorId).unwrap();
+      router.push(`/${companySlug}/store/vendors`);
+    } catch (err) {
+      alert('Failed to delete vendor.');
+      console.error(err);
+    }
+  };
 
   if (isLoading) return <p className="loading-text">Loading vendor...</p>;
   if (error) return <p className="error-text">Failed to fetch vendor details.</p>;
@@ -48,24 +36,55 @@ const Page = () => {
 
   return (
     <div className="vendor-details-outer">
-    <Link href={`/${companySlug}/store/vendors`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-    <div className="vendor-details-page">
+      <Link href={`/${companySlug}/store/vendors`} className="back-button">
+        <FaArrowLeft size={20} color="#fff" />
+      </Link>
 
+      <div className="vendor-details-page">
+        <div className="vendor-card">
+          <div className="vendor-header">
+            <h2 className="vendor-title">Vendor Details</h2>
+            <div className='view-vendor-action-button-outter'>
+              <button
+              className="edit-button"
+              onClick={() => router.push(`/${companySlug}/store/vendors/edit/${vendor.id}`)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <FaEdit />
+              Edit
+            </button>
 
-      <div className="vendor-card">
-        <h2 className="vendor-title">Vendor Details</h2>
-        <div className="vendor-info">
-          <p><strong>ID:</strong> {vendor.id}</p>
-          <p><strong>Name:</strong> {vendor.vendor_name}</p>
-          <p><strong>Number:</strong> {vendor.vendor_number}</p>
-          <p><strong>Email:</strong> {vendor.vendor_email || 'N/A'}</p>
-          <p><strong>Address:</strong> {vendor.vendor_address}</p>
-          <p><strong>Created At:</strong> {new Date(vendor.created_at).toLocaleString()}</p>
-          <p><strong>Updated At:</strong> {new Date(vendor.updated_at).toLocaleString()}</p>
+            <button
+              className="delete-button"
+              onClick={() => setShowConfirm(true)}
+              disabled={isDeleting}
+            >
+              <FaTrash style={{ marginRight: '6px' }} />
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+            </div>
+          </div>
+
+          <div className="vendor-info">
+            <p><strong>ID:</strong> {vendor.id}</p>
+            <p><strong>Name:</strong> {vendor.name}</p>
+            <p><strong>Number:</strong> {vendor.number  }</p>
+            <p><strong>Email:</strong> {vendor.email}</p>
+            <p><strong>Address:</strong> {vendor.address}</p>
+          </div>
         </div>
+      </div>
 
-      </div>
-      </div>
+      <ConfirmDialog
+        isOpen={showConfirm}
+        message="Are you sure you want to delete this vendor?"
+        onConfirm={() => {
+          handleDelete();
+          setShowConfirm(false);
+        }}
+        onCancel={() => setShowConfirm(false)}
+        type="delete"
+      />
     </div>
   );
 };

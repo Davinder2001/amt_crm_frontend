@@ -138,7 +138,20 @@ const Page = () => {
 
           <div className="input-with-label">
             <label><FaPhoneAlt style={{ marginRight: 3 }} /> Vendor No</label>
-            <input placeholder="Vendor No" value={vendorNo} onChange={(e) => setVendorNo(e.target.value)} />
+            <input
+              type="text"
+              placeholder="Vendor No"
+              value={vendorNo}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d{0,10}$/.test(value)) {
+                  setVendorNo(value);
+                }
+              }}
+              maxLength={10}
+              inputMode="numeric"
+            />
+
           </div>
           <div className="input-with-label">
             <label><FaUserAlt style={{ marginRight: 3 }} /> Email</label>

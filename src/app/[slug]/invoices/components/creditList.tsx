@@ -1,96 +1,15 @@
-// 'use client';
-// import React, { useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
-// import { useGetCreditUsersQuery } from '@/slices/invoices/invoice';
-// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-
-// const CreditList = () => {
-//   const router = useRouter();
-//   const { setTitle } = useBreadcrumb();
-
-//   // Set page title once on mount
-//   useEffect(() => {
-//     setTitle('Credit Users');
-//   }, [setTitle]);
-
-//   const { data, isLoading, isError } = useGetCreditUsersQuery();
-
-//   const handleView = (userId: number) => {
-//     router.push(`credits/view/${userId}`);
-//   };
-
-//   const handlePay = (userId: number) => {
-//     router.push(`credits/pay/${userId}`);
-//   };
-
-//   if (isLoading) return <p>Loading...</p>;
-//   if (isError) return <p>Something went wrong.</p>;
-
-//   return (
-//     <div className="table-container">
-//       <table className="table">
-//         <thead className="thead">
-//           <tr>
-//             <th>#</th>
-//             <th>Name</th>
-//             <th>Phone</th>
-//             <th>Total Invoices</th>
-//             <th>Total Due (₹)</th>
-//             <th>Paid (₹)</th>
-//             <th>Outstanding (₹)</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody className="tbody">
-//           {data?.data?.map((user, index) => (
-//             <tr key={user.customer_id ?? index}>
-//               <td>{index + 1}</td>
-//               <td>{user.name}</td>
-//               <td>{user.number}</td>
-//               <td>{user.total_invoices}</td>
-//               <td>{user.total_due}</td>
-//               <td>{user.amount_paid}</td>
-//               <td>{user.outstanding}</td>
-//               <td>
-//                 <button className="btn view-btn" onClick={() => handleView(user.customer_id)}>
-//                   View
-//                 </button>
-//                 <button className="btn pay-btn" onClick={() => handlePay(user.customer_id)}>
-//                   Pay
-//                 </button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default CreditList;
-
-
-
-
-
-
-
-
-
-
-
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { 
-  useGetCreditUsersQuery, 
+import {
+  useGetCreditUsersQuery,
 } from '@/slices/invoices/invoice';
 import { useCompany } from "@/utils/Company";
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
-import { FaEye, FaMoneyBill } from 'react-icons/fa';
+import { FaMoneyBill } from 'react-icons/fa';
 
 const CreditList = () => {
   const router = useRouter();
@@ -106,6 +25,12 @@ const CreditList = () => {
 
   const users = Array.isArray(data?.data) ? data.data : [];
 
+  // Add `id` field for row click (view)
+  const processedUsers = users.map((user) => ({
+    ...user,
+    id: user.customer_id,
+  }));
+
   useEffect(() => {
     if (users.length > 0) {
       setVisibleColumns([
@@ -120,10 +45,15 @@ const CreditList = () => {
     }
   }, [users]);
 
-  const handleView = (userId: number) => router.push(`credits/view/${userId}`);
-  const handlePay = (userId: number) => router.push(`credits/pay/${userId}`);
+  const handleView = (userId: number) => {
+    router.push(`/${companySlug}/invoices/credits/view/${userId}`);
+  };
 
+  const handlePay = (userId: number) => {
+    router.push(`/${companySlug}/invoices/credits/pay/${userId}`);
+  };
 
+ 
 
   const toggleColumn = (key: string) => {
     setVisibleColumns((prev) =>
@@ -136,14 +66,7 @@ const CreditList = () => {
     render: (item: any) => {
       if (key === 'action') {
         return (
-          <div className="flex space-x-2">
-            <button
-              className="btn view-btn"
-              onClick={() => handleView(item.customer_id)}
-              title="View"
-            >
-              <FaEye />
-            </button>
+          <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
             <button
               className="btn pay-btn"
               onClick={() => handlePay(item.customer_id)}
@@ -169,17 +92,15 @@ const CreditList = () => {
         columns={columns.map((col) => ({ label: col.label, key: col.label }))}
         visibleColumns={visibleColumns}
         onColumnToggle={(label) =>
-          toggleColumn(
-            label.toLowerCase().replace(/ /g, '_')
-          )
+          toggleColumn(label.toLowerCase().replace(/ /g, '_'))
         }
         actions={[]}
       />
 
       <ResponsiveTable
-        data={users}
+        data={processedUsers}
         columns={columns}
-        onView={(id) => router.push(`/${companySlug}/invoices/credits/view/${id}`)}
+        onView={(id) => handleView(id)} // Row click goes to view
       />
     </div>
   );

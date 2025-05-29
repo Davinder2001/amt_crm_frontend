@@ -1,38 +1,54 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useGetCreditUsersQuery,
-} from '@/slices/invoices/invoice';
+import { useGetCreditUsersQuery } from '@/slices/invoices/invoice';
 import { useCompany } from "@/utils/Company";
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaMoneyBill } from 'react-icons/fa';
 
-const CreditList = () => {
+// 1. Raw API shape
+interface CreditUser {
+  customer_id: number;
+  name: string;
+  number: string;
+  total_invoices: number;
+  total_due: number;
+  amount_paid: number;
+  outstanding: number;
+}
+
+// 2. Extend with `id` for the table
+type ProcessedUser = CreditUser & { id: number };
+
+// 3. Define the column keys you’ll actually display
+type DataColumnKey = keyof CreditUser; // all real data fields
+type ColumnKey = DataColumnKey | 'action';
+
+const CreditList: React.FC = () => {
   const router = useRouter();
   const { setTitle } = useBreadcrumb();
   const { data, isLoading, isError } = useGetCreditUsersQuery();
   const { companySlug } = useCompany();
-
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([]);
+  const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>([]);
 
   useEffect(() => {
     setTitle('Credit Users');
   }, [setTitle]);
 
-  const users = Array.isArray(data?.data) ? data.data : [];
+  const users = useMemo<CreditUser[]>(() => {
+    return Array.isArray(data?.data) ? data.data : [];
+  }, [data?.data]);
 
-  // Add `id` field for row click (view)
-  const processedUsers = users.map((user) => ({
-    ...user,
-    id: user.customer_id,
-  }));
+  const processedUsers = useMemo<ProcessedUser[]>(
+    () => users.map((u) => ({ ...u, id: u.customer_id })),
+    [users]
+  );
 
   useEffect(() => {
-    if (users.length > 0) {
+    if (users.length) {
       setVisibleColumns([
         'name',
         'number',
@@ -40,33 +56,29 @@ const CreditList = () => {
         'total_due',
         'amount_paid',
         'outstanding',
-        'action'
+        'action',
       ]);
     }
-  }, [users]);
+  }, [users.length]);
 
-  const handleView = (userId: number) => {
+  const handleView = (userId: number) =>
     router.push(`/${companySlug}/invoices/credits/view/${userId}`);
-  };
 
-  const handlePay = (userId: number) => {
+  const handlePay = (userId: number) =>
     router.push(`/${companySlug}/invoices/credits/pay/${userId}`);
-  };
 
- 
-
-  const toggleColumn = (key: string) => {
-    setVisibleColumns((prev) =>
-      prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
-    );
-  };
-
-  const columns = visibleColumns.map((key) => ({
-    label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-    render: (item: any) => {
+  // 4. Build columns with proper typing—no `any`
+  const columns = visibleColumns.map<{
+    label: string;
+    render: (item: ProcessedUser) => React.ReactNode;
+  }>((key) => ({
+    label: key === 'action'
+      ? 'Action'
+      : key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+    render: (item) => {
       if (key === 'action') {
         return (
-          <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
+          <div onClick={(e) => e.stopPropagation()} className="flex space-x-2">
             <button
               className="btn pay-btn"
               onClick={() => handlePay(item.customer_id)}
@@ -77,30 +89,45 @@ const CreditList = () => {
           </div>
         );
       }
-      return item[key]?.toString() ?? '-';
+
+      // Now `key` is one of DataColumnKey, so this is safe:
+      const val = item[key];
+      return val != null ? String(val) : '-';
     },
   }));
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading…</p>;
   if (isError) return <p>Something went wrong.</p>;
 
   return (
     <div className="credit-users-page">
       <TableToolbar
         filters={{}}
-        onFilterChange={() => { }}
+        onFilterChange={() => {}}
         columns={columns.map((col) => ({ label: col.label, key: col.label }))}
-        visibleColumns={visibleColumns}
-        onColumnToggle={(label) =>
-          toggleColumn(label.toLowerCase().replace(/ /g, '_'))
-        }
+        visibleColumns={visibleColumns.map((k) =>
+          k === 'action'
+            ? 'Action'
+            : k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+        )}
+        onColumnToggle={(label) => {
+          const key = label === 'Action'
+            ? 'action'
+            : (label.toLowerCase().replace(/ /g, '_') as DataColumnKey);
+
+          setVisibleColumns((prev) =>
+            prev.includes(key)
+              ? prev.filter((c) => c !== key)
+              : [...prev, key]
+          );
+        }}
         actions={[]}
       />
 
       <ResponsiveTable
         data={processedUsers}
         columns={columns}
-        onView={(id) => handleView(id)} // Row click goes to view
+        onView={(id: number) => handleView(id)}
       />
     </div>
   );

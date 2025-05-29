@@ -5,7 +5,7 @@ import SearchBar from '../search/SearchBar';
 import Link from 'next/link';
 import { FaRegBell, FaAngleDoubleLeft } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ interface headerProps {
 
 const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
   const { companySlug, userType } = useCompany();
-  const { title } = useBreadcrumb();
+  // const { title } = useBreadcrumb();
   const router = useRouter();
 
   // State to manage sticky class

@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
     if (userType === 'admin') {
 
       // ✅ 1. Allow confirm-payment *early*
-      if (pathname.includes('/confirm-payment')) {
+      if (pathname.includes('/confirm-payment') || pathname.includes('/confirm-company-paymen')) {
         return NextResponse.next();
       }
       

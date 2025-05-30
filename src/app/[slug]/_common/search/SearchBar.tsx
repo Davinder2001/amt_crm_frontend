@@ -17,7 +17,7 @@ const SearchBar: React.FC = () => {
         <>
             <div className="search-container">
                 <div className='search-input-container'>
-                    <FaSearch size={15}/>
+                    <FaSearch size={20}/>
                     <input
                         type="text"
                         placeholder="Search Store Item..."

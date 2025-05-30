@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Profile from './components/profile';
 import SearchBar from '../search/SearchBar';
 import Link from 'next/link';
-import { FaRegBell, FaBars } from 'react-icons/fa';
+import { FaRegBell, FaAngleDoubleLeft } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+// import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ interface headerProps {
 
 const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
   const { companySlug, userType } = useCompany();
-  const { title } = useBreadcrumb();
+  // const { title } = useBreadcrumb();
   const router = useRouter();
 
   // State to manage sticky class
@@ -74,15 +74,15 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
           }
         />
       )}
-      {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
-      <h1 className="header-title">{title}</h1>
+      {!isMobile && <FaAngleDoubleLeft size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
+      {/* <h1 className="header-title">{title}</h1> */}
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
 
         {/* Notification Icon with Unread Count */}
         <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="notification-icon"
         >
-          <FaRegBell size={22} color='var(--primary-color)'/>
+          <FaRegBell size={22} />
           {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
         </Link>
         {/* <GoogleTranslate /> */}
@@ -90,7 +90,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         <Profile />
       </div>
       {isMobile && (
-        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className="m-toggle" />
+        <FaAngleDoubleLeft size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className="m-toggle" />
       )}
     </div>
   );

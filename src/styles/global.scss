@@ -106,6 +106,8 @@
 @use './invoices/qutation.scss' as *;
 @use './invoices/viewinvoice.scss' as *;
 @use './invoices/viewcustomers.scss' as *;
+@use './invoices/credits/pay.scss' as *;
+@use './invoices/credits/viewcredits.scss' as *;
 
 
 
@@ -266,7 +268,8 @@ textarea {
         width: 100%;
         min-height: 0;
         height: 100vh;
-
+        margin: 10px 50px;
+       
         .page-content {
             padding: 10px;
         }

@@ -47,6 +47,11 @@ export function middleware(request: NextRequest) {
       if (pathname === '/') {
         return NextResponse.next();
       }
+
+      // ✅ Allow /add-company route even without slug
+      if (pathname === '/add-company') {
+        return NextResponse.next();
+      }
       // Redirect if not accessing their own company area
       if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));

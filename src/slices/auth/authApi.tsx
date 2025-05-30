@@ -82,20 +82,19 @@ const authApi = userCreateApiSlice.injectEndpoints({
 
     adminRegister: builder.mutation<RegisterForm, FormData>({
       query: (formData) => ({
-        url: "admin-register",
+        url: "register-admin",
         method: "POST",
         body: formData,
       }),
       invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
     }),
 
-    confirmAdminRegister: builder.mutation<RegisterForm, { orderId: string, formData: FormData }>({
-      query: ({ orderId, formData }) => ({
-        url: `admin-register-confirm/${orderId}`,
+    sendOtp: builder.mutation<void, { number: string }>({
+      query: (otp) => ({
+        url: "send-admin-otp",
         method: "POST",
-        body: formData,
+        body: otp,
       }),
-      invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
     }),
 
   }),
@@ -111,7 +110,7 @@ export const {
   useSelectedCompanyMutation,
   useFetchSelectedCompanyQuery,
   useAdminRegisterMutation,
-  useConfirmAdminRegisterMutation,
+  useSendOtpMutation
 } = authApi;
 
 export default authApi;

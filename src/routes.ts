@@ -4,7 +4,8 @@ export const authRoutes = ['/', '/login', '/forget-password', '/register-your-co
 
 //  Dynamic routes for admin and employee
 export const adminRoutes = (slug?: string) => [
-  ...(slug ? [`/${slug}/*`] : []), //  Handle all nested admin/employee routes
+  '/add-company', // Always allow this route
+  ...(slug ? [`/${slug}/*`] : []), // Handle all nested admin/employee routes
 ];
 
 export const employeeRoutes = (slug?: string) => [

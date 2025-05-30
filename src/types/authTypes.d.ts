@@ -30,6 +30,7 @@ interface TransactionDetails {
 }
 
 interface RegisterForm {
+    user: UserProfile;
     packageId?: number;
     business_category_id?: number | null;
     first_name: string;
@@ -56,6 +57,11 @@ interface RegisterForm {
     redirect_url?: string;
     transactionDetails?: TransactionDetails;
     orderId?: string;
+    token: string;
+}
+
+interface SendOtpResponse {
+    request_id: string;
 }
 
 interface AddCompany {

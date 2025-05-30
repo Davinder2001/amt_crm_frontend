@@ -5,10 +5,8 @@ import Loader from '@/components/common/Loader';
 import AddCompanyForm from './components/addCompanyForm'
 import Packages from './components/Packages';
 import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
 
 const Page = () => {
-  const { companySlug } = useCompany();
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
   const plans = Array.isArray(plansData) ? plansData : [];
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
@@ -28,7 +26,10 @@ const Page = () => {
     <div className='outer-div'>
       {hasValidSelection ? (
         <>
-          <Link href={`/${companySlug}/my-account`} className="back-button">
+          <Link href="/add-company" className="back-button" onClick={() => {
+            setSelectedPackageId(null);
+            setSelectedCategoryId(null);
+          }}>
             ← Back
           </Link>
           <AddCompanyForm packageId={selectedPackageId} categoryId={selectedCategoryId} />

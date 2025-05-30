@@ -28,7 +28,7 @@ export const UserNavbar = () => {
 
           <div className="header-buttons">
             <button className="btn-outline " onClick={() => router.push('/login')}>Sign In</button>
-            <button className="btn-filled " onClick={() => router.push('/register-your-company')}>Get Started</button>
+            <button className="btn-filled " onClick={() => router.push('/register')}>Get Started</button>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function Homepage() {
                 We offer personalized solutions for founders, business owners, professionals, and families. Whether you&apos;re scaling your business, managing daily operations, or securing your family&apos;s future, our platform simplifies your workflow and enhances productivity. Our technology streamlines customer management, operational processes, and decision-making.
               </p>
               <div className="hero-actions">
-                <button className="btn-outline buttons" onClick={() => router.push('/register-your-company')}>Try The Dashboard</button>
+                <button className="btn-outline buttons" onClick={() => router.push('/register')}>Try The Dashboard</button>
               </div>
             </div>
             <div className="hero-right">

@@ -89,7 +89,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
       invalidatesTags: [{ type: 'Auth', id: 'LIST' }],
     }),
 
-    sendOtp: builder.mutation<void, { number: string }>({
+    sendOtp: builder.mutation<SendOtpResponse, { number: string }>({
       query: (otp) => ({
         url: "send-admin-otp",
         method: "POST",

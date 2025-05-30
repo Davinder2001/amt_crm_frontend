@@ -13,7 +13,7 @@ const UpdateItem = () => {
   const { companySlug } = useCompany();
   const router = useRouter();
   const { data: item, isLoading: isItemLoading } = useFetchStoreItemQuery(Number(id));
-  const [updateStoreItem] = useUpdateStoreItemMutation();
+  const [updateStoreItem, {isLoading : isUpdating}] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
 
@@ -244,7 +244,7 @@ const UpdateItem = () => {
         setVariants={setVariants}
         handleSubmit={handleSubmit}
         companySlug={companySlug}
-        isLoading={isItemLoading}
+        isLoading={isUpdating}
         isEditMode={true} // or false
         isFormModified={isFormModified}
         activeTab={activeTab}

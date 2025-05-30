@@ -1,5 +1,123 @@
 @use '../variables' as *;
 
+
+
+// quation form styling start 
+.quotation-form {
+  max-width: 840px;
+  margin: auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  font-family: 'DMSans', sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #009693;
+  }
+
+  .form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+    color: #333;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus {
+    border-color: #009693;
+  }
+
+  .item-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .item-row input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+
+  .remove-btn {
+    grid-column: span 3;
+    text-align: right;
+    font-size: 0.85rem;
+    color: #e74c3c;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .add-item-btn {
+    color: #009693;
+    background: none;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .summary {
+    text-align: right;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .submit-btn {
+    background: #009693;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .success-msg {
+    color: #2ecc71;
+    font-weight: 500;
+    margin-top: 1rem;
+  }
+}
+
+// quation form styling end 
+
+
+
+
+
+
+
+
+
+
+
+
 .invoice-nav-section {
   display: flex;
   justify-content: space-between;
@@ -21,7 +139,7 @@
     padding: 10px 15px;
     border: none;
     background: linear-gradient(135deg, $base 0%, rgba($base, 5%) 100%);
-    color: white;
+    color: var(--primary-color);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;

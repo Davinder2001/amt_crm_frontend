@@ -14,6 +14,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/common/Loader';
+import { useCompany } from '@/utils/Company';
 
 // Add this type above your component or import it if defined elsewhere
 type StoreItem = {
@@ -24,7 +25,7 @@ type StoreItem = {
 
 const Items: React.FC = () => {
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug: string | undefined = selectedCompany?.selected_company?.company_slug;
+  const { companySlug } = useCompany();
   const router = useRouter();
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();

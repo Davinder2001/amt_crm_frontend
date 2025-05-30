@@ -56,121 +56,93 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h3 className="text-xl font-bold mb-4">Add Quotation</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block font-semibold">Customer Name:</label>
-          <input
-            type="text"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            className="w-full border rounded px-2 py-1"
-            required
-          />
+    <div className="quotation-form">
+      <h3 className="form-title">Add Quotation</h3>
+      <form onSubmit={handleSubmit} className="form-body">
+        <div className="form-group">
+          <label>Customer Name:</label>
+          <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
         </div>
 
-        <div>
-          <label className="block font-semibold">Customer Number:</label>
-          <input
-            type="text"
-            value={customerNumber}
-            onChange={(e) => setCustomerNumber(e.target.value)}
-            className="w-full border rounded px-2 py-1"
-            required
-          />
+        <div className="form-group">
+          <label>Customer Number:</label>
+          <input type="text" value={customerNumber} onChange={(e) => setCustomerNumber(e.target.value)} required />
         </div>
 
-        <div>
-          <label className="block font-semibold">Customer Email (optional):</label>
-          <input
-            type="email"
-            value={customerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
-            className="w-full border rounded px-2 py-1"
-          />
+        <div className="form-group">
+          <label>Customer Email (optional):</label>
+          <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
         </div>
 
         {items.map((item, index) => (
-          <div key={index} className="grid grid-cols-3 gap-2 items-center">
-            <input
-              type="text"
-              placeholder="Item Name"
-              value={item.name}
-              onChange={(e) => handleItemChange(index, 'name', e.target.value)}
-              className="border px-2 py-1"
-              required
-            />
-            <input
-              type="number"
-              placeholder="Qty"
-              value={item.quantity}
-              onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-              className="border px-2 py-1"
-              required
-            />
-            <input
-              type="number"
-              placeholder="Price"
-              value={item.price}
-              onChange={(e) => handleItemChange(index, 'price', e.target.value)}
-              className="border px-2 py-1"
-              required
-            />
+          <div key={index} className="item-row">
+            <div>
+              <label>Item Name:</label>
+              <input
+                type="text"
+                placeholder="Item Name"
+                value={item.name}
+                onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Qty:</label>
+              <input
+                type="number"
+                placeholder="Qty"
+                value={item.quantity}
+                onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label>Price:</label>
+              <input
+                type="number"
+                placeholder="Price"
+                value={item.price}
+                onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                required
+              />
+            </div>
             {items.length > 1 && (
-              <button
-                type="button"
-                onClick={() => handleRemoveItem(index)}
-                className="text-red-600 text-sm col-span-3 text-right"
-              >
+              <button type="button" onClick={() => handleRemoveItem(index)} className="remove-btn">
                 Remove
               </button>
             )}
           </div>
         ))}
 
-        <button type="button" onClick={handleAddItem} className="text-blue-600 text-sm">
+        <button type="button" onClick={handleAddItem} className="add-item-btn">
           + Add Another Item
         </button>
 
-        <div>
-          <label className="block font-semibold">Tax (%)</label>
-          <input
-            type="number"
-            value={taxPercent}
-            onChange={(e) => setTaxPercent(Number(e.target.value))}
-            className="w-full border rounded px-2 py-1"
-          />
+        <div className="form-group">
+          <label>Tax (%)</label>
+          <input type="number" value={taxPercent} onChange={(e) => setTaxPercent(Number(e.target.value))} />
         </div>
 
-        <div>
-          <label className="block font-semibold">Service Charges</label>
-          <input
-            type="number"
-            value={serviceCharges}
-            onChange={(e) => setServiceCharges(Number(e.target.value))}
-            className="w-full border rounded px-2 py-1"
-          />
+        <div className="form-group">
+          <label>Service Charges</label>
+          <input type="number" value={serviceCharges} onChange={(e) => setServiceCharges(Number(e.target.value))} />
         </div>
 
-        <div className="text-right font-semibold">
-          Subtotal: ₹{subtotal.toFixed(2)} <br />
-          Tax: ₹{taxAmount.toFixed(2)} <br />
-          Service Charges: ₹{serviceCharges.toFixed(2)} <br />
+        <div className="summary">
+          <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+          <p>Tax: ₹{taxAmount.toFixed(2)}</p>
+          <p>Service Charges: ₹{serviceCharges.toFixed(2)}</p>
           <strong>Total: ₹{total.toFixed(2)}</strong>
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
+        <button type="submit" disabled={isLoading} className="submit-btn">
           {isLoading ? 'Saving...' : 'Save Quotation'}
         </button>
 
-        {isSuccess && <p className="text-green-600">Quotation saved successfully!</p>}
+        {isSuccess && <p className="success-msg">Quotation saved successfully!</p>}
       </form>
     </div>
+
   );
 };
 

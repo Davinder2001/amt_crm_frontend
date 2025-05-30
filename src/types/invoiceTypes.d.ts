@@ -44,6 +44,8 @@ interface Invoice {
   pdf_base64: string;
   created_at: string;
   updated_at: string;
+  delivery_address: string;
+  delivery_pincodes: string;
   items: InvoiceItem[];
   credit: InvoiceCredit;
 }

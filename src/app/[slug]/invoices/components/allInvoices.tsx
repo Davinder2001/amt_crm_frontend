@@ -76,7 +76,7 @@ const AllInvoices = () => {
     { label: "Date", key: "invoice_date" as keyof Invoice },
     {
       label: "Total (₹)",
-      render: (invoice: Invoice) => `₹${invoice.total_amount}`,
+      render: (invoice: Invoice) => `₹${invoice.final_amount}`,
     },
     {
       label: "Actions",
@@ -108,7 +108,7 @@ const AllInvoices = () => {
       columns={columns}
       onDelete={(id) => console.log(id, 'deleted successfully')}
       onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
-      onView={(id) => router.push(`/${companySlug}/invoices/view/${id}`)}
+      onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
     />
   );
 };

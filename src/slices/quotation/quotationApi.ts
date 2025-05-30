@@ -19,6 +19,9 @@ export interface Quotation {
   tax_percent: number;
   service_charges: number;
   user_id?: number;
+  company_name: string;
+  tax_amount: string;
+  total: number;
 }
 
 

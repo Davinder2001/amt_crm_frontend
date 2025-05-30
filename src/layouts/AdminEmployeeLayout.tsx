@@ -81,7 +81,7 @@ export const AdminEmployeeLayout = ({
   }, [isToggle, isMobile]);
 
   // Render children if on the homepage
-  if (pathname === "/") {
+  if (pathname === "/" || pathname === "/add-company") {
     return <>{children}</>;
   }
 

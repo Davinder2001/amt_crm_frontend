@@ -32,18 +32,15 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         items_number: 0,
         daily_tasks_number: 0,
         invoices_number: 0,
-        price: 0,
+        monthly_price: 0,
+        annual_price: 0,
         business_categories: [],
-        package_type: 'monthly',
     });
     const router = useRouter();
-
-
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const { setTitle } = useBreadcrumb();
 
-    // API Hooks
     const { data: categories } = useGetBusinessCategoriesQuery();
     const [createPackage] = useCreatePackageMutation();
     const [updatePackage] = useUpdatePackageMutation();
@@ -57,7 +54,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
             setFormData({
                 ...packageData,
                 business_categories: packageData.business_categories || [],
-                package_type: packageData.package_type || 'monthly',
+                annual_price: packageData.annual_price || 0,
+                monthly_price: packageData.monthly_price || 0,
             });
         }
     }, [packageData, mode]);
@@ -72,16 +70,16 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         const { name, value } = e.target;
 
         const numberFields = [
-            'price',
             'employee_numbers',
             'items_number',
             'daily_tasks_number',
             'invoices_number',
+            'monthly_price',
+            'annual_price'
         ];
 
         if (numberFields.includes(name)) {
             const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
-
             setFormData(prev => ({
                 ...prev,
                 [name]: digitsOnly ? Number(digitsOnly) : 0,
@@ -94,10 +92,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         }
     };
 
-
     const toggleCategory = (category: BusinessCategory) => {
+        const exists: boolean = formData.business_categories.some(c => c.id === category.id);
         setFormData(prev => {
-            const exists = prev.business_categories.some(c => c.id === category.id);
             const updatedCategories = exists
                 ? prev.business_categories.filter(c => c.id !== category.id)
                 : [
@@ -105,18 +102,22 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     {
                         ...category,
                         description: category.description ?? '',
-                        created_at: category.created_at ?? '',
-                        updated_at: category.updated_at ?? ''
-                    }
+                    },
                 ];
-            return { ...prev, business_categories: updatedCategories };
+            // Ensure all descriptions are strings
+            const normalizedCategories = updatedCategories.map(c => ({
+                ...c,
+                description: c.description ?? '',
+            }));
+            return { ...prev, business_categories: normalizedCategories };
         });
     };
 
     const isFormValid = () => {
         return (
             formData.name.trim() !== '' &&
-            formData.price > 0 &&
+            formData.monthly_price > 0 &&
+            formData.annual_price > 0 &&
             formData.employee_numbers >= 0 &&
             formData.items_number >= 0 &&
             formData.daily_tasks_number >= 0 &&
@@ -129,16 +130,18 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         e.preventDefault();
         const formDataToSubmit = new FormData();
 
-        // Append all form fields
         Object.entries(formData).forEach(([key, value]) => {
             if (key === 'business_categories') {
                 (value as BusinessCategory[]).forEach(category => {
                     formDataToSubmit.append('business_category_ids[]', category.id.toString());
                 });
-            } else {
+            } else if (value !== null && value !== undefined) {
                 formDataToSubmit.append(key, value.toString());
+            } else {
+                formDataToSubmit.append(key, '');
             }
         });
+
 
         try {
             if (mode === 'edit' && packageId) {
@@ -148,15 +151,12 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     data: {
                         ...rest,
                         business_category_ids: business_categories.map(c => c.id),
-                    } as unknown as PackagePlan // Cast to 'any' or the correct DTO type expected by your API
+                    } as unknown as PackagePlan
                 }).unwrap();
-                router.back(); // Goes one step back
-
-            }
-            else {
+                router.back();
+            } else {
                 await createPackage(formDataToSubmit).unwrap();
                 alert('Package created successfully!');
-                // Reset form for create mode
                 if (mode === 'add') {
                     setFormData({
                         name: '',
@@ -164,9 +164,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                         items_number: 0,
                         daily_tasks_number: 0,
                         invoices_number: 0,
-                        price: 0,
+                        monthly_price: 0,
+                        annual_price: 0,
                         business_categories: [],
-                        package_type: 'monthly',
                     });
                 }
             }
@@ -178,7 +178,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
     if (mode === 'edit' && isPackageLoading) return <div>Loading package data...</div>;
 
-
     return (
         <div>
             <button className="back-button" onClick={() => router.back()}>
@@ -189,8 +188,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     <h2>{mode === 'edit' ? 'Edit Package' : 'Add New Plan'}</h2>
                     <p>{mode === 'edit'
                         ? 'Modify existing package details'
-                        : 'Configure a new subscription package for businesses'}
-                    </p>
+                        : 'Configure a new subscription package for businesses'}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="form">
@@ -198,9 +196,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                         <h2 className="section-title">Basic Information</h2>
                         <div className='form-group-outer'>
                             <div className="form-group">
-                                <label className="form-label">
-                                    Package Name <span className="required">*</span>
-                                </label>
+                                <label className="form-label">Package Name <span className="required">*</span></label>
                                 <input
                                     type="text"
                                     name="name"
@@ -211,43 +207,37 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     required
                                 />
                             </div>
-
                             <div className="form-group">
-                                <label className="form-label">
-                                    {formData.package_type === 'yearly' ? 'Yearly' : 'Monthly'} Price <span className="required">*</span>
-                                </label>
+                                <label className="form-label">Monthly Price <span className="required">*</span></label>
                                 <div className="input-with-icon">
                                     <FaRupeeSign className="input-icon" />
                                     <input
                                         type="number"
-                                        name="price"
-                                        value={formData.price ? Math.floor(Number(formData.price)) : ''}
+                                        name="monthly_price"
+                                        value={formData.monthly_price || ''}
                                         onChange={handleInputChange}
                                         placeholder="0"
                                         className="form-input"
                                         min="0"
-                                        maxLength={10}
-                                        step="1"  // step 1 to restrict decimals
                                         required
                                     />
-
                                 </div>
                             </div>
-
                             <div className="form-group">
-                                <label className="form-label">
-                                    Package Type <span className="required">*</span>
-                                </label>
-                                <select
-                                    name="package_type"
-                                    value={formData.package_type}
-                                    onChange={handleInputChange}
-                                    className="form-input"
-                                    required
-                                >
-                                    <option value="monthly">Monthly</option>
-                                    <option value="yearly">Yearly</option>
-                                </select>
+                                <label className="form-label">Annual Price <span className="required">*</span></label>
+                                <div className="input-with-icon">
+                                    <FaRupeeSign className="input-icon" />
+                                    <input
+                                        type="number"
+                                        name="annual_price"
+                                        value={formData.annual_price || ''}
+                                        onChange={handleInputChange}
+                                        placeholder="0"
+                                        className="form-input"
+                                        min="0"
+                                        required
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,11 +245,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     <div className="form-section">
                         <h2 className="section-title">Package Limits</h2>
                         <div className="grids grid-cols-2 gap-6">
-                            {/* Employee Limit */}
                             <div className="form-group">
-                                <label className="form-label">
-                                    <FiUsers className="icon" /> Employees
-                                </label>
+                                <label className="form-label"><FiUsers className="icon" /> Employees</label>
                                 <input
                                     type="number"
                                     name="employee_numbers"
@@ -271,12 +258,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     required
                                 />
                             </div>
-
-                            {/* Inventory Items Limit */}
                             <div className="form-group">
-                                <label className="form-label">
-                                    <FiBox className="icon" /> Inventory Items
-                                </label>
+                                <label className="form-label"><FiBox className="icon" /> Inventory Items</label>
                                 <input
                                     type="number"
                                     name="items_number"
@@ -288,12 +271,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     required
                                 />
                             </div>
-
-                            {/* Daily Tasks Limit */}
                             <div className="form-group">
-                                <label className="form-label">
-                                    <FiCheckCircle className="icon" /> Daily Tasks
-                                </label>
+                                <label className="form-label"><FiCheckCircle className="icon" /> Daily Tasks</label>
                                 <input
                                     type="number"
                                     name="daily_tasks_number"
@@ -305,12 +284,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     required
                                 />
                             </div>
-
-                            {/* Invoices Limit */}
                             <div className="form-group">
-                                <label className="form-label">
-                                    <FiFileText className="icon" /> Invoices
-                                </label>
+                                <label className="form-label"><FiFileText className="icon" /> Invoices</label>
                                 <input
                                     type="number"
                                     name="invoices_number"
@@ -336,13 +311,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                             {category.name}
                                             <button
                                                 type="button"
-                                                onClick={() => toggleCategory({
-                                                    id: category.id,
-                                                    name: category.name,
-                                                    description: category.description ?? '',
-                                                    created_at: category.created_at ?? '',
-                                                    updated_at: category.updated_at ?? ''
-                                                })}
+                                                onClick={() => toggleCategory(category)}
                                                 className="remove-item"
                                             >
                                                 <FiX size={14} />
@@ -350,7 +319,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                         </span>
                                     ))}
                                 </div>
-
                                 <div className="dropdown-container">
                                     <button
                                         type="button"
@@ -360,20 +328,13 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                         <span>Select categories</span>
                                         <FiChevronDown className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
                                     </button>
-
                                     {showDropdown && (
                                         <div className="dropdown-menu">
                                             {categories?.map(category => (
                                                 <div
                                                     key={category.id}
                                                     className="dropdown-item"
-                                                    onClick={() => toggleCategory({
-                                                        id: category.id,
-                                                        name: category.name,
-                                                        description: category.description ?? '',
-                                                        created_at: category.created_at ?? '',
-                                                        updated_at: category.updated_at ?? ''
-                                                    })}
+                                                    onClick={() => toggleCategory(category)}
                                                 >
                                                     <div className="checkbox-container">
                                                         {formData.business_categories.some(c => c.id === category.id) ? (

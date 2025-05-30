@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import Link from 'next/link'
-import React from 'react'
-import { FaArrowLeft, FaPlus } from 'react-icons/fa'
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { FaArrowLeft, FaPlus } from 'react-icons/fa';
+import TableToolbar from '@/components/common/TableToolbar';
 import { useCompany } from '@/utils/Company';
+import Link from 'next/link';
 
-const QutationNav = () => {
+const QutationNav: React.FC = () => {
   const { companySlug } = useCompany();
+  const router = useRouter();
 
   return (
-    <>
-      <nav className='invoice-nav-section'>
-        <Link href={`/${companySlug}/invoices`} className='back-button'>
-          <FaArrowLeft size={20} color='#fff' />
-        </Link>
-        <ul className='invoice-nav-buttons'>
-          <li>
-            <Link href="qutations/add" className="qutation-button">
-              <span>
-                <FaPlus className="icon" />
-                <span>Generate Qutation</span>
-              </span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </>
-  )
-}
+    <div className="quotation-toolbar-wrapper">
+      <Link href={`/${companySlug}/invoices`} className='back-button'>
+        <FaArrowLeft size={20} color='#fff' />
+      </Link>
+      <TableToolbar
+        actions={[
+          {
+            label: 'Generate Quotation',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/qutations/add`),
+          },
+        ]}
+      />
+    </div>
+  );
+};
 
-export default QutationNav
+export default QutationNav;

@@ -57,22 +57,32 @@ const AddItem: React.FC = () => {
   const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false, false, false]);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  useEffect(() => {
-    const savedFormData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedFormData) {
-      const parsed = JSON.parse(savedFormData);
-      delete parsed.images;
-      setFormData(prev => ({ ...prev, ...parsed }));
+  type VendorData = { vendor_name: string };
+  type VendorDataResponse = VendorData[] | { data: VendorData[] };
 
-      if (parsed.categories) {
-        setSelectedCategories(parsed.categories);
-      }
-    }
+function isVendorResponseObject(v: VendorDataResponse): v is { data: VendorData[] } {
+  return typeof v === 'object' && v !== null && 'data' in v && Array.isArray((v as any).data);
+}
 
-    if (vendorsData) {
-      setVendors(vendorsData.map((vendor: { vendor_name: string }) => vendor.vendor_name));
+useEffect(() => {
+  const savedFormData = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (savedFormData) {
+    const parsed = JSON.parse(savedFormData);
+    delete parsed.images;
+    setFormData(prev => ({ ...prev, ...parsed }));
+
+    if (parsed.categories) {
+      setSelectedCategories(parsed.categories);
     }
-  }, [vendorsData]);
+  }
+
+  if (vendorsData && Array.isArray(vendorsData)) {
+    setVendors(vendorsData.map((vendor: VendorData) => vendor.vendor_name));
+  } else if (isVendorResponseObject(vendorsData)) {
+    setVendors(vendorsData.data.map((vendor: VendorData) => vendor.vendor_name));
+  }
+}, [vendorsData]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

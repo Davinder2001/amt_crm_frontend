@@ -18,19 +18,22 @@ const AllQuotations = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const handleDownload = async (id: number) => {
-    try {
-      const blob = await generatePdf(id).unwrap();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `quotation-${id}.pdf`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch {
-      alert('Download failed!');
-    }
-  };
+  const handleDownload = React.useCallback(
+    async (id: number) => {
+      try {
+        const blob = await generatePdf(id).unwrap();
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `quotation-${id}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch {
+        alert('Download failed!');
+      }
+    },
+    [generatePdf]
+  );
 
   const quotations: Quotation[] = useMemo(() => {
     return (data ?? []).slice().reverse(); // Newest first
@@ -65,7 +68,7 @@ const AllQuotations = () => {
         </button>
       ),
     },
-  ], [generatePdf]);
+  ], [handleDownload]);
 
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Failed to load quotations.</p>;

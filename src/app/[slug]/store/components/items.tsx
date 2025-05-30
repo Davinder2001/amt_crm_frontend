@@ -7,7 +7,7 @@ import {
   useLazyExportStoreItemsQuery,
   useImportStoreItemsMutation,
 } from '@/slices/store/storeApi';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+// import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaPlus, FaDownload, FaUpload, FaUsers } from 'react-icons/fa';
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
@@ -24,7 +24,7 @@ type StoreItem = {
 };
 
 const Items: React.FC = () => {
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
+  // const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const { companySlug } = useCompany();
   const router = useRouter();
 

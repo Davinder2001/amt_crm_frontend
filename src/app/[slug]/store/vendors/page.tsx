@@ -8,7 +8,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 
 const Page: React.FC = () => {
-  const { data: vendors, error, isLoading } = useFetchVendorsQuery();
+  const { data: vendors, error, isLoading } = useFetchVendorsQuery() as { data: Vendor[] | undefined, error: undefined, isLoading: boolean };
   const { companySlug } = useCompany();
   const router = useRouter();
 

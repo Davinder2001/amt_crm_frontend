@@ -2,13 +2,11 @@ import storeApiSlice from './vendorCreateSlice';
 
 const vendorApiSlice = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchVendors: builder.query<Vendor, void>({
+    fetchVendors: builder.query<Vendors, void>({
       query: () => ({
         url: 'store/vendors',
         credentials: 'include',
       }),
-            transformResponse: (response: { vendor: Vendor }) => response.vendor,
-
       providesTags: ['Vendor'],
     }),
 

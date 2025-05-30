@@ -135,7 +135,14 @@ interface Vendor {
   number: string;
   email: string;
   address: string;
-  items_by_date?: any[]; // or more specific type if known
+  items_by_date?: Array[];
+}
+interface Vendors {
+  id: number;
+  name: string;
+  number: string;
+  email: string;
+  address: string;
 }
 
 

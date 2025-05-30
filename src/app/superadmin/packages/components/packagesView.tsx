@@ -8,8 +8,7 @@ import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 const PackagesView = () => {
-    const { setTitle } = useBreadcrumb();
-  
+  const { setTitle } = useBreadcrumb();
   const { data, error, isLoading } = useFetchPackagesQuery();
   const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
@@ -83,18 +82,18 @@ const PackagesView = () => {
       render: (plan: PackagePlan) => <span className='package-name'>{plan.name}</span>
     },
     {
-      label: 'Price',
-      key: 'price' as keyof PackagePlan,
+      label: 'Monthly Price',
+      key: 'annual_price' as keyof PackagePlan,
       render: (plan: PackagePlan) => (
-        <span>{Math.floor(Number(plan.price))}</span>
+        <span>{Math.floor(Number(plan.monthly_price))}</span>
       )
     },
 
     {
-      label: 'Package Type',
-      key: 'package_type' as keyof PackagePlan,
+      label: 'Annual Price',
+      key: 'annual_price' as keyof PackagePlan,
       render: (plan: PackagePlan) => (
-        <span className="Package-type ">{plan.package_type}</span>
+        <span className="">{plan.annual_price}</span>
       )
     },
     {

@@ -29,17 +29,17 @@ const Items: React.FC = () => {
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
   // Ensure storeItems is always StoreItem[]
-const storeItems: StoreItem[] = useMemo(() => {
-  if (!Array.isArray(items)) return [];
-  return items
-    .filter((item: unknown): item is StoreItem =>
-      typeof item === 'object' &&
-      item !== null &&
-      'id' in item &&
-      typeof (item as { id?: unknown }).id === 'number'
-    )
-    .map((item) => item as unknown as StoreItem);
-}, [items]);
+  const storeItems: StoreItem[] = useMemo(() => {
+    if (!Array.isArray(items)) return [];
+    return items
+      .filter((item: unknown): item is StoreItem =>
+        typeof item === 'object' &&
+        item !== null &&
+        'id' in item &&
+        typeof (item as { id?: unknown }).id === 'number'
+      )
+      .map((item) => item as unknown as StoreItem);
+  }, [items]);
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
   const [triggerExport] = useLazyExportStoreItemsQuery();
@@ -178,16 +178,27 @@ const storeItems: StoreItem[] = useMemo(() => {
         />
 
         {importModalVisible && (
-          <div className="modal-backdrop">
-            <div className="popup-modal">
-              <div className="popup-modal-content">
-                <h3 className="text-lg font-semibold mb-4">Import Items from Excel</h3>
-                <input type="file" accept=".xlsx, .xls" ref={fileInputRef} className="mb-4" />
-                <div className="flex justify-end space-x-4">
-                  <button className="bg-gray-300 px-4 py-2 rounded" onClick={() => setImportModalVisible(false)}>
+          <div className="import-items-modal-backdrop">
+            <div className="import-items-modal">
+              <div className="import-items-modal-content">
+                <h3 className="import-items-title">Import Items from Excel</h3>
+                <input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  ref={fileInputRef}
+                  className="import-items-file-input"
+                />
+                <div className="import-items-actions">
+                  <button
+                    className="import-items-cancel-button"
+                    onClick={() => setImportModalVisible(false)}
+                  >
                     Cancel
                   </button>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleImportFile}>
+                  <button
+                    className="import-items-upload-button"
+                    onClick={handleImportFile}
+                  >
                     Upload
                   </button>
                 </div>
@@ -195,6 +206,7 @@ const storeItems: StoreItem[] = useMemo(() => {
             </div>
           </div>
         )}
+
       </div>
     </div>
   );

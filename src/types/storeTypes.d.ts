@@ -129,19 +129,15 @@ interface UpdateStoreItemRequest {
   variants: variations[],
   categories: number[];
 }
-
-
 interface Vendor {
-  vendor_address: string;
-  vendor_email: string;
-  vendor_number: number | string;
   id: number;
-  company_id: number;
-  vendor_name: string;
-  created_at: string;
-  updated_at: string;
+  name: string;
+  number: string;
+  email: string;
+  address: string;
+  items_by_date?: any[]; // or more specific type if known
 }
-type VendorsResponse = Vendor[];
+
 
 interface CreateVendorRequest {
   vendor_name: string;

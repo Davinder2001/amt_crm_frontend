@@ -13,8 +13,8 @@ const Page = () => {
   const vendorId = Number(params?.id);
   const { companySlug } = useCompany();
 
-  const { data, error, isLoading } = useFetchVendorByIdQuery(vendorId);
-  const vendor = data;
+  const { data: vendor, isLoading, error } = useFetchVendorByIdQuery(vendorId);
+
   const [deleteVendor, { isLoading: isDeleting }] = useDeleteVendorMutation();
 
   // 🔧 Fix: Add state for confirm dialog
@@ -46,30 +46,30 @@ const Page = () => {
             <h2 className="vendor-title">Vendor Details</h2>
             <div className='view-vendor-action-button-outter'>
               <button
-              className="edit-button"
-              onClick={() => router.push(`/${companySlug}/store/vendors/edit/${vendor.id}`)}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <FaEdit />
-              Edit
-            </button>
+                className="edit-button"
+                onClick={() => router.push(`/${companySlug}/store/vendors/edit/${vendor.id}`)}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <FaEdit />
+                Edit
+              </button>
 
-            <button
-              className="delete-button"
-              onClick={() => setShowConfirm(true)}
-              disabled={isDeleting}
-            >
-              <FaTrash style={{ marginRight: '6px' }} />
-              {isDeleting ? 'Deleting...' : 'Delete'}
-            </button>
+              <button
+                className="delete-button"
+                onClick={() => setShowConfirm(true)}
+                disabled={isDeleting}
+              >
+                <FaTrash style={{ marginRight: '6px' }} />
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
             </div>
           </div>
 
           <div className="vendor-info">
             <p><strong>ID:</strong> {vendor.id}</p>
-            <p><strong>Name:</strong> {vendor.vendor_name}</p>
-            <p><strong>Email:</strong> {vendor.vendor_email}</p>
-            <p><strong>Address:</strong> {vendor.vendor_address}</p>
+            <p><strong>Name:</strong> {vendor.name}</p>
+            <p><strong>Email:</strong> {vendor.email}</p>
+            <p><strong>Address:</strong> {vendor.address}</p>
           </div>
         </div>
       </div>

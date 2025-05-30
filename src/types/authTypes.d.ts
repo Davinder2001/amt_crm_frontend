@@ -129,8 +129,8 @@ interface createPackagePlan {
 interface PackagePlan {
     id?: number;
     name: string;
-    price: number;
-    package_type: 'monthly' | 'yearly';
+    monthly_price: number;
+    annual_price: number;
     employee_numbers: number;
     items_number: number;
     daily_tasks_number: number;

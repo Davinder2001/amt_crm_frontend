@@ -1,28 +1,48 @@
-import Link from 'next/link'
-import React from 'react'
-import { FaPlus } from 'react-icons/fa'
+'use client';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { FaPlus, FaUsers, FaCreditCard, FaFileInvoice } from 'react-icons/fa';
+import TableToolbar from '@/components/common/TableToolbar';
+import { useCompany } from "@/utils/Company";
 
 const InvoicesNavigation = () => {
-  return (
-    <>
-        <nav className='invoice-nav-section'>
-            <ul  className='invoice-nav-buttons'>
-                <li>
-                    < Link href="invoices/new-invoice" className='buttons'> <FaPlus/>Add Invoices</Link>
-                </li>
-                <li>
-                    <Link href="invoices/customers" className='buttons' >All Customers</Link>
-                </li>
-                <li>
-                    <Link href="invoices/credits" className='buttons' >Credits</Link>
-                </li>
-                <li>
-                    <Link href="invoices/qutations" className='buttons' >Qutations</Link>
-                </li>
-            </ul>
-        </nav>
-    </>
-  )
-}
+  const router = useRouter();
+  const { companySlug } = useCompany();
 
-export default InvoicesNavigation
+  return (
+    <div className="invoice-toolbar-wrapper">
+      <TableToolbar
+        filters={{}}
+        columns={[]} // No column toggles here, leave empty
+        visibleColumns={[]}
+        onColumnToggle={() => {}}
+        onFilterChange={() => {}}
+        actions={[
+          {
+            label: 'Add Invoice',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
+          },
+          {
+            label: 'All Customers',
+            icon: <FaUsers />,
+            onClick: () => router.push(`/${companySlug}/invoices/customers`),
+          },
+          {
+            label: 'Credits',
+            icon: <FaCreditCard />,
+            onClick: () => router.push(`/${companySlug}/invoices/credits`),
+          },
+          {
+            label: 'Quotations',
+            icon: <FaFileInvoice />,
+            onClick: () => router.push(`/${companySlug}/invoices/qutations`),
+          },
+        ]}
+        downloadActions={[]}
+      />
+    </div>
+  );
+};
+
+export default InvoicesNavigation;

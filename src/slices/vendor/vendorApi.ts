@@ -2,20 +2,23 @@ import storeApiSlice from './vendorCreateSlice';
 
 const vendorApiSlice = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchVendors: builder.query<VendorsResponse, void>({
+    fetchVendors: builder.query<Vendors, void>({
       query: () => ({
         url: 'store/vendors',
         credentials: 'include',
       }),
       providesTags: ['Vendor'],
     }),
+
     fetchVendorById: builder.query<Vendor, number>({
       query: (id) => ({
         url: `store/vendors/${id}`,
         credentials: 'include',
       }),
+      transformResponse: (response: { vendor: Vendor }) => response.vendor,
       providesTags: ['Vendor'],
     }),
+
     createVendor: builder.mutation<Vendor, CreateVendorRequest>({
       query: (newVendor) => ({
         url: 'store/vendors',
@@ -33,7 +36,7 @@ const vendorApiSlice = storeApiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Vendor'],
     }),
-    updateVendor: builder.mutation<Vendor, {id:number, formdata:FormData}>({
+    updateVendor: builder.mutation<Vendor, { id: number, formdata: FormData }>({
       query: ({ id, formdata }) => ({
         url: `store/vendors/${id}`,
         method: 'POST',

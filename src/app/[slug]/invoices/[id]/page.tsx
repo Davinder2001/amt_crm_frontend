@@ -38,20 +38,31 @@ const InvoiceViewPage = () => {
             <p>Date: <strong>{invoice.invoice_date}</strong></p>
           </div>
         </header>
-
         <section className="invoice-info">
           <div className="client-section">
             <h2>Client</h2>
-            <p><strong>Name:</strong> {invoice.client_name}</p>
-            <p><strong>Phone:</strong> {invoice.client_phone}</p>
-            <p><strong>Email:</strong> {invoice.client_email}</p>
+            {invoice.client_name && <p><strong>Name:</strong> {invoice.client_name}</p>}
+            {invoice.client_phone && <p><strong>Phone:</strong> {invoice.client_phone}</p>}
+            {invoice.client_email && <p><strong>Email:</strong> {invoice.client_email}</p>}
+
+            {invoice.delivery_pincode && (
+              <p><strong>Delivery Pincode:</strong> {invoice.delivery_pincode}</p>
+            )}
           </div>
+
           <div className="company-section">
             <h2>Other Info</h2>
-            <p><strong>Issued By:</strong> {invoice.issued_by_name}</p>
-            <p><strong>Payment Method:</strong> <span>{invoice.payment_method}</span></p>
+            {invoice.issued_by_name && <p><strong>Issued By:</strong> {invoice.issued_by_name}</p>}
+            {invoice.payment_method && (
+              <p><strong>Payment Method:</strong> <span>{invoice.payment_method}</span></p>
+            )}
+            {invoice.delivery_address && (
+              <p><strong>Delivery Address:</strong> {invoice.delivery_address}</p>
+            )}
           </div>
         </section>
+
+
 
         <section className="invoice-items">
           <table>
@@ -82,15 +93,36 @@ const InvoiceViewPage = () => {
 
         <section className="invoice-summary-outer">
           <div className="invoice-summary">
-            <div className="summary-row"><span>Subtotal</span><span>₹{invoice.sub_total}</span></div>
             <div className="summary-row">
-              <span>Service Charge</span>
-              <span>
-                ₹{invoice.service_charge_amount} + {invoice.service_charge_percent}% GST
-                <span className="service-charge-percent"> ₹({invoice.service_charge_final})</span>
-              </span>
+              <span>Subtotal</span>
+              <span>₹{invoice.sub_total}</span>
             </div>
-            <div className="summary-row"><span>Discount ({invoice.discount_percentage}%)</span><span>₹{invoice.discount_amount}</span></div>
+
+            {invoice.service_charge_amount > 0 && (
+              <div className="summary-row">
+                <span>Service Charge</span>
+                <span>
+                  ₹{invoice.service_charge_amount} + {invoice.service_charge_percent}% GST
+                  <span className="service-charge-percent"> ₹({invoice.service_charge_final})</span>
+                </span>
+              </div>
+            )}
+            {invoice.delivery_charge > 0 && (
+              <div className="summary-row">
+                <span>Delivery Charge</span>
+                <span>
+                  ₹{invoice.delivery_charge}
+                </span>
+              </div>
+            )}
+
+            {invoice.discount_amount > 0 && (
+              <div className="summary-row">
+                <span>Discount ({invoice.discount_percentage}%)</span>
+                <span>₹{invoice.discount_amount}</span>
+              </div>
+            )}
+
             <div className="summary-row total">
               <span>Grand Total</span>
               <span className="view-invoice-final-amount">₹{invoice.final_amount}</span>
@@ -98,8 +130,9 @@ const InvoiceViewPage = () => {
           </div>
         </section>
 
+
         <footer className="invoice-footer">
-          <p>Thank you for your business!</p>
+          <p>Thank you !</p>
         </footer>
       </div>
     </div>

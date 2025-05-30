@@ -6,9 +6,13 @@ export interface QuotationItem {
   price: number;
 }
 
+// For creating new quotations (id is optional)
+export type QuotationInput = Omit<Quotation, 'id'> & { id?: number };
+
+// For fetched quotations (id is required)
 export interface Quotation {
+  id: number;
   customer_number: number | string;
-  id?: number;
   customer_name: string;
   customer_email?: string;
   items: QuotationItem[];
@@ -16,6 +20,7 @@ export interface Quotation {
   service_charges: number;
   user_id?: number;
 }
+
 
 export const quotationApi = qutationCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({

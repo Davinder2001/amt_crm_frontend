@@ -88,8 +88,8 @@ function CompanyDetails() {
       <div className="card green">
         <h2>Subscribed Package</h2>
         <p><strong>Name:</strong> {subscribed_package.name}</p>
-        <p><strong>Type:</strong> {subscribed_package.package_type}</p>
-        <p><strong>Price:</strong> ₹{subscribed_package.price}</p>
+        <p><strong>Annual Price:</strong> {subscribed_package.annual_price}</p>
+        <p><strong>Monthly Price:</strong> ₹{subscribed_package.monthly_price}</p>
         <p><strong>Employees Allowed:</strong> {subscribed_package.employee_numbers}</p>
         <p><strong>Items Allowed:</strong> {subscribed_package.items_number}</p>
         <p><strong>Daily Tasks:</strong> {subscribed_package.daily_tasks_number}</p>
@@ -101,8 +101,8 @@ function CompanyDetails() {
         {related_packages.map((pkg) => (
           <div key={pkg.id} className="package-item">
             <p><strong>Name:</strong> {pkg.name}</p>
-            <p><strong>Type:</strong> {pkg.package_type}</p>
-            <p><strong>Price:</strong> ₹{pkg.price}</p>
+            <p><strong>Annual Price:</strong> {pkg.annual_price}</p>
+            <p><strong>Monthly Price:</strong> ₹{pkg.monthly_price}</p>
             <p><strong>Employees Allowed:</strong> {pkg.employee_numbers}</p>
             <p><strong>Items Allowed:</strong> {pkg.items_number}</p>
             <p><strong>Daily Tasks:</strong> {pkg.daily_tasks_number}</p>

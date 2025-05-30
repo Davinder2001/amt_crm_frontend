@@ -181,7 +181,7 @@ const Profile = () => {
               </div>
             ))}
 
-            <Link href="my-account/add-company" className="company-card add-company">
+            <Link href="/add-company" className="company-card add-company">
               <div className="add-icon">+</div>
               <p>Add New Company</p>
             </Link>

@@ -81,7 +81,7 @@ interface variations {
   attributes: AttributeItem[];
 }
 
-interface CreateStoreItemRequest {
+interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
   quantity_count: number;
   measurement?: string;
@@ -97,9 +97,17 @@ interface CreateStoreItemRequest {
   selling_price: number;
   tax_id: number;
   images: (string | File)[] | File[];
-  variants: variations[],
-  categories: Category[],
+  variants: variations[];
+  categories: TCategories;
 }
+
+
+type CreateStoreItemRequest = BaseStoreItemRequest<Category[]>;
+interface UpdateStoreItemRequest extends BaseStoreItemRequest<number[]> {
+  id: number;
+}
+
+type StoreItemFormData = CreateStoreItemRequest | UpdateStoreItemRequest;
 
 type StoreResponse = StoreItem[];
 
@@ -108,28 +116,6 @@ interface OcrResponse {
   products?: { name: string; price: number; quantity: number; sub_total: number }[];
   message?: string;
 }
-
-interface UpdateStoreItemRequest {
-  id: number;
-  name: string;
-  quantity_count: number;
-  measurement?: string;
-  purchase_date?: string;
-  date_of_manufacture: string;
-  date_of_expiry?: string;
-  brand_name: string;
-  replacement?: string;
-  category?: string;
-  vendor_name?: string;
-  availability_stock: number;
-  cost_price: number;
-  selling_price: number;
-  tax_id?: number;
-  images: (string | File)[] | File[];
-  variants: variations[],
-  categories: number[];
-}
-
 
 interface Vendor {
   vendor_address: string;

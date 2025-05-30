@@ -81,39 +81,45 @@ const AdminHome = () => {
                 </div>
                 <div className='company-grid'>
                     {Array.isArray(companies) && companies.length > 0 ? (
-                        companies.map((company, index) => (
-                            <div key={index} className='company-card'>
-                                <Link
-                                    className='company-link'
-                                    href={`/${companySlug}/dashboard`}
-                                    onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
-                                >
-                                    <div className='company-card-content'>
-                                        <div className='company-header'>
-                                            <h2>{company.company_name}</h2>
-                                            <span className={`status ${company.verification_status}`}>{company.verification_status}</span>
+                        <>
+                            {companies.map((company, index) => (
+                                <div key={index} className='company-card'>
+                                    <Link
+                                        className='company-link'
+                                        href={`/${companySlug}/dashboard`}
+                                        onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
+                                    >
+                                        <div className='company-card-content'>
+                                            <div className='company-header'>
+                                                <h2>{company.company_name}</h2>
+                                                <span className={`status ${company.verification_status}`}>{company.verification_status}</span>
+                                            </div>
+                                            <p className='company-description'>{company.description || "No description available."}</p>
+                                            <div className='company-info'>
+                                                <p><strong>ID:</strong> {company.company_id}</p>
+                                                <p><strong>Location:</strong> {company.location || "N/A"}</p>
+                                            </div>
+                                            <div className='company-actions'>
+                                                <button
+                                                    className='btn-action'
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
+                                                    }}
+                                                    disabled={loadingCompanyId === company.id}
+                                                >
+                                                    {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
+                                                </button>
+                                            </div>
                                         </div>
-                                        <p className='company-description'>{company.description || "No description available."}</p>
-                                        <div className='company-info'>
-                                            <p><strong>ID:</strong> {company.company_id}</p>
-                                            <p><strong>Location:</strong> {company.location || "N/A"}</p>
-                                        </div>
-                                        <div className='company-actions'>
-                                            <button
-                                                className='btn-action'
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
-                                                }}
-                                                disabled={loadingCompanyId === company.id}
-                                            >
-                                                {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))
+                                    </Link>
+                                </div>
+                            ))}
+                            <Link href="/add-company" className="company-card add-company" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <p>Add New Company</p>
+                            </Link>
+                        </>
+
                     ) : (
                         <div className="empty-state">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -122,6 +128,9 @@ const AdminHome = () => {
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
                             <p>No companies available</p>
+                            <Link href="/add-company" className="company-card add-company" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'fit-content', position: 'relative', margin: '20px auto', padding: 10 }}>
+                                <p>Add New Company</p>
+                            </Link>
                         </div>
                     )}
                 </div>

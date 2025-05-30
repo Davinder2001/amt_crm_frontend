@@ -83,7 +83,7 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
         buiness_id: formData.business_id ?? "",
       };
       const response = await orderNewCompany(payload).unwrap();
-      localStorage.setItem("company_form_data", JSON.stringify({ ...formData, order_id: response.orderId }));
+      localStorage.setItem("addCompany", JSON.stringify({ ...formData, order_id: response.orderId }));
 
       if (response.redirect_url) {
         window.location.href = response.redirect_url;

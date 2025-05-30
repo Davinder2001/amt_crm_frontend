@@ -4,25 +4,16 @@ import { useParams, useRouter } from 'next/navigation';
 import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
-import AddVendor from '../../components/AddVendor';
-import ImageUpload from '../../components/ImageUpload';
 import { useCompany } from '@/utils/Company';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
-import ItemsTab from '../../components/ItemsTab';
-import ItemCategories from '../../components/ItemCategories';
-import { FormInput } from '@/components/common/FormInput';
-import DatePickerField from '@/components/common/DatePickerField';
-import { FormSelect } from '@/components/common/FormSelect';
-import { Tabs, Tab, Box } from '@mui/material';
 import { toast } from 'react-toastify';
+import StoreItemFields from '../../components/StoreItemFields';
 
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
   const { companySlug } = useCompany();
   const router = useRouter();
   const { data: item, isLoading: isItemLoading } = useFetchStoreItemQuery(Number(id));
-  const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
+  const [updateStoreItem] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
 
@@ -235,258 +226,32 @@ const UpdateItem = () => {
   if (isItemLoading) return <p>Loading item details...</p>;
 
   return (
-    <div className='store-add-item'>
+    <>
+      <StoreItemFields
+        formData={formData}
+        setFormData={setFormData}
+        vendors={vendorsList}
+        setVendors={setVendorsList}
+        handleChange={handleChange}
+        handleNumberChange={handleChange}
+        handleImageChange={handleImageChange}
+        handleClearImages={handleClearImages}
+        handleRemoveImage={handleRemoveImage}
+        taxesData={taxesData}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        variants={variants}
+        setVariants={setVariants}
+        handleSubmit={handleSubmit}
+        companySlug={companySlug}
+        isLoading={isItemLoading}
+        isEditMode={true} // or false
+        isFormModified={isFormModified}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
 
-      <form onSubmit={handleSubmit}>
-        <div className="add-item-header">
-          <Link href={`/${companySlug}/store`} className='back-button'>
-            <FaArrowLeft size={16} color='#fff' />
-          </Link>
-          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}
-            variant="scrollable"
-            scrollButtons="auto"
-            style={{
-              backgroundColor: '#f1f9f9',
-            }}
-            sx={{
-              '& .MuiTab-root': {
-                color: '#009693',
-                '&.Mui-selected': {
-                  color: '#009693',
-                },
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#009693',
-              },
-            }}
-          >
-            <Tab label="Basic Info" />
-            <Tab label="Pricing & Inventory" />
-            <Tab label="Media & Dates" />
-            <Tab label="Categories" />
-            <Tab label="Product Options" />
-          </Tabs>
-        </div>
-
-        <Box>
-          {activeTab === 0 && (
-            <div className='add-items-form-container'>
-              <FormInput
-                label="Item Name*"
-                name="name"
-                type="text"
-                value={formData.name || ''}
-                onChange={handleChange}
-                placeholder="e.g. Samsung Monitor 24 inch"
-                required
-              />
-
-              <FormInput
-                label="Brand Name*"
-                name="brand_name"
-                value={formData.brand_name || ''}
-                onChange={handleChange}
-                placeholder="e.g. Samsung, LG"
-                required
-              />
-
-              <FormInput
-                label="Measurement"
-                name="measurement"
-                value={formData.measurement || ''}
-                onChange={handleChange}
-                placeholder="e.g. kg, pcs, liters"
-              />
-
-              <FormInput
-                label="Replacement"
-                name="replacement"
-                value={formData.replacement || ''}
-                onChange={handleChange}
-                placeholder="e.g. Replace after 2 years"
-              />
-
-              <div className='add-items-form-input-label-container'>
-                <label>Vendor Name*</label>
-                <AddVendor
-                  vendors={vendorsList}
-                  selectedVendor={formData.vendor_name || ''}
-                  onVendorSelect={(vendorName) =>
-                    setFormData(prev => ({ ...prev, vendor_name: vendorName }))
-                  }
-                  onVendorAdded={(vendorName) => {
-                    setVendorsList(prev => [...prev, vendorName]);
-                    setFormData(prev => ({ ...prev, vendor_name: vendorName }));
-                  }}
-                />
-              </div>
-            </div>
-          )}
-
-          {activeTab === 1 && (
-            <div className='add-items-form-container'>
-              <FormInput
-                label="Cost Price*"
-                name="cost_price"
-                type="number"
-                value={formData.cost_price === 0 || formData.cost_price === undefined ? '' : formData.cost_price}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    cost_price: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 250.00"
-                required
-              />
-
-              <FormInput
-                label="Selling Price*"
-                name="selling_price"
-                type="number"
-                value={formData.selling_price === 0 || formData.selling_price === undefined ? '' : formData.selling_price}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    selling_price: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 300.00"
-                required
-              />
-
-
-
-              <FormInput
-                label="Quantity Count*"
-                name="quantity_count"
-                type="number"
-                value={formData.quantity_count === 0 || formData.quantity_count === undefined ? '' : formData.quantity_count}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    quantity_count: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 100"
-                required
-              />
-
-              <FormInput
-                label="Availability Stock"
-                name="availability_stock"
-                type="number"
-                value={formData.availability_stock === 0 || formData.availability_stock === undefined ? '' : formData.availability_stock}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    availability_stock: isNaN(val) ? 0 : val,
-                  }));
-                }}
-                placeholder="e.g. 50"
-              />
-
-              {taxesData?.data && (
-                <FormSelect<number>
-                  label="Tax"
-                  name="tax_id"
-                  value={formData.tax_id ?? 0}
-                  onChange={(value) => setFormData(prev => ({ ...prev, tax_id: value }))}
-                  options={taxesData.data.map((tax: Tax) => ({
-                    value: tax.id,
-                    label: `${tax.name} - ${tax.rate}%`
-                  }))}
-                />
-              )}
-
-            </div>
-          )}
-
-          {activeTab === 2 && (
-            <div className='add-items-form-container'>
-              <ImageUpload
-                images={formData.images ?? []}
-                handleImageChange={handleImageChange}
-                handleClearImages={handleClearImages}
-                handleRemoveImage={handleRemoveImage}
-              />
-
-              <DatePickerField
-                label="Purchase Date"
-                selectedDate={formData.purchase_date || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, purchase_date: date }))}
-                maxDate={new Date()}
-              />
-
-              <DatePickerField
-                label="Date Of Manufacture*"
-                selectedDate={formData.date_of_manufacture || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, date_of_manufacture: date }))}
-                maxDate={new Date()}
-                required
-              />
-
-              <DatePickerField
-                label="Date Of Expiry"
-                selectedDate={formData.date_of_expiry || null}
-                onChange={(date) => setFormData(prev => ({ ...prev, date_of_expiry: date }))}
-                minDate={new Date()}
-              />
-            </div>
-          )}
-
-          {activeTab === 3 && (
-            <div className='categories-container'>
-              <ItemCategories
-                setSelectedCategories={setSelectedCategories}
-                selectedCategories={selectedCategories}
-              />
-            </div>
-          )}
-
-          {activeTab === 4 && (
-            <div className="items-tab-container">
-              <ItemsTab setVariants={setVariants} variants={variants} />
-            </div>
-          )}
-        </Box>
-
-        {/* <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-          <button
-            className='buttons'
-            type="button"
-            style={{ marginLeft: '1rem' }}
-            onClick={() => router.push(`/${companySlug}/store`)}
-          >
-            Cancel
-          </button>
-          <button className='buttons' type="submit" disabled={isUpdating}>
-            {isUpdating ? 'Updating...' : 'Update'}
-          </button>
-        </div> */}
-        
-        {isFormModified() && (
-          <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-            <button
-              className='buttons'
-              type="button"
-              style={{ marginLeft: '1rem' }}
-              onClick={() => router.push(`/${companySlug}/store`)}
-            >
-              Cancel
-            </button>
-            <button className='buttons' type="submit" disabled={isUpdating}>
-              {isUpdating ? 'Updating...' : 'Update'}
-            </button>
-          </div>
-        )}
-
-      </form>
-    </div>
+    </>
   );
 };
 

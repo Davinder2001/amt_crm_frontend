@@ -5,19 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
-import Link from 'next/link';
 import { useCallback } from "react";
-import { FaArrowLeft } from 'react-icons/fa';
-import { FormInput } from '@/components/common/FormInput';
-import { FormSelect } from '@/components/common/FormSelect';
-import DatePickerField from '@/components/common/DatePickerField';
-import AddVendor from '../components/AddVendor';
-import ImageUpload from '../components/ImageUpload';
-import ItemsTab from '../components/ItemsTab';
-import ItemCategories from '../components/ItemCategories';
-import { Tabs, Tab } from '@mui/material';
-import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FiXCircle } from 'react-icons/fi';
+import StoreItemFields from '../components/StoreItemFields';
 
 const LOCAL_STORAGE_KEY = 'storeItemForm';
 
@@ -117,26 +106,26 @@ const AddItem: React.FC = () => {
 
 
 
-const validateTab = useCallback((index: number): boolean => {
-  switch (index) {
-    case 0:
-      return formData.name.trim() !== '' &&
-             formData.brand_name.trim() !== '' &&
-             (formData.vendor_name?.trim() ?? '') !== '';
-    case 1:
-      return formData.cost_price > 0 &&
-             formData.selling_price > 0 &&
-             formData.quantity_count > 0;
-    case 2:
-      return formData.date_of_manufacture !== '';
-    case 3:
-      return selectedCategories.length > 0;
-    case 4:
-      return variants && variants.length > 0;
-    default:
-      return false;
-  }
-}, [formData, selectedCategories, variants]);
+  const validateTab = useCallback((index: number): boolean => {
+    switch (index) {
+      case 0:
+        return formData.name.trim() !== '' &&
+          formData.brand_name.trim() !== '' &&
+          (formData.vendor_name?.trim() ?? '') !== '';
+      case 1:
+        return formData.cost_price > 0 &&
+          formData.selling_price > 0 &&
+          formData.quantity_count > 0;
+      case 2:
+        return formData.date_of_manufacture !== '';
+      case 3:
+        return selectedCategories.length > 0;
+      case 4:
+        return variants && variants.length > 0;
+      default:
+        return false;
+    }
+  }, [formData, selectedCategories, variants]);
 
 
   useEffect(() => {
@@ -201,278 +190,35 @@ const validateTab = useCallback((index: number): boolean => {
   };
 
   return (
-  <div className='store_outer_row'>
-    <div className='store-add-item'>
-      <form onSubmit={handleSubmit}>
-        <div className="add-item-header">
-          <Link href={`/${companySlug}/store`} className='back-button'>
-            <FaArrowLeft size={16} color='#fff' />
-          </Link>
-          <Tabs
-            value={activeTab}
-            onChange={(e, newValue) => {
-              if (tabCompletion[newValue]) setActiveTab(newValue);
-            }}
-            variant="scrollable"
-            scrollButtons="auto"
-            style={{ backgroundColor: '#f1f9f9' }}
-            sx={{
-              '& .MuiTab-root': {
-                color: '#009693',
-                '&.Mui-disabled': {
-                  color: '#ccc',
-                },
-                '&.Mui-selected': {
-                  color: '#009693',
-                },
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: '#009693',
-              },
-            }}
-          >
-            <Tab label="Basic Info" disabled={!tabCompletion[0]} />
-            <Tab label="Pricing & Inventory" disabled={!tabCompletion[1]} />
-            <Tab label="Media & Dates" disabled={!tabCompletion[2]} />
-            <Tab label="Categories" disabled={!tabCompletion[3]} />
-            <Tab label="Product Options" disabled={!tabCompletion[4]} />
-          </Tabs>
+    <>
+      <StoreItemFields
+        formData={formData}
+        setFormData={setFormData}
+        vendors={vendors}
+        setVendors={setVendors}
+        handleChange={handleChange}
+        handleNumberChange={handleNumberChange}
+        handleImageChange={handleImageChange}
+        handleClearImages={() => setFormData(prev => ({ ...prev, images: [] }))}
+        handleRemoveImage={handleRemoveImage}
+        taxesData={taxesData}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={handleCategoryChange}
+        variants={variants}
+        setVariants={setVariants}
+        handleSubmit={handleSubmit}
+        companySlug={companySlug}
+        isLoading={isLoading}
+        isEditMode={false} // or false
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabCompletion={tabCompletion}
+        showConfirm={showConfirm}
+        setShowConfirm={setShowConfirm}
+        handleClearForm={handleClearForm}
+      />
 
-
-        </div>
-
-      
-          <div className='store_left_column store_column store_column'>
-            <div className='add-items-form-container'>
-              <h2 className='basic_label'>Basic Name</h2>
-              <hr></hr>
-              <div className='store_input_feilds'>
-              <FormInput
-                label="Item Name*"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="e.g. Samsung Monitor 24 inch"
-                required
-              />
-
-              <FormInput
-                label="Brand Name*"
-                name="brand_name"
-                value={formData.brand_name}
-                onChange={handleChange}
-                placeholder="e.g. Samsung, LG"
-                required
-              />
-
-              <FormInput
-                label="Measurement"
-                name="measurement"
-                value={formData.measurement || ''}
-                onChange={handleChange}
-                placeholder="e.g. kg, pcs, liters"
-              />
-
-              <FormInput
-                label="Replacement"
-                name="replacement"
-                value={formData.replacement || ''}
-                onChange={handleChange}
-                placeholder="e.g. Replace after 2 years"
-              />
-
-              <div className='add-items-form-input-label-container'>                
-                <label>Vendor Name*</label>
-                <AddVendor
-                  vendors={vendors}
-                  selectedVendor={formData.vendor_name || ''}
-                  onVendorSelect={(vendorName) => {
-                    setFormData(prev => {
-                      const updated = { ...prev, vendor_name: vendorName };
-                      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                      return updated;
-                    });
-                  }}
-                  onVendorAdded={(vendorName) => {
-                    setVendors(prev => [...prev, vendorName]);
-                    setFormData(prev => {
-                      const updated = { ...prev, vendor_name: vendorName };
-                      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                      return updated;
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            </div>
-            </div>
-          
-
-          
-            <div className='add-items-form-container store_column'>
-              <h2 className='basic_label'>Pricing & Inventory</h2>
-              <hr></hr>
-                <div className='store_input_feilds'>
-              <FormInput
-                label="Cost Price*"
-                name="cost_price"
-                type="number"
-                value={formData.cost_price || ''}
-                onChange={handleNumberChange}
-                placeholder="e.g. 250.00"
-                required
-              />
-
-              <FormInput
-                label="Selling Price*"
-                name="selling_price"
-                type="number"
-                value={formData.selling_price || ''}
-                onChange={handleNumberChange}
-                placeholder="e.g. 300.00"
-                required
-              />
-
-              <FormInput
-                label="Quantity Count*"
-                name="quantity_count"
-                type="number"
-                value={formData.quantity_count || ''}
-                onChange={handleNumberChange}
-                placeholder="e.g. 100"
-                required
-              />
-
-              <FormInput
-                label="Availability Stock"
-                name="availability_stock"
-                type="number"
-                value={formData.availability_stock || ''}
-                onChange={handleNumberChange}
-                placeholder="e.g. 50"
-              />
-
-              {taxesData?.data && (
-                <FormSelect<number>
-                  label="Tax"
-                  name="tax_id"
-                  value={formData.tax_id}
-                  onChange={(value) => {
-                    const updated = { ...formData, tax_id: value };
-                    setFormData(updated);
-                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                  }}
-                  options={taxesData.data.map((tax: Tax) => ({
-                    value: tax.id,
-                    label: `${tax.name} - ${tax.rate}%`
-                  }))}
-                />
-              )}
-            </div>
-            </div>
-         
-
-          
-            <div className='add-items-form-container store_column'>
-              <h2 className='basic_label'>Media & Dates</h2>
-              <hr></hr>
-                <div className='store_input_feilds'>
-              <ImageUpload
-                images={formData.images}
-                handleImageChange={handleImageChange}
-                handleClearImages={() => setFormData(prev => ({ ...prev, images: [] }))}
-                handleRemoveImage={handleRemoveImage}
-              />
-
-              <DatePickerField
-                label="Purchase Date"
-                selectedDate={formData.purchase_date || null}
-                onChange={(date) => {
-                  const updated = { ...formData, purchase_date: date };
-                  setFormData(updated);
-                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                }}
-                maxDate={new Date()}
-              />
-
-              <DatePickerField
-                label="Date Of Manufacture*"
-                selectedDate={formData.date_of_manufacture || null}
-                onChange={(date) => {
-                  const updated = { ...formData, date_of_manufacture: date };
-                  setFormData(updated);
-                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                }}
-                maxDate={new Date()}
-                required
-              />
-
-              <DatePickerField
-                label="Date Of Expiry"
-                selectedDate={formData.date_of_expiry || null}
-                onChange={(date) => {
-                  const updated = { ...formData, date_of_expiry: date };
-                  setFormData(updated);
-                  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                }}
-                minDate={new Date()}
-              />
-            </div>
-            </div>
-         
-
-          
-           
-         
-
-          
-            <div className="items-tab-container store_column">
-              <h2 className='basic_label'>Media & Dates</h2>
-              <hr></hr>
-              <ItemsTab setVariants={setVariants} variants={variants} />
-            </div>
-        
-
-        <ConfirmDialog
-          isOpen={showConfirm}
-          message="Are you sure you want to clear the form?"
-          onConfirm={handleClearForm}
-          onCancel={() => setShowConfirm(false)}
-          type="clear"
-        />
-        <span className="clear-button" onClick={() => setShowConfirm(true)}><FiXCircle /></span>
-
-        <div className='save-cancel-button' style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-          <button
-            type="button"
-            className='buttons'
-            style={{ marginLeft: '1rem' }}
-            onClick={() => router.push(`/${companySlug}/store`)}
-          >
-            Cancel
-          </button>
-          <button type="submit" className='buttons' disabled={isLoading}>
-            {isLoading ? 'Adding...' : 'Save'}
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div className='right_sidebar_row'>
-
-     <div className='categories-container store_column'>
-              
-               <div className='store_input_feilds'>
-              <ItemCategories
-                setSelectedCategories={handleCategoryChange}
-                selectedCategories={selectedCategories}
-              />
-            </div>
-            </div>
-    </div>
-
-
-    </div>  
+    </>
   );
 };
 

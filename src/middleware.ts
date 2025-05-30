@@ -3,10 +3,10 @@ import type { NextRequest } from 'next/server';
 import { authRoutes, publicRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const laravelSession = request.cookies.get('access_token');
   let companySlug = request.cookies.get('company_slug')?.value;
   const userType = request.cookies.get('user_type')?.value ?? 'user';
-  const { pathname } = request.nextUrl;
 
   // ✅ Treat string "undefined" as a missing value
   if (companySlug === 'undefined' || companySlug === '') {
@@ -36,6 +36,11 @@ export function middleware(request: NextRequest) {
 
     if (userType === 'admin') {
 
+      // ✅ 1. Allow confirm-payment *early*
+      if (pathname.includes('/confirm-payment')) {
+        return NextResponse.next();
+      }
+      
       const selectionCount = request.cookies.get('company_selection_count')?.value;
 
       // 🔒 If count is set and trying to access "/", block access

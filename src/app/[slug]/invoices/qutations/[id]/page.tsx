@@ -26,7 +26,7 @@ const QuotationPage = () => {
           <div className="invoice-title">
             <h1>Quotation</h1>
           </div>
-          <div className="invoice-date">Date: {new Date().toISOString().split('T')[0]}</div>
+          <div className="invoice-date"><strong>Date:</strong> {new Date().toISOString().split('T')[0]}</div>
         </div>
 
         <div className="quotation-block">

@@ -29,6 +29,8 @@ const Page = () => {
     updatedItems.splice(index, 1);
     setItems(updatedItems);
   };
+  const [isTaxFocused, setIsTaxFocused,] = useState(false);
+  const [isServiceFocused, setIsServiceFocused] = useState(false);
 
   const subtotal = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
   const taxAmount = (subtotal * taxPercent) / 100;
@@ -66,7 +68,20 @@ const Page = () => {
 
         <div className="form-group">
           <label>Customer Number:</label>
-          <input type="text" value={customerNumber} onChange={(e) => setCustomerNumber(e.target.value)} required />
+          <input
+            type="text"
+            value={customerNumber}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d{0,10}$/.test(value)) {
+                setCustomerNumber(value);
+              }
+            }}
+            inputMode="numeric"
+            maxLength={10}
+            required
+          />
+
         </div>
 
         <div className="form-group">
@@ -120,12 +135,26 @@ const Page = () => {
 
         <div className="form-group">
           <label>Tax (%)</label>
-          <input type="number" value={taxPercent} onChange={(e) => setTaxPercent(Number(e.target.value))} />
+          <input
+            type="number"
+            value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
+            onChange={(e) => setTaxPercent(Number(e.target.value))}
+            onFocus={() => setIsTaxFocused(true)}
+            onBlur={() => setIsTaxFocused(false)}
+          />
+
         </div>
 
         <div className="form-group">
           <label>Service Charges</label>
-          <input type="number" value={serviceCharges} onChange={(e) => setServiceCharges(Number(e.target.value))} />
+          <input
+            type="number"
+            value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
+            onChange={(e) => setServiceCharges(Number(e.target.value))}
+            onFocus={() => setIsServiceFocused(true)}
+            onBlur={() => setIsServiceFocused(false)}
+          />
+
         </div>
 
         <div className="summary">

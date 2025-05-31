@@ -17,6 +17,7 @@ export interface Quotation {
   customer_email?: string;
   items: QuotationItem[];
   tax_percent: number;
+  sub_total: number;
   service_charges: number;
   user_id?: number;
   company_name: string;

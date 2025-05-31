@@ -18,7 +18,6 @@ const QuotationPage = () => {
   if (isLoading) return <p className="invoice-loading">Loading...</p>;
   if (isError || !quotation) return <p className="invoice-error">Something went wrong while fetching quotation.</p>;
 
-
   return (
     <div className="invoice-wrapper">
       <div className="invoice-card">
@@ -68,7 +67,7 @@ const QuotationPage = () => {
             <div className="invoice-summary">
               <div className="summary-row">
                 <span>Subtotal</span>
-                <span>₹</span>
+                <span>₹{quotation.sub_total}</span>
               </div>
               <div className="summary-row">
                 <span>Tax ({quotation.tax_percent}%)</span>

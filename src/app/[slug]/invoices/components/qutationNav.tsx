@@ -21,7 +21,7 @@ const QutationNav: React.FC = () => {
           {
             label: 'Generate Quotation',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/qutations/add`),
+            onClick: () => router.push(`/${companySlug}/invoices/qutations/add`),
           },
         ]}
       />

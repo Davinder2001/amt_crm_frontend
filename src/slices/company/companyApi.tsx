@@ -70,7 +70,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
 
-    orderNewCompany: builder.mutation<{ orderId: string, formdata: FormData }, FormData>({
+    orderNewCompany: builder.mutation<{ redirect_url: string ,orderId: string, formdata: FormData }, FormData>({
       query: (formData) => ({
         url: "add-new-company/pay",
         method: "POST",
@@ -81,7 +81,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
 
-    addNewCompany: builder.mutation<AddCompany, { orderId: string, formdata: FormData }>({
+    addNewCompany: builder.mutation<AddCompany, { redirect_url: string ,orderId: string, formdata: FormData }>({
       query: ({ orderId, formdata }) => ({
         url: `add-new-company/${orderId}`,
         method: "POST",

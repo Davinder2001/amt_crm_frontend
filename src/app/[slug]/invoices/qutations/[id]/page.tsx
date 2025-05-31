@@ -18,6 +18,7 @@ const QuotationPage = () => {
   if (isLoading) return <p className="invoice-loading">Loading...</p>;
   if (isError || !quotation) return <p className="invoice-error">Something went wrong while fetching quotation.</p>;
 
+
   return (
     <div className="invoice-wrapper">
       <div className="invoice-card">

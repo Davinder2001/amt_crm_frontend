@@ -7,6 +7,7 @@ import { BreadcrumbProvider } from "@/provider/BreadcrumbContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeProvider from '@/provider/themeContext';
+import NetworkStatusBanner from "@/components/common/NetworkStatusBanner";
 
 export const metadata: Metadata = {
   title: "AMT CRM",
@@ -31,7 +32,10 @@ export default function RootLayout({
           <ThemeProvider>
             <BreadcrumbProvider>
               <UserProvider>
-                <LayoutWrapper>{children}</LayoutWrapper>
+                <LayoutWrapper>
+                  {children}
+                  <NetworkStatusBanner />
+                </LayoutWrapper>
               </UserProvider>
             </BreadcrumbProvider>
           </ThemeProvider>

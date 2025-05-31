@@ -2,14 +2,29 @@
 import React, { useEffect, useState } from "react";
 import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
-interface addCompanyFormProps {
+interface AddCompany {
+  company_name: string;
+  package_id: number;
+  business_category_id: number | null;
+  subscription_type: string;
+  company_logo: File | null;
+  business_address: string;
+  pin_code: string;
+  business_proof_type: string;
+  business_id: string;
+  business_proof_front: File | null;
+  business_proof_back: File | null;
+}
+
+interface AddCompanyFormProps {
   packageId: number;
   categoryId: number | null;
+  subscriptionType: string | null;
 }
 
 const LOCAL_STORAGE_KEY = 'addCompany';
 
-const getStoredFormData = () => {
+const getStoredFormData = (): Partial<AddCompany> | null => {
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     return stored ? JSON.parse(stored) : null;
@@ -29,10 +44,11 @@ const saveFormData = (data: Partial<AddCompany>) => {
   }
 };
 
-const getDefaultFormData = (packageId: number, categoryId: number | null): AddCompany => ({
+const getDefaultFormData = (packageId: number, categoryId: number | null, subscriptionType: string | null): AddCompany => ({
   company_name: '',
   package_id: packageId,
   business_category_id: categoryId,
+  subscription_type: subscriptionType ?? '',
   company_logo: null,
   business_address: '',
   pin_code: '',
@@ -42,8 +58,10 @@ const getDefaultFormData = (packageId: number, categoryId: number | null): AddCo
   business_proof_back: null,
 });
 
-const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
-  const [formData, setFormData] = useState<AddCompany>(getDefaultFormData(packageId, categoryId));
+const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscriptionType }) => {
+  const [formData, setFormData] = useState<AddCompany>(
+    getDefaultFormData(packageId, categoryId, subscriptionType)
+  );
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
   useEffect(() => {
@@ -63,31 +81,38 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files.length > 0) {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: files[0],
-      }));
+      setFormData(prev => ({ ...prev, [name]: files[0] }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       if (formData.business_category_id === null) {
         throw new Error("Business category is required.");
       }
-      const payload = {
-        business_category_id: formData.business_category_id,
-        package_id: formData.package_id,
-        company_name: formData.company_name,
-        buiness_id: formData.business_id ?? "",
-      };
-      const response = await orderNewCompany(payload).unwrap();
+
+      const payload = new FormData();
+      payload.append('company_name', formData.company_name);
+      payload.append('package_id', formData.package_id.toString());
+      payload.append('business_category_id', formData.business_category_id.toString());
+      payload.append('subscription_type', formData.subscription_type);
+      payload.append('business_address', formData.business_address);
+      payload.append('pin_code', formData.pin_code);
+      payload.append('business_proof_type', formData.business_proof_type);
+      payload.append('business_id', formData.business_id);
+      if (formData.company_logo) payload.append('company_logo', formData.company_logo);
+      if (formData.business_proof_front) payload.append('business_proof_front', formData.business_proof_front);
+      if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
+
+const response = await orderNewCompany(payload).unwrap();
+
       localStorage.setItem("addCompany", JSON.stringify({ ...formData, order_id: response.orderId }));
 
-      if (response.redirect_url) {
-        window.location.href = response.redirect_url;
-      }
+      // if (response.redirect_url) {
+      //   window.location.href = response.redirect_url;
+      // }
     } catch (err) {
       console.error("Failed to start payment:", err);
     }
@@ -123,7 +148,6 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
               <span className="file-label">
                 {formData.company_logo ? formData.company_logo.name : 'Choose file...'}
               </span>
-              <button type="button" className="file-button">Browse</button>
             </div>
           </div>
 
@@ -176,7 +200,6 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
               <span className="file-label">
                 {formData.business_proof_front ? formData.business_proof_front.name : 'Choose file...'}
               </span>
-              <button type="button" className="file-button">Browse</button>
             </div>
           </div>
 
@@ -193,9 +216,9 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
               <span className="file-label">
                 {formData.business_proof_back ? formData.business_proof_back.name : 'Choose file...'}
               </span>
-              <button type="button" className="file-button">Browse</button>
             </div>
           </div>
+
           <div className="form-group full-width">
             <label className="form-label">Business Address</label>
             <textarea
@@ -219,10 +242,8 @@ const Page: React.FC<addCompanyFormProps> = ({ packageId, categoryId }) => {
           </button>
         </div>
       </form>
-
-
     </div>
   );
-}
+};
 
 export default Page;

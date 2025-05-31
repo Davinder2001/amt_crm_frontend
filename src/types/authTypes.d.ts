@@ -68,6 +68,7 @@ interface AddCompany {
     company_name: string;
     company_logo?: File | null;
     business_address?: string;
+    subscription_type: string | null; // allow null
     pin_code?: string;
     business_proof_type?: string;
     business_id?: string;
@@ -78,7 +79,10 @@ interface AddCompany {
     orderId?: string;
     business_category_id: number | null;
     package_id: number,
+    categoryId: number,
 }
+
+
 
 interface UserProfile {
     roles: Role[];

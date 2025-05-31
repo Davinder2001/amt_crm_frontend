@@ -70,7 +70,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
 
-    orderNewCompany: builder.mutation<AddCompany, { buiness_id: string, business_category_id: number, package_id: number | null, company_name: string }>({
+    orderNewCompany: builder.mutation<{ orderId: string, formdata: FormData }, FormData>({
       query: (formData) => ({
         url: "add-new-company/pay",
         method: "POST",

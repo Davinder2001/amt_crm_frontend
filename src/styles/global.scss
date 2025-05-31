@@ -154,7 +154,7 @@ body {
 .buttons {
     padding: 9px 22px;
     border: unset;
-   background-color: $primary-color;
+    background-color: $primary-color;
     font-size: 15px;
     font-weight: 500;
     letter-spacing: 0.3px;
@@ -269,7 +269,7 @@ textarea {
         min-height: 0;
         height: 100vh;
         margin: 10px 50px;
-       
+
         .page-content {
             padding: 10px;
         }
@@ -458,6 +458,13 @@ h2.react-datepicker__current-month,
 
 
 
+
+@media (max-width:1024px) {
+
+    .main .main-content {
+        margin: 0;
+    }
+}
 
 @media (max-width:468px) {
     .buttons {

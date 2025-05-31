@@ -31,7 +31,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
 })
 
 const AddItem: React.FC = () => {
-  const [createStoreItem, { isLoading }] = useCreateStoreItemMutation();
+  const [createStoreItem, { isLoading: isCreating }] = useCreateStoreItemMutation();
   const { currentData: vendorsData } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
   const router = useRouter();
@@ -208,7 +208,7 @@ const AddItem: React.FC = () => {
         setVariants={setVariants}
         handleSubmit={handleSubmit}
         companySlug={companySlug}
-        isLoading={isLoading}
+        isLoading={isCreating}
         isEditMode={false} // or false
         activeTab={activeTab}
         setActiveTab={setActiveTab}

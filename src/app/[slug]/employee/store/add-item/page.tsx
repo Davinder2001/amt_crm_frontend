@@ -58,13 +58,9 @@ const AddItem: React.FC = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   type VendorData = { vendor_name: string };
-  type VendorDataResponse = VendorData[] | { data: VendorData[] };
-
-function isVendorResponseObject(v: VendorDataResponse): v is { data: VendorData[] } {
-  return typeof v === 'object' && v !== null && 'data' in v && Array.isArray((v as any).data);
-}
-
-useEffect(() => {
+  // type VendorsApiResponse = VendorData[] | { data: VendorData[] };
+  
+ useEffect(() => {
   const savedFormData = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (savedFormData) {
     const parsed = JSON.parse(savedFormData);
@@ -82,7 +78,6 @@ useEffect(() => {
     setVendors(vendorsData.data.map((vendor: VendorData) => vendor.vendor_name));
   }
 }, [vendorsData]);
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

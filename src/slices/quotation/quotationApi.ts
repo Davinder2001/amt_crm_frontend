@@ -57,6 +57,15 @@ export const quotationApi = qutationCreateApiSlice.injectEndpoints({
       }),
     }),
 
+    getQuotationById: builder.query<Quotation, number>({
+      query: (id) => ({
+        url: `quotations/${id}`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, id) => [{ type: 'Qutation', id }],
+    }),
+
+
 
   }),
   overrideExisting: false,
@@ -66,4 +75,5 @@ export const {
   useCreateQuotationMutation,
   useGetAllQuotationsQuery,
   useGenerateQuotationPdfMutation,
+  useGetQuotationByIdQuery
 } = quotationApi;

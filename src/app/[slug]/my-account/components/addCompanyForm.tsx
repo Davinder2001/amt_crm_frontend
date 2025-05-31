@@ -110,9 +110,9 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
 
       localStorage.setItem("addCompany", JSON.stringify({ ...formData, order_id: response.orderId }));
 
-      // if (response.redirect_url) {
-      //   window.location.href = response.redirect_url;
-      // }
+      if (response.redirect_url) {
+        window.location.href = response.redirect_url;
+      }
     } catch (err) {
       console.error("Failed to start payment:", err);
     }

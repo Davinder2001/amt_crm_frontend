@@ -117,14 +117,6 @@ interface OcrResponse {
   message?: string;
 }
 
-interface Vendor {
-  id: number;
-  name: string;
-  number: string;
-  email: string;
-  address: string;
-  items_by_date?: Array[];
-}
 interface Vendors {
   id: number;
   name: string;
@@ -132,6 +124,23 @@ interface Vendors {
   email: string;
   address: string;
 }
+
+interface Vendor {
+  id: number;
+  name: string;
+  number: string;
+  email: string;
+  address: string;
+  items_by_date?: Array[];
+  vendor_address: string;
+  vendor_email: string;
+  vendor_number: number | string;
+  company_id: number;
+  vendor_name: string;
+  created_at: string;
+  updated_at: string;
+}
+type VendorsResponse = Vendor[];
 
 
 interface CreateVendorRequest {

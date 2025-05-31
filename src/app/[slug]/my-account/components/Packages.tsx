@@ -90,7 +90,7 @@ const Packages: React.FC<PackagesProps> = ({
                         return (
                             <div key={plan.id} className="package-card">
                                 <div className="ribbon">1 Year</div>
-                                <h3 className="planPrice">₹ {plan.price ?? 0} / Year</h3>
+                                <h3 className="planPrice">₹ {plan.annual_price ?? 0} / Year</h3>
                                 <ul className="features">
                                     <li>✓ {plan.employee_numbers} Employees</li>
                                     <li>✓ {plan.items_number} Items</li>

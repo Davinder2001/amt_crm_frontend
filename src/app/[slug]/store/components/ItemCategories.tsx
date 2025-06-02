@@ -182,7 +182,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               },
             }}
           />
-          <ListItemText primary={category.name} />
+          <ListItemText primary={category.name} className='category-name'/>
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <FaTrash
               size={14}
@@ -254,7 +254,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               },
             }}
           />
-          <ListItemText primary={category.name} />
+          <ListItemText primary={category.name} className='category-name'/>
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <FaTrash
               size={14}
@@ -290,9 +290,8 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     <Box sx={{ width: '100%' }}>
       {!isCreatingNewCategory ? (
         <>
-          <Typography variant="h6" gutterBottom>
-            Select Categories
-          </Typography>
+          <h2 className="basic_label">Categories:</h2>
+          <hr />
 
           <TextField
             variant="outlined"
@@ -360,9 +359,8 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         </>
       ) : (
         <>
-          <Typography variant="h6" gutterBottom>
-            Create New Category
-          </Typography>
+          <h2 className="basic_label"> Create New Category:</h2>
+          <hr />
 
           <TextField
             fullWidth

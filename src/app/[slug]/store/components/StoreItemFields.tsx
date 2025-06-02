@@ -12,6 +12,7 @@ import ItemCategories from './ItemCategories';
 import ItemsTab from './ItemsTab';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useRouter } from 'next/navigation';
+import FeaturedImageUpload from './FeaturedImageUpload';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -78,168 +79,209 @@ const StoreItemFields = <T extends StoreItemFormData>({
     const router = useRouter();
 
     return (
-        <form onSubmit={handleSubmit} className="store_outer_row">
-            <div className="store-add-item">
-                {/* Header + Tabs */}
-                <div className="add-item-header">
-                    <Link href={`/${companySlug}/store`} className="back-button">
-                        <FaArrowLeft size={16} color="#fff" />
-                    </Link>
-                    <Tabs
-                        value={activeTab}
-                        onChange={(e, newValue) => {
-                            if (!tabCompletion || tabCompletion[newValue]) setActiveTab(newValue);
-                        }}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        style={{ backgroundColor: '#f1f9f9' }}
-                        sx={{
-                            '& .MuiTab-root': {
-                                color: '#009693',
-                                '&.Mui-disabled': { color: '#ccc' },
-                                '&.Mui-selected': { color: '#009693' },
-                            },
-                            '& .MuiTabs-indicator': { backgroundColor: '#009693' },
-                        }}
-                    >
-                        <Tab label="Basic Info" disabled={tabCompletion && !tabCompletion[0]} />
-                        <Tab label="Pricing & Inventory" disabled={tabCompletion && !tabCompletion[1]} />
-                        <Tab label="Media & Dates" disabled={tabCompletion && !tabCompletion[2]} />
-                        <Tab label="Categories" disabled={tabCompletion && !tabCompletion[3]} />
-                        <Tab label="Product Options" disabled={tabCompletion && !tabCompletion[4]} />
-                    </Tabs>
-                </div>
+        <>
+            <form onSubmit={handleSubmit} className="store_outer_row">
+                <div className="store-add-item">
+                    {/* Header + Tabs */}
+                    <div className="add-item-header store_column">
+                        <Link href={`/${companySlug}/store`} className="back-button">
+                            <FaArrowLeft size={16} color="#fff" />
+                        </Link>
+                        <Tabs
+                            value={activeTab}
+                            onChange={(e, newValue) => {
+                                if (!tabCompletion || tabCompletion[newValue]) setActiveTab(newValue);
+                            }}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            sx={{
+                                '& .MuiTab-root': {
+                                    color: '#009693',
+                                    '&.Mui-disabled': { color: '#ccc' },
+                                    '&.Mui-selected': { color: '#009693' },
+                                },
+                                '& .MuiTabs-indicator': { backgroundColor: '#009693' },
+                            }}
+                        >
+                            <Tab label="Basic Info" disabled={tabCompletion && !tabCompletion[0]} />
+                            <Tab label="Pricing & Inventory" disabled={tabCompletion && !tabCompletion[1]} />
+                            <Tab label="Media & Dates" disabled={tabCompletion && !tabCompletion[2]} />
+                            <Tab label="Categories" disabled={tabCompletion && !tabCompletion[3]} />
+                            <Tab label="Product Options" disabled={tabCompletion && !tabCompletion[4]} />
+                        </Tabs>
+                    </div>
 
-                {/* Basic Info */}
-                <div className="store_left_column store_column">
-                    <div className="add-items-form-container">
-                        <h2 className="basic_label">Basic Name</h2>
-                        <hr />
-                        <div className="store_input_feilds">
-                            <FormInput label="Item Name*" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
-                            <FormInput label="Brand Name*" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="e.g. Samsung, LG" required />
-                            <FormInput label="Measurement" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
-                            <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
+                    {/* Basic Info */}
+                    <div className="store_left_column store_column">
+                        <div className="add-items-form-container">
+                            <h2 className="basic_label">Basic Name</h2>
+                            <hr />
+                            <div className="store_input_feilds">
+                                <FormInput label="Item Name*" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
+                                <FormInput label="Brand Name*" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="e.g. Samsung, LG" required />
+                                <FormInput label="Measurement" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
+                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
 
-                            <div className="add-items-form-input-label-container">
-                                <label>Vendor Name*</label>
-                                <AddVendor
-                                    vendors={vendors}
-                                    selectedVendor={formData.vendor_name || ''}
-                                    onVendorSelect={(vendorName) => {
-                                        const updated = { ...formData, vendor_name: vendorName };
-                                        setFormData(updated);
-                                        localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                                    }}
-                                    onVendorAdded={(vendorName) => {
-                                        setVendors((prev) => [...prev, vendorName]);
-                                        const updated = { ...formData, vendor_name: vendorName };
-                                        setFormData(updated);
-                                        localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                                    }}
-                                />
+                                <div className="add-items-form-input-label-container">
+                                    <label>Vendor Name*</label>
+                                    <AddVendor
+                                        vendors={vendors}
+                                        selectedVendor={formData.vendor_name || ''}
+                                        onVendorSelect={(vendorName) => {
+                                            const updated = { ...formData, vendor_name: vendorName };
+                                            setFormData(updated);
+                                            localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                                        }}
+                                        onVendorAdded={(vendorName) => {
+                                            setVendors((prev) => [...prev, vendorName]);
+                                            const updated = { ...formData, vendor_name: vendorName };
+                                            setFormData(updated);
+                                            localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Pricing & Inventory */}
-                <div className="add-items-form-container store_column">
-                    <h2 className="basic_label">Pricing & Inventory</h2>
-                    <hr />
-                    <div className="store_input_feilds">
-                        <FormInput label="Cost Price*" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
-                        <FormInput label="Selling Price*" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
-                        <FormInput label="Quantity Count*" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
-                        <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
-
-                        {taxesData?.data && (
-                            <FormSelect<number>
-                                label="Tax"
-                                name="tax_id"
-                                value={formData.tax_id}
-                                onChange={(value) => {
-                                    const updated = { ...formData, tax_id: value };
-                                    setFormData(updated);
-                                    localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                                }}
-                                options={taxesData.data.map((tax) => ({
-                                    value: tax.id,
-                                    label: `${tax.name} - ${tax.rate}%`,
-                                }))}
-                            />
-                        )}
-                    </div>
-                </div>
-
-                {/* Media & Dates */}
-                <div className="add-items-form-container store_column">
-                    <h2 className="basic_label">Media & Dates</h2>
-                    <hr />
-                    <div className="store_input_feilds">
-                        <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
-                        <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
-                            const updated = { ...formData, purchase_date: date };
-                            setFormData(updated);
-                            localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                        }} maxDate={new Date()} />
-                        <DatePickerField label="Date Of Manufacture*" selectedDate={formData.date_of_manufacture || null} onChange={(date) => {
-                            const updated = { ...formData, date_of_manufacture: date };
-                            setFormData(updated);
-                            localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                        }} maxDate={new Date()} required />
-                        <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
-                            const updated = { ...formData, date_of_expiry: date };
-                            setFormData(updated);
-                            localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
-                        }} minDate={new Date()} />
-                    </div>
-                </div>
-
-                {/* Attributes & Variants */}
-                <div className="items-tab-container store_column">
-                    <div className="add-items-form-container">
-                        <h2 className="basic_label">Attributes & Variations</h2>
+                    {/* Pricing & Inventory */}
+                    <div className="add-items-form-container store_column">
+                        <h2 className="basic_label">Pricing & Inventory</h2>
                         <hr />
-                        <ItemsTab setVariants={setVariants} variants={variants} />
+                        <div className="store_input_feilds">
+                            <FormInput label="Cost Price*" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
+                            <FormInput label="Selling Price*" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
+                            <FormInput label="Quantity Count*" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
+                            <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
+
+                            {taxesData?.data && (
+                                <FormSelect<number>
+                                    label="Tax"
+                                    name="tax_id"
+                                    value={formData.tax_id}
+                                    onChange={(value) => {
+                                        const updated = { ...formData, tax_id: value };
+                                        setFormData(updated);
+                                        localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                                    }}
+                                    options={taxesData.data.map((tax) => ({
+                                        value: tax.id,
+                                        label: `${tax.name} - ${tax.rate}%`,
+                                    }))}
+                                />
+                            )}
+                        </div>
                     </div>
+
+                    {/* Media & Dates */}
+                    <div className="add-items-form-container store_column">
+                        <h2 className="basic_label">Media & Dates</h2>
+                        <hr />
+                        <div className="store_input_feilds">
+                            <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
+                            <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
+                                const updated = { ...formData, purchase_date: date };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }} maxDate={new Date()} />
+                            <DatePickerField label="Date Of Manufacture*" selectedDate={formData.date_of_manufacture || null} onChange={(date) => {
+                                const updated = { ...formData, date_of_manufacture: date };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }} maxDate={new Date()} required />
+                            <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
+                                const updated = { ...formData, date_of_expiry: date };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }} minDate={new Date()} />
+                        </div>
+                    </div>
+
+                    {/* Attributes & Variants */}
+                    <div className="items-tab-container store_column">
+                        <div className="add-items-form-container">
+                            <ItemsTab setVariants={setVariants} variants={variants} />
+                        </div>
+                    </div>
+
+                    {/* Confirmation Dialog */}
+                    {showConfirm && (
+                        <ConfirmDialog
+                            isOpen={showConfirm}
+                            message="Are you sure you want to clear the form?"
+                            onConfirm={handleClearForm ?? (() => { })}
+                            onCancel={() => setShowConfirm && setShowConfirm(false)}
+                            type="clear"
+                        />
+                    )}
+
+                    <span className="clear-button" onClick={() => setShowConfirm && setShowConfirm(true)}>
+                        <FiXCircle />
+                    </span>
+
+                    {(isFormModified?.() || !isEditMode) && (
+                        <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+                            <button type="button" className="buttons" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
+                                Cancel
+                            </button>
+                            <button type="submit" className="buttons" disabled={isLoading}>
+                                {isLoading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update' : 'Save')}
+                            </button>
+                        </div>
+                    )}
                 </div>
 
-                {/* Confirmation Dialog */}
-                {showConfirm && (
-                    <ConfirmDialog
-                        isOpen={showConfirm}
-                        message="Are you sure you want to clear the form?"
-                        onConfirm={handleClearForm ?? (() => { })}
-                        onCancel={() => setShowConfirm && setShowConfirm(false)}
-                        type="clear"
-                    />
-                )}
-
-                <span className="clear-button" onClick={() => setShowConfirm && setShowConfirm(true)}>
-                    <FiXCircle />
-                </span>
-
-                {(isFormModified?.() || !isEditMode) && (
-                    <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-                        <button type="button" className="buttons" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
-                            Cancel
-                        </button>
-                        <button type="submit" className="buttons" disabled={isLoading}>
-                            {isLoading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update' : 'Save')}
-                        </button>
+                <div className="right_sidebar_row">
+                    <div className="add-items-form-container store_column">
+                        <h2 className="basic_label">Featured Image</h2>
+                        <hr />
+                        <FeaturedImageUpload
+                            featuredImage={formData.featured_image || null}
+                            onFeaturedImageChange={(file) => {
+                                const updated = { ...formData, featured_image: file };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }}
+                            onRemoveFeaturedImage={() => {
+                                const updated = { ...formData, featured_image: null };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }}
+                        />
                     </div>
-                )}
-            </div>
 
-            <div className="right_sidebar_row">
-                <div className="categories-container store_column">
-                    <div className="store_input_feilds">
+                    <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} />
                     </div>
+                    <div className="add-items-form-container store_column">
+                        <h2 className="basic_label">Brands</h2>
+                        <hr />
+                        <FormSelect<string>
+                            name="brand_name"
+                            value={formData.brand_name}
+                            onChange={(value) => {
+                                const updated = { ...formData, brand_name: value };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }}
+                            options={[
+                                { label: 'Samsung', value: 'Samsung' },
+                                { label: 'LG', value: 'LG' },
+                                { label: 'Dell', value: 'Dell' },
+                                { label: 'HP', value: 'HP' },
+                                { label: 'Asus', value: 'Asus' },
+                                { label: 'Acer', value: 'Acer' },
+                                { label: 'Lenovo', value: 'Lenovo' },
+                                { label: 'Apple', value: 'Apple' },
+                                { label: 'Sony', value: 'Sony' },
+                                { label: 'MSI', value: 'MSI' }
+                            ]}
+                        />
+                    </div>
+
                 </div>
-            </div>
-        </form>
+            </form>
+        </>
     );
 };
 

@@ -28,6 +28,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   images: [],
   variants: [],
   categories: [],
+  featured_image: null
 })
 
 const AddItem: React.FC = () => {
@@ -51,6 +52,7 @@ const AddItem: React.FC = () => {
     if (savedFormData) {
       const parsed = JSON.parse(savedFormData);
       delete parsed.images;
+      delete parsed.featured_image;
       setFormData(prev => ({ ...prev, ...parsed }));
 
       if (parsed.categories) {
@@ -159,13 +161,18 @@ const AddItem: React.FC = () => {
 
     // Append simple fields
     Object.entries(formData).forEach(([key, val]) => {
-      if (key !== 'images' && val !== null && val !== undefined) {
+      if (key !== 'images' && key !== 'featured_image' && val !== null && val !== undefined) {
         form.append(key, val.toString());
       }
     });
 
     // Append images
     formData.images.forEach(img => form.append('images[]', img));
+    // Append featured_image (as a binary file)
+    if (formData.featured_image instanceof File) {
+      form.append('featured_image', formData.featured_image);
+    }
+
 
     // Append variants
     variants.forEach((variant, i) => {

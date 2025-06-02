@@ -22,6 +22,7 @@ interface StoreItem {
   availability_stock: number;
   created_at: string;
   updated_at: string;
+  featured_image: File | string | null;
   images: (string | File)[] | File[];
   final_cost: number;
   categories: Category[];
@@ -96,6 +97,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   cost_price: number;
   selling_price: number;
   tax_id: number;
+  featured_image: File | string | null;
   images: (string | File)[] | File[];
   variants: variations[];
   categories: TCategories;

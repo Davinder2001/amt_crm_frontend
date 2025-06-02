@@ -72,17 +72,15 @@ const Attributes = () => {
 
     return (
         <>
-            <h1 className="title">Variations</h1>
-
             {/* Open Canvas Button */}
             <div className="add-attribute-button-container">
-            <button
-                type="button"
-                onClick={() => setIsCanvasOpen(true)}
-                className='buttons floting-attributes-button' title='Add New Attribute'
-            >
-                <FaPlus />
-            </button>
+                <button
+                    type="button"
+                    onClick={() => setIsCanvasOpen(true)}
+                    className='buttons floting-attributes-button' title='Add New Attribute'
+                >
+                    <FaPlus />
+                </button>
             </div>
 
             {/* Sliding Canvas */}

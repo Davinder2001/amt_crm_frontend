@@ -2,7 +2,7 @@
 import React, { useState, ReactNode } from 'react';
 import { FaBox, FaTag } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
-import Variations from '../add-item/Variations';
+import Variations from './Variations';
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
@@ -18,34 +18,43 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants }) => {
             label: <div className="tab-label">
                 <FaTag className="tab-icon" /> <span className="tab-text">Attributes</span>
             </div>,
-            content: <div className="tab-content"><Attributes /></div>
+            content: <Attributes />
         },
         {
             key: 'variations',
             label: <div className="tab-label">
-                <FaBox className="tab-icon" /> <span className="tab-text">Variations</span>
+                <FaBox className="tab-icon" /> <span className="tab-text">Variations
+                    {variants.filter(v => v.attributes.length > 0 || v.price > 0).length > 0 && (
+                        <p className='variations-count'>
+                            {variants.filter(v => v.attributes.length > 0 || v.price > 0).length}
+                        </p>
+                    )}
+                </span>
             </div>,
-            content: <div className="tab-content"><Variations setVariants={setVariants} variants={variants} setShowModal={() => { }} /></div>
+            content: <Variations setVariants={setVariants} variants={variants} setShowModal={() => { }} />
         },
     ];
 
     return (
         <>
             <div className="tabs-container">
-                <aside className="tabs-sidebar">
-                    {tabs.map(tab => (
-                        <button
-                            type="button"
-                            key={tab.key}
-                            className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
-                            onClick={() => setActiveTab(tab.key)}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
-                </aside>
+                <div className="basic_label_header">
+                    <h2 className="basic_label">Attributes & Variations</h2>
+                    <aside className="tabs-sidebar">
+                        {tabs.map(tab => (
+                            <button
+                                type="button"
+                                key={tab.key}
+                                className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
+                                onClick={() => setActiveTab(tab.key)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </aside>
+                </div>
 
-                <section className="tab-content">
+                <section className="tab-content fields-wrapper">
                     {tabs.find(tab => tab.key === activeTab)?.content}
                 </section>
             </div>

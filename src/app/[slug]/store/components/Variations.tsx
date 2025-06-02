@@ -113,76 +113,77 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
 
     return (
         <>
-            {combinations.map((combo, index) => (
-                <div key={index} className="variation-block  variation-container">
-                    {attributes?.map(attr => (
-                        <div key={attr.id} style={{ marginBottom: '12px' }}>
-                            <label>{attr.name}</label>
-                            <select
-                                value={
-                                    combo.attributes.find(a => a.attribute_id === attr.id)
-                                        ?.attribute_value_id || ''
-                                }
-                                onChange={e =>
-                                    handleAttributeChange(index, attr.id, e.target.value)
-                                }
-                            >
-                                <option value="">Select {attr.name}</option>
-                                {attr.values.map(val => (
-                                    <option key={val.id} value={val.id}>
-                                        {val.value}
-                                    </option>
-                                ))}
-                            </select>
+            <div className="variation-container">
+                {combinations.map((combo, index) => (
+                    <div key={index} className="variation-block">
+                        {attributes?.map(attr => (
+                            <div key={attr.id}>
+                                <label>{attr.name}</label>
+                                <select
+                                    value={
+                                        combo.attributes.find(a => a.attribute_id === attr.id)
+                                            ?.attribute_value_id || ''
+                                    }
+                                    onChange={e =>
+                                        handleAttributeChange(index, attr.id, e.target.value)
+                                    }
+                                >
+                                    <option value="">Select {attr.name}</option>
+                                    {attr.values.map(val => (
+                                        <option key={val.id} value={val.id}>
+                                            {val.value}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        ))}
+
+                        <div>
+                            <label>Regular Price</label>
+                            <input
+                                type="number"
+                                value={combo.regular_price === 0 ? '' : combo.regular_price}
+                                onChange={e => {
+                                    const val = Number(e.target.value);
+                                    handlePriceChange(index, combo.price, isNaN(val) ? 0 : val);
+                                }}
+                                placeholder="e.g. 300.00"
+                                min={0}
+                            />
                         </div>
-                    ))}
 
-                    <div style={{ marginBottom: '12px' }}>
-                        <label>Regular Price</label>
-                        <input
-                            type="number"
-                            value={combo.regular_price === 0 ? '' : combo.regular_price}
-                            onChange={e => {
-                                const val = Number(e.target.value);
-                                handlePriceChange(index, combo.price, isNaN(val) ? 0 : val);
-                            }}
-                            placeholder="e.g. 300.00"
-                            min={0}
-                        />
+                        <div>
+                            <label>Price</label>
+                            <input
+                                type="number"
+                                value={combo.price === 0 ? '' : combo.price}
+                                onChange={e => {
+                                    const val = Number(e.target.value);
+                                    handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
+                                }}
+                                placeholder="e.g. 250.00"
+                                min={0}
+                            />
+                        </div>
+
+                        {index > 0 && (
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveCombination(index)}
+                                className="remove-button"
+                            >
+                                Remove
+                            </button>
+                        )}
+
                     </div>
-
-                    <div style={{ marginBottom: '12px' }}>
-                        <label>Price</label>
-                        <input
-                            type="number"
-                            value={combo.price === 0 ? '' : combo.price}
-                            onChange={e => {
-                                const val = Number(e.target.value);
-                                handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
-                            }}
-                            placeholder="e.g. 250.00"
-                            min={0}
-                        />
-                    </div>
-
-                    {index > 0 && (
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveCombination(index)}
-                            className="remove-button"
-                        >
-                            Remove
-                        </button>
-                    )}
-
-                </div>
-            ))}
-
-            <button type="button" onClick={handleAddCombination} className="buttons">
-                Add More
-            </button>
+                ))}
+            </div>
 
             <div style={{ marginTop: '1rem' }} className='variation-buttons-container'>
+                <button type="button" onClick={handleAddCombination} className="buttons">
+                    Add More
+                </button>
                 <button type="button" onClick={handleReset} className="buttons">
                     Reset
                 </button>

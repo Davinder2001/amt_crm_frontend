@@ -3,7 +3,7 @@
 import React from 'react';
 
 interface FormSelectProps<T> {
-  label: string;
+  label?: string;
   name: string;
   value: T;
   onChange: (value: T) => void;
@@ -22,7 +22,7 @@ export const FormSelect = <T extends string | number>({
   className = '',
 }: FormSelectProps<T>) => (
   <div className={`add-items-form-input-label-container ${className}`}>
-    <label>{label}</label>
+    <label>{label || ''}</label>
     <select
       name={name}
       value={value}

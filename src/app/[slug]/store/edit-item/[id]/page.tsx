@@ -13,7 +13,7 @@ const UpdateItem = () => {
   const { companySlug } = useCompany();
   const router = useRouter();
   const { data: item, isLoading: isItemLoading } = useFetchStoreItemQuery(Number(id));
-  const [updateStoreItem, {isLoading : isUpdating}] = useUpdateStoreItemMutation();
+  const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
 
@@ -36,6 +36,7 @@ const UpdateItem = () => {
     images: [],
     variants: [],
     categories: [],
+    featured_image: null
   })
 
   const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
@@ -74,6 +75,7 @@ const UpdateItem = () => {
         images: Array.isArray(item.images) ? item.images : [],
         variants: item.variants || [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
+        featured_image: item.featured_image ?? null
       };
       setFormData(initialData);
       setOriginalItemData(initialData);
@@ -194,6 +196,10 @@ const UpdateItem = () => {
     const newImages = formData.images.filter((img) => img instanceof File);
     if (newImages.length > 0) {
       newImages.forEach((img) => formdata.append('images[]', img));
+    }
+
+    if (formData.featured_image instanceof File) {
+      formdata.append('featured_image', formData.featured_image);
     }
 
     // Add the removed images to the form data

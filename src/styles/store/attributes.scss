@@ -1,5 +1,20 @@
   @use '../variables' as *;
 
+  .variations-count {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background-color: green;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-weight: bold;
+    line-height: 1;
+    min-width: 20px;
+    text-align: center;
+  }
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -72,36 +87,27 @@
   }
 
   .tabs-sidebar {
-    width: 250px;
-    border-right: 1px solid #eee;
     display: flex;
-    flex-direction: column;
-    box-shadow: $box-shadow;
-
+    gap: 10px;
   }
 
   .tab-button {
-    padding: 15px 0px 15px 20px;
+    padding: 5px 10px;
     background: none;
+    border-radius: $border-radius;
     border: none;
     text-align: left;
     cursor: pointer;
     font-weight: 500;
-    margin-bottom: 6px;
     transition: background 0.2s;
-    font-size: 18px;
-  }
-
-  .tab-button:hover {
-    background-color: #f1f9f9;
-    border-right: 3px solid var(--primary-color);
+    font-size: 15px;
+    position: relative;
   }
 
   .tab-button.active {
     background-color: #f1f9f9;
     font-weight: 500;
     color: var(--primary-color);
-    border-right: 3px solid var(--primary-color);
   }
 
   .tab-content {
@@ -109,20 +115,17 @@
     min-height: 0px;
     max-height: 500px;
     width: 100%;
-    padding: 10px;
+
+    .add-attribute-button-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
 
     input,
     select {
       width: 100%;
     }
-  }
-
-  .variation-block {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
   }
 
   .remove-button {
@@ -385,13 +388,20 @@
 
 
   .add-Another-value-btn {
-    background-color: var(--primary-color);
-    color: #fff;
-    border-radius: 6px;
-    padding: .5rem;
-    font-weight: 500;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f0fdf4;
+    color: $primary-color;
+    border: 1px dashed $primary-color;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken(#f0fdf4, 2%);
+    }
   }
 
   .submit-btn {
@@ -416,193 +426,113 @@
     cursor: pointer;
   }
 
+  /* Attributes Table */
   .attributes-table {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 15px;
-    margin-top: 2rem;
-  }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
 
-  .attributes-table tr,
-  .attributes-table td,
-  .attributes-table th {
-    display: block;
-  }
+    .attribute-card {
+      background: white;
+      border: 1px solid #f3f4f6;
+      border-radius: $border-radius;
+      padding: 10px;
+      box-shadow: $box-shadow;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: all 0.2s ease;
+      position: relative;
 
-  .attributes-table tbody {
-    display: contents;
-  }
+      h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: $dark-color;
+        text-transform: capitalize;
+        margin-right: 2rem;
+      }
 
-  .attribute-card {
-    background: white;
-    border: 1px solid #fafafa;
-    border-radius: 10px;
-    padding: 1.2rem 1.2rem 1rem 1.2rem;
-    box-shadow: $box-shadow;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: all 0.2s ease-in-out;
-    position: relative;
-    justify-content: space-between;
+      .values {
+        font-size: 0.9rem;
+        color: #4b5563;
+        line-height: 1.5;
+        text-transform: capitalize;
+      }
 
-    .delete-btn {
-      background-color: unset;
-      color: var(--primary-color);
-      border: none;
-      padding: 0.6rem 0.75rem;
-      font-size: 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      align-self: flex-start;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
+      .selector-and-active-inactive-outer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
 
-    .delete-btn:hover {
-      color: $danger-color;
-      font-size: 1rem;
+        .status-pill {
+          border-radius: 9999px;
+          padding: 5px 10px;
+          font-size: 10px;
+          font-weight: 600;
+          text-transform: capitalize;
+        }
 
-    }
+        .active-option {
+          background-color: #dcfce7;
+          color: #166534;
+        }
 
-  }
+        .inactive-option {
+          background-color: #fee2e2;
+          color: #991b1b;
+        }
 
+        .toggle-switch {
+          width: 32px;
+          height: 14px;
+          background-color: #e5e7eb;
+          border-radius: 10px;
+          position: relative;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
 
+          &.active {
+            background-color: $primary-color;
+          }
 
-  .attribute-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: black;
-    text-transform: capitalize;
-  }
+          .toggle-thumb {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            right: 0;
+            transition: transform 0.2s ease;
+          }
 
-  .attribute-card .values {
-    font-size: 1rem;
-    color: #4b5563;
-    text-transform: capitalize
-  }
+          &.active .toggle-thumb {
+            transform: translateX(0);
+          }
+        }
+      }
 
-  .status-pill {
-    border-radius: 9999px;
-    width: fit-content;
-    padding: 4px 10px;
-    font-size: .75rem;
-    font-weight: 600;
-  }
+      .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0.25rem;
+        border-radius: 4px;
 
-  .active-option,
-  .inactive-option {
-    text-transform: capitalize;
-  }
-
-  .active-option {
-    background-color: #b4e8c6;
-    color: #0f4624;
-  }
-
-  .inactive-option {
-    background-color: #fee2e2;
-    color: $danger-color;
-  }
-
-  .selector-and-active-inactive-outer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .status-select {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 0.2rem;
-    width: fit-content;
-    background: white;
-  }
-
-
-
-  .toggle-switch {
-    width: 42px;
-    height: 19px;
-    background-color: #e5e7eb;
-    border-radius: 20px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    display: flex;
-    align-items: center;
-    padding: 0 3px;
-  }
-
-  .toggle-switch.active {
-    background-color: var(--primary-color);
-    /* green-400 */
-  }
-
-  .toggle-switch.inactive {
-    background-color: #e5e7eb;
-    /* red-400 */
-  }
-
-  .toggle-thumb {
-    width: 16px;
-    height: 16px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    transition: transform 0.2s ease-in-out;
-  }
-
-  .toggle-switch.active .toggle-thumb {
-    transform: translateX(24px);
-    right: 26px;
-    left: 2px;
-  }
-
-
-  .floting-attributes-button {
-    transition: transform .3s ease-in-out;
-    position: absolute;
-    /* bottom: 151px; */
-    right: 18px;
-    padding: 13px !important;
-    font-size: 24px !important;
-    top: 18px;
-  }
-
-  .floting-attributes-button svg:hover {
-    animation: rotateFan 0.5s infinite;
-    /* Fast rotation */
-    cursor: pointer;
-  }
-
-  @keyframes rotateFan {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    25% {
-      transform: rotate(90deg);
-    }
-
-    50% {
-      transform: rotate(180deg);
-    }
-
-    75% {
-      transform: rotate(270deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
+        &:hover {
+          color: $primary-color;
+        }
+      }
     }
   }
-
-
-
-
-  // tabs-sidebar styling starts here
 
 
 
@@ -641,14 +571,6 @@
     .tab-button.active {
       border-right: unset;
       border-bottom: 3px solid var(--primary-color);
-    }
-
-
-    .floting-attributes-button {
-      position: unset;
-      padding: 10px !important;
-      cursor: pointer;
-
     }
 
     .add-attribute-button-container {

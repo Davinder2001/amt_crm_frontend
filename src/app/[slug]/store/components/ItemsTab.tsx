@@ -2,7 +2,7 @@
 import React, { useState, ReactNode } from 'react';
 import { FaBox, FaTag } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
-import Variations from '../add-item/Variations';
+import Variations from './Variations';
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
@@ -38,7 +38,7 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants }) => {
     return (
         <>
             <div className="tabs-container">
-                <div className="variation-tabs-header">
+                <div className="basic_label_header">
                     <h2 className="basic_label">Attributes & Variations</h2>
                     <aside className="tabs-sidebar">
                         {tabs.map(tab => (
@@ -54,7 +54,7 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants }) => {
                     </aside>
                 </div>
 
-                <section className="tab-content">
+                <section className="tab-content fields-wrapper">
                     {tabs.find(tab => tab.key === activeTab)?.content}
                 </section>
             </div>

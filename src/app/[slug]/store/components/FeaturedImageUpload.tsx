@@ -31,7 +31,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
                         alt="Featured"
                         className="preview-img"
                         width={400}
-                        height={150}
+                        height={200}
                         style={{ objectFit: 'cover', borderRadius: '8px', width: '100%' }}
                         unoptimized={typeof featuredImage !== 'string'}
                     />
@@ -62,17 +62,16 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 1rem;
           border: 2px dashed #cddcdc;
-          border-radius: 10px;
+          border-radius: 5px;
           background-color: #f9ffff;
           cursor: pointer;
           transition: 0.3s ease;
-          margin-top: 20px;
         }
 
         .upload-box {
           text-align: center;
+          padding: 1rem;
         }
 
         .upload-box p {
@@ -89,7 +88,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
         .preview-img {
           width: 100%;
           height: auto;
-          max-height: 280px;
+          max-height: 200px;
           object-fit: cover;
           border-radius: 8px;
         }

@@ -10,7 +10,6 @@ import {
   Button,
   Checkbox,
   CircularProgress,
-  InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
@@ -19,7 +18,7 @@ import {
   Typography,
   Collapse
 } from '@mui/material';
-import { FaSearch, FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash } from 'react-icons/fa';
 
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
@@ -45,7 +44,6 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   const [selectedCategoriesIds, setSelectedCategoriesIds] = useState<number[]>([]);
   const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
   const [name, setName] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
 
@@ -139,12 +137,12 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     setHasChanges(false);
   };
 
-  // Filter categories based on search term
-  const filteredCategories = (data?.data?.filter(category =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.children?.some(child =>
-      child.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )) || []);
+  // Sync deselected categories to parent when none are selected
+  useEffect(() => {
+    if (selectedCategoriesIds.length === 0 && hasChanges) {
+      setSelectedCategories([]);
+    }
+  }, [selectedCategoriesIds, hasChanges, setSelectedCategories]);
 
   // Render category tree
   const renderCategory = (category: CategoryNode) => {
@@ -161,14 +159,14 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       >
         <ListItemButton
           onClick={() => handleExpand(category.id)}
-          sx={{ pl: category.parent_id ? 4 : 2 }}
+          sx={{ pl: category.parent_id ? 4 : 0, py: 0, minHeight: 30, }}
         >
           {hasChildren && (
-            <ListItemIcon sx={{ minWidth: 32 }}>
-              {isExpanded ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />}
+            <ListItemIcon sx={{ maxWidth: 24, width: '100%', minWidth: 0 }}>
+              {isExpanded ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />}
             </ListItemIcon>
           )}
-          {!hasChildren && <Box sx={{ width: 32 }} />}
+          {!hasChildren && <Box sx={{ maxWidth: 24, width: '100%', minWidth: 0 }} />}
           <Checkbox
             edge="start"
             checked={isSelected}
@@ -176,17 +174,17 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             tabIndex={-1}
             disableRipple
             sx={{
-              color: '#009693',
+              color: '#384b70',
               '&.Mui-checked': {
-                color: '#009693',
+                color: '#384b70',
               },
             }}
           />
-          <ListItemText primary={category.name} className='category-name'/>
+          <ListItemText primary={category.name} className='category-name' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <FaTrash
-              size={14}
-              color="#009693"
+              size={12}
+              color="#384b70"
               style={{ marginLeft: 'auto', cursor: 'pointer' }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -229,11 +227,11 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           onClick={() => {
             handleExpand(category.id);
           }}
-          sx={{ pl: category.parent_id ? 4 : 2 }}
+          sx={{ pl: category.parent_id ? 4 : 0, py: 0, minHeight: 30, }}
         >
-          <ListItemIcon sx={{ minWidth: 32 }}>
+          <ListItemIcon sx={{ maxWidth: 24, width: '100%', minWidth: 0 }}>
             {hasChildren ? (
-              isExpanded ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />
+              isExpanded ? <FaChevronDown size={12} /> : <FaChevronRight size={12} />
             ) : null}
           </ListItemIcon>
 
@@ -248,17 +246,17 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             tabIndex={-1}
             disableRipple
             sx={{
-              color: '#009693',
+              color: '#384b70',
               '&.Mui-checked': {
-                color: '#009693',
+                color: '#384b70',
               },
             }}
           />
-          <ListItemText primary={category.name} className='category-name'/>
+          <ListItemText primary={category.name} className='category-name' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <FaTrash
-              size={14}
-              color="#009693"
+              size={12}
+              color="#384b70"
               style={{ marginLeft: 'auto', cursor: 'pointer' }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -290,142 +288,173 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     <Box sx={{ width: '100%' }}>
       {!isCreatingNewCategory ? (
         <>
-          <h2 className="basic_label">Categories:</h2>
-          <hr />
+          <div className="basic_label_header">
+            <h2 className="basic_label">Categories:</h2>
+          </div>
 
-          <TextField
-            variant="outlined"
-            placeholder="Search categories..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FaSearch color="#009693" />
-                </InputAdornment>
-              ),
-              sx: {
-                height: 40,
-                paddingRight: 1,
-              },
-            }}
-            sx={{
-              maxWidth: 500,
-              width: '100%',
-              mb: 2,
-              '& .MuiOutlinedInput-root.Mui-focused': {
-                '& fieldset': {
-                  borderColor: '#009693',
-                },
-              },
-            }}
-          />
-
-          {isLoading ? (
-            <Box display="flex" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          ) : filteredCategories.length === 0 ? (
-            <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
-              No categories found
-            </Typography>
-          ) : (
-            <List sx={{ maxHeight: 400, overflow: 'auto' }}>
-              {filteredCategories.map(renderCategory)}
-            </List>
-          )}
-
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              variant="outlined"
-              startIcon={<FaPlus />}
-              onClick={() => setIsCreatingNewCategory(true)}
-              sx={{ borderColor: '#009693', color: '#009693', '&:hover': { backgroundColor: '#e0f7f6' } }}
-            >
-              Create New
-            </Button>
-            {hasChanges && (
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<FaCheck />}
-                onClick={handleDoneClick}
-                sx={{ backgroundColor: '#009693', '&:hover': { backgroundColor: '#007c7a' } }}
-              >
-                Done
-              </Button>
+          <div className="fields-wrapper">
+            {isLoading ? (
+              <Box display="flex" justifyContent="center">
+                <CircularProgress />
+              </Box>
+            ) : data?.data.length === 0 ? (
+              <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
+                No categories found
+              </Typography>
+            ) : (
+              <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+                {data?.data.map(renderCategory)}
+              </List>
             )}
-          </Box>
+
+            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+              <Button
+                variant="outlined"
+                startIcon={<FaPlus size={12} />}
+                onClick={() => setIsCreatingNewCategory(true)}
+                sx={{
+                  borderColor: '#384b70',
+                  color: '#384b70',
+                  fontSize: '0.75rem',
+                  py: 0.5,
+                  px: 1.5,
+                  minHeight: '30px',
+                  '&:hover': { backgroundColor: '#e0f7f6' },
+                }}
+              >
+                Create New
+              </Button>
+
+              {hasChanges && selectedCategoriesIds.length > 0 && (
+                <>
+                  <Button
+                    variant="outlined"
+                    startIcon={<FaTimes size={12} />}
+                    onClick={() => {
+                      setHasChanges(false);
+                      setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
+                    }}
+                    sx={{
+                      borderColor: '#384b70',
+                      color: '#384b70',
+                      fontSize: '0.75rem',
+                      py: 0.5,
+                      px: 1.5,
+                      minHeight: '30px',
+                      '&:hover': { backgroundColor: '#e0f7f6' },
+                    }}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<FaCheck size={12} />}
+                    onClick={handleDoneClick}
+                    sx={{
+                      backgroundColor: '#384b70',
+                      fontSize: '0.75rem',
+                      py: 0.5,
+                      px: 1.5,
+                      minHeight: '30px',
+                      '&:hover': { backgroundColor: '#007c7a' },
+                    }}
+                  >
+                    Done
+                  </Button>
+                </>
+              )}
+            </Box>
+          </div>
         </>
       ) : (
         <>
-          <h2 className="basic_label"> Create New Category:</h2>
-          <hr />
-
-          <TextField
-            fullWidth
-            label="Category Name"
-            variant="outlined"
-            size="small"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            InputLabelProps={{
-              sx: {
-                color: '#009693',
-                '&.Mui-focused': {
-                  color: '#009693',
-                },
-              },
-            }}
-            InputProps={{
-              sx: {
-                paddingRight: 1,
-              },
-            }}
-            sx={{
-              maxWidth: 500,
-              width: '100%',
-              mb: 2,
-              '& .MuiOutlinedInput-root.Mui-focused': {
-                '& fieldset': {
-                  borderColor: '#009693',
-                },
-              },
-            }}
-          />
-
-          <Typography variant="subtitle1" gutterBottom>
-            Parent Category (optional)
-          </Typography>
-
-          {isLoading ? (
-            <CircularProgress />
-          ) : (
-            <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
-              {data?.data?.map(renderParentOptions)}
-            </List>
-          )}
-
-          <Box display="flex" justifyContent="flex-end" gap={1}>
-            <Button
+          <div className="basic_label_header">
+            <h2 className="basic_label"> Create New Category:</h2>
+          </div>
+          <div className="fields-wrapper">
+            <TextField
+              fullWidth
+              label="Category Name"
               variant="outlined"
-              startIcon={<FaTimes />}
-              onClick={() => setIsCreatingNewCategory(false)}
-              sx={{ borderColor: '#009693', color: '#009693', '&:hover': { backgroundColor: '#e0f7f6' } }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<FaCheck />}
-              onClick={handleSubmit}
-              disabled={isCreating || !name.trim()}
-              sx={{ backgroundColor: '#009693', '&:hover': { backgroundColor: '#007c7a' } }}
-            >
-              {isCreating ? 'Creating...' : 'Create'}
-            </Button>
-          </Box>
+              size="small"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              InputLabelProps={{
+                sx: {
+                  color: '#384b70',
+                  '&.Mui-focused': {
+                    color: '#384b70',
+                  },
+                },
+              }}
+              InputProps={{
+                sx: {
+                  paddingRight: 1,
+                },
+              }}
+              sx={{
+                maxWidth: 500,
+                width: '100%',
+                mb: 2,
+                '& .MuiOutlinedInput-root.Mui-focused': {
+                  '& fieldset': {
+                    borderColor: '#384b70',
+                  },
+                },
+              }}
+            />
+
+            <Typography variant="subtitle1" gutterBottom>
+              select Parent Category (optional)
+            </Typography>
+
+            {isLoading ? (
+              <CircularProgress />
+            ) : (
+              <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
+                {data?.data?.map(renderParentOptions)}
+              </List>
+            )}
+
+            <Box display="flex" justifyContent="flex-end" gap={1} mt={2} flexWrap="wrap">
+              <Button
+                variant="outlined"
+                startIcon={<FaTimes size={12} />}
+                onClick={() => setIsCreatingNewCategory(false)}
+                sx={{
+                  borderColor: '#384b70',
+                  color: '#384b70',
+                  fontSize: '0.75rem',
+                  py: 0.5,
+                  px: 1.5,
+                  minHeight: '30px',
+                  '&:hover': { backgroundColor: '#e0f7f6' },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<FaCheck size={12} />}
+                onClick={handleSubmit}
+                disabled={isCreating || !name.trim()}
+                sx={{
+                  backgroundColor: '#384b70',
+                  fontSize: '0.75rem',
+                  py: 0.5,
+                  px: 1.5,
+                  minHeight: '30px',
+                  '&:hover': { backgroundColor: '#007c7a' },
+                }}
+              >
+                {isCreating ? 'Creating...' : 'Create'}
+              </Button>
+            </Box>
+
+          </div>
         </>
       )}
     </Box>

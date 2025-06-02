@@ -86,15 +86,6 @@
     background-color: #d5d5d5;
   }
 
-  .variation-tabs-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid #d5d5d5;
-    padding-bottom: 10px;
-  }
-
   .tabs-sidebar {
     display: flex;
     gap: 10px;
@@ -124,7 +115,12 @@
     min-height: 0px;
     max-height: 500px;
     width: 100%;
-    padding: 10px;
+
+    .add-attribute-button-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
 
     input,
     select {
@@ -392,13 +388,20 @@
 
 
   .add-Another-value-btn {
-    background-color: var(--primary-color);
-    color: #fff;
-    border-radius: 6px;
-    padding: .5rem;
-    font-weight: 500;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f0fdf4;
+    color: $primary-color;
+    border: 1px dashed $primary-color;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken(#f0fdf4, 2%);
+    }
   }
 
   .submit-btn {
@@ -423,148 +426,112 @@
     cursor: pointer;
   }
 
+  /* Attributes Table */
   .attributes-table {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 15px;
-    margin-top: 2rem;
-  }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
 
-  .attributes-table tr,
-  .attributes-table td,
-  .attributes-table th {
-    display: block;
-  }
+    .attribute-card {
+      background: white;
+      border: 1px solid #f3f4f6;
+      border-radius: $border-radius;
+      padding: 10px;
+      box-shadow: $box-shadow;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: all 0.2s ease;
+      position: relative;
 
-  .attributes-table tbody {
-    display: contents;
-  }
+      h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: $dark-color;
+        text-transform: capitalize;
+        margin-right: 2rem;
+      }
 
-  .attribute-card {
-    background: white;
-    border: 1px solid #fafafa;
-    border-radius: 10px;
-    padding: 1.2rem 1.2rem 1rem 1.2rem;
-    box-shadow: $box-shadow;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: all 0.2s ease-in-out;
-    position: relative;
-    justify-content: space-between;
+      .values {
+        font-size: 0.9rem;
+        color: #4b5563;
+        line-height: 1.5;
+        text-transform: capitalize;
+      }
 
-    .delete-btn {
-      background-color: unset;
-      color: var(--primary-color);
-      border: none;
-      padding: 0.6rem 0.75rem;
-      font-size: 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      align-self: flex-start;
-      position: absolute;
-      right: 0;
-      top: 0;
+      .selector-and-active-inactive-outer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+
+        .status-pill {
+          border-radius: 9999px;
+          padding: 5px 10px;
+          font-size: 10px;
+          font-weight: 600;
+          text-transform: capitalize;
+        }
+
+        .active-option {
+          background-color: #dcfce7;
+          color: #166534;
+        }
+
+        .inactive-option {
+          background-color: #fee2e2;
+          color: #991b1b;
+        }
+
+        .toggle-switch {
+          width: 32px;
+          height: 14px;
+          background-color: #e5e7eb;
+          border-radius: 10px;
+          position: relative;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+
+          &.active {
+            background-color: $primary-color;
+          }
+
+          .toggle-thumb {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 1px;
+            right: 0;
+            transition: transform 0.2s ease;
+          }
+
+          &.active .toggle-thumb {
+            transform: translateX(0);
+          }
+        }
+      }
+
+      .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0.25rem;
+        border-radius: 4px;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
     }
-
-    .delete-btn:hover {
-      color: $danger-color;
-      font-size: 1rem;
-
-    }
-
-  }
-
-
-
-  .attribute-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: black;
-    text-transform: capitalize;
-  }
-
-  .attribute-card .values {
-    font-size: 1rem;
-    color: #4b5563;
-    text-transform: capitalize
-  }
-
-  .status-pill {
-    border-radius: 9999px;
-    width: fit-content;
-    padding: 4px 10px;
-    font-size: .75rem;
-    font-weight: 600;
-  }
-
-  .active-option,
-  .inactive-option {
-    text-transform: capitalize;
-  }
-
-  .active-option {
-    background-color: #b4e8c6;
-    color: #0f4624;
-  }
-
-  .inactive-option {
-    background-color: #fee2e2;
-    color: $danger-color;
-  }
-
-  .selector-and-active-inactive-outer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .status-select {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 0.2rem;
-    width: fit-content;
-    background: white;
-  }
-
-
-
-  .toggle-switch {
-    width: 42px;
-    height: 19px;
-    background-color: #e5e7eb;
-    border-radius: 20px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    display: flex;
-    align-items: center;
-    padding: 0 3px;
-  }
-
-  .toggle-switch.active {
-    background-color: var(--primary-color);
-    /* green-400 */
-  }
-
-  .toggle-switch.inactive {
-    background-color: #e5e7eb;
-    /* red-400 */
-  }
-
-  .toggle-thumb {
-    width: 16px;
-    height: 16px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    transition: transform 0.2s ease-in-out;
-  }
-
-  .toggle-switch.active .toggle-thumb {
-    transform: translateX(24px);
-    right: 26px;
-    left: 2px;
   }
 
 

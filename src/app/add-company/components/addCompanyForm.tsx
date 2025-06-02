@@ -106,7 +106,7 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
       if (formData.business_proof_front) payload.append('business_proof_front', formData.business_proof_front);
       if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
 
-const response = await orderNewCompany(payload).unwrap();
+      const response = await orderNewCompany(payload).unwrap();
 
       localStorage.setItem("addCompany", JSON.stringify({ ...formData, order_id: response.orderId }));
 

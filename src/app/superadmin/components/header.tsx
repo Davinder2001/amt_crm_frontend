@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FaRegBell, FaBars } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
@@ -19,7 +18,6 @@ interface headerProps {
 
 const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
   const { companySlug, userType } = useCompany();
-  const { title } = useBreadcrumb();
   const router = useRouter();
 
   // State to manage sticky class
@@ -73,7 +71,6 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         />
       )}
       {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
-      <h1 className="header-title">{title}</h1>
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
 

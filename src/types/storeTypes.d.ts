@@ -73,7 +73,7 @@ interface AttributeOption {
 interface variations {
   attribute_value_id: number;
   id?: number;
-  regular_price?: number;
+  regular_price: number;
   price: number;
   stock?: number;
   images?: string[];

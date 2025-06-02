@@ -1,5 +1,26 @@
 @use '../variables' as *;
 
+
+.custom_header_hr {
+.MuiTab-root {
+    background: #dee9f2;
+    color: #656464;
+    margin-right: 6px;
+
+  }
+  .Mui-selected {
+    background: #384b70 !important;
+    border-bottom-color: #f8f7fa !important;
+    color: white !important;
+}
+
+}
+.css-1muzjf8 {
+  border :none !important;
+  margin-bottom: 0px !important;
+}
+
+
 .hr_navigation {
   display: flex;
   gap: 15px;

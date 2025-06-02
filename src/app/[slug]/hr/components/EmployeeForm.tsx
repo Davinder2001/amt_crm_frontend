@@ -535,7 +535,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
     return (
         <div>
-            <div className="add-item-header">
+            <div className="add-item-header custom_header_hr">
                 <Link href={`/${companySlug}/hr`} className='back-button'>
                     <FaArrowLeft size={16} color='#fff' />
                 </Link>
@@ -548,12 +548,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                     }}
                     variant="scrollable"
                     scrollButtons="auto"
-                    style={{ backgroundColor: '#f1f9f9' }}
+                    style={{ backgroundColor: '$primary-color' }}
                     sx={{
                         '& .MuiTab-root': {
-                            color: '#009693',
+                            color: '$light-color',
                             '&.Mui-disabled': { color: '#ccc' },
-                            '&.Mui-selected': { color: '#009693' },
+                            '&.Mui-selected': { color: '#' },
                         },
                         '& .MuiTabs-indicator': { backgroundColor: '#009693' },
                     }}

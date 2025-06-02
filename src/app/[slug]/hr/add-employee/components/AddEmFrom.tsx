@@ -300,7 +300,7 @@ const validateTab = useCallback((index: number): boolean => {
   return (
     <div>
 
-      <div className="add-item-header">
+      <div className="add-item-header ">
         <Link href={`/${companySlug}/hr`} className='back-button'>
           <FaArrowLeft size={16} color='#fff' />
         </Link>

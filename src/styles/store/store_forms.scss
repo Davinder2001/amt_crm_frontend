@@ -170,20 +170,33 @@
     box-shadow: $box-shadow;
     padding-bottom: 20px;
 
-  .store_input_feilds {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 70px;
-    row-gap: 20px;
-}
+    .store_input_feilds {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 20px;
+    }
 
-h2.basic_label {
-    font-size: 18px;
-    margin-bottom: 11px;
-    color: rgba(128, 129, 130, 1);
-    font-family: 'DMSans';
-    font-weight: 300;
-}
+    .fields-wrapper {
+      padding: 12px 20px;
+
+    }
+
+
+    .basic_label_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 20px;
+      border-bottom: 1px solid #D9D9D9;
+
+      h2 {
+        font-size: 18px;
+        color: rgba(128, 129, 130, 1);
+        font-family: 'DMSans';
+        font-weight: 300;
+      }
+    }
 
 
     .add-items-form-container hr {
@@ -279,7 +292,7 @@ h2.basic_label {
     h1 {
       font-size: 34px;
       font-weight: $font-weight-bold;
-      color: $primary-color;
+      color: var(--primary-color);
       margin-bottom: 0.5rem;
     }
 
@@ -311,21 +324,22 @@ h2.basic_label {
         color: $dark-color;
 
         .input-icon {
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
 
       .form-input {
         width: 100%;
         padding: 0.75rem 1rem;
-        border: 1px solid $hover-color;
+        border: 1px solid 1px solid #00969357;
         border-radius: $border-radius;
         font-size: $font-size;
         transition: $transition;
 
         &:focus {
           outline: none;
-          border-color: $primary-color;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
         }
 
         &::placeholder {
@@ -354,7 +368,7 @@ h2.basic_label {
     align-items: center;
 
     .primary-button {
-      background:$primary-color;
+      background: var(--primary-color);
       color: $white;
       border: none;
       padding: 0.75rem 2rem;
@@ -367,7 +381,7 @@ h2.basic_label {
       gap: 0.5rem;
 
       &:hover:not(:disabled) {
-        background: $hover-color;
+        background: rgba(var(--primary-color), 5%);
         transform: translateY(-2px);
         box-shadow: $secondary-shadow;
       }
@@ -426,18 +440,18 @@ h2.basic_label {
         gap: 5px;
 
         svg {
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
 
       input {
-        border: 1px solid $hover-color;
+        border: 1px solid #00969357;
         padding: 9px;
         width: 100%;
         border-radius: 5px;
 
         &:focus {
-          border-color: $primary-color;
+          border-color: var(--primary-color);
           background: #ffffff;
           transform: scale(1);
         }
@@ -459,7 +473,7 @@ h2.basic_label {
 
     label.file-upload-button {
       padding: 9px 12px;
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       border-radius: 50px;
       color: white;
       display: flex;
@@ -512,19 +526,19 @@ h2.basic_label {
       color: #333;
 
       svg {
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
 
     input {
       padding: 9px;
-      border: 1px solid $hover-color;
+      border: 1px solid #00969357;
       border-radius: 5px;
       width: 100%;
       margin-top: 5px;
 
       &:focus {
-        border-color: $primary-color;
+        border-color: var(--primary-color);
         background: #ffffff;
         transform: scale(1);
       }
@@ -568,7 +582,7 @@ h2.basic_label {
   }
 
   input[type='checkbox']:checked+.box {
-    border-color: $primary-color;
+    border-color: var(--primary-color);
 
     &::after {
       content: '';
@@ -577,7 +591,7 @@ h2.basic_label {
       left: 3px;
       width: 10px;
       height: 10px;
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       border-radius: 2px;
       transition: all 0.2s ease-in-out;
     }
@@ -591,7 +605,7 @@ h2.basic_label {
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid $primary-color;
+  border: 1px solid var(--primary-color);
   padding-left: 10px;
   margin: 0px 20px 20px 20px;
   border-radius: 5px;

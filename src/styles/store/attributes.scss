@@ -396,7 +396,7 @@
     border: 1px dashed $primary-color;
     padding: 0.65rem 1rem;
     font-size: 0.9rem;
-    border-radius: 8px;
+    border-radius: $border-radius;
     transition: all 0.2s ease;
 
     &:hover {
@@ -504,7 +504,7 @@
             border-radius: 50%;
             position: absolute;
             top: 1px;
-            right: 0;
+            right: 1px;
             transition: transform 0.2s ease;
           }
 

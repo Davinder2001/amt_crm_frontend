@@ -43,7 +43,7 @@ const Page = () => {
       <div className="vendor-details-page">
         <div className="vendor-card">
           <div className="vendor-header">
-            <h2 className="vendor-title">Vendor Details</h2>
+            <h1 className="vendor-title"> Vendor Details </h1>
             <div className='view-vendor-action-button-outter'>
               <button
                 className="edit-button"
@@ -66,10 +66,11 @@ const Page = () => {
           </div>
 
           <div className="vendor-info">
-            <p><strong>ID:</strong> {vendor.id}</p>
-            <p><strong>Name:</strong> {vendor.name}</p>
-            <p><strong>Email:</strong> {vendor.email}</p>
-            <p><strong>Address:</strong> {vendor.address}</p>
+            <p><strong>ID:</strong>  {vendor.id}</p>
+            <p><strong>Name:</strong>  {vendor.name}</p>
+            <p><strong>Email:</strong>  {vendor.email}</p>
+            <p><strong>Address:</strong>  {vendor.address}</p>
+            <p><strong>Number:</strong>  {vendor.number}</p>
           </div>
         </div>
       </div>

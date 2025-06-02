@@ -10,9 +10,6 @@ import { useCompany } from '@/utils/Company';
 import { FaArrowLeft, FaEdit, FaInfoCircle, FaMoneyBillWave, FaTags, FaTrash } from 'react-icons/fa';
 import { BsGearWideConnected } from 'react-icons/bs';
 
-
-
-
 const ViewItem = () => {
   const { id } = useParams();
   const { data: item, error, isLoading } = useFetchStoreItemQuery(Number(id));
@@ -81,8 +78,8 @@ const ViewItem = () => {
             <InfoCard icon={FaInfoCircle} title="Basic Info" className="info-card info-card-blue" data={[
               { label: 'Name', value: item.name },
               { label: 'Item code', value: item.item_code },
-              { label: 'Quantity', value: item.quantity_count },
-              { label: 'Stock', value: item.availability_stock },
+              { label: 'New Stock Added', value: item.quantity_count },
+              { label: 'Available Stock', value: item.availability_stock },
               { label: 'Measurement', value: item.measurement || '-' },
               { label: 'Purchase Date', value: item.purchase_date || '-' }
             ]} />

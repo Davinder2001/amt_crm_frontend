@@ -120,7 +120,7 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/store`} className='back-button'>
+      <Link href={`/${companySlug}/store/vendors`} className='back-button'>
         <FaArrowLeft size={20} color='#fff' />
       </Link>
 
@@ -206,7 +206,7 @@ const Page = () => {
               <div className="input-with-label">
                 <label><FaHashtag /> Quantity</label>
                 <input
-                  placeholder="Quantity"
+                  placeholder=""
                   value={newItem.quantity}
                   onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
                 />

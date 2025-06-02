@@ -162,36 +162,36 @@
     box-shadow: $box-shadow;
     padding-bottom: 40px;
 
-  .store_input_feilds {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 70px;
-    row-gap: 20px;
-}
+    .store_input_feilds {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 70px;
+      row-gap: 20px;
+    }
 
-h2.basic_label {
-    font-size: 18px;
-    margin-bottom: 11px;
-    color: rgba(128, 129, 130, 1);
-    font-family: 'DMSans';
-    font-weight: 300;
-}
-
-
-.add-items-form-container hr {
-    margin-bottom: 25px;
-    border: 0.5px solid rgba(217, 217, 217, 1);
-    border-style: dotted;
-}
-
-input::placeholder {
-    color: grey;
-    font-size: 14px;
-    text-transform: unset;
-}
+    h2.basic_label {
+      font-size: 18px;
+      margin-bottom: 11px;
+      color: rgba(128, 129, 130, 1);
+      font-family: 'DMSans';
+      font-weight: 300;
+    }
 
 
-}
+    .add-items-form-container hr {
+      margin-bottom: 25px;
+      border: 0.5px solid rgba(217, 217, 217, 1);
+      border-style: dotted;
+    }
+
+    input::placeholder {
+      color: grey;
+      font-size: 14px;
+      text-transform: unset;
+    }
+
+
+  }
 
 
   .add-items-form-input-label-container {
@@ -266,7 +266,7 @@ input::placeholder {
     h1 {
       font-size: 34px;
       font-weight: $font-weight-bold;
-      color: var(--primary-color);
+      color: $primary-color;
       margin-bottom: 0.5rem;
     }
 
@@ -298,22 +298,21 @@ input::placeholder {
         color: $dark-color;
 
         .input-icon {
-          color: var(--primary-color);
+          color: $primary-color;
         }
       }
 
       .form-input {
         width: 100%;
         padding: 0.75rem 1rem;
-        border: 1px solid 1px solid #00969357;
+        border: 1px solid $hover-color;
         border-radius: $border-radius;
         font-size: $font-size;
         transition: $transition;
 
         &:focus {
           outline: none;
-          border-color: var(--primary-color);
-          box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
+          border-color: $primary-color;
         }
 
         &::placeholder {
@@ -342,7 +341,7 @@ input::placeholder {
     align-items: center;
 
     .primary-button {
-      background: var(--primary-color);
+      background:$primary-color;
       color: $white;
       border: none;
       padding: 0.75rem 2rem;
@@ -355,7 +354,7 @@ input::placeholder {
       gap: 0.5rem;
 
       &:hover:not(:disabled) {
-        background: rgba(var(--primary-color), 5%);
+        background: $hover-color;
         transform: translateY(-2px);
         box-shadow: $secondary-shadow;
       }
@@ -414,18 +413,18 @@ input::placeholder {
         gap: 5px;
 
         svg {
-          color: var(--primary-color);
+          color: $primary-color;
         }
       }
 
       input {
-        border: 1px solid #00969357;
+        border: 1px solid $hover-color;
         padding: 9px;
         width: 100%;
         border-radius: 5px;
 
         &:focus {
-          border-color: var(--primary-color);
+          border-color: $primary-color;
           background: #ffffff;
           transform: scale(1);
         }
@@ -447,7 +446,7 @@ input::placeholder {
 
     label.file-upload-button {
       padding: 9px 12px;
-      background-color: var(--primary-color);
+      background-color: $primary-color;
       border-radius: 50px;
       color: white;
       display: flex;
@@ -500,19 +499,19 @@ input::placeholder {
       color: #333;
 
       svg {
-        color: var(--primary-color);
+        color: $primary-color;
       }
     }
 
     input {
       padding: 9px;
-      border: 1px solid #00969357;
+      border: 1px solid $hover-color;
       border-radius: 5px;
       width: 100%;
       margin-top: 5px;
 
       &:focus {
-        border-color: var(--primary-color);
+        border-color: $primary-color;
         background: #ffffff;
         transform: scale(1);
       }
@@ -556,7 +555,7 @@ input::placeholder {
   }
 
   input[type='checkbox']:checked+.box {
-    border-color: var(--primary-color);
+    border-color: $primary-color;
 
     &::after {
       content: '';
@@ -565,7 +564,7 @@ input::placeholder {
       left: 3px;
       width: 10px;
       height: 10px;
-      background-color: var(--primary-color);
+      background-color: $primary-color;
       border-radius: 2px;
       transition: all 0.2s ease-in-out;
     }
@@ -579,7 +578,7 @@ input::placeholder {
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid var(--primary-color);
+  border: 1px solid $primary-color;
   padding-left: 10px;
   margin: 0px 20px 20px 20px;
   border-radius: 5px;

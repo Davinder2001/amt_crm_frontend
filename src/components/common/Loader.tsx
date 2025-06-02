@@ -59,7 +59,7 @@ const Loader = () => {
         }} className='main-loader-container'>
             <div style={{
                 fontSize: '3rem',
-                color: '#009693',
+                color: '#384b70',
                 marginBottom: '1rem',
                 animation: 'pulse 0.5s infinite alternate'
             }}>

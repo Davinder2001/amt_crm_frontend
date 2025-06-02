@@ -87,7 +87,11 @@
 
     .edit-btn {
       color: $white;
-      background: var(--primary-color);
+      background: $primary-color;
+
+      &:hover{
+        background-color: $hover-color;
+      }
     }
 
     .delete-btn {
@@ -213,7 +217,7 @@
 
     // Top border colors
     .info-card-blue {
-      border-top-color: var(--primary-color);
+      border-top-color:$primary-color;
     }
 
     .info-card-green {

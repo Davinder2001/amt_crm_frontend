@@ -22,6 +22,7 @@ interface TableToolbarProps {
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
     downloadActions?: Action[];
+    leftContent?: React.ReactNode;
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = ({

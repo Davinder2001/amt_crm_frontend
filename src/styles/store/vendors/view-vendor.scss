@@ -12,10 +12,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-.view-vendor-action-button-outter{
-display: flex;
-gap: 10px;
-}
+
+    .view-vendor-action-button-outter {
+      display: flex;
+      gap: 10px;
+    }
+
     .edit-button,
     .delete-button {
       display: flex;
@@ -31,15 +33,15 @@ gap: 10px;
     }
 
     .edit-button {
-      background-color: #009693; // your $primary-color
+      background-color: $primary-color; // your $primary-color
       color: #fff;
 
       &:hover {
-        background-color: darken(#009693, 10%);
+        background-color: $hover-color;
       }
 
       &:active {
-        background-color: darken(#009693, 15%);
+        background-color: $primary-color;
       }
     }
 
@@ -90,13 +92,7 @@ gap: 10px;
       align-items: center;
       margin: 0.5rem 0;
       font-size: $font-size-small;
-
-      strong {
-        flex: 0 0 120px;
-        color: $dark-color;
-        font-weight: $font-weight-medium;
-        font-size: $font-size-one;
-      }
+      gap: 5px;
     }
   }
 }

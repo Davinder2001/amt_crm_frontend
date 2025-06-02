@@ -1,11 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaPlus } from 'react-icons/fa';
+import { FaArrowLeft, FaPlus } from 'react-icons/fa';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
+import Link from 'next/link';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading } = useFetchVendorsQuery() as { data: Vendor[] | undefined, error: undefined, isLoading: boolean };
@@ -62,6 +63,8 @@ const Page: React.FC = () => {
   }));
 
   return (
+    <div className="vendors-page-outer">
+      <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
     <div className="vendors-page">
       <div className="vendors-page-outer">
         <TableToolbar
@@ -76,11 +79,7 @@ const Page: React.FC = () => {
               icon: <FaPlus />,
               onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`),
             },
-            {
-              label: 'Add As Vendor',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
-            },
+           
 
           ]}
         />
@@ -91,6 +90,7 @@ const Page: React.FC = () => {
           onView={(id: number) => router.push(`/${companySlug}/store/vendors/${id}`)}
         />
       </div>
+    </div>
     </div>
   );
 };

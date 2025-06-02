@@ -38,6 +38,7 @@
   &::before {
     top: 0;
     background-image: url('../../assets/headersvg.svg'); // Replace with your SVG or data URI
+    
   }
 
   &::after {
@@ -48,8 +49,8 @@
   &:after {
 
     bottom: 0;
-
     transform: scaleX(-1); // flip horizontally
+
   }
 }
 

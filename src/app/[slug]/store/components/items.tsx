@@ -166,7 +166,12 @@ const Items: React.FC = () => {
           ]}
           actions={[
             { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
-            { label: 'Add item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) },
+            { label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) },
+            {
+              label: 'Add Purchase Bill',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
+            },
           ]}
         />
 

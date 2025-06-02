@@ -41,10 +41,6 @@ const AllQuotations = () => {
 
   const columns = useMemo(() => [
     {
-      label: 'Sr. No.',
-      render: (_: Quotation, index: number) => index + 1,
-    },
-    {
       label: 'Customer Name',
       render: (item: Quotation) => item.customer_name || '-',
     },

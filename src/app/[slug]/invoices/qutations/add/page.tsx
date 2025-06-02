@@ -61,37 +61,58 @@ const Page = () => {
     <div className="quotation-form">
       <h3 className="form-title">Add Quotation</h3>
       <form onSubmit={handleSubmit} className="form-body">
-        <div className="form-group">
-          <label>Customer Name:</label>
-          <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
+        <div className='quotation-form-wrapper'>
+          <div className="form-group">
+            <label>Customer Name:</label>
+            <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
+          </div>
+          <div className="form-group ">
+            <label>Customer Number:</label>
+            <input
+              type="text"
+              value={customerNumber}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d{0,10}$/.test(value)) {
+                  setCustomerNumber(value);
+                }
+              }}
+              inputMode="numeric"
+              maxLength={10}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Customer Email (optional):</label>
+            <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label>Tax (%)</label>
+            <input
+              type="number"
+              value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
+              onChange={(e) => setTaxPercent(Number(e.target.value))}
+              onFocus={() => setIsTaxFocused(true)}
+              onBlur={() => setIsTaxFocused(false)}
+            />
+
+          </div>
+          <div className="form-group">
+            <label>Service Charges</label>
+            <input
+              type="number"
+              value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
+              onChange={(e) => setServiceCharges(Number(e.target.value))}
+              onFocus={() => setIsServiceFocused(true)}
+              onBlur={() => setIsServiceFocused(false)}
+            />
+
+          </div>
+
         </div>
-
-        <div className="form-group">
-          <label>Customer Number:</label>
-          <input
-            type="text"
-            value={customerNumber}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (/^\d{0,10}$/.test(value)) {
-                setCustomerNumber(value);
-              }
-            }}
-            inputMode="numeric"
-            maxLength={10}
-            required
-          />
-
-        </div>
-
-        <div className="form-group">
-          <label>Customer Email (optional):</label>
-          <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
-        </div>
-
         {items.map((item, index) => (
           <div key={index} className="item-row">
-            <div>
+            <div className='form-group'>
               <label>Item Name:</label>
               <input
                 type="text"
@@ -101,7 +122,7 @@ const Page = () => {
                 required
               />
             </div>
-            <div>
+            <div className='form-group'>
               <label>Qty:</label>
               <input
                 type="number"
@@ -111,7 +132,7 @@ const Page = () => {
                 required
               />
             </div>
-            <div>
+            <div className='form-group'>
               <label>Price:</label>
               <input
                 type="number"
@@ -133,41 +154,18 @@ const Page = () => {
           + Add Another Item
         </button>
 
-        <div className="form-group">
-          <label>Tax (%)</label>
-          <input
-            type="number"
-            value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
-            onChange={(e) => setTaxPercent(Number(e.target.value))}
-            onFocus={() => setIsTaxFocused(true)}
-            onBlur={() => setIsTaxFocused(false)}
-          />
-
-        </div>
-
-        <div className="form-group">
-          <label>Service Charges</label>
-          <input
-            type="number"
-            value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
-            onChange={(e) => setServiceCharges(Number(e.target.value))}
-            onFocus={() => setIsServiceFocused(true)}
-            onBlur={() => setIsServiceFocused(false)}
-          />
-
-        </div>
 
         <div className="summary">
-          <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
-          <p>Tax: ₹{taxAmount.toFixed(2)}</p>
-          <p>Service Charges: ₹{serviceCharges.toFixed(2)}</p>
-          <strong>Total: ₹{total.toFixed(2)}</strong>
+          <p>Subtotal: ₹ {subtotal.toFixed(2)}</p>
+          <p>Tax: ₹<span className='tax-amount'> {taxAmount.toFixed(2)}</span> </p>
+          <p>Service Charges: ₹ {serviceCharges.toFixed(2)}</p>
+          <strong className='total'>Total: ₹ <span className='quotation-total'>{total.toFixed(2)}</span></strong>
         </div>
-
-        <button type="submit" disabled={isLoading} className="submit-btn">
-          {isLoading ? 'Saving...' : 'Save Quotation'}
-        </button>
-
+        <div className='quotation-submit-btn-outer'>
+          <button type="submit" disabled={isLoading} className="submit-btn">
+            {isLoading ? 'Saving...' : 'Save Quotation'}
+          </button>
+        </div>
         {isSuccess && <p className="success-msg">Quotation saved successfully!</p>}
       </form>
     </div>

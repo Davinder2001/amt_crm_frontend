@@ -84,7 +84,7 @@ const LoginForm = () => {
         {isLoading && <Loader />}
         <div className="left-panel">
           <div className="form-box">
-            <h1 className="title">Welcome back 👋🏻</h1>
+            <h1 className="title">Welcome back <span className='wave-hand'>👋🏻</span></h1>
             <p className="description">Please login to manage your dashboard.</p>
 
             {!isLoggedIn && (

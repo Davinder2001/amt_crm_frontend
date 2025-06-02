@@ -87,7 +87,7 @@ export default function NetworkStatusBanner() {
             {status === 'offline' ? (
                 <>
                     <FaWifi style={{ marginRight: 8, color: '#e60000' }} />
-                    You are currently <strong>offline</strong>. Please check your connection.
+                    You are currently <strong style={{ marginLeft: 4 }}>offline</strong>. Please check your connection.
                 </>
             ) : (
                 <>

@@ -173,6 +173,7 @@ const Items: React.FC = () => {
         <ResponsiveTable
           data={filteredItems}
           columns={columns}
+          storageKey="store_table_page"
           onDelete={(id) => handleDelete(id)}
           onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}

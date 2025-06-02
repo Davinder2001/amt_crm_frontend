@@ -70,7 +70,7 @@ const AllInvoices = () => {
   };
 
   const columns = [
-   
+
     { label: "Invoice No.", key: "invoice_number" as keyof Invoice },
     { label: "Client", key: "client_name" as keyof Invoice },
     { label: "Date", key: "invoice_date" as keyof Invoice },
@@ -106,6 +106,7 @@ const AllInvoices = () => {
     <ResponsiveTable
       data={invoices}
       columns={columns}
+      storageKey="invoice_table_page"
       onDelete={(id) => console.log(id, 'deleted successfully')}
       onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
       onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}

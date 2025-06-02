@@ -86,8 +86,8 @@ export const SuperAdminLayout = ({
   }
 
   return (
-    <div className="super-admin-layout-wrapper">
-      <div className="super-admin-layout-inner">
+    <>
+      <div className="main">
         {/* Overlay that appears when mobile menu is open */}
         {isMobile && isToggle && (
           <div
@@ -117,7 +117,7 @@ export const SuperAdminLayout = ({
             openMenu={openMenu}
           />
         </div>
-        <div className="content-area">
+        <div className="main-content">
           <Header
             handleToggleSidebar={handleToggleSidebar}
             openMenu={openMenu}
@@ -129,6 +129,6 @@ export const SuperAdminLayout = ({
           <FooterBarMenu openMenu={openMenu} />
         </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -23,6 +23,7 @@ type Props<T extends { id: number; name?: string }> = {
   onDelete?: (id: number) => void;
   onEdit?: (id: number) => void;
   onView?: (id: number) => void;
+  storageKey?: string;
 };
 
 
@@ -33,6 +34,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   onDelete,
   onEdit,
   onView,
+  storageKey,
 }: Props<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
@@ -49,9 +51,24 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const shouldShowPagination = totalPages > 1 && data.length > itemsPerPage;
 
+  useEffect(() => {
+    if (storageKey) {
+      const savedPage = localStorage.getItem(storageKey);
+      if (savedPage) {
+        const parsed = parseInt(savedPage, 10);
+        if (!isNaN(parsed)) {
+          setCurrentPage(parsed);
+        }
+      }
+    }
+  }, [storageKey]);
+
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
     setCurrentPage(newPage);
+    if (storageKey) {
+      localStorage.setItem(storageKey, String(newPage));
+    }
   };
 
   useEffect(() => {
@@ -89,7 +106,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                     target.closest('button') ||
                     target.closest('svg') ||
                     target.closest('.action-icon') ||
-                    target.closest('.ellipsis-icon')||
+                    target.closest('.ellipsis-icon') ||
                     target.closest('select')
                   ) {
                     return;

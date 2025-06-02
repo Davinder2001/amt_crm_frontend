@@ -141,10 +141,6 @@
 body {
     background-color: #F8F7FA;
 
-    .content-area {
-        margin: 0px 10px;
-    }
-
 }
 
 ::-webkit-scrollbar {
@@ -250,13 +246,6 @@ textarea {
 
 
 
-.super-admin-layout-inner {
-    display: flex;
-}
-
-
-
-
 .main {
     display: flex;
     overflow: hidden;
@@ -268,8 +257,11 @@ textarea {
         width: 100%;
         min-height: 0;
         height: 100vh;
-        margin: 10px 50px;
+        margin: 0px 50px;
 
+        .page-content {
+            padding: 10px;
+        }
     }
 }
 

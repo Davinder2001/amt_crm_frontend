@@ -1,8 +1,6 @@
 @use '../variables' as *;
 
 .customer-view-container {
-  padding: 2rem;
-  font-family: 'DMSans', sans-serif;
   background-color: #f9f9f9;
   min-height: 100vh;
 
@@ -10,11 +8,10 @@
 
   .customer-card {
     background-color: #fff;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    max-width: 900px;
-    margin: 0 auto;
+    margin-bottom: 20px;
 
     h2 {
       margin-bottom: 1.5rem;
@@ -45,8 +42,26 @@
   }
 
   .info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     gap: 10px;
+    flex-wrap: wrap;
   }
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .customer-view-container {
+    padding: 0;
+
+    .customer-card {
+      padding: 1rem;
+    }
+  }
+
+
 }

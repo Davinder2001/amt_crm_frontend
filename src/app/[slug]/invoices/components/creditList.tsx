@@ -8,7 +8,8 @@ import { useCompany } from "@/utils/Company";
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaMoneyBill } from 'react-icons/fa';
-
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
 // 1. Raw API shape
 interface CreditUser {
   customer_id: number;
@@ -78,13 +79,13 @@ const CreditList: React.FC = () => {
     render: (item) => {
       if (key === 'action') {
         return (
-          <div onClick={(e) => e.stopPropagation()} className="flex space-x-2">
+          <div onClick={(e) => e.stopPropagation()} className="pay-btn-outer">
             <button
               className="btn pay-btn"
               onClick={() => handlePay(item.customer_id)}
               title="Pay"
             >
-              <FaMoneyBill />
+              <FaMoneyBill />Pay
             </button>
           </div>
         );
@@ -100,35 +101,41 @@ const CreditList: React.FC = () => {
   if (isError) return <p>Something went wrong.</p>;
 
   return (
-    <div className="credit-users-page">
-      <TableToolbar
-        filters={{}}
-        onFilterChange={() => {}}
-        columns={columns.map((col) => ({ label: col.label, key: col.label }))}
-        visibleColumns={visibleColumns.map((k) =>
-          k === 'action'
-            ? 'Action'
-            : k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
-        )}
-        onColumnToggle={(label) => {
-          const key = label === 'Action'
-            ? 'action'
-            : (label.toLowerCase().replace(/ /g, '_') as DataColumnKey);
+    <div>
+      <Link href={`/${companySlug}/invoices`} className='back-button'>
+        <FaArrowLeft size={20} color='#fff' />
+      </Link>
 
-          setVisibleColumns((prev) =>
-            prev.includes(key)
-              ? prev.filter((c) => c !== key)
-              : [...prev, key]
-          );
-        }}
-        actions={[]}
-      />
+      <div className="credit-users-page">
+        <TableToolbar
+          filters={{}}
+          onFilterChange={() => { }}
+          columns={columns.map((col) => ({ label: col.label, key: col.label }))}
+          visibleColumns={visibleColumns.map((k) =>
+            k === 'action'
+              ? 'Action'
+              : k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+          )}
+          onColumnToggle={(label) => {
+            const key = label === 'Action'
+              ? 'action'
+              : (label.toLowerCase().replace(/ /g, '_') as DataColumnKey);
 
-      <ResponsiveTable
-        data={processedUsers}
-        columns={columns}
-        onView={(id: number) => handleView(id)}
-      />
+            setVisibleColumns((prev) =>
+              prev.includes(key)
+                ? prev.filter((c) => c !== key)
+                : [...prev, key]
+            );
+          }}
+          actions={[]}
+        />
+
+        <ResponsiveTable
+          data={processedUsers}
+          columns={columns}
+          onView={(id: number) => handleView(id)}
+        />
+      </div>
     </div>
   );
 };

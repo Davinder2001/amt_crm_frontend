@@ -79,10 +79,10 @@ const ResetPasswordForm = () => {
     <>
       <section className="forgot-p-form-wrapper">
         <div className="forgot-p-form-container">
-          <div className="login-container2">
+          <div className="login-container2 Forgot-pass-login-container">
             <div className="left-panel">
               <button type="button" onClick={() => router.back()} className="back-button">
-                <IoArrowBack size={18} /> Back
+                <IoArrowBack size={18} />
               </button>
 
               <div className="left-panel-inner">

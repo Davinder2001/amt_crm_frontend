@@ -23,6 +23,8 @@ export interface Quotation {
   company_name: string;
   tax_amount: string;
   total: number;
+  created_at: number;
+  updated_at: number;
 }
 
 

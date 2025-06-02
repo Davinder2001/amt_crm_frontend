@@ -5,10 +5,10 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--primary-color);
+    background-color: $primary-color;
     color: $white;
     padding: 6px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 20px 0px 20px 0px;
     border: none;
     cursor: pointer;

@@ -63,7 +63,7 @@ const CreditList: React.FC = () => {
   }, [users.length]);
 
   const handleView = (userId: number) =>
-    router.push(`/${companySlug}/invoices/credits/view/${userId}`);
+    router.push(`/${companySlug}/invoices/${userId}`);
 
   const handlePay = (userId: number) =>
     router.push(`/${companySlug}/invoices/credits/pay/${userId}`);

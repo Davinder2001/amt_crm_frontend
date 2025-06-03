@@ -88,7 +88,7 @@ const AddVendor: React.FC<AddVendorProps> = ({
               onClick={() => setIsAdding(true)}
               style={{
                 padding: '8px 10px',
-                color: '#009693',
+                color: '#384B70',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

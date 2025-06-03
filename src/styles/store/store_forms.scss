@@ -139,8 +139,8 @@
 
         button {
           padding: 5px 10px;
-          border-radius: 50px;
-          background-color: var(--primary-color);
+          border-radius: $border-radius;
+          background-color: $primary-color;
           color: $white;
           border: none;
         }

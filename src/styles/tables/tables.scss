@@ -395,9 +395,9 @@ table {
         height: 1px;
         background: linear-gradient(90deg,
                 transparent,
-                rgba(var(--primary-color-rgb), 0.84),
-                rgba(var(--primary-color-rgb), 0.77),
-                rgba(var(--primary-color-rgb), 0.82),
+                rgba($primary-color, 0.84),
+                rgba($primary-color, 0.77),
+                rgba($primary-color, 0.82),
                 transparent);
         animation: borderFlow 4s linear infinite; // Slower animation
         background-size: 200% 100%;
@@ -411,7 +411,7 @@ table {
         gap: 6px;
         padding: 8px;
         background: white;
-        border-radius: 50px;
+        border-radius: 5px;
         box-shadow: 0 4px 12px rgba(0, 150, 147, 0.1);
         position: relative;
         z-index: 2;
@@ -424,7 +424,7 @@ table {
         border: none;
         background: transparent;
         color: $primary-color;
-        border-radius: 50%;
+        border-radius: $border-radius;
         cursor: pointer;
         font-size: 14px;
         font-weight: 600;
@@ -443,7 +443,7 @@ table {
             right: -2px;
             bottom: -2px;
             border: 2px solid transparent;
-            border-radius: 50%;
+            border-radius: $border-radius;
             transition: all 0.4s ease;
         }
 
@@ -484,12 +484,12 @@ table {
 
     // Navigation arrows get special treatment
     .nav-arrow {
-        background:$hover-color;
+        background: $hover-color;
         color: $white;
-        border-radius: 50%;
+        border-radius: $border-radius;
 
         &:hover:not(:disabled) {
-            background:$primary-color ;
+            background: $primary-color ;
         }
     }
 }
@@ -542,7 +542,7 @@ table {
             right: 25px;
             background: #f9f9f9;
             padding: 5px 10px;
-            border-radius: 4px;
+            border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;

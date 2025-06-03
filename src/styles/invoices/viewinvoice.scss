@@ -212,7 +212,7 @@
       font-size: $font-size;
       margin: 0.25rem 0;
       color: #545454;
-      border-bottom: 1px dashed #00969357;
+      border-bottom: 1px dashed $primary-color;
       padding-bottom: 3px;
 
     }
@@ -247,7 +247,7 @@
 
         td {
           padding: 0.9rem 1rem;
-          border-bottom: 1px solid $border-color;
+          border-bottom: 1px solid $hover-color;
         }
       }
     }
@@ -274,7 +274,7 @@
       font-size: $font-size;
 
       &:not(:last-child) {
-        border-bottom: 1px dashed $border-color;
+        border-bottom: 1px dashed $hover-color;
       }
 
       &.total {

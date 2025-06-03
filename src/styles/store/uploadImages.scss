@@ -17,7 +17,7 @@
         align-items: center;
         gap: 8px;
         padding: 10px 12px;
-        border: 2px dashed $border-color;
+        border: 2px dashed $hover-color;
         border-radius: 8px;
         cursor: pointer;
         background-color: #fafafa;
@@ -25,7 +25,7 @@
         margin-top: 5px;
 
         &:hover {
-            border-color: var(--primary-color);
+            border-color: $primary-color;
         }
     }
 

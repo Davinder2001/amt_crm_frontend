@@ -365,7 +365,8 @@ export default function CartTabContent({
                     <div className="total">
                         Total:{' '}
                         <strong>
-                            ₹{total}
+                            ₹
+                            {total}
                         </strong>
                     </div>
                 </div>

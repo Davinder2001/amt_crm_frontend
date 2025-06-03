@@ -157,9 +157,10 @@
             color: $white;
             cursor: pointer;
 
-            &.filled{
+            &.filled {
                 color: $orange-color;
             }
+
             svg {
                 width: 16;
                 height: 16;
@@ -349,6 +350,17 @@
     flex-direction: column;
     overflow: scroll;
     padding-bottom: 60px;
+
+    .form-group {
+        input {
+            padding: 10px 12px;
+            border: 1px solid $feild_border;
+
+            &:focus {
+                border-color: $gray-color;
+            }
+        }
+    }
 
     .tabs {
         display: flex;
@@ -568,16 +580,25 @@
         margin-top: 20px;
         padding: 8px;
         border-right: $border;
+
+        .total {
+            strong {
+                color: $success-color;
+                border-bottom: 2px solid $success-color;
+            }
+        }
     }
 
     .sectionToggle {
         display: flex;
         align-items: center;
         gap: 8px;
+        color: $primary-color;
 
         &:hover {
-            color: var(--primary-color);
+            color: $hover-color;
         }
+
     }
 
     .payment-section {
@@ -588,20 +609,21 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+
         input[type="number"] {
-        height: 30px;
-        max-width: 60%;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px !important;
-        transition: border-color 0.2s ease;
-        outline: none;
-        &:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+            height: 30px;
+            max-width: 60%;
+            font-size: 14px;
+            border: 1px solid $feild_border;
+            border-radius: 5px !important;
+            outline: none;
+            padding: 10px 12px;
+
+            &:focus {
+                border-color: $gray-color;
+            }
+
         }
-    
-    }
     }
 
     .discount-input-container {
@@ -709,12 +731,16 @@
     .btn {
         flex: 1;
         padding: 10px;
-        background: #009688;
-        color: white;
+        background: $primary-color;
+        color: $white;
         border: none;
-        border-radius: 4px;
+        border-radius: $border-radius;
         font-weight: bold;
         cursor: pointer;
+
+        &:hover {
+            background-color: $hover-color;
+        }
     }
 
     .form {
@@ -725,9 +751,13 @@
 
     .form input,
     .form textarea {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        padding: 10px 12px;
+        border: 1px solid $feild_border;
+        border-radius: 5px;
+
+        &:hover {
+            border-color: 1px solid $gray-color;
+        }
     }
 
     .form textarea {

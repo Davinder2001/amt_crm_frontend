@@ -83,7 +83,7 @@ const QuotationPage = () => {
             <span>₹{quotation.sub_total}</span>
           </div>
           <div className="summary-row">
-            <span>Tax ({quotation.tax_percent}%)</span>
+            <span>Tax <strong className='tax'>({quotation.tax_percent}%)</strong></span>
             <span>₹{quotation.tax_amount}</span>
           </div>
           <div className="summary-row">

@@ -14,7 +14,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
-    color: var(--primary-color);
+    color: $primary-color;
   }
 
   .form-body {
@@ -33,24 +33,17 @@
     width: 100%;
   }
 
-  .form-group label {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    display: block;
-    color: #333;
-  }
-
   .form-group input {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border: 1px solid $feild_border;
+    border-radius: 5px;
     outline: none;
     transition: border-color 0.2s;
   }
 
   .form-group input:focus {
-    border-color: var(--primary-color);
+    border-color: $gray-color;
   }
 
   .item-row {
@@ -61,9 +54,9 @@
   }
 
   .item-row input {
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border-radius: 5px;
+    border: 1px solid $feild_border;
     width: 100%;
   }
 
@@ -78,12 +71,16 @@
   }
 
   .add-item-btn {
-    color: var(--primary-color);
+    color: $primary-color;
     background: none;
     border: none;
     font-weight: 500;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
   }
 
   .tax-amount {
@@ -106,7 +103,7 @@
 
   .total {
     margin-top: 15px;
-    border-bottom: 1px solid var(--primary-color);
+    border-bottom: 1px solid $primary-color;
     padding-bottom: 5px;
   }
 
@@ -115,7 +112,7 @@
     justify-content: flex-end;
 
     .submit-btn {
-      background: var(--primary-color);
+      background: $primary-color ;
       color: white;
       padding: 0.6rem 1.2rem;
       border: none;

@@ -1,6 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { useCreateQuotationMutation } from '@/slices/quotation/quotationApi';
+import { FaArrowLeft, FaPlus } from 'react-icons/fa';
+import Link from 'next/link';
+import { useCompany } from '@/utils/Company';
 
 const Page = () => {
   const [customerName, setCustomerName] = useState('');
@@ -9,6 +12,7 @@ const Page = () => {
   const [taxPercent, setTaxPercent] = useState(0);
   const [serviceCharges, setServiceCharges] = useState(0);
   const [items, setItems] = useState<{ name: string; quantity: number; price: number }[]>([{ name: '', quantity: 1, price: 0 }]);
+  const { companySlug } = useCompany();
 
   const [createQuotation, { isLoading, isSuccess }] = useCreateQuotationMutation();
 
@@ -58,116 +62,121 @@ const Page = () => {
   };
 
   return (
-    <div className="quotation-form">
-      <h3 className="form-title">Add Quotation</h3>
-      <form onSubmit={handleSubmit} className="form-body">
-        <div className='quotation-form-wrapper'>
-          <div className="form-group">
-            <label>Customer Name:</label>
-            <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
-          </div>
-          <div className="form-group ">
-            <label>Customer Number:</label>
-            <input
-              type="text"
-              value={customerNumber}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d{0,10}$/.test(value)) {
-                  setCustomerNumber(value);
-                }
-              }}
-              inputMode="numeric"
-              maxLength={10}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Customer Email (optional):</label>
-            <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
-          </div>
-          <div className="form-group">
-            <label>Tax (%)</label>
-            <input
-              type="number"
-              value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
-              onChange={(e) => setTaxPercent(Number(e.target.value))}
-              onFocus={() => setIsTaxFocused(true)}
-              onBlur={() => setIsTaxFocused(false)}
-            />
-
-          </div>
-          <div className="form-group">
-            <label>Service Charges</label>
-            <input
-              type="number"
-              value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
-              onChange={(e) => setServiceCharges(Number(e.target.value))}
-              onFocus={() => setIsServiceFocused(true)}
-              onBlur={() => setIsServiceFocused(false)}
-            />
-
-          </div>
-
-        </div>
-        {items.map((item, index) => (
-          <div key={index} className="item-row">
-            <div className='form-group'>
-              <label>Item Name:</label>
+    <div>
+      <Link href={`/${companySlug}/invoices/qutations`} className='back-button'>
+        <FaArrowLeft size={20} color='#fff' />
+      </Link>
+      <div className="quotation-form">
+        <h3 className="form-title">Add Quotation</h3>
+        <form onSubmit={handleSubmit} className="form-body">
+          <div className='quotation-form-wrapper'>
+            <div className="form-group">
+              <label>Customer Name:</label>
+              <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
+            </div>
+            <div className="form-group ">
+              <label>Customer Number:</label>
               <input
                 type="text"
-                placeholder="Item Name"
-                value={item.name}
-                onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+                value={customerNumber}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d{0,10}$/.test(value)) {
+                    setCustomerNumber(value);
+                  }
+                }}
+                inputMode="numeric"
+                maxLength={10}
                 required
               />
             </div>
-            <div className='form-group'>
-              <label>Qty:</label>
+            <div className="form-group">
+              <label>Customer Email (optional):</label>
+              <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label>Tax (%)</label>
               <input
                 type="number"
-                placeholder="Qty"
-                value={item.quantity}
-                onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                required
+                value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
+                onChange={(e) => setTaxPercent(Number(e.target.value))}
+                onFocus={() => setIsTaxFocused(true)}
+                onBlur={() => setIsTaxFocused(false)}
               />
+
             </div>
-            <div className='form-group'>
-              <label>Price:</label>
+            <div className="form-group">
+              <label>Service Charges</label>
               <input
                 type="number"
-                placeholder="Price"
-                value={item.price}
-                onChange={(e) => handleItemChange(index, 'price', e.target.value)}
-                required
+                value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
+                onChange={(e) => setServiceCharges(Number(e.target.value))}
+                onFocus={() => setIsServiceFocused(true)}
+                onBlur={() => setIsServiceFocused(false)}
               />
+
             </div>
-            {items.length > 1 && (
-              <button type="button" onClick={() => handleRemoveItem(index)} className="remove-btn">
-                Remove
-              </button>
-            )}
+
           </div>
-        ))}
+          {items.map((item, index) => (
+            <div key={index} className="item-row">
+              <div className='form-group'>
+                <label>Item Name:</label>
+                <input
+                  type="text"
+                  placeholder="Item Name"
+                  value={item.name}
+                  onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+                  required
+                />
+              </div>
+              <div className='form-group'>
+                <label>Qty:</label>
+                <input
+                  type="number"
+                  placeholder="Qty"
+                  value={item.quantity}
+                  onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                  required
+                />
+              </div>
+              <div className='form-group'>
+                <label>Price:</label>
+                <input
+                  type="number"
+                  placeholder="Price"
+                  value={item.price}
+                  onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                  required
+                />
+              </div>
+              {items.length > 1 && (
+                <button type="button" onClick={() => handleRemoveItem(index)} className="remove-btn">
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
 
-        <button type="button" onClick={handleAddItem} className="add-item-btn">
-          + Add Another Item
-        </button>
-
-
-        <div className="summary">
-          <p>Subtotal: ₹ {subtotal.toFixed(2)}</p>
-          <p>Tax: ₹<span className='tax-amount'> {taxAmount.toFixed(2)}</span> </p>
-          <p>Service Charges: ₹ {serviceCharges.toFixed(2)}</p>
-          <strong className='total'>Total: ₹ <span className='quotation-total'>{total.toFixed(2)}</span></strong>
-        </div>
-        <div className='quotation-submit-btn-outer'>
-          <button type="submit" disabled={isLoading} className="submit-btn">
-            {isLoading ? 'Saving...' : 'Save Quotation'}
+          <button type="button" onClick={handleAddItem} className="add-item-btn">
+            <FaPlus /> Add Another Item
           </button>
-        </div>
-        {isSuccess && <p className="success-msg">Quotation saved successfully!</p>}
-      </form>
+
+
+          <div className="summary">
+            <p>Subtotal: ₹ {subtotal.toFixed(2)}</p>
+            <p>Tax: ₹<span className='tax-amount'> {taxAmount.toFixed(2)}</span> </p>
+            <p>Service Charges: ₹ {serviceCharges.toFixed(2)}</p>
+            <strong className='total'>Total: ₹ <span className='quotation-total'>{total.toFixed(2)}</span></strong>
+          </div>
+          <div className='quotation-submit-btn-outer'>
+            <button type="submit" disabled={isLoading} className="submit-btn">
+              {isLoading ? 'Saving...' : 'Save Quotation'}
+            </button>
+          </div>
+          {isSuccess && <p className="success-msg">Quotation saved successfully!</p>}
+        </form>
+      </div>
     </div>
 
   );

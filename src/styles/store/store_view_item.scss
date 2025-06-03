@@ -89,7 +89,7 @@
       color: $white;
       background: $primary-color;
 
-      &:hover{
+      &:hover {
         background-color: $hover-color;
       }
     }
@@ -149,14 +149,25 @@
         }
       }
 
-      svg {
-        width: 25px;
+      .card-icon {
+        background-color: $light_blue;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primary-color;
+
+        svg {
+          color: $primary-color;
+        }
       }
     }
 
     .info-card h3 {
       color: $dark-color;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $primary-color;
       align-items: center;
       gap: 10px;
       margin-top: 0;
@@ -217,7 +228,7 @@
 
     // Top border colors
     .info-card-blue {
-      border-top-color:$primary-color;
+      border-top-color: $primary-color;
     }
 
     .info-card-green {

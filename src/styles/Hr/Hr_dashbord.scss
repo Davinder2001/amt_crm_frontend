@@ -165,21 +165,23 @@
   font-size: 12px;
   color: $gray-color;
 }
+.stat-card-box{
 
-.card-icon {
-  font-size: 24px;
+  .card-icon {
+    font-size: 24px;
   background-color: $light_blue;
   width: 40px;
-  height: auto;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
 
- svg {
- color: $primary-color;
+  svg {
+    color: $primary-color;
   }
+}
 }
 
 .employee-field svg

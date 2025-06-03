@@ -63,31 +63,21 @@
     .form-group {
       display: flex;
       flex-direction: column;
-
+      gap: 0px;
       .buttons {
         padding: 8px 22px !important;
-      }
-
-      label {
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #333;
-        font-size: 1rem;
       }
 
       input,
       select,
       textarea {
-        padding: 10px;
-        border: 1px solid #00969357;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
+        padding: 10px 12px;
+        border: 1px solid $feild_border;
+        border-radius: 5px;
 
         &:focus {
-          border-color: var(--primary-color);
-          background: #ffffff;
-          transform: scale(1);
+          border-color: $gray-color;
+          background: transparent;
         }
 
       }

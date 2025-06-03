@@ -16,7 +16,7 @@ function Page() {
   const { companySlug } = useCompany();
   return (
     <>
-      <Link href={`/${companySlug}/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       <Navigation />
       <AttendancesList />
     </>

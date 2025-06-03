@@ -93,11 +93,10 @@
 .form-input,
 .form-textarea {
     width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border: 1px solid $feild_border;
+    border-radius: 5px;
     font-size: 16px;
-    font-family: inherit;
     color: #2d3748;
     box-sizing: border-box;
     transition: border-color 0.2s ease;
@@ -106,7 +105,7 @@
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: $gray-color;
 }
 
 .Payment-submit-btn-outer {
@@ -114,11 +113,11 @@
     justify-content: flex-end;
 
     .submit-button {
-        background-color: var(--primary-color);
+        background-color: $primary-color;
         color: white;
         width: fit-content;
-        padding: 8px 16px;
-        border-radius: 6px;
+        padding: 10px 12px;
+        border-radius: 5px;
         font-weight: 600;
         cursor: pointer;
         border: none;

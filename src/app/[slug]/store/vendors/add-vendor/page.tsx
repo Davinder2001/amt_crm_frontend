@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaStore, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaStore, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const VendorCreationPage: React.FC = () => {
@@ -65,7 +65,7 @@ const VendorCreationPage: React.FC = () => {
             {/* Vendor Number */}
             <div className="input-group">
               <label>
-                <FaPhone className="input-icon" />
+                <FaPhoneAlt className="input-icon" />
                 Vendor Number <span className={`required-asterisk ${vendorNumber ? 'filled' : 'unfilled'}`}>*</span>
               </label>
               <input

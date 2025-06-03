@@ -16,7 +16,6 @@
     .employee-field {
       display: flex;
       flex-direction: column;
-      gap: 6px;
       position: relative;
 
       .error-message {
@@ -30,14 +29,12 @@
 
 
       label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      svg {
-        color: var(--primary-color);
-        size: 14px;
+        letter-spacing: .4px;
+        color: $lable-color;
+        margin-bottom: 5px;
+        font-size: $lable-font;
+        font-weight: $font-weight-regular;
+        display: block;
       }
 
     }
@@ -57,19 +54,20 @@
       background: #ffffff;
       transform: scale(1);
     }
+
     &::placeholder {
       color: #ccc;
-        font-size: 15px;
-        font-weight: 400;
-        letter-spacing: 0.3px;
-        background-color: transparent;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      background-color: transparent;
     }
   }
 
   label {
     font-size: 14px;
     font-weight: $font-weight-regular;
-    color:$hover-color;
+    color: $hover-color;
   }
 
 
@@ -87,19 +85,19 @@
       color: $white;
       font-size: $font-size;
       font-weight: $font-weight-medium;
-      margin-top: 10px;   
+      margin-top: 10px;
 
-    
-     &:hover {      
-      background: $hover-color;
+
+      &:hover {
+        background: $hover-color;
+      }
     }
-    }
-      
-    }
-    
-   
 
   }
+
+
+
+}
 
 
 

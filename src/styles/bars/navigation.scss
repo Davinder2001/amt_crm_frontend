@@ -6,15 +6,15 @@
     margin-bottom: 30px;
 
     .navigation-button{
-        background-color: var(--primary-color);
+        background-color: $primary-color;
         color: $white;
         font-size: $font-size-large;
         font-weight:  $font-weight-medium;
-        padding: 9px 22px;
+        padding: 10px 12px;
         text-decoration: none;
-        border-radius: 50px;
+        border-radius: 5px;
         display: flex;
-        gap: 10px;
+        gap: 5px;
         align-items: center;
     }
     

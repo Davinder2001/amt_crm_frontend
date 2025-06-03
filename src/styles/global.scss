@@ -420,7 +420,7 @@ svg.react-datepicker__triangle {
 
 .react-datepicker__header:not(.react-datepicker__header--has-time-select) {
     border-top-right-radius: .3rem;
-    background-color: var(--primary-color);
+    background-color: $primary-color;
 }
 
 h2.react-datepicker__current-month,
@@ -446,8 +446,21 @@ h2.react-datepicker__current-month,
 
 
 
+input::placeholder {
+    color: #ccc !important;
+    font-size: 14px !important;
+    letter-spacing: 0.3px !important;
+    background-color: transparent !important;
+}
 
-
+label {
+    letter-spacing: .4px !important;
+    color: #333 !important;
+    margin-bottom: 5px !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    display: block !important;
+}
 
 
 @media (max-width:1024px) {

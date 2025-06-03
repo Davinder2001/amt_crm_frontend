@@ -120,7 +120,7 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/store/vendors`} className='back-button'>
+      <Link href={`/${companySlug}/store`} className='back-button'>
         <FaArrowLeft size={20} color='#fff' />
       </Link>
 

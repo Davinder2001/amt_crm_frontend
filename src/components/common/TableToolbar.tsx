@@ -112,7 +112,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             <div className="left-group">
                 {filters && Object.keys(filters).length > 0 && (
                     <div className="dropdown dropdown-left hover-group">
-                        <button className="toolbar-btn">
+                        <button className="">
                             <FiFilter />
                             <span className='hide-mobile'>Filter</span>
                         </button>
@@ -178,7 +178,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div> */}
                 {/* <div className="dropdown dropdown-right">
                     <button onClick={() => toggleDropdown('actions')}
-                        className={`toolbar-btn ${openDropdown === 'filter' ? 'active' : ''}`}
+                        className={` ${openDropdown === 'filter' ? 'active' : ''}`}
                     >
                         <FiSettings />
                         <span>Actions</span>
@@ -199,7 +199,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 {downloadActions && downloadActions.length > 0 && (
                     <div className="dropdown dropdown-right hover-group">
                         <button className="toolbar-btn">
-                            <FiDownloadCloud size={16} style={{strokeWidth: 3}}/>
+                            <FiDownloadCloud size={18.98} style={{strokeWidth: 3}}/>
                         </button>
                         <div className="dropdown-content">
                             <ul className="action-list">

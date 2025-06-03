@@ -18,4 +18,4 @@ export const superAdminRoutes = [
 ];
 
 // company and payment routes
-export const companyAndPaymentRoutes = ['/add-company', '/confirm-payment', '/failed-company-payment']
+export const companyAndPaymentRoutes = ['/add-company', '/confirm-company-payment', '/failed-company-payment']

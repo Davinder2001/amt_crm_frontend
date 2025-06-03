@@ -149,18 +149,6 @@ const Items: React.FC = () => {
   }));
 
 
-  const actions = [
-    { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
-    {
-      label: 'Add Purchase Bill',
-      icon: <FaPlus />,
-      onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
-    },
-    ...(storeItems.length > 0
-      ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]
-      : []),
-  ];
-
   if (isLoading) return <LoadingState />;
   if (error) return (
     <EmptyState
@@ -197,7 +185,17 @@ const Items: React.FC = () => {
             { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
             { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
           ]}
-          actions={actions}
+          actions={[
+            { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
+            {
+              label: 'Add Purchase Bill',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
+            },
+            ...(storeItems.length > 0
+              ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]
+              : []),
+          ]}
         />
 
         <ResponsiveTable

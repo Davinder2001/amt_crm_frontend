@@ -63,7 +63,7 @@ const CreditList: React.FC = () => {
   }, [users.length]);
 
   const handleView = (userId: number) =>
-    router.push(`/${companySlug}/invoices/${userId}`);
+    router.push(`/${companySlug}/invoices/credits/view/${userId}`);
 
   const handlePay = (userId: number) =>
     router.push(`/${companySlug}/invoices/credits/pay/${userId}`);
@@ -133,7 +133,13 @@ const CreditList: React.FC = () => {
         <ResponsiveTable
           data={processedUsers}
           columns={columns}
-          onView={(id: number) => handleView(id)}
+          onView={(id: number) => {
+            const user = processedUsers.find((u) => u.id === id);
+            if (user && user.outstanding > 0) {
+              handleView(id);
+            }
+          }}
+
         />
       </div>
     </div>

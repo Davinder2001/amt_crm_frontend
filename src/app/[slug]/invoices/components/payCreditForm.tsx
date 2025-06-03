@@ -13,6 +13,7 @@ const PayCreditForm: React.FC = () => {
         id: number;
         name: string;
         number: string;
+        email: string;
         credits: {
             invoice_number: string;
             invoice_date: string;
@@ -63,6 +64,7 @@ const PayCreditForm: React.FC = () => {
                     <div className="customer-info">
                         <p><strong>Customer :</strong> {customer.name}</p>
                         <p><strong>Number :</strong> {customer.number}</p>
+                        <p><strong>email :</strong> {customer.email}</p>
                     </div>
 
                     <table className="credit-table">
@@ -134,3 +136,5 @@ const PayCreditForm: React.FC = () => {
 };
 
 export default PayCreditForm;
+
+

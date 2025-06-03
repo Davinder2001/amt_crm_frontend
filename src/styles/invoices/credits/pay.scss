@@ -1,52 +1,107 @@
 @use '../../variables' as *;
 
 .pay-credit-container {
-
-    padding: 24px;
+    padding: 32px;
     background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Inter', Arial, sans-serif;
+    color: #2d3748;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .pay-credit-header {
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    color: $primary-color;
+    position: relative;
+    padding-bottom: 12px;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, $primary-color, lighten($primary-color, 20%));
+        border-radius: 2px;
+    }
 }
 
 .loading-text {
-    font-size: 14px;
+    font-size: 16px;
     color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top-color: $primary-color;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 .error-text {
-    color: #f56565;
+    color: #e53e3e;
     font-weight: 600;
+    padding: 12px;
+    background-color: #fff5f5;
+    border-radius: 6px;
+    border-left: 4px solid #e53e3e;
 }
 
 .customer-info {
-    margin-bottom: 16px;
-    font-size: 14px;
+    margin-bottom: 24px;
+    font-size: 16px;
     color: #4a5568;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid $primary-color;
+    
+    p {
+        font-size: 16px;
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        
+        strong {
+            min-width: 100px;
+            display: inline-block;
+            color: #4a5568;
+        }
+        
+        span {
+            color: #2d3748;
+            font-weight: 500;
+        }
+    }
 }
 
 .credit-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 24px;
     font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.credit-table-header {
-    background-color: #f7fafc;
-}
 
-.credit-table-cell {
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-}
 
 .credit-table-cell--left {
     text-align: left;
@@ -56,38 +111,71 @@
     text-align: right;
 }
 
-.credit-row:nth-child(even) {
-    background-color: #fafafa;
+.credit-row {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+        background-color: #f8fafc;
+    }
+    
+    &:nth-child(even) {
+        background-color: #f9fafb;
+        
+        &:hover {
+            background-color: #f1f5f9;
+        }
+    }
 }
 
 .total-due-row {
     font-weight: 700;
-    background-color: #f9fafb;
-}
-
-.total-due-label {
-    text-align: right;
-    padding-right: 12px;
-}
-
-.total-due-amount {
-    text-align: right;
+    background-color: #f0fdf4;
+    
+    td {
+        border-top: 2px solid #dcfce7;
+        border-bottom: none;
+    }
+    
+    .total-due-amount {
+        color: $primary-color;
+        font-size: 16px;
+    }
 }
 
 .payment-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+    background: #f8fafc;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #edf2f7;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
+    gap: 6px;
 }
 
 .form-label {
     font-weight: 600;
     margin-bottom: 4px;
+    color: #4a5568;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    
+    &::after {
+        content: '*';
+        color: #e53e3e;
+        margin-left: 4px;
+        opacity: 0;
+    }
+    
+    &.required::after {
+        opacity: 1;
+    }
 }
 
 .form-input,
@@ -95,40 +183,93 @@
     width: 100%;
     padding: 10px 12px;
     border: 1px solid $feild_border;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 6px;
+    font-size: 15px;
     color: #2d3748;
     box-sizing: border-box;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: white;
+    
+    &:focus {
+        outline: none;
+        border-color: $gray-color;
+    }
+    
+    &::placeholder {
+        color: #a0aec0;
+    }
 }
 
-.form-input:focus,
-.form-textarea:focus {
-    outline: none;
-    border-color: $gray-color;
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
 .Payment-submit-btn-outer {
     display: flex;
     justify-content: flex-end;
-
+    margin-top: 12px;
+    
     .submit-button {
-        background-color: $primary-color;
+        background: linear-gradient(135deg, $primary-color, darken($primary-color, 10%));
         color: white;
         width: fit-content;
-        padding: 10px 12px;
-        border-radius: 5px;
+        padding: 12px 24px;
+        border-radius: 6px;
         font-weight: 600;
         cursor: pointer;
         border: none;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background-color: $hover-color;
+        }
+        
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     }
 
+}
 
-
-    .submit-button:disabled {
-        background-color: #a0aec0;
-        cursor: not-allowed;
+.amount-input-container {
+    position: relative;
+    
+    &::before {
+        content: '₹';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #4a5568;
+        font-weight: 500;
     }
+    
+    .form-input {
+        padding-left: 32px;
+    }
+}
 
+// Responsive adjustments
+@media (max-width: 768px) {
+    .pay-credit-container {
+        padding: 20px;
+    }
+    
+    .credit-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .payment-form {
+        padding: 16px;
+    }
 }

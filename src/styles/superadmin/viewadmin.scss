@@ -195,7 +195,7 @@
   margin-bottom: 3rem;
   position: relative;
   overflow: hidden;
-  border: $border;
+
 
   &::before {
     content: '';
@@ -308,7 +308,7 @@
   border-radius: $border-radius;
   padding: 2rem;
   box-shadow: $secondary-shadow;
-  border: $border;
+ 
 
   .admin-subtitle {
     color: var(--primary-color);
@@ -329,7 +329,7 @@
       padding: 1.5rem;
       border-radius: $border-radius;
       transition: all $transition;
-      border: $border;
+ 
 
       &:hover {
         transform: translateY(-3px);

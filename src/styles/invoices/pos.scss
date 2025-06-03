@@ -22,7 +22,7 @@
 .cats-sidebar {
     width: 150px;
     background: $white;
-    border-right: $border;
+    border-right: 1px solid $border-color;
     overflow-y: auto;
 
     button {
@@ -45,7 +45,7 @@
     .category-tab {
         display: flex;
         align-items: center;
-        border-bottom: $border;
+        border-bottom: 1px solid $border-color;
         background-color: $white;
         color: $dark-color;
     }
@@ -345,7 +345,7 @@
     max-width: 500px;
     width: 100%;
     background: $white;
-    border-left: $border;
+    border-left: 1px solid $border-color;
     display: flex;
     flex-direction: column;
     overflow: scroll;
@@ -579,14 +579,7 @@
         background: #f1f1f1;
         margin-top: 20px;
         padding: 8px;
-        border-right: $border;
-
-        .total {
-            strong {
-                color: $success-color;
-                border-bottom: 2px solid $success-color;
-            }
-        }
+        border-right: 1px solid $border-color;
     }
 
     .sectionToggle {
@@ -838,7 +831,7 @@
         width: 100%;
         height: auto;
         border-right: none;
-        border-bottom: $border;
+        border-bottom: 1px solid $border-color;
         flex-direction: row;
         overflow-x: auto;
         white-space: nowrap;
@@ -852,7 +845,7 @@
         width: 100%;
         max-width: 100%;
         border-left: none;
-        border-top: $border;
+        border-top: 1px solid $border-color;
     }
 
     .checkout-panel .tab,

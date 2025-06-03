@@ -10,14 +10,20 @@
   }
   .Mui-selected {
     background: #384b70 !important;
-    border-bottom-color: #f8f7fa !important;
     color: white !important;
 }
 
 }
+.css-6cy0zc-MuiTabs-root .MuiTabs-indicator {
+  background-color: transparent !important;
+
 .css-1muzjf8 {
-  border :none !important;
+  border-bottom :none !important;
   margin-bottom: 0px !important;
+}
+.Mui-disabled {
+    color: #384b70;
+}
 }
 
 
@@ -155,10 +161,12 @@
 }
 
 .card-left .label {
-  color: $hover-color;
-  font-weight: 500;
-  margin: 4px 0;
-  font-size: 18px;
+  letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
 }
 
 .card-left .note {

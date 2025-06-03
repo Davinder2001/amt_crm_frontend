@@ -52,7 +52,7 @@ const Page: React.FC = () => {
         toast.success(response.message);
         setNewRoleName("");
         setSelectedPermissions([]);
-        router.push(`/${companySlug}/permissions`);
+        router.push(`/${companySlug}/settings/permissions`);
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

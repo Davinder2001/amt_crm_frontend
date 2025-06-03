@@ -38,6 +38,21 @@ const Packages: React.FC<PackagesProps> = ({
         isInitialLoad.current = false;
     };
 
+    const handleSubscriptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newType = e.target.value as 'monthly' | 'annual';
+        setSubscriptionType(newType);
+
+        // Update localStorage 'addCompany' key
+        if (typeof window !== 'undefined') {
+            const existing = localStorage.getItem('addCompany');
+            const parsed = existing ? JSON.parse(existing) : {};
+            localStorage.setItem('addCompany', JSON.stringify({
+                ...parsed,
+                subscription_type: newType
+            }));
+        }
+    };
+
     useEffect(() => {
         if (isInitialLoad.current && categories.length > 0 && plans.length > 0) {
             const firstCategoryWithPackages = categories.find((category) =>
@@ -94,9 +109,7 @@ const Packages: React.FC<PackagesProps> = ({
                         <select
                             id="subscription-select"
                             value={subscriptionType ?? ''}
-                            onChange={(e) =>
-                                setSubscriptionType(e.target.value as 'monthly' | 'annual')
-                            }
+                            onChange={handleSubscriptionChange}
                         >
                             <option value="">Select Type</option>
                             <option value="monthly">Monthly</option>

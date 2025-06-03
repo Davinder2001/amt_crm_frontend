@@ -67,7 +67,7 @@ export default function EditRolePage() {
         permissions: selectedPermissions,
       }).unwrap();
       toast.success('Role updated!');
-      router.push(`/${companySlug}/permissions/roles`);
+      router.push(`/${companySlug}/settings/permissions/roles`);
     } catch {
       toast.error( 'Update failed');
     }

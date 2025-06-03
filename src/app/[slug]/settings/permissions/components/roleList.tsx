@@ -77,7 +77,7 @@ const RoleList: React.FC = () => {
         <FaArrowLeft size={20} color="#fff" />
       </button>
       
-        <Link className="navigation-button" href={`/${companySlug}/permissions/add-role`}>
+        <Link className="navigation-button" href={`/${companySlug}/settings/permissions/add-role`}>
           <FaPlus /> Add Role
         </Link>
       </div>
@@ -86,8 +86,8 @@ const RoleList: React.FC = () => {
         data={rolesData?.roles || []}
         columns={columns}
         onDelete={(id) => handleDeleteRole(id)}
-        onEdit={(id) => router.push(`/${companySlug}/permissions/edit-role/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/permissions/view-role/${id}`)}
+        onEdit={(id) => router.push(`/${companySlug}/settings/permissions/edit-role/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/settings/permissions/view-role/${id}`)}
       />
     </div>
   );

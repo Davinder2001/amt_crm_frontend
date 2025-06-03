@@ -27,6 +27,7 @@ interface InvoiceCredit {
   amount_paid: string;
   outstanding: string;
   status: string;
+  customer:Customer;
   created_at: string;
   updated_at: string;
 }

@@ -5,6 +5,7 @@ import Sidebar from "@/app/[slug]/_common/sidebar/sidebar";
 import Header from "@/app/[slug]/_common/header/header";
 import { usePathname } from "next/navigation";
 import FooterBarMenu from "@/app/[slug]/_common/footer/FooterBarMenu";
+import { companyAndPaymentRoutes } from "@/routes";
 
 export const AdminEmployeeLayout = ({
   children,
@@ -16,6 +17,9 @@ export const AdminEmployeeLayout = ({
   const [isToggle, setIsToggle] = useState<boolean>(false); // mobile sidebar toggle state
   const [isMobile, setIsMobile] = useState<boolean>(false); // check if the device is mobile
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const isCompanyOrPaymentRoute = companyAndPaymentRoutes.some(route =>
+    pathname === route || pathname.includes(route)
+  );
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window !== "undefined") {
@@ -80,11 +84,10 @@ export const AdminEmployeeLayout = ({
     };
   }, [isToggle, isMobile]);
 
-  // Render children if on the homepage
-  if (pathname === "/" || pathname === "/add-company" || pathname.includes('/confirm-payment')) {
+  // ✅ Render children for specific allowed paths
+  if (pathname === '/' || isCompanyOrPaymentRoute) {
     return <>{children}</>;
   }
-
   return (
     <div className="main">
       {/* Overlay that appears when mobile menu is open */}

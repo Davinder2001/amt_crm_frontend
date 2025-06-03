@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { authRoutes, publicRoutes } from '@/routes';
+import { authRoutes, companyAndPaymentRoutes, publicRoutes } from '@/routes';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -36,11 +36,15 @@ export function middleware(request: NextRequest) {
 
     if (userType === 'admin') {
 
-      // ✅ 1. Allow confirm-payment *early*
-      if (pathname.includes('/confirm-payment') || pathname.includes('/confirm-company-paymen')) {
+      // ✅ 1. Allow access to specific routes early (e.g., add-company, confirm-payment)
+      const isCompanyOrPaymentRoute = companyAndPaymentRoutes.some(route =>
+        pathname === route || pathname.includes(route)
+      );
+
+      if (isCompanyOrPaymentRoute) {
         return NextResponse.next();
       }
-      
+
       const selectionCount = request.cookies.get('company_selection_count')?.value;
 
       // 🔒 If count is set and trying to access "/", block access
@@ -53,10 +57,6 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
       }
 
-      // ✅ Allow /add-company route even without slug
-      if (pathname === '/add-company') {
-        return NextResponse.next();
-      }
       // Redirect if not accessing their own company area
       if (!companySlug || !pathname.startsWith(`/${companySlug}`)) {
         return NextResponse.redirect(new URL('/', request.url));

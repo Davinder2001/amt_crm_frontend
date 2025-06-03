@@ -519,8 +519,7 @@ form .clear-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 85vh;
-    max-height: 100vh;
+    height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
     padding: 20px;
 
@@ -634,6 +633,15 @@ form .clear-button {
             }
         }
 
+        .retry-button {
+            background-color: $primary-color;
+            color: $white;
+            padding: 8px 10px;
+            border: none;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: $border-radius;
+        }
     }
 
 }

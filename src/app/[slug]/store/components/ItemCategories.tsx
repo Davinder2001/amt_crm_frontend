@@ -172,7 +172,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         return areEqual ? prev : newExpanded;
       });
     }
-  }, [data]); // Only run when data changes
+  }, [data, selectedCategoriesIds]); // Only run when data changes
 
   // Sync deselected categories to parent when none are selected
   useEffect(() => {

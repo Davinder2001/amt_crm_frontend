@@ -41,7 +41,7 @@ useEffect(() => {
 
     try {
       // ✅ Call mutation with both orderId and formdata
-      await addCompany({ orderId, formdata }).unwrap();
+      await addCompany({ redirect_url, orderId, formdata }).unwrap();
       toast.success('Company Added successfully!');
       localStorage.removeItem('addCompany');
       router.push(`/${companySlug}/my-account`);

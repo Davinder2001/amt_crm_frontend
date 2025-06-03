@@ -7,6 +7,8 @@ import {
     useToggleAttributeStatusMutation,
 } from '@/slices/store/storeApi';
 import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa';
+import { HiOutlineDocumentText } from 'react-icons/hi';
+import LoadingState from '@/components/common/LoadingState';
 
 const Attributes = () => {
     const { data: attributes, isLoading, isError } = useFetchAttributesQuery();
@@ -67,25 +69,27 @@ const Attributes = () => {
         }
     };
 
-    if (isLoading) return <p>Loading attributes...</p>;
+    if (isLoading) return <LoadingState />;
     if (isError) return <p>Failed to load attributes.</p>;
 
     return (
         <>
             {/* Open Canvas Button */}
-            <div className="add-attribute-button-container">
-                <button
-                    type="button"
-                    onClick={() => setIsCanvasOpen(true)}
-                    className='buttons floting-attributes-button' title='Add New Attribute'
-                >
-                    <FaPlus />
-                </button>
-            </div>
+            {attributes && attributes?.length > 0 && (
+                <div className="add-attribute-button-container">
+                    <button
+                        type="button"
+                        onClick={() => setIsCanvasOpen(true)}
+                        className='buttons floting-attributes-button' title='Add New Attribute'
+                    >
+                        <FaPlus />
+                    </button>
+                </div>
+            )}
 
             {/* Sliding Canvas */}
             <div
-                className={`canvas ${isCanvasOpen ? 'open' : ''}`}
+                className={`attribute-canvas ${isCanvasOpen ? 'open' : ''}`}
             >
                 <div className="canvas-content">
                     <h2 className="canvas-title  create-attribute-title">Create New Attribute</h2>
@@ -142,6 +146,24 @@ const Attributes = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Empty State */}
+            {attributes?.length === 0 && (
+                <div className="empty-attributes-state">
+                    <div className="empty-illustration">
+                        <HiOutlineDocumentText size={80} color="#6c757d" />
+                    </div>
+                    <h3>No Attributes Found</h3>
+                    <p>You haven&apos;t created any attributes yet. Click the button below to get started.</p>
+                    <button
+                        type="button"
+                        onClick={() => setIsCanvasOpen(true)}
+                        className="buttons empty-state-button"
+                    >
+                        <FaPlus /> Create Your First Attribute
+                    </button>
+                </div>
+            )}
 
             {/* Attributes Table */}
             <div className="attributes-table">

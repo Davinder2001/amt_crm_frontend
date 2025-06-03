@@ -1,6 +1,7 @@
 'use client';
 import { useFetchVariationsQuery } from '@/slices/store/storeApi';
 import React, { useEffect, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
@@ -180,9 +181,9 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                 ))}
             </div>
 
-            <div style={{ marginTop: '1rem' }} className='variation-buttons-container'>
+            <div className='variation-buttons-container'>
                 <button type="button" onClick={handleAddCombination} className="buttons">
-                    Add More
+                   <FaPlus size={12}/> Add More
                 </button>
                 <button type="button" onClick={handleReset} className="buttons">
                     Reset

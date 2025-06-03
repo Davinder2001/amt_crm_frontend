@@ -16,3 +16,6 @@ export const employeeRoutes = (slug?: string) => [
 export const superAdminRoutes = [
   '/superadmin/*', //  Handle all nested superadmin routes
 ];
+
+// company and payment routes
+export const companyAndPaymentRoutes = ['/add-company', '/confirm-payment', '/failed-company-payment']

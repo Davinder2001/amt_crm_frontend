@@ -96,11 +96,11 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             scrollButtons="auto"
                             sx={{
                                 '& .MuiTab-root': {
-                                    color: '#009693',
+                                    color: '#384b70',
                                     '&.Mui-disabled': { color: '#ccc' },
-                                    '&.Mui-selected': { color: '#009693' },
+                                    '&.Mui-selected': { color: '#384b70' },
                                 },
-                                '& .MuiTabs-indicator': { backgroundColor: '#009693' },
+                                '& .MuiTabs-indicator': { backgroundColor: '#384b70' },
                             }}
                         >
                             <Tab label="Basic Info" disabled={tabCompletion && !tabCompletion[0]} />
@@ -222,16 +222,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         <FiXCircle />
                     </span>
 
-                    {(isFormModified?.() || !isEditMode) && (
-                        <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-                            <button type="button" className="buttons" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
-                                Cancel
-                            </button>
-                            <button type="submit" className="buttons" disabled={isLoading}>
-                                {isLoading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update' : 'Save')}
-                            </button>
-                        </div>
-                    )}
                 </div>
 
                 <div className="right_sidebar_row">
@@ -287,6 +277,17 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             />
                         </div>
                     </div>
+
+                    {(isFormModified?.() || !isEditMode) && (
+                        <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
+                            <button type="button" className="buttons" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
+                                Cancel
+                            </button>
+                            <button type="submit" className="buttons" disabled={isLoading}>
+                                {isLoading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update' : 'Save')}
+                            </button>
+                        </div>
+                    )}
                 </div>
             </form >
         </>

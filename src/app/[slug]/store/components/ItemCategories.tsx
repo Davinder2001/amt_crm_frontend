@@ -137,10 +137,48 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     setHasChanges(false);
   };
 
+  
+  // Initial expansion of parent categories (only once when data loads)
+  useEffect(() => {
+    if (!data?.data) return;
+
+    // Build map
+    const categoryMap = new Map<number, CategoryNode>();
+    const buildMap = (categories: CategoryNode[]) => {
+      categories.forEach(cat => {
+        categoryMap.set(cat.id, cat);
+        if (cat.children) buildMap(cat.children);
+      });
+    };
+    buildMap(data.data);
+
+    // Find parents to expand based on initially selected categories
+    const parentsToExpand = new Set<number>();
+    selectedCategoriesIds.forEach(selectedId => {
+      let current = categoryMap.get(selectedId);
+      while (current && current.parent_id) {
+        parentsToExpand.add(current.parent_id);
+        current = categoryMap.get(current.parent_id);
+      }
+    });
+
+    // Only set expanded categories if we have parents to expand
+    if (parentsToExpand.size > 0) {
+      setExpandedCategories(prev => {
+        const newExpanded = Array.from(parentsToExpand);
+        // Check if arrays differ
+        const areEqual = prev.length === newExpanded.length &&
+          prev.every(id => newExpanded.includes(id));
+        return areEqual ? prev : newExpanded;
+      });
+    }
+  }, [data]); // Only run when data changes
+
   // Sync deselected categories to parent when none are selected
   useEffect(() => {
     if (selectedCategoriesIds.length === 0 && hasChanges) {
       setSelectedCategories([]);
+      setHasChanges(false);
     }
   }, [selectedCategoriesIds, hasChanges, setSelectedCategories]);
 
@@ -422,7 +460,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               <Button
                 variant="outlined"
                 startIcon={<FaTimes size={12} />}
-                onClick={() => setIsCreatingNewCategory(false)}
+                onClick={() => {
+                  setIsCreatingNewCategory(false)
+                }}
                 sx={{
                   borderColor: '#384b70',
                   color: '#384b70',

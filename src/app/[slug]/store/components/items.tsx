@@ -8,13 +8,14 @@ import {
   useImportStoreItemsMutation,
 } from '@/slices/store/storeApi';
 // import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaPlus, FaDownload, FaUpload, FaUsers } from 'react-icons/fa';
+import { FaPlus, FaDownload, FaUpload, FaUsers, FaBoxOpen } from 'react-icons/fa';
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/common/Loader';
 import { useCompany } from '@/utils/Company';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 // Add this type above your component or import it if defined elsewhere
 type StoreItem = {
@@ -148,14 +149,34 @@ const Items: React.FC = () => {
   }));
 
 
-  if (isLoading) return <Loader />;
-  if (error) return <p>Error fetching items.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to load items"
+      message="We encountered an error while loading your store items. Please try again later."
+    />
+  );
+  if (storeItems.length === 0) return (
+    <EmptyState
+      icon={<FaBoxOpen className="empty-state-icon" />}
+      title="No items found"
+      message="You haven't added any items yet. Start by creating your first store item."
+      action={
+        <button
+          className="buttons"
+          onClick={() => router.push(`/${companySlug}/store/add-item`)}
+        >
+          <FaPlus size={18} /> Add New Item
+        </button>
+      }
+    />
+  );
 
   return (
     <div className="items-page">
       <div className="items-page-outer">
         <TableToolbar
-          filters={{}}
           onFilterChange={handleFilterChange}
           columns={columns.map((col) => ({ label: col.label, key: col.label }))}
           visibleColumns={visibleColumns}
@@ -166,12 +187,14 @@ const Items: React.FC = () => {
           ]}
           actions={[
             { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
-            { label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) },
             {
               label: 'Add Purchase Bill',
               icon: <FaPlus />,
               onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
             },
+            ...(storeItems.length > 0
+              ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]
+              : []),
           ]}
         />
 

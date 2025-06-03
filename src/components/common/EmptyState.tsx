@@ -1,28 +1,17 @@
-// src/components/common/EmptyState.tsx
 import React from 'react';
-import { FiAlertCircle, FiDatabase, FiInbox, FiSearch, FiMeh } from 'react-icons/fi';
 
 type EmptyStateProps = {
     title?: string;
     message?: string;
-    icon?: 'default' | 'search' | 'data' | 'inbox' | 'alert' | 'meh';
+    icon?: React.ReactNode;
     action?: React.ReactNode;
     className?: string;
-};
-
-const iconMap = {
-    default: <FiDatabase className="empty-state-icon" />,
-    search: <FiSearch className="empty-state-icon" />,
-    data: <FiDatabase className="empty-state-icon" />,
-    inbox: <FiInbox className="empty-state-icon" />,
-    alert: <FiAlertCircle className="empty-state-icon" />,
-    meh: <FiMeh className="empty-state-icon" />,
 };
 
 function EmptyState({
     title = 'No data available',
     message = 'There is nothing to display here at the moment.',
-    icon = 'default',
+    icon,
     action,
     className = '',
 }: EmptyStateProps) {
@@ -30,7 +19,7 @@ function EmptyState({
         <div className={`common-empty-state ${className}`}>
             <div className="empty-state-content">
                 <div className="empty-state-icon-container">
-                    {iconMap[icon]}
+                    {icon}
                 </div>
                 <h3 className="empty-state-title">{title}</h3>
                 <p className="empty-state-message">{message}</p>

@@ -24,9 +24,7 @@
         font-size: $font-size-small;
 
         &:hover {
-            background: rgba(var(--primary-color), 8%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(var(--primary-color), 0.25);
+            background: $hover-color;
         }
     }
 }

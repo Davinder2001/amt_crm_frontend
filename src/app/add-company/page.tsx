@@ -12,7 +12,7 @@ const Page = () => {
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
   const categories = categoriesData ?? [];
 
-  const [subscriptionType, setSubscriptionType] = useState<'monthly' | 'annually' | null>(null);
+  const [subscriptionType, setSubscriptionType] = useState<'monthly' | 'annual' | null>(null);
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
@@ -25,27 +25,27 @@ const Page = () => {
   return (
     <div className='outer-div'>
       {hasValidSelection ? (
-      <>
-        <Link href="/add-company" className="back-button" onClick={() => {
-        setSelectedPackageId(null);
-        setSelectedCategoryId(null);
-        setSubscriptionType(null);
-        }}>
-        ← Back
-        </Link>
-        <AddCompanyForm packageId={selectedPackageId} categoryId={selectedCategoryId} subscriptionType={subscriptionType} />
-      </>
+        <>
+          <Link href="/add-company" className="back-button" onClick={() => {
+            setSelectedPackageId(null);
+            setSelectedCategoryId(null);
+            setSubscriptionType(null);
+          }}>
+            ← Back
+          </Link>
+          <AddCompanyForm packageId={selectedPackageId} categoryId={selectedCategoryId} subscriptionType={subscriptionType} />
+        </>
       ) : (
-      <Packages
-        plans={plans}
-        setSelectedPackageId={setSelectedPackageId}
-        selectedPackageId={selectedPackageId}
-        categories={categories}
-        selectedCategoryId={selectedCategoryId}
-        setSelectedCategoryId={setSelectedCategoryId}
-        subscriptionType={subscriptionType}
-        setSubscriptionType={setSubscriptionType}
-      />
+        <Packages
+          plans={plans}
+          setSelectedPackageId={setSelectedPackageId}
+          selectedPackageId={selectedPackageId}
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
+          subscriptionType={subscriptionType}
+          setSubscriptionType={setSubscriptionType}
+        />
 
       )}
     </div>

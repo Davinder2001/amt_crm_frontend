@@ -178,9 +178,7 @@
 
     .fields-wrapper {
       padding: 12px 20px;
-
     }
-
 
     .basic_label_header {
       display: flex;
@@ -218,14 +216,7 @@
   .add-items-form-input-label-container {
     display: flex;
     flex-direction: column;
-    gap: 6px;
     position: relative;
-
-    label {
-      color: #8a9bb8;
-      font-size: 14px;
-      font-weight: 600;
-    }
 
 
     input,
@@ -234,12 +225,12 @@
       width: 100%;
       padding: 10px;
       font-size: 16px;
-      border: 1px solid #00969357;
+      border: 1px solid $feild_border;
       border-radius: 5px;
 
       &:focus {
-        border-color: var(--primary-color);
-        background: #ffffff;
+        border-color: $gray-color;
+        background: transparent;
         transform: scale(1);
       }
     }
@@ -477,14 +468,14 @@
     }
 
     label.file-upload-button {
-      padding: 9px 12px;
-      background-color: $primary-color;
-      border-radius: 5px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: #fff !important;
       cursor: pointer;
+      background-color: #384b70;
+      border-radius: 5px;
+      justify-content: center;
+      align-items: center;
+      padding: 9px 12px;
+      display: flex !important;
     }
   }
 

@@ -2,11 +2,9 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { useGetQuotationByIdQuery } from '@/slices/quotation/quotationApi';
-import { motion } from 'framer-motion';
-import { FaClipboardList } from 'react-icons/fa';
+import { FaClipboardList, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft } from 'react-icons/fa';
 
 const QuotationPage = () => {
   const params = useParams();
@@ -22,35 +20,30 @@ const QuotationPage = () => {
   if (isError || !quotation) return <p className="invoice-error">Something went wrong while fetching quotation.</p>;
 
   return (
-    <motion.div
-      className="quotation-container"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div><Link href={`/${companySlug}/invoices/qutations`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link></div>
+    <div className="quotation-container">
+      <div>
+        <Link href={`/${companySlug}/invoices/qutations`} className="back-button">
+          <FaArrowLeft size={20} color="#fff" />
+        </Link>
+      </div>
+
       <div className="quotation-card">
         <div className="quotation-header">
-          <h1><FaClipboardList style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} /> Quotation</h1>
+          <h1>
+            <FaClipboardList style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} /> Quotation
+          </h1>
           <div className="quotation-dates">
             <span><strong>Created:</strong> {new Date(quotation.created_at).toISOString().split('T')[0]}</span>
             <span><strong>Updated:</strong> {new Date(quotation.updated_at).toISOString().split('T')[0]}</span>
           </div>
         </div>
 
-        <motion.div
-          className="client-info"
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+        <div className="client-info">
           <p className="company-name">{quotation.company_name}</p>
           <p><strong>Name:</strong> {quotation.customer_name}</p>
           <p><strong>Phone:</strong> {quotation.customer_number}</p>
           <p><strong>Email:</strong> {quotation.customer_email}</p>
-        </motion.div>
+        </div>
 
         <div className="quotation-items">
           <table>
@@ -83,7 +76,7 @@ const QuotationPage = () => {
             <span>₹{quotation.sub_total}</span>
           </div>
           <div className="summary-row">
-            <span>Tax <strong className='tax'>({quotation.tax_percent}%)</strong></span>
+            <span>Tax <strong className="tax">({quotation.tax_percent}%)</strong></span>
             <span>₹{quotation.tax_amount}</span>
           </div>
           <div className="summary-row">
@@ -92,7 +85,7 @@ const QuotationPage = () => {
           </div>
           <div className="summary-row total">
             <span>Grand Total</span>
-            <span className='quotation-grand-total'>₹{quotation.total}</span>
+            <span className="quotation-grand-total">₹{quotation.total}</span>
           </div>
         </div>
 
@@ -100,7 +93,7 @@ const QuotationPage = () => {
           <p>Thank you!</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

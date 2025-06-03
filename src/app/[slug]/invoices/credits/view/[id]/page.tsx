@@ -38,7 +38,11 @@ const ViewCredits: React.FC = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
   const { setTitle } = useBreadcrumb();
-  const { data, isLoading, isError } = useGetCreditInvoiceByIdQuery(Number(id));
+  const { data, isLoading, isError } = useGetCreditInvoiceByIdQuery(Number(id)) as {
+    data: { customer?: { name: string; email: string; number: string; total_due: number; credits: CreditItem[] } };
+    isLoading: boolean;
+    isError: boolean;
+  };
   const [visibleColumns, setVisibleColumns] = useState<ColumnKey[]>([]);
 
   useEffect(() => {

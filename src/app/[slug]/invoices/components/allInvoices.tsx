@@ -2,25 +2,29 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaPlus, FaWhatsapp } from "react-icons/fa";
 import {
-  useFetchInvoicesQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation
 } from "@/slices/invoices/invoice";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { toast } from "react-toastify";
 import { useCompany } from "@/utils/Company";
-import Loader from "@/components/common/Loader";
+import EmptyState from "@/components/common/EmptyState";
+import LoadingState from "@/components/common/LoadingState";
 
-const AllInvoices = () => {
-  const { data, isLoading, isError } = useFetchInvoicesQuery();
+interface allInvoicesProps {
+  invoices: Invoice[];
+  isLoadingInvoices: boolean;
+  isError: boolean;
+}
+
+const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
   const [sendToWhatsapp, { isLoading: sending }] = useSendInvoiceToWhatsappMutation();
   const router = useRouter();
   const { companySlug } = useCompany();
 
-  const invoices = data?.invoices ?? [];
 
   const handleDownloadPdf = async (invoiceId: number) => {
     try {
@@ -98,9 +102,28 @@ const AllInvoices = () => {
     },
   ];
 
-  if (isLoading) return <Loader />;
-  if (isError) return <p>Failed to load invoices.</p>;
-  if (invoices.length === 0) return <p>No invoices found.</p>;
+  if (isLoadingInvoices) return <LoadingState />;
+  if (isError) return <EmptyState
+    icon="alert"
+    title="Failed to load invoices"
+    message="We encountered an error while loading your invoices. Please try again later."
+  />;
+
+  if (invoices.length === 0) return (
+    <EmptyState
+      icon="data"
+      title="No invoices found"
+      message="You haven't created any invoices yet. Get started by creating your first invoice."
+      action={
+        <button
+          className="buttons"
+          onClick={() => router.push(`/${companySlug}/invoices/new-invoice`)}
+        >
+          <FaPlus size={18} /> Add New Invoice
+        </button>
+      }
+    />
+  );
 
   return (
     <ResponsiveTable

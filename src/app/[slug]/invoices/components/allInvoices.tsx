@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FaPlus, FaWhatsapp } from "react-icons/fa";
+import { FaFileInvoice, FaPlus, FaWhatsapp } from "react-icons/fa";
 import {
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation
@@ -111,7 +111,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
 
   if (invoices.length === 0) return (
     <EmptyState
-      icon="data"
+      icon={<FaFileInvoice className="empty-state-icon" />}
       title="No invoices found"
       message="You haven't created any invoices yet. Get started by creating your first invoice."
       action={

@@ -7,6 +7,7 @@ const settingItems = [
   { label: 'Shifts', href: './settings/shifts' },
   { label: 'Taxes', href: './settings/taxes' },
   { label: 'Permissions', href: './settings/permissions' },
+  { label: 'Bank Accounts', href: './settings/bank-accounts' },
 ];
 
 const SettingNavigation = () => {

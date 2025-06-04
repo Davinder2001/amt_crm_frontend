@@ -229,7 +229,7 @@
       border-radius: $border-radius;
 
       &:focus {
-        border-color: $gray-color;
+       border-color: $hover-color;
         background: transparent;
         transform: scale(1);
       }
@@ -298,7 +298,7 @@
       background: $white;
       padding: 2rem;
       border-radius: $border-radius;
-      box-shadow: $box-shadow;
+      border: 1px solid $border-color;
       margin-bottom: 1.5rem;
     }
 
@@ -323,8 +323,8 @@
 
       .form-input {
         width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid 1px solid $feild_border;
+        padding: 8px 12px;
+        border: 1px solid $border-color;
         border-radius: $border-radius;
         font-size: $font-size;
         transition: $transition;
@@ -332,7 +332,7 @@
         &:focus {
           outline: none;
           background-color: transparent;
-          border-color: $gray-color;
+          border-color: $hover-color;
         }
 
         &::placeholder {
@@ -368,8 +368,8 @@
       color: $white;
       border: none;
       padding: 10px 12px;
+      font-size: 16px;
       border-radius: $border-radius;
-      font-weight: $font-weight-semi-bold;
       cursor: pointer;
       transition: $transition;
       display: flex;
@@ -438,17 +438,18 @@
         svg {
           color: $primary-color;
           font-size: $input-icon-size;
+          display: none;
         }
       }
 
       input {
         border: 1px solid $feild_border;
-        padding: 9px;
+        padding: 10px 12px;
         width: 100%;
         border-radius: $border-radius;
 
         &:focus {
-          border-color: $gray-color;
+          border-color:$hover-color;
           background: transparent;
         }
       }
@@ -476,13 +477,39 @@
       align-items: center;
       padding: 9px 12px;
       display: flex !important;
+      font-size: 16px;
     }
   }
 
   .add-as-vendor-select-tex-outer {
     display: flex;
-    gap: 20px;
-    padding: 0px 20px;
+    gap: 50px;
+    align-items: center;
+  }
+ .tax-box {
+  label.tax-radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+    color: $primary-color;
+ }
+  strong {
+    color: $primary-color;
+    margin-bottom: 10px;
+    display: inline-flex;
+  }
+}
+  .overall-tax {
+    strong {
+      color: $primary-color;
+      margin-bottom: 10px;
+      display: inline-flex;
+    }
+    select {
+      width: 300px;
+    }
   }
 }
 
@@ -528,14 +555,14 @@
     }
 
     input {
-      padding: 9px;
+      padding: 10px 12px;
       border: 1px solid $feild_border;
       border-radius: $border-radius;
       width: 100%;
       margin-top: 5px;
 
       &:focus {
-        border-color: $gray-color;
+        border-color: $hover-color;
         background: transparent;
         transform: scale(1);
       }

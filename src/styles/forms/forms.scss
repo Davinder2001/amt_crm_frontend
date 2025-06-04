@@ -66,7 +66,7 @@
 
       &:focus-within {
        background-color: transparent;
-        border-color: $gray-color;
+       border-color: $hover-color;
       }
 
       .input-icon {

@@ -150,7 +150,7 @@
             transition: all 0.2s;
 
             &:focus {
-              border-color: $gray-color ;
+             border-color: $hover-color ;
               outline: none;
             }
           }
@@ -165,7 +165,7 @@
             transition: all 0.2s;
 
             &:focus {
-              border-color: $gray-color;
+             border-color: $hover-color;
               outline: none;
             }
           }

@@ -356,7 +356,7 @@
             border: 1px solid $feild_border;
 
             &:focus {
-                border-color: $gray-color;
+               border-color: $hover-color;
             }
         }
     }
@@ -612,7 +612,7 @@
             padding: 10px 12px;
 
             &:focus {
-                border-color: $gray-color;
+               border-color: $hover-color;
             }
 
         }

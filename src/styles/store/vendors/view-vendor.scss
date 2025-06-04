@@ -46,11 +46,11 @@
     }
 
     .delete-button {
-      background-color: #e74c3c; // red color for delete
+      background-color: $danger-color; // red color for delete
       color: #fff;
 
       &:hover {
-        background-color: darken(#e74c3c, 10%);
+        background-color: darken(#e73c3c92, 10%);
       }
 
       &:active {
@@ -70,7 +70,7 @@
     background: $white;
     border-radius: $border-radius;
     padding: 2rem;
-    box-shadow: $box-shadow;
+    border: 1px solid $border-color;
  
 
     h2.vendor-title {
@@ -85,7 +85,8 @@
   .vendor-info {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap:5px;
+    margin-top: 20px;
 
     p {
       display: flex;
@@ -93,6 +94,9 @@
       margin: 0.5rem 0;
       font-size: $font-size-small;
       gap: 5px;
+    }
+    strong {
+      color: $primary-color;
     }
   }
 }

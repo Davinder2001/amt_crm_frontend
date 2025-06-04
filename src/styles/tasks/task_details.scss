@@ -76,7 +76,7 @@
         border-radius: $border-radius;
 
         &:focus {
-          border-color: $gray-color;
+         border-color: $hover-color;
           background: transparent;
         }
 

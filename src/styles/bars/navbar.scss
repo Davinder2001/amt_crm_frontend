@@ -292,16 +292,16 @@ svg {
         }
 
         .logout {
-          color: #e74c3c;
+          color: $danger-color;
           border-top: 1px solid rgba(0, 0, 0, 0.08);
           padding: 10px 20px;
 
           .menu-icon {
-            color: #e74c3c;
+          color: $danger-color;
           }
 
           &:hover {
-            background-color: rgba(231, 76, 60, 0.08);
+            background-color: rgba(0, 0, 0, 0.03);
           }
         }
       }

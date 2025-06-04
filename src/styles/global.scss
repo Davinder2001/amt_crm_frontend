@@ -139,7 +139,10 @@
 
 body {
     background-color: #F8F7FA;
-
+    margin: 0 !important;
+    padding: 0 !important;
+    top: 0 !important;
+    position: relative !important;
 }
 
 ::-webkit-scrollbar {
@@ -446,7 +449,7 @@ h2.react-datepicker__current-month,
 
 
 input::placeholder,
-textarea::placeholder{
+textarea::placeholder {
     color: #ccc;
     font-size: 14px;
     letter-spacing: 0.3px;

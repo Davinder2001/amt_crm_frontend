@@ -17,6 +17,11 @@ const Page = () => {
   const { data } = useGetPendingTasksQuery();
   const [activeTab, setActiveTab] = useState(0);
 
+  // Modal states
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
@@ -40,7 +45,7 @@ const Page = () => {
           {
             label: 'Add Task',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/tasks/add-task`),
+            onClick: () => setIsAddModalOpen(true),
           },
           {
             label: 'Attendance',
@@ -64,16 +69,16 @@ const Page = () => {
             style={{ backgroundColor: '#fff' }}
             sx={{
               '& .MuiTab-root': {
-                color: '#009693',
+                color: '#384b70',
                 '&.Mui-disabled': {
                   color: '#ccc',
                 },
                 '&.Mui-selected': {
-                  color: '#009693',
+                  color: '#384b70',
                 },
               },
               '& .MuiTabs-indicator': {
-                backgroundColor: '#009693',
+                backgroundColor: '#384b70',
               },
             }}
           >
@@ -86,10 +91,25 @@ const Page = () => {
       <Box>
         {/* Conditionally render AllTasks or MyTasks based on the selected tab */}
         {showTabs ? (
-          activeTab === 0 ? <AllTasks /> : <MyTasks />
+          activeTab === 0 ?
+            <AllTasks
+              isAddModalOpen={isAddModalOpen}
+              isEditModalOpen={isEditModalOpen}
+              currentTaskId={currentTaskId}
+              setIsAddModalOpen={setIsAddModalOpen}
+              setIsEditModalOpen={setIsEditModalOpen}
+              setCurrentTaskId={setCurrentTaskId}
+            /> : <MyTasks />
         ) : (
           // If no data, just render AllTasks by default
-          <AllTasks />
+          <AllTasks
+            isAddModalOpen={isAddModalOpen}
+            isEditModalOpen={isEditModalOpen}
+            currentTaskId={currentTaskId}
+            setIsAddModalOpen={setIsAddModalOpen}
+            setIsEditModalOpen={setIsEditModalOpen}
+            setCurrentTaskId={setCurrentTaskId}
+          />
         )}
       </Box>
     </>

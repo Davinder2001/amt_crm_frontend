@@ -4,7 +4,7 @@ import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTasks, FaTrash, } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';

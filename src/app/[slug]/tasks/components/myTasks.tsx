@@ -148,7 +148,7 @@ const MyTasks = () => {
         }
         
         .task-button {
-          background: #009693;
+          background: #384b70;
           color: white;
           border: none;
           padding: 0.4rem 0.6rem;
@@ -165,7 +165,7 @@ const MyTasks = () => {
         }
         
         .task-button:hover {
-          background: #00827c;
+          background:rgb(50, 69, 106);
         }
         
         .task-button:disabled {

@@ -1,13 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6';
+import Modal from '@/components/common/Modal';
+import RecurringTaskForm from '../components/RecurringTaskForm';
 
 // You can adjust or import this type from your models
 interface PredefinedTask {
@@ -28,8 +29,16 @@ const Page = () => {
     refetch: () => void;
   };
   const [deleteTask] = useDeletePredefinedTaskMutation();
-  const router = useRouter();
   const { companySlug } = useCompany();
+
+  const [isAddRecurringModalOpen, setIsAddRecurringModalOpen] = useState(false);
+  const [isEditRecurringModalOpen, setIsEditRecurringModalOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+
+  const handleEdit = (taskId: number) => {
+    setSelectedTaskId(taskId);
+    setIsEditRecurringModalOpen(true);
+  };
 
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this recurring task?')) {
@@ -42,19 +51,14 @@ const Page = () => {
     }
   };
 
-  const handleAdd = () => {
-    window.location.href = 'recurring-tasks/create';
-  };
-
   return (
-    <div >
+    <>
       <div className="recurring-wrapper">
-        <div className="header">
-           <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-          <button className="add-btn buttons" onClick={handleAdd}>
-            <FaPlus /> Add
-          </button>
-        </div>
+
+        <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+        <button className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
+          <FaPlus /> Add
+        </button>
 
         {isLoading && <p>Loading...</p>}
         {error && <p>Failed to load tasks.</p>}
@@ -80,7 +84,7 @@ const Page = () => {
                   <td>{task.recurrence_end_date ? new Date(task.recurrence_end_date).toLocaleDateString() : '—'}</td>
                   <td>{task.notify ? 'Yes' : 'No'}</td>
                   <td>
-                    <span onClick={() => router.push(`/${companySlug}/tasks/recurring-tasks/edit/${task.id}`)}><FaEdit /></span>
+                    <span onClick={() => handleEdit(task.id)}><FaEdit /></span>
                     <span onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
                       <FaTrash />
                     </span>
@@ -93,7 +97,38 @@ const Page = () => {
           !isLoading && <p>No recurring tasks found.</p>
         )}
       </div>
-    </div>
+      <Modal
+        isOpen={isAddRecurringModalOpen}
+        onClose={() => setIsAddRecurringModalOpen(false)}
+        title="Add Recurring Task"
+        width="800px"
+      >
+        <RecurringTaskForm
+          mode="add"
+          onSuccess={() => {
+            setIsAddRecurringModalOpen(false);
+            refetch();
+          }}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditRecurringModalOpen}
+        onClose={() => setIsEditRecurringModalOpen(false)}
+        title="Edit Recurring Task"
+        width="800px"
+      >
+        <RecurringTaskForm
+          mode="edit"
+          taskId={selectedTaskId ?? undefined}
+          onSuccess={() => {
+            setIsEditRecurringModalOpen(false);
+            refetch();
+          }}
+        />
+      </Modal>
+
+    </>
   );
 };
 

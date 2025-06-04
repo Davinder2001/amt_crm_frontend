@@ -1,18 +1,17 @@
 import React from 'react';
-import Link from 'next/link';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaPlus } from 'react-icons/fa';
 
-const Navigation = () => {
-    // Fetch company slug
-    const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-    const companySlug = selectedCompany?.selected_company?.company_slug;
+interface NavigationProps {
+    setIsAttandanceOpen: (open: boolean) => void;
+    setIsApplyForLeaveOpen: (open: boolean) => void;
+}
+const Navigation: React.FC<NavigationProps> = ({ setIsAttandanceOpen, setIsApplyForLeaveOpen }) => {
 
     return (
         <>
             <div className="navigation-buttons">
-                <Link className="navigation-button" href={`/${companySlug}/attendence/applay-for-leave`}><FaPlus /><span>Applay for Leave</span></Link>
-                <Link className="navigation-button" href={`/${companySlug}/attendence/add`}><FaPlus /><span>Add Attendence</span></Link>
+                <button className="buttons" onClick={() => setIsApplyForLeaveOpen(true)}><FaPlus /><span>Applay for Leave</span></button>
+                <button className="buttons" onClick={() => setIsAttandanceOpen(true)}><FaPlus /><span>Add Attendence</span></button>
             </div>
         </>
     );

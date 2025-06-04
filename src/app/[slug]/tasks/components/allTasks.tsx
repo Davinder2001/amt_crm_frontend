@@ -5,17 +5,20 @@ import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import Loader from '@/components/common/Loader';
+import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
+import { useRouter } from 'next/navigation';
 
 const AllTasks: React.FC = () => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { companySlug } = useCompany();
   const { refetch: refetchNotifications } = useFetchNotificationsQuery();
+  const router = useRouter();
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this task?')) {
       try {
@@ -30,8 +33,29 @@ const AllTasks: React.FC = () => {
     }
   };
 
-  if (tasksLoading) return <Loader />;
-  if (tasksError) return <p>Error fetching tasks.</p>;
+  if (tasksLoading) return <LoadingState />;
+  if (tasksError) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to load tasks"
+      message="We encountered an error while loading tasks. Please try again later."
+    />
+  );
+  if (!tasks?.data || tasks.data.length === 0) (
+    <EmptyState
+      icon={<FaTasks className="empty-state-icon" />}
+      title="No tasks found"
+      message="You haven't created any tasks yet. Start by assigning your first task."
+      action={
+        <button
+          className="buttons"
+          onClick={() => router.push(`/${companySlug}/tasks/add-task`)}
+        >
+          <FaPlus size={18} /> Add New Task
+        </button>
+      }
+    />
+  );
 
   // Define columns for the responsive table
   const columns = [
@@ -82,7 +106,7 @@ const AllTasks: React.FC = () => {
             disabled={isDeleting}
             className="table-e-d-v-buttons delete-button"
           >
-            <FaTrash  />
+            <FaTrash />
           </button>
         </div>
       ),
@@ -101,7 +125,19 @@ const AllTasks: React.FC = () => {
           onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
         />
       ) : (
-        <p>No tasks available.</p>
+        <EmptyState
+          icon={<FaTasks className="empty-state-icon" />}
+          title="No tasks found"
+          message="You haven't created any tasks yet. Start by assigning your first task."
+          action={
+            <button
+              className="buttons"
+              onClick={() => router.push(`/${companySlug}/tasks/add-task`)}
+            >
+              <FaPlus size={18} /> Add New Task
+            </button>
+          }
+        />
       )}
     </>
   );

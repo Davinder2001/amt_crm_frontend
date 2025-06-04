@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaCog } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
         clearStorage();
         setIsAuthenticated(false);
         dispatch(setTheme('light'));
-        
+
         if (userType === 'user') {
           router.push('/');
         } else {
@@ -143,7 +143,14 @@ const Profile: React.FC = () => {
                   <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
                   <span>Billing</span>
                 </Link>
-
+                <Link
+                  href={`${basePath}/my-account/settings`}
+                  onClick={() => setIsOpen(false)}
+                  className="menu-item"
+                >
+                  <FaCog className="menu-icon" />
+                  <span>Settings</span>
+                </Link>
                 <ThemeSwitcher />
 
                 <button

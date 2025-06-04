@@ -8,7 +8,7 @@
 
 
   .MuiBox-root.css-1muzjf8 {
-    border: none;
+    border: none !important;
     margin-bottom: 0px;
 }
 
@@ -22,11 +22,7 @@
   
  
 
-    .css-1muzjf8 {
-    border-bottom: none !important;
-    border-color: rgba(0, 0, 0, 0.12);
-    margin-bottom: 24px;
-}
+
 
     .employee-field {
       display: flex;
@@ -47,7 +43,7 @@
       }
 
       .employee-field input[type="text"]::placeholder {
-        color: grey;
+        color: #ccc;
       }
 
 

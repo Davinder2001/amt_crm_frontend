@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
@@ -11,14 +10,32 @@ import { useCompany } from '@/utils/Company';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
-import { useRouter } from 'next/navigation';
+import Modal from '@/components/common/Modal';
+import TaskForm from './TaskForm';
 
-const AllTasks: React.FC = () => {
+
+interface AllTasksProps {
+  isAddModalOpen: boolean;
+  isEditModalOpen: boolean;
+  currentTaskId: number | null;
+  setIsAddModalOpen: (open: boolean) => void;
+  setIsEditModalOpen: (open: boolean) => void;
+  setCurrentTaskId: (id: number | null) => void;
+}
+
+const AllTasks: React.FC<AllTasksProps> = ({
+  isAddModalOpen,
+  isEditModalOpen,
+  currentTaskId,
+  setIsAddModalOpen,
+  setIsEditModalOpen,
+  setCurrentTaskId,
+}) => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { companySlug } = useCompany();
   const { refetch: refetchNotifications } = useFetchNotificationsQuery();
-  const router = useRouter();
+
   const handleDelete = async (id: number) => {
     if (confirm('Are you sure you want to delete this task?')) {
       try {
@@ -31,6 +48,11 @@ const AllTasks: React.FC = () => {
         toast.error('Error deleting task');
       }
     }
+  };
+
+  const handleEditClick = (id: number) => {
+    setCurrentTaskId(id);
+    setIsEditModalOpen(true);
   };
 
   if (tasksLoading) return <LoadingState />;
@@ -49,7 +71,7 @@ const AllTasks: React.FC = () => {
       action={
         <button
           className="buttons"
-          onClick={() => router.push(`/${companySlug}/tasks/add-task`)}
+          onClick={() => setIsAddModalOpen(true)}
         >
           <FaPlus size={18} /> Add New Task
         </button>
@@ -91,13 +113,15 @@ const AllTasks: React.FC = () => {
       label: 'Actions',
       render: (task: Task) => (
         <div className='store-t-e-e-icons'>
-          <Link
-            href={`/${companySlug}/tasks/edit-task/${task.id}`}
+          <button
             className="table-e-d-v-buttons edit-button"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditClick(task.id);
+            }}
           >
             <FaEdit />
-          </Link>
+          </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -121,7 +145,6 @@ const AllTasks: React.FC = () => {
           data={tasks.data}
           columns={columns}
           onDelete={handleDelete}
-          onEdit={(id) => window.location.href = `/${companySlug}/tasks/edit-task/${id}`}
           onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
         />
       ) : (
@@ -132,13 +155,50 @@ const AllTasks: React.FC = () => {
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/tasks/add-task`)}
+              onClick={() => setIsAddModalOpen(true)}
             >
               <FaPlus size={18} /> Add New Task
             </button>
           }
         />
       )}
+
+      {/* Add Task Modal */}
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Add New Task"
+        width="800px"
+      >
+        <TaskForm
+          mode="add"
+          onSuccess={() => {
+            setIsAddModalOpen(false);
+            refetch();
+            refetchNotifications();
+          }}
+        />
+      </Modal>
+
+      {/* Edit Task Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title={`Edit Task ${currentTaskId}`}
+        width="800px"
+      >
+        {currentTaskId && (
+          <TaskForm
+            mode="edit"
+            taskId={currentTaskId}
+            onSuccess={() => {
+              setIsEditModalOpen(false);
+              refetch();
+              refetchNotifications();
+            }}
+          />
+        )}
+      </Modal>
     </>
   );
 };

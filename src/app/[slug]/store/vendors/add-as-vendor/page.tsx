@@ -4,7 +4,7 @@ import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { FaArrowLeft, FaCalculator, FaFileInvoice, FaHashtag, FaPhoneAlt, FaPlus, FaRupeeSign, FaTag, FaUserAlt } from 'react-icons/fa';
+import { FaArrowLeft,  FaPlus, } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import { FaRegImage } from 'react-icons/fa6';
 
@@ -127,17 +127,17 @@ const Page = () => {
       <div className='add-as-a-v-container'>
         <div className='add-as-a-v-inputs'>
           <div className="input-with-label">
-            <label><FaFileInvoice style={{ marginRight: 3 }} /> Invoice No</label>
+            <label> Invoice No</label>
             <input placeholder="Invoice No" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} />
           </div>
 
           <div className="input-with-label">
-            <label><FaUserAlt style={{ marginRight: 3 }} /> Vendor Name</label>
+            <label> Vendor Name</label>
             <input placeholder="Vendor Name" value={vendorName} onChange={(e) => setVendorName(e.target.value)} />
           </div>
 
           <div className="input-with-label">
-            <label><FaPhoneAlt style={{ marginRight: 3 }} /> Vendor No</label>
+            <label> Vendor No</label>
             <input
               type="text"
               placeholder="Vendor No"
@@ -154,7 +154,7 @@ const Page = () => {
 
           </div>
           <div className="input-with-label">
-            <label><FaUserAlt style={{ marginRight: 3 }} /> Email</label>
+            <label> Email</label>
             <input
               placeholder="Vendor Email"
               value={vendorEmail}
@@ -164,7 +164,7 @@ const Page = () => {
           </div>
 
           <div className="input-with-label">
-            <label><FaUserAlt style={{ marginRight: 3 }} /> Address</label>
+            <label> Address</label>
             <input
               placeholder="Vendor Address"
               value={vendorAddress}
@@ -176,7 +176,7 @@ const Page = () => {
 
         <div className='add-as-a-v-button'>
           <label htmlFor="file-upload" className="file-upload-button">
-            <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
+          <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
           </label>
           <input style={{ display: 'none' }} id="file-upload" type="file" onChange={handleImageUpload} />
           <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus /> Add Items</button>
@@ -214,6 +214,7 @@ const Page = () => {
 
               <div className="input-with-label">
                 <label>Sub Total</label>
+                <label> Sub Total</label>
                 <input
                   placeholder="Sub Total"
                   value={newItem.subTotal}

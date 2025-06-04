@@ -36,7 +36,7 @@ export default function CheckoutPanel({
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'credit'>('');
+    const [paymentMethod, setPaymentMethod] = useState<'' | 'cash' | 'online' | 'card' | 'credit' | 'self'>('');
     const [discountType, setDiscountType] = useState<'amount' | 'percentage'>('amount');
     const [discountAmount, setDiscountAmount] = useState<number>(0);
     const [discountPercent, setDiscountPercent] = useState<number>(0);

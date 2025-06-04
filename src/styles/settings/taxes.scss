@@ -1,125 +1,114 @@
 @use '../variables' as *;
 
 .tax-page {
-    background-color: white;
-    padding: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: $border-radius;
+
+  .glass-form {
+    background: unset;
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: $border-radius;
+    margin-bottom: 2rem;
+    box-shadow: $box-shadow;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .MuiTextField-root {
+      .MuiOutlinedInput-root.Mui-focused {
+        fieldset {
+          border-color: $border-color;
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  
+
+  .cancel-btn {
+    border: 1px solid $primary-color !important;
+    color: $white !important;
+    text-transform: none;
+    padding: 2px 10px;
     border-radius: $border-radius;
 
-    .glass-form {
-        background: unset;
-        backdrop-filter: blur(10px);
-        padding: 2rem;
-        border-radius: $border-radius;
-        margin-bottom: 2rem;
-        box-shadow: $box-shadow;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+    &:hover {
+      background-color: rgba(0, 169, 165, 0.05) !important;
+    }
+  }
 
-        .MuiTextField-root {
-            .MuiOutlinedInput-root.Mui-focused {
-                fieldset {
-                    border-color: var(--primary-color);
-                }
-            }
-        }
+  .loading-center {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .tax-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tax-box {
+    background-color: #ffffff;
+    padding: 1.2rem 1.5rem;
+    border-radius: $border-radius;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .form-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: flex-end;
+    .tax-name {
+      font-weight: 600;
+      color: #494949;
+      margin-bottom: 0.25rem;
+      text-transform: capitalize;
     }
 
-    .add-btn {
-        background-color: #00a9a5 !important;
-        color: white !important;
-        text-transform: none;
-        padding: 0px 25px;
-        border-radius: $border-radius;
-        font-size: 20px;
-
-        &:hover {
-            background-color: #008f8b !important;
-        }
+    .tax-rate {
+      color: green;
+      font-size: 0.9rem;
     }
+  }
 
-    .cancel-btn {
-        border: 1px solid #00a9a5 !important;
-        color: #00a9a5 !important;
-        text-transform: none;
-        padding: 2px 10px;
-        border-radius: $border-radius;
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
 
-        &:hover {
-            background-color: rgba(0, 169, 165, 0.05) !important;
-        }
+    svg {
+      font-size: 16px;
     }
+  }
 
-    .loading-center {
-        display: flex;
-        justify-content: center;
-        padding: 2rem;
+  .edit-btn {
+    color: #ffffff !important;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #008f8b !important;
     }
+  }
 
-    .tax-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
+  .delete-btn {
+    color: #e53935 !important;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #c62828 !important;
     }
-
-    .tax-box {
-        background-color: #ffffff;
-        padding: 1.2rem 1.5rem;
-        border-radius: $border-radius;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        &:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .tax-name {
-            font-weight: 600;
-            color: #494949;
-            margin-bottom: 0.25rem;
-            text-transform: capitalize;
-        }
-
-        .tax-rate {
-            color: green;
-            font-size: 0.9rem;
-        }
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-
-        svg {
-            font-size: 16px;
-        }
-    }
-
-    .edit-btn {
-        color: #ffffff !important;
-        transition: color 0.2s ease;
-
-        &:hover {
-            color: #008f8b !important;
-        }
-    }
-
-    .delete-btn {
-        color: #e53935 !important;
-        transition: color 0.2s ease;
-
-        &:hover {
-            color: #c62828 !important;
-        }
-    }
+  }
 }

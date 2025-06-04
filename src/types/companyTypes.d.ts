@@ -92,3 +92,42 @@ type UpdateTaxPayload = {
   name?: string;
   rate?: number;
 };
+
+
+
+
+// bank account types
+interface BankAccount {
+  id: number;
+  bank_name: string;
+  account_number: string;
+  ifsc_code: string;
+  type: 'current' | 'savings';
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface FetchCompanyAccountsResponse {
+  accounts: BankAccount[];
+}
+
+interface SingleCompanyAccountResponse {
+  account: BankAccount;
+}
+
+interface AddCompanyAccountsPayload {
+  accounts: {
+    bank_name: string;
+    account_number: string;
+    ifsc_code: string;
+    type: 'current' | 'savings';
+  }[];
+}
+
+interface UpdateCompanyAccountPayload {
+  id: number;
+  bank_name?: string;
+  account_number?: string;
+  ifsc_code?: string;
+  type?: 'current' | 'savings';
+}

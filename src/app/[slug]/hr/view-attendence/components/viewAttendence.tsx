@@ -62,10 +62,7 @@ function ViewAttendence() {
   };
 
   const columns = [
-    {
-      label: 'Sr No',
-      render: (_: Attendance, index: number) => index + 1,
-    },
+
     {
       label: 'Name',
       render: (row: Attendance) => row.user.name,

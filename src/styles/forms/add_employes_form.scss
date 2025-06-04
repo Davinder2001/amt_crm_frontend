@@ -47,7 +47,7 @@
       }
 
       .employee-field input[type="text"]::placeholder {
-       color: grey;
+        color: grey;
       }
 
 
@@ -74,14 +74,14 @@
     width: 100%;
 
     &:focus {
-      border-color: $hover-color;
+      border-color: $gray-color;
       background: #ffffff;
       transform: scale(1);
     }
 
     &::placeholder {
       color: #ccc;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 400;
       letter-spacing: 0.3px;
       background-color: transparent;

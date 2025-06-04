@@ -1,10 +1,16 @@
 @use '../variables' as *;
 
 .recurring-wrapper {
-  .header{
+  .recurring-task-header {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
   }
+
+  .back-button {
+    margin: 0px;
+  }
+
   .toggle-button {
     padding: 8px 16px;
     border-radius: $border-radius;
@@ -14,24 +20,149 @@
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
-  
+
     &.on {
       background-color: var(--primary-color);
       color: white;
     }
-  
+
     &.off {
       background-color: #e0e0e0;
       color: #555;
     }
-  
+
     &:hover {
       opacity: 0.9;
     }
   }
-  
-  
 
-  }  
+  .edit-button {
+    color: $success-color;
+  }
 
 
+}
+
+
+
+
+
+
+
+
+
+
+
+//recurring-task  form styling start........................................................................................
+
+
+
+
+
+.recurring-wrapper {
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .employee-fields-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .employee-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    input,
+    select,
+    .date-input {
+      padding: 10px 12px;
+      font-size: $font-size-small;
+      border: 1px solid $feild_border;
+      border-radius: $border-radius;
+      background-color: $light-bg;
+      color: $text-dark;
+      transition: border-color $transition;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+        border-color: $gray-color;
+        background-color: $white;
+      }
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: $lable-font;
+      color: $lable-color;
+      font-weight: $font-weight-medium;
+    }
+
+    .toggle-button {
+      padding: 8px 16px;
+      font-size: $font-size-small;
+      border: none;
+      border-radius: 20px;
+      background-color: $light_blue;
+      color: $dark-color;
+      font-weight: $font-weight-semi-bold;
+      cursor: pointer;
+      transition: background-color $transition;
+
+      &.on {
+        background-color: $success-color;
+        color: $white;
+      }
+
+      &.off {
+        background-color: $danger-color;
+        color: $white;
+      }
+    }
+  }
+
+  .create-employess-action {
+    display: flex;
+    justify-content: flex-end;
+
+    .form-button {
+      padding: 12px 24px;
+      font-size: $font-size-one;
+      font-weight: $font-weight-medium;
+      background-color: $primary-color;
+      color: $white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all $transition;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+        box-shadow: 0 6px 20px rgba($primary-color, 0.2);
+      }
+
+      &:disabled {
+        background-color: $gray-color;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .text-red-500 {
+    color: $danger-color;
+    font-size: $font-size-extra-small;
+    padding-top: 2px;
+  }
+}

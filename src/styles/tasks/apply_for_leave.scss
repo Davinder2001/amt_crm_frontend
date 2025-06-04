@@ -1,15 +1,7 @@
   @use '../variables' as *;
 
   .leave-application-container {
-    padding: 10px;
-    background: #ffffff;
-    border-radius: $border-radius;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-
-
-
     .application-header {
-      margin-bottom: 2rem;
 
       h1 {
         color: #2d3436;
@@ -128,7 +120,7 @@
             gap: 0.8rem;
 
             .chip {
-              padding: 0.6rem 1.2rem;
+              padding: 10px 12px;
               border-radius: $border-radius;
               border: 1px solid #e0e0e0;
               background: white;
@@ -144,10 +136,11 @@
 
           .modern-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid $feild_border;
+            padding: 10px 12px;
+            border: 1px solid $feild_border;
             border-radius: $border-radius;
             transition: all 0.2s;
+            font-size: 16px;
 
             &:focus {
              border-color: $hover-color ;
@@ -163,6 +156,7 @@
             min-height: 120px;
             resize: vertical;
             transition: all 0.2s;
+            font-size: 16px;
 
             &:focus {
              border-color: $hover-color;
@@ -200,48 +194,56 @@
 
           .file-preview {
             margin-top: 10px;
+            position: relative;
             display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: gray;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
 
             .thumbnail-wrapper {
               position: relative;
-              display: inline-block;
+              width: 150px;
+              height: 150px;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-              .file-thumbnail {
-                width: 60px;
-                height: 60px;
-                object-fit: cover;
-                border-radius: $border-radius;
-                border: 1px solid red;
+              .preview-link {
+                display: block;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
               }
 
               .remove-button {
-                color: #fff;
-                cursor: pointer;
-                background: #ea1c20;
-                border: none;
-                border-radius: $border-radius;
-                justify-content: center;
-                align-items: center;
-                width: 20px;
-                height: 22px;
-                font-size: 14px;
-                transition: background .3s;
-                display: flex;
                 position: absolute;
-                top: -9px;
-                right: -11px;
-                box-shadow: 0 2px 5px #0003;
+                top: 4px;
+                right: 4px;
+                background: rgba(255, 255, 255, 0.8);
+                border: none;
+                border-radius: 50%;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 2px 6px;
+                z-index: 2;
 
                 &:hover {
-                  background: $danger-color;
+                  background-color: $danger-color;
+                  color: white;
                 }
               }
+
+              img {
+                object-fit: contain;
+              }
+            }
+
+            span {
+              font-size: 12px;
+              color: #666;
             }
           }
+
 
 
         }
@@ -256,7 +258,7 @@
           font-size: 1rem;
           cursor: pointer;
           transition: all 0.2s;
-          margin-top: 1rem;
+          margin: 0px;
 
           &:hover {
             background: $hover-color;
@@ -276,6 +278,9 @@
 
       .date-range-display {
         color: $white;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
         .date-range-badge {
           background: $primary-color;

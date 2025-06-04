@@ -99,7 +99,7 @@ function TaxesPage() {
                         </Button>
                     )}
                     <Button
-                        className="add-btn"
+                        className="buttons"
                         onClick={handleSubmit}
                         startIcon={!form.id ? <FaPlus /> : null}
                         disabled={isUpdating}

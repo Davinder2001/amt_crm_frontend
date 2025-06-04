@@ -33,7 +33,7 @@ const BankAccountItem: React.FC<Props> = ({ account }) => {
     return (
         <div className="bank-account-item">
             {editMode ? (
-                <BankAccountForm initialData={account} onSubmit={handleUpdate} />
+                <BankAccountForm initialData={account} onSubmit={handleUpdate} onCancel={() => setEditMode(false)} />
             ) : (
                 <div className="account-details">
                     <p>

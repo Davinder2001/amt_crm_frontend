@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 type BankAccountFormProps = {
     onSubmit: (data: AddCompanyAccountsPayload['accounts'][0]) => void;
+    onCancel?: () => void;
     initialData?: AddCompanyAccountsPayload['accounts'][0];
 };
 
@@ -15,6 +16,7 @@ const defaultForm: AddCompanyAccountsPayload['accounts'][0] = {
 
 const BankAccountForm: React.FC<BankAccountFormProps> = ({
     onSubmit,
+    onCancel,
     initialData = defaultForm,
 }) => {
     const [form, setForm] = useState(initialData);
@@ -60,6 +62,9 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             </select>
             <button className="btn" type="submit">
                 Submit
+            </button>
+            <button className="btn" type="button" onClick={onCancel}>
+                cancel
             </button>
         </form>
     );

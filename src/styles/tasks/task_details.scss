@@ -70,6 +70,7 @@
         padding: 10px 12px;
         border: 1px solid $feild_border;
         border-radius: $border-radius;
+        font-size: 16px;
 
         &:focus {
           border-color: $gray-color;
@@ -184,7 +185,7 @@ color: $danger-color;
     grid-template-columns: 1fr;
   }
 
-  .add-task-form .form-group textarea {
+  .add-task-form  {
     grid-column: span 1;
 
 

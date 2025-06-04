@@ -136,10 +136,11 @@
 
           .modern-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid $feild_border;
+            padding: 10px 12px;
+            border: 1px solid $feild_border;
             border-radius: $border-radius;
             transition: all 0.2s;
+            font-size: 16px;
 
             &:focus {
               border-color: $gray-color ;
@@ -155,6 +156,7 @@
             min-height: 120px;
             resize: vertical;
             transition: all 0.2s;
+            font-size: 16px;
 
             &:focus {
               border-color: $gray-color;
@@ -225,7 +227,7 @@
                 padding: 2px 6px;
                 z-index: 2;
 
-                &:hover{
+                &:hover {
                   background-color: $danger-color;
                   color: white;
                 }

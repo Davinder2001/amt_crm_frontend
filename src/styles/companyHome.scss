@@ -13,7 +13,7 @@
         background: var(--primary-color);
         color: white;
         padding: 8px 16px;
-        border-radius: 5px;
+        border-radius: $border-radius;
         border: none;
         box-shadow: 0 3px 10px rgba(var(--primary-color), 0.2);
         transition: all 0.2s ease;
@@ -98,7 +98,7 @@
 
 .company-card {
     background-color: $white;
-    border-radius: 5px;
+    border-radius: $border-radius;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
@@ -169,7 +169,7 @@
     font-size: $font-size-extra-small;
     font-weight: $font-weight-semi-bold;
     padding: 3px 10px;
-    border-radius: 10px;
+    border-radius: $border-radius;
     text-transform: capitalize;
     display: inline-flex;
     align-items: center;
@@ -180,7 +180,7 @@
         display: inline-block;
         width: 7px;
         height: 7px;
-        border-radius: 50%;
+        border-radius: $border-radius;
         background: currentColor;
     }
 
@@ -254,7 +254,7 @@
     color: $white;
     border: none;
     padding: 5px 12px;
-    border-radius: 5px;
+    border-radius: $border-radius;
     cursor: pointer;
     font-size: $font-size-small;
     font-weight: $font-weight-semi-bold;

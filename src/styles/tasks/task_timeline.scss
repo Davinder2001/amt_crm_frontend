@@ -4,7 +4,7 @@
 .timeline-container {
 
     background-color: $white;
-    border-radius: 10px;
+    border-radius: $border-radius;
     margin-bottom: 20px;
 
     .timeline-header {
@@ -32,7 +32,7 @@
             color: $white;
             padding: 5px 10px;
             border: none;
-            border-radius: 6px;
+            border-radius: $border-radius;
             cursor: pointer;
             font-size: 14px;
 
@@ -57,7 +57,7 @@
         .reminder-content {
             background: #fff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: $border-radius;
             width: 400px;
             max-width: 90%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -73,7 +73,7 @@
                 margin-top: 0.3rem;
                 margin-bottom: 1rem;
                 border: 1px solid #ccc;
-                border-radius: 5px;
+                border-radius: $border-radius;
             }
 
             button {
@@ -82,7 +82,7 @@
                 padding: 5px 10px;
                 width: 100%;
                 border: none;
-                border-radius: 6px;
+                border-radius: $border-radius;
                 cursor: pointer;
                 font-size: 14px;
 
@@ -108,7 +108,7 @@
         .timeline-submit-task-inner {
             background: #fff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: $border-radius;
             width: 400px;
             max-width: 90%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -167,7 +167,7 @@
             background-color: #fff;
             color: #000;
             text-align: left;
-            border-radius: 8px;
+            border-radius: $border-radius;
             padding: 10px;
             position: absolute;
             z-index: 9999;
@@ -197,7 +197,7 @@
 
     .timeline-content {
         background-color: #f1f9f9f9;
-        border-radius: 5px;
+        border-radius: $border-radius;
         padding: 16px 20px;
         flex: 1;
         position: relative;
@@ -254,7 +254,7 @@
     .attachment-image {
         width: 220px;
         height: 130px;
-        border-radius: 8px;
+        border-radius: $border-radius;
         object-fit: cover;
         border: 1px solid #e5e7eb;
 
@@ -290,7 +290,7 @@
         padding: 6px 20px;
         font-size: 14px;
         font-weight: 500;
-        border-radius: 50px;
+        border-radius: $border-radius;
         cursor: pointer;
         transition: background-color 0.2s ease;
     }

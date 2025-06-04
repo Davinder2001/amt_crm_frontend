@@ -60,7 +60,6 @@
 @use './store/store_forms.scss' as *;
 @use './store/variations.scss' as *;
 @use './store/addcatagory.scss' as *;
-@use './store/itemtab.scss' as *;
 @use './store/store_view_item.scss' as *;
 @use './store/allitems.scss' as *;
 
@@ -163,7 +162,7 @@ body {
     color: #fff;
     justify-content: center;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: $border-radius;
 
     &:hover {
         background-color: #9CB9D0;
@@ -191,7 +190,7 @@ textarea {
             text-transform: capitalize;
             padding: 5px 12px;
             color: white;
-            border-radius: 50px;
+            border-radius: $border-radius;
             text-align: center;
         }
     }
@@ -225,7 +224,7 @@ textarea {
             text-transform: capitalize;
             padding: 5px 12px;
             color: white;
-            border-radius: 50px;
+            border-radius: $border-radius;
             text-align: center;
         }
     }
@@ -236,7 +235,7 @@ textarea {
             text-transform: capitalize;
             padding: 5px 12px;
             color: white;
-            border-radius: 50px;
+            border-radius: $border-radius;
             text-align: center;
         }
     }
@@ -316,7 +315,7 @@ textarea {
 
     .react-datepicker {
         border: 1px solid var(--primary-color);
-        border-radius: 5px;
+        border-radius: $border-radius;
         background-color: $white;
 
         &__popper {
@@ -401,14 +400,14 @@ svg.react-datepicker__triangle {
 .react-datepicker__day--keyboard-selected {
     color: #fff;
     background-color: #216ba5;
-    border-radius: 0.3rem;
+    border-radius: $border-radius;
 }
 
 .react-datepicker__day--selected.datepicker-sunday,
 .react-datepicker__day--keyboard-selected.datepicker-sunday {
     color: white !important;
     background-color: #216ba5; // or any color you prefer for selected Sundays
-    border-radius: 0.3rem;
+    border-radius: $border-radius;
 }
 
 .react-datepicker__day {

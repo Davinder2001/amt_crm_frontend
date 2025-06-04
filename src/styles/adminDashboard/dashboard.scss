@@ -12,8 +12,8 @@
 
     .card {
         background-color: $white;
-        border-radius: 16px;
-        box-shadow: $secondary-shadow;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
         padding: 15px;
     }
 
@@ -34,7 +34,7 @@
             color: var(--primary-color);
             background-color: #f1f9f9;
             padding: 8px 16px;
-            border-radius: 16px;
+            border-radius: $border-radius;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
@@ -128,7 +128,7 @@
             padding: 5px;
             width: 30px;
             height: 30px;
-            border-radius: 50%;
+            border-radius: $border-radius;
             font-size: 1.2rem;
             cursor: pointer;
             box-shadow: $box-shadow;
@@ -146,7 +146,7 @@
                 margin-bottom: 1rem;
                 box-shadow: $box-shadow;
                 padding: 5px 10px;
-                border-radius: 16px;
+                border-radius: $border-radius;
 
                 .avatar {
                     width: 40px;
@@ -187,6 +187,7 @@
         .sale-list {
             list-style: none;
             padding: 0;
+            margin-top: 20px;
 
             .sale-item {
                 display: flex;
@@ -285,7 +286,7 @@
                 align-items: center;
                 border: 1px solid #dff0f0;
                 padding: 10px;
-                border-radius: 10px;
+                border-radius: $border-radius;
                 gap: 10px;
 
                 .avatar {
@@ -344,7 +345,7 @@
     .card {
         background: $white;
         padding: 8px 12px;
-        border-radius: 8px;
+        border-radius: $border-radius;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         display: flex;
         align-items: center;
@@ -370,7 +371,7 @@
     .icon-shell {
         background-color: rgba(var(--primary-color), 0.08);
         padding: 5px;
-        border-radius: 14px;
+        border-radius: $border-radius;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -431,7 +432,7 @@
         padding: 12px 16px;
         color: #dc2626;
         text-align: center;
-        border-radius: 12px;
+        border-radius: $border-radius;
         font-weight: 600;
         margin: 0 15px;
         border: 1px solid #fecaca;
@@ -746,9 +747,10 @@
 }
 
 @media (max-width: 480px) {
-    .dashboard-container{
+    .dashboard-container {
         padding: 0;
     }
+
     .overview-grid-container {
         grid-template-columns: repeat(2, 1fr);
 

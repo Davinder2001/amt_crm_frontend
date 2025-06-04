@@ -3,7 +3,7 @@
 .view-item-container {
   background-color: $white;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: $border-radius;
 
   .item-container {
 
@@ -16,7 +16,7 @@
     .single-item-images {
       width: 100%;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: $border-radius;
       box-shadow: 0 10px 25px #0000001a;
       cursor: pointer;
     }
@@ -132,7 +132,7 @@
 
     .info-card {
       padding: 16px;
-      border-radius: 10px;
+      border-radius: $border-radius;
       background: $white;
       box-shadow: $secondary-shadow;
       border-top: 3px solid;
@@ -222,7 +222,7 @@
 
     .item-image {
       border: 1px solid  $border-color;
-      border-radius: 8px;
+      border-radius: $border-radius;
       object-fit: cover;
     }
 
@@ -260,7 +260,7 @@
       max-width: 999px;
       width: 100%;
       max-height: 666px;
-      border-radius: 8px;
+      border-radius: $border-radius;
       object-fit: cover;
     }
   }
@@ -299,7 +299,7 @@
     left: 0;
     background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 4px;
+    border-radius: $border-radius;
     padding: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 50;

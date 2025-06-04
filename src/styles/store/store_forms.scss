@@ -22,7 +22,7 @@
 }
 
 .store_outer_row {
-  border-radius: 10px;
+  border-radius: $border-radius;
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
@@ -41,7 +41,7 @@
 
     .category-container {
       margin-right: 10px;
-      border-radius: 15px;
+      border-radius: $border-radius;
       background-color: $white;
       box-shadow: 0 4px 6px #0000001a;
 
@@ -77,7 +77,7 @@
 
       .parent-category-list {
         background-color: #fff;
-        border-radius: 6px;
+        border-radius: $border-radius;
         min-height: 350px;
         max-height: 350px;
         overflow: scroll;
@@ -109,7 +109,7 @@
 
     .vendors-menu {
       position: absolute;
-      border-radius: 10px;
+      border-radius: $border-radius;
       top: 100%;
       left: 0;
       width: 100%;
@@ -153,7 +153,7 @@
 
   .items-tab-container {
     background-color: $white;
-    border-radius: 15px;
+    border-radius: $border-radius;
     box-shadow: $box-shadow;
     position: relative;
 
@@ -226,7 +226,7 @@
       padding: 10px;
       font-size: 16px;
       border: 1px solid $feild_border;
-      border-radius: 5px;
+      border-radius: $border-radius;
 
       &:focus {
         border-color: $gray-color;
@@ -414,7 +414,7 @@
   display: flex;
   background-color: white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: $border-radius;
 
   .add-as-a-v-inputs {
     margin-bottom: 5px;
@@ -445,7 +445,7 @@
         border: 1px solid $feild_border;
         padding: 9px;
         width: 100%;
-        border-radius: 5px;
+        border-radius: $border-radius;
 
         &:focus {
           border-color: $gray-color;
@@ -471,7 +471,7 @@
       color: #fff !important;
       cursor: pointer;
       background-color: #384b70;
-      border-radius: 5px;
+      border-radius: $border-radius;
       justify-content: center;
       align-items: center;
       padding: 9px 12px;
@@ -530,7 +530,7 @@
     input {
       padding: 9px;
       border: 1px solid $feild_border;
-      border-radius: 5px;
+      border-radius: $border-radius;
       width: 100%;
       margin-top: 5px;
 
@@ -579,7 +579,7 @@
     width: 18px;
     height: 19px;
     border: 1.5px solid #ccc;
-    border-radius: 4px;
+    border-radius: $border-radius;
     display: inline-block;
     position: relative;
     transition: all 0.2s ease-in-out;
@@ -596,7 +596,7 @@
       width: 10px;
       height: 10px;
       background-color: var(--primary-color);
-      border-radius: 2px;
+      border-radius: $border-radius;
       transition: all 0.2s ease-in-out;
     }
   }
@@ -612,7 +612,7 @@
   border: 1px solid var(--primary-color);
   padding-left: 10px;
   margin: 0px 20px 20px 20px;
-  border-radius: 5px;
+  border-radius: $border-radius;
 
   input {
     border: none;
@@ -626,7 +626,7 @@
   padding-right: 10px;
   height: 36px;
   width: 100%;
-  border-radius: 4px;
+  border-radius: $border-radius;
   border: 1px solid #ccc;
   font-size: 14px;
 }
@@ -669,7 +669,7 @@
       input.add-as-a-v-image {
         background-color: $secondary-color;
         padding: 11px;
-        border-radius: 5px;
+        border-radius: $border-radius;
         border: 1px solid var(--primary-color);
       }
     }

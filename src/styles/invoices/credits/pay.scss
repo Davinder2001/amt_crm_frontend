@@ -3,7 +3,7 @@
 .pay-credit-container {
     padding: 32px;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: $border-radius;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-family: 'Inter', Arial, sans-serif;
     color: #2d3748;
@@ -26,7 +26,7 @@
         width: 60px;
         height: 4px;
         background: linear-gradient(90deg, $primary-color, lighten($primary-color, 20%));
-        border-radius: 2px;
+        border-radius: $border-radius;
     }
 }
 

@@ -29,7 +29,7 @@
 
   .btn-filled {
     padding: .5rem 1rem;
-    border-radius: 5px;
+    border-radius: $border-radius;
     cursor: pointer;
     background-color: $primary-color;
     border: 1px solid $primary-color;
@@ -44,7 +44,7 @@
 
   .btn-outline {
     padding: .5rem 1rem;
-    border-radius: 5px;
+    border-radius: $border-radius;
     cursor: pointer;
     border: 1px solid $primary-color;
     color: $primary-color;
@@ -205,25 +205,17 @@
     color: $primary-color;
     background: #e1f5f4;
     display: inline-block;
-    border-radius: 4px;
+    border-radius: $border-radius;
   }
 
   &:hover {
     color: $primary-color;
     background: #e1f5f4;
     display: inline-block;
-    border-radius: 4px;
+    border-radius: $border-radius;
     cursor: pointer;
   }
 }
-
-// .categories .active {
-//   color: $primary-color;
-//   background: #e1f5f4;
-//   display: inline-block;
-//   padding: 0.3rem 0.5rem;
-//   border-radius: 4px;
-// }
 
 .hero-actions {
   display: flex;
@@ -232,7 +224,7 @@
 
   .btn-filled {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: $border-radius;
     cursor: pointer;
     background-color: $primary-color;
 
@@ -240,7 +232,7 @@
 
   .btn-outline {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: $border-radius;
     cursor: pointer;
     
   }
@@ -255,7 +247,7 @@
 
 .hero-right .main-image {
   width: 100%;
-  border-radius: 15px 0px 0px 15px;
+  border-radius: 5px 0px 0px 5px;
 }
 
 
@@ -293,7 +285,7 @@
 .stat-box {
   background: $white;
   padding: 40px 80px;
-  border-radius: 12px;
+  border-radius: $border-radius;
   box-shadow: 0 0 10px #0000000d;
   min-width: 160px;
   display: flex;
@@ -336,7 +328,7 @@ section.features-sections {
 .team-collaboration-content {
   background: #fff;
   border: 1px solid #efefef;
-  border-radius: 5px;
+  border-radius: $border-radius;
   padding: 20px;
   position: relative;
   overflow: hidden;
@@ -412,7 +404,7 @@ nav.feature-card-nav-bar {
   .feature-card {
     background: #fff;
     border: 1px solid #efefef;
-    border-radius: 5px;
+    border-radius: $border-radius;
     padding: 20px;
     display: grid;
     grid-template-columns: 65% 35%;
@@ -447,7 +439,7 @@ nav.feature-card-nav-bar {
 
   .feature-card img {
     width: 300px;
-    border-radius: 12px;
+    border-radius: $border-radius;
     height: 150px;
     object-fit: cover;
   }
@@ -523,7 +515,7 @@ nav.feature-card-nav-bar {
   object-fit: cover;
   box-shadow: 0 4px 20px #0000001a;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: $border-radius;
 }
 
 .comparison-section {
@@ -536,7 +528,7 @@ nav.feature-card-nav-bar {
   max-width: 1439px;
   margin: 0 auto;
   border-collapse: collapse;
-  border-radius: 5px;
+  border-radius: $border-radius;
   overflow: hidden;
   font-size: 14px;
   text-align: left;
@@ -757,7 +749,7 @@ nav.feature-card-nav-bar {
 
   .planCard {
     background: white;
-    border-radius: 5px;
+    border-radius: $border-radius;
     padding: 20px;
     max-width: 320px;
     width: 100%;
@@ -806,7 +798,7 @@ nav.feature-card-nav-bar {
       color: white;
       border: none;
       padding: 8px 16px;
-      border-radius: 5px;
+      border-radius: $border-radius;
       font-weight: 500;
       cursor: default;
       letter-spacing: 0.3px;
@@ -817,7 +809,7 @@ nav.feature-card-nav-bar {
       color:$primary-color;
       border: none;
       padding: 8px 16px;
-      border-radius: 5px;
+      border-radius: $border-radius;
       font-weight: 500;
       cursor: pointer;
       letter-spacing: 0.3px;
@@ -828,7 +820,7 @@ nav.feature-card-nav-bar {
       color: $primary-color;
       padding: 8px 16px;
       border: 1px solid $primary-color;
-      border-radius: 5px;
+      border-radius: $border-radius;
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0.3px;
@@ -892,7 +884,7 @@ nav.feature-card-nav-bar {
   }
 
   .hero-right .main-image {
-    border-radius: 15px;
+    border-radius: $border-radius;
     width: 100%;
   }
 
@@ -968,7 +960,7 @@ nav.feature-card-nav-bar {
   }
 
   .hero-right .main-image {
-    border-radius: 15px;
+    border-radius: $border-radius;
     width: 100%;
     height: auto;
     max-width: 100%;

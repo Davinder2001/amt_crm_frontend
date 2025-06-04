@@ -7,7 +7,7 @@
 
   .table-e-d-v-buttons {
     cursor: pointer;
-    border-radius: 9999px;
+    border-radius: $border-radius;
     justify-content: center;
     align-items: center;
     transition: background-color .3s;
@@ -51,7 +51,7 @@
   width: 100%;
   background-color: $white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: $border-radius;
   box-shadow: $box-shadow;
 
   .add-task-form {
@@ -73,7 +73,7 @@
       textarea {
         padding: 10px 12px;
         border: 1px solid $feild_border;
-        border-radius: 5px;
+        border-radius: $border-radius;
 
         &:focus {
           border-color: $gray-color;
@@ -136,7 +136,7 @@
   .view-task-check-icon,
   .view-times-check-icon {
     cursor: pointer;
-    border-radius: 9999px;
+    border-radius: $border-radius;
     justify-content: center;
     align-items: center;
     transition: background-color .3s;

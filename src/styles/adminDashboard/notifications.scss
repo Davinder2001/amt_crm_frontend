@@ -36,7 +36,7 @@
         align-items: center;
         gap: 4px;
         padding: 8px 12px;
-        border-radius: 6px;
+        border-radius: $border-radius;
         transition: all 0.2s;
     }
 
@@ -58,7 +58,7 @@
 
     .notification-card {
         background: white;
-        border-radius: 12px;
+        border-radius: $border-radius;
         padding: 10px;
         display: flex;
         gap: 8px;
@@ -139,7 +139,7 @@
     .notification-tag {
         font-size: 0.7rem;
         padding: 2px 8px;
-        border-radius: 12px;
+        border-radius: $border-radius;
         font-weight: 600;
     }
 

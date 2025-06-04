@@ -16,7 +16,7 @@
   position: relative;
   z-index: 1;
   background: white;
-  border-radius: 12px;
+  border-radius: $border-radius;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
   max-width: 960px;
   width: 100%;
@@ -117,7 +117,7 @@
         transform: skewX(-20deg);
         animation: shimmer 5s linear infinite;
         z-index: -1;
-        border-radius: 20px;
+        border-radius: $border-radius;
       }
 
       &::after {
@@ -173,7 +173,7 @@
     color: $white;
     display: inline-block;
     padding: 0.3rem 0.7rem;
-    border-radius: 5px;
+    border-radius: $border-radius;
     font-size: $font-size-small;
     margin-top: 0.5rem;
   }
@@ -199,7 +199,7 @@
     background: $tertiary-color;
     padding: 1rem 1.5rem;
     border-left: 4px solid $primary-color;
-    border-radius: 10px;
+    border-radius: $border-radius;
     flex: 1;
 
     h2 {
@@ -263,7 +263,7 @@
     margin-left: auto;
     background: $white;
     border: 2px solid $primary-color;
-    border-radius: 15px;
+    border-radius: $border-radius;
     padding: 1.2rem;
     box-shadow: $box-shadow;
 
@@ -322,7 +322,7 @@
 .whatsapp-badge {
   margin-top: 1rem;
   padding: 0.4rem 0.8rem;
-  border-radius: 20px;
+  border-radius: $border-radius;
   font-size: $font-size-small;
   font-weight: $font-weight-medium;
   display: inline-block;

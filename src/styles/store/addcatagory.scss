@@ -21,7 +21,7 @@
   .category-button {
     padding: 10px 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: $border-radius;
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.3s;
@@ -45,7 +45,7 @@
     display: block;
     width: initial;
     padding: 8px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     border: 1px solid var(--primary-color);  
     margin-top: 4px;
     margin: 0px 20px 0px 20px;

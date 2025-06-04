@@ -3,7 +3,7 @@
   .leave-application-container {
     padding: 10px;
     background: #ffffff;
-    border-radius: 1.5rem;
+    border-radius: $border-radius;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
 
 
@@ -24,7 +24,7 @@
 
         .step {
           padding: 0.6rem 1.2rem;
-          border-radius: 5px;
+          border-radius: $border-radius;
           background: #f8f9fa;
           color: #7f8c8d;
           font-size: 0.9rem;
@@ -46,7 +46,7 @@
       .calendar-card {
         background: #ffffff;
         padding: 1.5rem;
-        border-radius: 1rem;
+        border-radius: $border-radius;
         border: 1px solid #f0f0f0;
 
         .calendar-header {
@@ -91,7 +91,7 @@
           .selected-green {
             background-color: $primary-color !important;
             color: white !important;
-            border-radius: 50px;
+            border-radius: $border-radius;
 
             &:hover {
               background-color: $hover-color !important;
@@ -99,7 +99,7 @@
           }
 
           .current-date {
-            border-radius: 50%;
+            border-radius: $border-radius;
             font-weight: bold;
             background-color: green;
             color: white;
@@ -117,7 +117,7 @@
       .details-card {
         background: #ffffff;
         padding: 2rem;
-        border-radius: 1rem;
+        border-radius: $border-radius;
         border: 1px solid #f0f0f0;
 
         .input-group {
@@ -129,7 +129,7 @@
 
             .chip {
               padding: 0.6rem 1.2rem;
-              border-radius: 5px;
+              border-radius: $border-radius;
               border: 1px solid #e0e0e0;
               background: white;
               cursor: pointer;
@@ -146,7 +146,7 @@
             width: 100%;
             padding: 0.8rem 1rem;
             border: 2px solid $feild_border;
-            border-radius: 5px;
+            border-radius: $border-radius;
             transition: all 0.2s;
 
             &:focus {
@@ -159,7 +159,7 @@
             width: 100%;
             padding: 1rem;
             border: 2px solid $feild_border;
-            border-radius: 5px;
+            border-radius: $border-radius;
             min-height: 120px;
             resize: vertical;
             transition: all 0.2s;
@@ -173,7 +173,7 @@
           .file-upload-box {
             border: 2px dashed $primary-color;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: $border-radius;
             text-align: center;
             cursor: pointer;
             background: var(--input-bg);
@@ -214,17 +214,16 @@
                 width: 60px;
                 height: 60px;
                 object-fit: cover;
-                border-radius: 8px;
+                border-radius: $border-radius;
                 border: 1px solid red;
               }
 
               .remove-button {
-
                 color: #fff;
                 cursor: pointer;
                 background: #ea1c20;
                 border: none;
-                border-radius: 100%;
+                border-radius: $border-radius;
                 justify-content: center;
                 align-items: center;
                 width: 20px;
@@ -253,7 +252,7 @@
           background: $primary-color;
           color: white;
           border: none;
-          border-radius: 0.8rem;
+          border-radius: $border-radius;
           font-size: 1rem;
           cursor: pointer;
           transition: all 0.2s;
@@ -281,7 +280,7 @@
         .date-range-badge {
           background: $primary-color;
           padding: 0.6rem 1rem;
-          border-radius: 0.8rem;
+          border-radius: $border-radius;
           font-size: 0.9rem;
         }
       }
@@ -294,7 +293,7 @@
       line-height: initial;
       background-color: #fff;
       border: 1px solid #aeaeae;
-      border-radius: .3rem;
+      border-radius: $border-radius;
       display: inline-block;
       position: relative;
       width: 100%;
@@ -491,7 +490,7 @@
           font-size: 1.5rem;
           cursor: pointer;
           padding: 0.5rem;
-          border-radius: 50%;
+          border-radius: $border-radius;
           transition: $transition;
           display: flex;
           align-items: center;

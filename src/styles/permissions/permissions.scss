@@ -3,7 +3,7 @@
 .permissions-page {
     background-color: $white;
     box-shadow: $box-shadow;
-    border-radius: 10px;
+    border-radius: $border-radius;
     padding: 20px;
 
     h5 {
@@ -22,7 +22,7 @@
         .add-role-card {
             background-color: $white;
             box-shadow: $box-shadow;
-            border-radius: 10px;
+            border-radius: $border-radius;
             cursor: pointer;
         }
 

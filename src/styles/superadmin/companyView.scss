@@ -97,7 +97,7 @@
 
 .vc-status {
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: $border-radius;
   font-size: $font-size-small;
   font-weight: $font-weight-semi-bold;
 
@@ -156,7 +156,7 @@
   .vc-status {
     font-weight: 600;
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: $border-radius;
     display: inline-block;
     text-transform: capitalize;
 

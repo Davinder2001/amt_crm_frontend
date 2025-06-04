@@ -2,7 +2,7 @@
 
 .add-employee-form {
   background-color: white;
-  border-radius: 5px;
+  border-radius: $border-radius;
   padding: 40px 20px;
   margin-top: 30px;
 
@@ -68,7 +68,7 @@
   select {
     padding: 10px 12px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: $border-radius;
     border: 1px solid $feild_border;
     width: 100%;
 
@@ -110,7 +110,7 @@
       background-color: $primary-color;
       border: unset;
       padding: 10px 30px;
-      border-radius: 5px;
+      border-radius: $border-radius;
       color: $white;
       font-size: $font-size;
       font-weight: $font-weight-medium;

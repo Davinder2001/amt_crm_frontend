@@ -17,7 +17,7 @@
     .payment-box {
       background-color: #f8f9fa;
       border: 2px solid transparent;
-      border-radius: 12px;
+      border-radius: $border-radius;
       padding: 12px 16px;
       cursor: pointer;
       display: flex;
@@ -55,7 +55,7 @@
         padding: 8px 16px;
         background-color: #e9ecef;
         border: none;
-        border-radius: 8px;
+        border-radius: $border-radius;
         cursor: pointer;
         font-size: 0.9rem;
 
@@ -69,7 +69,7 @@
     .partial-input input {
       padding: 8px 12px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: $border-radius;
       width: 100%;
       max-width: 300px;
     }

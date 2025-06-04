@@ -25,7 +25,7 @@
 .invoice-form {
     padding: 20px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: $border-radius;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -49,7 +49,7 @@
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: $border-radius;
     
 }
 
@@ -58,7 +58,7 @@
     background-color: #f9f9f9;
     padding: 16px;
     margin-bottom: 16px;
-    border-radius: 8px;
+    border-radius: $border-radius;
     border: 1px solid #e0e0e0;
 }
 
@@ -111,7 +111,7 @@
     background-color: var(--primary-color);
     color: $white;
     padding: 8px 16px;
-    border-radius: 50px;
+    border-radius: $border-radius;
     border: none;
     font-size: 14px;
     cursor: pointer;
@@ -125,7 +125,7 @@
     background-color: var(--primary-color);
     color: $white;
     padding: 10px 20px;
-    border-radius: 50px;
+    border-radius: $border-radius;
     border: none;
     font-size: 15px;
     cursor: pointer;
@@ -145,7 +145,7 @@
 .quantity-btn {
     background-color: #f1f1f1;
     border: 1px solid #ccc;
-    border-radius: 50%;
+    border-radius: $border-radius;
     width: 30px;
     height: 30px;
     font-size: 18px;
@@ -181,7 +181,7 @@
 .item-field input {
     margin-top: 4px;
     padding: 8px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     border: 1px solid #ddd;
     font-size: 14px;
 }

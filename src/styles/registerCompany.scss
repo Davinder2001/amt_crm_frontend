@@ -9,7 +9,7 @@ form .clear-button {
     border: 1px solid #ccc;
     border-right: none;
     padding: 10px 12px;
-    border-radius: 8px 0 0 8px;
+    border-radius: 5px 0 0 5px;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     z-index: 1000;
@@ -61,7 +61,7 @@ form .clear-button {
             align-items: center;
             gap: 0.75rem;
             padding: 10px 20px;
-            border-radius: 50px;
+            border-radius: $border-radius;
             background: #f5f7fa;
             color: #666;
             font-weight: 500;
@@ -74,7 +74,7 @@ form .clear-button {
                 justify-content: center;
                 width: 28px;
                 height: 28px;
-                border-radius: 50%;
+                border-radius: $border-radius;
                 background: #e0e5eb;
                 color: #666;
                 font-weight: 600;
@@ -116,7 +116,7 @@ form .clear-button {
             font-size: 12px;
             border: none;
             padding: 5px 10px;
-            border-radius: 8px;
+            border-radius: $border-radius;
             height: 30px;
             cursor: pointer;
             display: flex;
@@ -127,7 +127,7 @@ form .clear-button {
 
     .register-form {
         background: white;
-        border-radius: 16px;
+        border-radius: $border-radius;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         padding: 20px;
         position: relative;
@@ -170,7 +170,7 @@ form .clear-button {
 
     .document-section {
         background: #f9fafc;
-        border-radius: 12px;
+        border-radius: $border-radius;
         padding: 1.5rem;
         border: 1px solid #eee;
         display: flex;
@@ -200,7 +200,7 @@ form .clear-button {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: $border-radius;
             font-size: 0.95rem;
             transition: all 0.2s ease;
             background: white;
@@ -290,7 +290,7 @@ form .clear-button {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: $border-radius;
             font-size: 0.95rem;
             transition: all 0.2s ease;
             background: white;
@@ -356,7 +356,7 @@ form .clear-button {
         justify-content: center;
         padding: 10px;
         border: 2px dashed #ddd;
-        border-radius: 8px;
+        border-radius: $border-radius;
         background: #fafafa;
         text-align: center;
         transition: all 0.2s ease;
@@ -399,7 +399,7 @@ form .clear-button {
         width: 100%;
         height: 100%;
         border: 2px dashed rgba($primary-color, 0.2);
-        border-radius: 8px;
+        border-radius: $border-radius;
         padding: 10px;
 
         &::before {
@@ -420,7 +420,7 @@ form .clear-button {
     .secondary-button,
     .submit-button {
         padding: 8px 12px;
-        border-radius: 8px;
+        border-radius: $border-radius;
         font-weight: 500;
         font-size: 1rem;
         cursor: pointer;
@@ -460,7 +460,7 @@ form .clear-button {
         padding: 8px 12px;
         font-size: 15px;
         font-weight: 600;
-        border-radius: 8px;
+        border-radius: $border-radius;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -525,7 +525,7 @@ form .clear-button {
 
     .confirmation-card {
         background: white;
-        border-radius: 16px;
+        border-radius: $border-radius;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         padding: 40px;
         max-width: 500px;
@@ -560,7 +560,7 @@ form .clear-button {
         .progress-bar {
             height: 6px;
             background: #f0f0f0;
-            border-radius: 3px;
+            border-radius: $border-radius;
             overflow: hidden;
             margin-top: 30px;
 
@@ -568,7 +568,7 @@ form .clear-button {
                 height: 100%;
                 width: 60%;
                 background: linear-gradient(90deg, #4f46e5, #10b981);
-                border-radius: 3px;
+                border-radius: $border-radius;
                 animation: progress-animation 2s ease-in-out infinite;
             }
         }

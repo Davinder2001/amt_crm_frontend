@@ -119,7 +119,7 @@
     padding: 5px 10px;
     background-color: $primary-color;
     color: $white;
-    border-radius: 5px;
+    border-radius: $border-radius;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;

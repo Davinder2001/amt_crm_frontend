@@ -556,7 +556,7 @@
             background: rgba($primary-color, 0.1);
             color: var(--primary-color) !important;
             padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            border-radius: $border-radius;
             font-size: $font-size-small;
             font-weight: $font-weight-medium;
         }

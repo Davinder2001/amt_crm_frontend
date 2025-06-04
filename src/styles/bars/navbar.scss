@@ -146,7 +146,7 @@ svg {
     background-color: var(--primary-color);
     color: white;
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: $border-radius;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -211,7 +211,7 @@ svg {
       right: 0;
       top: calc(100% + 10px);
       background: white;
-      border-radius: 5px;
+      border-radius: $border-radius;
       border: 1px solid $border-color;
       width: 280px;
       overflow: hidden;
@@ -363,7 +363,7 @@ svg {
 
   .theme-select {
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: white;
     color: #333;
@@ -391,7 +391,7 @@ svg {
   max-width: 999px;
   margin: auto;
   box-shadow: $box-shadow;
-  border-radius: 15px;
+  border-radius: $border-radius;
   width: 100%;
 
   .form-container {
@@ -443,7 +443,7 @@ svg {
     padding: 5px 10px;
     border: 1px solid #ccc;
     margin-bottom: 1rem;
-    border-radius: 8px;
+    border-radius: $border-radius;
     transition: border-color .3s ease, box-shadow .3s ease;
 
     &:focus-within {
@@ -479,7 +479,7 @@ svg {
     margin-top: 1rem;
     padding: 14px;
     font-size: 14px;
-    border-radius: 8px;
+    border-radius: $border-radius;
     border: none;
     background: linear-gradient(135deg, var(--primary-color), rgba(var(--primary-color), 8%));
     color: #fff;

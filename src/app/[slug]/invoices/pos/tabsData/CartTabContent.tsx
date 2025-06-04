@@ -31,14 +31,14 @@ type CartTabContentProps = {
     setDiscountPercent: React.Dispatch<React.SetStateAction<number>>;
     discountType: 'amount' | 'percentage';
     setDiscountType: React.Dispatch<React.SetStateAction<'amount' | 'percentage'>>;
-    paymentMethod: '' | 'cash' | 'online' | 'card' | 'credit';
+    paymentMethod: '' | 'cash' | 'online' | 'card' | 'credit' | 'self';
     serviceChargeAmount: number;
     setServiceChargeAmount: React.Dispatch<React.SetStateAction<number>>;
     serviceChargeType: 'amount' | 'percentage';
     setServiceChargeType: React.Dispatch<React.SetStateAction<'amount' | 'percentage'>>;
     serviceChargePercent: number;
     setServiceChargePercent: React.Dispatch<React.SetStateAction<number>>;
-    setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'credit'>>;
+    setPaymentMethod: React.Dispatch<React.SetStateAction<'' | 'cash' | 'online' | 'card' | 'credit' | 'self'>>;
     creditPaymentType: 'full' | 'partial';
     setCreditPaymentType: React.Dispatch<React.SetStateAction<'full' | 'partial'>>;
     partialAmount: number;
@@ -563,6 +563,18 @@ export default function CartTabContent({
                                     <input
                                         type="radio"
                                         name="paymentMethod"
+                                        value="card"
+                                        checked={paymentMethod === 'self'}
+                                        onChange={() => setPaymentMethod('self')}
+                                    />
+                                    <span className="radiomark" />
+                                    self consumption
+                                </label>
+
+                                <label className="custom-radio">
+                                    <input
+                                        type="radio"
+                                        name="paymentMethod"
                                         value="credit"
                                         checked={paymentMethod === 'credit'}
                                         onChange={() => setPaymentMethod('credit')}
@@ -571,8 +583,9 @@ export default function CartTabContent({
                                     Credit
                                 </label>
 
+
                                 {paymentMethod === 'credit' && (
-                                    <div className="credit-options" style={{ marginTop: 10 }}>
+                                    <div className="credit-options" style={{ width: '100%'}}>
                                         <div className="options-row">
                                             <label className="custom-radio">
                                                 <input

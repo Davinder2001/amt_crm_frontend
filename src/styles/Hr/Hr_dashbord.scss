@@ -25,7 +25,10 @@
     color: #384b70;
 }
 }
-
+.css-1muzjf8 {
+    border: none !important;
+    margin-bottom: 0px !important;
+}
 
 .hr_navigation {
   display: flex;
@@ -42,6 +45,7 @@
     background-color:  $primary-color;
     padding: 5px 10px;
     border-radius: $border-radius;
+    height: 40px;
     align-items: center;
     
       &:hover {

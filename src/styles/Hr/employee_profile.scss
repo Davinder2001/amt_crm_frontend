@@ -13,8 +13,7 @@
   .employee-profile-inner-container {
     background: $white;
     border-radius: $border-radius;
-    box-shadow: $secondary-shadow;
-    padding: 20px;
+    padding: 30px 20px;
 
     .loading-spinner {
       display: flex;
@@ -36,7 +35,7 @@
       display: flex;
       align-items: center;
       gap: 30px;
-      padding: 0px 15px 15px 15px;
+      padding: 0px 15px 25px 15px;
 
       .profile-avatar {
         .avatar-image {
@@ -112,6 +111,7 @@
 
           .btn {
             padding: 8px 20px;
+            height: 40px;
             border-radius: $border-radius;
             font-weight: $font-weight-medium;
             cursor: pointer;
@@ -127,7 +127,7 @@
               color: $white;
 
               &:hover {
-                background: #00969382;
+                background: $hover-color;
                 box-shadow: 0 8px 24px #0000001a;
               }
             }
@@ -153,13 +153,13 @@
       .profile-card {
         background: $white;
         border-radius: $border-radius;
-        padding: 10px;
-        box-shadow: $secondary-shadow;
+        padding:10px;
+        border: 1px solid $border-color;
         transition: $transition;
 
         &:hover {
           transform: translateY(-3px);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.049);
         }
 
         .card-title {

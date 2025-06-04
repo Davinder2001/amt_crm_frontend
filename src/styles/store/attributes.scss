@@ -32,9 +32,10 @@
       position: relative;
 
       &.active {
-        background-color: #f1f9f9;
+        background-color:$light_blue;
         font-weight: 500;
-        color: $primary-color
+        color: $primary-color;
+        padding: 10px 15px;
       }
     }
   }

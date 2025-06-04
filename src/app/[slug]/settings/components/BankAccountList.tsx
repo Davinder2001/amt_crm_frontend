@@ -15,7 +15,14 @@ const BankAccountList = () => {
 
     const handleCreate = async (account: AddCompanyAccountsPayload['accounts'][0]) => {
         try {
-            await addAccounts({ accounts: [account] }).unwrap();
+            const formData = new FormData();
+            // Assuming account is an object with keys and values to append
+            Object.entries(account).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    formData.append(key, value as string | Blob);
+                }
+            });
+            await addAccounts(formData).unwrap();
             setShowForm(false);
         } catch (e) {
             console.error('Failed to add account', e);

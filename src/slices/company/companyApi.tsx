@@ -111,7 +111,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
     // 🔽 Add new bank accounts (bulk)
-    addCompanyAccounts: builder.mutation<{ message: string }, AddCompanyAccountsPayload>({
+    addCompanyAccounts: builder.mutation<AddCompanyAccountsPayload, FormData>({
       query: (payload) => ({
         url: "company/account",
         method: "POST",
@@ -166,7 +166,7 @@ export const {
   useOrderNewCompanyMutation,
   useAddNewCompanyMutation,
   useFetchCompanyDetailsQuery,
-  
+
   // 🔽 New bank account endpoints
   useFetchCompanyAccountsQuery,
   useAddCompanyAccountsMutation,

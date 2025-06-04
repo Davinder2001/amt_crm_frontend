@@ -134,13 +134,13 @@
       padding: 16px;
       border-radius: $border-radius;
       background: $white;
-      box-shadow: $secondary-shadow;
+      border: 1px solid $border-color;
       border-top: 3px solid;
       transition: all $transition;
 
       &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 25px #0000001a;
+        box-shadow: 0 10px 25px #0000000a;
       }
 
       @media (max-width: 468px) {
@@ -221,8 +221,8 @@
     }
 
     .item-image {
-      border: 1px solid  $border-color;
-      border-radius: $border-radius;
+      border: 1px solid $border-color;
+      border-radius: 8px;
       object-fit: cover;
     }
 
@@ -232,7 +232,7 @@
     }
 
     .info-card-green {
-      border-top-color: $orange-color;
+      border-top-color: $hover-color;
     }
 
     .info-card-yellow {

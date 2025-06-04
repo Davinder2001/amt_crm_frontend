@@ -357,7 +357,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   py: 0.5,
                   px: 1.5,
                   minHeight: '30px',
-                  '&:hover': { backgroundColor: '#e0f7f6' },
+                  '&:hover': { backgroundColor: '#DEE9F2' },
                 }}
               >
                 Create New
@@ -379,7 +379,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                       py: 0.5,
                       px: 1.5,
                       minHeight: '30px',
-                      '&:hover': { backgroundColor: '#e0f7f6' },
+                      '&:hover': { backgroundColor: '#DEE9F2' },
                     }}
                   >
                     Cancel
@@ -470,7 +470,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   py: 0.5,
                   px: 1.5,
                   minHeight: '30px',
-                  '&:hover': { backgroundColor: '#e0f7f6' },
+                  '&:hover': { backgroundColor: '#DEE9F2' },
                 }}
               >
                 Cancel

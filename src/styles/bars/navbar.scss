@@ -211,8 +211,8 @@ svg {
       right: 0;
       top: calc(100% + 10px);
       background: white;
-      border-radius: $border-radius;
-      border: 1px solid $border-color;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       width: 280px;
       overflow: hidden;
       z-index: 1000;

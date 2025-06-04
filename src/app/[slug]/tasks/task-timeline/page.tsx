@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetWorkingTasksQuery } from '@/slices/tasks/taskApi';
 import { useRouter } from 'next/navigation';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaArrowLeft, FaPaperPlane } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import Modal from '@/components/common/Modal';
+import SubmitTaskComponent from '../submit-task/SubmitTaskComponent';
 
 // Define the Task type based on your API response
 type Task = {
@@ -19,22 +21,24 @@ type Task = {
 
 const Page = () => {
   const router = useRouter();
-  const { data, isLoading, error } = useGetWorkingTasksQuery();
+  const { data, isLoading, error, refetch } = useGetWorkingTasksQuery();
   const { data: selectedCompany } = useFetchSelectedCompanyQuery();
   const companySlug = selectedCompany?.selected_company?.company_slug;
+
+  // Modal states
+  const [isSubmitTaskOpen, setIsSubmitTaskOpen] = useState(false);
+  const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
+
 
   const tasks = data?.data || [];
 
   const handleSubmitTask = (taskId: number) => {
-    router.push(`/${companySlug}/tasks/submit-task/${taskId}`);
+    setCurrentTaskId(taskId);
+    setIsSubmitTaskOpen(true);
   };
 
   // Define columns with proper typing
   const columns = [
-    {
-      label: '#',
-      render: (task: Task, index: number) => index + 1,
-    },
     {
       label: 'Task Name',
       key: 'name' as keyof Task,
@@ -62,9 +66,9 @@ const Page = () => {
       render: (task: Task) => (
         <button
           onClick={() => handleSubmitTask(task.id)}
-          className="inline-flex items-center px-3 py-1 text-sm bg-blue-100 text-blue-700 border border-blue-300 rounded hover:bg-blue-200 transition"
+          className="buttons"
         >
-          <FaPaperPlane className="w-4 h-4 mr-1" />
+          <FaPaperPlane />
           Submit Task
         </button>
       ),
@@ -91,6 +95,22 @@ const Page = () => {
           onView={(id) => router.push(`/${companySlug}/tasks/task-timeline/${id}`)}
         />
       )}
+
+      {/*submit Task Modal */}
+      <Modal
+        isOpen={isSubmitTaskOpen}
+        onClose={() => setIsSubmitTaskOpen(false)}
+        title={`Submit Task ${currentTaskId}`}
+        width="800px"
+      >
+        <SubmitTaskComponent
+          taskId={currentTaskId!}
+          onSuccess={() => {
+            setIsSubmitTaskOpen(false);
+            refetch();
+          }}
+        />
+      </Modal>
     </div>
   );
 };

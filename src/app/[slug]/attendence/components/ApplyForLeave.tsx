@@ -3,10 +3,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Link from 'next/link';
 import Image from "next/image";
-import { FaArrowLeft, FaFileUpload } from 'react-icons/fa';
-import { useCompany } from '@/utils/Company';
+import { FaFileUpload } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format, isSameDay, isSunday } from 'date-fns';
@@ -22,7 +20,6 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [applyForLeave, { isLoading, isSuccess, isError }] = useApplyForLeaveMutation();
-    const { companySlug } = useCompany();
     const [document, setDocument] = useState<File | null>(null);
     useEffect(() => {
         if (isSuccess) {
@@ -97,10 +94,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
     };
 
     return (
-        <div className="">
-            <Link href={`/${companySlug}/attendence`} className="back-button">
-                <FaArrowLeft size={20} color="#fff" />
-            </Link>
+        <div>
             <div className='leave-application-container'>
                 <div className="application-header">
 
@@ -209,13 +203,20 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                                 <div className="file-preview">
                                     {document.type.startsWith('image/') ? (
                                         <div className="thumbnail-wrapper">
-                                            <Image
-                                                src={URL.createObjectURL(document)}
-                                                alt="Preview"
-                                                fill
-                                                className="object-contain rounded"
-                                                unoptimized
-                                            />
+                                            <a
+                                                href={URL.createObjectURL(document)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="preview-link"
+                                            >
+                                                <Image
+                                                    src={URL.createObjectURL(document)}
+                                                    alt="Preview"
+                                                    fill
+                                                    className="object-contain rounded"
+                                                    unoptimized
+                                                />
+                                            </a>
                                             <button
                                                 className="remove-button"
                                                 onClick={() => setDocument(null)}
@@ -231,6 +232,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                                 </div>
                             )}
 
+
                         </div>
 
                         <div className="date-range-display">
@@ -239,18 +241,18 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                                     📅 {getFormattedRange()}
                                 </span>
                             )}
+                            <button
+                                className="submit-button"
+                                onClick={handleApplyLeave}
+                                disabled={isLoading || selectedDates.length === 0 || !subject || !description}
+                            >
+                                {isLoading ? (
+                                    <span className="loading-dots">Submitting</span>
+                                ) : (
+                                    'Submit Request'
+                                )}
+                            </button>
                         </div>
-                        <button
-                            className="submit-button"
-                            onClick={handleApplyLeave}
-                            disabled={isLoading || selectedDates.length === 0 || !subject || !description}
-                        >
-                            {isLoading ? (
-                                <span className="loading-dots">Submitting</span>
-                            ) : (
-                                'Submit Request'
-                            )}
-                        </button>
                     </div>
                 </div>
 

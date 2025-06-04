@@ -45,18 +45,18 @@
     max-height: 500px;
     width: 100%;
     padding-bottom: 0px !important;
-
-    .add-attribute-button-container {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
+    
     input,
     select {
       width: 100%;
     }
   }
+  
+      .add-attribute-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
 
   // add attribute canvas *****************
   .attribute-canvas {
@@ -216,7 +216,7 @@
   // Attributes Table *****************
   .attributes-table {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-top: 10px;
     padding-bottom: 10px;
@@ -232,6 +232,7 @@
       gap: 5px;
       transition: all 0.2s ease;
       position: relative;
+      justify-content: space-between;
 
       h3 {
         font-size: 15px;

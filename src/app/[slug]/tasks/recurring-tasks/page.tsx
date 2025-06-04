@@ -54,11 +54,12 @@ const Page = () => {
   return (
     <>
       <div className="recurring-wrapper">
-
-        <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-        <button className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
-          <FaPlus /> Add
-        </button>
+        <div className='recurring-task-header'>
+          <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+          <button className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
+            <FaPlus /> Add
+          </button>
+        </div>
 
         {isLoading && <p>Loading...</p>}
         {error && <p>Failed to load tasks.</p>}
@@ -84,7 +85,7 @@ const Page = () => {
                   <td>{task.recurrence_end_date ? new Date(task.recurrence_end_date).toLocaleDateString() : '—'}</td>
                   <td>{task.notify ? 'Yes' : 'No'}</td>
                   <td>
-                    <span onClick={() => handleEdit(task.id)}><FaEdit /></span>
+                    <span onClick={() => handleEdit(task.id)} className=' edit-button'><FaEdit /></span>
                     <span onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
                       <FaTrash />
                     </span>

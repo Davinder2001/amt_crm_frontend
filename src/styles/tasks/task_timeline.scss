@@ -37,7 +37,7 @@
             font-size: 14px;
 
             &:hover {
-                background-color: #087a77;
+                background-color: $hover-color;
             }
         }
     }
@@ -77,7 +77,7 @@
             }
 
             button {
-                background-color: var(--primary-color);
+                background-color: $primary-color;
                 color: $white;
                 padding: 5px 10px;
                 width: 100%;
@@ -87,7 +87,7 @@
                 font-size: 14px;
 
                 &:hover {
-                    background-color: #087a77;
+                    background-color: $hover-color;
                 }
             }
         }
@@ -109,7 +109,7 @@
             background: #fff;
             padding: 20px;
             border-radius: $border-radius;
-            width: 400px;
+            width: 600px;
             max-width: 90%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
@@ -297,8 +297,8 @@
 
     .button.outline {
         background-color: transparent;
-        border: 1px solid #0a9896;
-        color: #0a9896;
+        border: 1px solid $primary-color;
+        color: $primary-color;
     }
 
     .button.outline:hover {
@@ -306,13 +306,13 @@
     }
 
     .button.primary {
-        background-color: #0a9896;
+        background-color: $primary-color;
         color: #ffffff;
         border: none;
     }
 
     .button.primary:hover {
-        background-color: #087a77;
+        background-color: $hover-color;
     }
 
 }

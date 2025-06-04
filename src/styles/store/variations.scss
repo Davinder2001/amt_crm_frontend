@@ -11,7 +11,6 @@
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: $border-radius;
-  box-shadow: $box-shadow;
   padding: 10px 12px;
   display: grid;
   grid-template-columns: repeat(4,1fr);
@@ -21,9 +20,9 @@
   counter-increment: variation-counter;
 
   label {
-    color: #8a9bb8;
-    font-size: 14px;
-    font-weight: 600;
+    color: $lable-color;
+    font-size: 13px;
+    font-weight: 500;
   }
 
   &:not(:last-child) {
@@ -101,7 +100,7 @@
     position: absolute;
     top: -10px;
     right: 16px;
-    background: #ff5c5c;
+    background: $danger-color;
     color: white;
     border: none;
     padding: 4px 10px;
@@ -132,7 +131,8 @@
 
 
   button {
-    padding: 5px 12px;
+    padding: 5px 25px;
+    height: 40px;
     border-radius: $border-radius;
     font-size: 15px;
     font-weight: 400;
@@ -140,7 +140,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-
+ 
     &:first-child {
       background: #f0f0f0;
       color: $dark-color;

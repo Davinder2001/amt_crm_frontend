@@ -82,7 +82,7 @@ const Attributes = () => {
                         onClick={() => setIsCanvasOpen(true)}
                         className='buttons floting-attributes-button' title='Add New Attribute'
                     >
-                        <FaPlus />
+                        <FaPlus />Add Attribute
                     </button>
                 </div>
             )}

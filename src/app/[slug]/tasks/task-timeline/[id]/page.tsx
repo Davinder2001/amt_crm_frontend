@@ -256,7 +256,7 @@ const ViewTimeline = () => {
       {showSubmitTask &&
         <div className='timeline-submit-task-wrapper' onClick={() => setShowSubmitTask(false)}>
           <div className="timeline-submit-task-inner" onClick={(e) => e.stopPropagation()}>
-            <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} />
+            <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
           </div>
         </div>
       }

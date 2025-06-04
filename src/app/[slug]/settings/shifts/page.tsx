@@ -6,7 +6,7 @@ import {
   useFetchCompanyShiftsQuery,
 } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
-import { FiClock, FiCalendar, FiWatch } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
 
 const Page = () => {
   const { data: shiftData, isLoading, refetch } = useFetchCompanyShiftsQuery();
@@ -60,12 +60,12 @@ const Page = () => {
       <div className="content-grid">
         {/* Create Shift Section */}
         <section className="create-shift-section glass-panel">
-          <h2 className="section-title">
+          <h2 className="section-title Create-section-title ">
              Create New Shift
           </h2>
 
           <form onSubmit={handleCreate} className="shift-form">
-            <div className="form-grid">
+            <div className="form-grid create-shift-form-outer">
               <div className={`form-group ${form.shift_name ? "filled" : ""}`}>
                 <label>
                   Shift Name <span className="required-asterisk">*</span>
@@ -80,9 +80,6 @@ const Page = () => {
                     placeholder="e.g. Morning Shift"
                     className="form-input"
                   />
-                  <span className="input-icon">
-                    <FiCalendar />
-                  </span>
                 </div>
               </div>
 
@@ -99,9 +96,6 @@ const Page = () => {
                     required
                     className="form-input"
                   />
-                  <span className="input-icon">
-                    <FiWatch />
-                  </span>
                 </div>
               </div>
 
@@ -118,9 +112,6 @@ const Page = () => {
                     required
                     className="form-input"
                   />
-                  <span className="input-icon">
-                    <FiWatch />
-                  </span>
                 </div>
               </div>
 
@@ -145,9 +136,6 @@ const Page = () => {
                     <option value="Friday">Friday</option>
                     <option value="Saturday">Saturday</option>
                   </select>
-                  <span className="input-icon">
-                    <FiCalendar />
-                  </span>
                 </div>
               </div>
             </div>
@@ -168,7 +156,7 @@ const Page = () => {
 
         {/* Shift List Section */}
         <section className="shift-list-section glass-panel">
-          <h2 className="section-title">
+          <h2 className="section-title view-all-shifte-title ">
             <FiClock /> Current Shifts
           </h2>
 

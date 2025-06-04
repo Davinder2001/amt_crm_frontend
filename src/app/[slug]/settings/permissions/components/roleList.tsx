@@ -1,22 +1,26 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
-import { FaArrowLeft, FaPlus } from "react-icons/fa";
-import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import ResponsiveTable
+import { FaArrowLeft, FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
+import ResponsiveTable from "@/components/common/ResponsiveTable";
 import Loader from "@/components/common/Loader";
+import RoleForm from "./RoleForm";
+import Modal from "@/components/common/Modal";
+import ViewRole from "./ViewRole";
 
 const RoleList: React.FC = () => {
   const router = useRouter();
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
-  const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-  const companySlug = selectedCompany?.selected_company?.company_slug;
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
   const handleDeleteRole = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this role?")) return;
@@ -49,46 +53,99 @@ const RoleList: React.FC = () => {
           : "None",
     },
     { label: "Company ID", key: "company_id" as keyof Role },
-    // {
-    //   label: "Actions",
-    //   render: (role: Role) => (
-    //     <div className="permissions-form-actions-icons-outer">
-    //       <Link href={`/${companySlug}/permissions/view-role/${role.id}`}>
-    //         <span><FaEye color="#222" /></span>
-    //       </Link>
-    //       <Link href={`/${companySlug}/permissions/edit-role/${role.id}`}>
-    //         <span><FaEdit color="#222" /></span>
-    //       </Link>
-    //       <span onClick={() => handleDeleteRole(role.id)} className="cursor-pointer">
-    //         <FaTrash color="#222" />
-    //       </span>
-    //     </div>
-    //   ),
-    // },
+    {
+      label: "Actions",
+      render: (role: Role) => (
+        <div className="action-buttons">
+          <FaEye onClick={() => {
+            setSelectedRoleId(role.id);
+            setIsViewModalOpen(true);
+          }} color="#384b70" />
+
+          <FaEdit onClick={() => {
+            setSelectedRoleId(role.id);
+            setIsEditModalOpen(true);
+          }} color="#384b70" />
+
+          <FaTrash onClick={() => handleDeleteRole(role.id)} color="#384b70" />
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="permissions-form-outer">
       <div className="navigation-buttons roll-list-navigation-btn">
-      <button
-        onClick={() => router.back()}
-        className="back-button"
-      >
-        <FaArrowLeft size={20} color="#fff" />
-      </button>
-      
-        <Link className="navigation-button" href={`/${companySlug}/settings/permissions/add-role`}>
+        <button
+          onClick={() => router.back()}
+          className="back-button"
+        >
+          <FaArrowLeft size={20} color="#fff" />
+        </button>
+
+        <button className="buttons" onClick={() => setIsAddModalOpen(true)}>
           <FaPlus /> Add Role
-        </Link>
+        </button>
       </div>
 
       <ResponsiveTable
         data={rolesData?.roles || []}
         columns={columns}
         onDelete={(id) => handleDeleteRole(id)}
-        onEdit={(id) => router.push(`/${companySlug}/settings/permissions/edit-role/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/settings/permissions/view-role/${id}`)}
       />
+
+
+      {/* Add Modal */}
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Add Role"
+        width="700px"
+      >
+        <RoleForm
+          mode="add"
+          onSuccess={() => {
+            setIsAddModalOpen(false);
+            // Optionally refetch roles
+          }}
+        />
+      </Modal>
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedRoleId(null);
+        }}
+        title="Edit Role"
+        width="700px"
+      >
+        {selectedRoleId && (
+          <RoleForm
+            mode="edit"
+            roleId={selectedRoleId}
+            onSuccess={() => {
+              setIsEditModalOpen(false);
+              setSelectedRoleId(null);
+              // Optionally refetch roles
+            }}
+          />
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={isViewModalOpen}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setSelectedRoleId(null);
+        }}
+        title="View Role"
+        width="600px"
+      >
+        {selectedRoleId !== null && <ViewRole roleId={selectedRoleId} />}
+      </Modal>
+
     </div>
   );
 };

@@ -5,9 +5,13 @@
   background-color: $white;
 }
 
+.remember-forgot label {
+    display: flex !important;
+}
+
 .outer-div {
-  max-width: 1439px;
   margin: auto;
+  max-width: 93%;
   width: 100%;
 }
 
@@ -63,9 +67,8 @@
   padding: 10px;
   background: #fff;
   flex-wrap: wrap;
-  max-width: 1439px;
   margin: auto;
-  width: 100%;
+  width: 93%;
 
   a {
     display: flex;
@@ -701,7 +704,7 @@ nav.feature-card-nav-bar {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-  max-width: 1439px;
+  max-width: 93%;
   margin: auto;
 
   p {

@@ -7,7 +7,7 @@ import {
     usePrintInvoiceMutation,
     useMailInvoiceMutation,
 } from '@/slices/invoices/invoice';
-import CartTabContent from './tabsData/CartTabContent';
+import CartTabContent from './CartTabContent';
 
 type CheckoutPanelProps = {
     activeTab: TabType;

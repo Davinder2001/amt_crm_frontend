@@ -3,9 +3,8 @@
 
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
-import { FaArrowLeft, FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
+import {  FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import Loader from "@/components/common/Loader";
 import RoleForm from "./RoleForm";
@@ -13,7 +12,6 @@ import Modal from "@/components/common/Modal";
 import ViewRole from "./ViewRole";
 
 const RoleList: React.FC = () => {
-  const router = useRouter();
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
 
@@ -76,13 +74,6 @@ const RoleList: React.FC = () => {
   return (
     <div className="permissions-form-outer">
       <div className="navigation-buttons roll-list-navigation-btn">
-        <button
-          onClick={() => router.back()}
-          className="back-button"
-        >
-          <FaArrowLeft size={20} color="#fff" />
-        </button>
-
         <button className="buttons" onClick={() => setIsAddModalOpen(true)}>
           <FaPlus /> Add Role
         </button>

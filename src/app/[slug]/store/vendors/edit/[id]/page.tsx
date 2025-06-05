@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaStore, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
+import { FaArrowLeft} from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const EditVendorPage: React.FC = () => {

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaStore, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
+import { FaArrowLeft} from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const VendorCreationPage: React.FC = () => {

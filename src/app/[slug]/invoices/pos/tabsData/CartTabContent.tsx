@@ -4,7 +4,7 @@ import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { FiTrash2, FiShoppingCart, FiList, FiUser } from 'react-icons/fi';
+import { FiTrash2, FiShoppingCart, FiList, FiUser, FiFileText } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 type CartTabContentProps = {
@@ -51,7 +51,7 @@ type CartTabContentProps = {
     setDeliveryCharge: React.Dispatch<React.SetStateAction<number>>;
 };
 
-type InnerTabType = 'Items' | 'Client';
+type InnerTabType = 'Items' | 'Client' | 'Bill';
 
 export default function CartTabContent({
     activeTab, cart, onQtyChange,
@@ -83,19 +83,34 @@ export default function CartTabContent({
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
 
+    // Calculate base total (sum of all items)
     const baseTotal = cart.reduce((sum, i) => sum + i.quantity * i.final_cost, 0);
-    // const total = Math.max(0, baseTotal - (isDiscountApplied ? discountAmount : 0));
 
+    // Calculate service charge (with 18% GST if applied)
+    let serviceChargeAmountWithGST = 0;
+    if (isServiceChargeApplied) {
+        const serviceChargeBeforeGST = serviceChargeType === 'percentage'
+            ? (baseTotal * serviceChargePercent) / 100
+            : serviceChargeAmount;
+
+        // Add 18% GST to service charge
+        serviceChargeAmountWithGST = serviceChargeBeforeGST * 1.18;
+    }
+
+    // Calculate subtotal after service charge
+    const subtotalAfterServiceCharge = baseTotal + serviceChargeAmountWithGST;
+
+    // Calculate discount (without GST)
     const appliedDiscount = isDiscountApplied
         ? discountType === 'percentage'
-            ? (baseTotal * discountPercent) / 100
-            : discountAmount
+            ? (subtotalAfterServiceCharge * discountPercent) / 100
+            : Math.min(discountAmount, subtotalAfterServiceCharge) // Ensure discount doesn't make total negative
         : 0;
 
-    const total = (Math.max(0, baseTotal - appliedDiscount)).toFixed(2);
+    // Final total
+    const total = Math.max(0, subtotalAfterServiceCharge - appliedDiscount).toFixed(2);
 
-
-    const innerTabs: InnerTabType[] = ['Items', 'Client'];
+    const innerTabs: InnerTabType[] = ['Items', 'Client', 'Bill'];
 
     const handleNumberBlur = () => {
         if (!number || !customers?.customers) return;
@@ -199,6 +214,9 @@ export default function CartTabContent({
                         case 'Client':
                             Icon = FiUser;
                             break;
+                        case 'Bill':
+                            Icon = FiFileText;
+                            break;
                         default:
                             Icon = null;
                     }
@@ -229,7 +247,7 @@ export default function CartTabContent({
                                 <div className="cart-labels">
                                     <span className="label-name">Item</span>
                                     <span className="label-quantity">Qty</span>
-                                    <span className="label-price">Price</span>
+                                    <span className="label-price">Total</span>
                                 </div>
                                 <div className="cart-items-list">
                                     {cart.map(item => (
@@ -354,6 +372,49 @@ export default function CartTabContent({
                     </div>
                 )}
 
+                {activeInnerTab === 'Bill' && (
+                    <div className="bill-section" style={{ padding: '10px' }}>
+                        <div className="total-section">
+                            <div className="total-row">
+                                <span>Base Total:</span>
+                                <span>₹{baseTotal.toFixed(2)}</span>
+                            </div>
+
+                            {isServiceChargeApplied && (
+                                <div className="total-row">
+                                    <span>
+                                        Service Charge ({serviceChargeType === 'percentage'
+                                            ? `${serviceChargePercent}%`
+                                            : `₹${serviceChargeAmount}`}) + 18% GST:
+                                    </span>
+                                    <span>₹{serviceChargeAmountWithGST.toFixed(2)}</span>
+                                </div>
+                            )}
+
+                            <div className="total-row subtotal">
+                                <span>Subtotal:</span>
+                                <span>₹{subtotalAfterServiceCharge.toFixed(2)}</span>
+                            </div>
+
+                            {isDiscountApplied && (
+                                <div className="total-row">
+                                    <span>
+                                        Discount ({discountType === 'percentage'
+                                            ? `${discountPercent}%`
+                                            : `₹${discountAmount}`}):
+                                    </span>
+                                    <span>-₹{appliedDiscount.toFixed(2)}</span>
+                                </div>
+                            )}
+
+                            <div className="total-row grand-total">
+                                <span>Final Cost:</span>
+                                <span>₹{total}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="toggle-total-outer">
                     <div
                         className="sectionToggle"
@@ -363,7 +424,7 @@ export default function CartTabContent({
                         <span>Payments & Discount</span>
                     </div>
                     <div className="total">
-                        Total:{' '}
+                        Final Cost:{' '}
                         <strong>
                             ₹
                             {total}
@@ -585,7 +646,7 @@ export default function CartTabContent({
 
 
                                 {paymentMethod === 'credit' && (
-                                    <div className="credit-options" style={{ width: '100%'}}>
+                                    <div className="credit-options" style={{ width: '100%' }}>
                                         <div className="options-row">
                                             <label className="custom-radio">
                                                 <input

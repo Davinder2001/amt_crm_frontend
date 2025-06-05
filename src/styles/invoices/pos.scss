@@ -7,6 +7,7 @@
 }
 
 .pos-wrapper {
+
     select,
     input,
     .tabs button,
@@ -418,6 +419,33 @@
         color: #b00;
         display: flex;
         align-items: center
+    }
+
+    .total-section {
+        margin-top: 15px;
+        padding: 10px;
+        background: #f8f8f8;
+        border-radius: 5px;
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+
+            &.subtotal {
+                border-top: 1px dashed #ccc;
+                padding-top: 5px;
+                margin-top: 5px;
+            }
+
+            &.grand-total {
+                font-weight: bold;
+                font-size: 1.1em;
+                border-top: 1px solid #ccc;
+                padding-top: 8px;
+                margin-top: 8px;
+            }
+        }
     }
 
     .content {

@@ -8,7 +8,7 @@ import {
 import Modal from '@/components/common/Modal';
 
 const BillingSection = () => {
-  const { data, isLoading, error } = useFetchAdminBillingQuery();
+  const { data, isLoading, error, refetch } = useFetchAdminBillingQuery();
   const [createRefund] = useCreateRefundMutation();
 
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
@@ -24,6 +24,8 @@ const BillingSection = () => {
       formdata.append('reason', reason);
       await createRefund({ transaction_id: selectedTransactionId, formdata }).unwrap();
       console.log('Refund submitted for transaction:', selectedTransactionId);
+      // ✅ Refetch billing data to update UI
+      refetch();
       setIsRefundModalOpen(false);
       setSelectedTransactionId(null);
       setReason('');
@@ -76,7 +78,7 @@ const BillingSection = () => {
                   <td className="p-2 border">{payment.payment_status}</td>
                   <td className="p-2 border">{payment.payment_date}</td>
                   <td className="p-2 border">{payment.payment_time}</td>
-                  <td className="p-2 border">
+                  <td className="p-2 border" style={{textTransform: 'capitalize'}}>
                     {payment.refund !== null ? payment.refund :
 
                       <button
@@ -128,7 +130,7 @@ const BillingSection = () => {
           <div className="text-right">
             <button
               type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+              className="buttons"
             >
               Submit
             </button>

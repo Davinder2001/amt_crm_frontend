@@ -73,17 +73,17 @@ const Refunds = () => {
                                     <td className="p-2 border">{refund.user_id}</td>
                                     <td className="p-2 border">${refund.amount}</td>
                                     <td className="p-2 border">{refund.refund}</td>
-                                    <td className="p-2 border space-x-2">
-                                        {refund.refund === 'refund_processed' && (
+                                    <td className="p-2 border space-x-2" style={{display: 'flex', alignItems: 'center', gap: 10}}>
+                                        {refund.refund === 'refund processed' && (
                                             <>
                                                 <button
-                                                    className="bg-blue-500 text-white px-2 py-1 rounded"
+                                                    className="buttons"
                                                     onClick={() => handleApprove(refund.transaction_id)}
                                                 >
                                                     Approve
                                                 </button>
                                                 <button
-                                                    className="bg-red-500 text-white px-2 py-1 rounded"
+                                                    className="buttons"
                                                     onClick={() => openDeclineModal(refund.transaction_id)}
                                                 >
                                                     Decline
@@ -91,16 +91,16 @@ const Refunds = () => {
                                             </>
                                         )}
 
-                                        {refund.refund === 'refund_approved' && (
+                                        {refund.refund === 'refund approved' && (
                                             <button
-                                                className="bg-green-500 text-white px-2 py-1 rounded"
+                                                className="buttons"
                                                 onClick={() => handleComplete(refund.transaction_id)}
                                             >
                                                 Complete
                                             </button>
                                         )}
 
-                                        {refund.refund === 'refund_declined' && (
+                                        {refund.refund === 'refund declined' && (
                                             <span className="text-red-600 text-xs">
                                                 Declined: {refund.decline_reason}
                                             </span>
@@ -138,11 +138,11 @@ const Refunds = () => {
                         <button
                             type="button"
                             onClick={closeDeclineModal}
-                            className="bg-gray-300 px-4 py-2 rounded"
+                            className="buttons"
                         >
                             Cancel
                         </button>
-                        <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded">
+                        <button type="submit" className="buttons">
                             Decline
                         </button>
                     </div>

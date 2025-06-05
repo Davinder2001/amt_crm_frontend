@@ -17,7 +17,11 @@
 .css-6cy0zc-MuiTabs-root .MuiTabs-indicator {
   background-color: transparent !important;
 
+.css-6cy0zc-MuiTabs-root .MuiTabs-indicator {
+  background-color: transparent !important;
+
 .css-1muzjf8 {
+  border-bottom :none !important;
   border-bottom :none !important;
   margin-bottom: 0px !important;
 }
@@ -156,6 +160,12 @@
 }
 
 .card-left .label {
+  letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
   letter-spacing: .4px;
     color: #333;
     margin-bottom: 5px;

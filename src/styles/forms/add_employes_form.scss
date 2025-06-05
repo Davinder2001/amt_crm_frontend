@@ -36,6 +36,11 @@
       }
 
 
+      input::placeholder {
+        color: grey;
+      }
+
+
       .error-message {
         color: $danger-color;
         position: absolute;
@@ -88,6 +93,12 @@
   }
 
   label {
+    letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
     letter-spacing: .4px;
     color: #333;
     margin-bottom: 5px;

@@ -155,7 +155,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     fetchLeaves: builder.query<LeaveListResponse, void>({
       query: () => ({
-        url: "leaves",
+        url: "company/leaves",
         method: "GET",
         credentials: "include",
       }),
@@ -164,7 +164,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     createLeave: builder.mutation<LeaveResponse, CreateLeavePayload>({
       query: (payload) => ({
-        url: "leaves",
+        url: "company/leaves",
         method: "POST",
         body: payload,
         credentials: "include",
@@ -174,7 +174,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     updateLeave: builder.mutation<LeaveResponse, UpdateLeavePayload>({
       query: ({ id, ...body }) => ({
-        url: `leaves/${id}`,
+        url: `company/leaves/${id}`,
         method: "PUT",
         body,
         credentials: "include",
@@ -184,7 +184,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     deleteLeave: builder.mutation<{ message: string }, number>({
       query: (id) => ({
-        url: `leaves/${id}`,
+        url: `company/leaves/${id}`,
         method: "DELETE",
         credentials: "include",
       }),
@@ -218,7 +218,7 @@ export const {
   useCreateLeaveMutation,
   useUpdateLeaveMutation,
   useDeleteLeaveMutation,
-  
+
 } = companyApi;
 
 export default companyApi;

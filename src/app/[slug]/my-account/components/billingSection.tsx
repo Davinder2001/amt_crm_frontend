@@ -1,38 +1,34 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFetchAdminBillingQuery } from '@/slices/paymentsAndBillings/payBillApi';
+import {
+  useFetchAdminBillingQuery,
+  useCreateRefundMutation,
+} from '@/slices/paymentsAndBillings/payBillApi';
 import Modal from '@/components/common/Modal';
 
 const BillingSection = () => {
   const { data, isLoading, error } = useFetchAdminBillingQuery();
-  const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
+  const [createRefund] = useCreateRefundMutation();
 
-  const [refundForm, setRefundForm] = useState({
-    refund_title: '',
-    refund_description: ''
-  });
+  const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
+  const [reason, setReason] = useState('');
 
   const handleRefundSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('refund_title', refundForm.refund_title);
-    formData.append('refund_description', refundForm.refund_description);
+    if (!selectedTransactionId) return;
 
     try {
-      const response = await fetch('/api/refund', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error('Failed to submit refund');
-
-      console.log('Refund submitted:', refundForm);
+      const formdata = new FormData();
+      formdata.append('reason', reason);
+      await createRefund({ transaction_id: selectedTransactionId, formdata }).unwrap();
+      console.log('Refund submitted for transaction:', selectedTransactionId);
       setIsRefundModalOpen(false);
-      setRefundForm({ refund_title: '', refund_description: '' });
+      setSelectedTransactionId(null);
+      setReason('');
     } catch (err) {
-      console.error(err);
+      console.error('Failed to submit refund:', err);
     }
   };
 
@@ -80,7 +76,17 @@ const BillingSection = () => {
                   <td className="p-2 border">{payment.payment_status}</td>
                   <td className="p-2 border">{payment.payment_date}</td>
                   <td className="p-2 border">{payment.payment_time}</td>
-                  <td className="p-2 border"><button className='buttons' onClick={() => setIsRefundModalOpen(true)}>Refund</button></td>
+                  <td className="p-2 border">
+                    <button
+                      className="buttons"
+                      onClick={() => {
+                        setSelectedTransactionId(payment.transaction_id);
+                        setIsRefundModalOpen(true);
+                      }}
+                    >
+                      Refund
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -89,38 +95,29 @@ const BillingSection = () => {
       ) : (
         <p className="text-gray-600">No billing records found.</p>
       )}
-      {/* Add Task Modal */}
+
+      {/* Refund Modal */}
       <Modal
         isOpen={isRefundModalOpen}
-        onClose={() => setIsRefundModalOpen(false)}
-        title="Refund"
+        onClose={() => {
+          setIsRefundModalOpen(false);
+          setSelectedTransactionId(null);
+          setReason('');
+        }}
+        title="Submit Refund Request"
         width="400px"
       >
         <form onSubmit={handleRefundSubmit} className="space-y-4">
           <div>
-            <label htmlFor="refund_title" className="block text-sm font-medium text-gray-700">Refund Title</label>
-            <input
-              type="text"
-              id="refund_title"
-              name="refund_title"
-              value={refundForm.refund_title}
-              onChange={(e) =>
-                setRefundForm({ ...refundForm, refund_title: e.target.value })
-              }
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="refund_description" className="block text-sm font-medium text-gray-700">Refund Description</label>
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700">
+              Reason for Refund
+            </label>
             <textarea
-              id="refund_description"
-              name="refund_description"
+              id="reason"
+              name="reason"
               rows={4}
-              value={refundForm.refund_description}
-              onChange={(e) =>
-                setRefundForm({ ...refundForm, refund_description: e.target.value })
-              }
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
@@ -130,7 +127,7 @@ const BillingSection = () => {
               type="submit"
               className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
             >
-              Submit Refund Request
+              Submit
             </button>
           </div>
         </form>

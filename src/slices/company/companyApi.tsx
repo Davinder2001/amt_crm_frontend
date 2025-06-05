@@ -152,6 +152,45 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
+
+    fetchLeaves: builder.query<LeaveListResponse, void>({
+      query: () => ({
+        url: "leaves",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
+
+    createLeave: builder.mutation<LeaveResponse, CreateLeavePayload>({
+      query: (payload) => ({
+        url: "leaves",
+        method: "POST",
+        body: payload,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
+    updateLeave: builder.mutation<LeaveResponse, UpdateLeavePayload>({
+      query: ({ id, ...body }) => ({
+        url: `leaves/${id}`,
+        method: "PUT",
+        body,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
+    deleteLeave: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `leaves/${id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
   }),
 });
 
@@ -173,6 +212,13 @@ export const {
   useFetchSingleCompanyAccountQuery,
   useUpdateCompanyAccountMutation,
   useDeleteCompanyAccountMutation,
+
+  // 🔽 New LEAVE hooks
+  useFetchLeavesQuery,
+  useCreateLeaveMutation,
+  useUpdateLeaveMutation,
+  useDeleteLeaveMutation,
+  
 } = companyApi;
 
 export default companyApi;

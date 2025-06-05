@@ -1,7 +1,10 @@
 'use client';
 
+import { useFetchCompanyAccountsQuery } from '@/slices/company/companyApi';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useFetchStoreQuery } from '@/slices/store/storeApi';
+import { useCompany } from '@/utils/Company';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { FiTrash2, FiShoppingCart, FiList, FiUser, FiFileText } from 'react-icons/fi';
@@ -43,12 +46,16 @@ type CartTabContentProps = {
     setCreditPaymentType: React.Dispatch<React.SetStateAction<'full' | 'partial'>>;
     partialAmount: number;
     setPartialAmount: React.Dispatch<React.SetStateAction<number>>;
+    creditNote: string;
+    setCreditNote: (value: string) => void;
     address: string;
     setAddress: React.Dispatch<React.SetStateAction<string>>;
     pincode: string;
     setPincode: React.Dispatch<React.SetStateAction<string>>;
     deliveryCharge: number;
     setDeliveryCharge: React.Dispatch<React.SetStateAction<number>>;
+    selectedBankAccount: number | null;
+    setSelectedBankAccount: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 type InnerTabType = 'Items' | 'Client' | 'Bill';
@@ -74,6 +81,8 @@ export default function CartTabContent({
     serviceChargeType, setServiceChargeType,
     creditPaymentType, setCreditPaymentType,
     partialAmount, setPartialAmount,
+    creditNote, setCreditNote,
+    selectedBankAccount, setSelectedBankAccount,
 
 }: CartTabContentProps) {
     const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
@@ -82,6 +91,11 @@ export default function CartTabContent({
     const [isServiceChargeApplied, setIsServiceChargeApplied] = useState(false);
     const { data: customers } = useFetchAllCustomersQuery();
     const { data: storeData } = useFetchStoreQuery();
+    const { data } = useFetchCompanyAccountsQuery();
+    const BankAccountList = data?.accounts;
+    console.log('bank accounts', BankAccountList);
+    const { companySlug } = useCompany();
+
 
     // Calculate base total (sum of all items)
     const baseTotal = cart.reduce((sum, i) => sum + i.quantity * i.final_cost, 0);
@@ -157,6 +171,12 @@ export default function CartTabContent({
         if (!paymentMethod) {
             setShowPaymentDetails(true);
             toast.error('Please select a payment method.');
+            return false;
+        }
+
+        if (paymentMethod === 'online' && !selectedBankAccount) {
+            setShowPaymentDetails(true);
+            toast.error('Please select a bank account for online payment.');
             return false;
         }
 
@@ -608,6 +628,32 @@ export default function CartTabContent({
                                     Online
                                 </label>
 
+                                {paymentMethod === 'online' && BankAccountList && BankAccountList.length > 0 && (
+                                    <div className="bank-account-selection" style={{ width: '100%', marginTop: '10px' }}>
+                                        <label>Select Bank Account*</label>
+                                        <select
+                                            value={selectedBankAccount || ''}
+                                            onChange={(e) => setSelectedBankAccount(Number(e.target.value) || null)}
+                                            required
+                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+                                        >
+                                            <option value="">Select Bank Account</option>
+                                            {BankAccountList.map((account) => (
+                                                <option key={account.id} value={account.id}>
+                                                    {account.bank_name} - {account.account_number} ({account.type})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+
+                                {paymentMethod === 'online' && (!BankAccountList || BankAccountList.length === 0) && (
+                                    <div style={{ color: 'red', marginTop: '10px' }}>
+                                        No bank accounts available. Please add <Link href={`/${companySlug}/settings#bank-accounts`}>bank accounts in</Link> settings.
+
+                                    </div>
+                                )}
+
                                 <label className="custom-radio">
                                     <input
                                         type="radio"
@@ -629,7 +675,7 @@ export default function CartTabContent({
                                         onChange={() => setPaymentMethod('self')}
                                     />
                                     <span className="radiomark" />
-                                    self consumption
+                                    Self consumption
                                 </label>
 
                                 <label className="custom-radio">
@@ -688,6 +734,17 @@ export default function CartTabContent({
                                                 />
                                             </div>
                                         )}
+
+                                        <div className="form-group" style={{ marginTop: 10 }}>
+                                            <label>Credit Note (Optional)</label>
+                                            <textarea
+                                                value={creditNote}
+                                                onChange={(e) => setCreditNote(e.target.value)}
+                                                placeholder="Enter any notes about this credit transaction"
+                                                rows={3}
+                                                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
+                                            />
+                                        </div>
                                     </div>
                                 )}
 

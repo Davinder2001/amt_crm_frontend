@@ -1,29 +1,101 @@
-import React from 'react';
-import Link from 'next/link';
-import { FaCog } from 'react-icons/fa';
+import React, { useEffect } from 'react';
+import {
+  FaStore,
+  FaUserClock,
+  FaMoneyBillWave,
+  FaUserShield,
+  FaPiggyBank,
+} from 'react-icons/fa';
 
 const settingItems = [
-  { label: 'Store Settings', href: './settings/store-settings' },
-  { label: 'Shifts', href: './settings/shifts' },
-  { label: 'Taxes', href: './settings/taxes' },
-  { label: 'Permissions', href: './settings/permissions' },
-  { label: 'Bank Accounts', href: './settings/bank-accounts' },
+  {
+    label: 'Store Settings',
+    id: 'store-settings',
+    icon: <FaStore className="settings-icon" />,
+    subLabel: 'Store configuration'
+  },
+  {
+    label: 'Shifts',
+    id: 'shifts',
+    icon: <FaUserClock className="settings-icon" />,
+    subLabel: 'Shift management'
+  },
+  {
+    label: 'Taxes',
+    id: 'taxes',
+    icon: <FaMoneyBillWave className="settings-icon" />,
+    subLabel: 'Tax settings'
+  },
+  {
+    label: 'Permissions',
+    id: 'permissions',
+    icon: <FaUserShield className="settings-icon" />,
+    subLabel: 'User permissions'
+  },
+  {
+    label: 'Bank Accounts',
+    id: 'bank-accounts',
+    icon: <FaPiggyBank className="settings-icon" />,
+    subLabel: 'Bank account management'
+  },
+  {
+    label: 'Leaves and Holidays',
+    id: 'leavs-and-holidays',
+    icon: <FaPiggyBank className="settings-icon" />,
+    subLabel: 'Leaves and Holidays management'
+  },
 ];
 
-const SettingNavigation = () => {
+interface SettingNavigationProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+const SettingNavigation = ({ activeTab, onTabChange }: SettingNavigationProps) => {
+  // Handle hash changes on component mount
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1); // Remove the #
+      if (hash && settingItems.some(item => item.id === hash)) {
+        onTabChange(hash);
+      }
+    };
+
+    // Check initial hash
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [onTabChange]);
+
+  const handleTabClick = (tabId: string) => {
+    // Update the URL hash
+    window.location.hash = tabId;
+    // Call the parent's tab change handler
+    onTabChange(tabId);
+  };
+
   return (
-    <div className="settings-wrapper">
+    <div className="settings-sidebar">
       <ul className="settings-list">
         {settingItems.map((item) => (
-          <li key={item.href} className="settings-item">
-            <Link href={item.href} className="settings-link">
-              <div className="settings-info-inner">
-                <span className="settings-label">{item.label}</span>
-                <div className="settings-btn-outer">
-                  <FaCog className="settings-icon" />
+          <li
+            key={item.id}
+            className={`settings-item ${activeTab === item.id ? 'active' : ''}`}
+          >
+            <button
+              onClick={() => handleTabClick(item.id)}
+              className="settings-button"
+            >
+              <div className="settings-item-content">
+                {item.icon}
+                <div className="settings-text">
+                  <span className="settings-label">{item.label}</span>
+                  <span className="settings-sublabel">{item.subLabel}</span>
                 </div>
               </div>
-            </Link>
+            </button>
           </li>
         ))}
       </ul>

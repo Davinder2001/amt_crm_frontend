@@ -8,7 +8,7 @@ import {
 import { toast } from "react-toastify";
 import { FiClock } from "react-icons/fi";
 
-const Page = () => {
+const Shifts = () => {
   const { data: shiftData, isLoading, refetch } = useFetchCompanyShiftsQuery();
   const [createShift, { isLoading: isCreating }] = useCreateShiftMutation();
 
@@ -194,4 +194,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Shifts;

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import RoleList from './components/roleList';
 
-const Page = () => {
+const Permissions = () => {
   const { setTitle } = useBreadcrumb();
 
   useEffect(() => {
@@ -16,4 +16,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default Permissions

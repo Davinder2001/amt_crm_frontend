@@ -1,6 +1,6 @@
 import React from 'react'
 import Attributes from '../components/Attributes'
-const Page = () => {
+const StoreSettings = () => {
   return (
     <>
       <Attributes />
@@ -8,4 +8,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default StoreSettings

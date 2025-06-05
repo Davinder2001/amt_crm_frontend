@@ -75,7 +75,7 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
               style={{
                 backgroundColor:
                   attendance.status === 'present'
-                    ? '#009693'
+                    ? 'green'
                     : attendance.status === 'leave'
                       ? 'yellow'
                       : attendance.status === 'absent'
@@ -96,9 +96,9 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
               style={{
                 backgroundColor:
                   attendance.approval_status === 'approved'
-                    ? '#009693'
+                    ? 'green'
                     : attendance.approval_status === 'pending'
-                      ? 'yellow'
+                      ? 'orange'
                       : attendance.approval_status === 'unapproved'
                         ? 'red'
                         : 'gray',

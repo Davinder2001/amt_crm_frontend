@@ -430,12 +430,11 @@
         cursor: pointer;
         transition: $transition;
         box-shadow: $box-shadow;
-        border: 1px solid rgba(var(--primary-color), 0.1);
+        border: 1px solid $border-color;
 
         &:hover {
           transform: translateY(-5px);
           box-shadow: $secondary-shadow;
-          border-color: rgba(var(--primary-color), 0.3);
         }
 
         .option-icon {

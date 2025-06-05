@@ -1,8 +1,8 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
 import Loader from '@/components/common/Loader';
-import AddCompanyForm from './components/addCompanyForm'
+import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
 
@@ -16,10 +16,20 @@ const Page = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
+  // 🔄 Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem('addCompany');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed.subscription_type) setSubscriptionType(parsed.subscription_type);
+      if (parsed.package_id) setSelectedPackageId(parsed.package_id);
+      if (parsed.category_id) setSelectedCategoryId(parsed.category_id);
+    }
+  }, []);
+
   if (isPlansLoading) return <Loader />;
   if (!plans || !categories) return <div>No plans or categories available.</div>;
 
-  // ✅ If both are present, go directly to RegisterForm
   const hasValidSelection = selectedPackageId !== null && selectedCategoryId !== null && subscriptionType !== null;
 
   return (
@@ -30,10 +40,15 @@ const Page = () => {
             setSelectedPackageId(null);
             setSelectedCategoryId(null);
             setSubscriptionType(null);
+            localStorage.removeItem('addCompany');
           }}>
             ← Back
           </Link>
-          <AddCompanyForm packageId={selectedPackageId} categoryId={selectedCategoryId} subscriptionType={subscriptionType} />
+          <AddCompanyForm
+            packageId={selectedPackageId}
+            categoryId={selectedCategoryId}
+            subscriptionType={subscriptionType}
+          />
         </>
       ) : (
         <Packages
@@ -46,10 +61,9 @@ const Page = () => {
           subscriptionType={subscriptionType}
           setSubscriptionType={setSubscriptionType}
         />
-
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

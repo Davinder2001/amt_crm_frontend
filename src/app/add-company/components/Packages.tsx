@@ -27,28 +27,47 @@ const Packages: React.FC<PackagesProps> = ({
     const isInitialLoad = useRef(true);
 
     const filteredPlans = plans.filter((plan) =>
-        plan.business_categories.some(
-            (category) => category.id === selectedCategoryId
-        )
+        plan.business_categories.some((category) => category.id === selectedCategoryId)
     );
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedCategoryId = Number(e.target.value);
-        setSelectedCategoryId(selectedCategoryId);
+        const selectedId = Number(e.target.value);
+        setSelectedCategoryId(selectedId);
         isInitialLoad.current = false;
+
+        if (typeof window !== 'undefined') {
+            const existing = localStorage.getItem('addCompany');
+            const parsed = existing ? JSON.parse(existing) : {};
+            localStorage.setItem('addCompany', JSON.stringify({
+                ...parsed,
+                category_id: selectedId,
+            }));
+        }
     };
 
     const handleSubscriptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newType = e.target.value as 'monthly' | 'annual';
         setSubscriptionType(newType);
 
-        // Update localStorage 'addCompany' key
         if (typeof window !== 'undefined') {
             const existing = localStorage.getItem('addCompany');
             const parsed = existing ? JSON.parse(existing) : {};
             localStorage.setItem('addCompany', JSON.stringify({
                 ...parsed,
-                subscription_type: newType
+                subscription_type: newType,
+            }));
+        }
+    };
+
+    const handlePackageSelection = (packageId: number) => {
+        setSelectedPackageId(packageId);
+
+        if (typeof window !== 'undefined') {
+            const existing = localStorage.getItem('addCompany');
+            const parsed = existing ? JSON.parse(existing) : {};
+            localStorage.setItem('addCompany', JSON.stringify({
+                ...parsed,
+                package_id: packageId,
             }));
         }
     };
@@ -67,19 +86,16 @@ const Packages: React.FC<PackagesProps> = ({
                 setSelectedCategoryId(firstCategoryWithPackages.id);
             }
 
-            // ✅ Set default subscription type if not already set
             if (!subscriptionType) {
-                setSubscriptionType('monthly'); // or 'annually' as your default
+                setSubscriptionType('monthly');
             }
 
             isInitialLoad.current = false;
         }
     }, [plans, categories, subscriptionType, setSelectedCategoryId, setSubscriptionType]);
 
-
     return (
         <div className="account-pricing-container">
-            {/* Header */}
             <div className="account-packages-header">
                 <Link href="/" className="back-button">
                     <FaArrowLeft size={16} color="#fff" />
@@ -87,7 +103,6 @@ const Packages: React.FC<PackagesProps> = ({
 
                 <div className="filters">
                     <div className="filter-group">
-                        {/* Category Dropdown */}
                         <label htmlFor="category-select">Category:</label>
                         <select
                             id="category-select"
@@ -103,7 +118,6 @@ const Packages: React.FC<PackagesProps> = ({
                         </select>
                     </div>
 
-                    {/* Subscription Type Dropdown */}
                     <div className="filter-group">
                         <label htmlFor="subscription-select">Billing:</label>
                         <select
@@ -116,19 +130,16 @@ const Packages: React.FC<PackagesProps> = ({
                             <option value="annual">Annually</option>
                         </select>
                     </div>
-
                 </div>
             </div>
 
-            {/* Plans */}
             <div className="packages-grid">
                 {filteredPlans.length > 0 ? (
                     filteredPlans.map((plan) => {
                         const isSelected = plan.id === selectedPackageId;
-                        const price =
-                            subscriptionType === 'monthly'
-                                ? plan.monthly_price
-                                : plan.annual_price;
+                        const price = subscriptionType === 'monthly'
+                            ? plan.monthly_price
+                            : plan.annual_price;
 
                         return (
                             <div key={plan.id} className="package-card">
@@ -136,8 +147,7 @@ const Packages: React.FC<PackagesProps> = ({
                                     {subscriptionType === 'monthly' ? '1 Month' : '1 Year'}
                                 </div>
                                 <h3 className="planPrice">
-                                    ₹ {price ?? 0} /{' '}
-                                    {subscriptionType === 'monthly' ? 'Month' : 'Year'}
+                                    ₹ {price ?? 0} / {subscriptionType === 'monthly' ? 'Month' : 'Year'}
                                 </h3>
                                 <ul className="features">
                                     <li>{plan.employee_numbers} Employees</li>
@@ -149,18 +159,17 @@ const Packages: React.FC<PackagesProps> = ({
                                 <div className="pricing-buttons">
                                     <button
                                         className={isSelected ? 'btnPrimary' : 'btnSecondary'}
-                                        onClick={() => setSelectedPackageId(plan.id ?? 0)}
+                                        onClick={() => handlePackageSelection(plan.id ?? 0)}
                                         disabled={!subscriptionType}
                                     >
                                         {isSelected ? 'Selected' : 'Choose Plan'}
                                     </button>
-
                                     <button className="btnOnline">✓ Online</button>
                                 </div>
+
                                 {!subscriptionType && (
                                     <p className="text-xs text-red-500 mb-1">Please select a subscription type first</p>
                                 )}
-
                             </div>
                         );
                     })

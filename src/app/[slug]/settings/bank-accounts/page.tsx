@@ -1,5 +1,5 @@
 import React from 'react'
-import BankAccountList from '../components/BankAccountList'
+import BankAccountList from '../components/accounts/BankAccountList'
 
 const BankAccountsPage = () => {
     return (

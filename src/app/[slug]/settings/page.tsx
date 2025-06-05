@@ -7,7 +7,7 @@ import Attributes from './components/Attributes';
 import Shifts from './components/Shifts';
 import TaxesPage from './components/Taxes';
 import RoleList from './permissions/components/roleList';
-import BankAccountList from './components/BankAccountList';
+import BankAccountList from './components/accounts/BankAccountList';
 import LeavesAndHolidays from './components/LeavesAndHolidays';
 
 const SettingsPage = () => {
@@ -32,7 +32,6 @@ const SettingsPage = () => {
         return <BankAccountList />;
       case 'leavs-and-holidays':
         return <LeavesAndHolidays />;
-    
       default:
         return <StoreSettings />;
     }

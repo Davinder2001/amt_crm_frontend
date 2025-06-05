@@ -13,6 +13,9 @@ const CompanyNav = () => {
                 <li className='buttons'>
                     <Link href='/superadmin/companies/pending'>Pending Companies</Link>
                 </li>
+                <li className='buttons'>
+                    <Link href='/superadmin/companies/refunds'>Refunds</Link>
+                </li>
             </ul>
             </div>
         </nav>

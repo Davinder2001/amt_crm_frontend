@@ -31,10 +31,7 @@
       flex-direction: column;
       position: relative;
 
-      input::placeholder {
-        color: grey;
-      }
-
+  
 
       .error-message {
         color: $danger-color;

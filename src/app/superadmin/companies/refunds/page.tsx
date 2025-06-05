@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import {
     useFetchRefundsQuery,
@@ -6,14 +7,28 @@ import {
     useCompleteRefundMutation,
     useDeclineRefundMutation,
 } from '@/slices/superadminSlices/payments/paymentApi';
+import Modal from '@/components/common/Modal';
 
-function Refunds() {
+const Refunds = () => {
     const { data, isLoading, isError } = useFetchRefundsQuery();
     const [approveRefund] = useApproveRefundMutation();
     const [completeRefund] = useCompleteRefundMutation();
     const [declineRefund] = useDeclineRefundMutation();
-    const [declineModal, setDeclineModal] = useState<{ show: boolean; id: string | null }>({ show: false, id: null });
+
+    const [declineModalOpen, setDeclineModalOpen] = useState(false);
+    const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
     const [declineReason, setDeclineReason] = useState('');
+
+    const openDeclineModal = (id: string) => {
+        setSelectedTransactionId(id);
+        setDeclineModalOpen(true);
+    };
+
+    const closeDeclineModal = () => {
+        setSelectedTransactionId(null);
+        setDeclineReason('');
+        setDeclineModalOpen(false);
+    };
 
     const handleApprove = async (id: string) => {
         await approveRefund(id);
@@ -23,105 +38,118 @@ function Refunds() {
         await completeRefund(id);
     };
 
-    const handleDeclineSubmit = async () => {
-        if (declineModal.id) {
-            await declineRefund({ transactionId: declineModal.id, reason: declineReason });
-            setDeclineModal({ show: false, id: null });
-            setDeclineReason('');
-        }
+    const handleDecline = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedTransactionId) return;
+
+        await declineRefund({ transactionId: selectedTransactionId, reason: declineReason });
+        closeDeclineModal();
     };
 
-    if (isLoading) return <p>Loading refunds...</p>;
+    if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>Error loading refunds.</p>;
 
     return (
-        <div className="p-6 max-w-5xl mx-auto">
+        <div className="p-6 max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">Refund Requests</h1>
             {data?.data.length === 0 ? (
-                <p>No refund requests found.</p>
+                <p>No refund requests available.</p>
             ) : (
-                <table className="w-full border border-gray-300">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="border px-4 py-2">Transaction ID</th>
-                            <th className="border px-4 py-2">User ID</th>
-                            <th className="border px-4 py-2">Amount</th>
-                            <th className="border px-4 py-2">Status</th>
-                            <th className="border px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data?.data.map((refund: RefundRequest) => (
-                            <tr key={refund.transaction_id}>
-                                <td className="border px-4 py-2">{refund.transaction_id}</td>
-                                <td className="border px-4 py-2">{refund.user_id}</td>
-                                <td className="border px-4 py-2">${refund.amount}</td>
-                                <td className="border px-4 py-2">{refund.refund}</td>
-                                <td className="border px-4 py-2 space-x-2">
-                                    {refund.refund === 'refund_processed' && (
-                                        <>
-                                            <button
-                                                onClick={() => handleApprove(refund.transaction_id)}
-                                                className="bg-blue-500 text-white px-2 py-1 rounded"
-                                            >
-                                                Approve
-                                            </button>
-                                            <button
-                                                onClick={() => setDeclineModal({ show: true, id: refund.transaction_id })}
-                                                className="bg-red-500 text-white px-2 py-1 rounded"
-                                            >
-                                                Decline
-                                            </button>
-                                        </>
-                                    )}
-                                    {refund.refund === 'refund_approved' && (
-                                        <button
-                                            onClick={() => handleComplete(refund.transaction_id)}
-                                            className="bg-green-500 text-white px-2 py-1 rounded"
-                                        >
-                                            Complete
-                                        </button>
-                                    )}
-                                    {refund.refund === 'refund_declined' && (
-                                        <span className="text-red-600 text-sm">Declined: {refund.decline_reason}</span>
-                                    )}
-                                </td>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm border border-gray-300">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="p-2 border">Transaction ID</th>
+                                <th className="p-2 border">User ID</th>
+                                <th className="p-2 border">Amount</th>
+                                <th className="p-2 border">Status</th>
+                                <th className="p-2 border">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+                        </thead>
+                        <tbody>
+                            {data?.data.map((refund: RefundRequest) => (
+                                <tr key={refund.transaction_id}>
+                                    <td className="p-2 border">{refund.transaction_id}</td>
+                                    <td className="p-2 border">{refund.user_id}</td>
+                                    <td className="p-2 border">${refund.amount}</td>
+                                    <td className="p-2 border">{refund.refund}</td>
+                                    <td className="p-2 border space-x-2">
+                                        {refund.refund === 'refund_processed' && (
+                                            <>
+                                                <button
+                                                    className="bg-blue-500 text-white px-2 py-1 rounded"
+                                                    onClick={() => handleApprove(refund.transaction_id)}
+                                                >
+                                                    Approve
+                                                </button>
+                                                <button
+                                                    className="bg-red-500 text-white px-2 py-1 rounded"
+                                                    onClick={() => openDeclineModal(refund.transaction_id)}
+                                                >
+                                                    Decline
+                                                </button>
+                                            </>
+                                        )}
 
-            {/* Decline Modal */}
-            {declineModal.show && (
-                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded shadow max-w-md w-full">
-                        <h2 className="text-xl font-semibold mb-4">Decline Refund</h2>
-                        <textarea
-                            className="w-full border px-2 py-1 mb-4"
-                            placeholder="Reason for decline..."
-                            value={declineReason}
-                            onChange={(e) => setDeclineReason(e.target.value)}
-                        />
-                        <div className="flex justify-end space-x-2">
-                            <button
-                                onClick={() => setDeclineModal({ show: false, id: null })}
-                                className="px-4 py-2 bg-gray-300 rounded"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDeclineSubmit}
-                                className="px-4 py-2 bg-red-600 text-white rounded"
-                            >
-                                Decline
-                            </button>
-                        </div>
-                    </div>
+                                        {refund.refund === 'refund_approved' && (
+                                            <button
+                                                className="bg-green-500 text-white px-2 py-1 rounded"
+                                                onClick={() => handleComplete(refund.transaction_id)}
+                                            >
+                                                Complete
+                                            </button>
+                                        )}
+
+                                        {refund.refund === 'refund_declined' && (
+                                            <span className="text-red-600 text-xs">
+                                                Declined: {refund.decline_reason}
+                                            </span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
+
+            {/* Reusable Decline Refund Modal */}
+            <Modal
+                isOpen={declineModalOpen}
+                onClose={closeDeclineModal}
+                title="Decline Refund Request"
+                width="400px"
+            >
+                <form onSubmit={handleDecline} className="space-y-4">
+                    <div>
+                        <label htmlFor="decline-reason" className="block text-sm font-medium text-gray-700">
+                            Reason for Decline
+                        </label>
+                        <textarea
+                            id="decline-reason"
+                            className="w-full border px-3 py-2 rounded-md"
+                            rows={4}
+                            value={declineReason}
+                            onChange={(e) => setDeclineReason(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                        <button
+                            type="button"
+                            onClick={closeDeclineModal}
+                            className="bg-gray-300 px-4 py-2 rounded"
+                        >
+                            Cancel
+                        </button>
+                        <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded">
+                            Decline
+                        </button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
-}
+};
 
 export default Refunds;

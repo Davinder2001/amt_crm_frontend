@@ -12,7 +12,7 @@ interface Category {
 interface CatMenuProps {
     categories: Category[];
     selectedTopCatId: number | null;
-    setSelectedTopCatId: (id: number) => void;
+    setSelectedTopCatId: (id: number | null) => void; // Updated to accept null
     selectedChildCatId: number | null;
     setSelectedChildCatId: (id: number | null) => void;
     expandedChildCats: number[];
@@ -82,13 +82,15 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
             <select
                 value={selectedTopCatId ?? ''}
                 onChange={e => {
-                    const id = parseInt(e.target.value);
+                    const value = e.target.value;
+                    const id = value === '' ? null : parseInt(value);
                     setSelectedTopCatId(id);
                     setSelectedChildCatId(null);
                     setExpandedChildCats([]);
                 }}
                 className="top-category-select"
             >
+                <option value="">All</option>
                 {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>
                         {cat.name}
@@ -96,7 +98,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                 ))}
             </select>
 
-            <div>{renderNestedCategories(childCategories)}</div>
+            {selectedTopCatId !== null && (
+                <div>{renderNestedCategories(childCategories)}</div>
+            )}
         </div>
     );
 };

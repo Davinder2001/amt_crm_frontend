@@ -7,7 +7,7 @@ import {
     usePrintInvoiceMutation,
     useMailInvoiceMutation,
 } from '@/slices/invoices/invoice';
-import CartTabContent from './tabsData/CartTabContent';
+import CartTabContent from './CartTabContent';
 
 type CheckoutPanelProps = {
     activeTab: TabType;
@@ -45,6 +45,8 @@ export default function CheckoutPanel({
     const [serviceChargePercent, setServiceChargePercent] = useState(0);
     const [creditPaymentType, setCreditPaymentType] = useState<'full' | 'partial'>('full');
     const [partialAmount, setPartialAmount] = useState(0);
+    const [creditNote, setCreditNote] = useState('');
+    const [selectedBankAccount, setSelectedBankAccount] = useState<number | null>(null);
     const [address, setAddress] = useState('');
     const [pincode, setPincode] = useState('');
     const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
@@ -65,6 +67,8 @@ export default function CheckoutPanel({
         serviceChargeType: serviceChargeType,
         creditPaymentType: creditPaymentType,
         partialAmount: partialAmount,
+        credit_note: creditNote,
+        bank_account_id: selectedBankAccount || undefined,
         item_type: activeTab,
         payment_method: paymentMethod,
         address: address,
@@ -208,8 +212,12 @@ export default function CheckoutPanel({
                 setDeliveryCharge={setDeliveryCharge}
                 creditPaymentType={creditPaymentType}
                 setCreditPaymentType={setCreditPaymentType}
+                creditNote={creditNote}
+                setCreditNote={setCreditNote}
                 partialAmount={partialAmount}
                 setPartialAmount={setPartialAmount}
+                selectedBankAccount={selectedBankAccount}
+                setSelectedBankAccount={setSelectedBankAccount}
             />
             <div className="content">
                 {activeTab === 'Cart' && (

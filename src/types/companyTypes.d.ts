@@ -131,3 +131,44 @@ interface UpdateCompanyAccountPayload {
   ifsc_code?: string;
   type?: 'current' | 'savings';
 }
+
+
+
+
+
+
+
+
+
+
+// Leave types 
+interface Leave {
+  id: number;
+  name: string;
+  frequency: "monthly" | "yearly";
+  type: "paid" | "unpaid";
+  count: number;
+  company_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface LeaveResponse {
+  message: string;
+  data: Leave;
+}
+
+interface LeaveListResponse {
+  data: Leave[];
+}
+
+interface CreateLeavePayload {
+  name: string;
+  frequency: "monthly" | "yearly";
+  type: "paid" | "unpaid";
+  count: number;
+}
+
+interface UpdateLeavePayload extends Partial<CreateLeavePayload> {
+  id: number;
+}

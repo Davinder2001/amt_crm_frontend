@@ -102,7 +102,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
         <p className="no-items">No items found</p>
       ) : (
         <ul className="item-list">
-          {filteredItems.map(item => {
+          {filteredItems.map((item, index) => {
             const firstImage = Array.isArray(item.images) && item.images.length > 0
               ? (typeof item.images[0] === 'string' ? item.images[0] : URL.createObjectURL(item.images[0]))
               : placeholderImg;
@@ -116,7 +116,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
             return (
               <li
-                key={`item-${item.id}`}
+                key={`item-${item.id}-${index}-${item.category}`}
                 className={`item ${isHovered ? 'hovered' : ''}`}
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}

@@ -17,13 +17,50 @@ function POSPage() {
 
     useEffect(() => {
         if (categories && categories.length > 0) {
-            setSelectedTopCatId(categories[0].id);
+            // Don't set initial selected category - let "All" be selected by default
         }
     }, [categories]);
 
     if (!categories) return <Loader />;
 
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
+
+    // Function to get all items from all categories and subcategories
+    const getAllItems = (): StoreItem[] => {
+        const allItems: StoreItem[] = [];
+
+        const collectItems = (category: Category) => {
+            if (category.items) {
+                allItems.push(...category.items);
+            }
+            if (category.children) {
+                category.children.forEach(collectItems);
+            }
+        };
+
+        topCategories.forEach(collectItems);
+        return allItems;
+    };
+
+    // Function to get all items from a category including all its subcategories
+    const getCategoryItems = (category: Category): StoreItem[] => {
+        const items: StoreItem[] = [];
+
+        // Add direct items of the category
+        if (category.items) {
+            items.push(...category.items);
+        }
+
+        // Recursively add items from all child categories
+        if (category.children) {
+            category.children.forEach(child => {
+                items.push(...getCategoryItems(child));
+            });
+        }
+
+        return items;
+    };
+
     const selectedTopCategory = topCategories.find((cat: { id: number | null; }) => cat.id === selectedTopCatId);
     const childCategories = selectedTopCategory?.children || [];
 
@@ -39,15 +76,21 @@ function POSPage() {
     };
 
     const selectedChild = findCategoryById(childCategories, selectedChildCatId);
-    const displayItems =
-        selectedChildCatId && selectedChild
-            ? selectedChild.items as StoreItem[]
-            : selectedTopCategory?.items as StoreItem[] || [];
+
+    // Determine which items to display based on selection
+    const displayItems = selectedTopCatId === null
+        ? getAllItems() // Show all items when "All" is selected
+        : selectedChildCatId && selectedChild
+            ? selectedChild.items as StoreItem[] // Show items from selected child category
+            : selectedTopCategory
+                ? getCategoryItems(selectedTopCategory) // Show all items from selected parent and its children
+                : [];
+
 
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
         const itemId = item.id;
         const variantId = variant?.id;
-        const id = variantId ?? itemId; // use variant id as unique cart key
+        const id = variantId ?? itemId;
         const finalCost = variant?.final_cost ?? item.final_cost;
         const name = item.name + (variant
             ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
@@ -66,7 +109,7 @@ function POSPage() {
                 return [
                     ...prev,
                     {
-                        id, // this will be variant id if available
+                        id,
                         itemId,
                         variantId,
                         name,
@@ -77,6 +120,7 @@ function POSPage() {
             }
         });
     };
+
     const handleQtyChange = (itemId: number, delta: number) => {
         setCart(prev =>
             prev
@@ -97,7 +141,7 @@ function POSPage() {
 
     return (
         <div className="pos-wrapper">
-            {/* Left: Categorie */}
+            {/* Left: Categories */}
             <div className='cats-sidebar'>
                 <CategoriesMenu
                     categories={topCategories}

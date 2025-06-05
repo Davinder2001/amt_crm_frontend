@@ -27,7 +27,7 @@ interface InvoiceCredit {
   amount_paid: string;
   outstanding: string;
   status: string;
-  customer:Customer;
+  customer: Customer;
   created_at: string;
   updated_at: string;
 }
@@ -71,7 +71,9 @@ interface CreateInvoicePayload {
   serviceChargePercent?: number;
   serviceChargeType?: string;
   partialAmount?: number;
+  bank_account_id?: number;
   creditPaymentType?: string;
+  credit_note?: string;
   item_type: TabType;
   payment_method: string;
   address?: string;

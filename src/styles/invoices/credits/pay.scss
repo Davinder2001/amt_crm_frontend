@@ -192,7 +192,7 @@
     
     &:focus {
         outline: none;
-        border-color: $gray-color;
+       border-color: $hover-color;
     }
     
     &::placeholder {

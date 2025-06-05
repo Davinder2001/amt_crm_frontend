@@ -155,8 +155,7 @@ body {
     border-radius: $border-radius;
     border: unset;
     background-color: $primary-color;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 16px;
     letter-spacing: 0.3px;
     color: $white;
     text-align: center;
@@ -455,14 +454,6 @@ textarea::placeholder {
     font-size: 14px;
     letter-spacing: 0.3px;
     background-color: transparent;
-}
-
-label {
-    letter-spacing: .4px;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 13px;
-    font-weight: 400;
 }
 
 

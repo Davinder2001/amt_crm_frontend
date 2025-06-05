@@ -84,8 +84,7 @@ const EditVendorPage: React.FC = () => {
 
                         {/* Vendor Name */}
                         <div className="input-group">
-                            <label>
-                                <FaStore className="input-icon" />
+                            <label> 
                                 Vendor Name
                             </label>
                             <input
@@ -99,7 +98,6 @@ const EditVendorPage: React.FC = () => {
                         {/* Vendor Number */}
                         <div className="input-group">
                             <label>
-                                <FaPhoneAlt className="input-icon" />
                                 Vendor Number
                             </label>
                             <input
@@ -120,7 +118,6 @@ const EditVendorPage: React.FC = () => {
                         {/* Vendor Email */}
                         <div className="input-group">
                             <label>
-                                <FaEnvelope className="input-icon" />
                                 Vendor Email <span className="optional-label">(optional)</span>
                             </label>
                             <input
@@ -134,7 +131,6 @@ const EditVendorPage: React.FC = () => {
                         {/* Vendor Address */}
                         <div className="input-group">
                             <label>
-                                <FaMapMarkerAlt className="input-icon" />
                                 Vendor Address
                             </label>
                             <textarea

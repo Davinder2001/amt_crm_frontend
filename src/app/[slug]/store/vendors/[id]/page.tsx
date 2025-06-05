@@ -59,7 +59,7 @@ const Page = () => {
                 onClick={() => setShowConfirm(true)}
                 disabled={isDeleting}
               >
-                <FaTrash style={{ marginRight: '6px' }} />
+                <FaTrash style={{ marginRight: '0px' }} />
                 {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>

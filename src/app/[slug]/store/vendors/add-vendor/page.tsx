@@ -49,7 +49,7 @@ const VendorCreationPage: React.FC = () => {
             {/* Vendor Name */}
             <div className="input-group">
               <label>
-                <FaStore className="input-icon" />
+               
                 Vendor Name <span className={`required-asterisk ${vendorName ? 'filled' : 'unfilled'}`}>*</span>
               </label>
               <input
@@ -65,7 +65,6 @@ const VendorCreationPage: React.FC = () => {
             {/* Vendor Number */}
             <div className="input-group">
               <label>
-                <FaPhoneAlt className="input-icon" />
                 Vendor Number <span className={`required-asterisk ${vendorNumber ? 'filled' : 'unfilled'}`}>*</span>
               </label>
               <input
@@ -89,7 +88,6 @@ const VendorCreationPage: React.FC = () => {
             {/* Vendor Email (optional) */}
             <div className="input-group">
               <label>
-                <FaEnvelope className="input-icon" />
                 Vendor Email <span className="optional-label">(optional)</span>
               </label>
               <input
@@ -104,7 +102,6 @@ const VendorCreationPage: React.FC = () => {
             {/* Vendor Address */}
             <div className="input-group">
               <label>
-                <FaMapMarkerAlt className="input-icon" />
                 Vendor Address <span className={`required-asterisk ${vendorAddress ? 'filled' : 'unfilled'}`}>*</span>
               </label>
               <textarea

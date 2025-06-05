@@ -62,7 +62,7 @@
 
         svg {
             transition: transform 0.3s ease;
-            font-size: 19px;
+            font-size: 16px;
         }
 
         &:hover svg {
@@ -317,6 +317,7 @@ table {
     }
 
     tbody {
+         border-bottom: 1px solid $border-color;
         tr {
             transition: background-color 200ms ease, border-left-color 200ms ease;
             cursor: pointer;

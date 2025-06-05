@@ -7,16 +7,32 @@
   margin-top: 30px;
 
 
+  .MuiBox-root.css-1muzjf8 {
+    border: none !important;
+    margin-bottom: 0px;
+}
+
+
+
   .employee-fields-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding-bottom: 10px;
+  
+ 
+
+
 
     .employee-field {
       display: flex;
       flex-direction: column;
       position: relative;
+
+      input::placeholder {
+        color: grey;
+      }
+
 
       .error-message {
         color: $danger-color;
@@ -27,7 +43,7 @@
       }
 
       .employee-field input[type="text"]::placeholder {
-       color: grey;
+        color: #ccc;
       }
 
 
@@ -54,14 +70,14 @@
     width: 100%;
 
     &:focus {
-      border-color: $hover-color;
+      border-color: $gray-color;
       background: #ffffff;
       transform: scale(1);
     }
 
     &::placeholder {
       color: #ccc;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 400;
       letter-spacing: 0.3px;
       background-color: transparent;
@@ -69,9 +85,12 @@
   }
 
   label {
-    font-size: 14px;
-    font-weight: $font-weight-regular;
-    color:$hover-color;
+    letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
   }
 
 

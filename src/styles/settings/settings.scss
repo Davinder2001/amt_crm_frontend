@@ -96,12 +96,15 @@
 }
 
 .settings-container {
-    display: grid;
-    grid-template-columns: 20% 80%;
-    border-radius: 5px;
+    display: flex;
+    border-radius: $border-radius;
+    gap: 20px;
 
 }
-
+.settings-content{
+    flex: 1;
+    
+}
 .sidebar-header {
     padding: 20px;
     border-bottom: 1px solid #e5e7eb;
@@ -155,7 +158,6 @@
 
 .settings-item.active .settings-button {
     background-color: $light_blue;
-    border-left: 3px solid $primary-color;
 
     svg {
         color: $primary-color;

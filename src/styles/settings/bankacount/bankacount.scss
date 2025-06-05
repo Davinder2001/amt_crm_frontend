@@ -62,7 +62,7 @@
 .account-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(278px, max-content));
-    justify-content: start; 
+    justify-content: start;
     gap: 15px;
 }
 
@@ -194,18 +194,17 @@
 
     .no-spinner {
 
-        // Hide spinner arrows (Chrome, Safari, Edge)
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
 
         // Hide spinner arrows (Firefox)
+        appearance: textfield;
         -moz-appearance: textfield;
-
-        // Optional: Disable scroll change behavior for extra safety
-        // (blur on wheel is handled in JSX)
     }
 
+}
+
+// Hide spinner arrows (Chrome, Safari, Edge)
+::-webkit-outer-spin-button,
+::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

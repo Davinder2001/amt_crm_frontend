@@ -27,6 +27,7 @@ interface Payment {
   transaction_amount: string;
   payment_date: string;
   payment_time: string;
+  refund: string | null;
 }
 
 interface AdminBillingResponse {

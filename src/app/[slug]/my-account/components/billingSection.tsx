@@ -63,7 +63,7 @@ const BillingSection = () => {
                 <th className="p-2 border">Status</th>
                 <th className="p-2 border">Date</th>
                 <th className="p-2 border">Time</th>
-                <th className="p-2 border">Action</th>
+                <th className="p-2 border">Refund</th>
               </tr>
             </thead>
             <tbody>
@@ -77,15 +77,18 @@ const BillingSection = () => {
                   <td className="p-2 border">{payment.payment_date}</td>
                   <td className="p-2 border">{payment.payment_time}</td>
                   <td className="p-2 border">
-                    <button
-                      className="buttons"
-                      onClick={() => {
-                        setSelectedTransactionId(payment.transaction_id);
-                        setIsRefundModalOpen(true);
-                      }}
-                    >
-                      Refund
-                    </button>
+                    {payment.refund !== null ? payment.refund :
+
+                      <button
+                        className="buttons"
+                        onClick={() => {
+                          setSelectedTransactionId(payment.transaction_id);
+                          setIsRefundModalOpen(true);
+                        }}
+                      >
+                        Apply
+                      </button>
+                    }
                   </td>
                 </tr>
               ))}

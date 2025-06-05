@@ -18,22 +18,6 @@ const SettingsPage = () => {
     setTitle('Settings');
   }, [setTitle]);
 
-  // const renderContent = () => {
-  //   switch (activeTab) {
-  //     case 'store-settings':
-  //       return <Attributes />;
-  //     case 'shifts':
-  //       return <Shifts />;
-  //     case 'taxes':
-  //       return <TaxesPage />;
-  //     case 'permissions':
-  //       return <RoleList />;
-  //     case 'bank-accounts':
-  //       return <BankAccountList />;
-  //     default:
-  //       return <StoreSettings />;
-  //   }
-  // };
   const renderContent = () => {
     switch (activeTab) {
       case 'store-settings':

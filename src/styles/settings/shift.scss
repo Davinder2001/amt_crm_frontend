@@ -1,7 +1,6 @@
 @use '../variables' as *;
 
 .shift-management-container {
-    font-family: $font-family;
     background-color: $light-bg;
     color: $text-dark;
     min-height: 100vh;
@@ -22,7 +21,7 @@
 .main-heading {
     font-size: $font-size-extra-large;
     font-weight: $font-weight-semi-bold;
-    color: $primary-color;
+    color:$dark-color;
     display: flex;
     align-items: center;
     gap: 8px;

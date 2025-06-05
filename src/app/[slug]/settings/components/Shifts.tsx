@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     useCreateShiftMutation,
     useFetchCompanyShiftsQuery,
@@ -11,14 +11,35 @@ import { FiClock } from "react-icons/fi";
 const Shifts = () => {
     const { data: shiftData, isLoading, refetch } = useFetchCompanyShiftsQuery();
     const [createShift, { isLoading: isCreating }] = useCreateShiftMutation();
-
     const [form, setForm] = useState({
         shift_name: "",
         start_time: "",
         end_time: "",
         weekly_off_day: "",
     });
+    const startTimeRef = useRef<HTMLInputElement>(null);
+    const endTimeRef = useRef<HTMLInputElement>(null);
 
+    // Click handlers to open time picker or focus input
+    const openStartTimePicker = () => {
+        if (startTimeRef.current) {
+            if (startTimeRef.current.showPicker) {
+                startTimeRef.current.showPicker();
+            } else {
+                startTimeRef.current.focus();
+            }
+        }
+    };
+
+    const openEndTimePicker = () => {
+        if (endTimeRef.current) {
+            if (endTimeRef.current.showPicker) {
+                endTimeRef.current.showPicker();
+            } else {
+                endTimeRef.current.focus();
+            }
+        }
+    };
     const [isFormValid, setIsFormValid] = useState(false);
 
     useEffect(() => {
@@ -87,8 +108,9 @@ const Shifts = () => {
                                 <label>
                                     Start Time <span className="required-asterisk">*</span>
                                 </label>
-                                <div className="input-wrapper">
+                                <div className="input-wrapper" onClick={openStartTimePicker}>
                                     <input
+                                        ref={startTimeRef}
                                         type="time"
                                         name="start_time"
                                         value={form.start_time}
@@ -103,8 +125,9 @@ const Shifts = () => {
                                 <label>
                                     End Time <span className="required-asterisk">*</span>
                                 </label>
-                                <div className="input-wrapper">
+                                <div className="input-wrapper" onClick={openEndTimePicker}>
                                     <input
+                                        ref={endTimeRef}
                                         type="time"
                                         name="end_time"
                                         value={form.end_time}

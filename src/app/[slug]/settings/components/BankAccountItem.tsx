@@ -31,23 +31,32 @@ const BankAccountItem: React.FC<Props> = ({ account }) => {
     };
 
     return (
-        <div className="bank-account-item">
+        <div className="bank-account-item ">
             {editMode ? (
                 <BankAccountForm initialData={account} onSubmit={handleUpdate} onCancel={() => setEditMode(false)} />
             ) : (
                 <div className="account-details">
                     <p>
-                        <strong>{account.bank_name}</strong> - {account.account_number}
+                        <strong>Bank Name:</strong><span> {account.bank_name}  </span>
                     </p>
                     <p>
-                        {account.ifsc_code} ({account.type})
+                        <strong>Account Number:</strong>  <span>{account.account_number}</span>
                     </p>
-                    <button className="btn" onClick={() => setEditMode(true)}>
-                        Edit
-                    </button>
-                    <button className="btn danger" onClick={handleDelete}>
-                        Delete
-                    </button>
+                    <p>
+                        <strong>IFSC Code:</strong> <span>{account.ifsc_code} </span>
+                    </p>
+                    <p>
+                        <strong>Account Type:</strong> <span>({account.type})</span>
+                    </p>
+                    <div className='bank-form-actions'>
+
+                        <button className="Edit-btn" onClick={() => setEditMode(true)}>
+                            Edit
+                        </button>
+                        <button className="Delete-btn" onClick={handleDelete}>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

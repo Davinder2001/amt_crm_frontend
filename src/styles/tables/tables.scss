@@ -283,6 +283,11 @@
     margin-bottom: 30px;
     border: 1px solid rgba(0, 150, 147, 0.08);
 
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-around;
+    }
 }
 
 table {
@@ -317,7 +322,8 @@ table {
     }
 
     tbody {
-         border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+
         tr {
             transition: background-color 200ms ease, border-left-color 200ms ease;
             cursor: pointer;

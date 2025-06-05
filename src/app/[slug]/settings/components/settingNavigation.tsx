@@ -4,7 +4,8 @@ import {
   FaUserClock,
   FaMoneyBillWave,
   FaUserShield,
-  FaPiggyBank,
+  FaUmbrellaBeach,
+  FaUniversity,
 } from 'react-icons/fa';
 
 const settingItems = [
@@ -35,13 +36,13 @@ const settingItems = [
   {
     label: 'Bank Accounts',
     id: 'bank-accounts',
-    icon: <FaPiggyBank className="settings-icon" />,
+    icon: <FaUniversity className="settings-icon" />,
     subLabel: 'Bank account management'
   },
   {
     label: 'Leaves and Holidays',
     id: 'leavs-and-holidays',
-    icon: <FaPiggyBank className="settings-icon" />,
+    icon: <FaUmbrellaBeach  className="settings-icon" />,
     subLabel: 'Leaves and Holidays management'
   },
 ];

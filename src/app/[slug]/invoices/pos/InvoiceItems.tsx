@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaShoppingCart } from 'react-icons/fa';
-import { LuLayoutList, } from 'react-icons/lu';
+import { FaSearch, FaShoppingCart, FaTh, FaList } from 'react-icons/fa';
 import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { FiX, FiChevronLeft, FiChevronRight, FiHeart } from 'react-icons/fi';
@@ -23,6 +22,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [wishlistItems, setWishlistItems] = useState<number[]>([]);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const cartItemCount = cart.length;
 
@@ -35,7 +35,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  console.log('wrwer', filteredItems);
+  const toggleViewMode = () => {
+    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+  };
 
 
   const toggleWishlist = (id: number) => {
@@ -119,8 +121,12 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
           />
           <div className="icon-buttons">
             <div className="icon-buttons">
-              <button className="circle-btn" title="Toggle View">
-                <LuLayoutList size={14} />
+              <button
+                className="circle-btn"
+                title={viewMode === 'grid' ? 'Switch to List View' : 'Switch to Grid View'}
+                onClick={toggleViewMode}
+              >
+                {viewMode === 'grid' ? <FaList size={12} /> : <FaTh size={12} />}
               </button>
               <button className="circle-btn" title="Filter" onClick={onFilterClick}>
                 <MdOutlineFilterList size={15} />
@@ -143,7 +149,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
       {filteredItems.length === 0 ? (
         <p className="no-items">No items found</p>
       ) : (
-        <ul className="item-list">
+        <ul className={`item-list ${viewMode}-view`}>
           {filteredItems.map((item, index) => {
             const firstImage = Array.isArray(item.images) && item.images.length > 0
               ? (typeof item.images[0] === 'string' ? item.images[0] : URL.createObjectURL(item.images[0]))

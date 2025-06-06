@@ -7,6 +7,7 @@ import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
 import { useCallback } from "react";
 import StoreItemFields from '../components/StoreItemFields';
+import { toast } from 'react-toastify';
 
 const LOCAL_STORAGE_KEY = 'storeItemForm';
 
@@ -187,10 +188,16 @@ const AddItem: React.FC = () => {
     selectedCategories.forEach(cat => form.append('categories[]', cat.id.toString()));
 
     try {
-      await createStoreItem(form).unwrap();
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-      setFormData(getDefaultFormData());
-      router.push(`/${companySlug}/store`);
+      const response = await createStoreItem(form).unwrap();
+      if (response.success === true) {
+        toast.success(response.message || 'Item created successfully.');
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        setFormData(getDefaultFormData());
+        router.push(`/${companySlug}/store`);
+      } else {
+        toast.error(response.message || response.error || 'Failed to create item.');
+      }
+
     } catch (err) {
       console.error('Error creating item:', err);
     }

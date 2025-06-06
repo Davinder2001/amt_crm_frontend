@@ -98,11 +98,11 @@ export default function CheckoutPanel({
         try {
             const payload = buildPayload();
             const invoice = await createInvoice(payload).unwrap();
-            if (invoice.message) {
-                toast.success(invoice.message);
-                router.push(`/${companySlug}/invoices`)
+            if (invoice.status === true) {
+                toast.success(invoice.message || 'Invoice created successfully.');
+                router.push(`/${companySlug}/invoices`);
             } else {
-                toast.error(invoice.message);
+                toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
             }
         } catch (err) {
             console.error('Save error:', err);
@@ -126,11 +126,11 @@ export default function CheckoutPanel({
         try {
             const payload = buildPayload();
             const invoice = await mailInvoice(payload).unwrap();
-            if (invoice.message) {
+            if (invoice.status === true) {
                 toast.success(invoice.message);
-                router.push(`/${companySlug}/invoices`)
+                router.push(`/${companySlug}/invoices`);
             } else {
-                toast.error(invoice.message);
+                toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
             }
         } catch (err) {
             console.error('Mail error:', err);

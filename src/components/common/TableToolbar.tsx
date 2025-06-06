@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiFilter, FiColumns, FiDownloadCloud } from 'react-icons/fi';
+import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
 
 type FilterOptions = Record<string, string[]>;
 
@@ -22,6 +22,7 @@ interface TableToolbarProps {
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
     downloadActions?: Action[];
+    extraLinks: Action[];
     leftContent?: React.ReactNode;
 }
 
@@ -32,6 +33,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     onColumnToggle,
     actions,
     downloadActions,
+    extraLinks,
 }) => {
     const [selectedFilters, setSelectedFilters] = useState<FilterOptions>(() => {
         const savedFilters = localStorage.getItem('selectedFilters');
@@ -112,7 +114,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             <div className="left-group">
                 {filters && Object.keys(filters).length > 0 && (
                     <div className="dropdown dropdown-left hover-group">
-                        <button className="">
+                        <button className="toolbar-btn">
                             <FiFilter />
                             <span className='hide-mobile'>Filter</span>
                         </button>
@@ -199,7 +201,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 {downloadActions && downloadActions.length > 0 && (
                     <div className="dropdown dropdown-right hover-group">
                         <button className="toolbar-btn">
-                            <FiDownloadCloud size={18.98} style={{strokeWidth: 3}}/>
+                            <FiDownloadCloud size={18.98} style={{ strokeWidth: 3 }} />
                         </button>
                         <div className="dropdown-content">
                             <ul className="action-list">
@@ -224,12 +226,31 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 <i>{action.icon}</i>
                                 <span>{action.label}</span>
                             </button>
-                            {/* <span className="tooltip-text">{action.label}</span> */}
+                            <span className="tooltip-text">{action.label}</span>
                         </div>
                     ))}
                 </div>
 
-                <style jsx>{`
+                {extraLinks && extraLinks.length > 0 && (
+                    <div className="dropdown dropdown-right hover-group">
+                        <button className="toolbar-btn">
+                            <FiSliders size={18} />
+                        </button>
+                        <div className="dropdown-content">
+                            <ul className="action-list">
+                                {extraLinks.map((action, i) => (
+                                    <li key={i} onClick={action.onClick} className="action-item">
+                                        {action.icon && <span className="a-icon">{action.icon}</span>}
+                                        <span>{action.label}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
+
+
+                <style>{`
     .action-icons-horizontal {
         display: flex;
         gap: 10px;

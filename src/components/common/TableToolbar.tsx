@@ -232,7 +232,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div>
 
                 {extraLinks && extraLinks.length > 0 && (
-                    <div className="dropdown dropdown-right hover-group">
+                    <div className="dropdown dropdown-right hover-group extra-links">
                         <button className="toolbar-btn">
                             <FiSliders size={18} />
                         </button>

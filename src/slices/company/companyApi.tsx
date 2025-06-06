@@ -191,6 +191,46 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
+
+    // HOLIDAYS
+    fetchHolidays: builder.query<HolidayListResponse, void>({
+      query: () => ({
+        url: 'company/holidays',
+        method: 'GET',
+        credentials: 'include',
+      }),
+      providesTags: ['Company'],
+    }),
+
+    createHoliday: builder.mutation<HolidayResponse, CreateHolidayPayload>({
+      query: (payload) => ({
+        url: 'company/holidays',
+        method: 'POST',
+        body: payload,
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Company'],
+    }),
+
+    updateHoliday: builder.mutation<HolidayResponse, UpdateHolidayPayload>({
+      query: ({ id, ...body }) => ({
+        url: `company/holidays/${id}`,
+        method: 'PUT',
+        body,
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Company'],
+    }),
+
+    deleteHoliday: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `company/holidays/${id}`,
+        method: 'DELETE',
+        credentials: 'include',
+      }),
+      invalidatesTags: ['Company'],
+    }),
+
   }),
 });
 
@@ -218,6 +258,12 @@ export const {
   useCreateLeaveMutation,
   useUpdateLeaveMutation,
   useDeleteLeaveMutation,
+
+  // 🔽 New holiday hooks
+  useFetchHolidaysQuery,
+  useCreateHolidayMutation,
+  useUpdateHolidayMutation,
+  useDeleteHolidayMutation
 
 } = companyApi;
 

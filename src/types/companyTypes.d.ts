@@ -142,7 +142,7 @@ interface UpdateCompanyAccountPayload {
 
 
 
-// Leave types 
+// Leave types***********
 interface Leave {
   id: number;
   name: string;
@@ -171,5 +171,37 @@ interface CreateLeavePayload {
 }
 
 interface UpdateLeavePayload extends Partial<CreateLeavePayload> {
+  id: number;
+}
+
+
+
+
+
+// holiday types***********
+interface Holiday {
+  id: number;
+  name: string;
+  type: 'monthly' | 'weekly' | 'general';
+  company_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface HolidayResponse {
+  message: string;
+  data: Holiday;
+}
+
+interface HolidayListResponse {
+  data: Holiday[];
+}
+
+interface CreateHolidayPayload {
+  name: string;
+  type: 'monthly' | 'weekly' | 'general';
+}
+
+interface UpdateHolidayPayload extends Partial<CreateHolidayPayload> {
   id: number;
 }

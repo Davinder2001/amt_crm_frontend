@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaUmbrellaBeach, FaCalendarAlt } from 'react-icons/fa';
 import LeaveList from './Leaves/LeaveList';
+import HolidayList from './holidays/HolidayList';
 
 const LeavesAndHolidays: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -26,7 +27,7 @@ const LeavesAndHolidays: React.FC = () => {
 
       <div className="tab-content">
         {activeTab === 0 && <LeaveList />}
-        {activeTab === 1 && <p>This is the Holidays tab content.</p>}
+        {activeTab === 1 && <HolidayList />}
       </div>
     </div>
   );

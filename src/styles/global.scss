@@ -146,6 +146,16 @@
     }
 }
 
+.drag-scroll {
+  cursor: grab;
+  user-select: auto;
+}
+
+.drag-scroll.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 body {
     background-color: #F8F7FA;
     margin: 0 !important;

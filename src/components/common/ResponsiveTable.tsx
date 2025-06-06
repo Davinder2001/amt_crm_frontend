@@ -8,6 +8,7 @@ import {
   FaExternalLinkAlt,
 } from 'react-icons/fa';
 import ConfirmDialog from './ConfirmDialog'; // adjust path if needed
+import { useDragScroll } from '@/components/common/useDragScroll'
 
 type Column<T> = {
   label: string;
@@ -39,7 +40,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [openActionCard, setOpenActionCard] = useState<number | null>(null);
-
+  const { ref, handleMouseDown, wasDraggedRef } = useDragScroll();
 
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
@@ -86,7 +87,10 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   return (
     <div className="responsive-table">
       {/* Table View */}
-      <div className="table-view">
+      <div className="table-view"
+        ref={ref}
+        onMouseDown={handleMouseDown}
+        style={{ width: '100%', overflow: 'auto', whiteSpace: 'nowrap' }}>
         <table>
           <thead>
             <tr>
@@ -101,6 +105,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               const serialNumber = startIndex + index + 1;
               return (
                 <tr key={index} onClick={(e) => {
+                  if (wasDraggedRef.current) {
+                    wasDraggedRef.current = false; // reset after suppressing click
+                    return;
+                  }
+
                   const target = e.target as HTMLElement;
                   if (
                     target.closest('button') ||
@@ -111,6 +120,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   ) {
                     return;
                   }
+
                   if (onView) onView(item.id);
                 }}>
                   <td>{serialNumber}</td>

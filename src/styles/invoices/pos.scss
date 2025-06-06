@@ -990,7 +990,13 @@
 @media (max-width: 992px) {
     .pos-wrapper {
         flex-direction: column;
-        height: auto;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999;
+        padding: 0px 0px 60px 0px;
     }
 
     .cats-sidebar {
@@ -1033,14 +1039,21 @@
         }
     }
 
+    .autoView .fullView-content,
+    .fullView-content {
+        padding: 0;
+        background-color: transparent;
+        box-shadow: none;
+        border-radius: 0px;
+    }
 
     .invoice-items-wrapper {
 
         .searchbar-container {
             border-radius: 50px;
-            margin: 0px 10px;
             height: 37px;
             overflow: hidden;
+            margin: 0;
         }
 
         .searchbar-desktop {
@@ -1049,7 +1062,12 @@
 
         .searchbar-mobile {
             display: block;
-            margin-bottom: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: $white;
+            padding: 10px;
+            margin: auto auto 10px auto;
 
             .icon-buttons {
                 display: flex;
@@ -1115,7 +1133,7 @@
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
 
         // Initial hidden state (slide off screen to right)
-        transform: translateX(100%);
+        transform: translateX(101%);
         transition: transform 0.4s ease-in-out;
 
         &.open {
@@ -1123,7 +1141,7 @@
         }
 
         &.closing {
-            transform: translateX(100%); // Slide out
+            transform: translateX(101%); // Slide out
         }
 
         .close-checkout-btn {

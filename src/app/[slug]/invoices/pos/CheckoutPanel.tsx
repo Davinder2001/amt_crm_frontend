@@ -9,6 +9,9 @@ import {
 } from '@/slices/invoices/invoice';
 import CartTabContent from './CartTabContent';
 import { FaArrowLeft } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { useCompany } from '@/utils/Company';
 
 type CheckoutPanelProps = {
     activeTab: TabType;
@@ -53,6 +56,8 @@ export default function CheckoutPanel({
     const [address, setAddress] = useState('');
     const [pincode, setPincode] = useState('');
     const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
+    const router = useRouter();
+    const { companySlug } = useCompany();
 
 
     const cartItemCount = cart.length;
@@ -93,7 +98,12 @@ export default function CheckoutPanel({
         try {
             const payload = buildPayload();
             const invoice = await createInvoice(payload).unwrap();
-            console.log('Invoice saved:', invoice);
+            if (invoice.status === true) {
+                toast.success(invoice.message || 'Invoice created successfully.');
+                router.push(`/${companySlug}/invoices`);
+            } else {
+                toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
+            }
         } catch (err) {
             console.error('Save error:', err);
         }
@@ -116,7 +126,12 @@ export default function CheckoutPanel({
         try {
             const payload = buildPayload();
             const invoice = await mailInvoice(payload).unwrap();
-            console.log('Invoice mailed:', invoice);
+            if (invoice.status === true) {
+                toast.success(invoice.message);
+                router.push(`/${companySlug}/invoices`);
+            } else {
+                toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
+            }
         } catch (err) {
             console.error('Mail error:', err);
         }
@@ -129,7 +144,7 @@ export default function CheckoutPanel({
                     className="close-checkout-btn"
                     onClick={onClose}
                 >
-                    <FaArrowLeft/>
+                    <FaArrowLeft />
                 </button>
             )}
             <div className="tabs">

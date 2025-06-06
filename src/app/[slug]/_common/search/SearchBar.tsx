@@ -20,7 +20,7 @@ const SearchBar: React.FC = () => {
                     <FaSearch size={20}/>
                     <input
                         type="text"
-                        placeholder="Search Store Item..."
+                        placeholder="Search ..."
                         value={searchTerm}
                         onChange={handleChange}
                         className="search-input"

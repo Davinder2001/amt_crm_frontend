@@ -8,6 +8,7 @@ import {
     useMailInvoiceMutation,
 } from '@/slices/invoices/invoice';
 import CartTabContent from './CartTabContent';
+import { FaArrowLeft } from 'react-icons/fa';
 
 type CheckoutPanelProps = {
     activeTab: TabType;
@@ -16,6 +17,7 @@ type CheckoutPanelProps = {
     onQtyChange: (itemId: number, delta: number) => void;
     onRemoveItem: (itemId: number) => void;
     onClearCart: () => void;
+    onClose?: () => void;
 };
 
 const tabs: TabType[] = ['Cart', 'Delivery', 'Pickup'];
@@ -27,6 +29,7 @@ export default function CheckoutPanel({
     onQtyChange,
     onRemoveItem,
     onClearCart,
+    onClose
 }: CheckoutPanelProps) {
 
     // RTK Query hooks
@@ -121,6 +124,14 @@ export default function CheckoutPanel({
 
     return (
         <div className="checkout">
+            {onClose && (
+                <button
+                    className="close-checkout-btn"
+                    onClick={onClose}
+                >
+                    <FaArrowLeft/>
+                </button>
+            )}
             <div className="tabs">
                 {tabs.map(tab => {
                     let Icon;

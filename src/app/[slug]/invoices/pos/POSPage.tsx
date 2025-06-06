@@ -6,6 +6,7 @@ import CheckoutPanel from './CheckoutPanel';
 import CategoriesMenu from './CategoriesMenu';
 import InvoiceItems from './InvoiceItems';
 import Loader from '@/components/common/Loader';
+import { FaTimes } from 'react-icons/fa';
 
 function POSPage() {
     const { data: categories } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined };
@@ -14,6 +15,8 @@ function POSPage() {
     const [expandedChildCats, setExpandedChildCats] = useState<number[]>([]);
     const [cart, setCart] = useState<CartItem[]>([]);
     const [activeTab, setActiveTab] = useState<TabType>('Cart');
+    const [showMobileCategories, setShowMobileCategories] = useState(false);
+    const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
 
     useEffect(() => {
         if (categories && categories.length > 0) {
@@ -141,24 +144,66 @@ function POSPage() {
 
     return (
         <div className="pos-wrapper">
-            {/* Left: Categories */}
-            <div className='cats-sidebar'>
-                <CategoriesMenu
-                    categories={topCategories}
-                    selectedTopCatId={selectedTopCatId}
-                    setSelectedTopCatId={setSelectedTopCatId}
-                    selectedChildCatId={selectedChildCatId}
-                    setSelectedChildCatId={setSelectedChildCatId}
-                    expandedChildCats={expandedChildCats}
-                    setExpandedChildCats={setExpandedChildCats}
-                />
-            </div>
+            {/* Left: Categories - Desktop */}
+            {!showCheckoutPanel && (
+                <div className='cats-sidebar desktop-category-wrapper'>
+                    <CategoriesMenu
+                        categories={topCategories}
+                        selectedTopCatId={selectedTopCatId}
+                        setSelectedTopCatId={setSelectedTopCatId}
+                        selectedChildCatId={selectedChildCatId}
+                        setSelectedChildCatId={setSelectedChildCatId}
+                        expandedChildCats={expandedChildCats}
+                        setExpandedChildCats={setExpandedChildCats}
+                    />
+                </div>
+            )}
+
+            {/* Mobile Categories Overlay */}
+            {showMobileCategories && (
+                <div className="mobile-categories-overlay">
+                    <div className="mobile-categories-content">
+                        <div className="m-cat-header">
+                            <h4>Ctaegories</h4>
+                            <button
+                                onClick={() => setShowMobileCategories(false)}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <CategoriesMenu
+                            categories={topCategories}
+                            selectedTopCatId={selectedTopCatId}
+                            setSelectedTopCatId={(id) => {
+                                setSelectedTopCatId(id);
+                                setShowMobileCategories(false); // Close when category is selected
+                            }}
+                            selectedChildCatId={selectedChildCatId}
+                            setSelectedChildCatId={(id) => {
+                                setSelectedChildCatId(id);
+                                setShowMobileCategories(false); // Close when category is selected
+                            }}
+                            expandedChildCats={expandedChildCats}
+                            setExpandedChildCats={setExpandedChildCats}
+                        />
+                    </div>
+                </div>
+            )}
+
             {/* center items */}
-            <div className='invoice-items-wrapper'>
-                <InvoiceItems items={displayItems} onAddToCart={handleAddToCart} cart={cart} />
-            </div>
+            {!showCheckoutPanel && (
+                <div className='invoice-items-wrapper'>
+                    <InvoiceItems
+                        items={displayItems}
+                        onAddToCart={handleAddToCart}
+                        cart={cart}
+                        onFilterClick={() => setShowMobileCategories(true)}
+                        onCartClick={() => setShowCheckoutPanel(true)}
+                    />
+                </div>)}
+
             {/* Right: Checkout Panel */}
-            <div className='checkout-panel'>
+            <div className={`checkout-panel checkout-panel-overlay ${showCheckoutPanel ? 'open' : 'closing'}`}>
                 <CheckoutPanel
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
@@ -166,6 +211,7 @@ function POSPage() {
                     onQtyChange={handleQtyChange}
                     onRemoveItem={handleRemoveItem}
                     onClearCart={handleClearCart}
+                    onClose={() => setShowCheckoutPanel(false)}
                 />
             </div>
         </div>

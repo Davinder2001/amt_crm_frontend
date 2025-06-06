@@ -74,11 +74,136 @@
     }
 }
 
+.desktop-categories {
+    display: block;
+}
+
+.mobile-categories {
+    display: none;
+
+    .top-category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .category-tab {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: $border-radius !important;
+            padding: 5px 10px;
+            height: auto !important;
+            transition: background 0.3s;
+
+            &.selected {
+                background: $primary-color;
+                color: $white;
+            }
+
+            .category-button {
+                background: none;
+                border: none;
+                font-size: 1rem;
+                text-align: left;
+                flex: 1;
+                color: inherit;
+                cursor: pointer;
+
+                &.selected {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .nested-wrapper {
+            list-style: none;
+            padding-left: 1.5rem;
+            margin-top: 0.4rem;
+
+            li {
+                margin-bottom: 0.4rem;
+            }
+
+            .category-tab {
+                border-radius: 4px;
+                padding: 0.5rem 0.8rem;
+
+                &.selected {
+                    background: $primary-color;
+                    color: $white;
+                }
+            }
+
+        }
+    }
+}
+
+/* Mobile Categories Overlay */
+.mobile-categories-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .mobile-categories-content {
+        width: 80%;
+        height: 100%;
+        background: white;
+        padding: 0px 12px 120px 12px;
+        overflow-y: auto;
+        position: relative;
+        animation: mCatslideIn 0.3s ease-out;
+
+        .m-cat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid $hover-color;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            background-color: $white;
+
+            button {
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    @keyframes mCatslideIn {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+}
+
 // invoice items list ************
 .invoice-items-wrapper {
     flex: 1;
     overflow-y: auto;
     background-color: $secondary-color;
+
+    .searchbar-mobile {
+        display: none;
+    }
 
     .searchbar-container {
         background-color: #fff;
@@ -833,9 +958,9 @@
 
 }
 
-
-
-
+.close-checkout-btn {
+    display: none;
+}
 
 // Responsive Design
 @media (max-width: 1200px) {
@@ -845,6 +970,13 @@
 
     .checkout-panel {
         max-width: 400px;
+    }
+}
+
+/* Show desktop categories on larger screens */
+@media (min-width: 993px) {
+    .mobile-categories-overlay {
+        display: none;
     }
 }
 
@@ -893,55 +1025,7 @@
             margin-top: 10px;
         }
     }
-}
 
-@media (max-width: 768px) {
-    .invoice-items-wrapper .item-list {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .checkout-panel .cart-labels {
-        font-size: 12px;
-
-        .label-name,
-        .label-quantity,
-        .label-price {
-            text-align: left;
-        }
-    }
-
-    .cats-sidebar .category-tab {
-        font-size: 13px;
-        padding: 8px;
-    }
-
-    .invoice-items-wrapper .item-name {
-        font-size: 14px;
-    }
-
-    .cart-navs {
-        padding: 6px;
-        gap: 6px;
-
-        button svg {
-            width: 14px;
-            height: 14px;
-            cursor: pointer;
-
-        }
-    }
-
-    .checkout-panel .btn {
-        font-size: 14px;
-        padding: 8px;
-    }
-}
-
-.searchbar-mobile {
-    display: none;
-}
-
-@media (max-width: 992px) {
 
     .invoice-items-wrapper {
 
@@ -999,6 +1083,95 @@
 
     }
 
+    .desktop-category-wrapper {
+        display: none;
+    }
+
+    .desktop-categories {
+        display: none;
+    }
+
+    .mobile-categories {
+        display: block;
+
+    }
+
+    .checkout-panel.checkout-panel-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100vh;
+        background: $white;
+        z-index: 1000;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+
+        // Initial hidden state (slide off screen to right)
+        transform: translateX(100%);
+        transition: transform 0.4s ease-in-out;
+
+        &.open {
+            transform: translateX(0); // Slide in (visible)
+        }
+
+        &.closing {
+            transform: translateX(100%); // Slide out
+        }
+
+        .close-checkout-btn {
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+            background-color: $primary-color;
+            color: $white;
+            padding: 2px;
+        }
+    }
+
+}
+
+@media (max-width: 768px) {
+    .invoice-items-wrapper .item-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checkout-panel .cart-labels {
+        font-size: 12px;
+
+        .label-name,
+        .label-quantity,
+        .label-price {
+            text-align: left;
+        }
+    }
+
+    .cats-sidebar .category-tab {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .invoice-items-wrapper .item-name {
+        font-size: 14px;
+    }
+
+    .cart-navs {
+        padding: 6px;
+        gap: 6px;
+
+        button svg {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+
+        }
+    }
+
+    .checkout-panel .btn {
+        font-size: 14px;
+        padding: 8px;
+    }
 }
 
 

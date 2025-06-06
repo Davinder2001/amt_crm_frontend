@@ -13,9 +13,11 @@ interface catMenuProps {
   items: StoreItem[];
   cart: CartItem[];
   onAddToCart: (item: StoreItem, variant?: variations) => void;
+  onFilterClick: () => void;
+  onCartClick: () => void;
 }
 
-const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart }) => {
+const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilterClick, onCartClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -120,11 +122,15 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart }) => {
               <button className="circle-btn" title="Toggle View">
                 <LuLayoutList size={14} />
               </button>
-              <button className="circle-btn" title="Filter">
+              <button className="circle-btn" title="Filter" onClick={onFilterClick}>
                 <MdOutlineFilterList size={15} />
               </button>
             </div>
-            <button className="circle-btn cart-icon-btn" title="Cart">
+            <button className="circle-btn cart-icon-btn" title="Cart"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCartClick();
+              }}>
               <FaShoppingCart size={12} />
               {cartItemCount > 0 && (
                 <span className="cart-badge">{cartItemCount}</span>

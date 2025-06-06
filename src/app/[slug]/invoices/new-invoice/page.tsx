@@ -33,8 +33,8 @@ const Page = () => {
 
       <div className={`creat-inv-page ${isFullView ? 'fullView' : 'autoView'}`}>
         <div className="fullView-content">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 10px 10px' }}>
-            <Link href={`/${companySlug}/invoices`} className="back-button" style={{ margin: 0, padding: 5 }}>
+          <div className='invoice-header-top'>
+            <Link href={`/${companySlug}/invoices`} className="back-button" style={{ margin: 0, padding: 5 }} >
               <FaArrowLeft size={16} color="#fff" />
             </Link>
             <span style={{ display: 'flex' }}>
@@ -48,7 +48,7 @@ const Page = () => {
           <POSPage />
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         .fullView {
           position: fixed;
           top: 0;

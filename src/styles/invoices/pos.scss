@@ -476,6 +476,14 @@
     overflow: scroll;
     padding-bottom: 60px;
 
+
+    .invoice-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px 10px 10px;
+    }
+
     .form-group {
         input {
             padding: 10px 12px;
@@ -1128,6 +1136,10 @@
             color: $white;
             padding: 2px;
         }
+    }
+
+    .invoice-header-top {
+        display: none;
     }
 
 }

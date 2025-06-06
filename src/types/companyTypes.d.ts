@@ -182,7 +182,7 @@ interface UpdateLeavePayload extends Partial<CreateLeavePayload> {
 interface Holiday {
   id: number;
   name: string;
-  date: string; // Format: YYYY-MM-DD
+  day: string; // Format: YYYY-MM-DD
   type: 'monthly' | 'weekly' | 'general';
   company_id: number;
   created_at: string;

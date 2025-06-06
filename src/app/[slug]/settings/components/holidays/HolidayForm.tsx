@@ -43,7 +43,7 @@ const HolidayForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
                     required
                 />
                 <input
-                    name="date"
+                    name="day"
                     value={form.date}
                     onChange={handleChange}
                     placeholder="date (YYYY-MM-DD)"

@@ -1,137 +1,31 @@
-// 'use client';
-// import React, { useState } from 'react';
-// import {
-//     useFetchCompanyAccountsQuery,
-//     useAddCompanyAccountsMutation,
-// } from '@/slices/company/companyApi';
-// import BankAccountItem from './BankAccountItem';
-// import BankAccountForm from './BankAccountForm';
-// import EmptyState from '@/components/common/EmptyState';
-// import { FaUniversity, FaPlus } from 'react-icons/fa';
-// import { Button } from '@mui/material';
-
-// const BankAccountList = () => {
-//     const { data, isLoading, error, refetch } = useFetchCompanyAccountsQuery();
-//     const [addAccounts] = useAddCompanyAccountsMutation();
-//     const [showForm, setShowForm] = useState(false);
-
-//     const handleCreate = async (account: AddCompanyAccountsPayload['accounts'][0]) => {
-//         try {
-//             const formData = new FormData();
-//             Object.entries(account).forEach(([key, value]) => {
-//                 if (value !== undefined && value !== null) {
-//                     formData.append(key, value as string | Blob);
-//                 }
-//             });
-//             await addAccounts(formData).unwrap();
-//             setShowForm(false);
-//             refetch();
-//         } catch (e) {
-//             console.error('Failed to add account', e);
-//         }
-//     };
-
-//     const handleCancel = () => {
-//         setShowForm(false);
-//     };
-
-//     const noAccounts = !isLoading && !error && (!data?.accounts || data.accounts.length === 0);
-
-//     return (
-//         <div className="bank-account-list">
-//             {!noAccounts && (
-//                 <div className='add-bank-btn'>
-//                     <button
-//                         onClick={() => setShowForm(true)}
-//                         className="buttons"
-//                         disabled={showForm}
-//                     >
-//                         Add Bank Account
-//                     </button>
-//                 </div>
-//             )}
-
-//             {showForm && (
-//                 <div className="form-wrapper">
-//                     <BankAccountForm
-//                         onSubmit={handleCreate}
-//                         onCancel={handleCancel}
-//                     />
-//                 </div>
-//             )}
-
-//             {isLoading && <p>Loading accounts...</p>}
-
-//             {error && (
-//                 <EmptyState
-//                     icon="alert"
-//                     title="Failed to load bank accounts"
-//                     message="Something went wrong while fetching bank account data. Please try again later."
-//                 />
-//             )}
-
-//             {noAccounts && !showForm && (
-//                 <EmptyState
-//                     icon={<FaUniversity className="empty-state-icon" />}
-//                     title="No Bank Accounts Found"
-//                     message="You haven't added any bank account details yet."
-//                     action={
-//                         <Button
-//                             className="buttons .create-btn"
-//                             onClick={() => setShowForm(true)}
-//                             startIcon={<FaPlus />}
-//                         >
-//                             Add Bank Account
-//                         </Button>
-//                     }
-//                 />
-//             )}
-
-//             <div className="account-list">
-//                 {Array.isArray(data?.accounts) &&
-//                     data.accounts.map((account) => (
-//                         <div key={account.id} className="account-item">
-//                             <BankAccountItem account={account} />
-//                         </div>
-//                     ))}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default BankAccountList;
-
-
-
-
-
-
-
-
-
-
-
 'use client';
+
 import React, { useState } from 'react';
 import {
     useFetchCompanyAccountsQuery,
     useAddCompanyAccountsMutation,
+    useDeleteCompanyAccountMutation,
 } from '@/slices/company/companyApi';
-import BankAccountItem from './BankAccountItem';
+
 import BankAccountForm from './BankAccountForm';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
-import { FaUniversity, FaPlus } from 'react-icons/fa';
-import { Button } from '@mui/material';
-import Modal from '@/components/common/Modal'; // Your custom Modal component
+import { toast } from 'react-toastify';
+
+import { FaPlus, FaUniversity, FaTrash, FaEdit } from 'react-icons/fa';
 
 const BankAccountList = () => {
     const { data, isLoading, error, refetch } = useFetchCompanyAccountsQuery();
-    const [addAccounts] = useAddCompanyAccountsMutation();
+    const [addAccount] = useAddCompanyAccountsMutation();
+    const [deleteAccount] = useDeleteCompanyAccountMutation();
 
-    // Modal open state instead of inline form toggle
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const accounts = data?.accounts ?? [];
 
-    const handleCreate = async (account: AddCompanyAccountsPayload['accounts'][0]) => {
+    const [showForm, setShowForm] = useState(false);
+    const [editAccount, setEditAccount] = useState<any | null>(null);
+
+    const handleCreate = async (account: any) => {
         try {
             const formData = new FormData();
             Object.entries(account).forEach(([key, value]) => {
@@ -139,82 +33,113 @@ const BankAccountList = () => {
                     formData.append(key, value as string | Blob);
                 }
             });
-            await addAccounts(formData).unwrap();
-            setIsAddModalOpen(false);
+
+            await addAccount(formData).unwrap();
+            toast.success('Bank account added successfully');
+            setShowForm(false);
             refetch();
-        } catch (e) {
-            console.error('Failed to add account', e);
+        } catch {
+            toast.error('Failed to add bank account');
         }
     };
 
-    const handleCancel = () => {
-        setIsAddModalOpen(false);
+    const handleDelete = async (id: number) => {
+        if (!window.confirm('Are you sure you want to delete this account?')) return;
+        try {
+            await deleteAccount(id).unwrap();
+            toast.success('Bank account deleted successfully');
+            refetch();
+        } catch {
+            toast.error('Failed to delete bank account');
+        }
     };
 
-    const noAccounts = !isLoading && !error && (!data?.accounts || data.accounts.length === 0);
+    const columns = [
+        { label: 'Bank Name', key: 'bank_name' },
+        { label: 'Account Number', key: 'account_number' },
+        { label: 'IFSC Code', key: 'ifsc_code' },
+        { label: 'Type', key: 'type' },
+        {
+            label: 'Actions',
+            render: (account: any) => (
+                <div className="action-buttons">
+                    {/* Edit logic if needed later */}
+                     <button
+                        className="icon-button edit-button"
+                        onClick={() => setEditAccount(account)}
+                        title="Edit"
+                    >
+                        <FaEdit />
+                    </button> 
+                    <button
+                        className="icon-button delete-button"
+                        onClick={() => handleDelete(account.id)}
+                        title="Delete"
+                    >
+                        <FaTrash />
+                    </button>
+                </div>
+            ),
+        },
+    ];
+
+    const noAccounts = !isLoading && !error && accounts.length === 0;
 
     return (
         <div className="bank-account-list">
             {!noAccounts && (
-                <div className='add-bank-btn'>
-                    <button
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="buttons"
-                        disabled={isAddModalOpen}
-                    >
+                <div className="add-bank-btn">
+                    <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
                         Add Bank Account
                     </button>
                 </div>
             )}
 
-            {isLoading && <p>Loading accounts...</p>}
-
-            {error && (
-                <EmptyState
-                    icon="alert"
-                    title="Failed to load bank accounts"
-                    message="Something went wrong while fetching bank account data. Please try again later."
-                />
-            )}
-
-            {noAccounts && !isAddModalOpen && (
-                <EmptyState
-                    icon={<FaUniversity className="empty-state-icon" />}
-                    title="No Bank Accounts Found"
-                    message="You haven't added any bank account details yet."
-                    action={
-                        <Button
-                            className="buttons create-btn"
-                            onClick={() => setIsAddModalOpen(true)}
-                            startIcon={<FaPlus />}
-                        >
-                            Add Bank Account
-                        </Button>
-                    }
-                />
-            )}
-
-            <div className="account-list">
-                {Array.isArray(data?.accounts) &&
-                    data.accounts.map((account) => (
-                        <div key={account.id} className="account-item">
-                            <BankAccountItem account={account} />
-                        </div>
-                    ))}
-            </div>
-
-            {/* Modal for adding bank account */}
             <Modal
-                isOpen={isAddModalOpen}
-                onClose={handleCancel}
+                isOpen={showForm}
+                onClose={() => {
+                    setShowForm(false);
+                    setEditAccount(null);
+                }}
                 title="Add Bank Account"
                 width="600px"
             >
                 <BankAccountForm
                     onSubmit={handleCreate}
-                    onCancel={handleCancel}
+                    onCancel={() => {
+                        setShowForm(false);
+                        setEditAccount(null);
+                    }}
+                    initialData={editAccount || undefined}
                 />
             </Modal>
+
+            {isLoading && <p>Loading bank accounts...</p>}
+
+            {error && (
+                <EmptyState
+                    icon="alert"
+                    title="Failed to load bank accounts"
+                    message="Something went wrong while fetching bank accounts."
+                />
+            )}
+
+            {noAccounts && !showForm && (
+                <EmptyState
+                    icon={<FaUniversity className="empty-state-icon" />}
+                    title="No Bank Accounts Found"
+                    message="You haven't added any bank account details yet."
+                    action={
+                        <button className="buttons create-btn" onClick={() => setShowForm(true)}>
+                            <FaPlus /> Add Bank Account
+                        </button>
+                    }
+                />
+            )}
+
+            {accounts.length > 0 && (
+                <ResponsiveTable data={accounts} columns={columns} />
+            )}
         </div>
     );
 };

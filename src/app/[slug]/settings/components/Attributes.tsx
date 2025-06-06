@@ -48,11 +48,11 @@ const Attributes = () => {
         if (filteredValues.length === 0) return;
 
         try {
-            await createAttribute({ name: newAttributeName, values: filteredValues }).unwrap();
-            toast.success('Attribute created');
-            setNewAttributeName('');
-            setValues(['']);
-            setIsModalOpen(false);
+            await createAttribute({
+                name: newAttributeName,
+                values: filteredValues,
+            }).unwrap();
+
         } catch {
             toast.error('Failed to create attribute');
         }
@@ -93,23 +93,17 @@ const Attributes = () => {
         {
             label: 'Status',
             render: (attr: Attribute) => (
-                <span className={`status-pill ${attr.status === 'active' ? 'active-option' : 'inactive-option'}`}>
-                    {attr.status}
-                </span>
-            ),
-        },
-        {
-            label: 'Toggle',
-            render: (attr: Attribute) => (
-                <div
-                    className={`toggle-switch ${attr.status === 'active' ? 'active' : 'inactive'}`}
-                    onClick={() => handleStatusChange(attr.id)}
-                    title="Click to toggle"
+                <select
+                    value={attr.status}
+                    onChange={() => handleStatusChange(attr.id)}
+                    className={`status-dropdown ${attr.status === 'active' ? 'active' : 'inactive'}`}
                 >
-                    <div className="toggle-thumb" />
-                </div>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
             ),
         },
+
         {
             label: 'Actions',
             render: (attr: Attribute) => (
@@ -123,11 +117,13 @@ const Attributes = () => {
     return (
         <div className="Attribute-form-outer">
             {(attributes?.length ?? 0) > 0 && (
-                <div className="navigation-buttons">
+                <div className="modal-actions">
                     <button className="buttons" onClick={() => setIsModalOpen(true)}>
                         <FaPlus /> Add Attribute
                     </button>
+
                 </div>
+
             )}
 
             {(attributes?.length ?? 0) === 0 ? (
@@ -142,7 +138,13 @@ const Attributes = () => {
                     }
                 />
             ) : (
-                <ResponsiveTable data={attributes || []} columns={columns} />
+                <ResponsiveTable
+  data={[...(attributes || [])].sort((a, b) =>
+    a.status === 'active' && b.status !== 'active' ? -1 : 1
+  )}
+  columns={columns}
+/>
+
             )}
 
             <Modal
@@ -151,15 +153,19 @@ const Attributes = () => {
                 title="Create New Attribute"
                 width="500px"
             >
+                <Typography variant="subtitle2" gutterBottom>
+                    Attribute Name
+                </Typography>
                 <TextField
                     fullWidth
-                    label="Attribute Name"
                     value={newAttributeName}
                     onChange={(e) => setNewAttributeName(e.target.value)}
                     variant="outlined"
                     size="small"
                     sx={{ mb: 2 }}
+                    placeholder='Enter attribute name'
                 />
+
 
                 <Typography variant="subtitle2" gutterBottom>
                     Attribute Values
@@ -185,22 +191,22 @@ const Attributes = () => {
                 </div>
 
                 <button
-                onClick={addNewValueField}
-                className="value-add-button "
+                    onClick={addNewValueField}
+                    className="value-add-button "
                 >
-                <FaPlus />
-                Add Another Value
-            </button>
+                    <FaPlus />
+                    Add Another Value
+                </button>
 
-            <div className="modal-actions">
-                <button onClick={handleCreate} className="buttons" >
-                    Add Attribute
-                </button>
-                <button onClick={() => setIsModalOpen(false)} className="buttons">
-                    Cancel
-                </button>
-            </div>
-        </Modal>
+                <div className="modal-actions">
+                    <button onClick={handleCreate} className="buttons" >
+                        Add Attribute
+                    </button>
+                    <button onClick={() => setIsModalOpen(false)} className="buttons">
+                        Cancel
+                    </button>
+                </div>
+            </Modal>
         </div >
     );
 };

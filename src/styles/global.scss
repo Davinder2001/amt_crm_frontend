@@ -116,6 +116,7 @@
 @use './settings/shift.scss' as *;
 @use './settings/taxes.scss' as *;
 @use './settings/bankacount/bankacount.scss' as *;
+@use './settings/leavesandholidays.scss' as *;
 
 // policy-pages
 @use './policy-pages.scss' as *;
@@ -127,6 +128,12 @@
 
 // company styling
 @use './company/ViewCompany.scss' as *;
+
+
+
+// emptystate section...................................................................................
+@use './emptystate/empatystate.scss' as *;
+
 
 * {
     margin: 0;
@@ -466,6 +473,17 @@ textarea::placeholder {
     letter-spacing: 0.3px;
     background-color: transparent;
 }
+
+
+
+
+@media (max-width:768px) {
+     .page-content {
+            padding: 30px 10px !important;
+        }
+}
+
+
 
 
 @media (max-width:1024px) {

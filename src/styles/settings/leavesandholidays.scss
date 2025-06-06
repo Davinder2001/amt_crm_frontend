@@ -1,0 +1,179 @@
+@use '../variables' as *;
+
+// leave and holidays form styling start
+.leave-form-wrapper,
+.holiday-form-wrapper {
+
+
+    .leave-form,
+    .holiday-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .leave-form input,
+    .leave-form select,
+    .holiday-form input,
+    .holiday-form select {
+        padding: 10px 12px;
+        font-size: 16px;
+        border: 1.5px solid $border-color;
+        border-radius: 6px;
+        transition: border-color 0.3s ease;
+        outline: none;
+        width: 100%;
+    }
+
+    .leave-form input:focus,
+    .leave-form select:focus,
+    .holiday-form input:focus,
+    .holiday-form select:focus {
+        border-color: $gray-color;
+        /* primary color */
+    }
+
+    .leave-form-actions,
+    .holiday-form-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    .buttons.cancel {
+        color: $primary-color;
+        border: 1px solid $primary-color;
+        background-color: unset;
+    }
+
+    .buttons.cancel:hover {
+        background-color: $hover-color;
+        color: $white;
+    }
+
+
+    /* Responsive */
+    @media (max-width: 480px) {
+
+        .leave-form-wrapper,
+        .holiday-form-wrapper {
+            padding: 1rem;
+            max-width: 100%;
+        }
+    }
+
+}
+
+// leave and holidays form styling end...................................................................................................
+
+
+
+
+
+// Action buttons styling start................................................................................................................
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 6px;
+
+        &.edit-button {
+            color: $primary-color;
+        }
+
+        &.delete-button {
+            color: $danger-color;
+        }
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+
+// Action buttons styling end................................................................................................................
+
+
+
+
+// Action buttons styling end................................................................................................................
+.leave-holiday-container {
+    .tabs {
+    display: flex;
+    border-bottom: 1px solid #e1e4e8;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    margin-right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #586069;
+    transition: all 0.3s ease;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    gap: 8px;
+}
+
+.tab:hover {
+    color: $primary-color;
+    background-color: #f6f8fa;
+}
+
+.tab.active {
+    color: $primary-color;
+    background-color: #ffffff;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: $primary-color;
+    border-radius: 3px 3px 0 0;
+}
+
+.tab-content {
+    padding: 20px;
+    border-radius: 6px;
+}
+
+/* Optional: Add a subtle animation for the content */
+.tab-content>* {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+}
+
+// Action buttons styling end................................................................................................................

@@ -31,6 +31,15 @@ const companyApi = companyCreateSlice.injectEndpoints({
       }),
       invalidatesTags: ["Company"],
     }),
+    // In companyApi (you likely missed this endpoint)
+    deleteShift: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `shifts/${id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
 
     fetchTaxes: builder.query<TaxesResponse, void>({
       query: () => ({
@@ -238,6 +247,7 @@ export const {
   useFetchCompanyShiftsQuery,
   useCreateShiftMutation,
   useUpdateShiftMutation,
+  useDeleteShiftMutation,
   useFetchTaxesQuery,
   useCreateTaxMutation,
   useUpdateTaxMutation,

@@ -14,10 +14,12 @@
     min-width: 20px;
     text-align: center;
   }
-.modal-input-content{
-  display: flex;
-  flex-direction: column;
-}
+
+  .modal-input-content {
+    display: flex;
+    flex-direction: column;
+  }
+
   .values-scroll-container {
     display: flex;
     flex-direction: column;
@@ -99,9 +101,111 @@
   }
 
   // add attribute canvas *****************
+  // Modal inner styles
+  .values-scroll-container {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding-right: 4px;
 
+    .value-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
 
+      input {
+        flex: 1;
+      }
 
+      span {
+        color: $orange-color;
+        cursor: pointer;
+        font-size: 18px;
+        transition: color 0.2s;
+
+        &:hover {
+          color: darken($orange-color, 10%);
+        }
+      }
+    }
+  }
+
+  .value-add-button {
+    background-color: $light_blue;
+    border: 1px dashed $primary-color;
+    color: $primary-color;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: lighten($light_blue, 5%);
+      border-color: darken($primary-color, 5%);
+    }
+
+    svg {
+      font-size: 16px;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .settings-content {
+    .responsive-table {
+      margin-top: 20PX;
+
+      button {
+        background-color: unset;
+        border: unset;
+        outline: none;
+      }
+
+      .delete-btn {
+        color: $danger-color;
+      }
+
+      .edit-btn {
+        color: $primary-color;
+      }
+
+      .status-dropdown {
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 13px;
+        font-weight: 500;
+        outline: none;
+        cursor: pointer;
+        min-width: 100px;
+        text-transform: capitalize;
+
+        &.active {
+          background-color: #e6f4ea;
+          color: #2e7d32;
+          border-color: #a5d6a7;
+        }
+
+        &.inactive {
+          background-color: #fdecea;
+          color: #d32f2f;
+          border-color: #f5c6cb;
+        }
+      }
+
+    }
+  }
 
 
   // compact version *************

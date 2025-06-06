@@ -8,11 +8,8 @@ import {
 import { toast } from 'react-toastify';
 import {
   Box,
-  Button,
   TextField,
-  Select,
-  MenuItem,
-  
+
 } from '@mui/material';
 import { FaPlus, FaTasks } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
@@ -95,81 +92,79 @@ const Shifts: React.FC = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Create New Shift"
-        width="600px"
       >
         <div className="modal-content">
+          <div className="shift-form-inner">
 
-          <Box sx={{ mb: 2 }}>
-            <label htmlFor="shift_name">Shift Name</label>
-            <TextField
-              id="shift_name"
-              name="shift_name"
-              value={form.shift_name}
-              onChange={handleChange}
-              fullWidth
-              size="small"
-            />
-          </Box>
+            <Box sx={{ mb: 2 }}>
+              <label htmlFor="shift_name">Shift Name</label>
+              <TextField
+                id="shift_name"
+                name="shift_name"
+                value={form.shift_name}
+                onChange={handleChange}
+                fullWidth
+                size="small"
+                placeholder='Enter Shift Name'
+              />
+            </Box>
 
-          <Box sx={{ mb: 2 }} onClick={() => startTimeRef.current?.showPicker?.()}>
-            <label htmlFor="start_time">Start Time</label>
-            <TextField
-              id="start_time"
-              inputRef={startTimeRef}
-              name="start_time"
-              type="time"
-              value={form.start_time}
-              onChange={handleChange}
-              fullWidth
-              size="small"
-            />
-          </Box>
+            <Box sx={{ mb: 2 }} onClick={() => startTimeRef.current?.showPicker?.()}>
+              <label htmlFor="start_time">Start Time</label>
+              <TextField
+                id="start_time"
+                inputRef={startTimeRef}
+                name="start_time"
+                type="time"
+                value={form.start_time}
+                onChange={handleChange}
+                fullWidth
+                size="small"
+              />
+            </Box>
 
-          <Box sx={{ mb: 2 }} onClick={() => endTimeRef.current?.showPicker?.()}>
-            <label htmlFor="end_time">End Time</label>
-            <TextField
-              id="end_time"
-              inputRef={endTimeRef}
-              name="end_time"
-              type="time"
-              value={form.end_time}
-              onChange={handleChange}
-              fullWidth
-              size="small"
-            />
-          </Box>
+            <Box sx={{ mb: 2 }} onClick={() => endTimeRef.current?.showPicker?.()}>
+              <label htmlFor="end_time">End Time</label>
+              <TextField
+                id="end_time"
+                inputRef={endTimeRef}
+                name="end_time"
+                type="time"
+                value={form.end_time}
+                onChange={handleChange}
+                fullWidth
+                size="small"
+              />
+            </Box>
 
-          <Box sx={{ mb: 3 }}>
-            <label htmlFor="weekly_off_day">Weekly Off Day</label>
-            <Select
-              id="weekly_off_day"
-              name="weekly_off_day"
-              value={form.weekly_off_day}
-              onChange={handleChange}
-              displayEmpty
-              fullWidth
-              size="small"
-            >
-              <MenuItem value="" disabled>
-                Select Weekly Off Day
-              </MenuItem>
-              {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(
-                (day) => (
-                  <MenuItem key={day} value={day}>
+            <Box sx={{ mb: 3 }}>
+              <label htmlFor="weekly_off_day">Weekly Off Day</label>
+              <select
+                id="weekly_off_day"
+                name="weekly_off_day"
+                value={form.weekly_off_day}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="" disabled>
+                  Select Weekly Off Day
+                </option>
+                {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
+                  <option key={day} value={day}>
                     {day}
-                  </MenuItem>
-                )
-              )}
-            </Select>
-          </Box>
+                  </option>
+                ))}
+              </select>
+            </Box>
 
+          </div>
           <Box display="flex" justifyContent="flex-end" gap={2}>
-            <Button className="cancel-btn" onClick={() => setModalOpen(false)} color="error">
+            <button className="cancel-btn buttons" onClick={() => setModalOpen(false)} color="error">
               Cancel
-            </Button>
-            <Button variant="contained" onClick={handleSubmit} className="buttons create-btn">
+            </button>
+            <button onClick={handleSubmit} className="buttons create-btn">
               Create
-            </Button>
+            </button>
           </Box>
         </div>
       </Modal>

@@ -42,6 +42,14 @@ const HolidayForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
                     placeholder="Holiday Name"
                     required
                 />
+                <input
+                    name="date"
+                    value={form.date}
+                    onChange={handleChange}
+                    placeholder="date (YYYY-MM-DD)"
+                    type="date"
+                    required
+                />
 
                 <select name="type" value={form.type} onChange={handleChange}>
                     <option value="monthly">Monthly</option>

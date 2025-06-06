@@ -9,10 +9,9 @@ import {
 } from '@/slices/company/companyApi';
 import {
     Box,
-    Button,
     IconButton,
     TextField,
-    
+
 } from '@mui/material';
 import { FaPlus, FaTrash, FaEdit, FaTasks } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
@@ -118,9 +117,9 @@ const TaxesPage = () => {
 
             {(taxesData?.data?.length ?? 0) > 0 && (
                 <Box display="flex" justifyContent="flex-end" mb={2}>
-                    <Button className="buttons" startIcon={<FaPlus />} onClick={handleOpen}>
-                        Add New Tax
-                    </Button>
+                    <button className="buttons" onClick={handleOpen}>
+                        <FaPlus /> Add New Tax
+                    </button>
                 </Box>
             )}
 
@@ -130,9 +129,9 @@ const TaxesPage = () => {
                     title="No taxes found"
                     message="You haven't created any tax entries yet."
                     action={
-                        <Button className="buttons" onClick={handleOpen}>
+                        <button className="buttons" onClick={handleOpen}>
                             <FaPlus size={16} /> Add New Tax
-                        </Button>
+                        </button>
                     }
                 />
             ) : (
@@ -167,10 +166,10 @@ const TaxesPage = () => {
                         sx={{ mb: 2 }}
                     />
                     <Box display="flex" justifyContent="flex-end" gap={2}>
-                        <Button onClick={handleClose} className="cancel-btn">Cancel</Button>
-                        <Button className="buttons" onClick={handleSubmit} disabled={isUpdating}>
+                        <button onClick={handleClose} className="buttons cancel-btn">Cancel</button>
+                        <button className="buttons" onClick={handleSubmit} disabled={isUpdating}>
                             {form.id ? (isUpdating ? 'Updating...' : 'Update') : 'Add Tax'}
-                        </Button>
+                        </button>
                     </Box>
                 </Box>
             </Modal>

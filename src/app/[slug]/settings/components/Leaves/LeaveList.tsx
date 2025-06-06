@@ -15,7 +15,7 @@ import LeaveForm from './LeaveForm';
 
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { FaPlus, FaCalendar, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
 
 const LeaveList = () => {
   const { data, isLoading, error, refetch } = useFetchLeavesQuery();
@@ -40,10 +40,10 @@ const LeaveList = () => {
     }
   };
 
-  const handleUpdate = async (leave: LeavePayload) => {
+  const handleUpdate = async (leave: Omit<UpdateLeavePayload, 'id'>) => {
     if (!editLeave) return;
     try {
-      await updateLeave({ id: editLeave.id, ...leave }).unwrap();
+      await updateLeave({ ...leave, id: editLeave.id }).unwrap();
       toast.success('Leave updated successfully');
       setEditLeave(null);
       refetch();
@@ -131,7 +131,7 @@ const LeaveList = () => {
 
       {noLeaves && !showForm && (
         <EmptyState
-          icon={<FaCalendar className="empty-state-icon" />}
+          icon={<FaUmbrellaBeach className="empty-state-icon" />}
           title="No Leaves Found"
           message="You haven't added any leave policies yet."
           action={

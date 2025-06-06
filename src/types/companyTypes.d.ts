@@ -188,6 +188,15 @@ interface Holiday {
   created_at: string;
   updated_at: string;
 }
+interface HolidayPayload {
+  id: number;
+  name: string;
+  day: string; // Format: YYYY-MM-DD
+  type: 'monthly' | 'weekly' | 'general';
+  company_id: number;
+  created_at: string;
+  updated_at: string;
+}
 
 interface HolidayResponse {
   message: string;

@@ -36,11 +36,6 @@
  
   }
   
-  // Delete button style
-  .delete-btn {
-    color: #e53935 !important;
-    transition: color 0.2s ease;
-  }
 
   .buttons{
     background-color: $primary-color;
@@ -58,12 +53,6 @@
     color: $white;
   }
   
-  .cancel-btn {
-    background-color: $danger-color;
-    color: $white;
-    &:hover{
-      background-color: rgb(241, 128, 128);
-    }
-  }
 
+  
 }

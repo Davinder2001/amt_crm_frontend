@@ -1,5 +1,4 @@
-'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
     onSubmit: (data: CreateHolidayPayload) => void;
@@ -10,15 +9,17 @@ type Props = {
 const defaultForm: CreateHolidayPayload = {
     name: '',
     type: 'general',
+    day: '',
 };
 
 const HolidayForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
     const [form, setForm] = useState<CreateHolidayPayload>(defaultForm);
+    const dateInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (initialData) {
-            const { name, type } = initialData;
-            setForm({ name, type });
+            const { name, type, day } = initialData;
+            setForm({ name, type, day });
         }
     }, [initialData]);
 
@@ -35,27 +36,38 @@ const HolidayForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
     return (
         <form onSubmit={handleSubmit} className="holiday-form-wrapper">
             <div className="holiday-form">
-                <input
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Holiday Name"
-                    required
-                />
-                <input
-                    name="day"
-                    value={form.date}
-                    onChange={handleChange}
-                    placeholder="date (YYYY-MM-DD)"
-                    type="date"
-                    required
-                />
+                <div  className='form-input-lable-wrapper'>
+                    <label>Holiday Name</label>
+                    <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Holiday Name"
+                        required
+                    />
+                </div>
 
-                <select name="type" value={form.type} onChange={handleChange}>
-                    <option value="monthly">Monthly</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="general">General</option>
-                </select>
+                <div className='form-input-lable-wrapper' onClick={() => dateInputRef.current?.showPicker()}>
+                    <label>Day</label>
+                    <input
+                        ref={dateInputRef}
+                        name="date"
+                        value={form.date}
+                        onChange={handleChange}
+                        placeholder="Select Date"
+                        type="date"
+                        required
+                        style={{ cursor: 'pointer' }}
+                    />
+                </div>
+                <div  className='form-input-lable-wrapper'>
+                    <label>Type</label>
+                    <select name="type" value={form.type} onChange={handleChange}>
+                        <option value="monthly">Monthly</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
             </div>
 
             <div className="holiday-form-actions">

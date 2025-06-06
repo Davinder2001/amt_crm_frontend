@@ -39,10 +39,11 @@ const HolidayList = () => {
         }
     };
 
-    const handleUpdate = async (holiday: HolidayPayload) => {
+    // Accepts CreateHolidayPayload to match HolidayForm's onSubmit type
+    const handleUpdate = async (holiday: UpdateHolidayPayload) => {
         if (!editHoliday) return;
         try {
-            await updateHoliday({ id: editHoliday.id, ...holiday }).unwrap();
+            await updateHoliday({ ...holiday, id: editHoliday.id }).unwrap();
             toast.success('Holiday updated successfully');
             setEditHoliday(null);
             refetch();
@@ -65,7 +66,7 @@ const HolidayList = () => {
     const columns = [
         { label: 'Name', key: 'name' as keyof Holiday },
         { label: 'Company Id', key: 'company_id' as keyof Holiday },
-        { label: 'Date', key: 'date' as keyof Holiday },
+        { label: 'Day', key: 'day' as keyof Holiday },
         { label: 'Type', key: 'type' as keyof Holiday },
         {
             label: 'Actions',
@@ -111,7 +112,13 @@ const HolidayList = () => {
                 title={showForm ? 'Add Holiday' : 'Edit Holiday'}
             >
                 <HolidayForm
-                    onSubmit={showForm ? handleCreate : handleUpdate}
+                    onSubmit={async (data) => {
+                        if (showForm) {
+                            await handleCreate(data);
+                        } else {
+                            await handleUpdate({ ...data, id: editHoliday!.id });
+                        }
+                    }}
                     onCancel={() => {
                         setShowForm(false);
                         setEditHoliday(null);

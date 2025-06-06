@@ -37,19 +37,39 @@ const LeaveForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
     return (
         <form onSubmit={handleSubmit} className="leave-form-wrapper">
             <div className="leave-form">
-                <input name="name" value={form.name} onChange={handleChange} placeholder="Leave Name" required />
+                <div className='form-input-lable-wrapper'>
+                    <label >
+                        Leave Name
+                    </label>
+                    <input name="name" value={form.name} onChange={handleChange} placeholder="Leave Name" required />
+                </div>
 
-                <select name="frequency" value={form.frequency} onChange={handleChange}>
-                    <option value="monthly">Monthly</option>
-                    <option value="yearly">Yearly</option>
-                </select>
+                <div className='form-input-lable-wrapper'>
+                    <label>
+                        Frequency
+                    </label>
+                    <select name="frequency" value={form.frequency} onChange={handleChange}>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
 
-                <select name="type" value={form.type} onChange={handleChange}>
-                    <option value="paid">Paid</option>
-                    <option value="unpaid">Unpaid</option>
-                </select>
+                <div className='form-input-lable-wrapper'>
+                    <label>
+                        Type
+                    </label>
+                    <select name="type" value={form.type} onChange={handleChange}>
+                        <option value="paid">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                    </select>
+                </div>
 
-                <input type="number" name="count" value={form.count} onChange={handleChange} required />
+                <div className='form-input-lable-wrapper'>
+                    <label>
+                        Count
+                    </label>
+                    <input type="number" name="count" value={form.count} onChange={handleChange} required />
+                </div>
             </div>
 
             <div className="leave-form-actions">

@@ -1,229 +1,44 @@
 @use '../variables' as *;
 
-.shift-management-container {
-    background-color: $light-bg;
-    color: $text-dark;
-    min-height: 100vh;
-}
+.shift-page {
 
-.glass-panel {
-    background: $white;
-    border-radius: $border-radius;
-    padding: 1.5rem;
-    box-shadow: $secondary-shadow;
-    margin-bottom: 1rem;
-}
-
-.create-shift-section {
-    padding: 0px;
-}
-
-.main-heading {
-    font-size: $font-size-extra-large;
-    font-weight: $font-weight-semi-bold;
-    color:$dark-color;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.subheading {
-    color: $gray-color;
-    font-size: $font-size-small;
-    margin-top: 0.5rem;
-}
-
-.content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.section-title {
-    font-size: $font-size-large;
-    font-weight: $font-weight-bold;
-    margin-bottom: 1rem;
-    color: $primary-color;
-    border-bottom: 2px solid $primary-color;
-    width: fit-content;
-}
-
-.view-all-shifte-title {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-}
-
-.shift-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.Create-section-title {
-    margin: 20px 0px 0px 20px;
-}
-
-.create-shift-form-outer {
-    padding: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-
-    .input-wrapper {
-        position: relative;
-
-        .form-input {
-            width: 100%;
-            border: 1px solid $feild_border;
-            border-radius: $border-radius;
-            font-size: $font-size;
-            transition: border $transition;
-            background-color: $white;
-
-            &:focus {
-                border-color: $gray-color;
-                outline: none;
-            }
-        }
-
-    }
-
-    label {
-        letter-spacing: .4px;
-        color: #333;
-        margin-bottom: 5px;
-        font-size: 13px;
-        font-weight: 400;
-        display: block;
-    }
-}
-
-.submit-button {
-    background-color: $primary-color;
-    color: $white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: $border-radius;
-    font-size: $font-size;
-    font-weight: $font-weight-medium;
-    margin: 0px 20px 20px 20px;
-    cursor: pointer;
-    transition: background-color $transition;
-
-    &.disabled {
-        background-color: $gray-color;
-        cursor: not-allowed;
-    }
-
-    &:hover:enabled {
-        background-color: $hover-color;
-    }
-
-    .button-loader {
-        border: 3px solid $light-color;
-        border-top: 3px solid $white;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        animation: spin 1s linear infinite;
-        margin: auto;
-    }
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.shift-list-section {
-    .shift-cards-grid {
-        gap: 10px;
+    .shift-header {
         display: flex;
-        flex-wrap: wrap;
-        padding: 10px;
-    }
+        justify-content: flex-end;
+        margin-bottom: 16px;
 
-    .shift-card {
-        background-color: $light-color;
-        border: 1px solid $border-color;
-        border-left: 5px solid $primary-color;
-        padding: 5px 10px;
-        border-radius: $border-radius;
-        box-shadow: $box-shadow;
-
-        .shift-name {
-            font-size: $font-size-one;
-            font-weight: $font-weight-semi-bold;
-            margin-bottom: 0.5rem;
-            color: $heading;
-        }
-
-        .shift-time {
+        .buttons {
+            background-color: $primary-color;
+            color: white;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 5px;
 
-            .time-badge {
-                background: $primary-color;
-                color: $white;
-                padding: 0.2rem 0.6rem;
-                border-radius: 3px;
-                font-size: $font-size-small;
+            &:hover {
+                background-color: $hover-color;
             }
-
-            .time-separator {
-                font-size: $font-size-one;
-                color: $gray-color;
-            }
-        }
-
-        .weekly-off {
-            margin-top: 0.5rem;
-            font-size: $font-size-small;
-            color: $gray-color;
         }
     }
 
-    .loading-state,
-    .empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem;
-        color: $gray-color;
 
-        .loading-spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid $feild_border;
-            border-top: 3px solid $primary-color;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
+}
+
+.MuiBox-root {
+
+    .create-btn {
+        background-color: $primary-color;
+        color: $white;
+    }
+
+    .cancel-btn {
+        background-color: #d32f2f;
+        color: $white;
+
+        &:hover {
+            background-color: rgb(241, 128, 128);
         }
     }
 }

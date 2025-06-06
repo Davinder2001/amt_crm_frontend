@@ -1,210 +1,44 @@
 @use '../../variables' as *;
 
-.bank-account-form {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-
-}
-
-.bank-account-form input,
-.bank-account-form select {
-    padding: 10px 12px;
-    font-size: 16px;
-    border: 1px solid $feild_border;
-    border-radius: 5px;
-    outline: none;
-    transition: border-color 0.3s ease;
-    width: 100%;
-}
-
-.bank-form-actions {
-    display: flex;
-    gap: 5px;
-    justify-content: flex-end;
-}
-
-.bank-account-form input:focus,
-.bank-account-form select:focus {
-    border-color: $gray-color;
-}
-
-.bank-account-form .btn {
-    background-color: $primary-color;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: fit-content;
-}
-
-.bank-account-form .btn:hover {
-    background-color: $hover-color;
-}
-
-.bank-account-form .btn+.btn {
-    background-color: #d32f2f;
-    margin-left: 10px;
-}
-
-.bank-account-form .btn+.btn:hover {
-    background-color: #b71c1c;
-}
-
-
-
-
-
-.account-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(278px, max-content));
-    justify-content: start;
-    gap: 15px;
-}
-
-
-.account-item {
-    background-color: #f9fafb;
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden;
-
-
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .account-details {
-        p {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 4px 0;
-            font-size: 14px;
-            color: #333;
-
-            strong {
-                color: $primary-color;
-            }
-
-            span {
-                flex: 1;
-                display: inline-block;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        .bank-form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-
-            .Edit-btn,
-            .Delete-btn {
-                padding: 6px 12px;
-                font-size: 13px;
-                font-weight: 500;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .Edit-btn {
-                background-color: rgb(204, 252, 204);
-                color: $primary-color;
-
-                &:hover {
-                    background-color: rgb(167, 253, 167);
-                }
-            }
-
-            .Delete-btn {
-                background-color: #ffe5e5;
-                color: #d00000;
-
-                &:hover {
-                    background-color: #ffc7c7;
-                }
-            }
-        }
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-
-.bank-account-item {
-
+.bank-account-form-wrapper {
 
     .bank-account-form {
-        justify-content: space-between;
-        gap: 12px;
-        padding: 10px 0;
         display: grid;
-        /* flex-wrap: wrap; */
         grid-template-columns: 1fr 1fr;
+        gap: 10px;
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            border: 1px solid $border-color;
+            border-radius: 6px;
+            transition: border-color 0.2s ease;
+            outline-offset: 2px;
+
+            &:focus {
+                border-color: $gray-color; // primary color
+                outline: none;
+            }
+        }
+
+        input.no-spinner::-webkit-inner-spin-button,
+        input.no-spinner::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input.no-spinner {
+            -moz-appearance: textfield;
+        }
     }
 
-    .bank-account-form-wrapper {
-        padding: 0px;
-
-    }
-}
-
-.bank-account-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-    .add-bank-btn {
+    .bank-form-actions {
+        margin-top: 1.5rem;
         display: flex;
         justify-content: flex-end;
+        gap: 1rem;
+
     }
-
-}
-
-
-.bank-account-form-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px;
-    background-color: white;
-
-    .no-spinner {
-
-
-        // Hide spinner arrows (Firefox)
-        appearance: textfield;
-        -moz-appearance: textfield;
-    }
-
-}
-
-// Hide spinner arrows (Chrome, Safari, Edge)
-::-webkit-outer-spin-button,
-::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }

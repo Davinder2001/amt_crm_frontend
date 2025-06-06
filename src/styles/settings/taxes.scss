@@ -1,124 +1,22 @@
 @use '../variables' as *;
 
 .tax-page {
-  background-color: white;
-  padding: 20px;
-  border-radius: $border-radius;
 
-  // Form container with glass effect
-  .glass-form {
-    background: unset;
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: $border-radius;
-    margin-bottom: 2rem;
-    box-shadow: $box-shadow;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
 
-    // Material UI TextField focus style override
-    .MuiTextField-root {
-      .MuiOutlinedInput-root.Mui-focused {
-        fieldset {
-          border-color: $border-color;
-        }
-      }
-    }
-  }
 
-  // Form buttons container
-  .form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-  }
-
-  // Add Tax Button (top bar)
-  .add-tax-btn {
-    background-color: $primary-color;
-    color: $white;
-    text-transform: none;
-    padding: 0.5rem 1rem;
-    border-radius: $border-radius;
-    display: flex;
-    align-items: center;
-
-    &:hover {
-      background-color: $hover-color;
-      color: $white;
-    }
-  }
-
-  // Cancel Button style inside form
-  .cancel-btn {
-    border: 1px solid $primary-color;
-    color: $primary-color;
-    text-transform: none;
-    padding: 2px 10px;
-    border-radius: $border-radius;
-
-    &:hover {
-      background-color: $hover-color;
-      color: $white;
-    }
-  }
-
-  // Loading center style if needed
-  .loading-center {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-  }
-
-  // Grid container for tax items
-  .tax-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-
-  // Each tax item card box
-  .tax-box {
-    background-color: #ffffff;
-    padding: 1.2rem 1.5rem;
-    border-radius: $border-radius;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    // Tax name style
-    .tax-name {
-      font-weight: 600;
-      color: #494949;
-      margin-bottom: 0.25rem;
-      text-transform: capitalize;
-    }
-
-    // Tax rate style
-    .tax-rate {
-      color: green;
-      font-size: 0.9rem;
-    }
-  }
-
+  
+  
   // Container for action buttons inside tax-box
   .action-buttons {
     display: flex;
     gap: 0.5rem;
+    justify-content: flex-start;
 
     svg {
-      font-size: 16px;
+      font-size: 18px;
     }
   }
-
+  
   // Update/Add button inside the form
   .update-add-btn {
     background-color: $primary-color;
@@ -130,25 +28,42 @@
       margin: 0px;
     }
   }
-
+  
   // Edit button style
   .edit-btn {
     color: $primary-color;
     transition: color 0.2s ease;
-
-    &:hover {
-      background-color: $hover-color;
-    }
+ 
   }
-
+  
   // Delete button style
   .delete-btn {
     color: #e53935 !important;
     transition: color 0.2s ease;
+  }
 
-    &:hover {
-      color: #ff0000 !important;
-      background-color: #e538356c;
+  .buttons{
+    background-color: $primary-color;
+    color: $white;
+    display: flex;
+    gap: 0;
+    padding: 7px 12px;
+  }
+}
+
+.modal-box {
+
+  .buttons {
+    background-color: $primary-color;
+    color: $white;
+  }
+  
+  .cancel-btn {
+    background-color: $danger-color;
+    color: $white;
+    &:hover{
+      background-color: rgb(241, 128, 128);
     }
   }
+
 }

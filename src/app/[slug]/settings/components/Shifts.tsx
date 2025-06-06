@@ -1,220 +1,180 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from 'react';
 import {
-    useCreateShiftMutation,
-    useFetchCompanyShiftsQuery,
-} from "@/slices/company/companyApi";
-import { toast } from "react-toastify";
-import { FiClock } from "react-icons/fi";
+  useCreateShiftMutation,
+  useFetchCompanyShiftsQuery,
+} from '@/slices/company/companyApi';
+import { toast } from 'react-toastify';
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  
+} from '@mui/material';
+import { FaPlus, FaTasks } from 'react-icons/fa';
+import EmptyState from '@/components/common/EmptyState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import Modal from '@/components/common/Modal';
 
-const Shifts = () => {
-    const { data: shiftData, isLoading, refetch } = useFetchCompanyShiftsQuery();
-    const [createShift, { isLoading: isCreating }] = useCreateShiftMutation();
-    const [form, setForm] = useState({
-        shift_name: "",
-        start_time: "",
-        end_time: "",
-        weekly_off_day: "",
-    });
-    const startTimeRef = useRef<HTMLInputElement>(null);
-    const endTimeRef = useRef<HTMLInputElement>(null);
+const Shifts: React.FC = () => {
+  const { data, refetch } = useFetchCompanyShiftsQuery();
+  const [createShift] = useCreateShiftMutation();
 
-    // Click handlers to open time picker or focus input
-    const openStartTimePicker = () => {
-        if (startTimeRef.current) {
-            if (startTimeRef.current.showPicker) {
-                startTimeRef.current.showPicker();
-            } else {
-                startTimeRef.current.focus();
-            }
-        }
-    };
+  const [modalOpen, setModalOpen] = useState(false);
+  const [form, setForm] = useState({
+    shift_name: '',
+    start_time: '',
+    end_time: '',
+    weekly_off_day: '',
+  });
 
-    const openEndTimePicker = () => {
-        if (endTimeRef.current) {
-            if (endTimeRef.current.showPicker) {
-                endTimeRef.current.showPicker();
-            } else {
-                endTimeRef.current.focus();
-            }
-        }
-    };
-    const [isFormValid, setIsFormValid] = useState(false);
+  const startTimeRef = React.useRef<HTMLInputElement>(null);
+  const endTimeRef = React.useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        setIsFormValid(
-            form.shift_name.trim() !== "" &&
-            form.start_time !== "" &&
-            form.end_time !== "" &&
-            form.weekly_off_day !== ""
-        );
-    }, [form]);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name!]: value }));
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleSubmit = async () => {
+    try {
+      await createShift(form).unwrap();
+      toast.success('Shift created successfully!');
+      setForm({
+        shift_name: '',
+        start_time: '',
+        end_time: '',
+        weekly_off_day: '',
+      });
+      setModalOpen(false);
+      refetch();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to create shift');
+    }
+  };
 
-    const handleCreate = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            await createShift(form).unwrap();
-            toast.success("Shift created successfully!");
-            setForm({ shift_name: "", start_time: "", end_time: "", weekly_off_day: "" });
-            refetch();
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to create shift");
-        }
-    };
+  const columns: { label: string; key: keyof Shift }[] = [
+    { label: 'Shift Name', key: 'shift_name' },
+    { label: 'Start Time', key: 'start_time' },
+    { label: 'End Time', key: 'end_time' },
+    { label: 'Weekly Off', key: 'weekly_off_day' },
+  ];
 
-    return (
-        <div className="shift-management-container">
-            <div className="glass-panel glass-panel-one">
-                <h1 className="main-heading">
-                    <FiClock className="icon-spin" /> Shift Management
-                </h1>
-                <p className="subheading">Create and manage your work shifts</p>
-            </div>
+  return (
+    <div className="shift-page">
+      <div className="navigation-buttons shift-header">
+        {(data?.data?.length ?? 0) > 0 && (
+          <button className="buttons" onClick={() => setModalOpen(true)}>
+            <FaPlus /> Add Shift
+          </button>
+        )}
+      </div>
 
-            <div className="content-grid">
-                {/* Create Shift Section */}
-                <section className="create-shift-section glass-panel">
-                    <h2 className="section-title Create-section-title ">
-                        Create New Shift
-                    </h2>
+      {(data?.data?.length ?? 0) === 0 ? (
+        <EmptyState
+          icon={<FaTasks />}
+          title="No shifts found"
+          message="You haven’t created any shifts yet."
+          action={
+            <button className="buttons create-btn" onClick={() => setModalOpen(true)}>
+              <FaPlus /> Add Shift
+            </button>
+          }
+        />
+      ) : (
+        <ResponsiveTable data={data?.data || []} columns={columns} />
+      )}
 
-                    <form onSubmit={handleCreate} className="shift-form">
-                        <div className="form-grid create-shift-form-outer">
-                            <div className={`form-group ${form.shift_name ? "filled" : ""}`}>
-                                <label>
-                                    Shift Name <span className="required-asterisk">*</span>
-                                </label>
-                                <div className="input-wrapper">
-                                    <input
-                                        type="text"
-                                        name="shift_name"
-                                        value={form.shift_name}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="e.g. Morning Shift"
-                                        className="form-input"
-                                    />
-                                </div>
-                            </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Create New Shift"
+        width="600px"
+      >
+        <div className="modal-content">
 
-                            <div className={`form-group ${form.start_time ? "filled" : ""}`}>
-                                <label>
-                                    Start Time <span className="required-asterisk">*</span>
-                                </label>
-                                <div className="input-wrapper" onClick={openStartTimePicker}>
-                                    <input
-                                        ref={startTimeRef}
-                                        type="time"
-                                        name="start_time"
-                                        value={form.start_time}
-                                        onChange={handleChange}
-                                        required
-                                        className="form-input"
-                                    />
-                                </div>
-                            </div>
+          <Box sx={{ mb: 2 }}>
+            <label htmlFor="shift_name">Shift Name</label>
+            <TextField
+              id="shift_name"
+              name="shift_name"
+              value={form.shift_name}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+            />
+          </Box>
 
-                            <div className={`form-group ${form.end_time ? "filled" : ""}`}>
-                                <label>
-                                    End Time <span className="required-asterisk">*</span>
-                                </label>
-                                <div className="input-wrapper" onClick={openEndTimePicker}>
-                                    <input
-                                        ref={endTimeRef}
-                                        type="time"
-                                        name="end_time"
-                                        value={form.end_time}
-                                        onChange={handleChange}
-                                        required
-                                        className="form-input"
-                                    />
-                                </div>
-                            </div>
+          <Box sx={{ mb: 2 }} onClick={() => startTimeRef.current?.showPicker?.()}>
+            <label htmlFor="start_time">Start Time</label>
+            <TextField
+              id="start_time"
+              inputRef={startTimeRef}
+              name="start_time"
+              type="time"
+              value={form.start_time}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+            />
+          </Box>
 
-                            <div className={`form-group ${form.weekly_off_day ? "filled" : ""}`}>
-                                <label>
-                                    Weekly Off Day <span className="required-asterisk">*</span>
-                                </label>
-                                <div className="input-wrapper">
-                                    <select
-                                        name="weekly_off_day"
-                                        value={form.weekly_off_day}
-                                        onChange={handleChange}
-                                        required
-                                        className="form-input"
-                                    >
-                                        <option value="">Select Day</option>
-                                        <option value="Sunday">Sunday</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+          <Box sx={{ mb: 2 }} onClick={() => endTimeRef.current?.showPicker?.()}>
+            <label htmlFor="end_time">End Time</label>
+            <TextField
+              id="end_time"
+              inputRef={endTimeRef}
+              name="end_time"
+              type="time"
+              value={form.end_time}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+            />
+          </Box>
 
-                        <button
-                            type="submit"
-                            disabled={!isFormValid || isCreating}
-                            className={`submit-button ${isFormValid ? "active" : "disabled"}`}
-                        >
-                            {isCreating ? (
-                                <span className="button-loader"></span>
-                            ) : (
-                                "Create Shift"
-                            )}
-                        </button>
-                    </form>
-                </section>
+          <Box sx={{ mb: 3 }}>
+            <label htmlFor="weekly_off_day">Weekly Off Day</label>
+            <Select
+              id="weekly_off_day"
+              name="weekly_off_day"
+              value={form.weekly_off_day}
+              onChange={handleChange}
+              displayEmpty
+              fullWidth
+              size="small"
+            >
+              <MenuItem value="" disabled>
+                Select Weekly Off Day
+              </MenuItem>
+              {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(
+                (day) => (
+                  <MenuItem key={day} value={day}>
+                    {day}
+                  </MenuItem>
+                )
+              )}
+            </Select>
+          </Box>
 
-                {/* Shift List Section */}
-                <section className="shift-list-section glass-panel">
-                    <h2 className="section-title view-all-shifte-title ">
-                        <FiClock /> Current Shifts
-                    </h2>
-
-                    {isLoading ? (
-                        <div className="loading-state">
-                            <div className="loading-spinner"></div>
-                            <p>Loading shifts...</p>
-                        </div>
-                    ) : shiftData?.data?.length === 0 ? (
-                        <div className="empty-state">
-                            <FiClock size={48} />
-                            <p>No shifts created yet</p>
-                        </div>
-                    ) : (
-                        <div className="shift-cards-grid">
-                            {shiftData?.data?.map((shift) => (
-                                <div key={shift.id} className="shift-card">
-                                    <div className="shift-time-indicator"></div>
-                                    <div className="shift-content">
-                                        <h3 className="shift-name">{shift.shift_name}</h3>
-                                        <div className="shift-time">
-                                            <span className="time-badge start-time">{shift.start_time}</span>
-                                            <span className="time-separator">→</span>
-                                            <span className="time-badge end-time">{shift.end_time}</span>
-                                        </div>
-                                        <p className="weekly-off">Weekly Off: {shift.weekly_off_day}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </section>
-            </div>
+          <Box display="flex" justifyContent="flex-end" gap={2}>
+            <Button className="cancel-btn" onClick={() => setModalOpen(false)} color="error">
+              Cancel
+            </Button>
+            <Button variant="contained" onClick={handleSubmit} className="buttons create-btn">
+              Create
+            </Button>
+          </Box>
         </div>
-    );
+      </Modal>
+    </div>
+  );
 };
 
 export default Shifts;

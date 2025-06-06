@@ -145,7 +145,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     <div className="dropdown dropdown-right hover-group">
                         <button className="toolbar-btn">
                             <FiColumns />
-                            <span>Columns</span>
+                            <span className='hide_col'>Columns</span>
                         </button>
                         <div className="dropdown-content">
                             {columns?.map((col) => (

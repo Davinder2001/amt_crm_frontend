@@ -24,22 +24,22 @@ const ListOverview = () => {
   const { companySlug } = useCompany();
 
   const cards = [
-    { label: "Total Revenue", value: "₹350.4", icon: FaMoneyBillWave, type: "revenue", link: "/revenue" },
-    { label: "Total Sales", value: "₹574.34", extra: "+23% since last month", icon: FaShoppingCart, type: "sales", link: "/sales" },
-    { label: "Total Expenses", value: "₹874.34", extra: "+40% since last month", icon: FaWallet, type: "expenses", link: "/expenses" },
-    { label: "Total Task", value: "642.39", icon: FaTasks, type: "tasks", link: "/tasks" },
-    { label: "Total Order", value: "154", icon: FaClipboardList, type: "orders", link: "/orders" },
-    { label: "Total Earning", value: "₹10,000", icon: FaHandHoldingUsd, type: "earnings", link: "/earnings" },
+    { label: "Revenue", value: "₹350.4", icon: FaMoneyBillWave, type: "revenue", link: "/revenue" },
+    { label: "Sales", value: "₹574.34", extra: "+23% since last month", icon: FaShoppingCart, type: "sales", link: "/sales" },
+    { label: "Expenses", value: "₹874.34", extra: "+40% since last month", icon: FaWallet, type: "expenses", link: "/expenses" },
+    { label: "Task", value: "642.39", icon: FaTasks, type: "tasks", link: "/tasks" },
+    { label: "Orders", value: "154", icon: FaClipboardList, type: "orders", link: "/orders" },
+    { label: "Earning", value: "₹10,000", icon: FaHandHoldingUsd, type: "earnings", link: "/earnings" },
     { label: "New Customer", value: "950", icon: FaUserPlus, type: "customers", link: "/customers" },
     {
-      label: "Total Employees",
+      label: "Employees",
       value: isLoading ? <FaSpinner className="item-loader" /> : EmployeeCount,
       icon: FaUsers,
       type: "employees",
       link: "/hr/status-view",
     },
-    { label: "Total Vendor", value: "600", icon: FaStore, type: "vendors", link: "/vendors" },
-    { label: "Total Customer", value: "2935", icon: FaUserFriends, type: "customers", link: "/customers" },
+    { label: "Vendor", value: "600", icon: FaStore, type: "vendors", link: "/vendors" },
+    { label: "Customer", value: "2935", icon: FaUserFriends, type: "customers", link: "/customers" },
     { label: "Receiveable", value: "2935", icon: FaUserFriends, type: "receivables", link: "/receivables" },
     { label: "Payable", value: "2935", icon: FaUserFriends, type: "payables", link: "/payables" },
   ];

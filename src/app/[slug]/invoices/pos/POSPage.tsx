@@ -155,7 +155,7 @@ function POSPage() {
             </div>
             {/* center items */}
             <div className='invoice-items-wrapper'>
-                <InvoiceItems items={displayItems} onAddToCart={handleAddToCart} />
+                <InvoiceItems items={displayItems} onAddToCart={handleAddToCart} cart={cart} />
             </div>
             {/* Right: Checkout Panel */}
             <div className='checkout-panel'>

@@ -88,13 +88,13 @@
         border: 1px solid #ccc;
         padding: 0px 10px;
         margin-bottom: 20px;
-    }
 
-    .searchbar-container input {
-        width: 100%;
-        border: none;
-        padding: 8px;
-        outline: none;
+        input {
+            width: 100%;
+            border: none;
+            padding: 8px;
+            outline: none;
+        }
     }
 
     .no-items {
@@ -357,7 +357,7 @@
             border: 1px solid $feild_border;
 
             &:focus {
-               border-color: $hover-color;
+                border-color: $hover-color;
             }
         }
     }
@@ -640,7 +640,7 @@
             padding: 10px 12px;
 
             &:focus {
-               border-color: $hover-color;
+                border-color: $hover-color;
             }
 
         }
@@ -936,6 +936,71 @@
         padding: 8px;
     }
 }
+
+.searchbar-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+
+    .invoice-items-wrapper {
+
+        .searchbar-container {
+            border-radius: 50px;
+            margin: 0px 10px;
+            height: 37px;
+            overflow: hidden;
+        }
+
+        .searchbar-desktop {
+            display: none;
+        }
+
+        .searchbar-mobile {
+            display: block;
+            margin-bottom: 16px;
+
+            .icon-buttons {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+
+                .cart-icon-btn {
+                    position: relative;
+                }
+
+                .cart-badge {
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                    background-color: red;
+                    color: white;
+                    font-size: 10px;
+                    padding: 2px 5px;
+                    border-radius: 50%;
+                    line-height: 1;
+                    min-width: 16px;
+                    text-align: center;
+                }
+
+                .circle-btn {
+                    border: 1px solid $hover-color;
+                    border-radius: 50px;
+                    padding: 2px;
+                    width: 25px;
+                    height: 25px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $primary-color;
+                }
+            }
+        }
+
+    }
+
+}
+
 
 @media (max-width: 480px) {
 

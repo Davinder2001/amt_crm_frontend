@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart } from 'react-icons/fa';
+import { LuLayoutList, } from 'react-icons/lu';
+import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { FiX, FiChevronLeft, FiChevronRight, FiHeart } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
@@ -9,15 +11,19 @@ import { placeholderImg } from '@/assets/useImage';
 
 interface catMenuProps {
   items: StoreItem[];
+  cart: CartItem[];
   onAddToCart: (item: StoreItem, variant?: variations) => void;
 }
 
-const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
+const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [wishlistItems, setWishlistItems] = useState<number[]>([]);
+
+  const cartItemCount = cart.length;
+
 
   const [variantModalItem, setVariantModalItem] = useState<StoreItem | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
@@ -88,14 +94,44 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
   return (
     <>
-      <div className="searchbar-container">
-        <FaSearch />
-        <input
-          type="text"
-          placeholder="Search items..."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
+      <div className="searchbar-desktop">
+        <div className="searchbar-container">
+          <FaSearch />
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="searchbar-mobile">
+        <div className="searchbar-container">
+          <FaSearch size={20} />
+          <input
+            type="text"
+            placeholder="Search Here.."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <div className="icon-buttons">
+            <div className="icon-buttons">
+              <button className="circle-btn" title="Toggle View">
+                <LuLayoutList size={14} />
+              </button>
+              <button className="circle-btn" title="Filter">
+                <MdOutlineFilterList size={15} />
+              </button>
+            </div>
+            <button className="circle-btn cart-icon-btn" title="Cart">
+              <FaShoppingCart size={12} />
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount}</span>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {filteredItems.length === 0 ? (

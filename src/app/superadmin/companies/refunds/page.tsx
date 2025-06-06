@@ -74,7 +74,7 @@ const Refunds = () => {
                                     <td className="p-2 border">${refund.amount}</td>
                                     <td className="p-2 border">{refund.refund}</td>
                                     <td className="p-2 border space-x-2" style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                                        {refund.refund === 'refund processed' && (
+                                        {refund.refund === 'request processed' && (
                                             <>
                                                 <button
                                                     className="buttons"

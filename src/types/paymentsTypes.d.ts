@@ -3,7 +3,7 @@ interface RefundRequest {
     transaction_id: string;
     user_id: number;
     amount: number;
-    refund: 'refund processed' | 'refund approved' | 'refunded' | 'refund declined' | null;
+    refund: 'request processed' | 'refund approved' | 'refunded' | 'refund declined' | null;
     decline_reason?: string;
     created_at: string;
     updated_at: string;

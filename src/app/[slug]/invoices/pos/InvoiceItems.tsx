@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart, FaTh, FaList } from 'react-icons/fa';
+import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { FiX, FiChevronLeft, FiChevronRight, FiHeart } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
@@ -9,15 +10,22 @@ import { placeholderImg } from '@/assets/useImage';
 
 interface catMenuProps {
   items: StoreItem[];
+  cart: CartItem[];
   onAddToCart: (item: StoreItem, variant?: variations) => void;
+  onFilterClick: () => void;
+  onCartClick: () => void;
 }
 
-const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
+const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilterClick, onCartClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<StoreItem | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [wishlistItems, setWishlistItems] = useState<number[]>([]);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  const cartItemCount = cart.length;
+
 
   const [variantModalItem, setVariantModalItem] = useState<StoreItem | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: string }>({});
@@ -27,7 +35,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  console.log('wrwer', filteredItems);
+  const toggleViewMode = () => {
+    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+  };
 
 
   const toggleWishlist = (id: number) => {
@@ -88,20 +98,58 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart }) => {
 
   return (
     <>
-      <div className="searchbar-container">
-        <FaSearch />
-        <input
-          type="text"
-          placeholder="Search items..."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
+      <div className="searchbar-desktop">
+        <div className="searchbar-container">
+          <FaSearch />
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="searchbar-mobile">
+        <div className="searchbar-container">
+          <FaSearch size={20} />
+          <input
+            type="text"
+            placeholder="Search Here.."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <div className="icon-buttons">
+            <div className="icon-buttons">
+              <button
+                className="circle-btn"
+                title={viewMode === 'grid' ? 'Switch to List View' : 'Switch to Grid View'}
+                onClick={toggleViewMode}
+              >
+                {viewMode === 'grid' ? <FaList size={12} /> : <FaTh size={12} />}
+              </button>
+              <button className="circle-btn" title="Filter" onClick={onFilterClick}>
+                <MdOutlineFilterList size={15} />
+              </button>
+            </div>
+            <button className="circle-btn cart-icon-btn" title="Cart"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCartClick();
+              }}>
+              <FaShoppingCart size={12} />
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount}</span>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {filteredItems.length === 0 ? (
         <p className="no-items">No items found</p>
       ) : (
-        <ul className="item-list">
+        <ul className={`item-list ${viewMode}-view`}>
           {filteredItems.map((item, index) => {
             const firstImage = Array.isArray(item.images) && item.images.length > 0
               ? (typeof item.images[0] === 'string' ? item.images[0] : URL.createObjectURL(item.images[0]))

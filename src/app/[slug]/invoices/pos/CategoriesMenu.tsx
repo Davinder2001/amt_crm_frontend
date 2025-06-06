@@ -12,7 +12,7 @@ interface Category {
 interface CatMenuProps {
     categories: Category[];
     selectedTopCatId: number | null;
-    setSelectedTopCatId: (id: number | null) => void; // Updated to accept null
+    setSelectedTopCatId: (id: number | null) => void;
     selectedChildCatId: number | null;
     setSelectedChildCatId: (id: number | null) => void;
     expandedChildCats: number[];
@@ -41,9 +41,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
     };
 
     const renderNestedCategories = (categories: Category[]) => (
-        <div className="nested-wrapper">
+        <ul className="nested-wrapper">
             {categories.map(child => (
-                <div key={child.id}>
+                <li key={child.id}>
                     <div
                         className={`category-tab ${child.id === selectedChildCatId ? 'selected' : ''}`}
                     >
@@ -69,39 +69,97 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                     {expandedChildCats.includes(child.id) && child.children && (
                         renderNestedCategories(child.children)
                     )}
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 
     const selectedTopCategory = categories.find(cat => cat.id === selectedTopCatId);
     const childCategories = selectedTopCategory?.children || [];
 
     return (
-        <div className="categories-menu">
-            <select
-                value={selectedTopCatId ?? ''}
-                onChange={e => {
-                    const value = e.target.value;
-                    const id = value === '' ? null : parseInt(value);
-                    setSelectedTopCatId(id);
-                    setSelectedChildCatId(null);
-                    setExpandedChildCats([]);
-                }}
-                className="top-category-select"
-            >
-                <option value="">All</option>
-                {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                    </option>
-                ))}
-            </select>
+        <>
+            {/* Desktop View */}
+            <div className="desktop-categories">
+                <select
+                    value={selectedTopCatId ?? ''}
+                    onChange={e => {
+                        const value = e.target.value;
+                        const id = value === '' ? null : parseInt(value);
+                        setSelectedTopCatId(id);
+                        setSelectedChildCatId(null);
+                        setExpandedChildCats([]);
+                    }}
+                    className="top-category-select"
+                >
+                    <option value="">All</option>
+                    {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
 
-            {selectedTopCatId !== null && (
-                <div>{renderNestedCategories(childCategories)}</div>
-            )}
-        </div>
+                {selectedTopCatId !== null && (
+                    <div>{renderNestedCategories(childCategories)}</div>
+                )}
+            </div>
+
+            {/* Mobile View */}
+            <div className="mobile-categories">
+                <ul className="top-category-list">
+                    <li>
+                        <div
+                            className={`category-tab ${selectedTopCatId === null ? 'selected' : ''}`}
+                        >
+                            <button
+                                className="category-button"
+                                onClick={() => {
+                                    setSelectedTopCatId(null);
+                                    setSelectedChildCatId(null);
+                                    setExpandedChildCats([]);
+                                }}
+                            >
+                                All
+                            </button>
+                        </div>
+                    </li>
+                    {categories.map(cat => (
+                        <li key={cat.id}>
+                            <div
+                                className={`category-tab ${cat.id === selectedTopCatId ? 'selected' : ''}`}
+                            >
+                                <button
+                                    className="category-button"
+                                    onClick={() => {
+                                        setSelectedTopCatId(cat.id);
+                                        setSelectedChildCatId(null);
+                                        setExpandedChildCats([]);
+                                    }}
+                                >
+                                    {cat.name}
+                                </button>
+                                {(cat.children ?? []).length > 0 && (
+                                    <span
+                                        className="expand-icon"
+                                        onClick={() => toggleExpandChild(cat.id)}
+                                    >
+                                        {expandedChildCats.includes(cat.id) ? (
+                                            <FaChevronCircleUp />
+                                        ) : (
+                                            <FaChevronCircleDown />
+                                        )}
+                                    </span>
+                                )}
+                            </div>
+                            {expandedChildCats.includes(cat.id) && cat.children && (
+                                renderNestedCategories(cat.children)
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </>
     );
 };
 

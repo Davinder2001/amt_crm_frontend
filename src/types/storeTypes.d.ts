@@ -101,6 +101,9 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   images: (string | File)[] | File[];
   variants: variations[];
   categories: TCategories;
+  success?: boolean;
+  message?: string;
+  error?: string;
 }
 
 

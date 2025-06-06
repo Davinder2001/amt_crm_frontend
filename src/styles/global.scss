@@ -458,6 +458,17 @@ textarea::placeholder {
 }
 
 
+
+
+@media (max-width:768px) {
+     .page-content {
+            padding: 30px 10px !important;
+        }
+}
+
+
+
+
 @media (max-width:1024px) {
 
     .main .main-content {

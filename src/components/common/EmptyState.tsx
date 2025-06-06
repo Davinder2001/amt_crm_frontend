@@ -109,6 +109,16 @@ function EmptyState({
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }
         }
+
+        @media (max-width:768px) {
+          .empty-state-icon {
+          font-size: 45px;
+          animation: bounce 2s infinite;
+        }
+          .empty-state-icon-container {
+    margin-bottom: 0px;
+}
+        }
       `}</style>
         </div>
     );

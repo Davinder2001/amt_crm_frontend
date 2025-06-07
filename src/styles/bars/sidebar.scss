@@ -26,7 +26,7 @@
         padding: 10px 20px;
         border-bottom: 1px solid #efefef;
         margin-bottom: 30px;
-       
+
         a {
             text-decoration: none;
             color: $primary-color;
@@ -64,23 +64,27 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                color:  #656464;
+                color: #656464;
                 align-items: center;
                 width: 100%;
+
                 &:hover {
                     color: $hover-color;
-                svg {
-                    color: $hover-color;
+
+                    svg {
+                        color: $hover-color;
+                    }
                 }
-            }
-            svg {
-                font-size: 16px;
-                color: #656464;
-           
-            }
-            .submenu-icon {
-                font-size: 20px;
-            }
+
+                svg {
+                    font-size: 16px;
+                    color: #656464;
+
+                }
+
+                .submenu-icon {
+                    font-size: 20px;
+                }
             }
 
             .active-indicator {
@@ -91,14 +95,17 @@
                 height: 100%;
                 background-color: $primary-color;
             }
+
             &.active {
                 background-color: #DEE9F2;
-              
-            a {
-                color: $primary-color;
-                font-weight: 700;
-            }
-             &:hover svg ,svg {
+
+                a {
+                    color: $primary-color;
+                    font-weight: 700;
+                }
+
+                &:hover svg,
+                svg {
                     color: $primary-color;
                 }
             }
@@ -162,12 +169,7 @@
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        max-width: 90%;
-    }
-}
 
-@media (max-width: 468px) {
     .sidebar {
         max-width: 100%;
         width: 100% !important;

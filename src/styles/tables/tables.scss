@@ -602,6 +602,15 @@ table {
 
 @media (max-width: 768px) {
 
+    .toolbar .toolbar-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+
+        span {
+            display: none;
+        }
+    }
+
     .toolbar .dropdown-right .dropdown-content {
         right: auto;
     }

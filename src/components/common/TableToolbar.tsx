@@ -22,7 +22,7 @@ interface TableToolbarProps {
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
     downloadActions?: Action[];
-    extraLinks: Action[];
+    extraLinks?: Action[];
     leftContent?: React.ReactNode;
     onResetColumns?: () => void;
 }
@@ -162,7 +162,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 )}
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .reset-columns {
                     padding: 8px 12px;
                     cursor: pointer;

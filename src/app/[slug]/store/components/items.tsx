@@ -17,6 +17,7 @@ import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
+import { placeholderImg } from '@/assets/useImage';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -176,7 +177,13 @@ const Items: React.FC = () => {
             objectFit='cover'
           />
         ) : (
-          <span>No Image</span>
+          <Image
+            src={placeholderImg}
+            alt="no-image"
+            width={60}
+            height={60}
+            objectFit='cover'
+          />
         )
       ),
     },

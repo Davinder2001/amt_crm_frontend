@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
 
 type FilterOptions = Record<string, string[]>;
@@ -18,38 +18,28 @@ interface TableToolbarProps {
     filters?: FilterOptions;
     onFilterChange?: (field: string, value: string, checked: boolean) => void;
     columns?: Column[];
-    visibleColumns?: string[]; // Columns that should be visible
+    visibleColumns?: string[];
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
     downloadActions?: Action[];
     extraLinks: Action[];
     leftContent?: React.ReactNode;
+    onResetColumns?: () => void;
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = ({
     filters,
     onFilterChange,
     columns,
+    visibleColumns = [],
     onColumnToggle,
     actions,
     downloadActions,
     extraLinks,
+    onResetColumns,
 }) => {
-    const [selectedFilters, setSelectedFilters] = useState<FilterOptions>(() => {
-        const savedFilters = localStorage.getItem('selectedFilters');
-        return savedFilters ? JSON.parse(savedFilters) : {};
-    });
-    const [selectedColumns, setSelectedColumns] = useState<string[]>(() => {
-        const savedColumns = localStorage.getItem('selectedColumns');
-        if (savedColumns) {
-            return JSON.parse(savedColumns);
-        } else {
-            return columns?.map(col => col.key) || []; // Default to all columns being visible
-        }
-    });
+    const [selectedFilters, setSelectedFilters] = React.useState<FilterOptions>({});
 
-
-    // Handle filter changes
     const handleFilterChange = (field: string, value: string, checked: boolean) => {
         const updatedFilters = { ...selectedFilters };
         if (checked) {
@@ -58,59 +48,13 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             updatedFilters[field] = updatedFilters[field]?.filter((item) => item !== value) || [];
         }
         setSelectedFilters(updatedFilters);
-        localStorage.setItem('selectedFilters', JSON.stringify(updatedFilters));
         if (onFilterChange) {
             onFilterChange(field, value, checked);
         }
     };
 
-    // Handle column visibility toggling
-    const handleColumnToggle = (columnKey: string) => {
-        let updatedColumns = [...selectedColumns];
-
-        if (updatedColumns.includes(columnKey)) {
-            updatedColumns = updatedColumns.filter((key) => key !== columnKey);
-        } else {
-            updatedColumns.push(columnKey);
-        }
-
-        setSelectedColumns(updatedColumns);
-        localStorage.setItem('selectedColumns', JSON.stringify(updatedColumns));
-
-        // Apply the column toggle to the table (this should call your `onColumnToggle` prop)
-        if (onColumnToggle) {
-            onColumnToggle(columnKey);
-        }
-    };
-
-    // Reset to default state
-    // const handleReset = () => {
-    //     setLoading(true);
-    //     setSelectedFilters({});
-    //     setSelectedColumns(columns.map(col => col.key)); // Reset to default all columns
-    //     localStorage.removeItem('selectedFilters');
-    //     localStorage.setItem('selectedColumns', JSON.stringify(columns.map(col => col.key))); // Reset to default columns
-    //     setTimeout(() => setLoading(false), 1000); // Simulate reset delay
-    // };
-
-    // Syncing localStorage with state on changes
-    useEffect(() => {
-        // Sync selected filters and columns with localStorage
-        localStorage.setItem('selectedFilters', JSON.stringify(selectedFilters));
-        localStorage.setItem('selectedColumns', JSON.stringify(selectedColumns));
-    }, [selectedFilters, selectedColumns]);
-
-    // Load selected columns from localStorage on page load
-    useEffect(() => {
-        const savedColumns = JSON.parse(localStorage.getItem('selectedColumns') || '[]');
-        if (savedColumns.length > 0) {
-            setSelectedColumns(savedColumns); // Apply saved selected columns
-        }
-    }, []);
-
     return (
         <div className="toolbar">
-            {/* Left Side: Filter */}
             <div className="left-group">
                 {filters && Object.keys(filters).length > 0 && (
                     <div className="dropdown dropdown-left hover-group">
@@ -141,7 +85,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 )}
             </div>
 
-            {/* Right Side: Columns & Actions */}
             <div className="right-group">
                 {columns && columns.length > 0 && (
                     <div className="dropdown dropdown-right hover-group">
@@ -150,12 +93,15 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                             <span className='hide_col'>Columns</span>
                         </button>
                         <div className="dropdown-content">
+                            <div className="reset-columns" onClick={onResetColumns}>
+                                Reset to Default
+                            </div>
                             {columns?.map((col) => (
                                 <label key={col.key} className="option">
                                     <input
                                         type="checkbox"
-                                        checked={selectedColumns.includes(col.key)}
-                                        onChange={() => handleColumnToggle(col.key)}
+                                        checked={visibleColumns.includes(col.key)}
+                                        onChange={() => onColumnToggle?.(col.key)}
                                     />
                                     {col.label}
                                 </label>
@@ -163,41 +109,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     </div>
                 )}
-                {/* Reset Button */}
-                {/* <div className="reset-group">
-                    <button
-                        onClick={handleReset}
-                        className="reset-btn"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <div className="loading-spinner"></div>
-                        ) : (
-                            <FiRefreshCw />
-                        )}
-                        <span>Reset</span>
-                    </button>
-                </div> */}
-                {/* <div className="dropdown dropdown-right">
-                    <button onClick={() => toggleDropdown('actions')}
-                        className={` ${openDropdown === 'filter' ? 'active' : ''}`}
-                    >
-                        <FiSettings />
-                        <span>Actions</span>
-                    </button>
-                    {openDropdown === 'actions' && (
-                        <div className="dropdown-content show">
-                            <ul className="action-list">
-                                {actions && actions.map((action, i) => (
-                                    <li key={i} onClick={action.onClick} className="action-item">
-                                        {action.icon && <span className="a-icon">{action.icon}</span>}
-                                        <span>{action.label}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </div> */}
+
                 {downloadActions && downloadActions.length > 0 && (
                     <div className="dropdown dropdown-right hover-group">
                         <button className="toolbar-btn">
@@ -248,68 +160,55 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     </div>
                 )}
-
-
-                <style>{`
-    .action-icons-horizontal {
-        display: flex;
-        gap: 10px;
-    }
-
-    .action-tooltip {
-        position: relative;
-        display: inline-block;
-    }
-
-    .action-icon-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        gap: 5px;
-    }
-
-    .action-icon-btn:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-        border-radius: 4px;
-    }
-
-    i {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .tooltip-text {
-        visibility: hidden;
-        width: max-content;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        border-radius: 4px;
-        padding: 5px 8px;
-        position: absolute;
-        z-index: 1;
-        bottom: 30px;
-        right: 0;
-        transform: translateX(-0%);
-        opacity: 0;
-        transition: opacity 0.2s;
-        white-space: nowrap;
-        font-size: 12px;
-    }
-
-    .action-tooltip:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
-    }
-`}</style>
-
             </div>
+
+            <style jsx>{`
+                .reset-columns {
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    background: #f0f0f0;
+                    border-bottom: 1px solid #ddd;
+                    font-weight: 500;
+                    color: #333;
+                }
+                .reset-columns:hover {
+                    background: #e0e0e0;
+                }
+                .dropdown-content {
+                    max-height: 400px;
+                    overflow-y: auto;
+                }
+                .action-icons-horizontal {
+                    display: flex;
+                    gap: 10px;
+                }
+                .action-tooltip {
+                    position: relative;
+                    display: inline-block;
+                }
+                .tooltip-text {
+                    visibility: hidden;
+                    width: max-content;
+                    background-color: black;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 4px;
+                    padding: 5px 8px;
+                    position: absolute;
+                    z-index: 1;
+                    bottom: 30px;
+                    right: 0;
+                    transform: translateX(-0%);
+                    opacity: 0;
+                    transition: opacity 0.2s;
+                    white-space: nowrap;
+                    font-size: 12px;
+                }
+                .action-tooltip:hover .tooltip-text {
+                    visibility: visible;
+                    opacity: 1;
+                }
+            `}</style>
         </div>
     );
 };

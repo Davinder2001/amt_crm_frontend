@@ -23,6 +23,7 @@ const LeavesAndHolidays: React.FC = () => {
           <FaCalendarAlt style={{ marginRight: 5 }} />
           Holidays
         </button>
+        
       </div>
 
       <div className="tab-content">

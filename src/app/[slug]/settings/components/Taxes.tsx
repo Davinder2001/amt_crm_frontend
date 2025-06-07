@@ -81,32 +81,31 @@ const TaxesPage = () => {
 
         try {
             setIsUpdating(true);
+
             if (form.id) {
+                // Update tax
                 const response: ApiResponse = await updateTax({
                     id: form.id,
                     name: form.name,
                     rate: parseFloat(form.rate),
                 }).unwrap();
-                if (response.status) {
-                    toast.success(response.message);
-                    handleClose();
-                    refetch();
-                } else {
-                    toast.error(response.message || response.error || 'Failed to update tax');
-                }
+
+                toast.success(response.message || 'Tax updated successfully');
+                handleClose(); // ✅ close after update
+                refetch();
+
             } else {
+                // Create tax
                 const response: ApiResponse = await createTax({
                     name: form.name,
                     rate: parseFloat(form.rate),
                 }).unwrap();
-                if (response.status) {
-                    toast.success(response.message);
-                    handleClose();
-                    refetch();
-                } else {
-                    toast.error(response.message || response.error || 'Failed to create tax');
-                }
+
+                toast.success(response.message || 'Tax created successfully');
+                handleClose(); // ✅ close after create
+                refetch();
             }
+
         } catch (err: unknown) {
             const error = err as ApiError;
             toast.error(error?.data?.message || error?.data?.error || 'Something went wrong');
@@ -114,6 +113,7 @@ const TaxesPage = () => {
             setIsUpdating(false);
         }
     };
+
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this tax?')) return;

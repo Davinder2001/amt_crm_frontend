@@ -51,7 +51,7 @@ const HolidayForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
                     <label>Day</label>
                     <input
                         ref={dateInputRef}
-                        name="date"
+                        name="day"
                         value={form.date}
                         onChange={handleChange}
                         placeholder="Select Date"

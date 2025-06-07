@@ -95,7 +95,7 @@ const HolidayList = () => {
     return (
         <div className="holiday-list">
             {!noHolidays && (
-                <div className="add-holiday-btn">
+                <div className="add-holiday-leave-btn-wrapper">
                     <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
                         Add Holiday
                     </button>
@@ -142,9 +142,12 @@ const HolidayList = () => {
                     title="No Holidays Found"
                     message="You haven't added any holidays yet."
                     action={
-                        <button className="buttons" onClick={() => setShowForm(true)} >
-                           <FaPlus /> Add Holiday
+                        <div className="add-holiday-action">
+
+                        <button className="buttons" onClick={() => setShowForm(true)}>
+                          <FaPlus />  Add Holiday
                         </button>
+                        </div>
                     }
                 />
             )}

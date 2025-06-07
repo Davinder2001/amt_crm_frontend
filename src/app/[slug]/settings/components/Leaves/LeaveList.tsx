@@ -93,7 +93,7 @@ const LeaveList = () => {
   return (
     <div className="leave-list">
       {!noLeaves && (
-        <div className="add-leave-btn">
+        <div className="add-holiday-leave-btn-wrapper">
           <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
             Add Leave
           </button>

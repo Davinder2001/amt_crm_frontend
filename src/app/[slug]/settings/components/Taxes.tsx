@@ -11,7 +11,6 @@ import {
     Box,
     IconButton,
     TextField,
-
 } from '@mui/material';
 import { FaPlus, FaTrash, FaEdit, FaTasks } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
@@ -19,9 +18,29 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
-
-// Import your custom Modal
 import Modal from '@/components/common/Modal';
+
+// Types
+type Tax = {
+    id: number;
+    name: string;
+    rate: number;
+};
+
+type ApiResponse = {
+    status?: boolean;
+    message?: string;
+    data?: unknown;
+    error?: string;
+};
+
+type ApiError = {
+    data?: {
+        message?: string;
+        error?: string;
+        errors?: Record<string, string[]>;
+    };
+};
 
 const TaxesPage = () => {
     const { setTitle } = useBreadcrumb();
@@ -59,17 +78,38 @@ const TaxesPage = () => {
 
     const handleSubmit = async () => {
         if (!form.name || !form.rate) return;
+
         try {
             setIsUpdating(true);
             if (form.id) {
-                await updateTax({ id: form.id, name: form.name, rate: parseFloat(form.rate) }).unwrap();
-                toast.success('Tax updated successfully');
+                const response: ApiResponse = await updateTax({
+                    id: form.id,
+                    name: form.name,
+                    rate: parseFloat(form.rate),
+                }).unwrap();
+                if (response.status) {
+                    toast.success(response.message);
+                    handleClose();
+                    refetch();
+                } else {
+                    toast.error(response.message || response.error || 'Failed to update tax');
+                }
             } else {
-                await createTax({ name: form.name, rate: parseFloat(form.rate) }).unwrap();
-                toast.success('Tax created successfully');
+                const response: ApiResponse = await createTax({
+                    name: form.name,
+                    rate: parseFloat(form.rate),
+                }).unwrap();
+                if (response.status) {
+                    toast.success(response.message);
+                    handleClose();
+                    refetch();
+                } else {
+                    toast.error(response.message || response.error || 'Failed to create tax');
+                }
             }
-            handleClose();
-            refetch();
+        } catch (err: unknown) {
+            const error = err as ApiError;
+            toast.error(error?.data?.message || error?.data?.error || 'Something went wrong');
         } finally {
             setIsUpdating(false);
         }
@@ -77,12 +117,18 @@ const TaxesPage = () => {
 
     const handleDelete = async (id: number) => {
         if (!confirm('Are you sure you want to delete this tax?')) return;
+
         try {
-            await deleteTax(id).unwrap();
-            toast.success('Tax deleted');
-            refetch();
-        } catch {
-            toast.error('Failed to delete tax');
+            const response: ApiResponse = await deleteTax(id).unwrap();
+            if (response.status) {
+                toast.success(response.message);
+                refetch();
+            } else {
+                toast.error(response.message || response.error || 'Failed to delete tax');
+            }
+        } catch (err: unknown) {
+            const error = err as ApiError;
+            toast.error(error?.data?.message || error?.data?.error || 'Failed to delete tax');
         }
     };
 
@@ -138,7 +184,6 @@ const TaxesPage = () => {
                 <ResponsiveTable data={taxesData?.data || []} columns={columns} />
             )}
 
-            {/* Using your custom Modal component here */}
             <Modal
                 isOpen={modalOpen}
                 onClose={handleClose}

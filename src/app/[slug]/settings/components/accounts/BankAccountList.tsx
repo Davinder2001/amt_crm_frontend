@@ -88,7 +88,7 @@ const BankAccountList = () => {
     return (
         <div className="bank-account-list">
             {!noAccounts && (
-                <div className="add-bank-btn-outer">
+                <div className="add-bank-btn">
                     <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
                         Add Bank Account
                     </button>

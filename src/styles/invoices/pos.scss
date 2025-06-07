@@ -1227,7 +1227,7 @@
 
 @media (max-width: 1600px) {
     .invoice-items-wrapper .item-list.grid-view {
-        grid-template-columns: repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -1276,6 +1276,12 @@
         border-top: 1px solid $border-color;
     }
 
+    .inner-tab.danger {
+        span {
+            display: none;
+        }
+    }
+
     .checkout-panel .tab,
     .checkout-panel .inner-tab {
         padding: 8px;
@@ -1305,8 +1311,12 @@
 
     .invoice-items-wrapper {
 
+        .item-list.grid-view .item .item-details {
+            padding: 5px 10px;
+        }
+
         .searchbar-container {
-            background-color: #fff;
+            background-color: $white;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -1329,6 +1339,11 @@
 
             .searchbar-container {
                 margin-bottom: 0;
+                height: 45px;
+
+                input {
+                    height: 35px;
+                }
             }
 
             .icon-buttons {

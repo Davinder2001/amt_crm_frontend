@@ -253,7 +253,7 @@ export default function CartTabContent({
                 })}
                 <button className="inner-tab danger" onClick={handleClearAll}>
                     <FiTrash2 style={{ marginRight: 5 }} />
-                    Clear All
+                    <span>Clear All</span>
                 </button>
             </div>
 

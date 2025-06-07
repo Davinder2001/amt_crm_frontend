@@ -1227,7 +1227,7 @@
 
 @media (max-width: 1600px) {
     .invoice-items-wrapper .item-list.grid-view {
-        grid-template-columns: repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -1274,6 +1274,12 @@
         max-width: 100%;
         border-left: none;
         border-top: 1px solid $border-color;
+    }
+
+    .inner-tab.danger {
+        span {
+            display: none;
+        }
     }
 
     .checkout-panel .tab,
@@ -1330,9 +1336,10 @@
             .searchbar-container {
                 margin-bottom: 0;
                 height: 45px;
-               input{
-                height: 35px;
-               }
+
+                input {
+                    height: 35px;
+                }
             }
 
             .icon-buttons {

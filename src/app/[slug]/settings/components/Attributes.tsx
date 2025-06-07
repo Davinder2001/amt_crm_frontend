@@ -139,19 +139,21 @@ const Attributes = () => {
             label: 'Actions',
             render: (attr: Attribute) => (
                 <>
-                    <button onClick={() => handleEdit(attr.id)} className="edit-btn">
-                        <FaEdit />
-                    </button>
-                    <button onClick={() => handleDelete(attr.id)} className="delete-btn">
-                        <FaTrash />
-                    </button>
+                    <div className="attribute-actions-btn-outer">
+                        <button onClick={() => handleEdit(attr.id)} className="edit-btn">
+                            <FaEdit />
+                        </button>
+                        <button onClick={() => handleDelete(attr.id)} className="delete-btn">
+                            <FaTrash />
+                        </button>
+                    </div>
                 </>
             ),
         },
     ];
 
     return (
-        <div className="Attribute-form-outer">
+        <div className="attribute-form-outer">
             {(attributes?.length ?? 0) > 0 && (
                 <div className="modal-actions">
                     <button className="buttons" onClick={() => setIsModalOpen(true)}>
@@ -229,11 +231,11 @@ const Attributes = () => {
                 </button>
 
                 <div className="modal-actions">
-                    <button onClick={handleCreate} className="buttons">
-                        {editAttributeId ? 'Update Attribute' : 'Add Attribute'}
-                    </button>
                     <button onClick={handleModalClose} className="buttons">
                         Cancel
+                    </button>
+                    <button onClick={handleCreate} className="buttons">
+                        {editAttributeId ? 'Update Attribute' : 'Add Attribute'}
                     </button>
                 </div>
             </Modal>

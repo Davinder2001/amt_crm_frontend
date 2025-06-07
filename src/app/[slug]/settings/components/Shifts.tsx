@@ -33,6 +33,8 @@ const Shifts: React.FC = () => {
     weekly_off_day: '',
   });
 
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
+
   const startTimeRef = React.useRef<HTMLInputElement>(null);
   const endTimeRef = React.useRef<HTMLInputElement>(null);
 
@@ -57,24 +59,45 @@ const Shifts: React.FC = () => {
       end_time: '',
       weekly_off_day: '',
     });
+    setFormErrors({});
     setEditId(null);
   };
 
   const handleSubmit = async () => {
     try {
-      if (editId !== null) {
-        await updateShift({ id: editId, ...form }).unwrap();
+      const formattedForm = {
+        ...form,
+        start_time: form.start_time.slice(0, 5),
+        end_time: form.end_time.slice(0, 5),
+      };
 
+      if (editId !== null) {
+        await updateShift({ id: editId, ...formattedForm }).unwrap();
         toast.success('Shift updated successfully!');
       } else {
-        await createShift(form).unwrap();
+        await createShift(formattedForm).unwrap();
         toast.success('Shift created successfully!');
       }
+
       resetForm();
       setModalOpen(false);
       refetch();
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      if (
+        typeof err === 'object' &&
+        err !== null &&
+        'data' in err &&
+        typeof (err as { data?: unknown }).data === 'object' &&
+        (err as { data: unknown }).data !== null &&
+        'errors' in (err as { data: { errors?: unknown } }).data
+      ) {
+        const backendErrors = (err as { data: { errors: Record<string, string[]> } }).data.errors;
+        const parsedErrors: Partial<Record<keyof typeof form, string>> = {};
+        Object.entries(backendErrors).forEach(([key, value]) => {
+          parsedErrors[key as keyof typeof form] = (value as string[])[0];
+        });
+        setFormErrors(parsedErrors);
+      }
       toast.error(editId ? 'Failed to update shift' : 'Failed to create shift');
     }
   };
@@ -110,13 +133,12 @@ const Shifts: React.FC = () => {
   };
 
   const columns: Column<Shift>[] = [
-    { label: 'Shift Name', key: 'shift_name' as keyof Shift },
-    { label: 'Start Time', key: 'start_time' as keyof Shift },
-    { label: 'End Time', key: 'end_time' as keyof Shift },
-    { label: 'Weekly Off', key: 'weekly_off_day' as keyof Shift },
+    { label: 'Shift Name', key: 'shift_name' },
+    { label: 'Start Time', key: 'start_time' },
+    { label: 'End Time', key: 'end_time' },
+    { label: 'Weekly Off', key: 'weekly_off_day' },
     {
       label: 'Actions',
-      key: undefined,
       render: (shift: Shift) => (
         <div className="table-actions">
           <button className="edit-btn" onClick={() => handleEdit(shift)}>
@@ -175,6 +197,8 @@ const Shifts: React.FC = () => {
                 fullWidth
                 size="small"
                 placeholder="Enter Shift Name"
+                error={!!formErrors.shift_name}
+                helperText={formErrors.shift_name}
               />
             </Box>
 
@@ -189,6 +213,8 @@ const Shifts: React.FC = () => {
                 onChange={handleChange}
                 fullWidth
                 size="small"
+                error={!!formErrors.start_time}
+                helperText={formErrors.start_time}
               />
             </Box>
 
@@ -203,15 +229,19 @@ const Shifts: React.FC = () => {
                 onChange={handleChange}
                 fullWidth
                 size="small"
+                error={!!formErrors.end_time}
+                helperText={formErrors.end_time}
               />
             </Box>
+
             <div>
+              <label htmlFor="weekly_off_day">Weekly Off Day</label>
               <select
                 id="weekly_off_day"
                 name="weekly_off_day"
                 value={form.weekly_off_day}
                 onChange={handleSelectChange}
-                className="form-input"
+                className={`form-input ${formErrors.weekly_off_day ? 'error' : ''}`}
               >
                 <option value="" disabled>
                   Select Weekly Off Day
@@ -222,10 +252,15 @@ const Shifts: React.FC = () => {
                   </option>
                 ))}
               </select>
+              {formErrors.weekly_off_day && (
+                <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                  {formErrors.weekly_off_day}
+                </div>
+              )}
             </div>
           </div>
 
-          <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
             <button
               className="cancel-btn buttons"
               onClick={() => {

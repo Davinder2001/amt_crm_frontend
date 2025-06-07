@@ -173,7 +173,7 @@
       }
 
       .delete-btn {
-        color:$primary-color;
+        color: $primary-color;
       }
 
       .edit-btn {
@@ -207,6 +207,31 @@
     }
   }
 
+  .attribute-form-outer {
+    .attributes-wrapper {
+      .responsive-table {
+        .attribute-actions-btn-outer {
+          display: flex;
+          justify-content: space-around;
+
+          button {
+            svg{
+              font-size: 16px;
+            }
+          }
+
+          .edit-btn {
+            color: $primary-color;
+          }
+
+          .delete-btn {
+            color: $danger-color;
+          }
+
+        }
+      }
+    }
+  }
 
   // compact version *************
   .empty-attributes-state {

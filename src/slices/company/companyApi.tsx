@@ -23,10 +23,10 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
     updateShift: builder.mutation<{ message: string; data: Shift }, UpdateShiftPayload>({
-      query: (body) => ({
-        url: `shifts`, // no ID in the URL
+      query: ({ id, ...body }) => ({
+        url: `shifts/${id}`, // now id is extracted from payload
         method: "PUT",
-        body, // must include `id` in the body
+        body,
         credentials: "include",
       }),
       invalidatesTags: ["Company"],
@@ -51,7 +51,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
       providesTags: ["Company"],
     }),
 
-    createTax: builder.mutation<{ message: string; data: Tax }, CreateTaxPayload>({
+    createTax: builder.mutation<{ status?: boolean, error?: string, message?: string; data: Tax }, CreateTaxPayload>({
       query: (payload) => ({
         url: "taxes",
         method: "POST",

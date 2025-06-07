@@ -6,8 +6,9 @@ import {
     useCreateAttributeMutation,
     useDeleteAttributeMutation,
     useToggleAttributeStatusMutation,
+    useUpdateAttributeMutation,
 } from '@/slices/store/storeApi';
-import { FaPlus, FaTrash, FaTimes, FaTasks } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaTimes, FaTasks, FaEdit } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
@@ -24,10 +25,12 @@ const Attributes = () => {
     const [createAttribute] = useCreateAttributeMutation();
     const [deleteAttribute] = useDeleteAttributeMutation();
     const [toggleStatus] = useToggleAttributeStatusMutation();
+    const [updateAttribute] = useUpdateAttributeMutation();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newAttributeName, setNewAttributeName] = useState('');
     const [values, setValues] = useState<string[]>(['']);
+    const [editAttributeId, setEditAttributeId] = useState<number | null>(null);
 
     const handleValueChange = (index: number, newValue: string) => {
         const updated = [...values];
@@ -42,20 +45,49 @@ const Attributes = () => {
         setValues(updated);
     };
 
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setNewAttributeName('');
+        setValues(['']);
+        setEditAttributeId(null);
+    };
+
     const handleCreate = async () => {
         if (!newAttributeName.trim()) return;
         const filteredValues = values.filter((v) => v.trim() !== '');
         if (filteredValues.length === 0) return;
 
         try {
-            await createAttribute({
-                name: newAttributeName,
-                values: filteredValues,
-            }).unwrap();
-
+            if (editAttributeId !== null) {
+                await updateAttribute({
+                    id: editAttributeId,
+                    data: {
+                        name: newAttributeName,
+                        values: filteredValues, // ✅ Send only strings
+                    },
+                }).unwrap();
+                toast.success('Attribute updated');
+            } else {
+                await createAttribute({
+                    name: newAttributeName,
+                    values: filteredValues,
+                }).unwrap();
+                toast.success('Attribute created');
+            }
+            handleModalClose();
         } catch {
-            toast.error('Failed to create attribute');
+            toast.error(editAttributeId ? 'Failed to update attribute' : 'Failed to create attribute');
         }
+    };
+
+    const handleEdit = (id: number) => {
+        const attr = attributes?.find(a => a.id === id);
+        if (!attr) return;
+
+        setNewAttributeName(attr.name);
+        setValues(attr.values?.map(v => v.value) || ['']);
+        setEditAttributeId(id);
+        setIsModalOpen(true);
     };
 
     const handleDelete = async (id: number) => {
@@ -103,13 +135,17 @@ const Attributes = () => {
                 </select>
             ),
         },
-
         {
             label: 'Actions',
             render: (attr: Attribute) => (
-                <button onClick={() => handleDelete(attr.id)} className="delete-btn">
-                    <FaTrash />
-                </button>
+                <>
+                    <button onClick={() => handleEdit(attr.id)} className="edit-btn">
+                        <FaEdit />
+                    </button>
+                    <button onClick={() => handleDelete(attr.id)} className="delete-btn">
+                        <FaTrash />
+                    </button>
+                </>
             ),
         },
     ];
@@ -121,9 +157,7 @@ const Attributes = () => {
                     <button className="buttons" onClick={() => setIsModalOpen(true)}>
                         <FaPlus /> Add Attribute
                     </button>
-
                 </div>
-
             )}
 
             {(attributes?.length ?? 0) === 0 ? (
@@ -138,19 +172,20 @@ const Attributes = () => {
                     }
                 />
             ) : (
-                <ResponsiveTable
-  data={[...(attributes || [])].sort((a, b) =>
-    a.status === 'active' && b.status !== 'active' ? -1 : 1
-  )}
-  columns={columns}
-/>
-
+                <div className="attributes-wrapper">
+                    <ResponsiveTable
+                        data={[...(attributes || [])].sort((a, b) =>
+                            a.status === 'active' && b.status !== 'active' ? -1 : 1
+                        )}
+                        columns={columns}
+                    />
+                </div>
             )}
 
             <Modal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                title="Create New Attribute"
+                onClose={handleModalClose}
+                title={editAttributeId ? 'Edit Attribute' : 'Create New Attribute'}
                 width="500px"
             >
                 <Typography variant="subtitle2" gutterBottom>
@@ -163,15 +198,14 @@ const Attributes = () => {
                     variant="outlined"
                     size="small"
                     sx={{ mb: 2 }}
-                    placeholder='Enter attribute name'
+                    placeholder="Enter attribute name"
                 />
-
 
                 <Typography variant="subtitle2" gutterBottom>
                     Attribute Values
                 </Typography>
 
-                <div className="values-scroll-container" >
+                <div className="values-scroll-container">
                     {values.map((val, index) => (
                         <Box key={index} className="value-row">
                             <TextField
@@ -190,24 +224,20 @@ const Attributes = () => {
                     ))}
                 </div>
 
-                <button
-                    onClick={addNewValueField}
-                    className="value-add-button "
-                >
-                    <FaPlus />
-                    Add Another Value
+                <button onClick={addNewValueField} className="value-add-button">
+                    <FaPlus /> Add Another Value
                 </button>
 
                 <div className="modal-actions">
-                    <button onClick={handleCreate} className="buttons" >
-                        Add Attribute
+                    <button onClick={handleCreate} className="buttons">
+                        {editAttributeId ? 'Update Attribute' : 'Add Attribute'}
                     </button>
-                    <button onClick={() => setIsModalOpen(false)} className="buttons">
+                    <button onClick={handleModalClose} className="buttons">
                         Cancel
                     </button>
                 </div>
             </Modal>
-        </div >
+        </div>
     );
 };
 

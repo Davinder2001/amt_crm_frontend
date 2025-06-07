@@ -93,7 +93,7 @@ const storeApi = storeApiSlice.injectEndpoints({
 
 
     // 🆕 Update an attribute
-    updateAttribute: builder.mutation<Attribute, { id: number; data: Partial<Attribute> }>({
+    updateAttribute: builder.mutation<Attribute, { id: number; data: { name: string; values: string[] } }>({
       query: ({ id, data }) => ({
         url: `attributes/${id}`,
         method: "PUT",

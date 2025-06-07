@@ -14,7 +14,6 @@ import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
 
 import { FaPlus, FaCalendar, FaEdit, FaTrash } from 'react-icons/fa';
-import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 
 const HolidayList = () => {
@@ -143,9 +142,9 @@ const HolidayList = () => {
                     title="No Holidays Found"
                     message="You haven't added any holidays yet."
                     action={
-                        <Button className="buttons" onClick={() => setShowForm(true)} startIcon={<FaPlus />}>
-                            Add Holiday
-                        </Button>
+                        <button className="buttons" onClick={() => setShowForm(true)} >
+                           <FaPlus /> Add Holiday
+                        </button>
                     }
                 />
             )}

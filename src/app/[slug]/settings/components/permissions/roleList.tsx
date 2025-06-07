@@ -64,7 +64,7 @@
               setIsEditModalOpen(true);
             }} color="#384b70" />
 
-            <FaTrash onClick={() => handleDeleteRole(role.id)} color="#384b70" />
+            <FaTrash onClick={() => handleDeleteRole(role.id)} color="#ff0000" />
           </div>
         ),
       },

@@ -4,8 +4,8 @@
 
 
 
-  
-  
+
+
   // Container for action buttons inside tax-box
   .action-buttons {
     display: flex;
@@ -13,10 +13,11 @@
     justify-content: flex-start;
 
     svg {
-      font-size: 18px;
+      font-size: 16px;
     }
+
   }
-  
+
   // Update/Add button inside the form
   .update-add-btn {
     background-color: $primary-color;
@@ -28,16 +29,18 @@
       margin: 0px;
     }
   }
-  
+
   // Edit button style
   .edit-btn {
     color: $primary-color;
-    transition: color 0.2s ease;
- 
-  }
-  
 
-  .buttons{
+  }
+
+  .delete-btn {
+    color: $danger-color;
+  }
+
+  .buttons {
     background-color: $primary-color;
     color: $white;
     display: flex;
@@ -52,7 +55,7 @@
     background-color: $primary-color;
     color: $white;
   }
-  
 
-  
+
+
 }

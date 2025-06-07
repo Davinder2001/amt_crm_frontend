@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -162,6 +163,23 @@ const Items: React.FC = () => {
 
   const columns = [
     // Visible & filtered columns
+    {
+      label: 'Image',
+      key: 'featured_image_url' as keyof StoreItem,
+      render: (item: StoreItem) => (
+        item.featured_image ? (
+          <Image
+            src={item.featured_image}
+            alt={item.name}
+            width={60}
+            height={60}
+            objectFit='cover'
+          />
+        ) : (
+          <span>No Image</span>
+        )
+      ),
+    },
     ...allColumns
       .filter((col) => visibleColumns.includes(col.key as string))
       .map((col) => {

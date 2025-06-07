@@ -23,14 +23,15 @@ const companyApi = companyCreateSlice.injectEndpoints({
     }),
 
     updateShift: builder.mutation<{ message: string; data: Shift }, UpdateShiftPayload>({
-      query: ({ id, ...body }) => ({
-        url: `shifts/${id}`,
-        method: "PATCH",
-        body,
+      query: (body) => ({
+        url: `shifts`, // no ID in the URL
+        method: "PUT",
+        body, // must include `id` in the body
         credentials: "include",
       }),
       invalidatesTags: ["Company"],
     }),
+
     // In companyApi (you likely missed this endpoint)
     deleteShift: builder.mutation<{ message: string }, number>({
       query: (id) => ({

@@ -3,15 +3,16 @@
 import React, { useState } from 'react';
 import {
   useCreateShiftMutation,
+  useDeleteShiftMutation,
+  useUpdateShiftMutation,
   useFetchCompanyShiftsQuery,
 } from '@/slices/company/companyApi';
 import { toast } from 'react-toastify';
 import {
   Box,
   TextField,
-
 } from '@mui/material';
-import { FaPlus, FaTasks } from 'react-icons/fa';
+import { FaPlus, FaTasks, FaTrash, FaEdit } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
@@ -19,8 +20,12 @@ import Modal from '@/components/common/Modal';
 const Shifts: React.FC = () => {
   const { data, refetch } = useFetchCompanyShiftsQuery();
   const [createShift] = useCreateShiftMutation();
+  const [updateShift] = useUpdateShiftMutation();
+  const [deleteShift] = useDeleteShiftMutation();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+
   const [form, setForm] = useState({
     shift_name: '',
     start_time: '',
@@ -32,35 +37,97 @@ const Shifts: React.FC = () => {
   const endTimeRef = React.useRef<HTMLInputElement>(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name!]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const resetForm = () => {
+    setForm({
+      shift_name: '',
+      start_time: '',
+      end_time: '',
+      weekly_off_day: '',
+    });
+    setEditId(null);
   };
 
   const handleSubmit = async () => {
     try {
-      await createShift(form).unwrap();
-      toast.success('Shift created successfully!');
-      setForm({
-        shift_name: '',
-        start_time: '',
-        end_time: '',
-        weekly_off_day: '',
-      });
+      if (editId !== null) {
+        await updateShift({ id: editId, ...form }).unwrap();
+
+        toast.success('Shift updated successfully!');
+      } else {
+        await createShift(form).unwrap();
+        toast.success('Shift created successfully!');
+      }
+      resetForm();
       setModalOpen(false);
       refetch();
     } catch (err) {
       console.error(err);
-      toast.error('Failed to create shift');
+      toast.error(editId ? 'Failed to update shift' : 'Failed to create shift');
     }
   };
 
-  const columns: { label: string; key: keyof Shift }[] = [
-    { label: 'Shift Name', key: 'shift_name' },
-    { label: 'Start Time', key: 'start_time' },
-    { label: 'End Time', key: 'end_time' },
-    { label: 'Weekly Off', key: 'weekly_off_day' },
+  const handleEdit = (shift: Shift) => {
+    setForm({
+      shift_name: shift.shift_name,
+      start_time: shift.start_time,
+      end_time: shift.end_time,
+      weekly_off_day: shift.weekly_off_day,
+    });
+    setEditId(shift.id);
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this shift?')) {
+      try {
+        await deleteShift(id).unwrap();
+        toast.success('Shift deleted successfully!');
+        refetch();
+      } catch (err) {
+        console.error(err);
+        toast.error('Failed to delete shift');
+      }
+    }
+  };
+
+  type Column<T> = {
+    label: string;
+    key?: keyof T;
+    render?: (row: T) => React.ReactNode;
+  };
+
+  const columns: Column<Shift>[] = [
+    { label: 'Shift Name', key: 'shift_name' as keyof Shift },
+    { label: 'Start Time', key: 'start_time' as keyof Shift },
+    { label: 'End Time', key: 'end_time' as keyof Shift },
+    { label: 'Weekly Off', key: 'weekly_off_day' as keyof Shift },
+    {
+      label: 'Actions',
+      key: undefined,
+      render: (shift: Shift) => (
+        <div className="table-actions">
+          <button className="edit-btn" onClick={() => handleEdit(shift)}>
+            <FaEdit />
+          </button>
+          <button className="delete-btn" onClick={() => handleDelete(shift.id)}>
+            <FaTrash />
+          </button>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -90,12 +157,14 @@ const Shifts: React.FC = () => {
 
       <Modal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title="Create New Shift"
+        onClose={() => {
+          setModalOpen(false);
+          resetForm();
+        }}
+        title={editId !== null ? 'Edit Shift' : 'Create New Shift'}
       >
         <div className="modal-content">
           <div className="shift-form-inner">
-
             <Box sx={{ mb: 2 }}>
               <label htmlFor="shift_name">Shift Name</label>
               <TextField
@@ -105,7 +174,7 @@ const Shifts: React.FC = () => {
                 onChange={handleChange}
                 fullWidth
                 size="small"
-                placeholder='Enter Shift Name'
+                placeholder="Enter Shift Name"
               />
             </Box>
 
@@ -136,14 +205,12 @@ const Shifts: React.FC = () => {
                 size="small"
               />
             </Box>
-
-            <Box sx={{ mb: 3 }}>
-              <label htmlFor="weekly_off_day">Weekly Off Day</label>
+            <div>
               <select
                 id="weekly_off_day"
                 name="weekly_off_day"
                 value={form.weekly_off_day}
-                onChange={handleChange}
+                onChange={handleSelectChange}
                 className="form-input"
               >
                 <option value="" disabled>
@@ -155,15 +222,21 @@ const Shifts: React.FC = () => {
                   </option>
                 ))}
               </select>
-            </Box>
-
+            </div>
           </div>
+
           <Box display="flex" justifyContent="flex-end" gap={2}>
-            <button className="cancel-btn buttons" onClick={() => setModalOpen(false)} color="error">
+            <button
+              className="cancel-btn buttons"
+              onClick={() => {
+                setModalOpen(false);
+                resetForm();
+              }}
+            >
               Cancel
             </button>
             <button onClick={handleSubmit} className="buttons create-btn">
-              Create
+              {editId !== null ? 'Update' : 'Create'}
             </button>
           </Box>
         </div>

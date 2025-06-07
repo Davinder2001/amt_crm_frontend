@@ -14,7 +14,6 @@ import Modal from '@/components/common/Modal';
 import LeaveForm from './LeaveForm';
 
 import { toast } from 'react-toastify';
-import { Button } from '@mui/material';
 import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
 
 const LeaveList = () => {
@@ -135,9 +134,9 @@ const LeaveList = () => {
           title="No Leaves Found"
           message="You haven't added any leave policies yet."
           action={
-            <Button className="buttons" onClick={() => setShowForm(true)} startIcon={<FaPlus />}>
-              Add Leave
-            </Button>
+            <button className="buttons" onClick={() => setShowForm(true)}>
+            <FaPlus /> Add Leave
+            </button>
           }
         />
       )}

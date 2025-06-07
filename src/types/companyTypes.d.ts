@@ -65,10 +65,12 @@ type CreateShiftPayload = {
 
 type UpdateShiftPayload = {
   id: number;
-  shift_name?: string;
-  start_time?: string;
-  end_time?: string;
+  shift_name: string;
+  start_time: string;
+  end_time: string;
+  weekly_off_day: string;
 };
+
 
 type Tax = {
   id: number;

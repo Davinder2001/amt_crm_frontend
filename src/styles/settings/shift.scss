@@ -1,1 +1,30 @@
 @use '../variables' as *;
+
+.shift-page {
+    .responsive-table {
+        .table-view {
+            .table-actions {
+                display: flex;
+                justify-content: space-around;
+
+                button {
+                    background-color: unset;
+                    border: none;
+                    outline: none;
+
+                    svg {
+                        font-size: 16px;
+                    }
+                }
+
+                .edit-btn {
+                    color: $primary-color;
+                }
+
+                .delete-btn {
+                    color: $danger-color;
+                }
+            }
+        }
+    }
+}

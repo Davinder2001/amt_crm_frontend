@@ -17,8 +17,9 @@
         margin: 0 auto;
     }
 
-    .buttons {
-        color: white;
+    .empty-state-action{
+        display: flex;
+        justify-content: center;
     }
 
     .empty-state-icon-container {

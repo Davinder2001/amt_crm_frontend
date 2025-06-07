@@ -63,7 +63,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     updateTax: builder.mutation<{ message: string; data: Tax }, UpdateTaxPayload>({
       query: ({ id, ...body }) => ({
-        url: `shifts/${id}`,
+        url: `taxes/${id}`,
         method: "PUT",
         body,
         credentials: "include",

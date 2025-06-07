@@ -22,7 +22,7 @@ interface StoreItem {
   availability_stock: number;
   created_at: string;
   updated_at: string;
-  featured_image: File | string | null;
+  featured_image: string;
   images: (string | File)[] | File[];
   final_cost: number;
   categories: Category[];

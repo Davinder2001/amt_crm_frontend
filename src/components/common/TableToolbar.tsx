@@ -162,7 +162,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 )}
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .reset-columns {
                     padding: 8px 12px;
                     cursor: pointer;

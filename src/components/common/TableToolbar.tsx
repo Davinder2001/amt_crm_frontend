@@ -22,7 +22,7 @@ interface TableToolbarProps {
     onColumnToggle?: (columnKey: string) => void;
     actions?: Action[];
     downloadActions?: Action[];
-    extraLinks: Action[];
+    extraLinks?: Action[];
     leftContent?: React.ReactNode;
     onResetColumns?: () => void;
 }

@@ -27,7 +27,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Delete a store item
-    deleteStoreItem: builder.mutation<void, number>({
+    deleteStoreItem: builder.mutation<{message: string}, number>({
       query: (id) => ({
         url: `store/items/${id}`,
         method: "DELETE",

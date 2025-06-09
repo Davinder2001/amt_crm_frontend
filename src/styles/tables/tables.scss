@@ -666,9 +666,17 @@ table {
 
         .card-row {
             padding: 8px 10px;
+            white-space: nowrap;
 
             strong {
                 margin-right: 0.5rem;
+            }
+
+            span {
+                width: 100%;
+                text-align: right;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
@@ -782,9 +790,8 @@ table {
     }
 
     .card-row {
-        margin-bottom: 0.5rem;
+        margin-bottom: 5px;
         display: flex;
-        flex-wrap: wrap;
     }
 
     .card-row strong {

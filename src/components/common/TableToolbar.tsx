@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaCheckSquare, FaRegSquare, FaTimes } from 'react-icons/fa';
 import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
 
 interface Column {
@@ -34,6 +34,8 @@ interface TableToolbarProps {
     onResetColumns?: () => void;
     activeFilterType?: string | null;
     onFilterTypeChange?: (filterKey: string | null) => void;
+    showBulkActions?: boolean;
+    onToggleBulkActions?: (enabled: boolean) => void;
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = ({
@@ -48,6 +50,8 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     onResetColumns,
     activeFilterType,
     onFilterTypeChange,
+    showBulkActions,
+    onToggleBulkActions,
 }) => {
     const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
     const [searchValue, setSearchValue] = React.useState<string>('');
@@ -138,6 +142,17 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 <span className='hide-mobile'>Filter</span>
                             </button>
                             <div className="dropdown-content">
+                                <div
+                                    className={`bulk-toggle-btn ${showBulkActions ? 'active' : ''}`}
+                                    onClick={() => onToggleBulkActions?.(!showBulkActions)}
+                                >
+                                    {showBulkActions ? (
+                                        <FaCheckSquare className="icon-checked" />
+                                    ) : (
+                                        <FaRegSquare className="icon-unchecked" />
+                                    )}
+                                    <span className="label">{showBulkActions ? 'Exit Bulk Mode' : 'Bulk Actions'}</span>
+                                </div>
                                 {filters.map((filter) => (
                                     <div key={filter.key} className="section">
                                         <label className="filter-type-option">

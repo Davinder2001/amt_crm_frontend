@@ -34,6 +34,7 @@ const Items: React.FC = () => {
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [itemToDeleteName, setItemToDeleteName] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [showBulkActions, setShowBulkActions] = useState(false);
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items)
@@ -289,6 +290,8 @@ const Items: React.FC = () => {
             }));
           }
         }}
+        showBulkActions={showBulkActions}
+        onToggleBulkActions={setShowBulkActions}
         columns={allColumns}
         visibleColumns={visibleColumns}
         onResetColumns={onResetColumns}
@@ -321,7 +324,7 @@ const Items: React.FC = () => {
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
           storageKey="store_table_page"
           cardViewKey="name"
-          showBulkActions={true}
+          showBulkActions={showBulkActions}
         />
         :
         <EmptyState

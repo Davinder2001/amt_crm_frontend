@@ -204,7 +204,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           <thead>
             <tr>
               {showBulkActions && (
-                <th>
+                <th className='bulk-action-th'>
                   <div className="select-all-container">
                     {/* Current page checkbox */}
                     <span
@@ -268,7 +268,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   if (onView) onView(item.id);
                 }}>
                   {showBulkActions && (
-                    <td>
+                    <td className='bulk-action-td'>
                       <span
                         className="select-checkbox"
                         onClick={(e) => {

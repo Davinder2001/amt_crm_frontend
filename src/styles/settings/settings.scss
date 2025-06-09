@@ -1,115 +1,375 @@
 @use '../variables' as *;
 
-.settings-sidebar {
-    width: 280px;
-    background-color: #fff;
-    border-right: 1px solid #e5e7eb;
-    height: 100vh;
-    overflow-y: auto;
-    border-radius: 5px;
-}
+// .settings-sidebar {
+//     width: 280px;
+//     background-color: #fff;
+//     border-right: 1px solid #e5e7eb;
+//     height: 100vh;
+//     overflow-y: auto;
+//     border-radius: 5px;
+// }
+
+// .settings-container {
+//     display: flex;
+//     border-radius: $border-radius;
+//     gap: 20px;
+
+// }
+// .settings-content{
+//     flex: 1;
+
+// }
+// .sidebar-header {
+//     padding: 20px;
+//     border-bottom: 1px solid #e5e7eb;
+// }
+
+// .sidebar-header h3 {
+//     margin: 0;
+//     font-size: 18px;
+//     font-weight: 600;
+//     color: #111827;
+// }
+
+// .settings-list {
+//     list-style: none;
+//     padding: 0;
+//     margin: 0;
+// }
+
+// .settings-item {
+//     border-bottom: 1px solid #e5e7eb;
+// }
+
+// .settings-button {
+//     width: 100%;
+//     padding: 14px 20px;
+//     background: none;
+//     border: none;
+//     text-align: left;
+//     cursor: pointer;
+//     transition: background-color 0.2s;
+
+//     &:hover {
+//         svg {
+//             color: $primary-color;
+//         }
+
+//         .settings-label {
+//             color: $primary-color;
+//         }
+
+//         .settings-sublabel {
+//             color: $gray-color;
+//         }
+//     }
+// }
+
+// .settings-button:hover {
+//     color: $light_blue;
+
+// }
+
+// .settings-item.active .settings-button {
+//     background-color: $light_blue;
+
+//     svg {
+//         color: $primary-color;
+//     }
+
+//     .settings-label {
+//         color: $primary-color;
+//     }
+
+//     .settings-sublabel {
+//         color: $gray-color;
+//     }
+// }
+
+// .settings-item-content {
+//     display: flex;
+//     align-items: center;
+//     gap: 12px;
+// }
+
+// .settings-icon {
+//     color: #6b7280;
+//     font-size: 18px;
+// }
+
+// .settings-text {
+//     display: flex;
+//     flex-direction: column;
+// }
+
+// .settings-label {
+//     font-size: 14px;
+//     font-weight: 500;
+//     color: #111827;
+// }
+
+// .settings-sublabel {
+//     font-size: 12px;
+//     color: #6b7280;
+//     margin-top: 2px;
+// }
+
 
 .settings-container {
     display: flex;
-    border-radius: $border-radius;
-    gap: 20px;
-
+    flex-direction: row;
+    height: 100%;
+    padding: 1rem;
+    gap: 1.5rem;
 }
-.settings-content{
+
+.settings-navigation {
+    width: 250px;
+    min-width: 250px;
+}
+
+.settings-content {
     flex: 1;
-    
-}
-.sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    overflow-y: auto;
 }
 
-.sidebar-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #111827;
+.settings-nav {
+    position: relative;
+    background-color: $white;
+    border-radius: $border-radius;
+    box-shadow:$box-shadow;
 }
 
 .settings-list {
     list-style: none;
     padding: 0;
     margin: 0;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .settings-item {
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.settings-button {
-    width: 100%;
-    padding: 14px 20px;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
 
     &:hover {
-        svg {
-            color: $primary-color;
-        }
-
         .settings-label {
             color: $primary-color;
         }
 
-        .settings-sublabel {
-            color: $gray-color;
+        svg {
+            color: $primary-color;
         }
     }
-}
 
-.settings-button:hover {
-    color: $light_blue;
+    &.active {
+        background-color: $light_blue;
 
-}
+        .settings-label {
+            color: $primary-color;
+            font-weight: 600;
+        }
 
-.settings-item.active .settings-button {
-    background-color: $light_blue;
-
-    svg {
-        color: $primary-color;
+        svg {
+            color: $primary-color;
+        }
     }
 
-    .settings-label {
-        color: $primary-color;
-    }
+}
 
-    .settings-sublabel {
-        color: $gray-color;
+.settings-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+
+    &:hover {
+        background-color: #fafafa;
     }
 }
 
 .settings-item-content {
     display: flex;
     align-items: center;
-    gap: 12px;
 }
 
 .settings-icon {
-    color: #6b7280;
-    font-size: 18px;
+    font-size: 1.25rem;
+    margin-right: 1rem;
+    color: #656464;
 }
 
 .settings-text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+
+    .settings-label {
+        font-size: 0.95rem;
+    }
+
+    .settings-sublabel {
+        font-size: 0.75rem;
+        color: #777;
+    }
 }
 
-.settings-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #111827;
+
+
+
+
+
+
+
+
+@media (max-width: 1024px) {
+    .settings-container {
+        flex-direction: column;
+        padding: 0px;
+        gap: 1rem;
+    }
+
+    .settings-navigation {
+        width: 100%;
+        order: -1; // move nav to top
+    }
+
+    .settings-content {
+        padding: 1rem 0.5rem;
+    }
+
+    .settings-nav {
+        border-bottom: 2px solid #e0e0e0;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+
+        &::-webkit-scrollbar {
+            height: 3px; // thinner scrollbar
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $primary-color;
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    }
+
+    .settings-list {
+        flex-direction: row;
+        white-space: nowrap;
+    }
+
+    .settings-item {
+        display: inline-block;
+        border-bottom: none;
+        border-right: 1px solid #eee;
+    }
+
+    .settings-button {
+        flex-direction: column;
+        min-width: 100px; // smaller width per tab
+        padding: 0.4rem 0.75rem; // smaller padding to reduce height
+        text-align: center;
+&:focus{
+    background-color: $light_blue;
+    border-bottom:2px solid $primary-color;
 }
 
-.settings-sublabel {
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 2px;
+
+    }
+
+    .settings-item-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .settings-icon {
+        font-size: 1rem; // smaller icon size
+        margin-right: 0;
+        margin-bottom: 0.15rem;
+    }
+
+    .settings-text {
+        align-items: center;
+
+        .settings-label {
+            font-size: 0.85rem; // smaller label font
+        }
+
+        .settings-sublabel {
+            display: none; // keep sublabel hidden for compactness
+        }
+    }
+
+    .settings-list {
+        flex-direction: row;
+        white-space: nowrap;
+    }
+
+    .settings-item {
+        display: inline-block;
+        border-bottom: none;
+        border-right: 1px solid #eee;
+    }
+
+    .settings-button {
+        flex-direction: column;
+        min-width: 120px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+    }
+
+    .settings-item-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .settings-icon {
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .settings-text {
+        align-items: center;
+
+        .settings-sublabel {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .settings-content {
+        padding: 1rem 0.5rem;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+
+
+    .settings-button {
+        padding: 0.3rem 0.5rem;
+        min-width: 60px; // even smaller width for tabs
+    }
+
+    .settings-text {
+        display: none; // hide label + sublabel completely
+    }
+
+    .settings-icon {
+        font-size: 1.2rem; // optionally increase icon size a bit to compensate
+        margin-right: 0;
+        margin-bottom: 0;
+    }
 }

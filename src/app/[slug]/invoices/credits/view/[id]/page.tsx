@@ -13,6 +13,7 @@ import TableToolbar from '@/components/common/TableToolbar';
 type CreditItem = {
   credit_id: number;
   invoice_number: string;
+  invoice_id: number;
   invoice_date: string;
   final_amount: number;
   amount_paid: number;
@@ -56,6 +57,7 @@ const ViewCredits: React.FC = () => {
   const processedCredits: CreditItemWithId[] = useMemo(() => {
     return credits.map((c) => ({ ...c, id: c.credit_id }));
   }, [credits]);
+
 
   useEffect(() => {
     if (credits.length) {
@@ -103,7 +105,7 @@ const ViewCredits: React.FC = () => {
       </div>
 
       <TableToolbar
-        onFilterChange={() => {}}
+        onFilterChange={() => { }}
         columns={columns.map((col) => ({ label: col.label, key: col.label }))}
         visibleColumns={visibleColumns.map((k) =>
           k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
@@ -120,8 +122,14 @@ const ViewCredits: React.FC = () => {
       <ResponsiveTable
         data={processedCredits}
         columns={columns}
-        onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
-        
+        onView={(id) => {
+          const credit = processedCredits.find((c) => c.id === id);
+          if (credit?.invoice_id) {
+            router.push(`/${companySlug}/invoices/${credit.invoice_id}`);
+          }
+        }}
+
+
       />
     </div>
   );

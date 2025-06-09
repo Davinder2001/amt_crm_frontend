@@ -24,6 +24,18 @@ export interface Attendance {
   user: User;
 }
 
+export interface LeaveBalanceResponse {
+  leaves: {
+    leave_type: string;
+    leave_id: number;
+    frequency: string;
+    total_allowed: number;
+    used: number;
+    remaining: number;
+  }[];
+}
+
+
 interface AttendanceResponse {
   attendances: Attendance[];   // For lists
   attendance: Attendance;      // For single item (e.g. detail/edit)
@@ -48,6 +60,11 @@ const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
 
     fetchMyAttenances: builder.query<AttendanceResponse, void>({
       query: () => "attendance/my",
+      providesTags: ["Attendance"],
+    }),
+
+    fetchBalanceLeave: builder.query<LeaveBalanceResponse, void>({
+      query: () => "attendance/balance-leave",
       providesTags: ["Attendance"],
     }),
 
@@ -104,6 +121,7 @@ const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
 export const {
   useFetchAttenancesQuery,
   useFetchMyAttenancesQuery,
+  useFetchBalanceLeaveQuery,
   useRecordAttendanceMutation,
   useUpdateAttendanceMutation,
   useApproveAttendanceMutation,

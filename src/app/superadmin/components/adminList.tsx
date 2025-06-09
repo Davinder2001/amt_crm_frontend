@@ -124,22 +124,34 @@ const AdminList = () => {
     id: typeof admin.id === 'string' ? Number(admin.id) : admin.id,
   }));
 
+  const tableFilters = [
+    {
+      key: 'search',
+      label: 'Search',
+      type: 'search' as const
+    },
+  ];
+
+
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Failed to fetch admins.</p>;
 
   return (
     <div className="items-page">
       <TableToolbar
-        filters={{
-          user_status: [...new Set(admins.map((admin) => admin.user_status))],
-        }}
-        onFilterChange={(field, value, checked) => {
-          setFilters((prev) => {
-            const current = new Set(prev[field] || []);
-            if (checked) current.add(value);
-            else current.delete(value);
-            return { ...prev, [field]: [...current] };
-          });
+        filters={tableFilters}
+        onFilterChange={(field, value, type) => {
+          if (type === 'search') {
+            setFilters(prev => ({
+              ...prev,
+              [field]: value && typeof value === 'string' ? [value] : []
+            }));
+          } else {
+            setFilters(prev => ({
+              ...prev,
+              [field]: Array.isArray(value) ? value : [value]
+            }));
+          }
         }}
         columns={allColumns}
         visibleColumns={visibleColumns}

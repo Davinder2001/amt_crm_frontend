@@ -103,7 +103,6 @@ const ViewCredits: React.FC = () => {
       </div>
 
       <TableToolbar
-        filters={{}}
         onFilterChange={() => {}}
         columns={columns.map((col) => ({ label: col.label, key: col.label }))}
         visibleColumns={visibleColumns.map((k) =>

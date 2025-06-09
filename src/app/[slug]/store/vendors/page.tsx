@@ -32,15 +32,6 @@ const Page: React.FC = () => {
     );
   };
 
-  const handleFilterChange = (field: string, value: string, checked: boolean) => {
-    setFilters((prev) => {
-      const current = new Set(prev[field] || []);
-      if (checked) current.add(value);
-      else current.delete(value);
-      return { ...prev, [field]: [...current] };
-    });
-  };
-
   const filterData = (data: Vendor[]): Vendor[] => {
     return data.filter((item) =>
       Object.entries(filters).every(([field, values]) => {
@@ -94,8 +85,19 @@ const Page: React.FC = () => {
       <div className="vendors-page">
         <div className="vendors-page-outer">
           <TableToolbar
-            filters={{}}
-            onFilterChange={handleFilterChange}
+            onFilterChange={(field, value, type) => {
+              if (type === 'search') {
+                setFilters(prev => ({
+                  ...prev,
+                  [field]: value && typeof value === 'string' ? [value] : []
+                }));
+              } else {
+                setFilters(prev => ({
+                  ...prev,
+                  [field]: Array.isArray(value) ? value : [value]
+                }));
+              }
+            }}
             columns={columns.map((col) => ({ label: col.label, key: col.label }))}
             visibleColumns={visibleColumns}
             onColumnToggle={toggleColumn}

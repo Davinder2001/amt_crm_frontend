@@ -81,15 +81,6 @@ const CompanyComponent = () => {
     }
   };
 
-  const handleFilterChange = (field: string, value: string, checked: boolean) => {
-    setFilters((prev) => {
-      const current = new Set(prev[field] || []);
-      if (checked) current.add(value);
-      else current.delete(value);
-      return { ...prev, [field]: [...current] };
-    });
-  };
-
   const toggleColumn = (key: string) => {
     setVisibleColumns((prev) =>
       prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
@@ -154,6 +145,16 @@ const CompanyComponent = () => {
     }
   ].filter((col) => visibleColumns.includes(col.key as string));
 
+
+  const tableFilters = [
+    {
+      key: 'search',
+      label: 'Search',
+      type: 'search' as const
+    },
+  ];
+  
+
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Error loading companies.</p>;
 
@@ -162,11 +163,20 @@ const CompanyComponent = () => {
   return (
     <div className="company-table-outer">
       <TableToolbar
-        filters={{
-          payment_status: [...new Set(companies.map((c) => c.payment_status))],
-          verification_status: [...new Set(companies.map((c) => c.verification_status))],
+        filters={tableFilters}
+        onFilterChange={(field, value, type) => {
+          if (type === 'search') {
+            setFilters(prev => ({
+              ...prev,
+              [field]: value && typeof value === 'string' ? [value] : []
+            }));
+          } else {
+            setFilters(prev => ({
+              ...prev,
+              [field]: Array.isArray(value) ? value : [value]
+            }));
+          }
         }}
-        onFilterChange={handleFilterChange}
         columns={columns}
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}

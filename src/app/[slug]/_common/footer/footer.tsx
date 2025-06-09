@@ -12,9 +12,8 @@ const Footer = () => {
                 fontSize: '16px',
                 fontWeight: '400',
                 padding: '20px',
-                borderTop: '1px solid #f3f3f3',
-                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                borderRadius: '10px',
+                border: '1px solid #efefef' ,
+                borderRadius: '5px',
                 margin: '20px 0px',
             }}>
                 <div style={{
@@ -51,7 +50,7 @@ const Footer = () => {
                 <div style={{
                     textAlign: 'center',
                     fontSize: '12px',
-                    color: '#222222',
+                    color: '#333',
                     fontWeight: '300',
                 }}>
                     © 2025 AMT CRM. All rights reserved.

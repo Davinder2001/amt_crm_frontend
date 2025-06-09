@@ -351,20 +351,22 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 startIcon={<FaPlus size={12} />}
                 onClick={() => setIsCreatingNewCategory(true)}
                 sx={{
-                  borderColor: '#384b70',
-                  color: '#384b70',
-                  fontSize: '0.75rem',
+                  background:'#f0f0f0',
+                  border: 'none',
+                  color: '#2c2b2e',
                   py: 0.5,
                   px: 1.5,
+                  textTransform: 'capitalize !important',
                   minHeight: '30px',
                   '&:hover': { backgroundColor: '#DEE9F2' },
                 }}
               >
                 Create New
               </Button>
-
+              <div className='category-cancle-btn'>
               {hasChanges && selectedCategoriesIds.length > 0 && (
                 <>
+              
                   <Button
                     variant="outlined"
                     startIcon={<FaTimes size={12} />}
@@ -375,6 +377,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                     sx={{
                       borderColor: '#384b70',
                       color: '#384b70',
+                      marginRight:'5px',
                       fontSize: '0.75rem',
                       py: 0.5,
                       px: 1.5,
@@ -396,13 +399,15 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                       py: 0.5,
                       px: 1.5,
                       minHeight: '30px',
-                      '&:hover': { backgroundColor: '#007c7a' },
+                      '&:hover': { backgroundColor: '#9CB9D0' },
                     }}
                   >
                     Done
                   </Button>
                 </>
+                
               )}
+              </div>
             </Box>
           </div>
         </>
@@ -445,7 +450,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             />
 
             <Typography variant="subtitle1" gutterBottom>
-              select Parent Category (optional)
+              Select Parent Category (optional)
             </Typography>
 
             {isLoading ? (

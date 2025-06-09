@@ -97,8 +97,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             sx={{
                                 '& .MuiTab-root': {
                                     color: '#384b70',
+                                   
                                     '&.Mui-disabled': { color: '#ccc' },
-                                    '&.Mui-selected': { color: '#384b70' },
+                                    '&.Mui-selected': { color: '#384b70' , fontWeight: 'bold',},
                                 },
                                 '& .MuiTabs-indicator': { backgroundColor: '#384b70' },
                             }}

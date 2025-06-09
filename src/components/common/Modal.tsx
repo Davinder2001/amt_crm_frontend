@@ -101,7 +101,7 @@ const Modal: React.FC<ModalProps> = ({
 
 .modal-container {
   background-color: white;
-  border-radius: 8px;
+  border-radius: 5px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 1001;
   max-height: 90vh;

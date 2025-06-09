@@ -13,9 +13,14 @@
     .tabs button,
     .category-tab,
     inner-tab {
-        border-radius: 0px !important;
-        height: 45px;
+        height: 40px;
     }
+}
+.invoice-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20PX 0PX;
 }
 
 // categories menus sidebar ************
@@ -24,6 +29,7 @@
     background: $white;
     border-right: 1px solid $border-color;
     overflow-y: auto;
+    padding-right: 10px;
 
     button {
         white-space: nowrap;
@@ -40,6 +46,8 @@
         width: 100%;
         padding: 10px;
         text-overflow: ellipsis;
+        border-radius: 5px !important;
+        border: 1px solid $border-color;
     }
 
     .category-tab {
@@ -71,7 +79,9 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
+       
     }
+    
 }
 
 .desktop-categories {
@@ -97,12 +107,15 @@
             padding: 5px 10px;
             height: auto !important;
             transition: background 0.3s;
+            color: $dark-color;
 
             &.selected {
                 background: $primary-color;
                 color: $white;
             }
-
+            span.expand-icon {
+                color: $hover-color;
+            }
             .category-button {
                 background: none;
                 border: none;
@@ -111,9 +124,11 @@
                 flex: 1;
                 color: inherit;
                 cursor: pointer;
+                color: $dark-color;
 
                 &.selected {
                     font-weight: bold;
+                    color: #fff;
                 }
             }
         }
@@ -125,22 +140,22 @@
 
             li {
                 margin-bottom: 0.4rem;
+               
             }
 
-            .category-tab {
-                border-radius: 4px;
-                padding: 0.5rem 0.8rem;
 
                 &.selected {
                     background: $primary-color;
                     color: $white;
+                  
                 }
             }
 
         }
     }
+.category-tab.selected button {
+    color: #fff !important;
 }
-
 /* Mobile Categories Overlay */
 .mobile-categories-overlay {
     position: fixed;
@@ -169,12 +184,15 @@
             align-items: center;
             margin: 10px 0px;
             padding-bottom: 10px;
-            border-bottom: 1px solid $hover-color;
+            border-bottom: 1px solid $border-color;
             position: sticky;
             top: 0;
             z-index: 99;
             background-color: $white;
-
+        h4 {
+            color: $primary-color;
+            font-size: 16px;
+        }
             button {
                 background: none;
                 border: none;
@@ -199,7 +217,7 @@
 .invoice-items-wrapper {
     flex: 1;
     overflow-y: auto;
-    background-color: $secondary-color;
+    background-color: #f8f7fa;
 
     .searchbar-desktop,
     .searchbar-mobile {
@@ -210,9 +228,10 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            border: 1px solid #ccc;
+            border: 1px solid $border-color;
+            border-radius: 5px;
             padding: 0px 10px;
-            margin-bottom: 20px;
+            margin: 10px;
 
             input {
                 width: 100%;
@@ -288,13 +307,14 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 10px;
+        margin-bottom: 30px;
 
         .item {
             position: relative;
             background: #fff;
             border-radius: $border-radius;
             overflow: hidden;
-            box-shadow: $box-shadow;
+            border: 1px solid $border-color;
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -360,10 +380,10 @@
                 flex-direction: column;
 
                 .item-name {
-                    margin: 0 0 6px;
+                    margin: 0 0 5px;
                     font-size: 14px;
                     font-weight: 600;
-                    color: #212529;
+                    color: $primary-color;
                     overflow: hidden;
                     width: 100%;
                     text-overflow: ellipsis;
@@ -373,7 +393,7 @@
                 .item-price {
                     margin: auto 0 0 0;
                     font-weight: 700;
-                    color: #2c3e50;
+                    color: $hover-color;
                     font-size: 15px;
                 }
             }
@@ -678,57 +698,23 @@
     }
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .invoice-items-wrapper {
-        padding: 10px;
 
-        .searchbar-desktop {
-            display: none;
-        }
 
-        .searchbar-mobile {
-            display: block;
-        }
+// checkout pannel ***********
 
-        .item-list.grid-view {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-        }
 
-        .item-list.list-view {
-            .item {
-                height: 80px;
-
-                .item-image {
-                    width: 80px;
-                    min-width: 80px;
-                }
-
-                .item-details {
-                    padding: 8px 12px;
-
-                    .item-name {
-                        font-size: 14px;
-                    }
-
-                    .item-price {
-                        font-size: 14px;
-                    }
-                }
-            }
-        }
+.cart-tab-content {
+    .inner-tab-content {
+         margin: 20px 0px;
+    }
+    .client-form label {
+        letter-spacing: .4px;
+        color: #333;
+        font-size: 13px;
+        font-weight: 400;
     }
 }
 
-.invoice-header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px 10px;
-}
-
-// checkout pannel ***********
 .checkout-panel {
     max-width: 500px;
     width: 100%;
@@ -743,6 +729,7 @@
         input {
             padding: 10px 12px;
             border: 1px solid $feild_border;
+            border-radius: 5px;
 
             &:focus {
                 border-color: $hover-color;
@@ -752,9 +739,14 @@
 
     .tabs {
         display: flex;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid $border-color;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+     
     }
-
+.checkout {
+    padding-left: 10px;
+}
     .tab {
         flex: 1;
         display: flex;
@@ -762,11 +754,11 @@
         align-items: center;
         padding: 10px;
         border: none;
-        border-right: 2px solid #ddd;
-        background: #eee;
+        border-right: 1px solid #ddd;
         cursor: pointer;
         font-weight: bold;
         transition: background-color 0.2s ease;
+           color:$gray-color;
     }
 
     .tab:hover {
@@ -781,7 +773,6 @@
     .inner-tabs {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #ccc;
     }
 
     .inner-tab {
@@ -793,8 +784,9 @@
         border: none;
         background-color: #f3f3f3;
         cursor: pointer;
-        border-right: 2px solid #ddd;
+        border-right: 1px solid #ddd;
         font-weight: bold;
+        color: $gray-color;
     }
 
     .inner-tab.active {
@@ -812,13 +804,16 @@
     .total-section {
         margin-top: 15px;
         padding: 10px;
-        background: #f8f8f8;
         border-radius: 5px;
+        border: 1px solid #efefef;
+        font-size: 14px;
+        line-height: 25px;
 
         .total-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 5px;
+            color: $dark-color;
 
             &.subtotal {
                 border-top: 1px dashed #ccc;
@@ -828,7 +823,8 @@
 
             &.grand-total {
                 font-weight: bold;
-                font-size: 1.1em;
+                font-size: 16px;
+                color: $primary-color;
                 border-top: 1px solid #ccc;
                 padding-top: 8px;
                 margin-top: 8px;
@@ -991,10 +987,11 @@
         gap: 8px;
         cursor: pointer;
         font-weight: bold;
-        background: #f1f1f1;
+        border: 1px solid $border-color;
+        background-color: #fafafa;
         margin-top: 20px;
-        padding: 8px;
-        border-right: 1px solid $border-color;
+        padding: 10px;
+        border-radius: 5px;
     }
 
     .sectionToggle {
@@ -1011,9 +1008,9 @@
 
     .payment-section {
         background: #fafafa;
-        border: 1px solid #e5e7eb;
-        padding: 10px;
-        box-shadow: $secondary-shadow;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+        padding: 20px 10px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -1056,10 +1053,11 @@
     .section-title {
         font-size: 14px;
         font-weight: 600;
-        color: #333;
-        margin-bottom: 0.5rem;
+        color: $primary-color;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        margin-bottom: 0px;
+        margin-top: 10px;
     }
 
     .options-row {
@@ -1074,7 +1072,7 @@
         padding-left: 28px;
         cursor: pointer;
         font-size: 14px;
-        color: #444;
+        color: $dark-color;
         display: inline-flex;
         align-items: center;
     }
@@ -1134,17 +1132,19 @@
     .actions {
         display: flex;
         gap: 10px;
+        margin-top: 40px;
     }
 
     .btn {
-        flex: 1;
-        padding: 10px;
-        background: $primary-color;
-        color: $white;
-        border: none;
-        border-radius: $border-radius;
-        font-weight: bold;
+        color: #fff;
         cursor: pointer;
+        background: #384b70;
+        border: none;
+        border-radius: 5px;
+        flex: 1;
+        padding: 8px 12px;
+        font-size: 16px;
+        letter-spacing: 0.4px;
 
         &:hover {
             background-color: $hover-color;
@@ -1224,6 +1224,8 @@
 .close-checkout-btn {
     display: none;
 }
+
+
 
 @media (max-width: 1600px) {
     .invoice-items-wrapper .item-list.grid-view {
@@ -1439,6 +1441,45 @@
 }
 
 @media (max-width: 768px) {
+        .invoice-items-wrapper {
+        padding: 10px;
+
+        .searchbar-desktop {
+            display: none;
+        }
+
+        .searchbar-mobile {
+            display: block;
+        }
+
+        .item-list.grid-view {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .item-list.list-view {
+            .item {
+                height: 80px;
+
+                .item-image {
+                    width: 80px;
+                    min-width: 80px;
+                }
+
+                .item-details {
+                    padding: 8px 12px;
+
+                    .item-name {
+                        font-size: 14px;
+                    }
+
+                    .item-price {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
     .pos-wrapper {
         flex-direction: column;
         position: fixed;
@@ -1490,6 +1531,7 @@
         padding: 8px;
     }
 }
+
 
 
 @media (max-width: 480px) {

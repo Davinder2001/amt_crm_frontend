@@ -273,10 +273,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 .reset-columns {
                     padding: 8px 12px;
                     cursor: pointer;
-                    background: #f0f0f0;
-                    border-bottom: 1px solid #ddd;
+                    background: #f8f7fa;
                     font-weight: 500;
-                    color: #333;
+                    color: #384b70;
                 }
                 .reset-columns:hover {
                     background: #e0e0e0;

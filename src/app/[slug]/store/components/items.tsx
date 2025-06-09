@@ -250,14 +250,14 @@ const Items: React.FC = () => {
           <div className="table-actions-wrapper">
             <Link href={`/${companySlug}/store/view-item/${item.id}`}>
               <span>
-                <FaEye color="#222" />
+                <FaEye color="#384B70" />
               </span>
             </Link>
             <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-              <FaEdit color="#222" />
+              <FaEdit color="#384B70" />
             </Link>
             <span onClick={() => handleDeleteClick(item.id, item.name)}>
-              <FaTrash color="#222" />
+              <FaTrash color="#384B70" />
             </span>
           </div>
         ),

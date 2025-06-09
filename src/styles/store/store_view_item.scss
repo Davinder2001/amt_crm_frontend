@@ -150,10 +150,8 @@
       }
 
       .card-icon {
-        background-color: $light_blue;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
+        width: 20px;
+        height: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -167,7 +165,7 @@
 
     .info-card h3 {
       color: $dark-color;
-      border-bottom: 1px solid $primary-color;
+      border-bottom: 1px solid $light_blue;
       align-items: center;
       gap: 10px;
       margin-top: 0;

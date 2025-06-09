@@ -54,7 +54,7 @@ const store = configureStore({
     [billingCreateApiSlice.reducerPath]: billingCreateApiSlice.reducer,
     [paymentCreateApiSlice.reducerPath]: paymentCreateApiSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware:  (getDefaultMiddleware)=>
     getDefaultMiddleware()
       .concat(authApiSlice.middleware)
       .concat(userApiSlice.middleware)

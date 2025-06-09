@@ -60,8 +60,18 @@
       display: flex;
       flex-direction: column;
       gap: 0px;
+      label {
+        font-weight: $font-weight-regular;
+        font-size: $lable-font;
+        margin-bottom: 5px;
+        color: $lable-color;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
       .buttons {
         padding: 8px 22px !important;
+        font-size: 13px;
       }
 
       input,
@@ -104,7 +114,6 @@
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
-      margin-top: 2rem;
       margin-bottom: 20px;
 
 

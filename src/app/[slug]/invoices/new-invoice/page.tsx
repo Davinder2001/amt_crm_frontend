@@ -63,16 +63,16 @@ const Page = () => {
         }
 
         .autoView .fullView-content {
-          border-radius: 8px;
+          border-radius: 5px;
         }
 
         .fullView-content {
-          padding: 10px 0px 0px 0px;
+          padding: 10px;
           background: #fff;
           width: 100%;
           height: 100%;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           position: relative;
+          border: 1px solid #efefef;
         }
       `}</style>
     </>

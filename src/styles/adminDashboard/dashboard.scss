@@ -13,8 +13,13 @@
     .card {
         background-color: $white;
         border-radius: $border-radius;
-        box-shadow: $box-shadow;
+        border: 1px solid $border-color;
         padding: 15px;
+        h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: $dark-color;
+        }
     }
 
     .card-header {
@@ -32,7 +37,7 @@
         .dropdown {
             font-size: $font-size-small;
             color: var(--primary-color);
-            background-color: #f1f9f9;
+            background-color: $light_blue;
             padding: 8px 16px;
             border-radius: $border-radius;
             cursor: pointer;
@@ -123,7 +128,7 @@
 
     .employees {
         .add-btn {
-            background-color: $secondary-color;
+            background-color: $light_blue;
             border: none;
             padding: 5px;
             width: 30px;
@@ -169,7 +174,8 @@
 
                 .role {
                     font-size: $font-size-small;
-                    color: $orange-color;
+                    color: $hover-color;
+                    font-weight: 600;
                 }
 
                 .menu-btn {
@@ -235,22 +241,24 @@
             display: flex;
             justify-content: space-between;
             font-size: 14px;
+            margin-top: 10px;
 
             .label {
                 font-weight: 600;
             }
 
             .orange {
-                color: #ff5722;
+                color: $hover-color;
             }
 
             .yellow {
-                color: #ffc107;
+                color: $hover-color;
             }
 
             .count {
                 font-weight: bold;
-                font-size: 18px;
+                font-size: 16px;
+                color: $primary-color;
             }
         }
 
@@ -270,9 +278,12 @@
                 background: none;
                 border: none;
                 font-size: 14px;
-                color: #20bfa9;
+                color: $primary-color;
                 font-weight: 500;
                 cursor: pointer;
+                &:hover {
+                    color: $hover-color;
+                }
             }
         }
 
@@ -292,8 +303,8 @@
                 .avatar {
                     width: 36px;
                     height: 36px;
-                    background-color: #e0f7f7;
-                    color: #20bfa9;
+                    background-color: $light_blue;
+                    color: $primary-color;
                     border-radius: 50%;
                     font-weight: 700;
                     display: flex;
@@ -307,11 +318,12 @@
                     .r-title {
                         font-weight: 600;
                         font-size: 14px;
+                        color: $primary-color;
                     }
 
                     .desc {
                         font-size: 13px;
-                        color: #ff5722;
+                        color: $gray-color;
                     }
                 }
 
@@ -346,20 +358,19 @@
         background: $white;
         padding: 8px 12px;
         border-radius: $border-radius;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid $border-color;
         display: flex;
         align-items: center;
         gap: 10px;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(var(--primary-color), 0.1);
         cursor: pointer;
 
         &:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: rgba(var(--primary-color), 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.055);
+            border: 1px solid $light_blue;
 
             .icon-shell {
                 transform: scale(1.05);
@@ -394,7 +405,7 @@
         font-size: 20px;
         font-weight: 700;
         margin: 6px 0 4px;
-        color: $dark-color;
+        color: $primary-color;
         line-height: 1.2;
     }
 
@@ -633,7 +644,7 @@
             }
 
             .value-count {
-                color: $dark-color;
+                color: $primary-color;
             }
         }
     }

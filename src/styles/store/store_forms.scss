@@ -119,6 +119,10 @@
       box-shadow: $box-shadow;
       overflow: auto;
       z-index: 99;
+      color: $dark-color;
+      li {
+        font-size: 14px;
+      }
 
       .vendor-name {
         padding: 8px 10px;
@@ -178,6 +182,12 @@
 
     .fields-wrapper {
       padding: 12px 20px;
+
+      .category-name span {
+        color: $dark-color;
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
     }
 
     .basic_label_header {
@@ -217,7 +227,14 @@
     display: flex;
     flex-direction: column;
     position: relative;
-
+  label {
+    letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
+  }
 
     input,
     select,

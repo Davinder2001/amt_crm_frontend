@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FaChevronCircleDown, FaChevronCircleUp } from 'react-icons/fa';
+import { FaChevronDown , FaChevronUp } from 'react-icons/fa';
 
 interface Category {
     id: number;
@@ -59,9 +59,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                                 onClick={() => toggleExpandChild(child.id)}
                             >
                                 {expandedChildCats.includes(child.id) ? (
-                                    <FaChevronCircleUp />
+                                    <FaChevronUp />
                                 ) : (
-                                    <FaChevronCircleDown />
+                                    <FaChevronDown />
                                 )}
                             </span>
                         )}
@@ -145,9 +145,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                                         onClick={() => toggleExpandChild(cat.id)}
                                     >
                                         {expandedChildCats.includes(cat.id) ? (
-                                            <FaChevronCircleUp />
+                                            <FaChevronUp />
                                         ) : (
-                                            <FaChevronCircleDown />
+                                            <FaChevronDown  />
                                         )}
                                     </span>
                                 )}

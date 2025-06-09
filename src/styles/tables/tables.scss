@@ -92,11 +92,52 @@
 
     .dropdown-left {
         .dropdown-content {
-            padding: 20px;
-            display: flex;
+            padding: 15px;
+            line-height: 30px;
             gap: 20px;
+            background-color: $white;
+            border-radius: 5px;
+            border: 1px solid $border-color;
+            margin-top: 5px;
+            color: $dark-color;
+            .bulk-toggle-btn {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
         }
+            label {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+         }  
+         .filter-options-list {
+          font-size: 14px;
+          background-color: #f5faff;
+          color: $primary-color;
+         }
     }
+  .search-filter-container {
+        input {
+            height: 41px;
+            padding: 10px 12px;
+            border-radius: 5px;
+            border: 1px solid $border-color;
+            width: 300px;
+            font-size: 14px;
+
+        }
+        button.clear-search-btn {
+            height: 41px;
+            padding: 10px 12px;
+            background: transparent;
+            border: 1px solid $hover-color;
+            margin-left: 10px;
+            border-radius: $border-radius;
+            color:$primary-color;
+        }
+
+  }
 
     .dropdown-right {
         .dropdown-content {
@@ -135,9 +176,7 @@
         }
 
         .section {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed rgba(0, 150, 147, 0.1);
+          
 
             &:last-child {
                 margin-bottom: 0;
@@ -173,9 +212,10 @@
             padding: 6px 8px;
             border-radius: $border-radius;
             transition: background 0.2s ease;
+            color: $dark-color;
 
             &:hover {
-                background: rgba(0, 150, 147, 0.05);
+                background:$light_blue;
             }
 
             input[type="checkbox"] {
@@ -198,8 +238,7 @@
                 background: none;
                 border: none;
                 border-radius: $border-radius;
-                font-size: 14px;
-                color: #333;
+                color: $dark-color;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
@@ -210,11 +249,11 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    color: $primary-color;
                 }
 
                 &:hover {
-                    background: $hover-color;
-                    color: $white;
+                    background: $light_blue;
                 }
             }
         }

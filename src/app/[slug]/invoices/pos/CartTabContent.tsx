@@ -85,7 +85,7 @@ export default function CartTabContent({
     selectedBankAccount, setSelectedBankAccount,
 
 }: CartTabContentProps) {
-    const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Items');
+    const [activeInnerTab, setActiveInnerTab] = useState<InnerTabType>('Client');
     const [showPaymentDetails, setShowPaymentDetails] = useState(true);
     const [isDiscountApplied, setIsDiscountApplied] = useState(false);
     const [isServiceChargeApplied, setIsServiceChargeApplied] = useState(false);
@@ -124,7 +124,7 @@ export default function CartTabContent({
     // Final total
     const total = Math.max(0, subtotalAfterServiceCharge - appliedDiscount).toFixed(2);
 
-    const innerTabs: InnerTabType[] = ['Items', 'Client', 'Bill'];
+    const innerTabs: InnerTabType[] = ['Client', 'Items', 'Bill'];
 
     const handleNumberBlur = () => {
         if (!number || !customers?.customers) return;
@@ -138,14 +138,15 @@ export default function CartTabContent({
 
     const validateFields = (): boolean => {
         if (cart.length === 0) {
-            setActiveInnerTab('Items');
-            toast.error('Cart is empty. Please add at least one item.');
+             setActiveInnerTab('Client');
+            toast.error('Please fill in required client details.');
+       
             return false;
         }
 
         if (!number || !clientName) {
-            setActiveInnerTab('Client');
-            toast.error('Please fill in required client details.');
+              setActiveInnerTab('Items');
+            toast.error('Cart is empty. Please add at least one item.');
             return false;
         }
 
@@ -209,7 +210,7 @@ export default function CartTabContent({
         setDiscountPercent(0);
         setDiscountType('amount');
         setIsDiscountApplied(false);
-        setActiveInnerTab('Items')
+        setActiveInnerTab('Client')
         setPaymentMethod('')
         setAddress('');
         setPincode('');
@@ -228,11 +229,11 @@ export default function CartTabContent({
                 {innerTabs.map(tab => {
                     let Icon;
                     switch (tab) {
-                        case 'Items':
-                            Icon = FiList;
-                            break;
                         case 'Client':
                             Icon = FiUser;
+                            break;
+                        case 'Items':
+                            Icon = FiList;
                             break;
                         case 'Bill':
                             Icon = FiFileText;
@@ -321,7 +322,7 @@ export default function CartTabContent({
                 )}
 
                 {activeInnerTab === 'Client' && (
-                    <div className="client-form" style={{ padding: '10px' }}>
+                    <div className="client-form" >
                         <div className="form-group">
                             <div className="form-group">
                                 <label>Phone Number</label>
@@ -393,7 +394,7 @@ export default function CartTabContent({
                 )}
 
                 {activeInnerTab === 'Bill' && (
-                    <div className="bill-section" style={{ padding: '10px' }}>
+                    <div className="bill-section" >
                         <div className="total-section">
                             <div className="total-row">
                                 <span>Base Total:</span>
@@ -440,7 +441,7 @@ export default function CartTabContent({
                         className="sectionToggle"
                         onClick={() => setShowPaymentDetails(!showPaymentDetails)}
                     >
-                        <span>{showPaymentDetails ? '▼' : '▲'}</span>
+                        <span>{showPaymentDetails ? '-' : '+'}</span>
                         <span>Payments & Discount</span>
                     </div>
                     <div className="total">
@@ -755,7 +756,7 @@ export default function CartTabContent({
                     </div>
                 )}
 
-                <div className="actions" style={{ padding: '10px' }}>
+                <div className="actions" >
                     <button
                         className="btn"
                         onClick={() => {

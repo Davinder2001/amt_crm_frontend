@@ -27,10 +27,20 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Delete a store item
-    deleteStoreItem: builder.mutation<{message: string}, number>({
+    deleteStoreItem: builder.mutation<{ message: string }, number>({
       query: (id) => ({
         url: `store/items/${id}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["Store"],
+    }),
+
+    // bulk Delete store items
+    bulkDeleteStoreItems: builder.mutation<{ message: string }, number[]>({
+      query: (item_id) => ({
+        url: 'store/items/bulk-delete',
+        method: 'POST',
+        body: { item_id },
       }),
       invalidatesTags: ["Store"],
     }),
@@ -188,6 +198,7 @@ export const {
   useFetchStoreItemQuery,
   useCreateStoreItemMutation,
   useDeleteStoreItemMutation,
+  useBulkDeleteStoreItemsMutation,
   useUpdateStoreItemMutation,
   useBulkCreateStoreItemMutation,
   useOcrProcessMutation,

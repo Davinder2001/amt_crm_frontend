@@ -29,20 +29,23 @@ const HrHeroSection = () => {
         </div>
       </div>
       {/* Right Section - Active Employees */}
-      <div className="active-employee-box">
-        <h3>Recent Active Employee</h3>
-        <ul>
-          {activeEmployees.slice(0, 5).map((emp) => (
-            <li key={emp.id} className="employee-item">
-              <div className="emp-avatar">{emp.name.charAt(0).toUpperCase()}</div>
-              <div className="emp-info">
-                <p>{emp.name}</p>
-                <span className="emp-status active">Active</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {activeEmployees.length > 0 ?
+        <div className="active-employee-box">
+          <h3>Recent Active Employee</h3>
+          <ul>
+            {activeEmployees.slice(0, 5).map((emp) => (
+              <li key={emp.id} className="employee-item">
+                <div className="emp-avatar">{emp.name.charAt(0).toUpperCase()}</div>
+                <div className="emp-info">
+                  <p>{emp.name}</p>
+                  <span className="emp-status active">Active</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        : ''
+      }
     </div>
   );
 };

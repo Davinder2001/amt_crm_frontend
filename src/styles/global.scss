@@ -157,6 +157,12 @@
 .drag-scroll.dragging {
     cursor: grabbing;
     user-select: none;
+
+    tr,
+    th {
+        cursor: grabbing;
+        user-select: none;
+    }
 }
 
 body {

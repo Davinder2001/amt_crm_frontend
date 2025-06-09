@@ -218,20 +218,23 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     </div>
                 )}
 
-                <div className="action-icons-horizontal">
-                    {actions && actions.map((action, i) => (
-                        <div key={i} className="action-tooltip">
-                            <button
-                                onClick={action.onClick}
-                                className="toolbar-btn"
-                            >
-                                <i>{action.icon}</i>
-                                <span>{action.label}</span>
-                            </button>
-                            <span className="tooltip-text">{action.label}</span>
-                        </div>
-                    ))}
-                </div>
+                {actions && actions?.length > 0 ?
+                    <div className="action-icons-horizontal">
+                        {actions.map((action, i) => (
+                            <div key={i} className="action-tooltip">
+                                <button
+                                    onClick={action.onClick}
+                                    className="toolbar-btn"
+                                >
+                                    <i>{action.icon}</i>
+                                    <span>{action.label}</span>
+                                </button>
+                                <span className="tooltip-text">{action.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                    : ''
+                }
 
                 {extraLinks && extraLinks.length > 0 && (
                     <div className="dropdown dropdown-right hover-group extra-links">
@@ -292,7 +295,13 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     transition: opacity 0.2s;
                     white-space: nowrap;
                     font-size: 12px;
+                    display: none;
                 }
+                    @media (max-width: 768px) {
+                    .tooltip-text {
+                    display: block;
+                    }
+            }
                 .action-tooltip:hover .tooltip-text {
                     visibility: visible;
                     opacity: 1;

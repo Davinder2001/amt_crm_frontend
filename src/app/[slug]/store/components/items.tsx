@@ -6,9 +6,10 @@ import {
   useDeleteStoreItemMutation,
   useImportStoreItemsMutation,
   useLazyExportStoreItemsQuery,
+  useBulkDeleteStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaEdit, FaEye, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload } from 'react-icons/fa';
+import { FaEdit, FaEye, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
@@ -17,6 +18,8 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -44,6 +47,7 @@ const Items: React.FC = () => {
     : [];
 
   const [deleteStoreItem] = useDeleteStoreItemMutation();
+  const [bulkDeleteStoreItems] = useBulkDeleteStoreItemsMutation();
   const [triggerExport] = useLazyExportStoreItemsQuery();
 
   const handleDelete = async (id: number) => {
@@ -57,6 +61,17 @@ const Items: React.FC = () => {
       setShowDeleteConfirm(false);
       setItemToDelete(null);
       setItemToDeleteName('');
+    }
+  };
+
+  const handleBulkDelete = async (item_id: number[]) => {
+    try {
+      const response = await bulkDeleteStoreItems(item_id).unwrap();
+      toast.success(response.message);
+      refetch();
+    } catch (err) {
+      console.error('Error bulk deleting items:', err);
+      toast.error('Failed to delete selected items');
     }
   };
 
@@ -248,8 +263,14 @@ const Items: React.FC = () => {
     },
   ];
 
-  if (isLoading) return <p>Loading items...</p>;
-  if (error) return <p>Error fetching items.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to load items"
+      message="We encountered an error while loading your store items. Please try again later."
+    />
+  );
 
   return (
     <div className="items-page">
@@ -290,14 +311,33 @@ const Items: React.FC = () => {
           { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
       />
-      <ResponsiveTable
-        data={filteredItems}
-        columns={columns}
-        onDelete={(id) => handleDelete(id)}
-        onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
-        storageKey="store_table_page"
-      />
+      {storeItems.length > 0 ?
+        <ResponsiveTable
+          data={filteredItems}
+          columns={columns}
+          onDelete={(id) => handleDelete(id)}
+          onBulkDelete={handleBulkDelete}
+          onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
+          storageKey="store_table_page"
+          cardViewKey="name"
+          showBulkActions={true}
+        />
+        :
+        <EmptyState
+          icon={<FaBoxOpen className="empty-state-icon" />}
+          title="No items found"
+          message="You haven't added any items yet. Start by creating your first store item."
+          action={
+            <button
+              className="buttons"
+              onClick={() => router.push(`/${companySlug}/store/add-item`)}
+            >
+              <FaPlus size={18} /> Add New Item
+            </button>
+          }
+        />
+      }
 
       <Modal
         isOpen={importModalVisible}

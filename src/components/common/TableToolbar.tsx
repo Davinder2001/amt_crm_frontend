@@ -292,7 +292,13 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     transition: opacity 0.2s;
                     white-space: nowrap;
                     font-size: 12px;
+                    display: none;
                 }
+                    @media (max-width: 768px) {
+                    .tooltip-text {
+                    display: block;
+                    }
+            }
                 .action-tooltip:hover .tooltip-text {
                     visibility: visible;
                     opacity: 1;

@@ -296,6 +296,130 @@
     }
 }
 
+/* Bulk Actions Toolbar */
+.bulk-actions-toolbar {
+    position: sticky;
+    top: 0;
+    color: $primary-color;
+    padding: 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    animation: slideDown 0.3s ease-out;
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+
+    /* Checkbox Styles */
+    .select-all-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .select-icon {
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+
+            &:hover {
+                color: $primary-color;
+            }
+
+            &.select-checkbox {
+                display: inline-flex;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &.select-icon {
+                    font-size: 18px;
+                }
+
+                &:hover .select-icon {
+                    color: $primary-color;
+                }
+
+            }
+        }
+
+        .FaCheckSquare {
+            color: $primary-color;
+        }
+
+        .select-all-pages {
+            margin-left: 4px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    .selected-count {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .bulk-actions {
+        display: flex;
+        gap: 8px;
+
+        .bulk-delete-btn {
+            background: #ef4444;
+            color: $white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            :hover {
+                background: #dc2626;
+                transform: translateY(-1px);
+            }
+        }
+    }
+
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .bulk-actions-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .bulk-actions {
+        width: 100%;
+    }
+
+    .bulk-delete-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -303,6 +427,8 @@ table {
 
     thead {
         tr {
+            cursor: pointer;
+
             th {
                 background: $primary-color;
                 color: rgba(255, 255, 255, 1);

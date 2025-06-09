@@ -1,10 +1,10 @@
 import React from 'react'
 
 function LoadingState() {
-    return (
-        <div className="data-loading-state">
-            <div className="data-spinner" />
-            <style>{`
+  return (
+    <div className="data-loading-state">
+      <div className="data-spinner" />
+      <style>{`
                 .data-loading-state {
   display: flex;
   align-items: center;
@@ -16,7 +16,7 @@ function LoadingState() {
   font-size: 16px;
   width: 100%;
   height: 100%;
-
+            }
   .data-spinner {
     width: 24px;
     height: 24px;
@@ -35,11 +35,11 @@ function LoadingState() {
       transform: rotate(360deg);
     }
   }
-}
+
 
                 `}</style>
-        </div>
-    )
+    </div>
+  )
 }
 
 export default LoadingState

@@ -720,30 +720,31 @@
     .overview-grid-container {
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 12px;
+
+        .card {
+            padding: 14px;
+            gap: 12px;
+        }
+
+        .icon-shell {
+            width: 46px;
+            height: 46px;
+            padding: 10px;
+        }
+
+        .value-count {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 13px;
+        }
+
+        .green {
+            font-size: 12px;
+        }
     }
 
-    .card {
-        padding: 14px;
-        gap: 12px;
-    }
-
-    .icon-shell {
-        width: 46px;
-        height: 46px;
-        padding: 10px;
-    }
-
-    .value-count {
-        font-size: 20px;
-    }
-
-    p {
-        font-size: 13px;
-    }
-
-    .green {
-        font-size: 12px;
-    }
 }
 
 @media (max-width: 480px) {

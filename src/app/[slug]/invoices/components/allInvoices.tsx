@@ -1,17 +1,17 @@
 'use client';
-
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaFileInvoice, FaPlus, FaWhatsapp } from "react-icons/fa";
+import { FaFileInvoice, FaPlus, FaWhatsapp, FaUsers, FaCreditCard } from "react-icons/fa";
 import {
   useLazyDownloadInvoicePdfQuery,
-  useSendInvoiceToWhatsappMutation
+  useSendInvoiceToWhatsappMutation,
 } from "@/slices/invoices/invoice";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
-import { toast } from "react-toastify";
 import { useCompany } from "@/utils/Company";
 import EmptyState from "@/components/common/EmptyState";
 import LoadingState from "@/components/common/LoadingState";
+import TableToolbar from "@/components/common/TableToolbar";
+import { toast } from 'react-toastify';
 
 interface allInvoicesProps {
   invoices: Invoice[];
@@ -19,12 +19,92 @@ interface allInvoicesProps {
   isError: boolean;
 }
 
+const COLUMN_STORAGE_KEY = 'visible_columns_invoice';
+
 const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
   const [sendToWhatsapp, { isLoading: sending }] = useSendInvoiceToWhatsappMutation();
   const router = useRouter();
   const { companySlug } = useCompany();
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
+    const saved = localStorage.getItem(COLUMN_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : ['invoice_number', 'client_name', 'invoice_date', 'final_amount'];
+  });
 
+  const allColumns = [
+    { label: "Invoice No.", key: "invoice_number" as string },
+    { label: "Client", key: "client_name" as string },
+    { label: "Date", key: "invoice_date" as string },
+    { label: "Total (₹)", key: "final_amount" as string },
+  ];
+
+  const tableFilters = [
+    {
+      key: 'search',
+      label: 'Search',
+      type: 'search' as const
+    },
+    {
+      key: 'invoice_date',
+      label: 'Date',
+      type: 'multi-select' as const,
+      options: [...new Set(invoices.map(invoice => invoice.invoice_date))].filter(Boolean) as string[]
+    },
+    {
+      key: 'client_name',
+      label: 'Client',
+      type: 'multi-select' as const,
+      options: [...new Set(invoices.map(invoice => invoice.client_name))].filter(Boolean) as string[]
+    }
+  ];
+
+  const toggleColumn = (key: string) => {
+    setVisibleColumns((prev) => {
+      const updated = prev.includes(key)
+        ? prev.filter((col) => col !== key)
+        : [...prev, key];
+      localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const onResetColumns = () => {
+    const defaultColumns = ['invoice_number', 'client_name', 'invoice_date', 'final_amount'];
+    setVisibleColumns(defaultColumns);
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(defaultColumns));
+  };
+
+  const filterData = (data: Invoice[]): Invoice[] => {
+    return data.filter((invoice) => {
+      if (filters.search && filters.search.length > 0) {
+        const searchTerm = filters.search[0].toLowerCase();
+        const visibleFields = allColumns
+          .filter(col => visibleColumns.includes(col.key))
+          .map(col => col.key);
+
+        const matchesSearch = visibleFields.some(key => {
+          const value = String(invoice[key as keyof Invoice] ?? '').toLowerCase();
+          return value.includes(searchTerm);
+        });
+
+        if (!matchesSearch) return false;
+      }
+
+      return Object.entries(filters)
+        .filter(([field]) => field !== 'search')
+        .every(([field, values]) => {
+          if (!values || values.length === 0) return true;
+
+          const invoiceValue = String(invoice[field as keyof Invoice] ?? '').toLowerCase();
+          const normalizedValues = values.map(v => v.toLowerCase());
+
+          return normalizedValues.includes(invoiceValue);
+        });
+    });
+  };
+
+  const filteredInvoices = filterData(invoices);
 
   const handleDownloadPdf = async (invoiceId: number) => {
     try {
@@ -63,7 +143,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
         });
         toast.success("Shared via WhatsApp or other app.");
       } else {
-        // Fallback to opening WhatsApp Web with prefilled message
         window.open(res.whatsapp_url, "_blank");
         toast.info("Opened WhatsApp Web for manual sharing.");
       }
@@ -74,14 +153,20 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
   };
 
   const columns = [
-
-    { label: "Invoice No.", key: "invoice_number" as keyof Invoice },
-    { label: "Client", key: "client_name" as keyof Invoice },
-    { label: "Date", key: "invoice_date" as keyof Invoice },
-    {
-      label: "Total (₹)",
-      render: (invoice: Invoice) => `₹${invoice.final_amount}`,
-    },
+    ...allColumns
+      .filter(col => visibleColumns.includes(col.key))
+      .map(col => {
+        if (col.key === 'final_amount') {
+          return {
+            label: col.label,
+            render: (invoice: Invoice) => `₹${invoice.final_amount}`,
+          };
+        }
+        return {
+          label: col.label,
+          key: col.key as keyof Invoice,
+        };
+      }),
     {
       label: "Actions",
       render: (invoice: Invoice) => (
@@ -126,14 +211,60 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
   );
 
   return (
-    <ResponsiveTable
-      data={invoices}
-      columns={columns}
-      storageKey="invoice_table_page"
-      onDelete={(id) => console.log(id, 'deleted successfully')}
-      onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
-      onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
-    />
+    <>
+      <TableToolbar
+        filters={tableFilters}
+        onFilterChange={(field, value, type) => {
+          if (type === 'search') {
+            setFilters(prev => ({
+              ...prev,
+              [field]: value && typeof value === 'string' ? [value] : []
+            }));
+          } else {
+            setFilters(prev => ({
+              ...prev,
+              [field]: Array.isArray(value) ? value : [value]
+            }));
+          }
+        }}
+        columns={allColumns}
+        visibleColumns={visibleColumns}
+        onColumnToggle={toggleColumn}
+        onResetColumns={onResetColumns}
+        actions={[
+          {
+            label: 'All Customers',
+            icon: <FaUsers />,
+            onClick: () => router.push(`/${companySlug}/invoices/customers`),
+          },
+          {
+            label: 'Credits',
+            icon: <FaCreditCard />,
+            onClick: () => router.push(`/${companySlug}/invoices/credits`),
+          },
+          {
+            label: 'Quotations',
+            icon: <FaFileInvoice />,
+            onClick: () => router.push(`/${companySlug}/invoices/qutations`),
+          },
+          ...(invoices.length > 0
+            ? [{
+              label: 'Add Invoice',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
+            }]
+            : []),
+        ]}
+      />
+
+      <ResponsiveTable
+        data={filteredInvoices}
+        columns={columns}
+        storageKey="invoice_table_page"
+        onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
+      />
+    </>
   );
 };
 

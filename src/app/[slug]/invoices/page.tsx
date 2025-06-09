@@ -2,7 +2,6 @@
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
 import AllInvoices from './components/allInvoices';
-import InvoicesNavigation from './components/invoicesNavigation';
 import { useFetchInvoicesQuery } from '@/slices/invoices/invoice';
 
 function Page() {
@@ -17,7 +16,6 @@ function Page() {
   return (
     <>
       <div className="navigation">
-        <InvoicesNavigation invoices={invoices} />
       </div>
       <AllInvoices invoices={invoices} isLoadingInvoices={isLoading} isError={isError} />
     </>

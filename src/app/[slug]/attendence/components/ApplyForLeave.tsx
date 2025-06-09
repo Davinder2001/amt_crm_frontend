@@ -274,7 +274,6 @@
 
 
 
-
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
@@ -293,7 +292,7 @@ interface ApplyLeaveFormProps {
 
 const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-    const [leaveType, setLeaveType] = useState(''); // ✅ Separate state
+    const [leaveTypeId, setLeaveTypeId] = useState(''); // ✅ updated: store ID
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
@@ -306,7 +305,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
         if (isSuccess) {
             toast.success("Leave applied successfully!");
             setSelectedDates([]);
-            setLeaveType('');
+            setLeaveTypeId('');
             setSubject('');
             setDescription('');
             setDocument(null);
@@ -334,10 +333,10 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
 
             const payload = {
                 dates: formattedDates,
-                leave_type: leaveType,
+                leave_type_id: Number(leaveTypeId), // ✅ send ID as number
                 subject,
                 description,
-                document, // Only include if API accepts multipart/form-data
+                document,
             };
 
             const response = await applyForLeave(payload).unwrap();
@@ -401,13 +400,13 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                     <div className="input-group">
                         <label>Leave Type</label>
                         <select
-                            value={leaveType}
-                            onChange={(e) => setLeaveType(e.target.value)}
+                            value={leaveTypeId}
+                            onChange={(e) => setLeaveTypeId(e.target.value)}
                             className="modern-input"
                         >
                             <option value="" disabled>Select Leave Type</option>
                             {data?.data?.map((leave: { id: number; name: string }) => (
-                                <option key={leave.id} value={leave.name}>
+                                <option key={leave.id} value={leave.id.toString()}>
                                     {leave.name}
                                 </option>
                             ))}
@@ -501,7 +500,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                             disabled={
                                 isLoading ||
                                 selectedDates.length === 0 ||
-                                !leaveType ||
+                                !leaveTypeId ||
                                 !subject ||
                                 !description
                             }

@@ -64,9 +64,9 @@ const Items: React.FC = () => {
     }
   };
 
-  const handleBulkDelete = async (ids: number[]) => {
+  const handleBulkDelete = async (item_id: number[]) => {
     try {
-      const response = await bulkDeleteStoreItems(ids).unwrap();
+      const response = await bulkDeleteStoreItems(item_id).unwrap();
       toast.success(response.message);
       refetch();
     } catch (err) {
@@ -271,21 +271,6 @@ const Items: React.FC = () => {
       message="We encountered an error while loading your store items. Please try again later."
     />
   );
-  if (storeItems.length === 0) return (
-    <EmptyState
-      icon={<FaBoxOpen className="empty-state-icon" />}
-      title="No items found"
-      message="You haven't added any items yet. Start by creating your first store item."
-      action={
-        <button
-          className="buttons"
-          onClick={() => router.push(`/${companySlug}/store/add-item`)}
-        >
-          <FaPlus size={18} /> Add New Item
-        </button>
-      }
-    />
-  );
 
   return (
     <div className="items-page">
@@ -326,16 +311,32 @@ const Items: React.FC = () => {
           { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
       />
-      <ResponsiveTable
-        data={filteredItems}
-        columns={columns}
-        onDelete={(id) => handleDelete(id)}
-        onBulkDelete={handleBulkDelete}
-        onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
-        storageKey="store_table_page"
-        showBulkActions={true}
-      />
+      {storeItems.length > 0 ?
+        <ResponsiveTable
+          data={filteredItems}
+          columns={columns}
+          onDelete={(id) => handleDelete(id)}
+          onBulkDelete={handleBulkDelete}
+          onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
+          storageKey="store_table_page"
+          showBulkActions={true}
+        />
+        :
+        <EmptyState
+          icon={<FaBoxOpen className="empty-state-icon" />}
+          title="No items found"
+          message="You haven't added any items yet. Start by creating your first store item."
+          action={
+            <button
+              className="buttons"
+              onClick={() => router.push(`/${companySlug}/store/add-item`)}
+            >
+              <FaPlus size={18} /> Add New Item
+            </button>
+          }
+        />
+      }
 
       <Modal
         isOpen={importModalVisible}

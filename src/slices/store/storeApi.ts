@@ -37,10 +37,10 @@ const storeApi = storeApiSlice.injectEndpoints({
 
     // bulk Delete store items
     bulkDeleteStoreItems: builder.mutation<{ message: string }, number[]>({
-      query: (ids) => ({
+      query: (item_id) => ({
         url: 'store/items/bulk-delete',
         method: 'POST',
-        body: { ids },
+        body: { item_id },
       }),
       invalidatesTags: ["Store"],
     }),

@@ -124,6 +124,30 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
     getCreditInvoiceById: builder.query<{ status: boolean; message: string }, number>({
       query: (id) => `invoices/credits/${id}`,
     }),
+    getOnlinePaymentHistory: builder.query<PaymentHistoryResponse<OnlinePaymentGroup>, void>({
+      query: () => 'invoices/payments-history/online',
+      providesTags: ['Invoice'],
+    }),
+
+    getCashPaymentHistory: builder.query<PaymentHistoryResponse<DateGroupedPayment>, void>({
+      query: () => 'invoices/payments-history/cash',
+      providesTags: ['Invoice'],
+    }),
+
+    getCardPaymentHistory: builder.query<PaymentHistoryResponse<DateGroupedPayment>, void>({
+      query: () => 'invoices/payments-history/card',
+      providesTags: ['Invoice'],
+    }),
+
+    getCreditPaymentHistory: builder.query<PaymentHistoryResponse<DateGroupedPayment>, void>({
+      query: () => 'invoices/payments-history/credit',
+      providesTags: ['Invoice'],
+    }),
+
+    getSelfConsumptionHistory: builder.query<PaymentHistoryResponse<DateGroupedPayment>, void>({
+      query: () => 'invoices/payments-history/self-consumption',
+      providesTags: ['Invoice'],
+    }),
 
   }),
 });
@@ -133,13 +157,18 @@ export const {
   useCreateInvoiceMutation,
   usePrintInvoiceMutation,
   useMailInvoiceMutation,
-  // useGetInvoiceByIdQuery,
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,
   useGetCreditUsersQuery,
   usePayCreditInvoiceMutation,
-  useGetCreditInvoiceByIdQuery
+  useGetCreditInvoiceByIdQuery,
+  useGetOnlinePaymentHistoryQuery,
+  useGetCashPaymentHistoryQuery,
+  useGetCardPaymentHistoryQuery,
+  useGetCreditPaymentHistoryQuery,
+  useGetSelfConsumptionHistoryQuery,
 } = invoiceApi;
+
 
 export default invoiceApi;

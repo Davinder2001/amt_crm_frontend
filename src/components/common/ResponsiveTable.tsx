@@ -99,38 +99,52 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   };
 
   const toggleSelectAll = () => {
-    if (selectedItems.all) {
-      // Deselect all
-      setSelectedItems({ all: false, ids: [], page: currentPage });
-    } else {
-      // Select all on current page
-      const pageIds = currentData.map(item => item.id);
-      setSelectedItems({ all: false, ids: pageIds, page: currentPage });
-    }
+    setSelectedItems(prev => {
+      // If we're in "all pages" mode, switch to current page selection
+      if (prev.all) {
+        const pageIds = currentData.map(item => item.id);
+        return { all: false, ids: pageIds, page: currentPage };
+      }
+      // If current page is already fully selected, deselect all
+      else if (prev.ids.length === currentData.length) {
+        return { all: false, ids: [], page: currentPage };
+      }
+      // Otherwise select current page
+      else {
+        const pageIds = currentData.map(item => item.id);
+        return { all: false, ids: pageIds, page: currentPage };
+      }
+    });
   };
 
   const toggleSelectAllPages = () => {
-    if (selectedItems.all) {
-      // Deselect all
-      setSelectedItems({ all: false, ids: [], page: currentPage });
-    } else {
-      // Select all across all pages
-      setSelectedItems({ all: true, ids: data.map(item => item.id), page: currentPage });
-    }
+    setSelectedItems(prev => {
+      // If already in "all pages" mode, deselect all
+      if (prev.all) {
+        return { all: false, ids: [], page: currentPage };
+      }
+      // Otherwise enable "all pages" mode
+      else {
+        return { all: true, ids: [], page: currentPage };
+      }
+    });
   };
 
   const toggleSelectItem = (id: number) => {
     setSelectedItems(prev => {
+      // In "all pages" mode, we track exceptions
       if (prev.all) {
-        // If "all" is selected, we need to exclude this item
-        const newIds = prev.ids.filter(itemId => itemId !== id);
-        return { all: false, ids: newIds, page: prev.page };
-      } else {
-        // Toggle this item in the selection
         const newIds = prev.ids.includes(id)
           ? prev.ids.filter(itemId => itemId !== id)
           : [...prev.ids, id];
         return { ...prev, ids: newIds };
+      }
+      // In normal mode, toggle the item
+      else {
+        const newIds = prev.ids.includes(id)
+          ? prev.ids.filter(itemId => itemId !== id)
+          : [...prev.ids, id];
+        return { all: false, ids: newIds, page: currentPage };
       }
     });
   };
@@ -154,7 +168,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   };
 
   const isItemSelected = (id: number) => {
-    if (selectedItems.all) return true;
+    // In "all pages" mode, items are selected unless explicitly excluded
+    if (selectedItems.all) {
+      return !selectedItems.ids.includes(id);
+    }
+    // In normal mode, check if item is in selected ids
     return selectedItems.ids.includes(id);
   };
 
@@ -188,13 +206,21 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               {showBulkActions && (
                 <th>
                   <div className="select-all-container">
-                    <span onClick={toggleSelectAll}>
-                      {selectedItems.ids.length === currentData.length && !selectedItems.all ? (
+                    {/* Current page checkbox */}
+                    <span
+                      onClick={toggleSelectAll}
+                      title="Select current page"
+                    >
+                      {selectedItems.all ? (
+                        <FaSquare className="select-icon" />
+                      ) : selectedItems.ids.length === currentData.length ? (
                         <FaCheckSquare className="select-icon" />
                       ) : (
                         <FaSquare className="select-icon" />
                       )}
                     </span>
+
+                    {/* All pages checkbox */}
                     {totalPages > 1 && (
                       <span
                         className="select-all-pages"

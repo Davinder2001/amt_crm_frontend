@@ -82,17 +82,6 @@ const UserList: React.FC = () => {
       },
     }
 
-
-    // {
-    //   label: 'Action',
-    //   render: (emp: Employee) => (
-    //     <div className="store-t-e-e-icons">
-    //       <span onClick={() => handleDelete(emp.id)}><FaTrash /></span>
-    //       <span onClick={() => update(emp)}><FaEdit /></span>
-    //       <span onClick={() => view(emp)}><FaEye /></span>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return <ResponsiveTable data={employees} columns={columns}

@@ -51,10 +51,6 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
       key?: keyof Attendance;
       render?: (row: Attendance, index?: number) => React.ReactNode;
     }[] = [
-        {
-          label: 'Sr. No',
-          render: (_: Attendance, index?: number) => (index ?? 0) + 1,
-        },
         { label: 'ID', key: 'id' },
         {
           label: 'Name',

@@ -11,7 +11,6 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
 import { FaUniversity, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 
 const BankAccountList = () => {
@@ -155,15 +154,13 @@ const BankAccountList = () => {
                     title="No Bank Accounts Found"
                     message="You haven't added any bank account details yet."
                     action={
-                        <Button
+                        <button
                             className="buttons"
                             onClick={openAddModal}
-                            startIcon={<FaPlus />}
-                            variant="contained"
                             color="primary"
                         >
-                            Add Bank Account
-                        </Button>
+                            <FaPlus />Add Bank Account
+                        </button>
                     }
                 />
             )}

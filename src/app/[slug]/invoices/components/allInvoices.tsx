@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaFileInvoice, FaPlus, FaWhatsapp, FaUsers, FaCreditCard } from "react-icons/fa";
+import { FaFileInvoice, FaPlus, FaWhatsapp, FaUsers, FaCreditCard, FaMoneyBill } from "react-icons/fa";
 import {
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,
@@ -256,6 +256,11 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
             label: 'Quotations',
             icon: <FaFileInvoice />,
             onClick: () => router.push(`/${companySlug}/invoices/qutations`),
+          },
+          {
+            label: 'Cash Flow',
+            icon: <FaMoneyBill />,
+            onClick: () => router.push(`/${companySlug}/invoices/cash-flow`),
           },
 
         ]}

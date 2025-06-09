@@ -4,17 +4,14 @@ import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoice';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
 import { FaArrowLeft } from 'react-icons/fa';
-
+import { useRouter } from 'next/navigation';
 const InvoiceViewPage = () => {
   const params = useParams();
   const id = params?.id;
-  const { companySlug } = useCompany();
 
   const { setTitle } = useBreadcrumb(); // ✅ Move this hook to the top
-
+  const router = useRouter();
   const { data, isLoading, isError } = useGetInvoiceByIdQuery(id as string, {
     skip: !id,
   });
@@ -30,9 +27,15 @@ const InvoiceViewPage = () => {
 
   return (
     <div>
-      <Link href={`/${companySlug}/invoices`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
+      <div
+        onClick={() => router.back()}
+        className="back-button"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && router.back()}
+      >
+        <FaArrowLeft size={20} color="#fff" />
+      </div>
       <div className="invoice-wrapper">
         <div className="invoice-card">
           <header className="invoice-header">

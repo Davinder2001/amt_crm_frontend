@@ -5,13 +5,13 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
-import HrNavigation from '../../../components/hrNavigation';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaTrash, FaUser } from 'react-icons/fa';
+import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import Link from 'next/link'
+import TableToolbar from '@/components/common/TableToolbar';
 
 const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -84,7 +84,25 @@ const ViewUserPage: React.FC = () => {
         <Link href={`/${companySlug}/hr/status-view`} className='back-button'>
           <FaArrowLeft size={20} color='#fff' />
         </Link>
-        <HrNavigation />
+        <TableToolbar
+          actions={[
+            {
+              label: 'Add Employee',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+            },
+            {
+              label: 'Status View',
+              icon: <FaUserCheck />,
+              onClick: () => router.push(`/${companySlug}/hr/status-view`),
+            },
+            {
+              label: 'Employee Salary',
+              icon: <FaMoneyBillWave />,
+              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
+            }
+          ]}
+        />
       </div>
       <div className="employee-profile-inner-container">
         <div className="profile-header">

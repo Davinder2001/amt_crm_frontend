@@ -292,7 +292,7 @@ interface ApplyLeaveFormProps {
 
 const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-    const [leaveTypeId, setLeaveTypeId] = useState(''); // ✅ updated: store ID
+    const [leaveType, setLeaveTypeId] = useState(''); // ✅ updated: store ID
     const [subject, setSubject] = useState('');
     const [description, setDescription] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
@@ -333,7 +333,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
 
             const payload = {
                 dates: formattedDates,
-                leave_type_id: Number(leaveTypeId), // ✅ send ID as number
+                leave_type: Number(leaveType), // ✅ send ID as number
                 subject,
                 description,
                 document,
@@ -400,7 +400,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                     <div className="input-group">
                         <label>Leave Type</label>
                         <select
-                            value={leaveTypeId}
+                            value={leaveType}
                             onChange={(e) => setLeaveTypeId(e.target.value)}
                             className="modern-input"
                         >
@@ -500,7 +500,7 @@ const ApplyForLeave: React.FC<ApplyLeaveFormProps> = ({ onSuccess }) => {
                             disabled={
                                 isLoading ||
                                 selectedDates.length === 0 ||
-                                !leaveTypeId ||
+                                !leaveType ||
                                 !subject ||
                                 !description
                             }

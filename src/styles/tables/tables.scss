@@ -298,25 +298,30 @@
 
 /* Bulk Actions Toolbar */
 .bulk-actions-toolbar {
-    position: sticky;
-    top: 0;
-    color: $primary-color;
-    padding: 5px;
+    position: fixed;
+    bottom: 50px;
+    left: 55%;
+    transform: translate(-50%, 0);
+    background-color: $primary-color;
+    box-shadow: $box-shadow;
+    color: $white;
+    padding: 5px 10px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 10;
+    gap: 20px;
+    z-index: 999;
     animation: slideDown 0.3s ease-out;
 
     @keyframes slideDown {
         from {
-            transform: translateY(-20px);
+            transform: translate(-50%, -20px);
             opacity: 0;
         }
 
         to {
-            transform: translateY(0);
+            transform: translate(-50%, 0);
             opacity: 1;
         }
     }

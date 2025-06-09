@@ -332,7 +332,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   onEdit,
   onView,
   storageKey,
-  showBulkActions = true,
+  showBulkActions = false,
 }: Props<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);

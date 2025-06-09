@@ -346,32 +346,35 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       {shouldShowPagination && (
         <div className="pagination-controls">
           <div className="pagination-track">
-            <button
-              className="nav-arrow"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              ←
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => (
+            <div className="nav-arrow-wrapper">
               <button
-                key={i}
-                onClick={() => handlePageChange(i + 1)}
-                className={currentPage === i + 1 ? 'active' : ''}
+                className="nav-arrow"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
               >
-                {i + 1}
+                ←
               </button>
-            ))}
 
-            <button
-              className="nav-arrow"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              →
-            </button>
+              <div className="pagination-btns-counts">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={currentPage === i + 1 ? 'active' : ''}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
 
+              <button
+                className="nav-arrow"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                →
+              </button>
+            </div>
             <span className="pagination-info">
               Page {currentPage} of {totalPages}
             </span>

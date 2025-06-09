@@ -282,12 +282,9 @@
 
 // Table Styles
 .responsive-table {
-    background: rgba(255, 255, 255, 1);
-    border-radius: 0px 0px 5px 5px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
     margin-bottom: 30px;
-    border: 1px solid rgba(0, 150, 147, 0.08);
+    box-shadow: $box-shadow;
 
 
     .action-buttons {
@@ -520,7 +517,6 @@ table {
     position: relative;
     overflow: hidden;
 
-    // Animated border effect
     &::before {
         content: '';
         position: absolute;
@@ -534,15 +530,17 @@ table {
                 rgba($primary-color, 0.77),
                 rgba($primary-color, 0.82),
                 transparent);
-        animation: borderFlow 4s linear infinite; // Slower animation
+        animation: borderFlow 4s linear infinite;
         background-size: 200% 100%;
-        opacity: 0.7; // More subtle default state
+        opacity: 0.7;
         transition: opacity 0.3s ease;
     }
 
     .pagination-track {
         display: flex;
         align-items: center;
+        justify-content: center;
+        flex-wrap: nowrap;
         gap: 6px;
         padding: 8px;
         background: white;
@@ -551,6 +549,35 @@ table {
         border: 1px solid $border-color;
         position: relative;
         z-index: 2;
+        width: 100%;
+        overflow: hidden;
+
+        .nav-arrow-wrapper {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+
+            .pagination-btns-counts {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 6px;
+                padding: 0 5px;
+                overflow-x: auto;
+                max-width: 100%;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                button {
+                    flex: 0 0 auto;
+                }
+            }
+        }
     }
 
     button {
@@ -567,10 +594,9 @@ table {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.3s ease;
         position: relative;
 
-        // Circular progress indicator
         &::after {
             content: '';
             position: absolute;
@@ -607,7 +633,6 @@ table {
     .pagination-info {
         font-size: 14px;
         color: #666;
-        margin: 0 16px;
         white-space: nowrap;
         position: relative;
 
@@ -618,14 +643,13 @@ table {
         }
     }
 
-    // Navigation arrows get special treatment
     .nav-arrow {
         background: $hover-color;
         color: $white;
         border-radius: $border-radius;
 
         &:hover:not(:disabled) {
-            background: $primary-color ;
+            background: $primary-color;
         }
     }
 }
@@ -722,6 +746,10 @@ table {
 
 
 @media (max-width: 768px) {
+
+    .pagination-track {
+        flex-wrap: wrap;
+    }
 
     .toolbar .toolbar-btn {
         padding: 5px 10px;

@@ -1,15 +1,42 @@
-import { useGetCardPaymentHistoryQuery } from '@/slices/invoices/invoice';
+'use client';
+
 import React from 'react';
+import { useGetCardPaymentHistoryQuery } from '@/slices/invoices/invoice';
+import EmptyState from '@/components/common/EmptyState';
+import { FaCreditCard } from 'react-icons/fa';
+import LoadingState from '@/components/common/LoadingState';
 
 export default function CardPayments() {
-  const { data, error, isLoading } = useGetCardPaymentHistoryQuery  ();
+  const { data, error, isLoading } = useGetCardPaymentHistoryQuery();
 
-  if (isLoading) return <div>Loading card payments...</div>;
-  if (error) return <div>Error loading card payments</div>;
+  if (isLoading) return <LoadingState/>;
+
+  if (error) {
+    return (
+      <EmptyState
+        icon={<FaCreditCard className="empty-state-icon" />}
+        title="Failed to load card payments"
+        message="There was an error while fetching card payment history."
+      />
+    );
+  }
+
+  const cardGroups = data?.data ?? [];
+  const hasNoData = cardGroups.length === 0;
+
+  if (hasNoData) {
+    return (
+      <EmptyState
+        icon={<FaCreditCard className="empty-state-icon" />}
+        title="No Card Payments Found"
+        message="No card transactions have been recorded yet."
+      />
+    );
+  }
 
   return (
     <div>
-      {data?.data.map((group) => (
+      {cardGroups.map((group) => (
         <div key={group.date} style={{ marginBottom: 20 }}>
           <h3>Date: {group.date}</h3>
           <p>Total: {group.total}</p>

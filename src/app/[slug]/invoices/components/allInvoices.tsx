@@ -194,22 +194,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
     message="We encountered an error while loading your invoices. Please try again later."
   />;
 
-  if (invoices.length === 0) return (
-    <EmptyState
-      icon={<FaFileInvoice className="empty-state-icon" />}
-      title="No invoices found"
-      message="You haven't created any invoices yet. Get started by creating your first invoice."
-      action={
-        <button
-          className="buttons"
-          onClick={() => router.push(`/${companySlug}/invoices/new-invoice`)}
-        >
-          <FaPlus size={18} /> Add New Invoice
-        </button>
-      }
-    />
-  );
-
   return (
     <>
       <TableToolbar
@@ -266,13 +250,29 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
         ]}
       />
 
-      <ResponsiveTable
-        data={filteredInvoices}
-        columns={columns}
-        storageKey="invoice_table_page"
-        onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
-      />
+      {invoices.length > 0 ?
+        <ResponsiveTable
+          data={filteredInvoices}
+          columns={columns}
+          storageKey="invoice_table_page"
+          onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
+        />
+        :
+        <EmptyState
+          icon={<FaFileInvoice className="empty-state-icon" />}
+          title="No invoices found"
+          message="You haven't created any invoices yet. Get started by creating your first invoice."
+          action={
+            <button
+              className="buttons"
+              onClick={() => router.push(`/${companySlug}/invoices/new-invoice`)}
+            >
+              <FaPlus size={18} /> Add New Invoice
+            </button>
+          }
+        />
+      }
     </>
   );
 };

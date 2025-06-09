@@ -124,7 +124,7 @@
         position: relative;
     }
 
-    .add-holiday-leave-btn-wrapper{
+    .add-holiday-leave-btn-wrapper {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 20px;
@@ -189,6 +189,21 @@
             opacity: 1;
             transform: translateY(0);
         }
+    }
+    @media (max-width: 768px) {
+    
+        .tab-content {
+            padding: 0px;
+        }
+    }
+
+}
+
+@media (max-width: 325px) {
+
+    .leave-holiday-container {
+
+        .tab {padding: 10px;}
     }
 }
 

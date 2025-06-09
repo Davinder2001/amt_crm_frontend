@@ -97,7 +97,7 @@ const HolidayList = () => {
             {!noHolidays && (
                 <div className="add-holiday-leave-btn-wrapper">
                     <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
-                        Add Holiday
+                       <FaPlus/> Add Holiday
                     </button>
                 </div>
             )}

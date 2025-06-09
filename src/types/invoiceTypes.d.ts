@@ -95,3 +95,40 @@ interface InvoicePdfDownloadResponse {
   pdf_base64: string;
   filename: string;
 }
+
+
+
+
+
+
+
+
+
+
+// historyTypes.d.ts
+type Transaction = {
+  invoice_number: string;
+  invoice_date?: string; // only for online
+  amount: number;
+};
+
+type OnlinePaymentGroup = {
+  bank_account_id: number | null;
+  bank_name: string;
+  account_number: string;
+  ifsc_code: string;
+  total_transferred: number;
+  transactions: Transaction[];
+};
+
+type DateGroupedPayment = {
+  date: string;
+  total: number;
+  transactions: Omit<Transaction, 'invoice_date'>[];
+};
+
+type PaymentHistoryResponse<T> = {
+  status: boolean;
+  payment_method?: string;
+  data: T[];
+};

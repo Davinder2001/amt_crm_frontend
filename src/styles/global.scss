@@ -110,6 +110,9 @@
 @use './invoices/credits/viewcredits.scss' as *;
 
 
+// cash-flow
+@use './invoices/cash-flow/cardflow.scss' as *;
+    
 
 // setting styling
 @use './settings/settings.scss' as *;

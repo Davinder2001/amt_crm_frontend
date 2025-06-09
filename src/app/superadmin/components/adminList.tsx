@@ -2,12 +2,16 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import {
+  useFetchAdminsQuery,
+  useUpdateAdminStatusMutation,
+} from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import Loader from '@/components/common/Loader';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 
 const statusOptions = ['active', 'blocked'];
+const COLUMN_STORAGE_KEY = 'visible_columns_admins';
 
 const AdminList = () => {
   const { data, isLoading, error } = useFetchAdminsQuery();
@@ -15,13 +19,15 @@ const AdminList = () => {
   const router = useRouter();
 
   const [filters, setFilters] = useState<Record<string, string[]>>({});
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'uid', 'name', 'email', 'number', 'email_verified', 'status'
-  ]);
-
-  const handleStatusChange = (id: string, status: string) => {
-    updateAdminStatus({ id, status });
-  };
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(COLUMN_STORAGE_KEY);
+      return saved
+        ? JSON.parse(saved)
+        : ['uid', 'name', 'email', 'number', 'email_verified', 'status'];
+    }
+    return ['uid', 'name', 'email', 'number', 'email_verified', 'status'];
+  });
 
   const allColumns = [
     { label: 'UID', key: 'uid' },
@@ -32,36 +38,61 @@ const AdminList = () => {
     { label: 'Status', key: 'status' },
   ];
 
-  const filterData = (admins: Admin[]) => {
-    return admins.filter((admin) => {
-      return Object.entries(filters).every(([field, values]) => {
-        const adminValue = admin[field as keyof Admin];
-        if (Array.isArray(values) && values.length > 0) {
-          return values.includes(String(adminValue));
-        }
-        return true;
-      });
+  const toggleColumn = (key: string) => {
+    setVisibleColumns((prev) => {
+      const updated = prev.includes(key)
+        ? prev.filter((col) => col !== key)
+        : [...prev, key];
+      localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
     });
   };
 
-  const toggleColumn = (key: string) => {
-    setVisibleColumns((prev) =>
-      prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
-    );
+  const onResetColumns = () => {
+    const defaultColumns = ['uid', 'name', 'email', 'number', 'email_verified', 'status'];
+    setVisibleColumns(defaultColumns);
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(defaultColumns));
+  };
+
+  const handleStatusChange = (id: string, status: string) => {
+    updateAdminStatus({ id, status });
+  };
+
+  const filterData = (admins: Admin[]) => {
+    return admins.filter((admin) => {
+      // Handle "search" filter
+      if (filters.search && filters.search.length > 0) {
+        const searchTerm = filters.search[0].toLowerCase();
+
+        const visibleFields = allColumns
+          .filter(col => visibleColumns.includes(col.key))
+          .map(col => col.key);
+
+        const matchesSearch = visibleFields.some(key => {
+          const value = String(admin[key as keyof Admin] ?? '').toLowerCase();
+          return value.includes(searchTerm);
+        });
+
+        if (!matchesSearch) return false;
+      }
+
+      // Handle other filters
+      return Object.entries(filters)
+        .filter(([field]) => field !== 'search')
+        .every(([field, values]) => {
+          if (!values || values.length === 0) return true;
+
+          const adminValue = String(admin[field as keyof Admin] ?? '').toLowerCase();
+          const normalizedValues = values.map(v => v.toLowerCase());
+
+          return normalizedValues.includes(adminValue);
+        });
+    });
   };
 
   const columns = allColumns
     .filter((col) => visibleColumns.includes(col.key))
     .map((col) => {
-      if (col.key === 'roles') {
-        return {
-          label: 'Roles',
-          key: 'roles' as const,
-          render: (admin: Admin) =>
-            admin.roles?.map((role) => role.company_id).join(', ') || '-',
-        };
-      }
-
       if (col.key === 'email_verified') {
         return {
           label: 'Email Verified',
@@ -83,42 +114,29 @@ const AdminList = () => {
                 borderRadius: '50px',
                 fontWeight: 500,
                 cursor: 'pointer',
-                border: `1px solid ${admin.user_status === 'active' ? '#22c55e' : '#ef4444'
-                  }`,
+                border: `1px solid ${admin.user_status === 'active' ? '#22c55e' : '#ef4444'}`,
                 color: admin.user_status === 'active' ? '#22c55e' : '#ef4444',
-                backgroundColor:
-                  admin.user_status === 'active' ? '#f0fdf4' : '#fef2f2',
+                backgroundColor: admin.user_status === 'active' ? '#f0fdf4' : '#fef2f2',
               }}
             >
-
               {statusOptions.map((status) => (
                 <option key={status} value={status}>
                   {status.charAt(0).toUpperCase() + status.slice(1)}
                 </option>
               ))}
             </select>
-
           ),
         };
       }
 
       return {
         label: col.label,
-        key: col.key as
-          | "number"
-          | "uid"
-          | "name"
-          | "email"
-          | "id"
-          | "companies"
-          | "created_at"
-          | "email_verified_at"
-          | "user_status",
+        key: col.key as keyof Admin,
       };
     });
 
   const admins = data?.admins || [];
-  // Ensure all ids are numbers for ResponsiveTable
+
   const filteredAdmins = filterData(admins).map((admin) => ({
     ...admin,
     id: typeof admin.id === 'string' ? Number(admin.id) : admin.id,
@@ -128,10 +146,9 @@ const AdminList = () => {
     {
       key: 'search',
       label: 'Search',
-      type: 'search' as const
+      type: 'search' as const,
     },
   ];
-
 
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Failed to fetch admins.</p>;
@@ -142,23 +159,24 @@ const AdminList = () => {
         filters={tableFilters}
         onFilterChange={(field, value, type) => {
           if (type === 'search') {
-            setFilters(prev => ({
+            setFilters((prev) => ({
               ...prev,
-              [field]: value && typeof value === 'string' ? [value] : []
+              [field]: value && typeof value === 'string' ? [value] : [],
             }));
           } else {
-            setFilters(prev => ({
+            setFilters((prev) => ({
               ...prev,
-              [field]: Array.isArray(value) ? value : [value]
+              [field]: Array.isArray(value) ? value : [value],
             }));
           }
         }}
         columns={allColumns}
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
+        onResetColumns={onResetColumns}
         actions={[]}
-
       />
+
       <ResponsiveTable
         data={filteredAdmins}
         columns={columns}
@@ -169,23 +187,3 @@ const AdminList = () => {
 };
 
 export default AdminList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

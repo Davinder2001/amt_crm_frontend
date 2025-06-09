@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from 'react'
 import Company from './components/company'
-import CompanyNav from './components/companyNav'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 
 
@@ -12,7 +11,6 @@ const Page = () => {
       }, [setTitle]);
   return (
     <>
-      <CompanyNav/>
       <Company/>
     </>
   )

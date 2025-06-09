@@ -33,6 +33,12 @@
         overflow: hidden;
         font-size: 16px;
 
+        i {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         // Animated underline
         &::after {
             content: '';

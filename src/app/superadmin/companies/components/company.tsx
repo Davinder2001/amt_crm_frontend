@@ -12,6 +12,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import { FaUniversity, FaHourglassHalf, FaUndoAlt } from 'react-icons/fa';
 
 interface Company {
   id: number;
@@ -24,6 +25,7 @@ interface Company {
   updated_at: string;
 }
 
+const COLUMN_STORAGE_KEY = 'visible_columns_company';
 const paymentStatusOptions = ['pending', 'completed', 'failed'];
 const verificationStatusOptions = ['pending', 'block', 'verified', 'rejected'];
 
@@ -33,13 +35,16 @@ const CompanyComponent = () => {
   const [verifyStatus] = useVerifyCompanyStatusMutation();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filters, setFilters] = useState<Record<string, string[]>>({});
-  const [visibleColumns, setVisibleColumns] = useState<string[]>([
-    'company_id',
-    'company_name',
-    'company_slug',
-    'payment_status',
-    'verification_status'
-  ]);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(COLUMN_STORAGE_KEY);
+      return saved
+        ? JSON.parse(saved)
+        : ['company_id', 'company_name', 'company_slug', 'payment_status', 'verification_status'];
+    }
+    return ['company_id', 'company_name', 'company_slug', 'payment_status', 'verification_status'];
+  });
+
   const router = useRouter();
   const { setTitle } = useBreadcrumb();
 
@@ -53,9 +58,9 @@ const CompanyComponent = () => {
 
   const handlePaymentChange = async (id: number, status: string) => {
     try {
-      await verifyPayment({ id, status }).unwrap(); // ✅ pass status in body
-      setCompanies((prev) =>
-        prev.map((company) =>
+      await verifyPayment({ id, status }).unwrap();
+      setCompanies(prev =>
+        prev.map(company =>
           company.id === id ? { ...company, payment_status: status } : company
         )
       );
@@ -68,9 +73,9 @@ const CompanyComponent = () => {
 
   const handleVerificationChange = async (id: number, status: string) => {
     try {
-      await verifyStatus({ id, status }).unwrap(); // ✅ pass status in body
-      setCompanies((prev) =>
-        prev.map((company) =>
+      await verifyStatus({ id, status }).unwrap();
+      setCompanies(prev =>
+        prev.map(company =>
           company.id === id ? { ...company, verification_status: status } : company
         )
       );
@@ -82,21 +87,22 @@ const CompanyComponent = () => {
   };
 
   const toggleColumn = (key: string) => {
-    setVisibleColumns((prev) =>
-      prev.includes(key) ? prev.filter((col) => col !== key) : [...prev, key]
-    );
+    setVisibleColumns(prev => {
+      const updated = prev.includes(key)
+        ? prev.filter(col => col !== key)
+        : [...prev, key];
+      localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   };
 
-  const filterData = (data: Company[]): Company[] => {
-    return data.filter((company) =>
-      Object.entries(filters).every(([field, values]) => {
-        const value = company[field as keyof Company];
-        return values.length === 0 || values.includes(String(value));
-      })
-    );
+  const onResetColumns = () => {
+    const defaultCols = ['company_id', 'company_name', 'company_slug', 'payment_status', 'verification_status'];
+    setVisibleColumns(defaultCols);
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(defaultCols));
   };
 
-  const columns = [
+  const allColumns = [
     {
       label: 'Company Code',
       key: 'company_id' as keyof Company,
@@ -120,7 +126,7 @@ const CompanyComponent = () => {
         >
           {paymentStatusOptions.map((status) => (
             <option key={status} value={status}>
-              {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+              {status.charAt(0).toUpperCase() + status.slice(1)}
             </option>
           ))}
         </select>
@@ -137,14 +143,15 @@ const CompanyComponent = () => {
         >
           {verificationStatusOptions.map((status) => (
             <option key={status} value={status}>
-              {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+              {status.charAt(0).toUpperCase() + status.slice(1)}
             </option>
           ))}
         </select>
       )
     }
-  ].filter((col) => visibleColumns.includes(col.key as string));
+  ];
 
+  const columns = allColumns.filter(col => visibleColumns.includes(col.key as string));
 
   const tableFilters = [
     {
@@ -153,12 +160,39 @@ const CompanyComponent = () => {
       type: 'search' as const
     },
   ];
-  
+
+  const filterData = (data: Company[]): Company[] => {
+    return data.filter((company) => {
+      // Search
+      if (filters.search && filters.search.length > 0) {
+        const searchTerm = filters.search[0].toLowerCase();
+        const visibleFields = allColumns
+          .filter(col => visibleColumns.includes(col.key as string))
+          .map(col => col.key);
+
+        const matchesSearch = visibleFields.some(key => {
+          const value = String(company[key] ?? '').toLowerCase();
+          return value.includes(searchTerm);
+        });
+
+        if (!matchesSearch) return false;
+      }
+
+      // Other filters (add more if needed)
+      return Object.entries(filters)
+        .filter(([key]) => key !== 'search')
+        .every(([field, values]) => {
+          if (!values || values.length === 0) return true;
+          const value = String(company[field as keyof Company] ?? '').toLowerCase();
+          return values.includes(value);
+        });
+    });
+  };
+
+  const filteredData = filterData(companies);
 
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Error loading companies.</p>;
-
-  const filteredData = filterData(companies);
 
   return (
     <div className="company-table-outer">
@@ -177,10 +211,27 @@ const CompanyComponent = () => {
             }));
           }
         }}
-        columns={columns}
+        columns={allColumns}
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
-        actions={[]}
+        onResetColumns={onResetColumns}
+        actions={[
+          {
+            label: 'All Companies',
+            icon: <FaUniversity />,
+            onClick: () => router.push('/superadmin/companies'),
+          },
+          {
+            label: 'Pending Companies',
+            icon: <FaHourglassHalf />,
+            onClick: () => router.push('/superadmin/companies/pending'),
+          },
+          {
+            label: 'Refunds',
+            icon: <FaUndoAlt />,
+            onClick: () => router.push('/superadmin/companies/refunds'),
+          },
+        ]}
       />
       <ResponsiveTable
         data={filteredData}

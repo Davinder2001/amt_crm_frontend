@@ -320,6 +320,7 @@ const Items: React.FC = () => {
           onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
           storageKey="store_table_page"
+          cardViewKey="name"
           showBulkActions={true}
         />
         :

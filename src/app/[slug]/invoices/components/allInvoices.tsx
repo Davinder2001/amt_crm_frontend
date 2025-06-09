@@ -232,6 +232,16 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
         onColumnToggle={toggleColumn}
         onResetColumns={onResetColumns}
         actions={[
+
+          ...(invoices.length > 0
+            ? [{
+              label: 'Add Invoice',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
+            }]
+            : []),
+        ]}
+        extraLinks={[
           {
             label: 'All Customers',
             icon: <FaUsers />,
@@ -247,13 +257,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
             icon: <FaFileInvoice />,
             onClick: () => router.push(`/${companySlug}/invoices/qutations`),
           },
-          ...(invoices.length > 0
-            ? [{
-              label: 'Add Invoice',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
-            }]
-            : []),
+
         ]}
       />
 

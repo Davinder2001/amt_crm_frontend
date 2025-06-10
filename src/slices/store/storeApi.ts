@@ -190,6 +190,24 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
 
+    fetchBrands: builder.query<Brand[], void>({
+      query: () => 'store/brands',
+    }),
+    createBrand: builder.mutation<Brand, { name: string }>({
+      query: (body) => ({
+        url: 'store/brands',
+        method: 'POST',
+        body,
+      }),
+    }),
+    deleteBrand: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `store/brands/${id}`,
+        method: 'DELETE',
+      }),
+    }),
+
+
   }),
 });
 
@@ -220,6 +238,10 @@ export const {
   useFetchCategoriesAndItemsQuery,
   useLazyExportStoreItemsQuery,
   useImportStoreItemsMutation,
+
+  useFetchBrandsQuery,
+  useCreateBrandMutation,
+  useDeleteBrandMutation,
 
 } = storeApi;
 

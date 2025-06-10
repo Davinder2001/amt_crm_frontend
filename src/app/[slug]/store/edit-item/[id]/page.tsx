@@ -8,6 +8,8 @@ import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
 
+const LOCAL_STORAGE_KEY = 'storeItemForm';
+
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
   const { companySlug } = useCompany();
@@ -255,6 +257,7 @@ const UpdateItem = () => {
         isFormModified={isFormModified}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
       />
 
     </>

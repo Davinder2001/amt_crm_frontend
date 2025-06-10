@@ -172,3 +172,12 @@ interface CreateAttributePayload {
   name: string;
   values: string[];
 };
+
+
+interface Brand {
+  id: number;
+  name: string;
+  company_id: number;
+  created_at?: string;
+  updated_at?: string;
+}

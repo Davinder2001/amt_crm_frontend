@@ -5,12 +5,13 @@ import {
   useGetAllQuotationsQuery,
   useGenerateQuotationPdfMutation,
 } from '@/slices/quotation/quotationApi';
-import { FaDownload } from 'react-icons/fa';
+import { FaDownload, FaFileInvoice } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import { Quotation } from '@/slices/quotation/quotationApi'; // Import type
+import { Quotation } from '@/slices/quotation/quotationApi';
+import EmptyState from '@/components/common/EmptyState';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();
@@ -56,7 +57,7 @@ const AllQuotations = () => {
       label: 'Actions',
       render: (item: Quotation) => (
         <button
-          className=" buttons flex items-center gap-1 text-blue-600 hover:underline"
+          className="buttons flex items-center gap-1 text-blue-600 hover:underline"
           onClick={() => handleDownload(item.id!)}
         >
           <FaDownload />
@@ -67,19 +68,44 @@ const AllQuotations = () => {
   ], [handleDownload]);
 
   if (isLoading) return <Loader />;
-  if (error) return <p className="text-red-500">Failed to load quotations.</p>;
+
+  if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to load quotations"
+        message="Something went wrong while fetching quotations."
+      />
+    );
+  }
+
+  if (quotations.length === 0) {
+    return (
+      <EmptyState
+        icon={<FaFileInvoice className="empty-state-icon" />}
+        title="No Quotations Found"
+        message="You haven't added any quotations yet."
+        action={
+          <button
+            className="buttons"
+            onClick={() => router.push(`/${companySlug}/invoices/qutations/create`)}
+          >
+            <FaDownload className="mr-2" />
+            Create Quotation
+          </button>
+        }
+      />
+    );
+  }
 
   return (
     <div className="all-quotations-page">
-      {quotations.length > 0 ? (
-        <ResponsiveTable
-          data={quotations}
-          columns={columns}
-          onView={(id) => router.push(`/${companySlug}/invoices/qutations/${id}`)}
-        />
-      ) : (
-        <p>No quotations found.</p>
-      )}
+      <ResponsiveTable
+        data={quotations}
+        columns={columns}
+        cardViewKey='customer_name'
+        onView={(id) => router.push(`/${companySlug}/invoices/qutations/${id}`)}
+      />
     </div>
   );
 };

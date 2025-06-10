@@ -8,6 +8,7 @@ import { FaArrowLeft, FaPaperPlane } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import SubmitTaskComponent from '../submit-task/SubmitTaskComponent';
+import EmptyState from '@/components/common/EmptyState';
 
 // Define the Task type based on your API response
 type Task = {
@@ -77,7 +78,16 @@ const Page = () => {
   ];
 
   if (isLoading) return <p>Loading working tasks...</p>;
-  if (error) return <p>Failed to load working tasks</p>;
+  if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to Load Tasks"
+        message="Something went wrong while fetching your working tasks."
+      />
+    );
+  }
+
 
   return (
     <div className="p-4">
@@ -89,7 +99,11 @@ const Page = () => {
         <FaArrowLeft size={20} color="#fff" />
       </button>
       {tasks.length === 0 ? (
-        <p>No working tasks found.</p>
+        <EmptyState
+          icon={<FaPaperPlane className="empty-state-icon" />}
+          title="No Working Tasks"
+          message="You're all caught up! No pending tasks at the moment."
+        />
       ) : (
         <ResponsiveTable<Task>
           data={tasks}
@@ -97,6 +111,7 @@ const Page = () => {
           onView={(id) => router.push(`/${companySlug}/tasks/task-timeline/${id}`)}
         />
       )}
+
 
       {/*submit Task Modal */}
       <Modal

@@ -139,8 +139,8 @@
         }
 
         .settings-list {
-            flex-direction: row;
-            white-space: nowrap;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
         }
 
         .settings-item {
@@ -151,7 +151,7 @@
 
         .settings-button {
             flex-direction: column;
-            min-width: 120px;
+            min-width: 20px;
             padding: 0.75rem 1rem;
             text-align: center;
 
@@ -194,6 +194,9 @@
             padding: 1rem 0.5rem;
         }
 
+        .settings-text {
+            display: none;
+        }
 
 
         .settings-list {
@@ -211,13 +214,6 @@
             min-width: 50px;
         }
 
-  .settings-text {
-            display: none;
-        }
-        .settings-list {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-        }
 
         .settings-icon {
             font-size: 1.2rem;

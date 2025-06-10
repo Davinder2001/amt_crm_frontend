@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useGetCreditUsersQuery } from '@/slices/invoices/invoice';
 import { useCompany } from '@/utils/Company';
+import EmptyState from '@/components/common/EmptyState';
+import { FaUsers } from 'react-icons/fa'; 
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -146,42 +148,54 @@ const CreditList: React.FC = () => {
       </Link>
 
       <div className="credit-users-page">
-        <TableToolbar
-          filters={[
-            {
-              key: 'search',
-              label: 'Search',
-              type: 'search' as const
-            }
-          ]}
-          onFilterChange={(field, value, type) => {
-            if (type === 'search') {
-              setFilters(prev => ({
-                ...prev,
-                [field]: value && typeof value === 'string' ? [value] : []
-              }));
-            }
-          }}
-          columns={allColumns}
-          visibleColumns={visibleColumns}
-          onColumnToggle={toggleColumn}
-          onResetColumns={onResetColumns}
-          actions={[]}
-        />
+        {filteredData.length === 0 ? (
+          <EmptyState
+            icon={<FaUsers className="empty-state-icon" />}
+            title="No Credit Users Found"
+            message="You don't have any users with outstanding invoices."
+          />
+        ) : (
+          <>
+            <TableToolbar
+              filters={[
+                {
+                  key: 'search',
+                  label: 'Search',
+                  type: 'search' as const
+                }
+              ]}
+              onFilterChange={(field, value, type) => {
+                if (type === 'search') {
+                  setFilters(prev => ({
+                    ...prev,
+                    [field]: value && typeof value === 'string' ? [value] : []
+                  }));
+                }
+              }}
+              columns={allColumns}
+              visibleColumns={visibleColumns}
+              onColumnToggle={toggleColumn}
+              onResetColumns={onResetColumns}
+              actions={[]}
+            />
 
-        <ResponsiveTable
-          data={filteredData}
-          columns={columns}
-          onView={(id: number) => {
-            const user = processedUsers.find(u => u.id === id);
-            if (user && user.outstanding > 0) {
-              handleView(id);
-            }
-          }}
-        />
+            <ResponsiveTable
+              data={filteredData}
+              columns={columns}
+              onView={(id: number) => {
+                const user = processedUsers.find(u => u.id === id);
+                if (user && user.outstanding > 0) {
+                  handleView(id);
+                }
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );
+
+
 };
 
 export default CreditList;

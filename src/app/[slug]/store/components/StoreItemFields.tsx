@@ -13,6 +13,7 @@ import ItemsTab from './ItemsTab';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useRouter } from 'next/navigation';
 import FeaturedImageUpload from './FeaturedImageUpload';
+import ItemBrands from './ItemBrands';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -97,9 +98,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             sx={{
                                 '& .MuiTab-root': {
                                     color: '#384b70',
-                                   
+
                                     '&.Mui-disabled': { color: '#ccc' },
-                                    '&.Mui-selected': { color: '#384b70' , fontWeight: 'bold',},
+                                    '&.Mui-selected': { color: '#384b70', fontWeight: 'bold', },
                                 },
                                 '& .MuiTabs-indicator': { backgroundColor: '#384b70' },
                             }}
@@ -250,7 +251,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} />
                     </div>
-                    <div className="add-items-form-container store_column">
+                    {/* <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
                             <h2 className="basic_label">Brands</h2>
                         </div>
@@ -277,6 +278,17 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 ]}
                             />
                         </div>
+                    </div> */}
+
+                    <div className="add-items-form-container store_column">
+                        <ItemBrands
+                            selectedBrand={formData.brand_name || ''}
+                            onBrandSelect={(brandName) => {
+                                const updated = { ...formData, brand_name: brandName };
+                                setFormData(updated);
+                                localStorage.setItem('STORE_ITEM_FORM', JSON.stringify(updated));
+                            }}
+                        />
                     </div>
 
                     {(isFormModified?.() || !isEditMode) && (

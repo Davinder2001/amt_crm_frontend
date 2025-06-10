@@ -492,7 +492,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   py: 0.5,
                   px: 1.5,
                   minHeight: '30px',
-                  '&:hover': { backgroundColor: '#007c7a' },
+                  '&:hover': { backgroundColor: '#9cb9d0' },
                 }}
               >
                 {isCreating ? 'Creating...' : 'Create'}

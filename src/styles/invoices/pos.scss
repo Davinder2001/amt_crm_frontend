@@ -21,7 +21,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20PX 0PX;
+    padding: 10px 0px 20px 0px;
 }
 
 // categories menus sidebar ************
@@ -114,7 +114,7 @@
             &.selected {
                 background: rgba(#384b70, 0.06);
                 color: #384b70;
-                
+
                 .category-button {
                     font-weight: 500;
                 }
@@ -123,7 +123,7 @@
             span.expand-icon {
                 color: rgba(#384b70, 0.5);
                 transition: transform 0.2s;
-                
+
                 &.expanded {
                     transform: rotate(90deg);
                 }
@@ -152,7 +152,7 @@
             li {
                 margin-bottom: 4px;
                 position: relative;
-                
+
                 &::before {
                     content: "";
                     position: absolute;
@@ -166,7 +166,7 @@
 
             .category-tab {
                 padding: 8px 10px 8px 12px;
-                
+
                 &.selected {
                     background: rgba(#384b70, 0.04);
                 }
@@ -640,8 +640,8 @@
 
     }
 
-    .checkout {
-        padding-left: 10px;
+    .cart-tab-content {
+        padding: 0px 10px;
     }
 
     .tab {
@@ -1350,8 +1350,15 @@
         }
 
         .item-list.grid-view {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+            padding: 0;
+
+            .item .item-image {
+                max-width: 80px;
+                max-height: 60px;
+                margin: auto;
+            }
         }
 
         .item-list.list-view {

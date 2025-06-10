@@ -22,7 +22,8 @@ import { FaPlus, FaCheck, FaTimes, FaTrash, FaEdit } from 'react-icons/fa';
 
 interface Props {
     selectedBrand: string;
-    onBrandSelect: (brandName: string) => void;
+    selectedBrandId: number;
+    onBrandSelect: (brandName: string, brandId?: number) => void;
 }
 
 const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
@@ -37,7 +38,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
 
     // Handle brand selection
     const handleBrandSelect = (brandName: string) => {
-        onBrandSelect(brandName);
+        const selectedBrandObj = data?.find(brand => brand.name === brandName);
+        onBrandSelect(brandName, selectedBrandObj?.id);
     };
 
     // Create or update brand
@@ -48,24 +50,15 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         }
 
         try {
-            let finalBrandName = name;
-
             if (editingBrand) {
                 await updateBrand({ id: editingBrand.id, name }).unwrap();
             } else {
-                const response = await createBrand({ name }).unwrap();
-                finalBrandName = response?.name || name;
+                await createBrand({ name }).unwrap();
             }
-
             setName('');
             setEditingBrand(null);
             setIsFormOpen(false);
-
-            // ✅ Set selected brand after creation or update
-            onBrandSelect(finalBrandName);
-
-            // ✅ Refetch after setting brand
-            refetch();
+            refetch(); // Refresh the list
         } catch (err) {
             console.error('Error saving brand:', err);
             alert('Error saving brand');
@@ -126,7 +119,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                     labelId="brand-select-label"
                                     value={selectedBrand}
                                     label="Select Brand"
-                                    onChange={(e) => handleBrandSelect(e.target.value)}
+                                    onChange={(e) => handleBrandSelect(e.target.value as string)}
                                     renderValue={(selected) => <span>{selected}</span>}
                                     sx={{
                                         '& .MuiOutlinedInput-notchedOutline': {

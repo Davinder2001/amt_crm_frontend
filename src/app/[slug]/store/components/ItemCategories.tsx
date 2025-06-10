@@ -333,7 +333,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           <div className="fields-wrapper">
             {isLoading ? (
               <Box display="flex" justifyContent="center">
-                <CircularProgress />
+                <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
               </Box>
             ) : data?.data.length === 0 ? (
               <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
@@ -454,7 +454,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             </Typography>
 
             {isLoading ? (
-              <CircularProgress />
+              <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
             ) : (
               <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
                 {data?.data?.map(renderParentOptions)}

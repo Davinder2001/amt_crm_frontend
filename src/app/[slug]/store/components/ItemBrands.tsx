@@ -82,7 +82,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                     <div className="fields-wrapper">
                         {isLoading ? (
                             <Box display="flex" justifyContent="center">
-                                <CircularProgress />
+                                <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
                             </Box>
                         ) : data?.length === 0 ? (
                             <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>

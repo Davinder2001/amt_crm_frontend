@@ -16,7 +16,9 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    IconButton
+    IconButton,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import { FaPlus, FaCheck, FaTimes, FaTrash, FaEdit } from 'react-icons/fa';
 
@@ -35,6 +37,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
     const [name, setName] = useState('');
     const [editingBrand, setEditingBrand] = useState<{ id: number; name: string } | null>(null);
     const [hoveredBrandId, setHoveredBrandId] = useState<number | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [showError, setShowError] = useState(false);
 
     // Handle brand selection
     const handleBrandSelect = (brandName: string) => {
@@ -42,10 +46,25 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         onBrandSelect(brandName, selectedBrandObj?.id);
     };
 
+    // Check if brand name exists
+    const brandExists = (brandName: string) => {
+        return data?.some(brand =>
+            brand.name.toLowerCase() === brandName.toLowerCase() &&
+            (!editingBrand || brand.id !== editingBrand.id)
+        );
+    };
+
     // Create or update brand
     const handleSubmit = async () => {
         if (!name.trim()) {
-            alert('Please enter a brand name');
+            setErrorMessage('Please enter a brand name');
+            setShowError(true);
+            return;
+        }
+
+        if (brandExists(name)) {
+            setErrorMessage('Brand with this name already exists');
+            setShowError(true);
             return;
         }
 
@@ -61,7 +80,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
             refetch(); // Refresh the list
         } catch (err) {
             console.error('Error saving brand:', err);
-            alert('Error saving brand');
+            setErrorMessage('Error saving brand');
+            setShowError(true);
         }
     };
 
@@ -76,7 +96,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                 }
             } catch (err) {
                 console.error('Delete failed:', err);
-                alert('Failed to delete brand');
+                setErrorMessage('Failed to delete brand');
+                setShowError(true);
             }
         }
     };
@@ -95,8 +116,25 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         setName('');
     };
 
+    // Close error snackbar
+    const handleCloseError = () => {
+        setShowError(false);
+        setErrorMessage(null);
+    };
+
     return (
         <Box sx={{ width: '100%' }}>
+            <Snackbar
+                open={showError}
+                autoHideDuration={6000}
+                onClose={handleCloseError}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
+
             {!isFormOpen ? (
                 <>
                     <div className="basic_label_header">
@@ -207,6 +245,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                             size="small"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            error={brandExists(name)}
+                            helperText={brandExists(name) ? 'Brand with this name already exists' : ''}
                             InputLabelProps={{
                                 sx: {
                                     color: '#384b70',
@@ -254,7 +294,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                 color="primary"
                                 startIcon={<FaCheck size={12} />}
                                 onClick={handleSubmit}
-                                disabled={(isCreating || isUpdating) || !name.trim()}
+                                disabled={(isCreating || isUpdating) || !name.trim() || brandExists(name)}
                                 sx={{
                                     backgroundColor: '#384b70',
                                     fontSize: '0.75rem',

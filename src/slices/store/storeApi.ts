@@ -206,6 +206,13 @@ const storeApi = storeApiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    updateBrand: builder.mutation<Brand, { id: number; name: string }>({
+      query: ({ id, ...body }) => ({
+        url: `store/brands/${id}`,
+        method: 'PUT',
+        body,
+      }),
+    }),
 
 
   }),
@@ -242,6 +249,7 @@ export const {
   useFetchBrandsQuery,
   useCreateBrandMutation,
   useDeleteBrandMutation,
+  useUpdateBrandMutation,
 
 } = storeApi;
 

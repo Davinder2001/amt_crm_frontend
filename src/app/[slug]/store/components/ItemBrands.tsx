@@ -4,6 +4,7 @@ import {
     useCreateBrandMutation,
     useDeleteBrandMutation,
     useFetchBrandsQuery,
+    useUpdateBrandMutation,
 } from '@/slices/store/storeApi';
 import {
     Box,
@@ -17,7 +18,7 @@ import {
     MenuItem,
     IconButton
 } from '@mui/material';
-import { FaPlus, FaCheck, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaCheck, FaTimes, FaTrash, FaEdit } from 'react-icons/fa';
 
 interface Props {
     selectedBrand: string;
@@ -27,9 +28,11 @@ interface Props {
 const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
     const { data, isLoading, refetch } = useFetchBrandsQuery();
     const [createBrand, { isLoading: isCreating }] = useCreateBrandMutation();
+    const [updateBrand, { isLoading: isUpdating }] = useUpdateBrandMutation();
     const [deleteBrand] = useDeleteBrandMutation();
-    const [isCreatingNewBrand, setIsCreatingNewBrand] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const [name, setName] = useState('');
+    const [editingBrand, setEditingBrand] = useState<{ id: number; name: string } | null>(null);
     const [hoveredBrandId, setHoveredBrandId] = useState<number | null>(null);
 
     // Handle brand selection
@@ -37,7 +40,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         onBrandSelect(brandName);
     };
 
-    // Create new brand
+    // Create or update brand
     const handleSubmit = async () => {
         if (!name.trim()) {
             alert('Please enter a brand name');
@@ -45,13 +48,27 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         }
 
         try {
-            await createBrand({ name }).unwrap();
+            let finalBrandName = name;
+
+            if (editingBrand) {
+                await updateBrand({ id: editingBrand.id, name }).unwrap();
+            } else {
+                const response = await createBrand({ name }).unwrap();
+                finalBrandName = response?.name || name;
+            }
+
             setName('');
-            setIsCreatingNewBrand(false);
-            refetch(); // Refresh the list
+            setEditingBrand(null);
+            setIsFormOpen(false);
+
+            // ✅ Set selected brand after creation or update
+            onBrandSelect(finalBrandName);
+
+            // ✅ Refetch after setting brand
+            refetch();
         } catch (err) {
-            console.error('Error creating brand:', err);
-            alert('Error creating brand');
+            console.error('Error saving brand:', err);
+            alert('Error saving brand');
         }
     };
 
@@ -71,9 +88,23 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
         }
     };
 
+    // Start editing a brand
+    const handleEditBrand = (brand: { id: number; name: string }) => {
+        setEditingBrand(brand);
+        setName(brand.name);
+        setIsFormOpen(true);
+    };
+
+    // Cancel form
+    const handleCancel = () => {
+        setIsFormOpen(false);
+        setEditingBrand(null);
+        setName('');
+    };
+
     return (
         <Box sx={{ width: '100%' }}>
-            {!isCreatingNewBrand ? (
+            {!isFormOpen ? (
                 <>
                     <div className="basic_label_header">
                         <h2 className="basic_label">Brands:</h2>
@@ -82,7 +113,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                     <div className="fields-wrapper">
                         {isLoading ? (
                             <Box display="flex" justifyContent="center">
-                                <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
+                                <CircularProgress color="primary" sx={{ color: '#384b70' }} />
                             </Box>
                         ) : data?.length === 0 ? (
                             <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
@@ -120,28 +151,38 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                         >
                                             <span>{brand.name}</span>
                                             {hoveredBrandId === brand.id && (
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDeleteBrand(brand.id, brand.name);
-                                                    }}
-                                                >
-                                                    <FaTrash size={12} color="#384b70" />
-                                                </IconButton>
+                                                <Box display="flex" gap={1}>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleEditBrand(brand);
+                                                        }}
+                                                    >
+                                                        <FaEdit size={12} color="#384b70" />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDeleteBrand(brand.id, brand.name);
+                                                        }}
+                                                    >
+                                                        <FaTrash size={12} color="#384b70" />
+                                                    </IconButton>
+                                                </Box>
                                             )}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
-
                         )}
 
                         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
                             <Button
                                 variant="outlined"
                                 startIcon={<FaPlus size={12} />}
-                                onClick={() => setIsCreatingNewBrand(true)}
+                                onClick={() => setIsFormOpen(true)}
                                 sx={{
                                     background: '#f0f0f0',
                                     border: 'none',
@@ -161,7 +202,9 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
             ) : (
                 <>
                     <div className="basic_label_header">
-                        <h2 className="basic_label">Create New Brand:</h2>
+                        <h2 className="basic_label">
+                            {editingBrand ? 'Edit Brand' : 'Create New Brand'}:
+                        </h2>
                     </div>
                     <div className="fields-wrapper">
                         <TextField
@@ -200,10 +243,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                             <Button
                                 variant="outlined"
                                 startIcon={<FaTimes size={12} />}
-                                onClick={() => {
-                                    setIsCreatingNewBrand(false);
-                                    setName('');
-                                }}
+                                onClick={handleCancel}
                                 sx={{
                                     borderColor: '#384b70',
                                     color: '#384b70',
@@ -221,7 +261,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                 color="primary"
                                 startIcon={<FaCheck size={12} />}
                                 onClick={handleSubmit}
-                                disabled={isCreating || !name.trim()}
+                                disabled={(isCreating || isUpdating) || !name.trim()}
                                 sx={{
                                     backgroundColor: '#384b70',
                                     fontSize: '0.75rem',
@@ -231,7 +271,9 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                     '&:hover': { backgroundColor: '#9cb9d0' },
                                 }}
                             >
-                                {isCreating ? 'Creating...' : 'Create'}
+                                {isCreating || isUpdating
+                                    ? (editingBrand ? 'Updating...' : 'Creating...')
+                                    : (editingBrand ? 'Update' : 'Create')}
                             </Button>
                         </Box>
                     </div>

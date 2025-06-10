@@ -6,7 +6,7 @@ import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaWhatsapp } from 'react-icons/fa';
 import { FiTrash2, FiShoppingCart, FiList, FiUser, FiFileText } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -20,8 +20,8 @@ type CartTabContentProps = {
     isSaving: boolean;
     handlePrint: () => void;
     isPrinting: boolean;
-    handleMail: () => void;
-    isMailing: boolean;
+    handleSendWhatsapp: () => void;
+    isSendWhatsapp: boolean;
     clientName: string;
     setClientName: React.Dispatch<React.SetStateAction<string>>;
     email: string;
@@ -65,7 +65,7 @@ export default function CartTabContent({
     onRemoveItem, onClearCart,
     handleSave, isSaving,
     handlePrint, isPrinting,
-    handleMail, isMailing,
+    handleSendWhatsapp, isSendWhatsapp,
     clientName, setClientName,
     email, setEmail,
     number, setNumber,
@@ -799,11 +799,11 @@ export default function CartTabContent({
                         className="btn"
                         onClick={() => {
                             if (!validateFields()) return;
-                            handleMail();
+                            handleSendWhatsapp();
                         }}
-                        disabled={isMailing}
+                        disabled={isSendWhatsapp}
                     >
-                        {isMailing ? 'Sending...' : 'Save & Mail'}
+                        {isSendWhatsapp ? 'Sending...' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>Save & <FaWhatsapp /></span>}
                     </button>
                 </div>
             </div>

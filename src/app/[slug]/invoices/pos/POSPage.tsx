@@ -24,14 +24,13 @@ function POSPage() {
         }
     }, [categories]);
 
-    if (!categories) return <Loader />;
-
+    
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
-
+    
     // Function to get all items from all categories and subcategories
     const getAllItems = (): StoreItem[] => {
         const allItems: StoreItem[] = [];
-
+        
         const collectItems = (category: Category) => {
             if (category.items) {
                 allItems.push(...category.items);
@@ -40,33 +39,33 @@ function POSPage() {
                 category.children.forEach(collectItems);
             }
         };
-
+        
         topCategories.forEach(collectItems);
         return allItems;
     };
-
+    
     // Function to get all items from a category including all its subcategories
     const getCategoryItems = (category: Category): StoreItem[] => {
         const items: StoreItem[] = [];
-
+        
         // Add direct items of the category
         if (category.items) {
             items.push(...category.items);
         }
-
+        
         // Recursively add items from all child categories
         if (category.children) {
             category.children.forEach(child => {
                 items.push(...getCategoryItems(child));
             });
         }
-
+        
         return items;
     };
-
+    
     const selectedTopCategory = topCategories.find((cat: { id: number | null; }) => cat.id === selectedTopCatId);
     const childCategories = selectedTopCategory?.children || [];
-
+    
     const findCategoryById = (cats: Category[], id: number | null): Category | undefined => {
         for (const cat of cats) {
             if (cat.id === id) return cat;
@@ -77,19 +76,19 @@ function POSPage() {
         }
         return undefined;
     };
-
+    
     const selectedChild = findCategoryById(childCategories, selectedChildCatId);
-
+    
     // Determine which items to display based on selection
     const displayItems = selectedTopCatId === null
-        ? getAllItems() // Show all items when "All" is selected
-        : selectedChildCatId && selectedChild
-            ? selectedChild.items as StoreItem[] // Show items from selected child category
-            : selectedTopCategory
-                ? getCategoryItems(selectedTopCategory) // Show all items from selected parent and its children
-                : [];
-
-
+    ? getAllItems() // Show all items when "All" is selected
+    : selectedChildCatId && selectedChild
+    ? selectedChild.items as StoreItem[] // Show items from selected child category
+    : selectedTopCategory
+    ? getCategoryItems(selectedTopCategory) // Show all items from selected parent and its children
+    : [];
+    
+    
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
         const itemId = item.id;
         const variantId = variant?.id;
@@ -98,17 +97,17 @@ function POSPage() {
         const name = item.name + (variant
             ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
             : '');
-
-        setCart(prev => {
-            const existing = prev.find(ci => ci.id === id);
-
-            if (existing) {
-                return prev.map(ci =>
-                    ci.id === id
+            
+            setCart(prev => {
+                const existing = prev.find(ci => ci.id === id);
+                
+                if (existing) {
+                    return prev.map(ci =>
+                        ci.id === id
                         ? { ...ci, quantity: ci.quantity + 1 }
                         : ci
-                );
-            } else {
+                    );
+                } else {
                 return [
                     ...prev,
                     {
@@ -123,25 +122,27 @@ function POSPage() {
             }
         });
     };
-
+    
     const handleQtyChange = (itemId: number, delta: number) => {
         setCart(prev =>
             prev
-                .map(ci =>
-                    ci.id === itemId ? { ...ci, quantity: ci.quantity + delta } : ci
-                )
-                .filter(ci => ci.quantity > 0)
+            .map(ci =>
+                ci.id === itemId ? { ...ci, quantity: ci.quantity + delta } : ci
+            )
+            .filter(ci => ci.quantity > 0)
         );
     };
-
+    
     const handleRemoveItem = (itemId: number) => {
         setCart(prev => prev.filter(item => item.id !== itemId));
     };
-
+    
     const handleClearCart = () => {
         setCart([]);
     };
-
+    
+    if (!categories) return <Loader />;
+    
     return (
         <div className="pos-wrapper">
             {/* Left: Categories - Desktop */}

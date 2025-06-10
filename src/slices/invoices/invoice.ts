@@ -56,9 +56,9 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Invoice"],
     }),
 
-    mailInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
+    whatsappInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
       query: (newInvoice) => ({
-        url: "invoices/mail",
+        url: "invoices/store-whatsapp",
         method: "POST",
         body: {
           ...newInvoice,
@@ -156,7 +156,7 @@ export const {
   useFetchInvoicesQuery,
   useCreateInvoiceMutation,
   usePrintInvoiceMutation,
-  useMailInvoiceMutation,
+  useWhatsappInvoiceMutation,
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,

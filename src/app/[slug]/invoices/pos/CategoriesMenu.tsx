@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { FaChevronDown , FaChevronUp } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import Checkbox from '@mui/material/Checkbox';
 
 interface Category {
     id: number;
@@ -40,19 +41,34 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
         );
     };
 
-    const renderNestedCategories = (categories: Category[]) => (
+    const renderNestedCategories = (
+        categories: Category[],
+        isMobile: boolean = false
+    ) => (
         <ul className="nested-wrapper">
             {categories.map(child => (
                 <li key={child.id}>
                     <div
                         className={`category-tab ${child.id === selectedChildCatId ? 'selected' : ''}`}
                     >
-                        <button
-                            className="category-button"
-                            onClick={() => handleChildTabClick(child.id)}
-                        >
-                            {child.name}
-                        </button>
+                        {isMobile ? (
+                            <label className="category-checkbox-label">
+                                <Checkbox
+                                    checked={selectedChildCatId === child.id}
+                                    onChange={() => handleChildTabClick(child.id)}
+                                    size="small"
+                                />
+                                {child.name}
+                            </label>
+                        ) : (
+                            <button
+                                className="category-button"
+                                onClick={() => handleChildTabClick(child.id)}
+                            >
+                                {child.name}
+                            </button>
+                        )}
+
                         {(child.children ?? []).length > 0 && (
                             <span
                                 className="expand-icon"
@@ -66,8 +82,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                             </span>
                         )}
                     </div>
+
                     {expandedChildCats.includes(child.id) && child.children && (
-                        renderNestedCategories(child.children)
+                        renderNestedCategories(child.children, isMobile)
                     )}
                 </li>
             ))}
@@ -112,16 +129,18 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                         <div
                             className={`category-tab ${selectedTopCatId === null ? 'selected' : ''}`}
                         >
-                            <button
-                                className="category-button"
-                                onClick={() => {
-                                    setSelectedTopCatId(null);
-                                    setSelectedChildCatId(null);
-                                    setExpandedChildCats([]);
-                                }}
-                            >
+                            <label className="category-checkbox-label">
+                                <Checkbox
+                                    checked={selectedTopCatId === null}
+                                    onChange={() => {
+                                        setSelectedTopCatId(null);
+                                        setSelectedChildCatId(null);
+                                        setExpandedChildCats([]);
+                                    }}
+                                    size="small"
+                                />
                                 All
-                            </button>
+                            </label>
                         </div>
                     </li>
                     {categories.map(cat => (
@@ -129,16 +148,19 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                             <div
                                 className={`category-tab ${cat.id === selectedTopCatId ? 'selected' : ''}`}
                             >
-                                <button
-                                    className="category-button"
-                                    onClick={() => {
-                                        setSelectedTopCatId(cat.id);
-                                        setSelectedChildCatId(null);
-                                        setExpandedChildCats([]);
-                                    }}
-                                >
+                                <label className="category-checkbox-label">
+                                    <Checkbox
+                                        checked={selectedTopCatId === cat.id}
+                                        onChange={() => {
+                                            setSelectedTopCatId(cat.id);
+                                            setSelectedChildCatId(null);
+                                            setExpandedChildCats([]);
+                                        }}
+                                        size="small"
+                                    />
                                     {cat.name}
-                                </button>
+                                </label>
+
                                 {(cat.children ?? []).length > 0 && (
                                     <span
                                         className="expand-icon"
@@ -147,13 +169,14 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                                         {expandedChildCats.includes(cat.id) ? (
                                             <FaChevronUp />
                                         ) : (
-                                            <FaChevronDown  />
+                                            <FaChevronDown />
                                         )}
                                     </span>
                                 )}
                             </div>
+
                             {expandedChildCats.includes(cat.id) && cat.children && (
-                                renderNestedCategories(cat.children)
+                                renderNestedCategories(cat.children, true)
                             )}
                         </li>
                     ))}

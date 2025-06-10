@@ -5,7 +5,7 @@ import { FiShoppingCart, FiTruck, FiUser } from 'react-icons/fi';
 import {
     useCreateInvoiceMutation,
     usePrintInvoiceMutation,
-    useMailInvoiceMutation,
+    useWhatsappInvoiceMutation,
 } from '@/slices/invoices/invoice';
 import CartTabContent from './CartTabContent';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -38,7 +38,7 @@ export default function CheckoutPanel({
     // RTK Query hooks
     const [createInvoice, { isLoading: isSaving }] = useCreateInvoiceMutation();
     const [printInvoice, { isLoading: isPrinting }] = usePrintInvoiceMutation();
-    const [mailInvoice, { isLoading: isMailing }] = useMailInvoiceMutation();
+    const [whatsappInvoice, { isLoading: isSendWhatsapp }] = useWhatsappInvoiceMutation();
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -121,11 +121,11 @@ export default function CheckoutPanel({
         }
     };
 
-    // 3) Save & Mail (or KOT)
-    const handleMail = async () => {
+    // 3) Save & whatsapp (or KOT)
+    const handleSendWhatsapp = async () => {
         try {
             const payload = buildPayload();
-            const invoice = await mailInvoice(payload).unwrap();
+            const invoice = await whatsappInvoice(payload).unwrap();
             if (invoice.status === true) {
                 toast.success(invoice.message);
                 router.push(`/${companySlug}/invoices`);
@@ -208,8 +208,8 @@ export default function CheckoutPanel({
                 isSaving={isSaving}
                 handlePrint={handlePrint}
                 isPrinting={isPrinting}
-                handleMail={handleMail}
-                isMailing={isMailing}
+                handleSendWhatsapp={handleSendWhatsapp}
+                isSendWhatsapp={isSendWhatsapp}
                 clientName={clientName}
                 setClientName={setClientName}
                 email={email}

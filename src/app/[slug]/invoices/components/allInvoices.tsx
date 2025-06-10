@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { FaFileInvoice, FaPlus, FaUsers, FaCreditCard, FaMoneyBill } from "react-icons/fa";
 import {
   useLazyDownloadInvoicePdfQuery,
-  useSendInvoiceToWhatsappMutation,
 } from "@/slices/invoices/invoice";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { useCompany } from "@/utils/Company";

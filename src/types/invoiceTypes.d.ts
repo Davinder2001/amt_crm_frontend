@@ -60,6 +60,7 @@ interface Variant {
   quantity: number;
 }
 interface CreateInvoicePayload {
+  id?: number | string;
   number: string;
   client_name: string;
   invoice_date: string;

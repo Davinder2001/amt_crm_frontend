@@ -28,6 +28,7 @@ const UpdateItem = () => {
     date_of_manufacture: '',
     date_of_expiry: '',
     brand_name: '',
+    brand_id: 0,
     replacement: '',
     category: '',
     vendor_name: '',
@@ -67,6 +68,7 @@ const UpdateItem = () => {
         date_of_manufacture: item.date_of_manufacture || '',
         date_of_expiry: item.date_of_expiry || '',
         brand_name: item.brand_name || '',
+        brand_id: item.brand_id || 0,
         replacement: item.replacement || '',
         category: item.category || '',
         vendor_name: item.vendor_name || '',
@@ -138,7 +140,7 @@ const UpdateItem = () => {
 
     const primitiveFields: (keyof UpdateStoreItemRequest)[] = [
       'name', 'quantity_count', 'measurement', 'purchase_date',
-      'date_of_manufacture', 'date_of_expiry', 'brand_name',
+      'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_name', 'availability_stock',
       'cost_price', 'selling_price', 'tax_id'
     ];
@@ -156,7 +158,15 @@ const UpdateItem = () => {
     const newImages = formData.images.filter((img) => img instanceof File);
     const imagesChanged = newImages.length > 0 || removedImages.length > 0;
 
-    return categoriesChanged || variantsChanged || imagesChanged;
+    // Check featured image
+    const featuredImageChanged =
+      (formData.featured_image instanceof File) || // new file uploaded
+      (originalItemData.featured_image && !formData.featured_image) || // was removed
+      (typeof originalItemData.featured_image === 'string' &&
+        typeof formData.featured_image === 'string' &&
+        originalItemData.featured_image !== formData.featured_image);
+
+    return categoriesChanged || variantsChanged || imagesChanged || featuredImageChanged;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -173,7 +183,7 @@ const UpdateItem = () => {
     // Add primitive fields only if they changed
     const primitiveFields = [
       'name', 'quantity_count', 'measurement', 'purchase_date',
-      'date_of_manufacture', 'date_of_expiry', 'brand_name',
+      'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_name', 'availability_stock',
       'cost_price', 'selling_price', 'tax_id'
     ];

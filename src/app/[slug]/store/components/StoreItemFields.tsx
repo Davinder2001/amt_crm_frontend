@@ -239,12 +239,10 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 onFeaturedImageChange={(file) => {
                                     const updated = { ...formData, featured_image: file };
                                     setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }}
                                 onRemoveFeaturedImage={() => {
                                     const updated = { ...formData, featured_image: null };
                                     setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }}
                             />
                         </div>
@@ -285,10 +283,17 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <ItemBrands
                             selectedBrand={formData.brand_name || ''}
-                            onBrandSelect={(brandName) => {
-                                const updated = { ...formData, brand_name: brandName };
+                            selectedBrandId={formData.brand_id}
+                            onBrandSelect={(brandName, brandId) => {
+                                const updated = {
+                                    ...formData,
+                                    brand_name: brandName,
+                                    brand_id: brandId || 0,
+                                };
                                 setFormData(updated);
-                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                if (LOCAL_STORAGE_KEY) {
+                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                }
                             }}
                         />
                     </div>

@@ -19,6 +19,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   date_of_manufacture: '',
   date_of_expiry: '',
   brand_name: '',
+  brand_id: 0,
   replacement: '',
   category: '',
   vendor_name: '',
@@ -163,6 +164,10 @@ const AddItem: React.FC = () => {
     // Append simple fields
     Object.entries(formData).forEach(([key, val]) => {
       if (key !== 'images' && key !== 'featured_image' && val !== null && val !== undefined) {
+        // Special handling for brand (send both name and id if available)
+        if (key === 'brand_name' && formData.brand_id) {
+          form.append('brand_id', formData.brand_id.toString());
+        }
         form.append(key, val.toString());
       }
     });

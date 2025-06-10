@@ -96,6 +96,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                     value={selectedBrand}
                                     label="Select Brand"
                                     onChange={(e) => handleBrandSelect(e.target.value)}
+                                    renderValue={(selected) => <span>{selected}</span>}
                                     sx={{
                                         '& .MuiOutlinedInput-notchedOutline': {
                                             borderColor: '#384b70',

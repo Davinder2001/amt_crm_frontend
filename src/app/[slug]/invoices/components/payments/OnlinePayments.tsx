@@ -1,15 +1,94 @@
-'use client';
+// 'use client';
+
+// import React from 'react';
+// import { useGetOnlinePaymentHistoryQuery } from '@/slices/invoices/invoice';
+// import EmptyState from '@/components/common/EmptyState';
+// import LoadingState from '@/components/common/LoadingState';
+// import { FaGlobe } from 'react-icons/fa';
+
+// export default function OnlinePayments() {
+//   const { data, error, isLoading } = useGetOnlinePaymentHistoryQuery();
+
+//   if (isLoading) return <LoadingState />;
+
+//   if (error) {
+//     return (
+//       <EmptyState
+//         icon={<FaGlobe className="empty-state-icon" />}
+//         title="Failed to load online payments"
+//         message="There was an error fetching online payment data."
+//       />
+//     );
+//   }
+
+//   const groups = data?.data ?? [];
+
+//   if (groups.length === 0) {
+//     return (
+//       <EmptyState
+//         icon={<FaGlobe className="empty-state-icon" />}
+//         title="No Online Payments Found"
+//         message="No online payment transactions have been recorded yet."
+//       />
+//     );
+//   }
+
+//   return (
+//     <div className="online-payments">
+//       {groups.map((group) => (
+//         <div key={group.bank_account_id} className="bank-card">
+//           <div className="bank-header">
+//             <div className="title">{group.bank_name} Account</div>
+//           </div>
+
+//           <div className="bank-info">
+//             <p><strong>Account Number:</strong> {group.account_number}</p>
+//             <p><strong>IFSC Code:</strong> {group.ifsc_code}</p>
+//           </div>
+//             <div className="total summary">Total Transferred: <span>₹{group.total_transferred}</span></div>
+
+//           <div className="transactions">
+//             {group.transactions.map((t, idx) => (
+//               <div className="transaction-card" key={idx}>
+//                 <p><strong>Invoice Number:</strong> {t.invoice_number}</p>
+//                 <p><strong>Invoice Date:</strong> {t.invoice_date}</p>
+//                 <p><strong>Amount:</strong> ₹{t.amount}</p>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }'use client';
 
 import React from 'react';
 import { useGetOnlinePaymentHistoryQuery } from '@/slices/invoices/invoice';
 import EmptyState from '@/components/common/EmptyState';
-import { FaGlobe } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import { FaGlobe } from 'react-icons/fa';
+import ResponsiveTable from '@/components/common/ResponsiveTable';// adjust path if needed
+
+type TransactionWithGroup = Transaction & {
+  bank_name: string;
+  account_number: string;
+  bank_account_id: string;
+  ifsc_code: string;
+  total_transferred: number;
+};
 
 export default function OnlinePayments() {
-  const { data, error, isLoading } = useGetOnlinePaymentHistoryQuery();
+  const {
+    data,
+    error,
+    isLoading,
+  } = useGetOnlinePaymentHistoryQuery() as {
+    data?: PaymentHistoryResponse<OnlinePaymentGroup>;
+    error?: unknown;
+    isLoading: boolean;
+  };
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
 
   if (error) {
     return (
@@ -22,9 +101,8 @@ export default function OnlinePayments() {
   }
 
   const groups = data?.data ?? [];
-  const hasNoData = groups.length === 0;
 
-  if (hasNoData) {
+  if (groups.length === 0) {
     return (
       <EmptyState
         icon={<FaGlobe className="empty-state-icon" />}
@@ -34,23 +112,42 @@ export default function OnlinePayments() {
     );
   }
 
+  const flattenedTransactions: (TransactionWithGroup & { id: number })[] = groups.flatMap((group) =>
+    group.transactions.map((transaction, idx) => ({
+      ...transaction,
+      bank_name: group.bank_name,
+      account_number: group.account_number,
+      bank_account_id: group.bank_account_id != null ? String(group.bank_account_id) : '',
+      ifsc_code: group.ifsc_code,
+      total_transferred: group.total_transferred,
+      id: transaction.id ?? idx, // Use transaction.id if exists, else fallback to index
+    }))
+  );
+
+  const columns = [
+    { label: 'Bank', key: 'bank_name' as keyof TransactionWithGroup },
+    { label: 'Acount Id', key: 'bank_account_id' as keyof TransactionWithGroup },
+    { label: 'Account Number', key: 'account_number' as keyof TransactionWithGroup },
+    { label: 'IFSC', key: 'ifsc_code' as keyof TransactionWithGroup },
+    { label: 'Invoice No.', key: 'invoice_number' as keyof TransactionWithGroup },
+    { label: 'Invoice Date', key: 'invoice_date' as keyof TransactionWithGroup },
+    {
+      label: 'Amount',
+      render: (row: TransactionWithGroup) => `₹${row.amount}`,
+    },
+    {
+      label: 'Total Transferred',
+      render: (row: TransactionWithGroup) => `₹${row.total_transferred}`,
+    },
+  ];
+
   return (
-    <div>
-      {groups.map((group) => (
-        <div key={group.bank_account_id ?? 'no-id'} style={{ marginBottom: 20 }}>
-          <h3>
-            {group.bank_name} - {group.account_number}
-          </h3>
-          <p>Total transferred: {group.total_transferred}</p>
-          <ul>
-            {group.transactions.map((t, idx) => (
-              <li key={idx}>
-                Invoice#: {t.invoice_number}, Date: {t.invoice_date}, Amount: {t.amount}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="online-payments">
+      <ResponsiveTable
+        data={flattenedTransactions}
+        columns={columns}
+        cardViewKey="invoice_number"
+      />
     </div>
   );
 }

@@ -26,7 +26,7 @@ const LeavesAndHolidays: React.FC = () => {
         
       </div>
 
-      <div className="tab-content">
+      <div className="setting-tab-contenttab-content">
         {activeTab === 0 && <LeaveList />}
         {activeTab === 1 && <HolidayList />}
       </div>

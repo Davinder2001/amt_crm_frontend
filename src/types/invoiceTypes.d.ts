@@ -107,6 +107,7 @@ interface InvoicePdfDownloadResponse {
 
 // historyTypes.d.ts
 type Transaction = {
+  id: number;
   invoice_number: string;
   invoice_date?: string; // only for online
   amount: number;

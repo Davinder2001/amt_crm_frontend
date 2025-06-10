@@ -3,13 +3,28 @@
 import React from 'react';
 import { useGetCashPaymentHistoryQuery } from '@/slices/invoices/invoice';
 import EmptyState from '@/components/common/EmptyState';
-import { FaMoneyBillWave } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import { FaMoneyBillWave } from 'react-icons/fa';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+type CashTransaction = {
+  invoice_number: string;
+  amount: number;
+  date: string;
+  total: number;
+};
 
 export default function CashPayments() {
-  const { data, error, isLoading } = useGetCashPaymentHistoryQuery();
+  const {
+    data,
+    error,
+    isLoading,
+  } = useGetCashPaymentHistoryQuery() as {
+    data?: PaymentHistoryResponse<DateGroupedPayment>;
+    error?: unknown;
+    isLoading: boolean;
+  };
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
 
   if (error) {
     return (
@@ -34,21 +49,30 @@ export default function CashPayments() {
     );
   }
 
+  // Flatten the grouped transactions into a list and add a unique 'id' property
+  const flattenedData: (CashTransaction & { id: number })[] = cashGroups.flatMap((group, groupIdx) =>
+    group.transactions.map((t, tIdx) => ({
+      ...t,
+      date: group.date,
+      total: group.total,
+      id: Number(`${groupIdx}${tIdx}`), // Generates a unique numeric id
+    }))
+  );
+
+  const columns = [
+    { label: 'Date', key: 'date' as keyof CashTransaction },
+    { label: 'Invoice Number', key: 'invoice_number' as keyof CashTransaction },
+    { label: 'Amount', render: (row: CashTransaction) => `₹${row.amount}` },
+    { label: 'Total of the Day', render: (row: CashTransaction) => `₹${row.total}` },
+  ];
+
   return (
-    <div>
-      {cashGroups.map((group) => (
-        <div key={group.date} style={{ marginBottom: 20 }}>
-          <h3>Date: {group.date}</h3>
-          <p>Total: {group.total}</p>
-          <ul>
-            {group.transactions.map((t, idx) => (
-              <li key={idx}>
-                Invoice#: {t.invoice_number}, Amount: {t.amount}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="cash-payments">
+      <ResponsiveTable
+        data={flattenedData}
+        columns={columns}
+        cardViewKey="invoice_number"
+      />
     </div>
   );
 }

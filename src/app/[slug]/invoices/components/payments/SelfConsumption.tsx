@@ -3,13 +3,29 @@
 import React from 'react';
 import { useGetSelfConsumptionHistoryQuery } from '@/slices/invoices/invoice';
 import EmptyState from '@/components/common/EmptyState';
-import { FaLeaf } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { FaLeaf } from 'react-icons/fa';
+
+type SelfConsumptionTransaction = {
+  invoice_number: string;
+  amount: number;
+  date: string;
+  total: number;
+};
 
 export default function SelfConsumption() {
-  const { data, error, isLoading } = useGetSelfConsumptionHistoryQuery();
+  const {
+    data,
+    error,
+    isLoading,
+  } = useGetSelfConsumptionHistoryQuery() as {
+    data?: PaymentHistoryResponse<DateGroupedPayment>;
+    error?: unknown;
+    isLoading: boolean;
+  };
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
 
   if (error) {
     return (
@@ -22,9 +38,7 @@ export default function SelfConsumption() {
   }
 
   const groups = data?.data ?? [];
-  const hasNoData = groups.length === 0;
-
-  if (hasNoData) {
+  if (groups.length === 0) {
     return (
       <EmptyState
         icon={<FaLeaf className="empty-state-icon" />}
@@ -34,21 +48,29 @@ export default function SelfConsumption() {
     );
   }
 
+  const flattenedData: (SelfConsumptionTransaction & { id: number })[] = groups.flatMap((group, groupIdx) =>
+    group.transactions.map((transaction, txIdx) => ({
+      ...transaction,
+      date: group.date,
+      total: group.total,
+      id: Number(`${groupIdx}${txIdx}`), // unique id per transaction
+    }))
+  );
+
+  const columns = [
+    { label: 'Date', key: 'date' as keyof SelfConsumptionTransaction },
+    { label: 'Invoice Number', key: 'invoice_number' as keyof SelfConsumptionTransaction },
+    { label: 'Amount', render: (row: SelfConsumptionTransaction) => `₹${row.amount}` },
+    { label: 'Total of the Day', render: (row: SelfConsumptionTransaction) => `₹${row.total}` },
+  ];
+
   return (
-    <div>
-      {groups.map((group) => (
-        <div key={group.date} style={{ marginBottom: 20 }}>
-          <h3>Date: {group.date}</h3>
-          <p>Total: {group.total}</p>
-          <ul>
-            {group.transactions.map((t, idx) => (
-              <li key={idx}>
-                Invoice#: {t.invoice_number}, Amount: {t.amount}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="self-consumption-payments">
+      <ResponsiveTable
+        data={flattenedData}
+        columns={columns}
+        cardViewKey="invoice_number"
+      />
     </div>
   );
 }

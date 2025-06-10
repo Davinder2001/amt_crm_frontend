@@ -181,7 +181,7 @@ const TaxesPage = () => {
                     }
                 />
             ) : (
-                <ResponsiveTable data={taxesData?.data || []} columns={columns} />
+                <ResponsiveTable data={taxesData?.data || []} columns={columns} cardViewKey='name'/>
             )}
 
             <Modal

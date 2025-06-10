@@ -1,15 +1,99 @@
+// 'use client';
+
+// import React from 'react';
+// import { useGetCardPaymentHistoryQuery } from '@/slices/invoices/invoice';
+// import EmptyState from '@/components/common/EmptyState';
+// import LoadingState from '@/components/common/LoadingState';
+// import { FaCreditCard } from 'react-icons/fa';
+// export default function CardPayments() {
+//   const { data, error, isLoading } = useGetCardPaymentHistoryQuery();
+
+//   if (isLoading) return <LoadingState />;
+
+//   if (error) {
+//     return (
+//       <EmptyState
+//         icon={<FaCreditCard className="empty-state-icon" />}
+//         title="Failed to load card payments"
+//         message="There was an error while fetching card payment history."
+//       />
+//     );
+//   }
+
+//   const cardGroups = data?.data ?? [];
+//   const hasNoData = cardGroups.length === 0;
+
+//   if (hasNoData) {
+//     return (
+//       <EmptyState
+//         icon={<FaCreditCard className="empty-state-icon" />}
+//         title="No Card Payments Found"
+//         message="No card transactions have been recorded yet."
+//       />
+//     );
+//   }
+
+//   return (
+//     <div className="card-payments">
+//       {cardGroups.map((group) => (
+//         <div key={group.date} className="card-group">
+//           <h3>Card Payment</h3>
+//           <div className="group-meta">Date: {group.date}</div>
+//           <div className="summary">
+//             Total Amount: <span>₹{group.total}</span>
+//           </div>
+
+//           <h4>Transactions</h4>
+//           <ul>
+//             {group.transactions.map((t, idx) => (
+//               <li key={idx}>
+//                 <p><strong>Invoice Number:</strong> {t.invoice_number}</p>
+//                 <p><strong>Amount:</strong> ₹{t.amount}</p>
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
 'use client';
 
 import React from 'react';
 import { useGetCardPaymentHistoryQuery } from '@/slices/invoices/invoice';
 import EmptyState from '@/components/common/EmptyState';
-import { FaCreditCard } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { FaCreditCard } from 'react-icons/fa';
+type CardTransaction = {
+  invoice_number: string;
+  amount: number;
+  date: string;
+  total: number;
+};
 
 export default function CardPayments() {
-  const { data, error, isLoading } = useGetCardPaymentHistoryQuery();
+  const {
+    data,
+    error,
+    isLoading,
+  } = useGetCardPaymentHistoryQuery() as {
+    data?: PaymentHistoryResponse<DateGroupedPayment>;
+    error?: unknown;
+    isLoading: boolean;
+  };
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
 
   if (error) {
     return (
@@ -34,21 +118,30 @@ export default function CardPayments() {
     );
   }
 
+  // Flatten transactions for table and add a unique numeric id to each row
+  const flattenedData: (CardTransaction & { id: number })[] = cardGroups.flatMap((group, groupIdx) =>
+    group.transactions.map((t, tIdx) => ({
+      ...t,
+      date: group.date,
+      total: group.total,
+      id: groupIdx * 1000 + tIdx, // ensures uniqueness
+    }))
+  );
+
+  const columns = [
+    { label: 'Date', key: 'date' as keyof CardTransaction },
+    { label: 'Invoice Number', key: 'invoice_number' as keyof CardTransaction },
+    { label: 'Amount', render: (row: CardTransaction) => `₹${row.amount}` },
+    { label: 'Total of the Day', render: (row: CardTransaction) => `₹${row.total}` },
+  ];
+
   return (
-    <div>
-      {cardGroups.map((group) => (
-        <div key={group.date} style={{ marginBottom: 20 }}>
-          <h3>Date: {group.date}</h3>
-          <p>Total: {group.total}</p>
-          <ul>
-            {group.transactions.map((t, idx) => (
-              <li key={idx}>
-                Invoice#: {t.invoice_number}, Amount: {t.amount}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="card-payments">
+      <ResponsiveTable
+        data={flattenedData}
+        columns={columns}
+        cardViewKey="invoice_number"
+      />
     </div>
   );
 }

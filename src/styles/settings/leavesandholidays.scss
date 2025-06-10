@@ -169,13 +169,13 @@
         border-radius: 3px 3px 0 0;
     }
 
-    .tab-content {
+    .setting-tab-content {
         padding: 20px;
         border-radius: 6px;
     }
 
     /* Optional: Add a subtle animation for the content */
-    .tab-content>* {
+    .setting-tab-content>* {
         animation: fadeIn 0.3s ease-in-out;
     }
 
@@ -192,7 +192,7 @@
     }
     @media (max-width: 768px) {
     
-        .tab-content {
+        .setting-tab-content {
             padding: 0px;
         }
     }

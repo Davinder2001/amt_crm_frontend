@@ -119,8 +119,8 @@ const BankAccountList = () => {
         <div className="bank-account-list">
             {!noAccounts && (
                 <div className="add-bank-btn-outer">
-                    <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
-                        Add Bank Account
+                    <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm} type="button">
+                       <FaPlus/> Add Bank Account
                     </button>
                 </div>
             )}
@@ -158,6 +158,7 @@ const BankAccountList = () => {
                             className="buttons"
                             onClick={openAddModal}
                             color="primary"
+                            type="button"
                         >
                             <FaPlus />Add Bank Account
                         </button>
@@ -166,7 +167,7 @@ const BankAccountList = () => {
             )}
 
             {accounts.length > 0 && (
-                <ResponsiveTable data={accounts} columns={columns} />
+                <ResponsiveTable data={accounts} columns={columns} cardViewKey='bank_name' />
             )}
         </div>
     );

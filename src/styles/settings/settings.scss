@@ -1,125 +1,9 @@
 @use '../variables' as *;
 
-// .settings-sidebar {
-//     width: 280px;
-//     background-color: #fff;
-//     border-right: 1px solid #e5e7eb;
-//     height: 100vh;
-//     overflow-y: auto;
-//     border-radius: 5px;
-// }
-
-// .settings-container {
-//     display: flex;
-//     border-radius: $border-radius;
-//     gap: 20px;
-
-// }
-// .settings-content{
-//     flex: 1;
-
-// }
-// .sidebar-header {
-//     padding: 20px;
-//     border-bottom: 1px solid #e5e7eb;
-// }
-
-// .sidebar-header h3 {
-//     margin: 0;
-//     font-size: 18px;
-//     font-weight: 600;
-//     color: #111827;
-// }
-
-// .settings-list {
-//     list-style: none;
-//     padding: 0;
-//     margin: 0;
-// }
-
-// .settings-item {
-//     border-bottom: 1px solid #e5e7eb;
-// }
-
-// .settings-button {
-//     width: 100%;
-//     padding: 14px 20px;
-//     background: none;
-//     border: none;
-//     text-align: left;
-//     cursor: pointer;
-//     transition: background-color 0.2s;
-
-//     &:hover {
-//         svg {
-//             color: $primary-color;
-//         }
-
-//         .settings-label {
-//             color: $primary-color;
-//         }
-
-//         .settings-sublabel {
-//             color: $gray-color;
-//         }
-//     }
-// }
-
-// .settings-button:hover {
-//     color: $light_blue;
-
-// }
-
-// .settings-item.active .settings-button {
-//     background-color: $light_blue;
-
-//     svg {
-//         color: $primary-color;
-//     }
-
-//     .settings-label {
-//         color: $primary-color;
-//     }
-
-//     .settings-sublabel {
-//         color: $gray-color;
-//     }
-// }
-
-// .settings-item-content {
-//     display: flex;
-//     align-items: center;
-//     gap: 12px;
-// }
-
-// .settings-icon {
-//     color: #6b7280;
-//     font-size: 18px;
-// }
-
-// .settings-text {
-//     display: flex;
-//     flex-direction: column;
-// }
-
-// .settings-label {
-//     font-size: 14px;
-//     font-weight: 500;
-//     color: #111827;
-// }
-
-// .settings-sublabel {
-//     font-size: 12px;
-//     color: #6b7280;
-//     margin-top: 2px;
-// }
-
-
 .settings-container {
     display: flex;
     flex-direction: row;
     height: 100%;
-    padding: 1rem;
     gap: 1.5rem;
 }
 
@@ -130,7 +14,7 @@
 
 .settings-content {
     flex: 1;
-    padding: 1.5rem;
+    padding: 0;
     overflow-y: auto;
 }
 
@@ -219,12 +103,6 @@
         color: #777;
     }
 }
-
-
-
-
-
-
 
 
 
@@ -368,15 +246,15 @@
 
     .settings-button {
         padding: 0.3rem 0.5rem;
-        min-width: 60px; // even smaller width for tabs
+        min-width: 50px;
     }
 
     .settings-text {
-        display: none; // hide label + sublabel completely
+        display: none; 
     }
 
     .settings-icon {
-        font-size: 1.2rem; // optionally increase icon size a bit to compensate
+        font-size: 1.2rem; 
         margin-right: 0;
         margin-bottom: 0;
     }

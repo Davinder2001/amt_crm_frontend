@@ -180,6 +180,7 @@ const Attributes = () => {
                             a.status === 'active' && b.status !== 'active' ? -1 : 1
                         )}
                         columns={columns}
+                        cardViewKey='name'
                     />
                 </div>
             )}

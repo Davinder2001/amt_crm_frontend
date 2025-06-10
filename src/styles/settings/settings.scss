@@ -5,257 +5,224 @@
     flex-direction: row;
     height: 100%;
     gap: 1.5rem;
-}
-
-.settings-navigation {
-    width: 250px;
-    min-width: 250px;
-}
-
-.settings-content {
-    flex: 1;
-    padding: 0;
-    overflow-y: auto;
-}
-
-.settings-nav {
-    position: relative;
-    background-color: $white;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow;
-}
-
-.settings-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.settings-item {
-    border-bottom: 1px solid #f0f0f0;
-
-    &:hover {
-        .settings-label {
-            color: $primary-color;
-        }
-
-        svg {
-            color: $primary-color;
-        }
-    }
-
-    &.active {
-        background-color: $light_blue;
-
-        .settings-label {
-            color: $primary-color;
-            font-weight: 600;
-        }
-
-        svg {
-            color: $primary-color;
-        }
-    }
-
-}
-
-.settings-button {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 1rem;
-    border: none;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.2s;
-
-    &:hover {
-        background-color: #fafafa;
-    }
-}
-
-.settings-item-content {
-    display: flex;
-    align-items: center;
-}
-
-.settings-icon {
-    font-size: 1.25rem;
-    margin-right: 1rem;
-    color: #656464;
-}
-
-.settings-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    .settings-label {
-        font-size: 0.95rem;
-    }
-
-    .settings-sublabel {
-        font-size: 0.75rem;
-        color: #777;
-    }
-}
-
-
-
-@media (max-width: 1024px) {
-    .settings-container {
-        flex-direction: column;
-        padding: 0px;
-        gap: 1rem;
-    }
 
     .settings-navigation {
-        width: 100%;
-        order: -1; // move nav to top
+        width: 250px;
+        min-width: 250px;
     }
 
     .settings-content {
-        padding: 1rem 0.5rem;
+        flex: 1;
+        padding: 0;
+        overflow-y: auto;
     }
 
     .settings-nav {
-        border-bottom: 2px solid #e0e0e0;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-
-        &::-webkit-scrollbar {
-            height: 3px; // thinner scrollbar
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: $primary-color;
-            border-radius: 2px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        position: relative;
+        background-color: $white;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
     }
 
     .settings-list {
-        flex-direction: row;
-        white-space: nowrap;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .settings-item {
-        display: inline-block;
-        border-bottom: none;
-        border-right: 1px solid #eee;
+        border-bottom: 1px solid #f0f0f0;
+
+        &:hover {
+            .settings-label {
+                color: $primary-color;
+            }
+
+            svg {
+                color: $primary-color;
+            }
+        }
+
+        &.active {
+            background-color: $light_blue;
+
+            .settings-label {
+                color: $primary-color;
+                font-weight: 600;
+            }
+
+            svg {
+                color: $primary-color;
+            }
+        }
     }
 
     .settings-button {
-        flex-direction: column;
-        min-width: 100px; // smaller width per tab
-        padding: 0.4rem 0.75rem; // smaller padding to reduce height
-        text-align: center;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.2s;
 
-        &:focus {
-            background-color: $light_blue;
-            border-bottom: 2px solid $primary-color;
+        &:hover {
+            background-color: #fafafa;
         }
-
-        &:active {
-            background-color: $light_blue;
-        }
-
-
     }
 
     .settings-item-content {
-        flex-direction: column;
+        display: flex;
         align-items: center;
     }
 
     .settings-icon {
-        font-size: 1rem; // smaller icon size
-        margin-right: 0;
-        margin-bottom: 0.15rem;
+        font-size: 1.25rem;
+        margin-right: 1rem;
+        color: #656464;
     }
 
     .settings-text {
-        align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
         .settings-label {
-            font-size: 0.85rem; // smaller label font
+            font-size: 0.95rem;
         }
 
         .settings-sublabel {
-            display: none; // keep sublabel hidden for compactness
+            font-size: 0.75rem;
+            color: #777;
         }
     }
 
-    .settings-list {
-        flex-direction: row;
-        white-space: nowrap;
-    }
+    /* ----------------------------- */
+    /*        MEDIA QUERIES         */
+    /* ----------------------------- */
 
-    .settings-item {
-        display: inline-block;
-        border-bottom: none;
-        border-right: 1px solid #eee;
-    }
-
-    .settings-button {
+    @media (max-width: 1024px) {
         flex-direction: column;
-        min-width: 120px;
-        padding: 0.75rem 1rem;
-        text-align: center;
+        padding: 0;
+        gap: 1rem;
+
+        .settings-navigation {
+            width: 100%;
+            order: -1;
+        }
+
+        .settings-content {
+            padding: 1rem 0.5rem;
+        }
+
+        .settings-nav {
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+
+            &::-webkit-scrollbar {
+                height: 3px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $primary-color;
+                border-radius: 2px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+        }
+
+        .settings-list {
+            flex-direction: row;
+            white-space: nowrap;
+        }
+
+        .settings-item {
+            display: inline-block;
+            border-bottom: none;
+            border-right: 1px solid #eee;
+        }
+
+        .settings-button {
+            flex-direction: column;
+            min-width: 120px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+
+            &:focus {
+                background-color: $light_blue;
+                border-bottom: 2px solid $primary-color;
+            }
+
+            &:active {
+                background-color: $light_blue;
+            }
+        }
+
+        .settings-item-content {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .settings-icon {
+            font-size: 1rem;
+            margin-right: 0;
+            margin-bottom: 0.15rem;
+        }
+
+        .settings-text {
+            align-items: center;
+
+            .settings-label {
+                font-size: 0.85rem;
+            }
+
+            .settings-sublabel {
+                display: none;
+            }
+        }
     }
 
-    .settings-item-content {
-        flex-direction: column;
-        align-items: center;
+    @media (max-width: 768px) {
+        .settings-content {
+            padding: 1rem 0.5rem;
+        }
+
+
+
+        .settings-list {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+        }
     }
 
-    .settings-icon {
-        margin-right: 0;
-        margin-bottom: 0.25rem;
-    }
 
-    .settings-text {
-        align-items: center;
+    @media (max-width: 468px) {
+        gap: 5px;
 
-        .settings-sublabel {
+        .settings-button {
+            padding: 0.3rem 0.5rem;
+            min-width: 50px;
+        }
+
+  .settings-text {
             display: none;
         }
-    }
-}
+        .settings-list {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+        }
 
-@media (max-width: 768px) {
-    .settings-content {
-        padding: 1rem 0.5rem;
-    }
-}
-
-
-
-@media (max-width: 425px) {
-
-    .settings-container {
-        gap:5px;
-    }
-
-    .settings-button {
-        padding: 0.3rem 0.5rem;
-        min-width: 50px;
-    }
-
-    .settings-text {
-        display: none; 
-    }
-
-    .settings-icon {
-        font-size: 1.2rem; 
-        margin-right: 0;
-        margin-bottom: 0;
+        .settings-icon {
+            font-size: 1.2rem;
+            margin-right: 0;
+            margin-bottom: 0;
+        }
     }
 }

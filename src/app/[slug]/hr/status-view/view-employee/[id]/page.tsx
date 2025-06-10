@@ -134,18 +134,18 @@ const ViewUserPage: React.FC = () => {
               <div className="action-buttons desktop-only">
                 <button
                   onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
-                  className="btn primary"
+                  className="btn primary" type='button'
                 >
                   <FaEdit />Edit Profile
                 </button>
-                <button onClick={() => setShowConfirm(true)} className="btn danger">
+                <button onClick={() => setShowConfirm(true)} className="btn danger" type='button'>
                   <FaTrash /> Delete Profile
                 </button>
               </div>
 
               {/* Mobile Menu */}
               <div className="mobile-menu mobile-only" ref={menuRef}>
-                <button className="dots-button" onClick={() => setMenuOpen(!menuOpen)}>
+                <button className="dots-button" onClick={() => setMenuOpen(!menuOpen)} type='button'>
                   ⋮
                 </button>
                 {menuOpen && (
@@ -155,7 +155,7 @@ const ViewUserPage: React.FC = () => {
                         setMenuOpen(false);
                         router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`);
                       }}
-                      className='dropdown-edit-btn'
+                      className='dropdown-edit-btn' type='button'
                     >
                       <FaEdit /> Edit Profile
                     </button>
@@ -164,7 +164,7 @@ const ViewUserPage: React.FC = () => {
                         setMenuOpen(false);
                         setShowConfirm(true);
                       }}
-                      className='dropdown-delete-btn'
+                      className='dropdown-delete-btn' type='button'
                     >
                       <FaTrash /> Delete Profile
                     </button>

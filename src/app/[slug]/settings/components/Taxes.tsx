@@ -163,7 +163,7 @@ const TaxesPage = () => {
 
             {(taxesData?.data?.length ?? 0) > 0 && (
                 <Box display="flex" justifyContent="flex-end" mb={2}>
-                    <button className="buttons" onClick={handleOpen}>
+                    <button className="buttons" onClick={handleOpen} type='button'>
                         <FaPlus /> Add New Tax
                     </button>
                 </Box>
@@ -175,7 +175,7 @@ const TaxesPage = () => {
                     title="No taxes found"
                     message="You haven't created any tax entries yet."
                     action={
-                        <button className="buttons" onClick={handleOpen}>
+                        <button className="buttons" onClick={handleOpen} type='button'>
                             <FaPlus size={16} /> Add New Tax
                         </button>
                     }

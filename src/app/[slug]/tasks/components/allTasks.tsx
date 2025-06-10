@@ -71,6 +71,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
       action={
         <button
           className="buttons"
+          type='button'
           onClick={() => setIsAddModalOpen(true)}
         >
           <FaPlus size={18} /> Add New Task
@@ -114,6 +115,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
       render: (task: Task) => (
         <div className='store-t-e-e-icons'>
           <button
+            type='button'
             className="table-e-d-v-buttons edit-button"
             onClick={(e) => {
               e.stopPropagation();
@@ -123,6 +125,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
             <FaEdit />
           </button>
           <button
+            type='button'
             onClick={(e) => {
               e.stopPropagation();
               handleDelete(task.id);
@@ -154,6 +157,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
           message="You haven't created any tasks yet. Start by assigning your first task."
           action={
             <button
+              type='button'
               className="buttons"
               onClick={() => setIsAddModalOpen(true)}
             >

@@ -73,16 +73,18 @@ const Refunds = () => {
                                     <td className="p-2 border">{refund.user_id}</td>
                                     <td className="p-2 border">${refund.amount}</td>
                                     <td className="p-2 border">{refund.refund}</td>
-                                    <td className="p-2 border space-x-2" style={{display: 'flex', alignItems: 'center', gap: 10}}>
+                                    <td className="p-2 border space-x-2" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                         {refund.refund === 'request processed' && (
                                             <>
                                                 <button
+                                                    type='submit'
                                                     className="buttons"
                                                     onClick={() => handleApprove(refund.transaction_id)}
                                                 >
                                                     Approve
                                                 </button>
                                                 <button
+                                                    type='submit'
                                                     className="buttons"
                                                     onClick={() => openDeclineModal(refund.transaction_id)}
                                                 >
@@ -93,6 +95,7 @@ const Refunds = () => {
 
                                         {refund.refund === 'refund approved' && (
                                             <button
+                                                type='submit'
                                                 className="buttons"
                                                 onClick={() => handleComplete(refund.transaction_id)}
                                             >

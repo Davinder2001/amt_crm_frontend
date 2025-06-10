@@ -140,10 +140,10 @@ const Attributes = () => {
             render: (attr: Attribute) => (
                 <>
                     <div className="attribute-actions-btn-outer">
-                        <button onClick={() => handleEdit(attr.id)} className="edit-btn">
+                        <button onClick={() => handleEdit(attr.id)} className="edit-btn" type='button'>
                             <FaEdit />
                         </button>
-                        <button onClick={() => handleDelete(attr.id)} className="delete-btn">
+                        <button onClick={() => handleDelete(attr.id)} className="delete-btn" type='button'>
                             <FaTrash />
                         </button>
                     </div>
@@ -156,7 +156,7 @@ const Attributes = () => {
         <div className="attribute-form-outer">
             {(attributes?.length ?? 0) > 0 && (
                 <div className="modal-actions">
-                    <button className="buttons" onClick={() => setIsModalOpen(true)}>
+                    <button className="buttons" onClick={() => setIsModalOpen(true)} type='button'>
                         <FaPlus /> Add Attribute
                     </button>
                 </div>
@@ -168,7 +168,7 @@ const Attributes = () => {
                     title="No attributes found"
                     message="You haven't created any attributes yet."
                     action={
-                        <button className="buttons" onClick={() => setIsModalOpen(true)}>
+                        <button className="buttons" onClick={() => setIsModalOpen(true)} type='button'>
                             <FaPlus size={18} /> Add Attribute
                         </button>
                     }
@@ -227,15 +227,15 @@ const Attributes = () => {
                     ))}
                 </div>
 
-                <button onClick={addNewValueField} className="value-add-button">
+                <button onClick={addNewValueField} className="value-add-button" type='button'>
                     <FaPlus /> Add Another Value
                 </button>
 
                 <div className="modal-actions">
-                    <button onClick={handleModalClose} className="buttons">
+                    <button onClick={handleModalClose} className="buttons" type='button'>
                         Cancel
                     </button>
-                    <button onClick={handleCreate} className="buttons">
+                    <button onClick={handleCreate} className="buttons" type='button'>
                         {editAttributeId ? 'Update Attribute' : 'Add Attribute'}
                     </button>
                 </div>

@@ -175,6 +175,7 @@ const ViewTimeline = () => {
         {/* Always show the "Create" button */}
         <div className="new-task-action">
           <button
+            type='button'
             className="buttons"
             onClick={() => setShowSubmitTask(prev => !prev)}
           >
@@ -206,7 +207,7 @@ const ViewTimeline = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </label>
-            <button onClick={handleReminderSubmit}>Submit</button>
+            <button type='button' onClick={handleReminderSubmit}>Submit</button>
           </div>
         </div>
       )}
@@ -262,7 +263,7 @@ const ViewTimeline = () => {
       }
 
       <div className="action-buttons">
-        <button className="button outline" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
+        <button type='button' className="button outline" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
         <ConfirmDialog
           isOpen={showConfirm}
           message="Are you sure you want to end this Task?"
@@ -271,6 +272,7 @@ const ViewTimeline = () => {
           type="end"
         />
         <button
+         type='button'
           className="button primary"
           onClick={() => setShowConfirm(true)}
           disabled={isEnding}

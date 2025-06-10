@@ -3,14 +3,17 @@
 import React, { useState } from 'react';
 import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash, FaTasks } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6';
 import Modal from '@/components/common/Modal';
 import RecurringTaskForm from '../components/RecurringTaskForm';
+import EmptyState from '@/components/common/EmptyState';
+import LoadingState from '@/components/common/LoadingState';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// You can adjust or import this type from your models
 interface PredefinedTask {
   id: number;
   name: string;
@@ -44,25 +47,36 @@ const Page = () => {
     if (confirm('Are you sure you want to delete this recurring task?')) {
       try {
         await deleteTask(id).unwrap();
+        toast.success('Recurring task deleted successfully');
         refetch();
       } catch {
-        alert('Delete failed!');
+        toast.error('Delete failed!');
       }
     }
   };
 
+  if (isLoading) return <LoadingState />;
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to load recurring tasks"
+      message="We encountered an error while loading recurring tasks. Please try again later."
+    />
+  );
+
   return (
     <>
+      <ToastContainer />
       <div className="recurring-wrapper">
         <div className='recurring-task-header'>
           <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
-          <button className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
-            <FaPlus /> Add
-          </button>
+          {/* Only show header Add button when there are tasks */}
+          {data && data.length > 0 && (
+            <button type='button' className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
+              <FaPlus /> Add
+            </button>
+          )}
         </div>
-
-        {isLoading && <p>Loading...</p>}
-        {error && <p>Failed to load tasks.</p>}
 
         {data && data.length > 0 ? (
           <table className="task-table">
@@ -85,7 +99,7 @@ const Page = () => {
                   <td>{task.recurrence_end_date ? new Date(task.recurrence_end_date).toLocaleDateString() : '—'}</td>
                   <td>{task.notify ? 'Yes' : 'No'}</td>
                   <td>
-                    <span onClick={() => handleEdit(task.id)} className=' edit-button'><FaEdit /></span>
+                    <span onClick={() => handleEdit(task.id)} className='edit-button'><FaEdit /></span>
                     <span onClick={() => handleDelete(task.id)} style={{ color: 'red', marginLeft: '8px' }}>
                       <FaTrash />
                     </span>
@@ -95,7 +109,20 @@ const Page = () => {
             </tbody>
           </table>
         ) : (
-          !isLoading && <p>No recurring tasks found.</p>
+          <EmptyState
+            icon={<FaTasks className="empty-state-icon" />}
+            title="No recurring tasks found"
+            message="You haven't created any recurring tasks yet. Start by adding your first recurring task."
+            action={
+              <button
+              type='button'
+                className="buttons"
+                onClick={() => setIsAddRecurringModalOpen(true)}
+              >
+                <FaPlus size={18} /> Add Recurring Task
+              </button>
+            }
+          />
         )}
       </div>
       <Modal
@@ -128,7 +155,6 @@ const Page = () => {
           }}
         />
       </Modal>
-
     </>
   );
 };

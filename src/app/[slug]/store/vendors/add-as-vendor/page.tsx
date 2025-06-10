@@ -179,7 +179,7 @@ const Page = () => {
           <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
           </label>
           <input style={{ display: 'none' }} id="file-upload" type="file" onChange={handleImageUpload} />
-          <button className='buttons' onClick={() => setShowItemFields(true)}><FaPlus /> Add Items</button>
+          <button className='buttons' onClick={() => setShowItemFields(true)} type='button'><FaPlus /> Add Items</button>
         </div>
 
         {showItemFields && (
@@ -222,7 +222,7 @@ const Page = () => {
                 />
               </div>
             </div>
-            <button className='buttons' onClick={handleAddItemToList}>Add</button>
+            <button className='buttons' onClick={handleAddItemToList} type='button'>Add</button>
           </div>
         )}
 
@@ -330,12 +330,14 @@ const Page = () => {
                 <label className="sub-title">Credit Type</label>
                 <div className="credit-options">
                   <button
+                  type='button'
                     className={`credit-button ${creditPaymentType === 'full' ? 'active' : ''}`}
                     onClick={() => setCreditPaymentType('full')}
                   >
                     Full Payment
                   </button>
                   <button
+                  type='button'
                     className={`credit-button ${creditPaymentType === 'partial' ? 'active' : ''}`}
                     onClick={() => setCreditPaymentType('partial')}
                   >

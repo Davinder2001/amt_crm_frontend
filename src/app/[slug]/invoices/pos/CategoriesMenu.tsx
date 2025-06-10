@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Checkbox from '@mui/material/Checkbox';
 
@@ -29,6 +29,28 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
     expandedChildCats,
     setExpandedChildCats,
 }) => {
+    // Build a set of all child category ids to filter out from top-level categories
+    const childCategoryIds = useMemo(() => {
+        const ids = new Set<number>();
+        const collectChildIds = (cats: Category[]) => {
+            cats.forEach(cat => {
+                if (cat.children && cat.children.length > 0) {
+                    cat.children.forEach(child => {
+                        ids.add(child.id);
+                        if (child.children) collectChildIds(child.children);
+                    });
+                }
+            });
+        };
+        collectChildIds(categories);
+        return ids;
+    }, [categories]);
+
+    // Filter top-level categories to exclude any that are children of others
+    const topLevelCategories = useMemo(() => {
+        return categories.filter(cat => !childCategoryIds.has(cat.id));
+    }, [categories, childCategoryIds]);
+
     const handleChildTabClick = (id: number) => {
         setSelectedChildCatId(selectedChildCatId === id ? null : id);
     };
@@ -52,10 +74,11 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                         className={`category-tab ${child.id === selectedChildCatId ? 'selected' : ''}`}
                     >
                         {isMobile ? (
-                            <label className="category-checkbox-label">
+                            <label className="category-checkbox-label" htmlFor={`child-cat-${child.id}`}>
                                 <Checkbox
+                                    id={`child-cat-${child.id}`}
                                     checked={selectedChildCatId === child.id}
-                                    onChange={() => handleChildTabClick(child.id)}
+                                    onChange={() => handleChildTabClick(child.id)}  // important!
                                     size="small"
                                 />
                                 {child.name}
@@ -110,7 +133,7 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                     className="top-category-select"
                 >
                     <option value="">All</option>
-                    {categories.map(cat => (
+                    {topLevelCategories.map(cat => (
                         <option key={cat.id} value={cat.id}>
                             {cat.name}
                         </option>
@@ -143,7 +166,7 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                             </label>
                         </div>
                     </li>
-                    {categories.map(cat => (
+                    {topLevelCategories.map(cat => (
                         <li key={cat.id}>
                             <div
                                 className={`category-tab ${cat.id === selectedTopCatId ? 'selected' : ''}`}

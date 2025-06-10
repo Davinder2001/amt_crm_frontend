@@ -144,7 +144,7 @@ const HolidayList = () => {
                     action={
                         <div className="add-holiday-action">
 
-                        <button className="buttons" onClick={() => setShowForm(true)}>
+                        <button className="" onClick={() => setShowForm(true)}>
                           <FaPlus />  Add Holiday
                         </button>
                         </div>

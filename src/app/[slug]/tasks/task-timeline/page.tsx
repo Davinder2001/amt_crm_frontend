@@ -65,6 +65,7 @@ const Page = () => {
       label: 'Action',
       render: (task: Task) => (
         <button
+          type='submit'
           onClick={() => handleSubmitTask(task.id)}
           className="buttons"
         >
@@ -81,6 +82,7 @@ const Page = () => {
   return (
     <div className="p-4">
       <button
+        type='button'
         onClick={() => router.back()}
         className="back-button"
       >

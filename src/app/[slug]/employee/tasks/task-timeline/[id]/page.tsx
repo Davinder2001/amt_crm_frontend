@@ -177,10 +177,11 @@ const ViewTimeline = () => {
           <button
             className="buttons"
             onClick={() => setShowSubmitTask(prev => !prev)}
+            type='button'
           >
             {showSubmitTask ? 'Cancel' : 'Create'}
           </button>
-          <button onClick={() => setShowReminderForm((prev) => !prev)}>
+          <button onClick={() => setShowReminderForm((prev) => !prev)} type='button'>
             {reminderData?.reminder ? '✏️ Edit Reminder' : '⏰ Set Reminder'}
           </button>
         </div>
@@ -206,7 +207,7 @@ const ViewTimeline = () => {
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </label>
-            <button onClick={handleReminderSubmit}>Submit</button>
+            <button onClick={handleReminderSubmit} type='submit'>Submit</button>
           </div>
         </div>
       )}
@@ -274,6 +275,7 @@ const ViewTimeline = () => {
           className="button primary"
           onClick={() => setShowConfirm(true)}
           disabled={isEnding}
+          type='button'
         >
           {isEnding ? 'Ending Task...' : 'End Task'}
         </button>

@@ -69,7 +69,7 @@ const AllTasks: React.FC = () => {
         <div className='store-t-e-e-icons'>
           <Link
             href={`/${companySlug}/employee/tasks/edit-task/${task.id}`}
-            className="table-e-d-v-buttons edit-button"
+            className="table-e-d-v- edit-button"
             onClick={(e) => e.stopPropagation()}
           >
             <FaEdit />
@@ -81,8 +81,9 @@ const AllTasks: React.FC = () => {
             }}
             disabled={isDeleting}
             className="table-e-d-v-buttons delete-button"
+            type='button'
           >
-            <FaTrash  />
+            <FaTrash />
           </button>
         </div>
       ),

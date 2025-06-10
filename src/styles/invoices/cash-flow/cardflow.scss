@@ -1,230 +1,168 @@
-// @use '../../variables' as *;
-
-// /* Stylish Tabs CSS */
-
-// .tabs {
-//   display: flex;
-//   border-bottom: 2px solid #e0e0e0;
-//   background: $white;
-//   box-shadow: $box-shadow;
-//   overflow: hidden;
-// }
-
-// .tab-button {
-//   text-align: center;
-//   padding: 20px ;
-//   font-weight: 600;
-//   font-size: 15px;
-//   color: #555;
-//   background: transparent;
-//   border: none;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
-//   position: relative;
-
-// }
-
-// .tab-button:hover {
-//   color: $primary-color;
-//   background-color: $light-blue;
-// }
-
-// .tab-button.active {
-//   color: $primary-color;
-//   background-color: #e7f1ff;
-//   box-shadow: inset 0 -3px 0 $primary-color;
-// }
-
-// /* Optional: Add a subtle underline bar animation */
-// .tab-button.active::after {
-//   content: "";
-//   position: absolute;
-//   bottom: 0;
-//   left: 20%;
-//   width: 60%;
-//   height: 3px;
-//   background-color: $primary-color;
-//   border-radius: 3px 3px 0 0;
-//   transition: all 0.3s ease;
-// }
-// /* Wrapper full width */
-
-
-
 @use '../../variables' as *;
 
-/* Base Container */
 .cashflow-container {
   width: 100%;
-}
 
-/* Tabs Container */
-.tabs-container {
-  position: relative;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin-bottom: 16px;
+  .tabs-container {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 16px;
 
-  &::-webkit-scrollbar {
-    height: 4px;
-    background: $light_blue;
-  }
+    &::-webkit-scrollbar {
+      height: 4px;
+      background: $light_blue;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    background: $primary-color;
-    border-radius: $border-radius;
-  }
+    &::-webkit-scrollbar-thumb {
+      background: $primary-color;
+      border-radius: $border-radius;
+    }
 
-  .tabs {
-    display: inline-flex;
-    background: $white;
-    box-shadow: $box-shadow;
-    min-width: 100%;
-  }
-}
-
-/* Tab Button */
-.tab-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 16px;
-  font-size: $font-size-small;
-  font-weight: $font-weight-medium;
-  color: $gray-color;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: $transition;
-  position: relative;
-  white-space: nowrap;
-  min-width: 80px;
-  align-items: normal;
-
-  .tab-icon {
-    font-size: $font-size-large;
-    margin-bottom: 4px;
-    color: $gray-color;
-    transition: $transition;
-  }
-
-  .tab-label {
-    font-size: $font-size-small;
-    transition: $transition;
-  }
-
-  &:hover {
-    color: $primary-color;
-    background: $light_blue;
-
-    .tab-icon {
-      color: $primary-color;
+    .tabs {
+      display: inline-flex;
+      background: $white;
+      box-shadow: $box-shadow;
+      min-width: 100%;
     }
   }
 
-  &.active {
-    color: $primary-color;
-    font-weight: $font-weight-semi-bold;
-
-    .tab-icon {
-      color: $primary-color;
-    }
-
-    .active-indicator {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-  }
-}
-
-/* Active Indicator */
-.active-indicator {
-  position: absolute;
-  bottom: 0;
-  transform: translateX(-50%) scaleX(0.8);
-  width: 100%;
-  height: 3px;
-  right: 0;
-  left: 0;
-  background: $primary-color;
-  border-radius: 3px 3px 0 0;
-  opacity: 0;
-  transition: $transition;
-}
-
-/* Tab Content */
-// Removed empty .tab-content ruleset to avoid compile error
-
-/* ----------------------------- */
-/*        MEDIA QUERIES         */
-/* ----------------------------- */
-
-@media (min-width: 768px) {
-  .tabs-container .tabs {
-    display: flex;
-    min-width: auto;
-    gap: 0;
-  }
-}
-
-@media (min-width: 992px) {
   .tab-button {
-    flex-direction: row;
-    gap: 8px;
-    padding: 12px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 16px;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+    color: $gray-color;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: $transition;
+    position: relative;
+    white-space: nowrap;
+    min-width: 80px;
     align-items: normal;
 
     .tab-icon {
-      margin-bottom: 0;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .tab-button {
-    padding: 8px 12px;
-    min-width: 70px;
-
-    .tab-icon {
-      font-size: 20px;
-      margin-bottom: 2px;
+      font-size: $font-size-large;
+      margin-bottom: 4px;
+      color: $gray-color;
+      transition: $transition;
     }
 
     .tab-label {
-      font-size: $font-size-extra-small;
+      font-size: $font-size-small;
+      transition: $transition;
     }
 
-    &.active .active-indicator {
-      opacity: 0;
+    &:hover {
+      color: $primary-color;
+      background: $light_blue;
+
+      .tab-icon {
+        color: $primary-color;
+      }
+    }
+
+    &.active {
+      color: $primary-color;
+      font-weight: $font-weight-semi-bold;
+
+      .tab-icon {
+        color: $primary-color;
+      }
+
+      .active-indicator {
+        opacity: 1;
+        transform: scaleX(1);
+      }
     }
   }
 
   .active-indicator {
-    width: 60%;
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%) scaleX(0.8);
+    width: 100%;
+    height: 3px;
+    right: 0;
+    left: 0;
+    background: $primary-color;
+    border-radius: 3px 3px 0 0;
+    opacity: 0;
+    transition: $transition;
   }
 
-  .tab-content {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 624px) {
-  .tab-button {
-    min-width: 80px;
-    align-items: normal;
-
-    .tab-label {
-      display: none;
+  @media (min-width: 768px) {
+    .tabs-container {
+      .tabs {
+        display: flex;
+        min-width: auto;
+        gap: 0;
+      }
     }
   }
-}
 
-@media (max-width: 425px) {
-  .tab-button {
-    min-width: 65px;
+  @media (min-width: 992px) {
+    .tab-button {
+      flex-direction: row;
+      gap: 8px;
+      padding: 12px 24px;
+      align-items: normal;
+
+      .tab-icon {
+        margin-bottom: 0;
+      }
+    }
   }
 
-  .tabs {
-    justify-content: space-between;
+  @media (max-width: 768px) {
+    .tab-button {
+      padding: 8px 12px;
+      min-width: 70px;
+
+      .tab-icon {
+        font-size: 20px;
+        margin-bottom: 2px;
+      }
+
+      .tab-label {
+        font-size: $font-size-extra-small;
+      }
+
+      &.active .active-indicator {
+        opacity: 0;
+      }
+    }
+
+    .active-indicator {
+      width: 60%;
+    }
+
+    .tab-content {
+      padding: 16px;
+    }
+  }
+
+  @media (max-width: 624px) {
+    .tab-button {
+      min-width: 80px;
+      align-items: normal;
+
+      .tab-label {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: 425px) {
+    .tab-button {
+      min-width: 65px;
+    }
+
+    .tabs {
+      justify-content: space-between;
+    }
   }
 }

@@ -158,13 +158,14 @@ const Packages: React.FC<PackagesProps> = ({
 
                                 <div className="pricing-buttons">
                                     <button
+                                    type='button'
                                         className={isSelected ? 'btnPrimary' : 'btnSecondary'}
                                         onClick={() => handlePackageSelection(plan.id ?? 0)}
                                         disabled={!subscriptionType}
                                     >
                                         {isSelected ? 'Selected' : 'Choose Plan'}
                                     </button>
-                                    <button className="btnOnline">✓ Online</button>
+                                    <button type='button' className="btnOnline">✓ Online</button>
                                 </div>
 
                                 {!subscriptionType && (

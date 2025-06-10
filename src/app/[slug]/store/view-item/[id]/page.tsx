@@ -67,9 +67,9 @@ const ViewItem = () => {
           <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
           <div className="action-buttons">
             <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
-              <button className="edit-btn"><FaEdit />Edit</button>
+              <button className="edit-btn" type='button'><FaEdit />Edit</button>
             </Link>
-            <button className="delete-btn" onClick={() => setShowConfirm(true)}><FaTrash />Delete</button>
+            <button className="delete-btn" onClick={() => setShowConfirm(true)} type='button'><FaTrash />Delete</button>
           </div>
         </div>
 

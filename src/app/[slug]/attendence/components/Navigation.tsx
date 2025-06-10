@@ -15,17 +15,17 @@ const Navigation: React.FC<NavigationProps> = ({ setIsAttandanceOpen, setIsApply
     return (
         <>
             <div className="navigation-buttons">
-                <button className="buttons" onClick={() => setIsApplyForLeaveOpen(true)}>
+                <button className="buttons" onClick={() => setIsApplyForLeaveOpen(true)} type='button'>
                     <FaCalendarPlus />
                     <span>Apply for Leave</span>
                 </button>
 
-                <button className="buttons" onClick={() => setIsAttandanceOpen(true)}>
+                <button className="buttons" onClick={() => setIsAttandanceOpen(true)} type='button' >
                     <FaUserCheck />
                     <span>Add Attendance</span>
                 </button>
 
-                <button className="buttons" onClick={() => router.push(`/${companySlug}/leaves`)}>
+                <button className="buttons" onClick={() => router.push(`/${companySlug}/leaves`)} type='button'>
                     <FaClipboardList />
                     <span>Leaves</span>
                 </button>

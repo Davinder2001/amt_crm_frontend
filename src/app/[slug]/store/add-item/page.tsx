@@ -230,6 +230,7 @@ const AddItem: React.FC = () => {
         showConfirm={showConfirm}
         setShowConfirm={setShowConfirm}
         handleClearForm={handleClearForm}
+        LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
       />
 
     </>

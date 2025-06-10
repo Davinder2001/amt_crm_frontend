@@ -59,7 +59,7 @@ export default function SelfConsumption() {
 
   const columns = [
     { label: 'Date', key: 'date' as keyof SelfConsumptionTransaction },
-    { label: 'Invoice Number', key: 'invoice_number' as keyof SelfConsumptionTransaction },
+    { label: 'Invoice No.', key: 'invoice_number' as keyof SelfConsumptionTransaction },
     { label: 'Amount', render: (row: SelfConsumptionTransaction) => `₹${row.amount}` },
     { label: 'Total of the Day', render: (row: SelfConsumptionTransaction) => `₹${row.total}` },
   ];

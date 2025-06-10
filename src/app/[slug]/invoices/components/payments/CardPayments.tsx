@@ -130,7 +130,7 @@ export default function CardPayments() {
 
   const columns = [
     { label: 'Date', key: 'date' as keyof CardTransaction },
-    { label: 'Invoice Number', key: 'invoice_number' as keyof CardTransaction },
+    { label: 'Invoice No.', key: 'invoice_number' as keyof CardTransaction },
     { label: 'Amount', render: (row: CardTransaction) => `₹${row.amount}` },
     { label: 'Total of the Day', render: (row: CardTransaction) => `₹${row.total}` },
   ];

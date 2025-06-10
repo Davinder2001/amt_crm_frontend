@@ -99,6 +99,7 @@
   position: relative;
   white-space: nowrap;
   min-width: 80px;
+  align-items: normal;
 
   .tab-icon {
     font-size: $font-size-large;
@@ -171,6 +172,7 @@
     flex-direction: row;
     gap: 8px;
     padding: 12px 24px;
+    align-items: normal;
 
     .tab-icon {
       margin-bottom: 0;
@@ -219,9 +221,10 @@
 
 @media (max-width: 425px) {
   .tab-button {
-    min-width: 80px;
+    min-width: 65px;
   }
-   .tabs{
-    justify-content:space-between ;
-   }
+
+  .tabs {
+    justify-content: space-between;
+  }
 }

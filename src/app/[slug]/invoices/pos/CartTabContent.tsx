@@ -138,14 +138,14 @@ export default function CartTabContent({
 
     const validateFields = (): boolean => {
         if (cart.length === 0) {
-             setActiveInnerTab('Client');
+            setActiveInnerTab('Client');
             toast.error('Please fill in required client details.');
-       
+
             return false;
         }
 
         if (!number || !clientName) {
-              setActiveInnerTab('Items');
+            setActiveInnerTab('Items');
             toast.error('Cart is empty. Please add at least one item.');
             return false;
         }
@@ -327,21 +327,33 @@ export default function CartTabContent({
                             <div className="form-group">
                                 <label>Phone Number</label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     value={number}
-                                    onChange={(e) => setNumber(e.target.value)}
-                                    placeholder="Enter phone number"
+                                    onChange={(e) => {
+                                        const digitsOnly = e.target.value.replace(/\D/g, '');
+                                        if (digitsOnly.length <= 10) {
+                                            setNumber(digitsOnly);
+                                        }
+                                    }}
                                     onBlur={handleNumberBlur}
+                                    placeholder="Enter 10-digit phone number"
                                     required
+                                    maxLength={10}
+                                    pattern="\d{10}"
                                 />
                             </div>
                             <label>Client Name</label>
                             <input
                                 type="text"
                                 value={clientName}
-                                onChange={(e) => setClientName(e.target.value)}
+                                onChange={(e) => {
+                                    const textOnly = e.target.value.replace(/[^a-zA-Z\s\-'.]/g, '');
+                                    setClientName(textOnly);
+                                }}
                                 placeholder="Enter client name"
                                 required
+                                pattern="[A-Za-z\s\-'.]+"
+                                title="Only letters, spaces, hyphens, apostrophes, and periods are allowed"
                             />
                         </div>
                         <div className="form-group">
@@ -507,7 +519,9 @@ export default function CartTabContent({
                                             placeholder="Enter service charge amount"
                                             min={0}
                                             max={baseTotal}
+                                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                         />
+
                                     ) : (
                                         <input
                                             type="number"
@@ -519,14 +533,15 @@ export default function CartTabContent({
                                             placeholder="Enter service charge %"
                                             min={0}
                                             max={100}
+                                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                         />
+
                                     )}
                                 </div>
                             )}
                         </div>
 
                         <div className="section-group">
-                            <div className="section-title">Discount Options*</div>
                             <div className="options-row">
                                 <label className="custom-checkbox">
                                     <input
@@ -535,13 +550,10 @@ export default function CartTabContent({
                                         onChange={(e) => setIsDiscountApplied(e.target.checked)}
                                     />
                                     <span className="checkmark" />
-                                    Discount
+                                    <div className="section-title" style={{ margin: 0 }}> Discount*</div>
+
                                 </label>
-                                <label className="custom-checkbox">
-                                    <input type="checkbox" />
-                                    <span className="checkmark" />
-                                    Complimentary
-                                </label>
+
                             </div>
                         </div>
                         {isDiscountApplied && (
@@ -550,7 +562,7 @@ export default function CartTabContent({
                                 <div className="options-row">
                                     <label className="custom-radio">
                                         <input
-                                            type="radio"
+                                            type="checkbox"
                                             name="discountType"
                                             value="amount"
                                             checked={discountType === 'amount'}
@@ -562,7 +574,7 @@ export default function CartTabContent({
 
                                     <label className="custom-radio">
                                         <input
-                                            type="radio"
+                                            type="checkbox"
                                             name="discountType"
                                             value="percentage"
                                             checked={discountType === 'percentage'}
@@ -584,7 +596,9 @@ export default function CartTabContent({
                                         placeholder="Enter discount amount"
                                         min={0}
                                         max={baseTotal}
+                                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                     />
+
                                 ) : (
                                     <input
                                         type="number"
@@ -596,6 +610,7 @@ export default function CartTabContent({
                                         placeholder="Enter discount %"
                                         min={0}
                                         max={100}
+                                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
                                     />
                                 )}
                             </div>
@@ -729,6 +744,7 @@ export default function CartTabContent({
                                                         const val = Number(e.target.value);
                                                         setPartialAmount(isNaN(val) ? 0 : val);
                                                     }}
+                                                    onWheel={(e) => (e.target as HTMLInputElement).blur()} // This will remove focus when scrolling
                                                     placeholder="Enter partial payment amount"
                                                     min={0}
                                                     max={parseFloat(total)}

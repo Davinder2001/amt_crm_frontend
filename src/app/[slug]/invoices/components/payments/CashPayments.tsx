@@ -61,7 +61,7 @@ export default function CashPayments() {
 
   const columns = [
     { label: 'Date', key: 'date' as keyof CashTransaction },
-    { label: 'Invoice Number', key: 'invoice_number' as keyof CashTransaction },
+    { label: 'Invoice No.', key: 'invoice_number' as keyof CashTransaction },
     { label: 'Amount', render: (row: CashTransaction) => `₹${row.amount}` },
     { label: 'Total of the Day', render: (row: CashTransaction) => `₹${row.total}` },
   ];

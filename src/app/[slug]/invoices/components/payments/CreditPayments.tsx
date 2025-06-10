@@ -59,7 +59,7 @@ export default function CreditPayments() {
 
   const columns = [
     { label: 'Date', key: 'date' as keyof CreditTransaction },
-    { label: 'Invoice Number', key: 'invoice_number' as keyof CreditTransaction },
+    { label: 'Invoice No.', key: 'invoice_number' as keyof CreditTransaction },
     { label: 'Amount', render: (row: CreditTransaction) => `₹${row.amount}` },
     { label: 'Total of the Day', render: (row: CreditTransaction) => `₹${row.total}` },
   ];

@@ -150,6 +150,7 @@
     }
 }
 
+
 .drag-scroll {
     cursor: grab;
     user-select: auto;
@@ -442,9 +443,10 @@ svg.react-datepicker__triangle {
 }
 
 .react-datepicker__day {
-    padding: 5px 0px;
-    font-size: 13px;
+    padding: 0px;
+    font-size: 14px;
     font-weight: 500;
+    color: $primary-color !important;
 }
 
 

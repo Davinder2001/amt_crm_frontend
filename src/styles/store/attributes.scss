@@ -212,7 +212,8 @@
       .responsive-table {
         .attribute-actions-btn-outer {
           display: flex;
-          justify-content: space-around;
+          justify-content: flex-start;
+          gap: 10px;
 
           button {
             svg{

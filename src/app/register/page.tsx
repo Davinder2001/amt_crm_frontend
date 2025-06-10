@@ -85,17 +85,17 @@ const UserRegisterForm = () => {
       <h2 className="text-lg font-semibold mb-4">Create Your Account</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="form-group">
-          <label><FiUser /> Full Name</label>
+          <label> Full Name</label>
           <input name="name" value={form.name} onChange={handleChange} required />
         </div>
 
         <div className="form-group">
-          <label><FiMail /> Email</label>
+          <label> Email</label>
           <input name="email" type="email" value={form.email} onChange={handleChange} required />
         </div>
 
         <div className="form-group">
-          <label><FiPhone /> Phone Number</label>
+          <label> Phone Number</label>
           <div className="input-group">
             <input
               name="number"
@@ -123,7 +123,7 @@ const UserRegisterForm = () => {
         )}
 
         <div className="form-group">
-          <label><FiLock /> Password</label>
+          <label> Password</label>
           <div className="input-group">
             <input
               type={showPassword ? "text" : "password"}
@@ -139,7 +139,7 @@ const UserRegisterForm = () => {
         </div>
 
         <div className="form-group">
-          <label><FiLock /> Confirm Password</label>
+          <label> Confirm Password</label>
           <div className="input-group">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -161,7 +161,7 @@ const UserRegisterForm = () => {
 
       <style jsx>{`
         .register-popup {
-          max-width: 450px;
+          max-width: 550px;
           margin: 40px auto;
           padding: 24px;
           background: #fff;
@@ -183,12 +183,11 @@ const UserRegisterForm = () => {
         }
 
         .form-group label {
-          font-weight: 500;
-          margin-bottom: 6px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          color: #444;
+          letter-spacing: .4px;
+          color: #333;
+          font-size: 13px;
+          font-weight: 400;
+          display: block;
         }
 
         .form-group input {
@@ -215,18 +214,18 @@ const UserRegisterForm = () => {
         }
 
         button {
-          font-weight: 600;
+          font-size: 16px;
           padding: 10px 16px;
           border: none;
-          border-radius: 6px;
-          background: #007bff;
+          border-radius: 5px;
+          background: #384B70;
           color: #fff;
           cursor: pointer;
-          margin-top: 8px;
+          letter-spacing: 0.4px;
         }
 
         button:hover {
-          background: #005fcc;
+          background: #9CB9D0;
         }
 
         button:disabled {

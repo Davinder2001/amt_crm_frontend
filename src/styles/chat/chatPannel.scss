@@ -34,7 +34,7 @@
         flex: 1;
         display: flex;
         align-items: center;
-        background-color: #f1f9f9;
+        background-color: $light-color;
         border-radius: $border-radius;
         padding: 8px 16px;
         gap: 8px;
@@ -240,7 +240,7 @@
 
     .clear-search-btn:hover,
     .start-chat-btn:hover {
-        background-color: #038482;
+        background-color: $hover-color;
     }
 
     /* Chat Main Area */

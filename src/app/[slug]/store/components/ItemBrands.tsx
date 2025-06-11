@@ -21,6 +21,7 @@ import {
     Alert
 } from '@mui/material';
 import { FaPlus, FaCheck, FaTimes, FaTrash, FaEdit } from 'react-icons/fa';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 interface Props {
     selectedBrand: string;
@@ -36,9 +37,11 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [name, setName] = useState('');
     const [editingBrand, setEditingBrand] = useState<{ id: number; name: string } | null>(null);
+    const [brandToDelete, setBrandToDelete] = useState<{ id: number; name: string } | null>(null);
     const [hoveredBrandId, setHoveredBrandId] = useState<number | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showError, setShowError] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Handle brand selection
     const handleBrandSelect = (brandName: string) => {
@@ -87,18 +90,16 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
 
     // Delete brand
     const handleDeleteBrand = async (id: number, brandName: string) => {
-        if (confirm(`Are you sure you want to delete "${brandName}"?`)) {
-            try {
-                await deleteBrand(id).unwrap();
-                refetch(); // Refresh the list
-                if (selectedBrand === brandName) {
-                    onBrandSelect('');
-                }
-            } catch (err) {
-                console.error('Delete failed:', err);
-                setErrorMessage('Failed to delete brand');
-                setShowError(true);
+        try {
+            await deleteBrand(id).unwrap();
+            refetch(); // Refresh the list
+            if (selectedBrand === brandName) {
+                onBrandSelect('');
             }
+        } catch (err) {
+            console.error('Delete failed:', err);
+            setErrorMessage('Failed to delete brand');
+            setShowError(true);
         }
     };
 
@@ -196,7 +197,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                                         size="small"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleDeleteBrand(brand.id, brand.name);
+                                                            setBrandToDelete({ id: brand.id, name: brand.name });
+                                                            setShowDeleteConfirm(true);
                                                         }}
                                                     >
                                                         <FaTrash size={12} color="#384b70" />
@@ -317,6 +319,22 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                     </div>
                 </>
             )}
+            <ConfirmDialog
+                isOpen={showDeleteConfirm}
+                message={`Are you sure want to delete the brand "${brandToDelete?.name}"?`}
+                onConfirm={() => {
+                    if (brandToDelete) {
+                        handleDeleteBrand(brandToDelete.id, brandToDelete.name);
+                    }
+                    setShowDeleteConfirm(false);
+                    setBrandToDelete(null);
+                }}
+                onCancel={() => {
+                    setShowDeleteConfirm(false);
+                    setBrandToDelete(null);
+                }}
+                type="delete"
+            />
         </Box>
     );
 };

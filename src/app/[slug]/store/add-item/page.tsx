@@ -1,15 +1,12 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useCreateStoreItemMutation } from '@/slices/store/storeApi';
 import { useRouter } from 'next/navigation';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
-import { useCallback } from "react";
 import StoreItemFields from '../components/StoreItemFields';
 import { toast } from 'react-toastify';
-
-const LOCAL_STORAGE_KEY = 'storeItemForm';
 
 const getDefaultFormData = (): CreateStoreItemRequest => ({
   name: '',
@@ -42,46 +39,47 @@ const AddItem: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const [formData, setFormData] = useState<CreateStoreItemRequest>(getDefaultFormData());
-
   const [vendors, setVendors] = useState<string[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false, false, false]);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
-    const savedFormData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedFormData) {
-      const parsed = JSON.parse(savedFormData);
-      delete parsed.images;
-      delete parsed.featured_image;
-      setFormData(prev => ({ ...prev, ...parsed }));
-
-      if (parsed.categories) {
-        setSelectedCategories(parsed.categories);
-      }
-    }
-
     if (vendorsData) {
       setVendors(vendorsData.map((vendor: { vendor_name: string }) => vendor.vendor_name));
     }
   }, [vendorsData]);
 
+  // Warn user before leaving page with unsaved changes
+  useEffect(() => {
+    const warningText = 'You have unsaved changes - are you sure you wish to leave this page?';
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!hasUnsavedChanges) return;
+      e.preventDefault();
+      e.returnValue = warningText;
+      return warningText;
+    };
+
+    window.addEventListener('beforeunload', handleWindowClose);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose);
+    };
+  }, [hasUnsavedChanges]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const updated = { ...formData, [name]: value };
-    setFormData(updated);
-
-    const { ...rest } = updated;
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(rest));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setHasUnsavedChanges(true);
   };
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const numValue = value === '' ? 0 : Number(value);
-    const newFormData = { ...formData, [name]: isNaN(numValue) ? 0 : numValue };
-    setFormData(newFormData);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newFormData));
+    setFormData(prev => ({ ...prev, [name]: isNaN(numValue) ? 0 : numValue }));
+    setHasUnsavedChanges(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +87,7 @@ const AddItem: React.FC = () => {
       const newImages = Array.from(e.target.files).slice(0, 5);
       const updatedImages = [...formData.images, ...newImages].slice(-5);
       setFormData(prev => ({ ...prev, images: updatedImages }));
+      setHasUnsavedChanges(true);
     }
   };
 
@@ -97,18 +96,13 @@ const AddItem: React.FC = () => {
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+    setHasUnsavedChanges(true);
   };
 
   const handleCategoryChange = (categories: Category[]) => {
     setSelectedCategories(categories);
-
-    // Store in localStorage
-    const existing = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-    const updated = { ...existing, categories };
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+    setHasUnsavedChanges(true);
   };
-
-
 
   const validateTab = useCallback((index: number): boolean => {
     switch (index) {
@@ -131,7 +125,6 @@ const AddItem: React.FC = () => {
     }
   }, [formData, selectedCategories, variants]);
 
-
   useEffect(() => {
     const newTabCompletion = [true]; // First tab is always enabled
     for (let i = 0; i < 4; i++) {
@@ -144,7 +137,6 @@ const AddItem: React.FC = () => {
 
     setTabCompletion(newTabCompletion);
 
-    // If current tab is no longer valid, go back to the last valid one
     if (!newTabCompletion[activeTab]) {
       const lastValidTab = newTabCompletion.lastIndexOf(true);
       setActiveTab(lastValidTab);
@@ -152,11 +144,14 @@ const AddItem: React.FC = () => {
   }, [formData, variants, selectedCategories, activeTab, validateTab]);
 
   const handleClearForm = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
-    setFormData(getDefaultFormData());
-    setShowConfirm(false);
-    setActiveTab(0)
+    if (window.confirm('Are you sure you want to clear all form data?')) {
+      setFormData(getDefaultFormData());
+      setShowConfirm(false);
+      setActiveTab(0);
+      setHasUnsavedChanges(false);
+    }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = new FormData();
@@ -164,7 +159,6 @@ const AddItem: React.FC = () => {
     // Append simple fields
     Object.entries(formData).forEach(([key, val]) => {
       if (key !== 'images' && key !== 'featured_image' && val !== null && val !== undefined) {
-        // Special handling for brand (send both name and id if available)
         if (key === 'brand_name' && formData.brand_id) {
           form.append('brand_id', formData.brand_id.toString());
         }
@@ -174,11 +168,9 @@ const AddItem: React.FC = () => {
 
     // Append images
     formData.images.forEach(img => form.append('images[]', img));
-    // Append featured_image (as a binary file)
     if (formData.featured_image instanceof File) {
       form.append('featured_image', formData.featured_image);
     }
-
 
     // Append variants
     variants.forEach((variant, i) => {
@@ -196,49 +188,44 @@ const AddItem: React.FC = () => {
       const response = await createStoreItem(form).unwrap();
       if (response.success === true) {
         toast.success(response.message || 'Item created successfully.');
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
         setFormData(getDefaultFormData());
+        setHasUnsavedChanges(false);
         router.push(`/${companySlug}/store`);
       } else {
         toast.error(response.message || response.error || 'Failed to create item.');
       }
-
     } catch (err) {
       console.error('Error creating item:', err);
     }
   };
 
   return (
-    <>
-      <StoreItemFields
-        formData={formData}
-        setFormData={setFormData}
-        vendors={vendors}
-        setVendors={setVendors}
-        handleChange={handleChange}
-        handleNumberChange={handleNumberChange}
-        handleImageChange={handleImageChange}
-        handleClearImages={() => setFormData(prev => ({ ...prev, images: [] }))}
-        handleRemoveImage={handleRemoveImage}
-        taxesData={taxesData}
-        selectedCategories={selectedCategories}
-        setSelectedCategories={handleCategoryChange}
-        variants={variants}
-        setVariants={setVariants}
-        handleSubmit={handleSubmit}
-        companySlug={companySlug}
-        isLoading={isCreating}
-        isEditMode={false} // or false
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        tabCompletion={tabCompletion}
-        showConfirm={showConfirm}
-        setShowConfirm={setShowConfirm}
-        handleClearForm={handleClearForm}
-        LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
-      />
-
-    </>
+    <StoreItemFields
+      formData={formData}
+      setFormData={setFormData}
+      vendors={vendors}
+      setVendors={setVendors}
+      handleChange={handleChange}
+      handleNumberChange={handleNumberChange}
+      handleImageChange={handleImageChange}
+      handleClearImages={() => setFormData(prev => ({ ...prev, images: [] }))}
+      handleRemoveImage={handleRemoveImage}
+      taxesData={taxesData}
+      selectedCategories={selectedCategories}
+      setSelectedCategories={handleCategoryChange}
+      variants={variants}
+      setVariants={setVariants}
+      handleSubmit={handleSubmit}
+      companySlug={companySlug}
+      isLoading={isCreating}
+      isEditMode={false}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+      tabCompletion={tabCompletion}
+      showConfirm={showConfirm}
+      setShowConfirm={setShowConfirm}
+      handleClearForm={handleClearForm}
+    />
   );
 };
 

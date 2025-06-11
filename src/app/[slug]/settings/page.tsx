@@ -5,7 +5,7 @@ import SettingNavigation from './components/settingNavigation';
 import StoreSettings from './components/Attributes';
 import Attributes from './components/Attributes';
 import Shifts from './components/Shifts';
-import TaxesPage from './components/Taxes';
+import CreateTax from './components/Taxes';
 import RoleList from './components/permissions/roleList';
 import BankAccountList from './components/accounts/BankAccountList';
 import LeavesAndHolidays from './components/LeavesAndHolidays';
@@ -25,7 +25,7 @@ const SettingsPage = () => {
       case 'shifts':
         return <Shifts />;
       case 'taxes':
-        return <TaxesPage />;
+        return <CreateTax />;
       case 'permissions':
         return <RoleList />;
       case 'bank-accounts':

@@ -9,14 +9,22 @@ import TableToolbar from '@/components/common/TableToolbar';
 import Link from 'next/link';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import Modal from '@/components/common/Modal';
+import CreateVendor from './components/CreateVendor';
 
 const Page: React.FC = () => {
-  const { data: vendors, error, isLoading } = useFetchVendorsQuery() as { data: Vendor[] | undefined, error: undefined, isLoading: boolean };
+  const { data: vendors, error, isLoading, refetch } = useFetchVendorsQuery() as {
+    data: Vendor[] | undefined;
+    error: unknown;
+    isLoading: boolean;
+    refetch: () => void;
+  };
   const { companySlug } = useCompany();
   const router = useRouter();
 
   const [visibleColumns, setVisibleColumns] = useState<string[]>([]);
   const [filters, setFilters] = useState<Record<string, string[]>>({});
+  const [addVendorModalOpen, setAddVendorModalOpen] = useState(false);
 
   useEffect(() => {
     if (vendors && vendors.length > 0) {
@@ -62,10 +70,7 @@ const Page: React.FC = () => {
         title="No vendors found"
         message="You haven't added any vendors yet. Start by creating your first vendor."
         action={
-          <button
-            className="buttons"
-            onClick={() => router.push(`/${companySlug}/store/vendors/add-vendor`)}
-          >
+          <button className="buttons" onClick={() => setAddVendorModalOpen(true)}>
             <FaPlus size={18} /> Add New Vendor
           </button>
         }
@@ -76,25 +81,27 @@ const Page: React.FC = () => {
 
   const columns = visibleColumns.map((key) => ({
     label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-    render: (item: Vendor) => item[key as keyof Vendor]?.toString() || '-'
+    render: (item: Vendor) => item[key as keyof Vendor]?.toString() || '-',
   }));
 
   return (
     <div className="vendors-page-outer">
-      <Link href={`/${companySlug}/store`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <Link href={`/${companySlug}/store`} className="back-button">
+        <FaArrowLeft size={20} color="#fff" />
+      </Link>
       <div className="vendors-page">
         <div className="vendors-page-outer">
           <TableToolbar
             onFilterChange={(field, value, type) => {
               if (type === 'search') {
-                setFilters(prev => ({
+                setFilters((prev) => ({
                   ...prev,
-                  [field]: value && typeof value === 'string' ? [value] : []
+                  [field]: value && typeof value === 'string' ? [value] : [],
                 }));
               } else {
-                setFilters(prev => ({
+                setFilters((prev) => ({
                   ...prev,
-                  [field]: Array.isArray(value) ? value : [value]
+                  [field]: Array.isArray(value) ? value : [value],
                 }));
               }
             }}
@@ -105,9 +112,8 @@ const Page: React.FC = () => {
               {
                 label: 'Add Vendor',
                 icon: <FaPlus />,
-                onClick: () => router.push(`/${companySlug}/store/vendors/add-vendor`),
+                onClick: () => setAddVendorModalOpen(true),
               },
-
             ]}
           />
 
@@ -116,6 +122,21 @@ const Page: React.FC = () => {
             columns={columns}
             onView={(id: number) => router.push(`/${companySlug}/store/vendors/${id}`)}
           />
+
+          <Modal
+            isOpen={addVendorModalOpen}
+            onClose={() => setAddVendorModalOpen(false)}
+            title="Add New Vendor"
+            width="800px"
+          >
+            <CreateVendor
+              onSuccess={() => {
+                refetch(); // Refresh vendor list
+                setAddVendorModalOpen(false);
+              }}
+              onClose={() => setAddVendorModalOpen(false)}
+            />
+          </Modal>
         </div>
       </div>
     </div>

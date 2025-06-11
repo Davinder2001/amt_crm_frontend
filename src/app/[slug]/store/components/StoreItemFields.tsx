@@ -7,7 +7,6 @@ import Link from 'next/link';
 import AddVendor from './AddVendor';
 import ImageUpload from './ImageUpload';
 import { FormInput } from '@/components/common/FormInput';
-import { FormSelect } from '@/components/common/FormSelect';
 import DatePickerField from '@/components/common/DatePickerField';
 import ItemCategories from './ItemCategories';
 import ItemsTab from './ItemsTab';
@@ -16,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import FeaturedImageUpload from './FeaturedImageUpload';
 import ItemBrands from './ItemBrands';
 import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
+import AddTax from './AddTax';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -50,7 +50,6 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
     showConfirm?: boolean;
     setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
     handleClearForm?: () => void;
-    LOCAL_STORAGE_KEY: string;
 }
 
 const StoreItemFields = <T extends StoreItemFormData>({
@@ -79,7 +78,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
     showConfirm,
     setShowConfirm,
     handleClearForm,
-    LOCAL_STORAGE_KEY,
 }: StoreItemFieldsProps<T>) => {
     const router = useRouter();
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -147,7 +145,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
                                     <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
-                                    {/* <FormInput label="Brand Name" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="e.g. Samsung, LG" /> */}
                                     <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
                                     <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
 
@@ -159,13 +156,11 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             onVendorSelect={(vendorName) => {
                                                 const updated = { ...formData, vendor_name: vendorName };
                                                 setFormData(updated);
-                                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                             }}
                                             onVendorAdded={(vendorName) => {
                                                 setVendors((prev) => [...prev, vendorName]);
                                                 const updated = { ...formData, vendor_name: vendorName };
                                                 setFormData(updated);
-                                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                             }}
                                         />
                                     </div>
@@ -198,7 +193,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <FormInput label="Add fresh Stock" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
                                 <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
 
-                                {taxesData?.data && (
+                                {/* {taxesData?.data && (
                                     <FormSelect<number>
                                         label="Tax"
                                         name="tax_id"
@@ -206,14 +201,31 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         onChange={(value) => {
                                             const updated = { ...formData, tax_id: value };
                                             setFormData(updated);
-                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                         }}
                                         options={taxesData.data.map((tax) => ({
                                             value: tax.id,
                                             label: `${tax.name} - ${tax.rate}%`,
                                         }))}
                                     />
-                                )}
+                                )} */}
+
+                                <div className="add-items-form-input-label-container">
+                                    <label>Tax</label>
+                                    {taxesData?.data && (
+                                        <AddTax
+                                            taxes={taxesData.data}
+                                            selectedTaxId={typeof formData.tax_id === 'number' ? formData.tax_id : null}
+                                            onTaxSelect={(taxId) => {
+                                                const updated = { ...formData, tax_id: taxId };
+                                                setFormData(updated);
+                                            }}
+                                            onTaxAdded={(newTax) => {
+                                                setFormData((prev) => ({ ...prev, tax_id: newTax.id }));
+                                            }}
+                                        />
+                                    )}
+                                </div>
+
                             </div>
                         )}
                     </div>
@@ -240,17 +252,14 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
                                     const updated = { ...formData, purchase_date: date };
                                     setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }} maxDate={new Date()} />
                                 <DatePickerField label="Date Of Manufacture" selectedDate={formData.date_of_manufacture || null} onChange={(date) => {
                                     const updated = { ...formData, date_of_manufacture: date };
                                     setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }} maxDate={new Date()} required />
                                 <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
                                     const updated = { ...formData, date_of_expiry: date };
                                     setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }} minDate={new Date()} />
                                 <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
                             </div>
@@ -323,7 +332,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
 
                     <div className="add-items-form-container store_column">
                         <ItemBrands
-                            LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
                             selectedBrand={formData.brand_name || ''}
                             selectedBrandId={formData.brand_id}
                             onBrandSelect={(brandName, brandId) => {
@@ -333,9 +341,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     brand_id: brandId || 0,
                                 };
                                 setFormData(updated);
-                                if (LOCAL_STORAGE_KEY) {
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                                }
                             }}
                             collapsedSections={collapsedSections}
                             toggleSection={toggleSection}

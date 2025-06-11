@@ -8,8 +8,6 @@ import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
 
-const LOCAL_STORAGE_KEY = 'storeItemForm';
-
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
   const { companySlug } = useCompany();
@@ -18,6 +16,7 @@ const UpdateItem = () => {
   const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const getDefaultFormData = (): UpdateStoreItemRequest => ({
     id: Number(id),
@@ -40,7 +39,7 @@ const UpdateItem = () => {
     variants: [],
     categories: [],
     featured_image: null
-  })
+  });
 
   const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
   const [originalItemData, setOriginalItemData] = useState<UpdateStoreItemRequest | null>(null);
@@ -96,43 +95,55 @@ const UpdateItem = () => {
     }));
   }, [selectedCategories]);
 
+  // Warn user before leaving page with unsaved changes
+  useEffect(() => {
+    const warningText = 'You have unsaved changes - are you sure you wish to leave this page?';
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!hasUnsavedChanges) return;
+      e.preventDefault();
+      e.returnValue = warningText;
+      return warningText;
+    };
+
+    window.addEventListener('beforeunload', handleWindowClose);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose);
+    };
+  }, [hasUnsavedChanges, router, companySlug]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setHasUnsavedChanges(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const currentImages = formData.images || [];
-
-      // Count how many are already in state
-      const existingImageCount = currentImages.length;
-
-      // Only allow new files up to 5 - existingImageCount
-      const allowedFiles = files.slice(0, 5 - existingImageCount);
-
-      // Combine and update
+      const allowedFiles = files.slice(0, 5 - currentImages.length);
       const updatedImages = [...currentImages, ...allowedFiles];
       setFormData(prev => ({ ...prev, images: updatedImages }));
+      setHasUnsavedChanges(true);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    const imageUrl = formData.images[index];  // Get the URL of the image to be removed
+    const imageUrl = formData.images[index];
     if (typeof imageUrl === 'string') {
-      setRemovedImages((prev) => [...prev, imageUrl]);  // Store the removed image URL
+      setRemovedImages((prev) => [...prev, imageUrl]);
     }
-
     setFormData((prev) => {
       const updatedImages = prev.images.filter((_, i) => i !== index);
       return { ...prev, images: updatedImages };
     });
+    setHasUnsavedChanges(true);
   };
 
   const handleClearImages = () => {
     setFormData(prev => ({ ...prev, images: [] }));
+    setHasUnsavedChanges(true);
   };
 
   const isFormModified = (): boolean => {
@@ -157,11 +168,9 @@ const UpdateItem = () => {
       JSON.stringify(variants) !== JSON.stringify(originalItemData.variants);
     const newImages = formData.images.filter((img) => img instanceof File);
     const imagesChanged = newImages.length > 0 || removedImages.length > 0;
-
-    // Check featured image
     const featuredImageChanged =
-      (formData.featured_image instanceof File) || // new file uploaded
-      (originalItemData.featured_image && !formData.featured_image) || // was removed
+      (formData.featured_image instanceof File) ||
+      (originalItemData.featured_image && !formData.featured_image) ||
       (typeof originalItemData.featured_image === 'string' &&
         typeof formData.featured_image === 'string' &&
         originalItemData.featured_image !== formData.featured_image);
@@ -175,12 +184,9 @@ const UpdateItem = () => {
     if (!originalItemData) return;
 
     const formdata = new FormData();
-
-    // Always include method and id
     formdata.append('_method', 'PUT');
     formdata.append('id', formData.id.toString());
 
-    // Add primitive fields only if they changed
     const primitiveFields = [
       'name', 'quantity_count', 'measurement', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
@@ -198,13 +204,11 @@ const UpdateItem = () => {
       }
     });
 
-    // ✅ Always include categories[]
     formdata.delete('categories[]');
     formData.categories.forEach((catId) => {
       formdata.append('categories[]', catId.toString());
     });
 
-    // ✅ Only include new images (File objects)
     const newImages = formData.images.filter((img) => img instanceof File);
     if (newImages.length > 0) {
       newImages.forEach((img) => formdata.append('images[]', img));
@@ -214,10 +218,8 @@ const UpdateItem = () => {
       formdata.append('featured_image', formData.featured_image);
     }
 
-    // Add the removed images to the form data
     removedImages.forEach((imageUrl) => formdata.append('removed_images[]', imageUrl));
 
-    // ✅ Only send variants if changed
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {
       variants.forEach((variant, i) => {
         formdata.append(`variants[${i}][price]`, variant.price.toString());
@@ -228,49 +230,43 @@ const UpdateItem = () => {
       });
     }
 
-    // Submit update
     try {
       await updateStoreItem({ id: formData.id, formdata }).unwrap();
       toast.success('Item updated successfully!');
-      router.back(); // 
-      // router.push(`/${companySlug}/store`);
+      setHasUnsavedChanges(false);
+      router.back();
     } catch (err) {
       console.error('Error updating item:', err);
       toast.error('Failed to update item.');
     }
   };
 
-
   if (isItemLoading) return <p>Loading item details...</p>;
 
   return (
-    <>
-      <StoreItemFields
-        formData={formData}
-        setFormData={setFormData}
-        vendors={vendorsList}
-        setVendors={setVendorsList}
-        handleChange={handleChange}
-        handleNumberChange={handleChange}
-        handleImageChange={handleImageChange}
-        handleClearImages={handleClearImages}
-        handleRemoveImage={handleRemoveImage}
-        taxesData={taxesData}
-        selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
-        variants={variants}
-        setVariants={setVariants}
-        handleSubmit={handleSubmit}
-        companySlug={companySlug}
-        isLoading={isUpdating}
-        isEditMode={true} // or false
-        isFormModified={isFormModified}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
-      />
-
-    </>
+    <StoreItemFields
+      formData={formData}
+      setFormData={setFormData}
+      vendors={vendorsList}
+      setVendors={setVendorsList}
+      handleChange={handleChange}
+      handleNumberChange={handleChange}
+      handleImageChange={handleImageChange}
+      handleClearImages={handleClearImages}
+      handleRemoveImage={handleRemoveImage}
+      taxesData={taxesData}
+      selectedCategories={selectedCategories}
+      setSelectedCategories={setSelectedCategories}
+      variants={variants}
+      setVariants={setVariants}
+      handleSubmit={handleSubmit}
+      companySlug={companySlug}
+      isLoading={isUpdating}
+      isEditMode={true}
+      isFormModified={isFormModified}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+    />
   );
 };
 

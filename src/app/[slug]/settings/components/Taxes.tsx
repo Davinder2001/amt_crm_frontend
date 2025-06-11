@@ -42,7 +42,7 @@ type ApiError = {
     };
 };
 
-const TaxesPage = () => {
+const CreateTax = () => {
     const { setTitle } = useBreadcrumb();
     const { data: taxesData, isLoading, isError, refetch } = useFetchTaxesQuery();
     const [createTax] = useCreateTaxMutation();
@@ -181,7 +181,7 @@ const TaxesPage = () => {
                     }
                 />
             ) : (
-                <ResponsiveTable data={taxesData?.data || []} columns={columns} cardViewKey='name'/>
+                <ResponsiveTable data={taxesData?.data || []} columns={columns} cardViewKey='name' />
             )}
 
             <Modal
@@ -222,4 +222,4 @@ const TaxesPage = () => {
     );
 };
 
-export default TaxesPage;
+export default CreateTax;

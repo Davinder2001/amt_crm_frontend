@@ -25,7 +25,6 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 interface Props {
-    LOCAL_STORAGE_KEY: string;
     selectedBrand: string;
     selectedBrandId: number;
     onBrandSelect: (brandName: string, brandId?: number) => void;
@@ -33,7 +32,7 @@ interface Props {
     toggleSection: (key: string) => void;
 }
 
-const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, LOCAL_STORAGE_KEY, collapsedSections, toggleSection }) => {
+const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSections, toggleSection }) => {
     const { data, isLoading, refetch } = useFetchBrandsQuery();
     const [createBrand, { isLoading: isCreating }] = useCreateBrandMutation();
     const [updateBrand, { isLoading: isUpdating }] = useUpdateBrandMutation();
@@ -48,23 +47,10 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, LOCAL_STORA
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
 
-    // helper to update localStorage consistently
-    const updateLocalStorageBrand = (brandName: string, brandId?: number) => {
-        const savedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-        const updated = {
-            ...savedData,
-            brand_name: brandName,
-            brand_id: brandId || 0,
-        };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-    };
-
-
     // Handle brand selection
     const handleBrandSelect = (brandName: string) => {
         const selectedBrandObj = data?.find(brand => brand.name === brandName);
         onBrandSelect(brandName, selectedBrandObj?.id);
-        updateLocalStorageBrand(brandName, selectedBrandObj?.id);
     };
 
 
@@ -93,12 +79,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, LOCAL_STORA
         try {
             if (editingBrand) {
                 await updateBrand({ id: editingBrand.id, name }).unwrap();
-                if (name === selectedBrand) {
-                    updateLocalStorageBrand(name, editingBrand.id);
-                }
             } else {
                 const created = await createBrand({ name }).unwrap();
-                updateLocalStorageBrand(name, created.id);
                 onBrandSelect(name, created.id);
             }
             setName('');
@@ -119,7 +101,6 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, LOCAL_STORA
             refetch(); // Refresh the list
             if (selectedBrand === brandName) {
                 onBrandSelect('');
-                updateLocalStorageBrand('', 0);
                 refetch();
             }
         } catch (err) {

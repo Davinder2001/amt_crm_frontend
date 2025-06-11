@@ -43,11 +43,16 @@
       font-size: 15px;
       position: relative;
 
+      .tab-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
       &.active {
         background-color: $light_blue;
         font-weight: 500;
         color: $primary-color;
-        padding: 10px 15px;
       }
     }
   }
@@ -216,7 +221,7 @@
           gap: 10px;
 
           button {
-            svg{
+            svg {
               font-size: 16px;
             }
           }

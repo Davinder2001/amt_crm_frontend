@@ -1,4 +1,5 @@
 'use client';
+import React, { useState } from 'react';
 import { Tabs, Tab } from '@mui/material';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
@@ -14,6 +15,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useRouter } from 'next/navigation';
 import FeaturedImageUpload from './FeaturedImageUpload';
 import ItemBrands from './ItemBrands';
+import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -80,6 +82,15 @@ const StoreItemFields = <T extends StoreItemFormData>({
     LOCAL_STORAGE_KEY,
 }: StoreItemFieldsProps<T>) => {
     const router = useRouter();
+    const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+
+    const toggleSection = (sectionKey: string) => {
+        setCollapsedSections(prev => ({
+            ...prev,
+            [sectionKey]: !prev[sectionKey],
+        }));
+    };
+
 
     return (
         <>
@@ -120,32 +131,46 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         <div className="add-items-form-container">
                             <div className="basic_label_header">
                                 <h2 className="basic_label">Basic Info</h2>
+                                <span
+                                    onClick={() => toggleSection('basicInfo')}
+                                    style={{
+                                        color: '#384b70',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                    aria-label="Toggle Basic Info Section"
+                                >
+                                    {collapsedSections['basicInfo'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                                </span>
                             </div>
-                            <div className="store_input_feilds fields-wrapper">
-                                <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
-                                {/* <FormInput label="Brand Name" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="e.g. Samsung, LG" /> */}
-                                <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
-                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
+                            {!collapsedSections['basicInfo'] && (
+                                <div className="store_input_feilds fields-wrapper">
+                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
+                                    {/* <FormInput label="Brand Name" name="brand_name" value={formData.brand_name} onChange={handleChange} placeholder="e.g. Samsung, LG" /> */}
+                                    <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
+                                    <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
 
-                                <div className="add-items-form-input-label-container">
-                                    <label>Vendor Name*</label>
-                                    <AddVendor
-                                        vendors={vendors}
-                                        selectedVendor={formData.vendor_name || ''}
-                                        onVendorSelect={(vendorName) => {
-                                            const updated = { ...formData, vendor_name: vendorName };
-                                            setFormData(updated);
-                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                                        }}
-                                        onVendorAdded={(vendorName) => {
-                                            setVendors((prev) => [...prev, vendorName]);
-                                            const updated = { ...formData, vendor_name: vendorName };
-                                            setFormData(updated);
-                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                                        }}
-                                    />
+                                    <div className="add-items-form-input-label-container">
+                                        <label>Vendor Name*</label>
+                                        <AddVendor
+                                            vendors={vendors}
+                                            selectedVendor={formData.vendor_name || ''}
+                                            onVendorSelect={(vendorName) => {
+                                                const updated = { ...formData, vendor_name: vendorName };
+                                                setFormData(updated);
+                                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                            }}
+                                            onVendorAdded={(vendorName) => {
+                                                setVendors((prev) => [...prev, vendorName]);
+                                                const updated = { ...formData, vendor_name: vendorName };
+                                                setFormData(updated);
+                                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 
@@ -153,61 +178,90 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
                             <h2 className="basic_label">Pricing & Inventory</h2>
+                            <span
+                                onClick={() => toggleSection('pricingInventory')}
+                                style={{
+                                    color: '#384b70',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                                aria-label="Toggle pricing Inventory Section"
+                            >
+                                {collapsedSections['pricingInventory'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                            </span>
                         </div>
-                        <div className="store_input_feilds fields-wrapper">
-                            <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
-                            <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
-                            <FormInput label="Add fresh Stock" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
-                            <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
+                        {!collapsedSections['pricingInventory'] && (
+                            <div className="store_input_feilds fields-wrapper">
+                                <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
+                                <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
+                                <FormInput label="Add fresh Stock" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
+                                <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
 
-                            {taxesData?.data && (
-                                <FormSelect<number>
-                                    label="Tax"
-                                    name="tax_id"
-                                    value={formData.tax_id}
-                                    onChange={(value) => {
-                                        const updated = { ...formData, tax_id: value };
-                                        setFormData(updated);
-                                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                                    }}
-                                    options={taxesData.data.map((tax) => ({
-                                        value: tax.id,
-                                        label: `${tax.name} - ${tax.rate}%`,
-                                    }))}
-                                />
-                            )}
-                        </div>
+                                {taxesData?.data && (
+                                    <FormSelect<number>
+                                        label="Tax"
+                                        name="tax_id"
+                                        value={formData.tax_id}
+                                        onChange={(value) => {
+                                            const updated = { ...formData, tax_id: value };
+                                            setFormData(updated);
+                                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                        }}
+                                        options={taxesData.data.map((tax) => ({
+                                            value: tax.id,
+                                            label: `${tax.name} - ${tax.rate}%`,
+                                        }))}
+                                    />
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Media & Dates */}
                     <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
                             <h2 className="basic_label">Media & Dates</h2>
+                            <span
+                                onClick={() => toggleSection('mediaDates')}
+                                style={{
+                                    color: '#384b70',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                                aria-label="Toggle media and dates Section"
+                            >
+                                {collapsedSections['mediaDates'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                            </span>
                         </div>
-                        <div className="store_input_feilds fields-wrapper">
-                            <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
-                                const updated = { ...formData, purchase_date: date };
-                                setFormData(updated);
-                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                            }} maxDate={new Date()} />
-                            <DatePickerField label="Date Of Manufacture" selectedDate={formData.date_of_manufacture || null} onChange={(date) => {
-                                const updated = { ...formData, date_of_manufacture: date };
-                                setFormData(updated);
-                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                            }} maxDate={new Date()} required />
-                            <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
-                                const updated = { ...formData, date_of_expiry: date };
-                                setFormData(updated);
-                                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                            }} minDate={new Date()} />
-                            <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
-                        </div>
+                        {!collapsedSections['mediaDates'] && (
+                            <div className="store_input_feilds fields-wrapper">
+                                <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
+                                    const updated = { ...formData, purchase_date: date };
+                                    setFormData(updated);
+                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                }} maxDate={new Date()} />
+                                <DatePickerField label="Date Of Manufacture" selectedDate={formData.date_of_manufacture || null} onChange={(date) => {
+                                    const updated = { ...formData, date_of_manufacture: date };
+                                    setFormData(updated);
+                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                }} maxDate={new Date()} required />
+                                <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
+                                    const updated = { ...formData, date_of_expiry: date };
+                                    setFormData(updated);
+                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                                }} minDate={new Date()} />
+                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
+                            </div>
+                        )}
                     </div>
 
                     {/* Attributes & Variants */}
                     <div className="items-tab-container store_column">
                         <div className="add-items-form-container">
-                            <ItemsTab setVariants={setVariants} variants={variants} />
+                            <ItemsTab setVariants={setVariants} variants={variants} collapsedSections={collapsedSections}
+                                toggleSection={toggleSection} />
                         </div>
                     </div>
 
@@ -232,24 +286,39 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
                             <h2 className="basic_label">Featured Image</h2>
-                        </div>
-                        <div className="fields-wrapper">
-                            <FeaturedImageUpload
-                                featuredImage={formData.featured_image || null}
-                                onFeaturedImageChange={(file) => {
-                                    const updated = { ...formData, featured_image: file };
-                                    setFormData(updated);
+                            <span
+                                onClick={() => toggleSection('featuredImage')}
+                                style={{
+                                    color: '#384b70',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
                                 }}
-                                onRemoveFeaturedImage={() => {
-                                    const updated = { ...formData, featured_image: null };
-                                    setFormData(updated);
-                                }}
-                            />
+                                aria-label="Toggle featured image Section"
+                            >
+                                {collapsedSections['featuredImage'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                            </span>
                         </div>
+                        {!collapsedSections['featuredImage'] && (
+                            <div className="fields-wrapper">
+                                <FeaturedImageUpload
+                                    featuredImage={formData.featured_image || null}
+                                    onFeaturedImageChange={(file) => {
+                                        const updated = { ...formData, featured_image: file };
+                                        setFormData(updated);
+                                    }}
+                                    onRemoveFeaturedImage={() => {
+                                        const updated = { ...formData, featured_image: null };
+                                        setFormData(updated);
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="add-items-form-container store_column">
-                        <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} />
+                        <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
+                            toggleSection={toggleSection} />
                     </div>
 
                     <div className="add-items-form-container store_column">
@@ -268,6 +337,8 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
                                 }
                             }}
+                            collapsedSections={collapsedSections}
+                            toggleSection={toggleSection}
                         />
                     </div>
 

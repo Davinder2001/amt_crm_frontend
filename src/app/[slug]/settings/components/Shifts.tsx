@@ -178,7 +178,7 @@ const Shifts: React.FC = () => {
 
       {(data?.data?.length ?? 0) === 0 ? (
         <EmptyState
-          icon={<FaTasks/>}
+          icon={<FaTasks className="empty-state-icon" />}
           title="No shifts found"
           message="You haven’t created any shifts yet."
           action={

@@ -3,13 +3,16 @@ import React, { useState, ReactNode } from 'react';
 import { FaBox, FaTag } from 'react-icons/fa';
 import Attributes from '../../settings/components/Attributes';
 import Variations from './Variations';
+import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
     variants: variations[];
+    collapsedSections: Record<string, boolean>;
+    toggleSection: (key: string) => void;
 }
 
-const ItemsTab: React.FC<Props> = ({ setVariants, variants }) => {
+const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, toggleSection }) => {
     const [activeTab, setActiveTab] = useState('variations');
 
     const tabs: { key: string; label: ReactNode; content: ReactNode }[] = [
@@ -51,12 +54,25 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants }) => {
                                 {tab.label}
                             </button>
                         ))}
+                        <span
+                            onClick={() => toggleSection('attributesVariations')}
+                            style={{
+                                color: '#384b70',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                            aria-label="Toggle attributes and Variations Section"
+                        >
+                            {collapsedSections['attributesVariations'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                        </span>
                     </aside>
                 </div>
-
-                <section className="tab-content fields-wrapper">
-                    {tabs.find(tab => tab.key === activeTab)?.content}
-                </section>
+                {!collapsedSections['attributesVariations'] && (
+                    <section className="tab-content fields-wrapper">
+                        {tabs.find(tab => tab.key === activeTab)?.content}
+                    </section>
+                )}
             </div>
         </>
     );

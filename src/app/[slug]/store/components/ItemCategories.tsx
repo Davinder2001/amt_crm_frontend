@@ -23,10 +23,13 @@ import {
   IconButton
 } from '@mui/material';
 import { FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash, FaEdit } from 'react-icons/fa';
+import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
   selectedCategories: Category[];
+  collapsedSections: Record<string, boolean>;
+  toggleSection: (key: string) => void;
 }
 
 type CategoryNode = {
@@ -39,7 +42,7 @@ type CategoryNode = {
   updated_at?: string;
 };
 
-const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories }) => {
+const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories, collapsedSections, toggleSection }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
@@ -424,88 +427,102 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         <>
           <div className="basic_label_header">
             <h2 className="basic_label">Categories:</h2>
+            <span
+              onClick={() => toggleSection('categories')}
+              style={{
+                color: '#384b70',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label="Toggle categories Section"
+            >
+              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+            </span>
           </div>
 
-          <div className="fields-wrapper">
-            {isLoading ? (
-              <Box display="flex" justifyContent="center">
-                <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+          {!collapsedSections['categories'] && (
+            <div className="fields-wrapper">
+              {isLoading ? (
+                <Box display="flex" justifyContent="center">
+                  <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+                </Box>
+              ) : data?.data.length === 0 ? (
+                <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
+                  No categories found
+                </Typography>
+              ) : (
+                <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+                  {data?.data.map(renderCategory)}
+                </List>
+              )}
+
+              <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+                <Button
+                  variant="outlined"
+                  startIcon={<FaPlus size={12} />}
+                  onClick={() => setIsCreatingNewCategory(true)}
+                  sx={{
+                    background: '#f0f0f0',
+                    border: 'none',
+                    color: '#2c2b2e',
+                    py: 0.5,
+                    px: 1.5,
+                    textTransform: 'capitalize !important',
+                    minHeight: '30px',
+                    '&:hover': { backgroundColor: '#DEE9F2' },
+                  }}
+                >
+                  Create New
+                </Button>
+                <div className='category-cancle-btn'>
+                  {hasChanges && selectedCategoriesIds.length > 0 && (
+                    <>
+
+                      <Button
+                        variant="outlined"
+                        startIcon={<FaTimes size={12} />}
+                        onClick={() => {
+                          setHasChanges(false);
+                          setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
+                        }}
+                        sx={{
+                          borderColor: '#384b70',
+                          color: '#384b70',
+                          marginRight: '5px',
+                          fontSize: '0.75rem',
+                          py: 0.5,
+                          px: 1.5,
+                          minHeight: '30px',
+                          '&:hover': { backgroundColor: '#DEE9F2' },
+                        }}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<FaCheck size={12} />}
+                        onClick={handleDoneClick}
+                        sx={{
+                          backgroundColor: '#384b70',
+                          fontSize: '0.75rem',
+                          py: 0.5,
+                          px: 1.5,
+                          minHeight: '30px',
+                          '&:hover': { backgroundColor: '#9CB9D0' },
+                        }}
+                      >
+                        Done
+                      </Button>
+                    </>
+
+                  )}
+                </div>
               </Box>
-            ) : data?.data.length === 0 ? (
-              <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
-                No categories found
-              </Typography>
-            ) : (
-              <List sx={{ maxHeight: 300, overflow: 'auto' }}>
-                {data?.data.map(renderCategory)}
-              </List>
-            )}
-
-            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
-              <Button
-                variant="outlined"
-                startIcon={<FaPlus size={12} />}
-                onClick={() => setIsCreatingNewCategory(true)}
-                sx={{
-                  background: '#f0f0f0',
-                  border: 'none',
-                  color: '#2c2b2e',
-                  py: 0.5,
-                  px: 1.5,
-                  textTransform: 'capitalize !important',
-                  minHeight: '30px',
-                  '&:hover': { backgroundColor: '#DEE9F2' },
-                }}
-              >
-                Create New
-              </Button>
-              <div className='category-cancle-btn'>
-                {hasChanges && selectedCategoriesIds.length > 0 && (
-                  <>
-
-                    <Button
-                      variant="outlined"
-                      startIcon={<FaTimes size={12} />}
-                      onClick={() => {
-                        setHasChanges(false);
-                        setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
-                      }}
-                      sx={{
-                        borderColor: '#384b70',
-                        color: '#384b70',
-                        marginRight: '5px',
-                        fontSize: '0.75rem',
-                        py: 0.5,
-                        px: 1.5,
-                        minHeight: '30px',
-                        '&:hover': { backgroundColor: '#DEE9F2' },
-                      }}
-                    >
-                      Cancel
-                    </Button>
-
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<FaCheck size={12} />}
-                      onClick={handleDoneClick}
-                      sx={{
-                        backgroundColor: '#384b70',
-                        fontSize: '0.75rem',
-                        py: 0.5,
-                        px: 1.5,
-                        minHeight: '30px',
-                        '&:hover': { backgroundColor: '#9CB9D0' },
-                      }}
-                    >
-                      Done
-                    </Button>
-                  </>
-
-                )}
-              </div>
-            </Box>
-          </div>
+            </div>
+          )}
         </>
       ) : (
         <>
@@ -513,103 +530,117 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <h2 className="basic_label">
               {editingCategory ? 'Edit Category' : 'Create New Category'}:
             </h2>
+            <span
+              onClick={() => toggleSection('categories')}
+              style={{
+                color: '#384b70',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label="Toggle categories Section"
+            >
+              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+            </span>
           </div>
-          <div className="fields-wrapper">
-            <TextField
-              fullWidth
-              label="Category Name"
-              variant="outlined"
-              size="small"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              error={categoryExists(name, selectedParentId)}
-              helperText={
-                categoryExists(name, selectedParentId)
-                  ? 'Category with this name already exists'
-                  : ''
-              }
-              InputLabelProps={{
-                sx: {
-                  color: '#384b70',
-                  '&.Mui-focused': {
-                    color: '#384b70',
-                  },
-                },
-              }}
-              InputProps={{
-                sx: {
-                  paddingRight: 1,
-                },
-              }}
-              sx={{
-                maxWidth: 500,
-                width: '100%',
-                mb: 2,
-                '& .MuiOutlinedInput-root': {
-                  '&.Mui-focused fieldset': {
-                    borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : '#384b70',
-                  },
-                },
-                '& .MuiFormHelperText-root': {
-                  marginLeft: 0,
-                },
-              }}
-            />
-
-            <Typography variant="subtitle1" gutterBottom>
-              Select Parent Category (optional)
-            </Typography>
-
-            {isLoading ? (
-              <CircularProgress color="primary" sx={{ color: '#384b70' }} />
-            ) : (
-              <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
-                {data?.data?.map(renderParentOptions)}
-              </List>
-            )}
-
-            <Box display="flex" justifyContent="flex-end" gap={1} mt={2} flexWrap="wrap">
-              <Button
+          {!collapsedSections['categories'] && (
+            <div className="fields-wrapper">
+              <TextField
+                fullWidth
+                label="Category Name"
                 variant="outlined"
-                startIcon={<FaTimes size={12} />}
-                onClick={() => {
-                  setIsCreatingNewCategory(false);
-                  setEditingCategory(null);
+                size="small"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                error={categoryExists(name, selectedParentId)}
+                helperText={
+                  categoryExists(name, selectedParentId)
+                    ? 'Category with this name already exists'
+                    : ''
+                }
+                InputLabelProps={{
+                  sx: {
+                    color: '#384b70',
+                    '&.Mui-focused': {
+                      color: '#384b70',
+                    },
+                  },
+                }}
+                InputProps={{
+                  sx: {
+                    paddingRight: 1,
+                  },
                 }}
                 sx={{
-                  borderColor: '#384b70',
-                  color: '#384b70',
-                  fontSize: '0.75rem',
-                  py: 0.5,
-                  px: 1.5,
-                  minHeight: '30px',
-                  '&:hover': { backgroundColor: '#DEE9F2' },
+                  maxWidth: 500,
+                  width: '100%',
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : '#384b70',
+                    },
+                  },
+                  '& .MuiFormHelperText-root': {
+                    marginLeft: 0,
+                  },
                 }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<FaCheck size={12} />}
-                onClick={handleSubmit}
-                disabled={isCreating || !name.trim() || categoryExists(name, selectedParentId)}
-                sx={{
-                  backgroundColor: '#384b70',
-                  fontSize: '0.75rem',
-                  py: 0.5,
-                  px: 1.5,
-                  minHeight: '30px',
-                  '&:hover': { backgroundColor: '#9cb9d0' },
-                }}
-              >
-                {isCreating || isUpdating
-                  ? (editingCategory ? 'Updating...' : 'Creating...')
-                  : (editingCategory ? 'Update' : 'Create')}
-              </Button>
-            </Box>
+              />
 
-          </div>
+              <Typography variant="subtitle1" gutterBottom>
+                Select Parent Category (optional)
+              </Typography>
+
+              {isLoading ? (
+                <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+              ) : (
+                <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
+                  {data?.data?.map(renderParentOptions)}
+                </List>
+              )}
+
+              <Box display="flex" justifyContent="flex-end" gap={1} mt={2} flexWrap="wrap">
+                <Button
+                  variant="outlined"
+                  startIcon={<FaTimes size={12} />}
+                  onClick={() => {
+                    setIsCreatingNewCategory(false);
+                    setEditingCategory(null);
+                  }}
+                  sx={{
+                    borderColor: '#384b70',
+                    color: '#384b70',
+                    fontSize: '0.75rem',
+                    py: 0.5,
+                    px: 1.5,
+                    minHeight: '30px',
+                    '&:hover': { backgroundColor: '#DEE9F2' },
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<FaCheck size={12} />}
+                  onClick={handleSubmit}
+                  disabled={isCreating || !name.trim() || categoryExists(name, selectedParentId)}
+                  sx={{
+                    backgroundColor: '#384b70',
+                    fontSize: '0.75rem',
+                    py: 0.5,
+                    px: 1.5,
+                    minHeight: '30px',
+                    '&:hover': { backgroundColor: '#9cb9d0' },
+                  }}
+                >
+                  {isCreating || isUpdating
+                    ? (editingCategory ? 'Updating...' : 'Creating...')
+                    : (editingCategory ? 'Update' : 'Create')}
+                </Button>
+              </Box>
+
+            </div>
+          )}
         </>
       )}
     </Box>

@@ -193,22 +193,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <FormInput label="Add fresh Stock" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
                                 <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
 
-                                {/* {taxesData?.data && (
-                                    <FormSelect<number>
-                                        label="Tax"
-                                        name="tax_id"
-                                        value={formData.tax_id}
-                                        onChange={(value) => {
-                                            const updated = { ...formData, tax_id: value };
-                                            setFormData(updated);
-                                        }}
-                                        options={taxesData.data.map((tax) => ({
-                                            value: tax.id,
-                                            label: `${tax.name} - ${tax.rate}%`,
-                                        }))}
-                                    />
-                                )} */}
-
                                 <div className="add-items-form-input-label-container">
                                     <label>Tax</label>
                                     {taxesData?.data && (

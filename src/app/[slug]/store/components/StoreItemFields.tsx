@@ -344,12 +344,12 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <ItemBrands
                             selectedBrand={formData.brand_name || ''}
-                            selectedBrandId={formData.brand_id}
+                            selectedBrandId={formData.brand_id ?? null}
                             onBrandSelect={(brandName, brandId) => {
                                 const updated = {
                                     ...formData,
                                     brand_name: brandName,
-                                    brand_id: brandId || 0,
+                                    brand_id: brandId || null,
                                 };
                                 setFormData(updated);
                             }}

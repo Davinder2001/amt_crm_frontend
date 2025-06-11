@@ -16,7 +16,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   date_of_manufacture: '',
   date_of_expiry: '',
   brand_name: '',
-  brand_id: 0,
+  brand_id: null,
   replacement: '',
   category: '',
   vendor_name: '',

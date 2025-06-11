@@ -26,7 +26,7 @@ import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 
 interface Props {
     selectedBrand: string;
-    selectedBrandId: number;
+    selectedBrandId: number | null;
     onBrandSelect: (brandName: string, brandId?: number) => void;
     collapsedSections: Record<string, boolean>;
     toggleSection: (key: string) => void;

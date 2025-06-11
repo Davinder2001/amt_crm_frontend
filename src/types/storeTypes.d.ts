@@ -15,8 +15,8 @@ interface StoreItem {
   description: string;
   item_code: string;
   catalog?: number | boolean | null;
-  brand_name: string;
-  brand_id: number | null;
+  brand_name?: string;
+  brand_id?: number | null;
   replacement: string | null;
   category: string | null;
   vendor_name: string | null;
@@ -90,8 +90,8 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   purchase_date?: string;
   date_of_manufacture: string;
   date_of_expiry?: string;
-  brand_name: string;
-  brand_id: number | null;
+  brand_name?: string;
+  brand_id?: number | null;
   replacement?: string;
   category?: string;
   vendor_name?: string;

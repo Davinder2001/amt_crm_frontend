@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { FaWhatsapp } from "react-icons/fa";
-import { FiEye, FiEyeOff, FiLock, FiPhone, FiUser, FiMail } from "react-icons/fi";
+import { FiEye, FiEyeOff} from "react-icons/fi";
 import { encodeStorage } from "@/utils/Company";
 import { useUser } from "@/provider/UserContext";
 

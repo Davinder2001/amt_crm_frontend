@@ -246,7 +246,9 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             error={brandExists(name)}
-                            helperText={brandExists(name) ? 'Brand with this name already exists' : ''}
+                            helperText={
+                                brandExists(name) ? 'Brand with this name already exists' : ''
+                            }
                             InputLabelProps={{
                                 sx: {
                                     color: '#384b70',
@@ -264,10 +266,13 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect }) => {
                                 maxWidth: 500,
                                 width: '100%',
                                 mb: 2,
-                                '& .MuiOutlinedInput-root.Mui-focused': {
-                                    '& fieldset': {
-                                        borderColor: '#384b70',
+                                '& .MuiOutlinedInput-root': {
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: brandExists(name) ? '#d32f2f' : '#384b70',
                                     },
+                                },
+                                '& .MuiFormHelperText-root': {
+                                    marginLeft: 0,
                                 },
                             }}
                         />

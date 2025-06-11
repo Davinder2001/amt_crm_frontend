@@ -97,3 +97,157 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
 };
 
 export default Header;
+
+
+
+
+
+
+
+
+
+
+// 'use client';
+// import React, { useEffect, useState } from 'react';
+// import Profile from './components/profile';
+// import Link from 'next/link';
+// import { FaRegBell, FaBars, FaPlus, FaQuestionCircle } from 'react-icons/fa';
+// import { useCompany } from '@/utils/Company';
+// import Image from 'next/image';
+// import { logo } from '@/assets/useImage';
+// import { useRouter } from 'next/navigation';
+// import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
+// import SearchBar from '../search/SearchBar';
+
+// interface headerProps {
+//   handleToggleSidebar: () => void;
+//   openMenu: () => void;
+//   isMobile: boolean;
+// }
+
+// const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
+//   const { companySlug, userType } = useCompany();
+//   const router = useRouter();
+
+//   const [isSticky, setIsSticky] = useState(false);
+//   const [showQuickAdd, setShowQuickAdd] = useState(false);
+
+//   const { data } = useFetchNotificationsQuery();
+//   const notifications = Array.isArray(data) ? data : data?.notifications || [];
+//   const unreadCount = notifications.filter((notification: Notification) => notification.read_at === null).length;
+
+//   useEffect(() => {
+//     const mainContent = document.querySelector('.main-content');
+
+//     const handleScroll = () => {
+//       if (mainContent) {
+//         const scrollPosition = mainContent.scrollTop;
+//         const threshold = window.innerHeight * 0.01;
+//         setIsSticky(scrollPosition > threshold);
+//       }
+//     };
+
+//     if (mainContent) {
+//       mainContent.addEventListener('scroll', handleScroll);
+//     }
+
+//     return () => {
+//       if (mainContent) {
+//         mainContent.removeEventListener('scroll', handleScroll);
+//       }
+//     };
+//   }, []);
+
+//   const quickAddItems = [
+//     { label: 'New Contact', action: () => router.push(`/${companySlug}/contacts/new`) },
+//     { label: 'New Deal', action: () => router.push(`/${companySlug}/deals/new`) },
+//     { label: 'New Task', action: () => router.push(`/${companySlug}/tasks/new`) },
+//     { label: 'New Note', action: () => router.push(`/${companySlug}/notes/new`) },
+//   ];
+
+//   return (
+//     <div className={`header ${isSticky ? 'sticky' : ''}`}>
+//       <div className="header-left">
+//         {isMobile && (
+//           <Image
+//             src={logo.src}
+//             alt="logo"
+//             width={30}
+//             height={30}
+//             onClick={() =>
+//               router.push(
+//                 userType === 'employee'
+//                   ? `/${companySlug}/employee/dashboard`
+//                   : `/${companySlug}/dashboard`
+//               )
+//             }
+//           />
+//         )}
+//         {!isMobile && (
+//           <button className="sidebar-toggle" onClick={handleToggleSidebar}>
+//             <FaBars size={20} />
+//           </button>
+//         )}
+//       </div>
+
+//       <div className="header-center">
+//         {!isMobile && (
+//           <SearchBar />
+//         )}
+//       </div>
+
+//       <div className="header-right">
+//         <div className="header-actions">
+//           {!isMobile && (
+//             <>
+//               <div className="quick-add-container">
+//                 <button
+//                   className="quick-add-button"
+//                   onClick={() => setShowQuickAdd(!showQuickAdd)}
+//                 >
+//                   <FaPlus />
+//                   <span>Quick Add</span>
+//                 </button>
+//                 {showQuickAdd && (
+//                   <div className="quick-add-menu">
+//                     {quickAddItems.map((item, index) => (
+//                       <button
+//                         key={index}
+//                         className="quick-add-item"
+//                         onClick={item.action}
+//                       >
+//                         {item.label}
+//                       </button>
+//                     ))}
+//                   </div>
+//                 )}
+//               </div>
+
+//               <button className="help-button">
+//                 <FaQuestionCircle />
+//               </button>
+//             </>
+//           )}
+
+//           <Link
+//             href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`}
+//             className="notification-icon"
+//           >
+//             <FaRegBell size={22} />
+//             {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+//           </Link>
+
+//           <Profile />
+//         </div>
+
+//         {isMobile && (
+//           <button className="mobile-menu-toggle" onClick={openMenu}>
+//             <FaBars size={20} />
+//           </button>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Header;

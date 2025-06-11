@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
   useFetchCategoriesQuery,
 } from '@/slices/store/storeApi';
 import {
@@ -16,9 +17,12 @@ import {
   ListItemText,
   TextField,
   Typography,
-  Collapse
+  Collapse,
+  Snackbar,
+  Alert,
+  IconButton
 } from '@mui/material';
-import { FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaCheck, FaTimes, FaChevronRight, FaChevronDown, FaTrash, FaEdit } from 'react-icons/fa';
 
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
@@ -39,6 +43,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
+  const [updateCategory, { isLoading: isUpdating }] = useUpdateCategoryMutation();
   const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
   const [selectedCategoriesIds, setSelectedCategoriesIds] = useState<number[]>([]);
@@ -46,6 +51,19 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   const [name, setName] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<number[]>([]);
   const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<{
+    id: number;
+    name: string;
+    parent_id: number | null;
+  } | null>(null);
+
+  // Close error snackbar
+  const handleCloseError = () => {
+    setShowError(false);
+    setErrorMessage(null);
+  };
 
   // Initialize with selected categories
   useEffect(() => {
@@ -78,24 +96,70 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     setSelectedParentId(prev => prev === id ? null : id);
   };
 
+
+  // Check if category name exists under the same parent
+  const categoryExists = (categoryName: string, parentId: number | null) => {
+    return data?.data?.some(category => {
+      const nameMatches = category.name.toLowerCase() === categoryName.toLowerCase();
+      const parentMatches = category.parent_id === parentId;
+
+      // If editing, exclude the current category from the check
+      if (editingCategory) {
+        return nameMatches && parentMatches && category.id !== editingCategory.id;
+      }
+      return nameMatches && parentMatches;
+    });
+  };
+
+  // Start editing a category
+  const handleEditCategory = (category: CategoryNode) => {
+    setEditingCategory({
+      id: category.id,
+      name: category.name,
+      parent_id: category.parent_id
+    });
+    setName(category.name);
+    setSelectedParentId(category.parent_id);
+    setIsCreatingNewCategory(true);
+  };
+
   // Create new category
   const handleSubmit = async () => {
     if (!name.trim()) {
-      alert('Please enter a category name');
+      setErrorMessage('Please enter a category name');
+      setShowError(true);
+      return;
+    }
+
+    if (categoryExists(name, selectedParentId)) {
+      setErrorMessage('Category with this name already exists under the selected parent');
+      setShowError(true);
       return;
     }
 
     try {
-      await createCategory({
-        name,
-        parent_id: selectedParentId
-      }).unwrap();
+      if (editingCategory) {
+        await updateCategory({
+          id: editingCategory.id,
+          data: {
+            name,
+            parent_id: selectedParentId
+          }
+        }).unwrap();
+      } else {
+        await createCategory({
+          name,
+          parent_id: selectedParentId
+        }).unwrap();
+      }
       setName('');
       setSelectedParentId(null);
+      setEditingCategory(null);
       setIsCreatingNewCategory(false);
     } catch (err) {
-      console.error('Error creating category:', err);
-      alert('Error creating category');
+      console.error('Error saving category:', err);
+      setErrorMessage('Error saving category');
+      setShowError(true);
     }
   };
 
@@ -137,7 +201,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     setHasChanges(false);
   };
 
-  
+
   // Initial expansion of parent categories (only once when data loads)
   useEffect(() => {
     if (!data?.data) return;
@@ -220,22 +284,33 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           />
           <ListItemText primary={category.name} className='category-name' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
-            <FaTrash
-              size={12}
-              color="#384b70"
-              style={{ marginLeft: 'auto', cursor: 'pointer' }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
-                  deleteCategory(category.id)
-                    .unwrap()
-                    .catch((err) => {
-                      console.error('Delete failed:', err);
-                      alert('Failed to delete category');
-                    });
-                }
-              }}
-            />
+            <Box display="flex" gap={1} marginLeft="auto">
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEditCategory(category);
+                }}
+              >
+                <FaEdit size={12} color="#384b70" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                    deleteCategory(category.id)
+                      .unwrap()
+                      .catch((err) => {
+                        console.error('Delete failed:', err);
+                        alert('Failed to delete category');
+                      });
+                  }
+                }}
+              >
+                <FaTrash size={12} color="#384b70" />
+              </IconButton>
+            </Box>
           )}
         </ListItemButton>
         {hasChildren && (
@@ -292,22 +367,33 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           />
           <ListItemText primary={category.name} className='category-name' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
-            <FaTrash
-              size={12}
-              color="#384b70"
-              style={{ marginLeft: 'auto', cursor: 'pointer' }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
-                  deleteCategory(category.id)
-                    .unwrap()
-                    .catch((err) => {
-                      console.error('Delete failed:', err);
-                      alert('Failed to delete category');
-                    });
-                }
-              }}
-            />
+            <Box display="flex" gap={1} marginLeft="auto">
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEditCategory(category);
+                }}
+              >
+                <FaEdit size={12} color="#384b70" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                    deleteCategory(category.id)
+                      .unwrap()
+                      .catch((err) => {
+                        console.error('Delete failed:', err);
+                        alert('Failed to delete category');
+                      });
+                  }
+                }}
+              >
+                <FaTrash size={12} color="#384b70" />
+              </IconButton>
+            </Box>
           )}
         </ListItemButton>
 
@@ -324,6 +410,16 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
 
   return (
     <Box sx={{ width: '100%' }}>
+      <Snackbar
+        open={showError}
+        autoHideDuration={6000}
+        onClose={handleCloseError}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       {!isCreatingNewCategory ? (
         <>
           <div className="basic_label_header">
@@ -333,7 +429,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           <div className="fields-wrapper">
             {isLoading ? (
               <Box display="flex" justifyContent="center">
-                <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
+                <CircularProgress color="primary" sx={{ color: '#384b70' }} />
               </Box>
             ) : data?.data.length === 0 ? (
               <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
@@ -351,7 +447,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 startIcon={<FaPlus size={12} />}
                 onClick={() => setIsCreatingNewCategory(true)}
                 sx={{
-                  background:'#f0f0f0',
+                  background: '#f0f0f0',
                   border: 'none',
                   color: '#2c2b2e',
                   py: 0.5,
@@ -364,49 +460,49 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 Create New
               </Button>
               <div className='category-cancle-btn'>
-              {hasChanges && selectedCategoriesIds.length > 0 && (
-                <>
-              
-                  <Button
-                    variant="outlined"
-                    startIcon={<FaTimes size={12} />}
-                    onClick={() => {
-                      setHasChanges(false);
-                      setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
-                    }}
-                    sx={{
-                      borderColor: '#384b70',
-                      color: '#384b70',
-                      marginRight:'5px',
-                      fontSize: '0.75rem',
-                      py: 0.5,
-                      px: 1.5,
-                      minHeight: '30px',
-                      '&:hover': { backgroundColor: '#DEE9F2' },
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                {hasChanges && selectedCategoriesIds.length > 0 && (
+                  <>
 
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<FaCheck size={12} />}
-                    onClick={handleDoneClick}
-                    sx={{
-                      backgroundColor: '#384b70',
-                      fontSize: '0.75rem',
-                      py: 0.5,
-                      px: 1.5,
-                      minHeight: '30px',
-                      '&:hover': { backgroundColor: '#9CB9D0' },
-                    }}
-                  >
-                    Done
-                  </Button>
-                </>
-                
-              )}
+                    <Button
+                      variant="outlined"
+                      startIcon={<FaTimes size={12} />}
+                      onClick={() => {
+                        setHasChanges(false);
+                        setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
+                      }}
+                      sx={{
+                        borderColor: '#384b70',
+                        color: '#384b70',
+                        marginRight: '5px',
+                        fontSize: '0.75rem',
+                        py: 0.5,
+                        px: 1.5,
+                        minHeight: '30px',
+                        '&:hover': { backgroundColor: '#DEE9F2' },
+                      }}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<FaCheck size={12} />}
+                      onClick={handleDoneClick}
+                      sx={{
+                        backgroundColor: '#384b70',
+                        fontSize: '0.75rem',
+                        py: 0.5,
+                        px: 1.5,
+                        minHeight: '30px',
+                        '&:hover': { backgroundColor: '#9CB9D0' },
+                      }}
+                    >
+                      Done
+                    </Button>
+                  </>
+
+                )}
               </div>
             </Box>
           </div>
@@ -414,7 +510,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       ) : (
         <>
           <div className="basic_label_header">
-            <h2 className="basic_label"> Create New Category:</h2>
+            <h2 className="basic_label">
+              {editingCategory ? 'Edit Category' : 'Create New Category'}:
+            </h2>
           </div>
           <div className="fields-wrapper">
             <TextField
@@ -424,6 +522,12 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               size="small"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              error={categoryExists(name, selectedParentId)}
+              helperText={
+                categoryExists(name, selectedParentId)
+                  ? 'Category with this name already exists'
+                  : ''
+              }
               InputLabelProps={{
                 sx: {
                   color: '#384b70',
@@ -441,10 +545,13 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 maxWidth: 500,
                 width: '100%',
                 mb: 2,
-                '& .MuiOutlinedInput-root.Mui-focused': {
-                  '& fieldset': {
-                    borderColor: '#384b70',
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : '#384b70',
                   },
+                },
+                '& .MuiFormHelperText-root': {
+                  marginLeft: 0,
                 },
               }}
             />
@@ -454,7 +561,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             </Typography>
 
             {isLoading ? (
-              <CircularProgress color="primary" sx={{ color: '#384b70' }}/>
+              <CircularProgress color="primary" sx={{ color: '#384b70' }} />
             ) : (
               <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
                 {data?.data?.map(renderParentOptions)}
@@ -466,7 +573,8 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 variant="outlined"
                 startIcon={<FaTimes size={12} />}
                 onClick={() => {
-                  setIsCreatingNewCategory(false)
+                  setIsCreatingNewCategory(false);
+                  setEditingCategory(null);
                 }}
                 sx={{
                   borderColor: '#384b70',
@@ -485,7 +593,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 color="primary"
                 startIcon={<FaCheck size={12} />}
                 onClick={handleSubmit}
-                disabled={isCreating || !name.trim()}
+                disabled={isCreating || !name.trim() || categoryExists(name, selectedParentId)}
                 sx={{
                   backgroundColor: '#384b70',
                   fontSize: '0.75rem',
@@ -495,7 +603,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   '&:hover': { backgroundColor: '#9cb9d0' },
                 }}
               >
-                {isCreating ? 'Creating...' : 'Create'}
+                {isCreating || isUpdating
+                  ? (editingCategory ? 'Updating...' : 'Creating...')
+                  : (editingCategory ? 'Update' : 'Create')}
               </Button>
             </Box>
 

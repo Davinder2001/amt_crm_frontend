@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Tabs, Tab } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Tabs, Tab, Tooltip, IconButton } from '@mui/material';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FiXCircle } from 'react-icons/fi';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ import FeaturedImageUpload from './FeaturedImageUpload';
 import ItemBrands from './ItemBrands';
 import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
 import AddTax from './AddTax';
+import useStickyWithOffset from '@/utils/StickyWithOffset';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -79,8 +80,21 @@ const StoreItemFields = <T extends StoreItemFormData>({
     setShowConfirm,
     handleClearForm,
 }: StoreItemFieldsProps<T>) => {
+
+    const headerRef = useRef<HTMLDivElement>(null);
+    useStickyWithOffset(headerRef, 30);
+
     const router = useRouter();
+    const sectionKeys = ['basicInfo', 'pricingInventory', 'mediaDates', 'attributesVariations', 'featuredImage', 'categories', 'brands'];
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+
+    const toggleAllSections = (shouldCollapse: boolean) => {
+        const newState: Record<string, boolean> = {};
+        sectionKeys.forEach(key => {
+            newState[key] = shouldCollapse;
+        });
+        setCollapsedSections(newState);
+    };
 
     const toggleSection = (sectionKey: string) => {
         setCollapsedSections(prev => ({
@@ -95,7 +109,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
             <form onSubmit={handleSubmit} className="store_outer_row">
                 <div className="store-add-item">
                     {/* Header + Tabs */}
-                    <div className="add-item-header store_column">
+                    <div className="add-item-header store_column" ref={headerRef}>
                         <Link href={`/${companySlug}/store`} className="back-button">
                             <FaArrowLeft size={16} color="#fff" />
                         </Link>
@@ -122,6 +136,19 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             <Tab label="Categories" disabled={tabCompletion && !tabCompletion[3]} />
                             <Tab label="Product Options" disabled={tabCompletion && !tabCompletion[4]} />
                         </Tabs>
+                        <Tooltip title={sectionKeys.some(key => !collapsedSections[key]) ? "Collapse all" : "Expand all"}>
+                            <IconButton
+                                onClick={() => {
+                                    const anyOpen = sectionKeys.some(key => !collapsedSections[key]);
+                                    toggleAllSections(anyOpen);
+                                }}
+                                className="header-icon"
+                                color="default"
+                                sx={{ color: '#384b70' }}
+                            >
+                                {sectionKeys.some(key => !collapsedSections[key]) ? <FiMinusCircle size={20} /> : <FiPlusCircle size={20} />}
+                            </IconButton>
+                        </Tooltip>
                     </div>
 
                     {/* Basic Info */}

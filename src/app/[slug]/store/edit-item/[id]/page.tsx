@@ -7,6 +7,7 @@ import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
+import LoadingState from '@/components/common/LoadingState';
 
 const UpdateItem = () => {
   const { id } = useParams() as { id: string };
@@ -241,7 +242,7 @@ const UpdateItem = () => {
     }
   };
 
-  if (isItemLoading) return <p>Loading item details...</p>;
+  if (isItemLoading) return <LoadingState />;
 
   return (
     <StoreItemFields

@@ -1,7 +1,16 @@
 'use client';
+import LoadingState from '@/components/common/LoadingState';
 import { useFetchVariationsQuery } from '@/slices/store/storeApi';
 import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
+
+
+const emptyVariant = {
+    attributes: [],
+    price: 0,
+    regular_price: 0,
+    attribute_value_id: 0
+};
 
 interface Props {
     setVariants: (combinations: variations[]) => void;
@@ -12,47 +21,55 @@ interface Props {
 const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) => {
     const { data: attributes } = useFetchVariationsQuery();
     const [combinations, setCombinations] = useState<variations[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Populate combinations from passed-in `variants` prop
     useEffect(() => {
         if (!attributes) return;
 
-        if (variants && variants.length > 0) {
-            const mappedVariants = variants.map(v => {
-                const mappedAttributes = v.attributes?.map(attr => {
-                    const matchedAttribute = attributes.find(a => a.name.toLowerCase() === attr.attribute?.toLowerCase());
-                    const matchedValue = matchedAttribute?.values.find(
-                        val => val.value.toLowerCase() === attr.value?.toLowerCase()
-                    );
+        setIsLoading(true);
+        try {
+            if (variants && variants.length > 0) {
+                const mappedVariants = variants.map(v => {
+                    const mappedAttributes = v.attributes?.map(attr => {
+                        const matchedAttribute = attributes.find(a =>
+                            a.name.toLowerCase() === attr.attribute?.toLowerCase()
+                        );
+                        const matchedValue = matchedAttribute?.values.find(
+                            val => val.value.toLowerCase() === attr.value?.toLowerCase()
+                        );
+
+                        return {
+                            attribute_id: matchedAttribute?.id || 0,
+                            attribute_value_id: matchedValue?.id?.toString() || '',
+                            attribute: attr.attribute || '',
+                            value: attr.value || '',
+                            final_cost: attr.final_cost ?? 0
+                        };
+                    }) || [];
 
                     return {
-                        attribute_id: matchedAttribute?.id || 0,
-                        attribute_value_id: matchedValue?.id?.toString() || '',
-                        attribute: attr.attribute || '',
-                        value: attr.value || '',
-                        final_cost: attr.final_cost ?? 0
+                        attribute_value_id: mappedAttributes[0]?.attribute_value_id
+                            ? Number(mappedAttributes[0].attribute_value_id)
+                            : 0,
+                        attributes: mappedAttributes,
+                        price: Number(v.price) || 0,
+                        regular_price: Number(v.regular_price) || 0,
                     };
-                }) || [];
-
-                return {
-                    attribute_value_id: mappedAttributes[0]?.attribute_value_id
-                        ? Number(mappedAttributes[0].attribute_value_id)
-                        : 0,
-                    attributes: mappedAttributes,
-                    price: Number(v.price) || 0,
-                    regular_price: Number(v.regular_price) || 0,
-                };
-            });
-            setCombinations([{ attribute_value_id: 0, attributes: [], price: 0, regular_price: 0 }]);
-            setCombinations(mappedVariants);
-        } else {
-            setCombinations([{
-                attributes: [], price: 0, regular_price: 0,
-                attribute_value_id: 0
-            }]);
+                });
+                setCombinations(mappedVariants);
+            } else {
+                setCombinations([{
+                    attributes: [],
+                    price: 0,
+                    regular_price: 0,
+                    attribute_value_id: 0
+                }]);
+            }
+        } finally {
+            setIsLoading(false);
         }
     }, [variants, attributes]);
-
 
     const handleAttributeChange = (
         comboIndex: number,
@@ -61,6 +78,9 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     ) => {
         setCombinations(prev => {
             const updated = [...prev];
+            const attribute = attributes?.find(a => a.id === attributeId);
+            const value = attribute?.values.find(v => v.id.toString() === valueId);
+
             const currentAttributes = updated[comboIndex].attributes.filter(
                 attr => attr.attribute_id !== attributeId
             );
@@ -68,8 +88,8 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
             currentAttributes.push({
                 attribute_id: attributeId,
                 attribute_value_id: valueId,
-                attribute: '',
-                value: '',
+                attribute: attribute?.name || '',
+                value: value?.value || '',
                 final_cost: 0
             });
 
@@ -106,38 +126,40 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     };
 
     const handleReset = () => {
-        setCombinations([{
-            attributes: [], price: 0, regular_price: 0,
-            attribute_value_id: 0
-        }]);
+        setCombinations([emptyVariant]);
+        setVariants([emptyVariant]);
     };
+
+    if (isLoading || !attributes) {
+        return <LoadingState />;
+    }
 
     return (
         <>
             <div className="variation-container">
                 {combinations.map((combo, index) => (
                     <div key={index} className="variation-block">
-                        {attributes?.map(attr => (
-                            <div key={attr.id}>
-                                <label>{attr.name}</label>
-                                <select
-                                    value={
-                                        combo.attributes.find(a => a.attribute_id === attr.id)
-                                            ?.attribute_value_id || ''
-                                    }
-                                    onChange={e =>
-                                        handleAttributeChange(index, attr.id, e.target.value)
-                                    }
-                                >
-                                    <option value="">Select {attr.name}</option>
-                                    {attr.values.map(val => (
-                                        <option key={val.id} value={val.id}>
-                                            {val.value}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        ))}
+                        {attributes?.map(attr => {
+                            const selectedAttr = combo.attributes.find(a => a.attribute_id === attr.id);
+                            return (
+                                <div key={attr.id}>
+                                    <label>{attr.name}</label>
+                                    <select
+                                        value={selectedAttr?.attribute_value_id || ''}
+                                        onChange={e =>
+                                            handleAttributeChange(index, attr.id, e.target.value)
+                                        }
+                                    >
+                                        <option value="">Select {attr.name}</option>
+                                        {attr.values.map(val => (
+                                            <option key={val.id} value={val.id.toString()}>
+                                                {val.value}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            );
+                        })}
 
                         <div>
                             <label>Regular Price</label>
@@ -183,7 +205,7 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
 
             <div className='variation-buttons-container'>
                 <button type="button" onClick={handleAddCombination} className="buttons">
-                   <FaPlus size={12}/> Add More
+                    <FaPlus size={12} /> Add More
                 </button>
                 <button type="button" onClick={handleReset} className="buttons">
                     Reset

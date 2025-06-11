@@ -251,37 +251,10 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} />
                     </div>
-                    {/* <div className="add-items-form-container store_column">
-                        <div className="basic_label_header">
-                            <h2 className="basic_label">Brands</h2>
-                        </div>
-                        <div className="fields-wrapper">
-                            <FormSelect<string>
-                                name="brand_name"
-                                value={formData.brand_name}
-                                onChange={(value) => {
-                                    const updated = { ...formData, brand_name: value };
-                                    setFormData(updated);
-                                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                                }}
-                                options={[
-                                    { label: 'Samsung', value: 'Samsung' },
-                                    { label: 'LG', value: 'LG' },
-                                    { label: 'Dell', value: 'Dell' },
-                                    { label: 'HP', value: 'HP' },
-                                    { label: 'Asus', value: 'Asus' },
-                                    { label: 'Acer', value: 'Acer' },
-                                    { label: 'Lenovo', value: 'Lenovo' },
-                                    { label: 'Apple', value: 'Apple' },
-                                    { label: 'Sony', value: 'Sony' },
-                                    { label: 'MSI', value: 'MSI' }
-                                ]}
-                            />
-                        </div>
-                    </div> */}
 
                     <div className="add-items-form-container store_column">
                         <ItemBrands
+                            LOCAL_STORAGE_KEY={LOCAL_STORAGE_KEY}
                             selectedBrand={formData.brand_name || ''}
                             selectedBrandId={formData.brand_id}
                             onBrandSelect={(brandName, brandId) => {

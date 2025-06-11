@@ -108,7 +108,6 @@ const AddItem: React.FC = () => {
     switch (index) {
       case 0:
         return formData.name.trim() !== '' &&
-          formData.brand_name.trim() !== '' &&
           (formData.vendor_name?.trim() ?? '') !== '';
       case 1:
         return formData.cost_price > 0 &&

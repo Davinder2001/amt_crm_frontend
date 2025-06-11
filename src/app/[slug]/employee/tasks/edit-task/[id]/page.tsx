@@ -387,7 +387,7 @@ const EditTask: React.FC = () => {
           </div>
 
           <div className="form-actions">
-            <button type="button" onClick={() => router.back()} className="cancel-button buttons">
+            <button type="button" onClick={() => router.back()} className="cancel-button cancel-btn buttons">
               Cancel
             </button>
             <button type="submit" disabled={isUpdating} className="save-button buttons">

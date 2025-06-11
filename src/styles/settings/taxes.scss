@@ -44,7 +44,7 @@
     background-color: $primary-color;
     color: $white;
     display: flex;
-    gap: 0;
+    gap: 5px;
     padding: 7px 12px;
   }
 }
@@ -58,4 +58,14 @@
 
 
 
+}
+.popup-tax {
+    input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid $feild_border;
+        border-radius: $border-radius;
+        outline: none;
+        transition: border-color 0.2s;
+    }
 }

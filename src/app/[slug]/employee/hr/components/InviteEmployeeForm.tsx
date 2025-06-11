@@ -38,13 +38,13 @@ const InviteEmployeeForm: React.FC<InviteEmployeeFormProps> = ({ onClose }) => {
           cursor: pointer;
           padding: 8px 12px;
           border: none;
-          background: #007bff;
+          background: #384B70;
           color: white;
           border-radius: 4px;
           margin-right: 10px;
         }
         button:hover {
-          background: #0056b3;
+          background:#9CB9D0;
         }
       `}</style>
     </div>

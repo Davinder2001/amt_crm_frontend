@@ -199,7 +199,7 @@ const Shifts: React.FC = () => {
         }}
         title={editId !== null ? 'Edit Shift' : 'Create New Shift'}
       >
-        <div className="modal-content">
+
           <div className="shift-form-inner">
             <Box sx={{ mb: 2 }}>
               <label htmlFor="shift_name">Shift Name</label>
@@ -289,7 +289,7 @@ const Shifts: React.FC = () => {
               {editId !== null ? 'Update' : 'Create'}
             </button>
           </Box>
-        </div>
+
       </Modal>
     </div>
   );

@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
         </div>
       </div>
       <style>{`
-      .modal-overlay {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -112,7 +112,7 @@ const Modal: React.FC<ModalProps> = ({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 10px 20px;
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -136,8 +136,25 @@ const Modal: React.FC<ModalProps> = ({
 }
 
 .modal-content {
-  padding: 24px;
+  padding: 20px;
 }
+.modal-content h6 {
+  letter-spacing: .4px;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  display: block;
+}
+.modal-content input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
       `}</style>
     </div>,
     document.body

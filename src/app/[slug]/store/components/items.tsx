@@ -358,7 +358,7 @@ const Items: React.FC = () => {
             />
             <div className="import-items-actions">
               <button
-                className="import-items-cancel-button"
+                className="import-items-cancel-button cancel-btn"
                 onClick={() => setImportModalVisible(false)}
               >
                 Cancel

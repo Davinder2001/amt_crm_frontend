@@ -5,6 +5,7 @@
   border-radius: $border-radius;
   padding: 40px 20px;
   margin-top: 30px;
+  border: 1px solid $feild_border;
 
 
   .MuiBox-root.css-1muzjf8 {
@@ -132,8 +133,26 @@
 
 }
 
+  .invite-employees-popup  {
+    p {
+      font-size: 16px;
+      color: $primary-color;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    input  {
+      margin-bottom: 20px;
+    }
+    .close-btn {
+      color: #fff;
+      background-color: #9cb9d0;
+    }
+    .invites-btn {
+      display: flex;
+      gap: 20px;
+    }
 
-
+  }
 
 
 

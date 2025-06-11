@@ -214,7 +214,6 @@ const Page = () => {
 
               <div className="input-with-label">
                 <label>Sub Total</label>
-                <label> Sub Total</label>
                 <input
                   placeholder="Sub Total"
                   value={newItem.subTotal}
@@ -365,7 +364,7 @@ const Page = () => {
           </div>
         )}
         <div className='add-as-a-v-button c-s-buttons-outers'>
-          <span className='buttons c-s-buttons'>Cancel</span>
+          <span className='buttons c-s-buttons cancel-btn'>Cancel</span>
           <button className='buttons c-s-buttons' onClick={handleSave} disabled={isLoading}>
             {isLoading ? 'Saving...' : 'Save'}
           </button>

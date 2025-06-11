@@ -72,7 +72,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
             <div className="bank-form-actions">
 
                 {onCancel && (
-                    <button type="button" className="buttons cancel" onClick={onCancel}>
+                    <button type="button" className="buttons cancel cancel-btn" onClick={onCancel}>
                         Cancel
                     </button>
                 )}

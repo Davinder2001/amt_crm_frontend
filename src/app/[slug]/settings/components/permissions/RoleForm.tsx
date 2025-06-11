@@ -93,7 +93,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, onSuccess }) => {
                 </div>
 
                 {/* Permission Group Tabs */}
-                <Tabs
+                <Tabs className='permission-tab-popup'
                     value={selectedTabIndex === -1 ? 0 : selectedTabIndex}
                     onChange={(e, val) => {
                         const selectedGroup = permissionGroups[val]?.group;
@@ -128,12 +128,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, onSuccess }) => {
                         .flatMap((g) =>
                             g.permissions.map((p) => (
                                 <label key={p.id}>
-                                    <input
+                                    <p className='role-name-select'> {p.name}</p> 
+                                    <input className='role-checkboxes'
                                         type="checkbox"
                                         checked={selectedPermissions.includes(p.name)}
                                         onChange={() => handleTogglePermission(p.name)}
                                     />
-                                    {p.name}
+                                   
                                 </label>
                             ))
                         )}

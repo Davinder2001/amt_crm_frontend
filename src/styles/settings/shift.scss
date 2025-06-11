@@ -5,7 +5,8 @@
         .table-view {
             .table-actions {
                 display: flex;
-                justify-content: space-around;
+                justify-content: flex-start;
+                gap: 10px;
 
                 button {
                     background-color: unset;
@@ -26,5 +27,32 @@
                 }
             }
         }
+    }
+}
+
+.shift-form-inner {
+    label {  
+      letter-spacing: .4px;
+      color: $lable-color;
+      margin-bottom: 5px;
+      font-size: $lable-font;
+      font-weight: $font-weight-regular;
+      display: block;
+    }
+    input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid $feild_border;
+        border-radius: $border-radius;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+}
+button.cancel-btn {
+    background-color: $hover-color;
+    color: $white;
+    &:hover {
+        background-color: $light-color;
+        color: $primary-color;
     }
 }

@@ -55,20 +55,39 @@ const AddVendor: React.FC<AddVendorProps> = ({
               {vendor}
             </li>
           ))}
-          <li
-            onClick={() => setAddVendorModalOpen(true)}
-            style={{
-              padding: '8px 10px',
-              color: '#384B70',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              borderTop: '1px solid #ddd'
-            }}
-          >
-            <FaPlus /> Add New Vendor
-          </li>
+
+          {!isAdding ? (
+            <li
+              onClick={() => setIsAdding(true)}
+              style={{
+                padding: '8px 10px',
+                color: '#384B70',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                borderTop: '1px solid #ddd'
+              }}
+            >
+              <FaPlus /> Add New Vendor
+            </li>
+          ) : (
+            <li style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
+              <input
+                type="text"
+                value={newVendor}
+                onChange={(e) => setNewVendor(e.target.value)}
+                placeholder="Vendor name"
+                style={{ width: '100%', marginBottom: '6px' }}
+              />
+              <div className='save-cancel-vendor'>
+                <button className ="cancel-btn" type="button" onClick={() => setIsAdding(false)}>Cancel</button>
+                <button type="button" onClick={handleAddVendor} disabled={isLoading}>
+                  {isLoading ? 'Adding...' : 'Add'}
+                </button>
+              </div>
+            </li>
+          )}
         </ul>
       )}
 

@@ -1,7 +1,7 @@
 @use './variables.scss' as *;
 
 .admin-home-container {
-    background: linear-gradient(135deg, #f4f7fa 0%, #e8f0f5 100%);
+    background: #F8F7FA;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -100,11 +100,10 @@
     background-color: $white;
     border-radius: $border-radius;
     padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     transition: all 0.3s ease;
     position: relative;
-    border: 1px solid rgba(var(--primary-color), 0.08);
+    border: 1px solid $border-color;
 
     &::before {
         content: '';
@@ -120,8 +119,8 @@
 
     &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        border-color: rgba(var(--primary-color), 0.15);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.055);
+        border-color: $hover-color;
 
         .company-header h2 {
             color: var(--primary-color);

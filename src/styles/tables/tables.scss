@@ -285,38 +285,6 @@
 }
 
 
-@media (max-width: 468px) {
-    .hide-mobile {
-        display: none;
-    }
-
-    .left-group,
-    .right-group {
-        gap: 10px;
-    }
-
-    .right-group button {
-        font-size: 14px;
-        padding: 8px 10px;
-    }
-
-    .left-group button {
-        padding: 8px 10px;
-    }
-
-    .toolbar {
-        justify-content: flex-start;
-        gap: 8px;
-        padding: 10px;
-
-        .right-group {
-            gap: 10px;
-
-        }
-
-    }
-
-}
 
 
 
@@ -329,7 +297,8 @@
 
     .action-buttons {
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-start;
+        gap: 10px;
     }
 }
 
@@ -444,26 +413,7 @@
 
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .bulk-actions-toolbar {
-        gap: 8px;
-        bottom: 80px;
 
-        .selected-count {
-            font-size: 12px;
-        }
-
-        .bulk-actions {
-            width: 100%;
-
-            .bulk-delete-btn {
-                font-size: 10px;
-            }
-        }
-    }
-
-}
 
 table {
     width: 100%;
@@ -582,14 +532,13 @@ table {
         justify-content: center;
         flex-wrap: nowrap;
         gap: 6px;
-        padding: 8px;
+        padding: 10px;
         background: white;
         border-radius: $border-radius;
         box-shadow: 0 4px 12px #efefef82;
         border: 1px solid $border-color;
         position: relative;
         z-index: 2;
-        width: 100%;
         overflow: hidden;
 
         .nav-arrow-wrapper {
@@ -877,4 +826,53 @@ table {
         justify-content: space-around;
         gap: 10px;
     }
+        .bulk-actions-toolbar {
+        gap: 8px;
+        bottom: 80px;
+
+        .selected-count {
+            font-size: 12px;
+        }
+
+        .bulk-actions {
+            width: 100%;
+
+            .bulk-delete-btn {
+                font-size: 10px;
+            }
+        }
+    }
+}
+
+@media (max-width: 468px) {
+    .hide-mobile {
+        display: none;
+    }
+
+    .left-group,
+    .right-group {
+        gap: 10px;
+    }
+
+    .right-group button {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .left-group button {
+        padding: 8px 10px;
+    }
+
+    .toolbar {
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 10px;
+
+        .right-group {
+            gap: 10px;
+
+        }
+
+    }
+
 }

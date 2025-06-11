@@ -209,7 +209,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                 </div>
 
                 <div className="form-actions">
-                    <button type="button" onClick={onSuccess} className="cancel-button buttons">
+                    <button type="button" onClick={onSuccess} className="cancel-button buttons cancel-btn">
                         Cancel
                     </button>
                     <button

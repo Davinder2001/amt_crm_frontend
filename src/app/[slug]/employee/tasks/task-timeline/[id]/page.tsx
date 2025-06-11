@@ -263,7 +263,7 @@ const ViewTimeline = () => {
       }
 
       <div className="action-buttons">
-        <button className="button outline" onClick={() => router.push(`/${companySlug}/employee/tasks/task-timeline`)}>Cancel</button>
+        <button className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/employee/tasks/task-timeline`)}>Cancel</button>
         <ConfirmDialog
           isOpen={showConfirm}
           message="Are you sure you want to end this Task?"

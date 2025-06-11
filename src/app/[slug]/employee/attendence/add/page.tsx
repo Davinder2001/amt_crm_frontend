@@ -100,7 +100,7 @@ function AddAttendancePage() {
               <button onClick={captureFromWebcam} style={{ marginRight: "1rem" }}>
                 Capture
               </button>
-              <button onClick={() => setShowWebcam(false)}>Cancel</button>
+              <button className="cancel-btn" onClick={() => setShowWebcam(false)}>Cancel</button>
             </div>
           </div>
         )}

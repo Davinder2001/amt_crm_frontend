@@ -7,10 +7,14 @@ interface InviteEmployeeFormProps {
 const InviteEmployeeForm: React.FC<InviteEmployeeFormProps> = ({ onClose }) => {
   return (
     <>
+    <div className='invite-employees-popup'>
       <p>Enter employee details to send an invitation.</p>
       <input type="email" placeholder="Employee Email" />
-      <button>Send Invite</button>
-      <button onClick={onClose}>Close</button>
+      <div className='invites-btn'>
+        <button className='buttons'>Send Invite</button>
+        <button className="buttons close-btn"onClick={onClose}>Close</button>
+      </div>
+    </div>
     </>
   );
 };

@@ -33,14 +33,23 @@
     width: 100%;
   }
 
-  .form-group input {
+  .form-group {
+    label {
+      letter-spacing: .4px;
+      color: $lable-color;
+      font-size: $lable-font;
+      font-weight: $font-weight-regular;
+      display: block;
+    }
+    input {
     width: 100%;
-    padding: 10px 12px;
+    padding: 8px 12px;
     border: 1px solid $feild_border;
     border-radius: $border-radius;
     outline: none;
     transition: border-color 0.2s;
   }
+}
 
   .form-group input:focus {
    border-color: $hover-color;
@@ -73,7 +82,9 @@
   .add-item-btn {
     color: $primary-color;
     background: none;
-    border: none;
+    border: 1px solid $primary-color;
+    width: fit-content;
+    padding: 8px 12px;
     font-weight: 500;
     cursor: pointer;
     font-size: 14px;
@@ -93,17 +104,17 @@
 
   .summary {
     text-align: right;
-    color: #333;
+    color: $dark-color;
     display: flex;
     font-weight: 600;
+    letter-spacing: 0.4px;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 
   }
 
   .total {
     margin-top: 15px;
-    border-bottom: 1px solid $primary-color;
     padding-bottom: 5px;
   }
 
@@ -120,6 +131,10 @@
       font-weight: bold;
       cursor: pointer;
       width: fit-content;
+      &:hover {
+        background-color: $hover-color;
+        color: $white;
+      }
     }
   }
 

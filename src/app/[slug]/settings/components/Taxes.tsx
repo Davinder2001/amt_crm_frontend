@@ -183,14 +183,14 @@ const CreateTax = () => {
             ) : (
                 <ResponsiveTable data={taxesData?.data || []} columns={columns} cardViewKey='name' />
             )}
-
-            <Modal
+      
+            <Modal 
                 isOpen={modalOpen}
                 onClose={handleClose}
                 title={form.id ? 'Update Tax' : 'Add New Tax'}
                 width="400px"
             >
-                <Box sx={{ mt: 1 }}>
+                <Box className="popup-tax" sx={{ mt: 1 }}>
                     <TextField
                         fullWidth
                         label="Tax Name"
@@ -218,6 +218,7 @@ const CreateTax = () => {
                     </Box>
                 </Box>
             </Modal>
+      
         </Box>
     );
 };

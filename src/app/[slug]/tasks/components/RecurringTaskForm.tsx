@@ -146,7 +146,7 @@ const RecurringTaskForm: React.FC<RecurringTaskFormProps> = ({ mode, taskId, onS
     if (mode === 'edit' && taskLoading) return <p>Loading task...</p>;
 
     return (
-        <div className="recurring-wrapper">
+        <div className="recurring-wrapper dsdsd">
             <form onSubmit={handleSubmit}>
                 <div className="employee-fields-wrapper">
                     {renderField('Task Name', 'name', 'text', 'Enter task name')}

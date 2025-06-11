@@ -232,7 +232,7 @@ const Attributes = () => {
                 </button>
 
                 <div className="modal-actions">
-                    <button onClick={handleModalClose} className="buttons" type='button'>
+                    <button onClick={handleModalClose} className="cancel-btn buttons buttons" type='button'>
                         Cancel
                     </button>
                     <button onClick={handleCreate} className="buttons" type='button'>

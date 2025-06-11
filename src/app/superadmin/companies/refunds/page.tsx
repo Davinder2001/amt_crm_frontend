@@ -141,7 +141,7 @@ const Refunds = () => {
                         <button
                             type="button"
                             onClick={closeDeclineModal}
-                            className="buttons"
+                            className="buttons cancel-btn"
                         >
                             Cancel
                         </button>

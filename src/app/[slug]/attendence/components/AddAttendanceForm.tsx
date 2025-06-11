@@ -137,7 +137,7 @@ const AddAttendanceForm: React.FC<AttandanceFormProps> = ({ onSuccess }) => {
                                 <div className="webcam-controls">
                                     <button
                                         onClick={() => setShowWebcam(false)}
-                                        className="cancel-button"
+                                        className="cancel-button cancel-btn"
                                     >
                                         Cancel
                                     </button>

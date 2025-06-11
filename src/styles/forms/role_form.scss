@@ -27,17 +27,21 @@
 }
 
 .roll-name-input label {
-  font-weight: 500;
-  display: block;
-  margin-bottom: 5px;
+    letter-spacing: .4px;
+    color: $lable-color;
+    margin-bottom: 5px;
+    font-size: $lable-font;
+    font-weight: $font-weight-regular;
+    display: block;
 }
 
 .roll-name-input input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #00969357;
+   width: 100%;
+  padding: 10px 12px;
+  border: 1px solid $feild_border;
   border-radius: $border-radius;
-  margin-top: 5px;
+  outline: none;
+  transition: border-color 0.2s;
 
   &:focus {
     border-color: var(--primary-color);
@@ -117,17 +121,26 @@
 /* Permissions List */
 .permissions-container {
   margin-top: 15px;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #efefef;
+    border-radius: 0;
+    padding: 8px 12px;
+    gap: 10px;
+    cursor: pointer;
+  }
 }
-
-.permissions-container label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: $white;
-  padding: 8px 12px;
-  border-radius: $border-radius;
-  box-shadow: $box-shadow;
-  cursor: pointer;
+.permission-tab-popup {
+    background: #DEE9F2;
+    border-radius: 5px;
+}
+.role-checkboxes {
+    height: 16px;
 }
 
 .permissions-container div {

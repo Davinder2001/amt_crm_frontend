@@ -19,6 +19,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const Attributes = () => {
     const { data: attributes, isLoading, error } = useFetchAttributesQuery();
@@ -26,7 +27,8 @@ const Attributes = () => {
     const [deleteAttribute] = useDeleteAttributeMutation();
     const [toggleStatus] = useToggleAttributeStatusMutation();
     const [updateAttribute] = useUpdateAttributeMutation();
-
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newAttributeName, setNewAttributeName] = useState('');
     const [values, setValues] = useState<string[]>(['']);
@@ -89,14 +91,21 @@ const Attributes = () => {
         setEditAttributeId(id);
         setIsModalOpen(true);
     };
+    const promptDelete = (id: number) => {
+        setDeleteId(id);
+        setShowConfirm(true);
+    };
 
-    const handleDelete = async (id: number) => {
-        if (!window.confirm('Are you sure you want to delete this attribute?')) return;
+    const confirmDelete = async () => {
+        if (deleteId === null) return;
         try {
-            await deleteAttribute(id).unwrap();
+            await deleteAttribute(deleteId).unwrap();
             toast.success('Attribute deleted');
         } catch {
             toast.error('Error deleting attribute');
+        } finally {
+            setShowConfirm(false);
+            setDeleteId(null);
         }
     };
 
@@ -143,7 +152,7 @@ const Attributes = () => {
                         <button onClick={() => handleEdit(attr.id)} className="edit-btn" type='button'>
                             <FaEdit />
                         </button>
-                        <button onClick={() => handleDelete(attr.id)} className="delete-btn" type='button'>
+                        <button onClick={() => promptDelete(attr.id)} className="delete-btn" type='button'>
                             <FaTrash />
                         </button>
                     </div>
@@ -235,11 +244,22 @@ const Attributes = () => {
                     <button onClick={handleModalClose} className="cancel-btn buttons buttons" type='button'>
                         Cancel
                     </button>
-                    <button onClick={handleCreate} className="buttons" type='button'>
+                    <button onClick={handleCreate} className="buttons">
                         {editAttributeId ? 'Update Attribute' : 'Add Attribute'}
                     </button>
                 </div>
             </Modal>
+
+            <ConfirmDialog
+                isOpen={showConfirm}
+                message="Are you sure you want to delete this attribute?"
+                onConfirm={confirmDelete}
+                onCancel={() => {
+                    setShowConfirm(false);
+                    setDeleteId(null);
+                }}
+                type="delete"
+            />
         </div>
     );
 };

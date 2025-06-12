@@ -54,7 +54,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
 
       <div className="searchbar-mobile">
         <div className="searchbar-container">
-          <FaSearch size={20} />
+          <FaSearch size={30} />
           <input
             type="text"
             placeholder="Search Here.."

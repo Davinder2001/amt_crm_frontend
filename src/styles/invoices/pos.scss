@@ -181,7 +181,8 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 90vh;
+    min-height: 60vh;
+    max-height: 90vh;
     background-color: $white;
     z-index: 9999;
     border-top-left-radius: 16px;
@@ -261,16 +262,20 @@
     .searchbar-desktop,
     .searchbar-mobile {
         margin-bottom: 20px;
+        position: sticky;
+        top: 0;
+        background-color: $white;
+        box-shadow: $box-shadow;
+        z-index: 999;
 
         .searchbar-container {
-            background-color: #fff;
+            background-color: $white;
             display: flex;
             align-items: center;
             gap: 5px;
             border: 1px solid $border-color;
             border-radius: 5px;
             padding: 0px 10px;
-            margin: 10px;
 
             input {
                 width: 100%;
@@ -345,8 +350,9 @@
         padding: 0px 10px;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 30px;
+        padding-bottom: 120px;
 
         .item {
             position: relative;
@@ -366,7 +372,7 @@
             .item-image {
                 position: relative;
                 width: 100%;
-                max-height: 100px;
+                max-height: 70px;
 
                 img {
                     object-fit: contain;
@@ -405,7 +411,7 @@
     /* List View Styles */
     .item-list.list-view {
         list-style: none;
-        padding: 0;
+        padding: 0px 10px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -619,6 +625,13 @@
     flex-direction: column;
     overflow: scroll;
     padding-bottom: 60px;
+    position: relative;
+
+    .checkout {
+        position: relative;
+        flex: 1;
+        overflow-y: auto;
+    }
 
     .form-group {
         input {
@@ -932,7 +945,7 @@
         margin-top: 10px;
         display: flex;
         flex-direction: column;
-        
+
     }
 
     .discount-input-container label {
@@ -1123,9 +1136,14 @@
     display: none;
 }
 
+.creat-inv-page.fullView {
+    .invoice-items-wrapper .item-list.grid-view {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 
 
-@media (max-width: 1600px) {
+@media (max-width: 1540px) {
     .invoice-items-wrapper .item-list.grid-view {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1174,6 +1192,14 @@
         max-width: 100%;
         border-left: none;
         border-top: 1px solid $border-color;
+        overflow: hidden;
+
+        .tabs{
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            padding: 0;
+        }
     }
 
     .inner-tab.danger {
@@ -1322,14 +1348,32 @@
         }
 
         .close-checkout-btn {
-            display: block;
-            background: none;
-            border: none;
-            cursor: pointer;
+            position: fixed;
+            bottom: 120px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
             background-color: $primary-color;
             color: $white;
-            padding: 2px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            z-index: 2000;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+
+            svg {
+                font-size: 20px;
+            }
         }
+
     }
 
     .invoice-header-top {
@@ -1340,7 +1384,6 @@
 
 @media (max-width: 768px) {
     .invoice-items-wrapper {
-        padding: 10px;
 
         .searchbar-desktop {
             display: none;
@@ -1352,8 +1395,7 @@
 
         .item-list.grid-view {
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 0;
+            padding-bottom: 10px;
 
             .item .item-image {
                 max-width: 80px;
@@ -1399,6 +1441,7 @@
 
     .invoice-items-wrapper .item-list {
         grid-template-columns: repeat(2, 1fr);
+        padding: 10px;
     }
 
     .checkout-panel .cart-labels {

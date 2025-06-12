@@ -138,7 +138,7 @@ export default function CheckoutPanel({
     };
 
     return (
-        <div className="checkout">
+        <>
             {onClose && (
                 <button
                     className="close-checkout-btn"
@@ -147,123 +147,125 @@ export default function CheckoutPanel({
                     <FaArrowLeft />
                 </button>
             )}
-            <div className="tabs">
-                {tabs.map(tab => {
-                    let Icon;
-                    switch (tab) {
-                        case 'Cart':
-                            Icon = FiShoppingCart;
-                            break;
-                        case 'Delivery':
-                            Icon = FiTruck;
-                            break;
-                        case 'Pickup':
-                            Icon = FiUser;
-                            break;
-                        default:
-                            Icon = null;
-                    }
+            <div className="checkout">
+                <div className="tabs">
+                    {tabs.map(tab => {
+                        let Icon;
+                        switch (tab) {
+                            case 'Cart':
+                                Icon = FiShoppingCart;
+                                break;
+                            case 'Delivery':
+                                Icon = FiTruck;
+                                break;
+                            case 'Pickup':
+                                Icon = FiUser;
+                                break;
+                            default:
+                                Icon = null;
+                        }
 
-                    return (
-                        <button
-                            key={tab}
-                            className={`tab ${tab === activeTab ? 'active' : ''}`}
-                            onClick={() => onTabChange(tab)}
-                            style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                        >
-                            {Icon && <Icon style={{ fontSize: 16 }} />}
-                            <span style={{ position: 'relative', display: 'inline-block' }}>
-                                {tab}
-                                {tab === 'Cart' && cartItemCount > 0 && (
-                                    <span
-                                        className="cart-badge"
-                                        style={{
-                                            position: 'absolute',
-                                            top: -8,
-                                            right: -12,
-                                            background: 'red',
-                                            color: 'white',
-                                            borderRadius: '50%',
-                                            padding: '2px 6px',
-                                            fontSize: 11,
-                                            fontWeight: 'bold',
-                                            lineHeight: 1,
-                                        }}
-                                    >
-                                        {cartItemCount}
-                                    </span>
-                                )}
-                            </span>
-                        </button>
-                    );
-                })}
+                        return (
+                            <button
+                                key={tab}
+                                className={`tab ${tab === activeTab ? 'active' : ''}`}
+                                onClick={() => onTabChange(tab)}
+                                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                            >
+                                {Icon && <Icon style={{ fontSize: 16 }} />}
+                                <span style={{ position: 'relative', display: 'inline-block' }}>
+                                    {tab}
+                                    {tab === 'Cart' && cartItemCount > 0 && (
+                                        <span
+                                            className="cart-badge"
+                                            style={{
+                                                position: 'absolute',
+                                                top: -8,
+                                                right: -12,
+                                                background: 'red',
+                                                color: 'white',
+                                                borderRadius: '50%',
+                                                padding: '2px 6px',
+                                                fontSize: 11,
+                                                fontWeight: 'bold',
+                                                lineHeight: 1,
+                                            }}
+                                        >
+                                            {cartItemCount}
+                                        </span>
+                                    )}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+                <CartTabContent
+                    activeTab={activeTab}
+                    cart={cart}
+                    onQtyChange={onQtyChange}
+                    onRemoveItem={onRemoveItem}
+                    onClearCart={onClearCart}
+                    handleSave={handleSave}
+                    isSaving={isSaving}
+                    handlePrint={handlePrint}
+                    isPrinting={isPrinting}
+                    handleSendWhatsapp={handleSendWhatsapp}
+                    isSendWhatsapp={isSendWhatsapp}
+                    clientName={clientName}
+                    setClientName={setClientName}
+                    email={email}
+                    setEmail={setEmail}
+                    number={number}
+                    setNumber={setNumber}
+                    discountAmount={discountAmount}
+                    setDiscountAmount={setDiscountAmount}
+                    discountType={discountType}
+                    setDiscountType={setDiscountType}
+                    discountPercent={discountPercent}
+                    setDiscountPercent={setDiscountPercent}
+                    serviceChargeAmount={serviceChargeAmount}
+                    setServiceChargeAmount={setServiceChargeAmount}
+                    serviceChargeType={serviceChargeType}
+                    setServiceChargeType={setServiceChargeType}
+                    serviceChargePercent={serviceChargePercent}
+                    setServiceChargePercent={setServiceChargePercent}
+                    paymentMethod={paymentMethod}
+                    setPaymentMethod={setPaymentMethod}
+                    address={address}
+                    setAddress={setAddress}
+                    pincode={pincode}
+                    setPincode={setPincode}
+                    deliveryCharge={deliveryCharge}
+                    setDeliveryCharge={setDeliveryCharge}
+                    creditPaymentType={creditPaymentType}
+                    setCreditPaymentType={setCreditPaymentType}
+                    creditNote={creditNote}
+                    setCreditNote={setCreditNote}
+                    partialAmount={partialAmount}
+                    setPartialAmount={setPartialAmount}
+                    selectedBankAccount={selectedBankAccount}
+                    setSelectedBankAccount={setSelectedBankAccount}
+                />
+                <div className="content">
+                    {activeTab === 'Cart' && (
+                        <>
+
+                        </>
+                    )}
+
+                    {activeTab === 'Delivery' && (
+                        <div className="delivery">
+
+                        </div>
+                    )}
+
+                    {activeTab === 'Pickup' && (
+                        <div className="pickup">
+
+                        </div>
+                    )}
+                </div>
             </div>
-            <CartTabContent
-                activeTab={activeTab}
-                cart={cart}
-                onQtyChange={onQtyChange}
-                onRemoveItem={onRemoveItem}
-                onClearCart={onClearCart}
-                handleSave={handleSave}
-                isSaving={isSaving}
-                handlePrint={handlePrint}
-                isPrinting={isPrinting}
-                handleSendWhatsapp={handleSendWhatsapp}
-                isSendWhatsapp={isSendWhatsapp}
-                clientName={clientName}
-                setClientName={setClientName}
-                email={email}
-                setEmail={setEmail}
-                number={number}
-                setNumber={setNumber}
-                discountAmount={discountAmount}
-                setDiscountAmount={setDiscountAmount}
-                discountType={discountType}
-                setDiscountType={setDiscountType}
-                discountPercent={discountPercent}
-                setDiscountPercent={setDiscountPercent}
-                serviceChargeAmount={serviceChargeAmount}
-                setServiceChargeAmount={setServiceChargeAmount}
-                serviceChargeType={serviceChargeType}
-                setServiceChargeType={setServiceChargeType}
-                serviceChargePercent={serviceChargePercent}
-                setServiceChargePercent={setServiceChargePercent}
-                paymentMethod={paymentMethod}
-                setPaymentMethod={setPaymentMethod}
-                address={address}
-                setAddress={setAddress}
-                pincode={pincode}
-                setPincode={setPincode}
-                deliveryCharge={deliveryCharge}
-                setDeliveryCharge={setDeliveryCharge}
-                creditPaymentType={creditPaymentType}
-                setCreditPaymentType={setCreditPaymentType}
-                creditNote={creditNote}
-                setCreditNote={setCreditNote}
-                partialAmount={partialAmount}
-                setPartialAmount={setPartialAmount}
-                selectedBankAccount={selectedBankAccount}
-                setSelectedBankAccount={setSelectedBankAccount}
-            />
-            <div className="content">
-                {activeTab === 'Cart' && (
-                    <>
-
-                    </>
-                )}
-
-                {activeTab === 'Delivery' && (
-                    <div className="delivery">
-
-                    </div>
-                )}
-
-                {activeTab === 'Pickup' && (
-                    <div className="pickup">
-
-                    </div>
-                )}
-            </div>
-        </div>
+        </>
     );
 }

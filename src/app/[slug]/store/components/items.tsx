@@ -152,7 +152,7 @@ const Items: React.FC = () => {
     },
     {
       key: 'sale_price',
-      label: 'Selling Price',
+      label: 'Sale Price',
       type: 'multi-select' as const,
       options: [...new Set(storeItems.map((item) => String(item.sale_price)))].filter(Boolean) as string[]
     }

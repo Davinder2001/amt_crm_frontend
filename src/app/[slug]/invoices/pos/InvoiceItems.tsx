@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FaSearch, FaShoppingCart, FaTh, FaList } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart, FaTh, FaList, FaCheck } from 'react-icons/fa';
 import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
@@ -20,6 +20,11 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const cartItemCount = cart.length;
+
+  // Check if an item is in the cart
+  const isItemInCart = (itemId: number) => {
+    return cart.some(cartItem => cartItem.id === itemId);
+  };
 
   const filteredItems = items.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,7 +84,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 e.stopPropagation();
                 onCartClick();
               }}>
-              <FaShoppingCart  size={15}/>
+              <FaShoppingCart size={15} />
               {cartItemCount > 0 && (
                 <span className="cart-badge">{cartItemCount}</span>
               )}
@@ -97,6 +102,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
 
             const isHovered = hoveredItemId === item.id;
             const priceRange = item.variants ? getPriceRange(item.variants) : null;
+            const inCart = isItemInCart(item.id);
 
             const priceDisplay = priceRange
               ? `₹${priceRange.min} - ₹${priceRange.max}`
@@ -105,7 +111,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
             return (
               <li
                 key={`item-${item.id}-${index}-${item.category}`}
-                className={`item ${isHovered ? 'hovered' : ''}`}
+                className={`item ${isHovered ? 'hovered' : ''} ${inCart ? 'in-cart' : ''}`}
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}
                 onClick={() => {
@@ -124,6 +130,13 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                     height={100}
                     className="item-image-img"
                   />
+                  {inCart && (
+                    <div className="item-selected-indicator">
+                      <div className="checkmark-circle">
+                        <FaCheck className="checkmark-icon" />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="item-details">

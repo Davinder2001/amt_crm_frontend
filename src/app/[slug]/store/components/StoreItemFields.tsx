@@ -88,7 +88,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
     useStickyWithOffset(headerRef, 30);
 
     const router = useRouter();
-    const sectionKeys = ['basicInfo', 'inventoryAndDates', 'attributesVariations', 'featuredImage', 'categories', 'brands', 'media',];
+    const sectionKeys = ['basicInfo', 'inventoryAndDates', 'pricing', 'attributesVariations', 'featuredImage', 'categories', 'brands', 'media',];
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
     const toggleAllSections = (shouldCollapse: boolean) => {
@@ -279,16 +279,39 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <option value="variable_product">Variable Product</option>
                                     </select>
                                 </div>
-
-                                {formData.product_type === 'simple_product' && (
-                                    <>
-                                        <FormInput label="Regular Price" name="regular_price" type="number" value={formData.regular_price || ''} onChange={handleNumberChange} required placeholder="e.g. 280.00" />
-                                        <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
-                                    </>)}
                                 {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" /> */}
                             </div>
                         )}
                     </div>
+
+                    {/* pricing */}
+                    {formData.product_type === 'simple_product' && (
+                        <>
+                            <div className="add-items-form-container store_column">
+                                <div className="basic_label_header">
+                                    <h2 className="basic_label">Pricing</h2>
+                                    <span
+                                        onClick={() => toggleSection('pricing')}
+                                        style={{
+                                            color: '#384b70',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                        aria-label="Toggle pricing Section"
+                                    >
+                                        {collapsedSections['pricing'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                                    </span>
+                                </div>
+                                {!collapsedSections['pricing'] && (
+                                    <div className="store_input_feilds fields-wrapper">
+                                        <FormInput label="Regular Price" name="regular_price" type="number" value={formData.regular_price || ''} onChange={handleNumberChange} required placeholder="e.g. 280.00" />
+                                        <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
+                                    </div>
+                                )}
+                            </div>
+
+                        </>)}
 
                     {/* Attributes & Variants */}
                     {formData.product_type === 'variable_product' && (

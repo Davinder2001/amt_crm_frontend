@@ -183,8 +183,8 @@ const CreateTax = () => {
             ) : (
                 <ResponsiveTable data={taxesData?.data || []} columns={columns} cardViewKey='name' />
             )}
-      
-            <Modal 
+
+            <Modal
                 isOpen={modalOpen}
                 onClose={handleClose}
                 title={form.id ? 'Update Tax' : 'Add New Tax'}
@@ -198,7 +198,26 @@ const CreateTax = () => {
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         variant="outlined"
                         size="small"
-                        sx={{ mb: 2 }}
+                        sx={{
+                            mb: 2,
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: '#384b70',
+                                '&.Mui-focused': {
+                                    color: '#384b70',
+                                },
+                            },
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -208,7 +227,26 @@ const CreateTax = () => {
                         variant="outlined"
                         type="number"
                         size="small"
-                        sx={{ mb: 2 }}
+                        sx={{
+                            mb: 2,
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: '#384b70',
+                                '&.Mui-focused': {
+                                    color: '#384b70',
+                                },
+                            },
+                        }}
                     />
                     <Box display="flex" justifyContent="flex-end" gap={2}>
                         <button onClick={handleClose} className="buttons cancel-btn">Cancel</button>
@@ -218,7 +256,7 @@ const CreateTax = () => {
                     </Box>
                 </Box>
             </Modal>
-      
+
         </Box>
     );
 };

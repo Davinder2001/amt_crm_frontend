@@ -2,7 +2,6 @@
 import React, { useRef, useState } from 'react';
 import { Tabs, Tab, Tooltip, IconButton } from '@mui/material';
 import { FaArrowLeft } from 'react-icons/fa';
-import { FiXCircle } from 'react-icons/fi';
 import Link from 'next/link';
 import AddVendor from './AddVendor';
 import ImageUpload from './ImageUpload';
@@ -10,13 +9,13 @@ import { FormInput } from '@/components/common/FormInput';
 import DatePickerField from '@/components/common/DatePickerField';
 import ItemCategories from './ItemCategories';
 import ItemsTab from './ItemsTab';
-import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { useRouter } from 'next/navigation';
 import FeaturedImageUpload from './FeaturedImageUpload';
 import ItemBrands from './ItemBrands';
 import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
 import AddTax from './AddTax';
 import useStickyWithOffset from '@/utils/StickyWithOffset';
+import MeasuringUnits from './MeasuringUnits';
 
 
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
@@ -34,6 +33,12 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
             id: number;
             name: string;
             rate: number;
+        }>;
+    };
+    measuringUnits?: {
+        data?: Array<{
+            id: number;
+            name: string;
         }>;
     };
     selectedCategories: Category[];
@@ -64,6 +69,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
     handleClearImages,
     handleRemoveImage,
     taxesData,
+    measuringUnits,
     selectedCategories,
     setSelectedCategories,
     variants,
@@ -76,16 +82,13 @@ const StoreItemFields = <T extends StoreItemFormData>({
     activeTab,
     setActiveTab,
     tabCompletion,
-    showConfirm,
-    setShowConfirm,
-    handleClearForm,
 }: StoreItemFieldsProps<T>) => {
 
     const headerRef = useRef<HTMLDivElement>(null);
     useStickyWithOffset(headerRef, 30);
 
     const router = useRouter();
-    const sectionKeys = ['basicInfo', 'pricingInventory', 'mediaDates', 'attributesVariations', 'featuredImage', 'categories', 'brands'];
+    const sectionKeys = ['basicInfo', 'inventoryAndDates', 'attributesVariations', 'featuredImage', 'categories', 'brands', 'media',];
     const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
     const toggleAllSections = (shouldCollapse: boolean) => {
@@ -172,9 +175,23 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
                                     <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
-                                    <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" />
-                                    <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
-
+                                    {/* <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" /> */}
+                                    <div className="add-items-form-input-label-container">
+                                        <label>Measuring Unit</label>
+                                        <MeasuringUnits
+                                            units={measuringUnits?.data ?? []}
+                                            selectedUnit={typeof formData.unit_id === 'number' ? formData.unit_id : null}
+                                            onUnitSelect={(unitId) => {
+                                                const updated = { ...formData, unit_id: unitId };
+                                                setFormData(updated);
+                                            }}
+                                            onUnitAdded={(newUnit) => {
+                                                setFormData((prev) => ({ ...prev, unit_id: newUnit.id }));
+                                            }}
+                                        />
+                                    </div>
+                                    <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
+                                    <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
                                     <div className="add-items-form-input-label-container">
                                         <label>Vendor Name*</label>
                                         <AddVendor
@@ -191,40 +208,11 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             }}
                                         />
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
 
-                    {/* Pricing & Inventory */}
-                    <div className="add-items-form-container store_column">
-                        <div className="basic_label_header">
-                            <h2 className="basic_label">Pricing & Inventory</h2>
-                            <span
-                                onClick={() => toggleSection('pricingInventory')}
-                                style={{
-                                    color: '#384b70',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                                aria-label="Toggle pricing Inventory Section"
-                            >
-                                {collapsedSections['pricingInventory'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-                            </span>
-                        </div>
-                        {!collapsedSections['pricingInventory'] && (
-                            <div className="store_input_feilds fields-wrapper">
-                                <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
-                                <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
-                                <FormInput label="Add fresh Stock" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
-                                <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" />
-
-                                <div className="add-items-form-input-label-container">
-                                    <label>Tax</label>
-                                    {taxesData?.data && (
+                                    <div className="add-items-form-input-label-container">
+                                        <label>Tax</label>
                                         <AddTax
-                                            taxes={taxesData.data}
+                                            taxes={taxesData?.data ?? []}
                                             selectedTaxId={typeof formData.tax_id === 'number' ? formData.tax_id : null}
                                             onTaxSelect={(taxId) => {
                                                 const updated = { ...formData, tax_id: taxId };
@@ -234,32 +222,33 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                                 setFormData((prev) => ({ ...prev, tax_id: newTax.id }));
                                             }}
                                         />
-                                    )}
-                                </div>
+                                    </div>
 
-                            </div>
-                        )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Media & Dates */}
+                    {/* Inventory & Dates */}
                     <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
-                            <h2 className="basic_label">Media & Dates</h2>
+                            <h2 className="basic_label">Inventory & Dates</h2>
                             <span
-                                onClick={() => toggleSection('mediaDates')}
+                                onClick={() => toggleSection('inventoryAndDates')}
                                 style={{
                                     color: '#384b70',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                 }}
-                                aria-label="Toggle media and dates Section"
+                                aria-label="Toggle pricing Inventory Section"
                             >
-                                {collapsedSections['mediaDates'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                                {collapsedSections['inventoryAndDates'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
                             </span>
                         </div>
-                        {!collapsedSections['mediaDates'] && (
+                        {!collapsedSections['inventoryAndDates'] && (
                             <div className="store_input_feilds fields-wrapper">
+                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
                                 <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
                                     const updated = { ...formData, purchase_date: date };
                                     setFormData(updated);
@@ -272,37 +261,49 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     const updated = { ...formData, date_of_expiry: date };
                                     setFormData(updated);
                                 }} minDate={new Date()} />
-                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
+                                <div className="add-items-form-input-label-container">
+                                    <label>Product Type*</label>
+                                    <select
+                                        value={formData.product_type}
+                                        onChange={(e) => {
+                                            const updated = {
+                                                ...formData,
+                                                product_type: e.target.value as 'simple_product' | 'variable_product'
+                                            };
+                                            setFormData(updated);
+                                        }}
+                                        className="form-select"
+                                        required
+                                    >
+                                        <option value="simple_product">Simple Product</option>
+                                        <option value="variable_product">Variable Product</option>
+                                    </select>
+                                </div>
+
+                                {formData.product_type === 'simple_product' && (
+                                    <>
+                                        <FormInput label="Regular Price" name="regular_price" type="number" value={formData.regular_price || ''} onChange={handleNumberChange} required placeholder="e.g. 280.00" />
+                                        <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
+                                    </>)}
+                                {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" /> */}
                             </div>
                         )}
                     </div>
 
                     {/* Attributes & Variants */}
-                    <div className="items-tab-container store_column">
-                        <div className="add-items-form-container">
-                            <ItemsTab setVariants={setVariants} variants={variants} collapsedSections={collapsedSections}
-                                toggleSection={toggleSection} />
+                    {formData.product_type === 'variable_product' && (
+                        <div className="items-tab-container store_column">
+                            <div className="add-items-form-container">
+                                <ItemsTab setVariants={setVariants} variants={variants} collapsedSections={collapsedSections}
+                                    toggleSection={toggleSection} />
+                            </div>
                         </div>
-                    </div>
-
-                    {/* Confirmation Dialog */}
-                    {showConfirm && (
-                        <ConfirmDialog
-                            isOpen={showConfirm}
-                            message="Are you sure you want to clear the form?"
-                            onConfirm={handleClearForm ?? (() => { })}
-                            onCancel={() => setShowConfirm && setShowConfirm(false)}
-                            type="clear"
-                        />
                     )}
-
-                    <span className="clear-button" onClick={() => setShowConfirm && setShowConfirm(true)}>
-                        <FiXCircle />
-                    </span>
-
                 </div>
 
                 <div className="right_sidebar_row">
+
+                    {/* Featured image */}
                     <div className="add-items-form-container store_column">
                         <div className="basic_label_header">
                             <h2 className="basic_label">Featured Image</h2>
@@ -336,11 +337,13 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         )}
                     </div>
 
+                    {/* Categories */}
                     <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
                             toggleSection={toggleSection} />
                     </div>
 
+                    {/* Brands */}
                     <div className="add-items-form-container store_column">
                         <ItemBrands
                             selectedBrand={formData.brand_name || ''}
@@ -356,6 +359,31 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             collapsedSections={collapsedSections}
                             toggleSection={toggleSection}
                         />
+                    </div>
+
+                    {/* Media */}
+                    <div className="add-items-form-container store_column">
+                        <div className="basic_label_header">
+                            <h2 className="basic_label">Media</h2>
+                            <span
+                                onClick={() => toggleSection('media')}
+                                style={{
+                                    color: '#384b70',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                                aria-label="Toggle media and dates Section"
+                            >
+                                {collapsedSections['media'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                            </span>
+                        </div>
+                        {!collapsedSections['media'] && (
+                            <div className="fields-wrapper">
+
+                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
+                            </div>
+                        )}
                     </div>
 
                     {(isFormModified?.() || !isEditMode) && (

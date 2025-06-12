@@ -79,6 +79,24 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
+    fetchMeasuringUnits: builder.query<MeasuringUnitResponse, void>({
+      query: () => ({
+        url: "measuring-units",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
+
+    createMeasuringUnit: builder.mutation<{ status?: boolean, error?: string, message?: string; data: MeasuringUnit }, { name: string }>({
+      query: (payload) => ({
+        url: "measuring-units",
+        method: "POST",
+        body: payload,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
 
     orderNewCompany: builder.mutation<{ redirect_url: string, orderId: string, formdata: FormData }, FormData>({
       query: (formData) => ({
@@ -253,6 +271,8 @@ export const {
   useCreateTaxMutation,
   useUpdateTaxMutation,
   useDeleteTaxMutation,
+  useFetchMeasuringUnitsQuery,
+  useCreateMeasuringUnitMutation,
   useOrderNewCompanyMutation,
   useAddNewCompanyMutation,
   useFetchCompanyDetailsQuery,

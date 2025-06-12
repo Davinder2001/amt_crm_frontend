@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useCreateStoreItemMutation } from '@/slices/store/storeApi';
 import { useRouter } from 'next/navigation';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
-import { useFetchTaxesQuery } from '@/slices/company/companyApi';
+import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
 import StoreItemFields from '../components/StoreItemFields';
 import { toast } from 'react-toastify';
@@ -20,18 +20,22 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   vendor_name: '',
   availability_stock: 0,
   cost_price: 0,
+  regular_price: 0,
   selling_price: 0,
   tax_id: 0,
+  unit_id: 0,
   images: [],
   variants: [],
   categories: [],
-  featured_image: null
+  featured_image: null,
+  product_type: 'simple_product'
 })
 
 const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading: isCreating }] = useCreateStoreItemMutation();
   const { currentData: vendorsData } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
+  const { data: measuringUnits } = useFetchMeasuringUnitsQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
   const [activeTab, setActiveTab] = useState(0);
@@ -41,7 +45,6 @@ const AddItem: React.FC = () => {
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false, false, false]);
-  const [showConfirm, setShowConfirm] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
@@ -109,7 +112,8 @@ const AddItem: React.FC = () => {
           (formData.vendor_name?.trim() ?? '') !== '';
       case 1:
         return formData.cost_price > 0 &&
-          formData.selling_price > 0 &&
+          (formData.regular_price ?? 0) > 0 &&
+          (formData.selling_price ?? 0) > 0 &&
           formData.quantity_count > 0;
       case 2:
         return formData.date_of_manufacture !== '';
@@ -140,15 +144,6 @@ const AddItem: React.FC = () => {
     }
   }, [formData, variants, selectedCategories, activeTab, validateTab]);
 
-  const handleClearForm = () => {
-    if (window.confirm('Are you sure you want to clear all form data?')) {
-      setFormData(getDefaultFormData());
-      setShowConfirm(false);
-      setActiveTab(0);
-      setHasUnsavedChanges(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = new FormData();
@@ -171,7 +166,7 @@ const AddItem: React.FC = () => {
 
     // Append variants
     variants.forEach((variant, i) => {
-      form.append(`variants[${i}][price]`, variant.price.toString());
+      form.append(`variants[${i}][selling_price]`, variant.selling_price.toString());
       variant.attributes?.forEach((attr, attrIndex) => {
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());
@@ -208,6 +203,7 @@ const AddItem: React.FC = () => {
       handleClearImages={() => setFormData(prev => ({ ...prev, images: [] }))}
       handleRemoveImage={handleRemoveImage}
       taxesData={taxesData}
+      measuringUnits={measuringUnits}
       selectedCategories={selectedCategories}
       setSelectedCategories={handleCategoryChange}
       variants={variants}
@@ -219,9 +215,6 @@ const AddItem: React.FC = () => {
       activeTab={activeTab}
       setActiveTab={setActiveTab}
       tabCompletion={tabCompletion}
-      showConfirm={showConfirm}
-      setShowConfirm={setShowConfirm}
-      handleClearForm={handleClearForm}
     />
   );
 };

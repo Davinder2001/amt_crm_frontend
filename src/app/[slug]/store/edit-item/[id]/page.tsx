@@ -34,12 +34,15 @@ const UpdateItem = () => {
     vendor_name: '',
     availability_stock: 0,
     cost_price: 0,
+    regular_price: 0,
     selling_price: 0,
     tax_id: 0,
+    unit_id: 0,
     images: [],
     variants: [],
     categories: [],
-    featured_image: null
+    featured_image: null,
+    product_type: 'simple_product'
   });
 
   const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
@@ -74,12 +77,15 @@ const UpdateItem = () => {
         vendor_name: item.vendor_name || '',
         availability_stock: item.availability_stock || 0,
         cost_price: item.cost_price || 0,
+        regular_price: item.regular_price || 0,
         selling_price: item.selling_price || 0,
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
+        unit_id: (item.units && item.units.length > 0 && item.units[0]?.id) ? item.units[0].id : 0,
         images: Array.isArray(item.images) ? item.images : [],
         variants: item.variants || [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
-        featured_image: item.featured_image ?? null
+        featured_image: item.featured_image ?? null,
+        product_type: item.product_type || 'simple_product'
       };
       setFormData(initialData);
       setOriginalItemData(initialData);
@@ -223,7 +229,7 @@ const UpdateItem = () => {
 
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {
       variants.forEach((variant, i) => {
-        formdata.append(`variants[${i}][price]`, variant.price.toString());
+        formdata.append(`variants[${i}][selling_price]`, variant.selling_price.toString());
         variant.attributes?.forEach((attr, j) => {
           formdata.append(`variants[${i}][attributes][${j}][attribute_id]`, attr.attribute_id.toString());
           formdata.append(`variants[${i}][attributes][${j}][attribute_value_id]`, attr.attribute_value_id.toString());

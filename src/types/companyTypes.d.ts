@@ -71,6 +71,15 @@ type UpdateShiftPayload = {
   weekly_off_day: string;
 };
 
+type MeasuringUnit = {
+  id: number;
+  name: string;
+}
+
+type MeasuringUnitResponse = {
+  success: boolean;
+  data: MeasuringUnit[];
+};
 
 type Tax = {
   id: number;

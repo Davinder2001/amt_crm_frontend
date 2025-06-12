@@ -10,7 +10,8 @@ interface StoreItem {
   date_of_manufacture: string;
   date_of_expiry: string | null;
   cost_price: number;
-  selling_price: number;
+  regular_price?: number;
+  selling_price?: number;
   online_visibility: string;
   description: string;
   item_code: string;
@@ -20,6 +21,7 @@ interface StoreItem {
   replacement: string | null;
   category: string | null;
   vendor_name: string | null;
+  product_type: 'simple_product' | 'variable_product';
   availability_stock: number;
   created_at: string;
   updated_at: string;
@@ -29,6 +31,7 @@ interface StoreItem {
   categories: Category[];
   variants: variations[];
   taxes: Tax[];
+  units: MeasuringUnit[];
 }
 
 interface Category {
@@ -76,7 +79,7 @@ interface variations {
   attribute_value_id: number;
   id?: number;
   regular_price: number;
-  price: number;
+  selling_price: number;
   stock?: number;
   images?: string[];
   final_cost?: number;
@@ -97,8 +100,11 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   vendor_name?: string;
   availability_stock: number;
   cost_price: number;
-  selling_price: number;
+  regular_price?: number;
+  selling_price?: number;
+  product_type: 'simple_product' | 'variable_product';
   tax_id: number;
+  unit_id: number;
   featured_image: File | string | null;
   images: (string | File)[] | File[];
   variants: variations[];

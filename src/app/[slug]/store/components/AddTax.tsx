@@ -118,7 +118,26 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         variant="outlined"
                         size="small"
-                        sx={{ mb: 2 }}
+                        sx={{
+                            mb: 2,
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: '#384b70',
+                                '&.Mui-focused': {
+                                    color: '#384b70',
+                                },
+                            },
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -128,7 +147,26 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                         variant="outlined"
                         type="number"
                         size="small"
-                        sx={{ mb: 2 }}
+                        sx={{
+                            mb: 2,
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: '#384b70',
+                                },
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: '#384b70',
+                                '&.Mui-focused': {
+                                    color: '#384b70',
+                                },
+                            },
+                        }}
                     />
                     <Box display="flex" justifyContent="flex-end" gap={2}>
                         <button onClick={() => setAddTaxModalOpen(false)} className="buttons cancel-btn">Cancel</button>

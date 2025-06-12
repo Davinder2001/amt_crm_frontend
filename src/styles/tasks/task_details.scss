@@ -60,6 +60,10 @@
       display: flex;
       flex-direction: column;
       gap: 0px;
+
+      .react-datepicker-wrapper{
+        width: 100%;
+      }
       label {
         font-weight: $font-weight-regular;
         font-size: $lable-font;

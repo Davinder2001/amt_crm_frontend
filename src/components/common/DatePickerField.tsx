@@ -59,6 +59,7 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
                             onClick={decreaseMonth}
                             disabled={prevMonthButtonDisabled}
                             className="date-p-btn"
+                            type='button'
                         >
                             {"<"}
                         </button>
@@ -90,6 +91,7 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
                             onClick={increaseMonth}
                             disabled={nextMonthButtonDisabled}
                             className="date-p-btn"
+                            type='button'
                         >
                             {">"}
                         </button>

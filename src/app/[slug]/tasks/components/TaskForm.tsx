@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useCreateTaskMutation, useUpdateTaskMutation, useGetTasksQuery } from '@/slices/tasks/taskApi';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
+import DatePickerField from '@/components/common/DatePickerField';
 
 interface TaskFormProps {
     mode: 'add' | 'edit';
@@ -29,23 +30,16 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
         description: '',
     });
 
-    const startDateRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
-    const endDateRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
     const convertToDatetimeLocal = (dateStr: string) => {
         if (!dateStr) return '';
         const lastColonIndex = dateStr.lastIndexOf(':');
-        const datePart = dateStr.substring(0, lastColonIndex); 
-        const timePart = dateStr.substring(lastColonIndex - 2); 
+        const datePart = dateStr.substring(0, lastColonIndex);
+        const timePart = dateStr.substring(lastColonIndex - 2);
         return `${datePart}T${timePart}`;
     };
     const convertToBackendFormat = (datetimeLocalStr: string) => {
         if (!datetimeLocalStr) return '';
         return datetimeLocalStr.replace('T', ':');
-    };
-    const openPicker = (ref: React.RefObject<HTMLInputElement>) => {
-        if (ref.current && 'showPicker' in ref.current) {
-            (ref.current as HTMLInputElement).showPicker();
-        }
     };
 
     // Load task data in edit mode
@@ -160,29 +154,22 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>Start Timing</label>
-                    <input
-                        type="datetime-local"
-                        name="startDate"
-                        value={formData.startDate}
-                        onChange={handleChange}
-                        onClick={() => openPicker(startDateRef)}
-                        ref={startDateRef}
-                        required
+                    <DatePickerField
+                        label="Start Timing"
+                        selectedDate={formData.startDate}
+                        onChange={(date) => setFormData({ ...formData, startDate: date })}
+                        minDate={new Date()}
+                        placeholder="Select start date and time"
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>End Timing</label>
-                    <input
-                        type="datetime-local"
-                        name="endDate"
-                        value={formData.endDate}
-                        onChange={handleChange}
-                        onClick={() => openPicker(endDateRef)}
-                        ref={endDateRef}
-                        required
-                        className="datetime-local-input"
+                    <DatePickerField
+                        label="End Timing"
+                        selectedDate={formData.endDate}
+                        onChange={(date) => setFormData({ ...formData, endDate: date })}
+                        minDate={new Date()}
+                         placeholder="Select end date and time"
                     />
                 </div>
 

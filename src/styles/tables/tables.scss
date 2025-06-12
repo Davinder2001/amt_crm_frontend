@@ -100,24 +100,28 @@
             border: 1px solid $border-color;
             margin-top: 5px;
             color: $dark-color;
+
             .bulk-toggle-btn {
                 display: flex;
                 gap: 10px;
                 align-items: center;
             }
         }
-            label {
+
+        label {
             display: flex;
             gap: 10px;
             align-items: center;
-         }  
-         .filter-options-list {
-          font-size: 14px;
-          background-color: #f5faff;
-          color: $primary-color;
-         }
+        }
+
+        .filter-options-list {
+            font-size: 14px;
+            background-color: #f5faff;
+            color: $primary-color;
+        }
     }
-  .search-filter-container {
+
+    .search-filter-container {
         input {
             height: 41px;
             padding: 10px 12px;
@@ -127,6 +131,7 @@
             font-size: 14px;
 
         }
+
         button.clear-search-btn {
             height: 41px;
             padding: 10px 12px;
@@ -134,10 +139,14 @@
             border: 1px solid $hover-color;
             margin-left: 10px;
             border-radius: $border-radius;
-            color:$primary-color;
+            color: $primary-color;
         }
 
-  }
+    }
+
+    .mobile-render-table-searchbar {
+        display: none;
+    }
 
     .dropdown-right {
         .dropdown-content {
@@ -176,7 +185,7 @@
         }
 
         .section {
-          
+
 
             &:last-child {
                 margin-bottom: 0;
@@ -215,7 +224,7 @@
             color: $dark-color;
 
             &:hover {
-                background:$light_blue;
+                background: $light_blue;
             }
 
             input[type="checkbox"] {
@@ -735,26 +744,37 @@ table {
 
 @media (max-width: 768px) {
 
+    .desktop-render-table-searchbar {
+        display: none;
+    }
+
+
     .pagination-track {
         flex-wrap: wrap;
     }
 
-    .toolbar .toolbar-btn {
-        padding: 5px 10px;
-        font-size: 12px;
-        height: auto;
-
-        span {
-            display: none;
+    .toolbar {
+        .mobile-render-table-searchbar {
+            display: block;
         }
-    }
 
-    .toolbar .dropdown-right .dropdown-content {
-        right: auto;
-    }
+        .toolbar-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            height: auto;
 
-    .toolbar .extra-links .dropdown-content {
-        right: 0;
+            span {
+                display: none;
+            }
+        }
+
+        .dropdown-right .dropdown-content {
+            right: auto;
+        }
+
+        .extra-links .dropdown-content {
+            right: 0;
+        }
     }
 
     /* ResponsiveTable.css */
@@ -827,7 +847,8 @@ table {
         justify-content: space-around;
         gap: 10px;
     }
-        .bulk-actions-toolbar {
+
+    .bulk-actions-toolbar {
         gap: 8px;
         bottom: 80px;
 

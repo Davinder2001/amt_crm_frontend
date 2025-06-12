@@ -113,7 +113,7 @@
 // cash-flow
 @use './invoices/cash-flow/cardflow.scss' as *;
 @use './invoices/cash-flow/payment.scss' as *;
-    
+
 
 // setting styling
 @use './settings/settings.scss' as *;
@@ -142,12 +142,20 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: $font-family;
+    font-family: $font-family !important;
     box-sizing: border-box;
 
     svg {
         cursor: pointer;
     }
+}
+
+body,
+button,
+input,
+textarea,
+.MuiTypography-root {
+    font-family: $font-family !important;
 }
 
 

@@ -123,7 +123,7 @@ const Items: React.FC = () => {
     { label: 'Name', key: 'name' },
     { label: 'Date of Manufacture', key: 'date_of_manufacture' },
     { label: 'Date of Expiry', key: 'date_of_expiry' },
-    { label: 'Selling Price', key: 'selling_price' },
+    { label: 'Sale Price', key: 'sale_price' },
     { label: 'Stock Available', key: 'availability_stock' },
   ];
 
@@ -151,10 +151,10 @@ const Items: React.FC = () => {
       options: [...new Set(storeItems.map((item) => item.brand_name))].filter(Boolean) as string[]
     },
     {
-      key: 'selling_price',
+      key: 'sale_price',
       label: 'Selling Price',
       type: 'multi-select' as const,
-      options: [...new Set(storeItems.map((item) => String(item.selling_price)))].filter(Boolean) as string[]
+      options: [...new Set(storeItems.map((item) => String(item.sale_price)))].filter(Boolean) as string[]
     }
   ];
 

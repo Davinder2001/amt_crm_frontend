@@ -93,7 +93,7 @@ const ViewItem = () => {
 
             <InfoCard icon={FaMoneyBillWave} title="Pricing & Tax" className="info-card info-card-yellow" data={[
               { label: 'Cost Price', value: item.cost_price || '-' },
-              { label: 'Selling Price', value: item.selling_price || '-' },
+              { label: 'Sale Price', value: item.sale_price || '-' },
               { label: 'Tax', value: item.taxes?.[0]?.name ? `${item.taxes[0].name} - ${item.taxes[0].rate}%` : '-', className: item.taxes?.[0]?.rate ? 'text-rate' : '' }
             ]} />
 

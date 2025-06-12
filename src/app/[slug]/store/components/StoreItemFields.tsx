@@ -306,7 +306,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 {!collapsedSections['pricing'] && (
                                     <div className="store_input_feilds fields-wrapper">
                                         <FormInput label="Regular Price" name="regular_price" type="number" value={formData.regular_price || ''} onChange={handleNumberChange} required placeholder="e.g. 280.00" />
-                                        <FormInput label="Selling Price" name="selling_price" type="number" value={formData.selling_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
+                                        <FormInput label="Sale Price" name="sale_price" type="number" value={formData.sale_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
                                     </div>
                                 )}
                             </div>

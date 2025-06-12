@@ -21,7 +21,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   availability_stock: 0,
   cost_price: 0,
   regular_price: 0,
-  selling_price: 0,
+  sale_price: 0,
   tax_id: 0,
   unit_id: 0,
   images: [],
@@ -113,7 +113,7 @@ const AddItem: React.FC = () => {
       case 1:
         return formData.cost_price > 0 &&
           (formData.regular_price ?? 0) > 0 &&
-          (formData.selling_price ?? 0) > 0 &&
+          (formData.sale_price ?? 0) > 0 &&
           formData.quantity_count > 0;
       case 2:
         return formData.date_of_manufacture !== '';
@@ -166,7 +166,7 @@ const AddItem: React.FC = () => {
 
     // Append variants
     variants.forEach((variant, i) => {
-      form.append(`variants[${i}][selling_price]`, variant.selling_price.toString());
+      form.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
       variant.attributes?.forEach((attr, attrIndex) => {
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
         form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());

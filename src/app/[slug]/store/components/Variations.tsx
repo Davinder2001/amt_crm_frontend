@@ -8,7 +8,7 @@ import { FaPlus } from 'react-icons/fa';
 const emptyVariant = {
     attributes: [],
     regular_price: 0,
-    selling_price: 0,
+    sale_price: 0,
     attribute_value_id: 0
 };
 
@@ -54,7 +54,7 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                             : 0,
                         attributes: mappedAttributes,
                         regular_price: Number(v.regular_price) || 0,
-                        selling_price: Number(v.selling_price) || 0,
+                        sale_price: Number(v.sale_price) || 0,
                     };
                 });
                 setCombinations(mappedVariants);
@@ -62,7 +62,7 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                 setCombinations([{
                     attributes: [],
                     regular_price: 0,
-                    selling_price: 0,
+                    sale_price: 0,
                     attribute_value_id: 0
                 }]);
             }
@@ -98,10 +98,10 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
         });
     };
 
-    const handlePriceChange = (comboIndex: number, selling_price: number, regular_price?: number) => {
+    const handlePriceChange = (comboIndex: number, sale_price: number, regular_price?: number) => {
         setCombinations(prev => {
             const updated = [...prev];
-            updated[comboIndex].selling_price = selling_price;
+            updated[comboIndex].sale_price = sale_price;
             if (regular_price !== undefined) {
                 updated[comboIndex].regular_price = regular_price;
             }
@@ -112,7 +112,7 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
-            { attribute_value_id: 0, attributes: [], selling_price: 0, regular_price: 0 }
+            { attribute_value_id: 0, attributes: [], sale_price: 0, regular_price: 0 }
         ]);
     };
 
@@ -168,7 +168,7 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                                 value={combo.regular_price === 0 ? '' : combo.regular_price}
                                 onChange={e => {
                                     const val = Number(e.target.value);
-                                    handlePriceChange(index, combo.selling_price, isNaN(val) ? 0 : val);
+                                    handlePriceChange(index, combo.sale_price, isNaN(val) ? 0 : val);
                                 }}
                                 placeholder="e.g. 300.00"
                                 min={0}
@@ -176,10 +176,10 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                         </div>
 
                         <div>
-                            <label>Selling Price</label>
+                            <label>Sale Price</label>
                             <input
                                 type="number"
-                                value={combo.selling_price === 0 ? '' : combo.selling_price}
+                                value={combo.sale_price === 0 ? '' : combo.sale_price}
                                 onChange={e => {
                                     const val = Number(e.target.value);
                                     handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);

@@ -11,7 +11,7 @@ interface StoreItem {
   date_of_expiry: string | null;
   cost_price: number;
   regular_price?: number;
-  selling_price?: number;
+  sale_price?: number;
   online_visibility: string;
   description: string;
   item_code: string;
@@ -79,7 +79,7 @@ interface variations {
   attribute_value_id: number;
   id?: number;
   regular_price: number;
-  selling_price: number;
+  sale_price: number;
   stock?: number;
   images?: string[];
   final_cost?: number;
@@ -101,7 +101,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   availability_stock: number;
   cost_price: number;
   regular_price?: number;
-  selling_price?: number;
+  sale_price?: number;
   product_type: 'simple_product' | 'variable_product';
   tax_id: number;
   unit_id: number;

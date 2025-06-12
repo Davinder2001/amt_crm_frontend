@@ -184,8 +184,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 ))}
                             </div>
                         </div>
-
-                        {renderActiveFilterInput()}
+                        <div className='desktop-render-table-searchbar'>
+                            {renderActiveFilterInput()}
+                        </div>
                     </>
                 )}
             </div>
@@ -268,6 +269,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     </div>
                 )}
+            </div>
+            <div className='mobile-render-table-searchbar'>
+                {renderActiveFilterInput()}
             </div>
             <style>{`
                 .reset-columns {

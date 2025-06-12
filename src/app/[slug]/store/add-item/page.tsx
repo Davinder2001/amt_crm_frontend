@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { useCreateStoreItemMutation } from '@/slices/store/storeApi';
+import { useCreateStoreItemMutation } from '@/slices';
 import { useRouter } from 'next/navigation';
-import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
-import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices/company/companyApi';
+import { useFetchVendorsQuery } from '@/slices';
+import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import StoreItemFields from '../components/StoreItemFields';
 import { toast } from 'react-toastify';

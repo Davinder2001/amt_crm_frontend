@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { useCreateVendorMutation } from '@/slices/vendor/vendorApi';
+import React, { useState, useEffect } from 'react';
+import { useCreateVendorMutation, useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { toast } from 'react-toastify';
 
 interface CreateVendorProps {
@@ -14,8 +14,36 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
     const [vendorEmail, setVendorEmail] = useState('');
     const [vendorAddress, setVendorAddress] = useState('');
     const [createVendor, { isLoading }] = useCreateVendorMutation();
+    const { data: vendors } = useFetchVendorsQuery();
+    const [previousMatchedNumber, setPreviousMatchedNumber] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        if (vendorNumber && vendors) {
+            const existingVendor = vendors.find((v: Vendor) => v.vendor_number === vendorNumber);
+
+            if (existingVendor) {
+                // If we find a match, fill the fields and remember this number
+                setVendorName(existingVendor.vendor_name);
+                setVendorEmail(existingVendor.vendor_email || '');
+                setVendorAddress(existingVendor.vendor_address);
+                setPreviousMatchedNumber(vendorNumber);
+            } else if (previousMatchedNumber && vendorNumber !== previousMatchedNumber) {
+                // If we had a match before but now don't, clear the fields
+                setVendorName('');
+                setVendorEmail('');
+                setVendorAddress('');
+                setPreviousMatchedNumber('');
+            }
+        } else if (!vendorNumber) {
+            // If vendor number is empty, clear all fields
+            setVendorName('');
+            setVendorEmail('');
+            setVendorAddress('');
+            setPreviousMatchedNumber('');
+        }
+    }, [vendorNumber, vendors, previousMatchedNumber]);
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         try {
             await createVendor({
@@ -36,22 +64,8 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
     return (
         <div className="vendor-creation-page-outer">
             <div className='vendor-creation-page'>
-                <form className="vendor-form" onSubmit={handleSubmit}>
+                <form className="vendor-form" onSubmit={(e) => e.preventDefault()}>
                     <div className="form-section">
-                        <div className="input-group">
-                            <label>
-                                Vendor Name <span className={`required-asterisk ${vendorName ? 'filled' : 'unfilled'}`}>*</span>
-                            </label>
-                            <input
-                                type="text"
-                                value={vendorName}
-                                onChange={(e) => setVendorName(e.target.value)}
-                                required
-                                placeholder="Enter vendor name"
-                                className="form-input"
-                            />
-                        </div>
-
                         <div className="input-group">
                             <label>
                                 Vendor Number <span className={`required-asterisk ${vendorNumber ? 'filled' : 'unfilled'}`}>*</span>
@@ -69,6 +83,20 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
                                 placeholder="Enter 10-digit vendor phone number"
                                 className="form-input"
                                 maxLength={10}
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>
+                                Vendor Name <span className={`required-asterisk ${vendorName ? 'filled' : 'unfilled'}`}>*</span>
+                            </label>
+                            <input
+                                type="text"
+                                value={vendorName}
+                                onChange={(e) => setVendorName(e.target.value)}
+                                required
+                                placeholder="Enter vendor name"
+                                className="form-input"
                             />
                         </div>
 
@@ -103,7 +131,8 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
                                 Cancel
                             </button>
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={handleSubmit}
                                 className="buttons"
                                 disabled={isLoading || !vendorName || !vendorNumber || !vendorAddress}
                             >

@@ -132,148 +132,146 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     };
 
     return (
-        <div className="toolbar">
-            <div className="left-group">
-                {filters && filters.length > 0 && (
-                    <>
-                        <div className="dropdown dropdown-left hover-group">
+        <>
+            <div className="toolbar">
+                <div className="left-group">
+                    {filters && filters.length > 0 && (
+                        <>
+                            <div className="dropdown dropdown-left hover-group">
+                                <button className="toolbar-btn">
+                                    <FiFilter />
+                                    <span className='hide-mobile'>Filter</span>
+                                </button>
+                                <div className="dropdown-content">
+                                    <div
+                                        className={`bulk-toggle-btn ${showBulkActions ? 'active' : ''}`}
+                                        onClick={() => onToggleBulkActions?.(!showBulkActions)}
+                                    >
+                                        {showBulkActions ? (
+                                            <FaCheckSquare className="icon-checked" />
+                                        ) : (
+                                            <FaRegSquare className="icon-unchecked" />
+                                        )}
+                                        <span className="label">{showBulkActions ? 'Exit Bulk Mode' : 'Bulk Actions'}</span>
+                                    </div>
+                                    {filters.map((filter) => (
+                                        <div key={filter.key} className="section">
+                                            <label className="filter-type-option">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={currentActiveFilterType === filter.key}
+                                                    onChange={() => handleFilterTypeSelect(filter.key)}
+                                                />
+                                                {filter.label}
+                                            </label>
+
+                                            {currentActiveFilterType === filter.key && filter.type === 'multi-select' && (
+                                                <div className="filter-options-list">
+                                                    {filter.options?.map((opt) => (
+                                                        <label key={opt} className="option">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedFilters[filter.key]?.includes(opt) || false}
+                                                                onChange={(e) =>
+                                                                    handleMultiSelectChange(filter.key, opt, e.target.checked)
+                                                                }
+                                                            />
+                                                            {opt}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className='desktop-render-table-searchbar filter-search-table'>
+                                {renderActiveFilterInput()}
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                <div className="right-group">
+                    {columns && columns.length > 0 && (
+                        <div className="dropdown dropdown-right hover-group">
                             <button className="toolbar-btn">
-                                <FiFilter />
-                                <span className='hide-mobile'>Filter</span>
+                                <FiColumns />
+                                <span className='hide_col'>Columns</span>
                             </button>
                             <div className="dropdown-content">
-                                <div
-                                    className={`bulk-toggle-btn ${showBulkActions ? 'active' : ''}`}
-                                    onClick={() => onToggleBulkActions?.(!showBulkActions)}
-                                >
-                                    {showBulkActions ? (
-                                        <FaCheckSquare className="icon-checked" />
-                                    ) : (
-                                        <FaRegSquare className="icon-unchecked" />
-                                    )}
-                                    <span className="label">{showBulkActions ? 'Exit Bulk Mode' : 'Bulk Actions'}</span>
+                                <div className="reset-columns" onClick={onResetColumns}>
+                                    Reset to Default
                                 </div>
-                                {filters.map((filter) => (
-                                    <div key={filter.key} className="section">
-                                        <label className="filter-type-option">
-                                            <input
-                                                type="checkbox"
-                                                checked={currentActiveFilterType === filter.key}
-                                                onChange={() => handleFilterTypeSelect(filter.key)}
-                                            />
-                                            {filter.label}
-                                        </label>
-
-                                        {currentActiveFilterType === filter.key && filter.type === 'multi-select' && (
-                                            <div className="filter-options-list">
-                                                {filter.options?.map((opt) => (
-                                                    <label key={opt} className="option">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedFilters[filter.key]?.includes(opt) || false}
-                                                            onChange={(e) =>
-                                                                handleMultiSelectChange(filter.key, opt, e.target.checked)
-                                                            }
-                                                        />
-                                                        {opt}
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
+                                {columns.map((col) => (
+                                    <label key={col.key} className="option">
+                                        <input
+                                            type="checkbox"
+                                            checked={visibleColumns.includes(col.key)}
+                                            onChange={() => onColumnToggle?.(col.key)}
+                                        />
+                                        {col.label}
+                                    </label>
                                 ))}
                             </div>
                         </div>
-                        <div className='desktop-render-table-searchbar'>
-                            {renderActiveFilterInput()}
-                        </div>
-                    </>
-                )}
-            </div>
+                    )}
 
-            <div className="right-group">
-                {columns && columns.length > 0 && (
-                    <div className="dropdown dropdown-right hover-group">
-                        <button className="toolbar-btn">
-                            <FiColumns />
-                            <span className='hide_col'>Columns</span>
-                        </button>
-                        <div className="dropdown-content">
-                            <div className="reset-columns" onClick={onResetColumns}>
-                                Reset to Default
+                    {downloadActions && downloadActions.length > 0 && (
+                        <div className="dropdown dropdown-right hover-group">
+                            <button className="toolbar-btn">
+                                <FiDownloadCloud size={18.98} style={{ strokeWidth: 3 }} />
+                            </button>
+                            <div className="dropdown-content">
+                                <ul className="action-list">
+                                    {downloadActions.map((action, i) => (
+                                        <li key={i} onClick={action.onClick} className="action-item">
+                                            {action.icon && <span className="a-icon">{action.icon}</span>}
+                                            <span>{action.label}</span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            {columns.map((col) => (
-                                <label key={col.key} className="option">
-                                    <input
-                                        type="checkbox"
-                                        checked={visibleColumns.includes(col.key)}
-                                        onChange={() => onColumnToggle?.(col.key)}
-                                    />
-                                    {col.label}
-                                </label>
+                        </div>
+                    )}
+
+                    {actions && actions?.length > 0 ?
+                        <div className="action-icons-horizontal">
+                            {actions.map((action, i) => (
+                                <div key={i} className="action-tooltip">
+                                    <button
+                                        onClick={action.onClick}
+                                        className="toolbar-btn"
+                                    >
+                                        <i>{action.icon}</i>
+                                        <span>{action.label}</span>
+                                    </button>
+                                    <span className="tooltip-text">{action.label}</span>
+                                </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                        : ''
+                    }
 
-                {downloadActions && downloadActions.length > 0 && (
-                    <div className="dropdown dropdown-right hover-group">
-                        <button className="toolbar-btn">
-                            <FiDownloadCloud size={18.98} style={{ strokeWidth: 3 }} />
-                        </button>
-                        <div className="dropdown-content">
-                            <ul className="action-list">
-                                {downloadActions.map((action, i) => (
-                                    <li key={i} onClick={action.onClick} className="action-item">
-                                        {action.icon && <span className="a-icon">{action.icon}</span>}
-                                        <span>{action.label}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )}
-
-                {actions && actions?.length > 0 ?
-                    <div className="action-icons-horizontal">
-                        {actions.map((action, i) => (
-                            <div key={i} className="action-tooltip">
-                                <button
-                                    onClick={action.onClick}
-                                    className="toolbar-btn"
-                                >
-                                    <i>{action.icon}</i>
-                                    <span>{action.label}</span>
-                                </button>
-                                <span className="tooltip-text">{action.label}</span>
+                    {extraLinks && extraLinks.length > 0 && (
+                        <div className="dropdown dropdown-right hover-group extra-links">
+                            <button className="toolbar-btn">
+                                <FiSliders size={18} />
+                            </button>
+                            <div className="dropdown-content">
+                                <ul className="action-list">
+                                    {extraLinks.map((action, i) => (
+                                        <li key={i} onClick={action.onClick} className="action-item">
+                                            {action.icon && <span className="a-icon">{action.icon}</span>}
+                                            <span>{action.label}</span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                        ))}
-                    </div>
-                    : ''
-                }
-
-                {extraLinks && extraLinks.length > 0 && (
-                    <div className="dropdown dropdown-right hover-group extra-links">
-                        <button className="toolbar-btn">
-                            <FiSliders size={18} />
-                        </button>
-                        <div className="dropdown-content">
-                            <ul className="action-list">
-                                {extraLinks.map((action, i) => (
-                                    <li key={i} onClick={action.onClick} className="action-item">
-                                        {action.icon && <span className="a-icon">{action.icon}</span>}
-                                        <span>{action.label}</span>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
-                    </div>
-                )}
-            </div>
-            <div className='mobile-render-table-searchbar'>
-                {renderActiveFilterInput()}
-            </div>
-            <style>{`
+                    )}
+                </div>
+                <style>{`
                 .reset-columns {
                     padding: 8px 12px;
                     cursor: pointer;
@@ -325,7 +323,11 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     opacity: 1;
                 }
             `}</style>
-        </div>
+            </div>
+            <div className='mobile-render-table-searchbar filter-search-table'>
+                {renderActiveFilterInput()}
+            </div>
+        </>
     );
 };
 

@@ -422,17 +422,6 @@
       top: 5px;
     }
 
-    .tab-button {
-      margin-bottom: 0px;
-      padding: 10px 20px;
-      font-size: 15px;
-    }
-
-    .tab-button.active {
-      border-right: unset;
-      border-bottom: 3px solid $primary-color;
-    }
-
     .add-attribute-button-container {
       display: flex;
       justify-content: flex-end;

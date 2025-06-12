@@ -68,10 +68,10 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 title={viewMode === 'grid' ? 'Switch to List View' : 'Switch to Grid View'}
                 onClick={toggleViewMode}
               >
-                {viewMode === 'grid' ? <FaList size={12} /> : <FaTh size={12} />}
+                {viewMode === 'grid' ? <FaList /> : <FaTh />}
               </button>
               <button className="circle-btn" title="Filter" onClick={onFilterClick}>
-                <MdOutlineFilterList size={15} />
+                <MdOutlineFilterList size={18} />
               </button>
             </div>
             <button className="circle-btn cart-icon-btn" title="Cart"
@@ -79,7 +79,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 e.stopPropagation();
                 onCartClick();
               }}>
-              <FaShoppingCart size={12} />
+              <FaShoppingCart  size={15}/>
               {cartItemCount > 0 && (
                 <span className="cart-badge">{cartItemCount}</span>
               )}

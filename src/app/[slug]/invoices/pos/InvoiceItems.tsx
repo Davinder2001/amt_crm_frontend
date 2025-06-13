@@ -23,7 +23,13 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
 
   // Check if an item is in the cart
   const isItemInCart = (itemId: number) => {
-    return cart.some(cartItem => cartItem.id === itemId);
+    return cart.some(cartItem => cartItem.itemId === itemId);
+  };
+
+  // Add this helper function to get the quantity from cart
+  const getItemQuantity = (itemId: number) => {
+    const cartItem = cart.find(ci => ci.itemId === itemId);
+    return cartItem ? cartItem.quantity : 0;
   };
 
   const filteredItems = items.filter(item =>
@@ -133,7 +139,11 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   {inCart && (
                     <div className="item-selected-indicator">
                       <div className="checkmark-circle">
-                        <FaCheck className="checkmark-icon" />
+                        {getItemQuantity(item.id) > 1 ? (
+                          <span className='item-qty-count'>{getItemQuantity(item.id)}</span>
+                        ) : (
+                          <FaCheck className="checkmark-icon" />
+                        )}
                       </div>
                     </div>
                   )}

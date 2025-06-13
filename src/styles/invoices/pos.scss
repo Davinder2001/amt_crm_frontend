@@ -384,10 +384,16 @@
             align-items: center;
             color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            
         }
 
         .checkmark-icon {
+            font-size: 10px;
+        }
+
+        .item-qty-count{
             font-size: 12px;
+            font-weight: 600;
         }
     }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFetchCategoriesAndItemsQuery } from '@/slices/store/storeApi';
 import CheckoutPanel from './CheckoutPanel';
 import CategoriesMenu from './CategoriesMenu';
@@ -17,6 +17,25 @@ function POSPage() {
     const [activeTab, setActiveTab] = useState<TabType>('Cart');
     const [showMobileCategories, setShowMobileCategories] = useState(false);
     const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
+    const mobileCategoriesRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            // If the click is outside the mobile categories content and the popup is shown
+            if (showMobileCategories && mobileCategoriesRef.current &&
+                !mobileCategoriesRef.current.contains(event.target as Node)) {
+                setShowMobileCategories(false);
+            }
+        };
+
+        // Add event listener when component mounts
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Clean up event listener when component unmounts
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showMobileCategories]);
 
     useEffect(() => {
         if (categories && categories.length > 0) {
@@ -173,7 +192,7 @@ function POSPage() {
             {/* Mobile Categories Overlay */}
             {showMobileCategories && (
                 <div className="mobile-categories-overlay">
-                    <div className="mobile-categories-content">
+                    <div className="mobile-categories-content" ref={mobileCategoriesRef}>
                         <div className="m-cat-header">
                             <h4>Ctaegories</h4>
                             <button
@@ -187,12 +206,10 @@ function POSPage() {
                             selectedTopCatId={selectedTopCatId}
                             setSelectedTopCatId={(id) => {
                                 setSelectedTopCatId(id);
-                                setShowMobileCategories(false); // Close when category is selected
                             }}
                             selectedChildCatId={selectedChildCatId}
                             setSelectedChildCatId={(id) => {
                                 setSelectedChildCatId(id);
-                                setShowMobileCategories(false); // Close when category is selected
                             }}
                             expandedChildCats={expandedChildCats}
                             setExpandedChildCats={setExpandedChildCats}

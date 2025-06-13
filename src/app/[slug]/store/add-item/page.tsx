@@ -151,7 +151,7 @@ const AddItem: React.FC = () => {
 
     // Append simple fields
     Object.entries(formData).forEach(([key, val]) => {
-      if (key !== 'images' && key !== 'featured_image' && val !== null && val !== undefined) {
+      if (key !== 'images' && key !== 'featured_image' && key !== 'regular_price' && key !== 'sale_price' && val !== null && val !== undefined) {
         if (key === 'brand_name' && formData.brand_id) {
           form.append('brand_id', formData.brand_id.toString());
         }
@@ -159,20 +159,33 @@ const AddItem: React.FC = () => {
       }
     });
 
+    // For simple products, append regular_price and sale_price
+    if (formData.product_type === 'simple_product') {
+      if (formData.regular_price) {
+        form.append('regular_price', formData.regular_price.toString());
+      }
+      if (formData.sale_price) {
+        form.append('sale_price', formData.sale_price.toString());
+      }
+    }
+
     // Append images
     formData.images.forEach(img => form.append('images[]', img));
     if (formData.featured_image instanceof File) {
       form.append('featured_image', formData.featured_image);
     }
 
-    // Append variants
-    variants.forEach((variant, i) => {
-      form.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
-      variant.attributes?.forEach((attr, attrIndex) => {
-        form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
-        form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());
+    // For variable products, append variants
+    if (formData.product_type === 'variable_product' && variants.length > 0) {
+      variants.forEach((variant, i) => {
+        form.append(`variants[${i}][regular_price]`, variant.regular_price.toString());
+        form.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
+        variant.attributes?.forEach((attr, attrIndex) => {
+          form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
+          form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());
+        });
       });
-    });
+    }
 
     // Append categories
     selectedCategories.forEach(cat => form.append('categories[]', cat.id.toString()));

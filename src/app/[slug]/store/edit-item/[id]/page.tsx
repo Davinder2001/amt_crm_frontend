@@ -42,12 +42,13 @@ const UpdateItem = () => {
     variants: [],
     categories: [],
     featured_image: null,
-    product_type: 'simple_product'
+    product_type: 'simple_product',
+    vendor_id: null
   });
 
   const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
   const [originalItemData, setOriginalItemData] = useState<UpdateStoreItemRequest | null>(null);
-  const [vendorsList, setVendorsList] = useState<string[]>([]);
+  const [vendorsList, setVendorsList] = useState<Vendor[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [activeTab, setActiveTab] = useState(0);
@@ -55,8 +56,7 @@ const UpdateItem = () => {
 
   useEffect(() => {
     if (vendors) {
-      const vendorNames = vendors.map((vendor: { vendor_name: string }) => vendor.vendor_name);
-      setVendorsList(vendorNames);
+      setVendorsList(vendors)
     }
   }, [vendors]);
 
@@ -85,7 +85,8 @@ const UpdateItem = () => {
         variants: item.variants || [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
-        product_type: item.product_type || 'simple_product'
+        product_type: item.product_type || 'simple_product',
+        vendor_id: item.vendor_id != null ? item.vendor_id : null
       };
       setFormData(initialData);
       setOriginalItemData(initialData);
@@ -255,7 +256,23 @@ const UpdateItem = () => {
       formData={formData}
       setFormData={setFormData}
       vendors={vendorsList}
-      setVendors={setVendorsList}
+      selectedVendorId={formData.vendor_id || null}
+      onVendorSelect={(vendorId) => {
+        const vendor = vendorsList.find(v => v.id === vendorId);
+        setFormData(prev => ({
+          ...prev,
+          vendor_id: vendorId,
+          vendor_name: vendor?.vendor_name || ''
+        }));
+      }}
+      onVendorAdded={(newVendor) => {
+        setVendorsList(prev => [...prev, newVendor]);
+        setFormData(prev => ({
+          ...prev,
+          vendor_id: newVendor.id,
+          vendor_name: newVendor.vendor_name
+        }));
+      }}
       handleChange={handleChange}
       handleNumberChange={handleChange}
       handleImageChange={handleImageChange}

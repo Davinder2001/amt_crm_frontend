@@ -17,6 +17,7 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   date_of_expiry: '',
   replacement: '',
   category: '',
+  vendor_id: null,
   vendor_name: '',
   availability_stock: 0,
   cost_price: 0,
@@ -41,7 +42,7 @@ const AddItem: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const [formData, setFormData] = useState<CreateStoreItemRequest>(getDefaultFormData());
-  const [vendors, setVendors] = useState<string[]>([]);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [tabCompletion, setTabCompletion] = useState<boolean[]>([true, false, false, false, false]);
@@ -49,7 +50,7 @@ const AddItem: React.FC = () => {
 
   useEffect(() => {
     if (vendorsData) {
-      setVendors(vendorsData.map((vendor: { vendor_name: string }) => vendor.vendor_name));
+      setVendors(vendorsData)
     }
   }, [vendorsData]);
 
@@ -196,7 +197,23 @@ const AddItem: React.FC = () => {
       formData={formData}
       setFormData={setFormData}
       vendors={vendors}
-      setVendors={setVendors}
+      selectedVendorId={formData.vendor_id || null}
+      onVendorSelect={(vendorId) => {
+        const vendor = vendors.find(v => v.id === vendorId);
+        setFormData(prev => ({
+          ...prev,
+          vendor_id: vendorId,
+          vendor_name: vendor?.vendor_name || ''
+        }));
+      }}
+      onVendorAdded={(newVendor) => {
+        setVendors(prev => [...prev, newVendor]);
+        setFormData(prev => ({
+          ...prev,
+          vendor_id: newVendor.id,
+          vendor_name: newVendor.vendor_name
+        }));
+      }}
       handleChange={handleChange}
       handleNumberChange={handleNumberChange}
       handleImageChange={handleImageChange}

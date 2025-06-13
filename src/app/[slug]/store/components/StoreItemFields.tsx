@@ -21,8 +21,10 @@ import MeasuringUnits from './MeasuringUnits';
 interface StoreItemFieldsProps<T extends StoreItemFormData> {
     formData: T;
     setFormData: React.Dispatch<React.SetStateAction<T>>;
-    vendors: string[];
-    setVendors: React.Dispatch<React.SetStateAction<string[]>>;
+    vendors: Vendor[];
+    selectedVendorId: number | null;
+    onVendorSelect: (vendorId: number) => void;
+    onVendorAdded: (vendor: Vendor) => void;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleNumberChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -62,7 +64,8 @@ const StoreItemFields = <T extends StoreItemFormData>({
     formData,
     setFormData,
     vendors,
-    setVendors,
+    onVendorAdded,
+    onVendorSelect,
     handleChange,
     handleNumberChange,
     handleImageChange,
@@ -196,16 +199,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <label>Vendor Name*</label>
                                         <AddVendor
                                             vendors={vendors}
-                                            selectedVendor={formData.vendor_name || ''}
-                                            onVendorSelect={(vendorName) => {
-                                                const updated = { ...formData, vendor_name: vendorName };
-                                                setFormData(updated);
-                                            }}
-                                            onVendorAdded={(vendorName) => {
-                                                setVendors((prev) => [...prev, vendorName]);
-                                                const updated = { ...formData, vendor_name: vendorName };
-                                                setFormData(updated);
-                                            }}
+                                            selectedVendorId={formData.vendor_id || null}
+                                            onVendorSelect={onVendorSelect}
+                                            onVendorAdded={onVendorAdded}
                                         />
                                     </div>
 

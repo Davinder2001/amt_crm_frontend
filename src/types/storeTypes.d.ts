@@ -20,7 +20,8 @@ interface StoreItem {
   brand_id?: number | null;
   replacement: string | null;
   category: string | null;
-  vendor_name: string | null;
+  vendor_id: number | null;
+  vendor_name?: string | null;
   product_type: 'simple_product' | 'variable_product';
   availability_stock: number;
   created_at: string;
@@ -97,6 +98,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   brand_id?: number | null;
   replacement?: string;
   category?: string;
+  vendor_id: number | null;
   vendor_name?: string;
   availability_stock: number;
   cost_price: number;

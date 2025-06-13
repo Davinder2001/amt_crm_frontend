@@ -6,15 +6,15 @@ import Modal from '@/components/common/Modal';
 import CreateVendor from '../vendors/components/CreateVendor';
 
 interface AddVendorProps {
-  vendors: string[];
-  selectedVendor: string;
-  onVendorSelect: (vendorName: string) => void;
-  onVendorAdded: (vendorName: string) => void;
+  vendors: Vendor[];
+  selectedVendorId: number | null;
+  onVendorSelect: (vendorId: number) => void;
+  onVendorAdded: (vendor: Vendor) => void;
 }
 
 const AddVendor: React.FC<AddVendorProps> = ({
   vendors,
-  selectedVendor,
+  selectedVendorId,
   onVendorSelect,
   onVendorAdded
 }) => {
@@ -32,27 +32,29 @@ const AddVendor: React.FC<AddVendorProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleVendorClick = (vendorName: string) => {
-    onVendorSelect(vendorName);
+  const handleVendorClick = (vendorId: number) => {
+    onVendorSelect(vendorId);
     setIsOpen(false);
   };
+
+  const selectedVendorName = vendors.find(v => v.id === selectedVendorId)?.vendor_name || 'Select Vendor';
 
   return (
     <div className="addvendor-dropdown" ref={dropdownRef}>
       <div className="vendors-header" onClick={() => setIsOpen(prev => !prev)}>
-        {selectedVendor || 'Select Vendor'}
+        {selectedVendorName}
         <FaChevronDown size={14} />
       </div>
 
       {isOpen && (
         <ul className="vendors-menu">
-          {vendors.map((vendor, i) => (
+          {vendors.map((vendor) => (
             <li
-              key={i}
-              onClick={() => handleVendorClick(vendor)}
-              className={`vendor-name ${vendor === selectedVendor ? 'active' : ''}`}
+              key={vendor.id}
+              onClick={() => handleVendorClick(vendor.id)}
+              className={`vendor-name ${vendor.id === selectedVendorId ? 'active' : ''}`}
             >
-              {vendor}
+              {vendor.vendor_name}
             </li>
           ))}
           <li
@@ -79,9 +81,9 @@ const AddVendor: React.FC<AddVendorProps> = ({
         width="800px"
       >
         <CreateVendor
-          onSuccess={(newVendorName) => {
-            onVendorAdded(newVendorName);
-            onVendorSelect(newVendorName);
+          onSuccess={(newVendor) => {
+            onVendorAdded(newVendor);
+            onVendorSelect(newVendor.id);
             setAddVendorModalOpen(false);
           }}
           onClose={() => setAddVendorModalOpen(false)}

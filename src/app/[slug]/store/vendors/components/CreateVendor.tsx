@@ -4,7 +4,7 @@ import { useCreateVendorMutation, useFetchVendorsQuery } from '@/slices/vendor/v
 import { toast } from 'react-toastify';
 
 interface CreateVendorProps {
-    onSuccess: (vendorName: string) => void;
+    onSuccess: (vendor: Vendor) => void;
     onClose: () => void;
 }
 
@@ -46,7 +46,7 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         try {
-            await createVendor({
+            const response = await createVendor({
                 vendor_name: vendorName,
                 vendor_number: vendorNumber,
                 vendor_email: vendorEmail || '',
@@ -54,7 +54,7 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
             }).unwrap();
 
             toast.success('Vendor created successfully!');
-            onSuccess(vendorName);
+            onSuccess(response);
         } catch (err) {
             console.error('Error adding vendor:', err);
             toast.error('Failed to create vendor');

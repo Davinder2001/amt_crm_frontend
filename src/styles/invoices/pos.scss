@@ -1366,26 +1366,30 @@
             position: fixed;
             bottom: 120px;
             right: 16px;
-            width: 48px;
-            height: 48px;
-            background-color: $primary-color;
-            color: $white;
-            border: none;
+            width: 35px;
+            height: 35px;
+            background-color: $white;
+            color: $primary-color;
+            border: 2px solid $primary-color;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-            z-index: 2000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            z-index: 9999999;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Glass morphism effect */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            background-color: rgba(255, 255, 255, 0.85);
 
             &:hover {
-                background-color: darken($primary-color, 10%);
-            }
-
-            svg {
-                font-size: 20px;
+                transform: translateY(-2px);
+                box-shadow: $box-shadow;
+                background-color: $primary-color;
+                color: $white;
+                border-color: transparent;
             }
         }
     }

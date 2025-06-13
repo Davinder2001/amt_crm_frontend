@@ -265,48 +265,52 @@ export default function CartTabContent({
                     <>
                         {cart.length > 0 ? (
                             <>
-                                <div className="cart-labels">
-                                    <span className="label-name">Item</span>
-                                    <span className="label-quantity">Qty</span>
-                                    <span className="label-price">Total</span>
-                                </div>
                                 <div className="cart-items-list">
                                     {cart.map(item => (
                                         <div key={item.id} className="cart-item-row">
-                                            <div className="item-info">
-                                                <span className="item-name">{item.name}</span>
-                                                <button
-                                                    className="delete-btn"
-                                                    onClick={() => onRemoveItem(item.id)}>
-                                                    <FaTimes />
-                                                </button>
+
+                                            <div className="item-image-container">
+                                                {/* Placeholder for item image - you can replace with actual image */}
+                                                <div className="item-image-placeholder">
+                                                    {item.name.charAt(0).toUpperCase()}
+                                                </div>
                                             </div>
 
-                                            <div className="item-quantity">
-                                                <button
-                                                    className="item-quantity-btn"
-                                                    onClick={() => onQtyChange(item.id, -1)}
-                                                    disabled={item.quantity <= 1}
-                                                >
-                                                    -
-                                                </button>
-                                                <span>{item.quantity}</span>
-                                                <button
-                                                    className="item-quantity-btn"
-                                                    onClick={() => onQtyChange(item.id, 1)}
-                                                    disabled={
-                                                        (() => {
-                                                            const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
-                                                            return storeItem ? item.quantity >= storeItem.quantity_count : false;
-                                                        })()
-                                                    }
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
+                                            <div className="item-details">
+                                                <div className="item-header">
+                                                    <span className="item-name">{item.name}</span>
+                                                    <button
+                                                        className="delete-btn"
+                                                        onClick={() => onRemoveItem(item.id)}
+                                                        title="Remove"
+                                                    >
+                                                        <FaTimes />
+                                                    </button>
+                                                </div>
 
-                                            <div className="item-price">
-                                                ₹{item.quantity * item.final_cost}
+                                                <div className="item-controls">
+                                                    <div className="quantity-control">
+                                                        <button
+                                                            className="item-quantity-btn"
+                                                            onClick={() => onQtyChange(item.id, -1)}
+                                                            disabled={item.quantity <= 1}
+                                                        >
+                                                            −
+                                                        </button>
+                                                        <span>{item.quantity}</span>
+                                                        <button
+                                                            className="item-quantity-btn"
+                                                            onClick={() => onQtyChange(item.id, 1)}
+                                                            disabled={(() => {
+                                                                const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
+                                                                return storeItem ? item.quantity >= storeItem.quantity_count : false;
+                                                            })()}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                    <div className="item-price">₹{item.quantity * item.final_cost}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}

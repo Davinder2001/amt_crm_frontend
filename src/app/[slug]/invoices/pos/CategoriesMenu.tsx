@@ -98,9 +98,9 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                                 onClick={() => toggleExpandChild(child.id)}
                             >
                                 {expandedChildCats.includes(child.id) ? (
-                                    <FaChevronUp />
+                                    <FaChevronUp size={12}/>
                                 ) : (
-                                    <FaChevronDown />
+                                    <FaChevronDown size={12}/>
                                 )}
                             </span>
                         )}
@@ -128,7 +128,10 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                         const id = value === '' ? null : parseInt(value);
                         setSelectedTopCatId(id);
                         setSelectedChildCatId(null);
-                        setExpandedChildCats([]);
+                        // Keep existing expanded state when switching to "All"
+                        if (id !== null) {
+                            setExpandedChildCats([]);
+                        }
                     }}
                     className="top-category-select"
                 >
@@ -140,7 +143,10 @@ const CategoriesMenu: React.FC<CatMenuProps> = ({
                     ))}
                 </select>
 
-                {selectedTopCatId !== null && (
+                {/* Show all categories when "All" is selected */}
+                {selectedTopCatId === null ? (
+                    <div>{renderNestedCategories(topLevelCategories)}</div>
+                ) : (
                     <div>{renderNestedCategories(childCategories)}</div>
                 )}
             </div>

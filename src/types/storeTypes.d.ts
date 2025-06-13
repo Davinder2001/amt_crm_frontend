@@ -55,6 +55,7 @@ interface CartItem {
   id: number;
   itemId?: number;
   name: string;
+  featured_image?: string;
   quantity: number;
   final_cost: number;
   description?: string;

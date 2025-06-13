@@ -240,6 +240,7 @@ function POSPage() {
                     onRemoveItem={handleRemoveItem}
                     onClearCart={handleClearCart}
                     onClose={() => setShowCheckoutPanel(false)}
+                    items={displayItems}
                 />
             </div>
         </div>

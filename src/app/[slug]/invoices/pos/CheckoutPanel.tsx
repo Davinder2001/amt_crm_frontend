@@ -21,6 +21,7 @@ type CheckoutPanelProps = {
     onRemoveItem: (itemId: number) => void;
     onClearCart: () => void;
     onClose?: () => void;
+    items: StoreItem[];
 };
 
 const tabs: TabType[] = ['Cart', 'Delivery', 'Pickup'];
@@ -32,7 +33,8 @@ export default function CheckoutPanel({
     onQtyChange,
     onRemoveItem,
     onClearCart,
-    onClose
+    onClose,
+    items
 }: CheckoutPanelProps) {
 
     // RTK Query hooks
@@ -245,6 +247,7 @@ export default function CheckoutPanel({
                     setPartialAmount={setPartialAmount}
                     selectedBankAccount={selectedBankAccount}
                     setSelectedBankAccount={setSelectedBankAccount}
+                    items={items}
                 />
                 <div className="content">
                     {activeTab === 'Cart' && (

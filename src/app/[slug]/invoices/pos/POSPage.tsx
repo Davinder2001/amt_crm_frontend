@@ -47,17 +47,29 @@ function POSPage() {
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
 
     // Function to get all items from all categories and subcategories
+    // const getAllItems = (): StoreItem[] => {
+    //     const allItems: StoreItem[] = [];
+
+    //     const collectItems = (category: Category) => {
+    //         if (category.items) {
+    //             allItems.push(...category.items);
+    //         }
+    //         if (category.children) {
+    //             category.children.forEach(collectItems);
+    //         }
+    //     };
+
+    //     topCategories.forEach(collectItems);
+    //     return allItems;
+    // };
+
     const getAllItems = (): StoreItem[] => {
-        const allItems: StoreItem[] = [];
-        const seenItemIds = new Set<number>();
+        const itemMap = new Map<number, StoreItem>(); // Maps item.id → latest StoreItem
 
         const collectItems = (category: Category) => {
             if (category.items) {
                 for (const item of category.items) {
-                    if (!seenItemIds.has(item.id)) {
-                        seenItemIds.add(item.id);
-                        allItems.push(item);
-                    }
+                    itemMap.set(item.id, item); // Always overwrite with the latest occurrence
                 }
             }
             if (category.children) {
@@ -66,7 +78,7 @@ function POSPage() {
         };
 
         topCategories.forEach(collectItems);
-        return allItems;
+        return Array.from(itemMap.values()); // Convert back to an array
     };
 
     // Function to get all items from a category including all its subcategories

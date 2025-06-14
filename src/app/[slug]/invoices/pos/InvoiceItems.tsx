@@ -5,6 +5,7 @@ import { FaSearch, FaShoppingCart, FaTh, FaList, FaCheck } from 'react-icons/fa'
 import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
+import { FiX } from 'react-icons/fi';
 
 interface catMenuProps {
   items: StoreItem[];
@@ -18,6 +19,8 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [variantModalItem, setVariantModalItem] = useState<StoreItem | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<variations | null>(null);
 
   const cartItemCount = cart.length;
 
@@ -121,7 +124,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}
                 onClick={() => {
-                  if (item.variants && item.variants.length === 1) {
+                  if (item.variants && item.variants.length > 1) {
+                    setVariantModalItem(item);
+                  } else if (item.variants && item.variants.length === 1) {
                     onAddToCart(item, item.variants[0]);
                   } else {
                     onAddToCart(item);
@@ -157,6 +162,59 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
             );
           })}
         </ul>
+      )}
+
+      {/* Variant Selection Modal */}
+      {variantModalItem && (
+        <div className="variant-modal">
+          <div className="variant-modal-content">
+            <h3>Select Variant</h3>
+            <button onClick={() => {
+              setVariantModalItem(null);
+              setSelectedVariant(null);
+            }} className="close-btn"><FiX /></button>
+
+            <select
+              onChange={(e) => {
+                const variantId = parseInt(e.target.value);
+                const matched = variantModalItem?.variants?.find(v => v.id === variantId) ?? null;
+                setSelectedVariant(matched);
+              }}
+              defaultValue=""
+            >
+              <option value="" disabled>Select a variant</option>
+              {(variantModalItem?.variants ?? []).map(variant => {
+                const label = variant.attributes
+                  .map(attr => `${attr.attribute}: ${attr.value}`)
+                  .join(', ');
+
+                return (
+                  <option key={variant.id} value={variant.id}>
+                    {label} - ₹{variant.final_cost}
+                  </option>
+                );
+              })}
+            </select>
+
+            {selectedVariant && (
+              <p className="price-info">Price: ₹{selectedVariant.final_cost}</p>
+            )}
+
+            <button
+              disabled={!selectedVariant}
+              onClick={() => {
+                if (selectedVariant) {
+                  onAddToCart(variantModalItem, selectedVariant);
+                  setVariantModalItem(null);
+                  setSelectedVariant(null);
+                }
+              }}
+              className="confirm-btn"
+            >
+              Confirm Add to Cart
+            </button>
+          </div>
+        </div>
       )}
     </>
   );

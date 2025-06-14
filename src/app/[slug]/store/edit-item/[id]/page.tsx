@@ -199,7 +199,7 @@ const UpdateItem = () => {
       'name', 'quantity_count', 'measurement', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_name', 'availability_stock',
-      'cost_price', 'sale_price', 'tax_id'
+      'cost_price', 'sale_price', 'tax_id', 'product_type'
     ];
 
     primitiveFields.forEach((field) => {
@@ -230,6 +230,7 @@ const UpdateItem = () => {
 
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {
       variants.forEach((variant, i) => {
+        formdata.append(`variants[${i}][regular_price]`, variant.regular_price.toString());
         formdata.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
         variant.attributes?.forEach((attr, j) => {
           formdata.append(`variants[${i}][attributes][${j}][attribute_id]`, attr.attribute_id.toString());

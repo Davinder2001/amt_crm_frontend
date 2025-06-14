@@ -299,7 +299,7 @@ export default function CartTabContent({
                                                         <span className="item-name">{item.name}</span>
                                                         <button
                                                             className="delete-btn"
-                                                            onClick={() => onRemoveItem(item.id)}
+                                                            onClick={() => onRemoveItem(Number(item.id))}
                                                             title="Remove"
                                                         >
                                                             <FaTimes />
@@ -310,7 +310,7 @@ export default function CartTabContent({
                                                         <div className="quantity-control">
                                                             <button
                                                                 className="item-quantity-btn"
-                                                                onClick={() => onQtyChange(item.id, -1)}
+                                                                onClick={() => onQtyChange(Number(item.id), -1)}
                                                                 disabled={item.quantity <= 1}
                                                             >
                                                                 −
@@ -318,7 +318,7 @@ export default function CartTabContent({
                                                             <span>{item.quantity}</span>
                                                             <button
                                                                 className="item-quantity-btn"
-                                                                onClick={() => onQtyChange(item.id, 1)}
+                                                                onClick={() => onQtyChange(Number(item.id), 1)}
                                                                 disabled={(() => {
                                                                     const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
                                                                     return storeItem ? item.quantity >= storeItem.quantity_count : false;

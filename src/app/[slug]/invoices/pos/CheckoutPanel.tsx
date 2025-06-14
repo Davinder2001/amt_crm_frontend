@@ -85,7 +85,7 @@ export default function CheckoutPanel({
         pincode: pincode,
         delivery_charge: deliveryCharge,
         items: cart.map(i => ({
-            item_id: i.id,
+            item_id: typeof i.id === 'string' ? parseInt(i.id, 10) : i.id,
             quantity: i.quantity,
             unit_price: i.final_cost,
             final_cost: i.final_cost,

@@ -52,7 +52,8 @@ interface CategoryResponse {
 }
 
 interface CartItem {
-  id: number;
+  id: number | string;
+  variantId?: number;
   itemId?: number;
   name: string;
   featured_image?: string;

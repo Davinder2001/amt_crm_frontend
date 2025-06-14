@@ -110,12 +110,19 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
             const imageSrc = item.featured_image ?? placeholderImg;
 
             const isHovered = hoveredItemId === item.id;
-            const priceRange = item.variants ? getPriceRange(item.variants) : null;
             const inCart = isItemInCart(item.id);
 
-            const priceDisplay = priceRange
-              ? `₹${priceRange.min} - ₹${priceRange.max}`
-              : `₹${item.final_cost}`;
+            let priceDisplay = '';
+
+            if (item.variants && item.variants.length === 1) {
+              priceDisplay = `₹${item.variants[0].final_cost}`;
+            } else if (item.variants && item.variants.length > 1) {
+              const priceRange = getPriceRange(item.variants);
+              priceDisplay = priceRange ? `₹${priceRange.min} - ₹${priceRange.max}` : '0';
+            } else {
+              priceDisplay = `₹${item.final_cost}`;
+            }
+
 
             return (
               <li

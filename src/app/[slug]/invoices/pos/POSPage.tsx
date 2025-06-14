@@ -13,7 +13,7 @@ function POSPage() {
     const [selectedTopCatId, setSelectedTopCatId] = useState<number | null>(null);
     const [selectedChildCatId, setSelectedChildCatId] = useState<number | null>(null);
     const [expandedChildCats, setExpandedChildCats] = useState<number[]>([]);
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItemWithStringId[]>([]);
     const [activeTab, setActiveTab] = useState<TabType>('Cart');
     const [showMobileCategories, setShowMobileCategories] = useState(false);
     const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
@@ -46,22 +46,9 @@ function POSPage() {
 
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
 
-    // Function to get all items from all categories and subcategories
-    // const getAllItems = (): StoreItem[] => {
-    //     const allItems: StoreItem[] = [];
+    // Extend CartItem to allow string id for composite keys
+    type CartItemWithStringId = Omit<CartItem, 'id'> & { id: string };
 
-    //     const collectItems = (category: Category) => {
-    //         if (category.items) {
-    //             allItems.push(...category.items);
-    //         }
-    //         if (category.children) {
-    //             category.children.forEach(collectItems);
-    //         }
-    //     };
-
-    //     topCategories.forEach(collectItems);
-    //     return allItems;
-    // };
 
     const getAllItems = (): StoreItem[] => {
         const itemMap = new Map<number, StoreItem>(); // Maps item.id → latest StoreItem
@@ -129,53 +116,57 @@ function POSPage() {
                 ? getCategoryItems(selectedTopCategory) // Show all items from selected parent and its children
                 : [];
 
-
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
-        const itemId = item.id;
-        const variantId = variant?.id;
-        const id = variantId ?? itemId;
+        // Unique ID for cart: 
+        // - If variant exists: `item.id + variant.id`
+        // - If no variant: `item.id`
+        const id = variant ? `${item.id}_${variant.id}` : `${item.id}`;
+
         const finalCost = variant?.final_cost ?? item.final_cost;
-        const name = item.name + (variant
-            ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
-            : '');
+        const name = item.name + (
+            variant
+                ? ` (${variant.attributes.map(attr => `${attr.value}`).join(', ')})`
+                : ''
+        );
 
         setCart(prev => {
-            const existing = prev.find(ci => ci.id === id);
+            const existingItem = prev.find(cartItem => cartItem.id === id);
 
-            if (existing) {
-                return prev.map(ci =>
-                    ci.id === id
-                        ? { ...ci, quantity: ci.quantity + 1 }
-                        : ci
+            if (existingItem) {
+                // If already in cart, increase quantity
+                return prev.map(cartItem =>
+                    cartItem.id === id
+                        ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                        : cartItem
                 );
             } else {
+                // If not in cart, add new entry
                 return [
                     ...prev,
                     {
-                        id,
-                        itemId,
-                        variantId,
-                        name,
+                        id,          // Unique composite ID (itemId or itemId_variantId)
+                        itemId: item.id,  // Original item ID (for reference)
+                        variantId: variant?.id,  // Variant ID (if exists)
+                        name,        // e.g., "iPhone 13 (128GB, Black)"
                         quantity: 1,
-                        final_cost: finalCost
+                        final_cost: finalCost,
                     }
                 ];
             }
         });
     };
-
     const handleQtyChange = (itemId: number, delta: number) => {
         setCart(prev =>
             prev
                 .map(ci =>
-                    ci.id === itemId ? { ...ci, quantity: ci.quantity + delta } : ci
+                    ci.id === itemId.toString() ? { ...ci, quantity: ci.quantity + delta } : ci
                 )
                 .filter(ci => ci.quantity > 0)
         );
     };
 
     const handleRemoveItem = (itemId: number) => {
-        setCart(prev => prev.filter(item => item.id !== itemId));
+        setCart(prev => prev.filter(item => item.id !== itemId.toString()));
     };
 
     const handleClearCart = () => {

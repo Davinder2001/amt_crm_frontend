@@ -97,6 +97,7 @@ export default function CartTabContent({
     const { data } = useFetchCompanyAccountsQuery();
     const BankAccountList = data?.accounts;
     const { companySlug } = useCompany();
+    const [popupImage, setPopupImage] = useState<string | null>(null);
 
 
     // Calculate base total (sum of all items)
@@ -274,8 +275,12 @@ export default function CartTabContent({
 
                                         return (
                                             <div key={item.id} className="cart-item-row">
-
-                                                <div className="item-image-container">
+                                                <div className="item-image-container" onClick={() => {
+                                                    const storeItem = items.find(si => si.id === item.itemId);
+                                                    if (storeItem?.featured_image) {
+                                                        setPopupImage(storeItem.featured_image);
+                                                    }
+                                                }}>
                                                     {imageUrl ? (
                                                         <Image
                                                             src={imageUrl}
@@ -286,6 +291,7 @@ export default function CartTabContent({
                                                             }}
                                                             width={50}
                                                             height={50}
+                                                            style={{ cursor: 'pointer' }}
                                                         />
                                                     ) : (
                                                         <div className="item-image-placeholder">
@@ -293,6 +299,26 @@ export default function CartTabContent({
                                                         </div>
                                                     )}
                                                 </div>
+
+                                                {/* Image Popup */}
+                                                {popupImage && (
+                                                    <div className="image-popup-overlay" onClick={() => setPopupImage(null)}>
+                                                        <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
+                                                            <button
+                                                                className="close-popup"
+                                                                onClick={() => setPopupImage(null)}
+                                                            >
+                                                                <FaTimes />
+                                                            </button>
+                                                            <Image
+                                                                src={popupImage}
+                                                                alt="Enlarged product"
+                                                                width={1000}
+                                                                height={1000}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )}
 
                                                 <div className="item-details">
                                                     <div className="item-header">

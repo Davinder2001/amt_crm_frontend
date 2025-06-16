@@ -35,6 +35,13 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
     return cartItem ? cartItem.quantity : 0;
   };
 
+  // Add this helper function to get the quantity of a specific variant from cart
+  const getVariantQuantity = (itemId: number, variantId?: number) => {
+    if (!variantId) return 0;
+    const cartItem = cart.find(ci => ci.itemId === itemId && ci.variantId === variantId);
+    return cartItem ? cartItem.quantity : 0;
+  };
+
   const filteredItems = items.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -204,14 +211,18 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 const firstLetters = variant.attributes
                   .map(attr => attr.value.substring(0, 1).toUpperCase())
                   .join('');
+                const variantQty = getVariantQuantity(variantModalItem.id, variant.id);
 
                 return (
                   <div
                     key={variant.id}
-                    className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''}`}
+                    className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''} ${variantQty > 0 ? 'in-cart' : ''}`}
                     onClick={() => setSelectedVariant(variant)}
                   >
                     <div className="bubble-label">{firstLetters}</div>
+                    {variantQty > 0 && (
+                      <div className="variant-qty-badge">{variantQty}</div>
+                    )}
                   </div>
                 );
               })}

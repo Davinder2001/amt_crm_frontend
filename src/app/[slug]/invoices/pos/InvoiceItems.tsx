@@ -5,7 +5,7 @@ import { FaSearch, FaShoppingCart, FaTh, FaList, FaCheck } from 'react-icons/fa'
 import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
-import { FiX } from 'react-icons/fi';
+import Modal from '@/components/common/Modal';
 
 interface catMenuProps {
   items: StoreItem[];
@@ -189,39 +189,46 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
 
       {/* Variant Selection Modal */}
       {variantModalItem && (
-        <div className="variant-modal">
+        <Modal
+          isOpen={!!variantModalItem}
+          onClose={() => {
+            setVariantModalItem(null);
+            setSelectedVariant(null);
+          }}
+          title="Select Variant"
+          width="400px"
+        >
           <div className="variant-modal-content">
-            <h3>Select Variant</h3>
-            <button onClick={() => {
-              setVariantModalItem(null);
-              setSelectedVariant(null);
-            }} className="close-btn"><FiX /></button>
-
-            <select
-              onChange={(e) => {
-                const variantId = parseInt(e.target.value);
-                const matched = variantModalItem?.variants?.find(v => v.id === variantId) ?? null;
-                setSelectedVariant(matched);
-              }}
-              defaultValue=""
-            >
-              <option value="" disabled>Select a variant</option>
+            <div className="variant-radial-selector">
               {(variantModalItem?.variants ?? []).map(variant => {
-                const label = variant.attributes
-                  .map(attr => `${attr.attribute}: ${attr.value}`)
-                  .join(', ');
+                const firstLetters = variant.attributes
+                  .map(attr => attr.value.substring(0, 1).toUpperCase())
+                  .join('');
 
                 return (
-                  <option key={variant.id} value={variant.id}>
-                    {label} - ₹{variant.final_cost}
-                  </option>
+                  <div
+                    key={variant.id}
+                    className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedVariant(variant)}
+                  >
+                    <div className="bubble-label">{firstLetters}</div>
+                  </div>
                 );
               })}
-            </select>
+            </div>
 
-            {selectedVariant && (
-              <p className="price-info">Price: ₹{selectedVariant.final_cost}</p>
-            )}
+            <div className="variant-details">
+              {selectedVariant ? (
+                <>
+                  <div className="variant-name">
+                    {selectedVariant.attributes.map(attr => attr.value).join(' • ')}
+                  </div>
+                  <div className="variant-price">₹{selectedVariant.final_cost}</div>
+                </>
+              ) : (
+                <div className="variant-name">Select a variant</div>
+              )}
+            </div>
 
             <button
               disabled={!selectedVariant}
@@ -232,12 +239,15 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   setSelectedVariant(null);
                 }
               }}
-              className="confirm-btn"
+              className="add-button"
             >
-              Confirm Add to Cart
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
+                <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Confirm
             </button>
           </div>
-        </div>
+        </Modal>
       )}
     </>
   );

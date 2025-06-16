@@ -3,9 +3,6 @@
 import { useUser } from '@/provider/UserContext';
 import layoutMap from './layoutMap';
 import AuthLayout from '@/layouts/AuthLayout';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { useCompany } from '@/utils/Company';
-import { useEffect, useState } from 'react';
 import Loader from '@/components/common/Loader';
 
 type LayoutWrapperProps = {
@@ -13,25 +10,14 @@ type LayoutWrapperProps = {
 };
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const { accessToken } = useCompany();
-  const { user } = useUser();
+  const { user, authChecked } = useUser();
   const role = user?.user_type;
-  const [mounted, setMounted] = useState(false);
 
-  const { isFetching } = useFetchSelectedCompanyQuery(undefined, {
-    skip: !accessToken,
-  });
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const SelectedLayout = role ? layoutMap[role] : AuthLayout;
-
-  if (!mounted || isFetching) {
-    return <Loader />
+  if (!authChecked) {
+    return <Loader />;
   }
 
+  const SelectedLayout = role ? layoutMap[role] : AuthLayout;
   return <SelectedLayout>{children}</SelectedLayout>;
 };
 

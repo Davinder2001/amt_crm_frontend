@@ -3,56 +3,49 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { clearStorage, useCompany } from '@/utils/Company';
-import { useRouter } from 'next/navigation';
+import Loader from '@/components/common/Loader';
 
 type UserContextType = {
   user: UserProfile | null;
   setUser: (user: UserProfile | null) => void;
+  authChecked: boolean;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { accessToken } = useCompany();
-  const router = useRouter();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  const {
-    data,
-    error,
-    isLoading,
-    refetch,
-  } = useFetchProfileQuery(undefined, {
+  const { data, error } = useFetchProfileQuery(undefined, {
     skip: !accessToken,
   });
 
-  const [user, setUser] = useState<UserProfile | null>(null);
-
-  // 🔐 If API returns 401, clear storage and optionally redirect to login
   useEffect(() => {
-    if (error && 'status' in error && error.status === 401) {
-      clearStorage();
-      setUser(null);
-      router.push('/login'); // optional: redirect to login
+    if (accessToken) {
+      if (data?.user) {
+        setUser(data.user);
+        setAuthChecked(true);
+      } else if (error) {
+        // Only handle status if error is FetchBaseQueryError
+        if ('status' in error && error.status === 401) {
+          clearStorage();
+          setUser(null);
+        }
+        setAuthChecked(true);
+      }
+    } else {
+      setAuthChecked(true);
     }
-  }, [error, router]);
+  }, [accessToken, data, error]);
 
-  useEffect(() => {
-    if (accessToken && !data && !isLoading) {
-      refetch();
-    } else if (data?.user) {
-      setUser(data.user);
-    }
-  }, [accessToken, data, isLoading, refetch]);
-
-
-  useEffect(() => {
-    if (data?.user) {
-      setUser(data.user);
-    }
-  }, [data]);
+  if (!authChecked) {
+    return <Loader />;
+  }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, authChecked }}>
       {children}
     </UserContext.Provider>
   );

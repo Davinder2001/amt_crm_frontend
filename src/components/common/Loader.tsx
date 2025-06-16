@@ -54,8 +54,8 @@ const Loader = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            zIndex: 9999
+            backgroundColor: '#ffffff',
+            zIndex: '999999999999'
         }} className='main-loader-container'>
             <div style={{
                 fontSize: '3rem',

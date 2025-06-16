@@ -113,9 +113,7 @@ function POSPage() {
                 : [];
 
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
-        // Create a unique ID - string for variants, number for regular items
         const id = variant ? `${item.id}-${variant.id}` : item.id;
-
         const finalCost = variant?.final_cost ?? item.final_cost;
         const name = item.name + (variant
             ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
@@ -123,40 +121,82 @@ function POSPage() {
 
         setCart(prev => {
             const existing = prev.find(ci => ci.id.toString() === id.toString());
+            const availableQty = item.quantity_count; // Use parent item's quantity for all variants
+
+            // Calculate total quantity of all variants of this item already in cart
+            const totalVariantsInCart = prev
+                .filter(ci => ci.itemId === item.id)
+                .reduce((sum, ci) => sum + ci.quantity, 0);
 
             if (existing) {
-                return prev.map(ci =>
-                    ci.id.toString() === id.toString()
-                        ? { ...ci, quantity: ci.quantity + 1 }
-                        : ci
-                );
+                // Only increase if we have stock available across all variants
+                if (totalVariantsInCart < availableQty) {
+                    return prev.map(ci =>
+                        ci.id.toString() === id.toString()
+                            ? { ...ci, quantity: ci.quantity + 1 }
+                            : ci
+                    );
+                }
+                return prev; // Don't change if we can't increase
             } else {
-                return [
-                    ...prev,
-                    {
-                        id,
-                        itemId: item.id,
-                        variantId: variant?.id,
-                        name,
-                        quantity: 1,
-                        final_cost: finalCost
-                    }
-                ];
+                // Only add if we have at least 1 in stock across all variants
+                if (totalVariantsInCart < availableQty) {
+                    return [
+                        ...prev,
+                        {
+                            id,
+                            itemId: item.id,
+                            variantId: variant?.id,
+                            name,
+                            quantity: 1,
+                            final_cost: finalCost
+                        }
+                    ];
+                }
+                return prev; // Don't add if out of stock
             }
         });
     };
-    const handleQtyChange = (itemId: string | number, delta: number | string) => {
-        setCart(prev =>
-            prev
-                .map(ci =>
-                    ci.id.toString() === itemId.toString()
-                        ? { ...ci, quantity: ci.quantity + Number(delta) }
-                        : ci
-                )
-                .filter(ci => ci.quantity > 0)
-        );
-    };
 
+    const handleQtyChange = (itemId: string | number, delta: number | string) => {
+        setCart(prev => {
+            return prev
+                .map(ci => {
+                    if (ci.id.toString() === itemId.toString()) {
+                        // Find the cart item and its parent item
+                        const cartItem = prev.find(item => item.id.toString() === itemId.toString());
+                        if (!cartItem) return ci;
+
+                        const storeItem = displayItems.find(item => item.id === cartItem.itemId);
+                        if (!storeItem) return ci;
+
+                        const availableQty = storeItem.quantity_count;
+
+                        // Calculate total quantity of all variants of this item already in cart
+                        const totalVariantsInCart = prev
+                            .filter(item => item.itemId === cartItem.itemId)
+                            .reduce((sum, item) => sum + item.quantity, 0);
+
+                        // Calculate current item's quantity without this one's delta
+                        const othersQty = totalVariantsInCart - ci.quantity;
+
+                        let newQty = ci.quantity;
+                        if (typeof delta === 'number') {
+                            newQty += delta;
+                        } else {
+                            newQty = Number(delta);
+                        }
+
+                        // Ensure quantity stays between 1 and available quantity considering other variants
+                        newQty = Math.max(1, Math.min(newQty, availableQty - othersQty));
+
+                        return { ...ci, quantity: newQty };
+                    }
+                    return ci;
+                })
+                .filter(ci => ci.quantity > 0);
+        });
+    };
     const handleRemoveItem = (itemId: string | number) => {
         setCart(prev => prev.filter(item => item.id.toString() !== itemId.toString()));
     };

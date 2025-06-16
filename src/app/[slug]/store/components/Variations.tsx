@@ -204,12 +204,11 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                     min={0}
                                 />
                             </div>
-
                             <div>
                                 <label>Stock</label>
                                 <input
                                     type="number"
-                                    value={combo.stock ?? ''}
+                                    value={combo.stock === 0 ? '' : combo.stock ?? ''}
                                     onChange={e => {
                                         const val = e.target.value === '' ? null : Number(e.target.value);
                                         setCombinations(prev => {
@@ -218,7 +217,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                             return updated;
                                         });
                                     }}
-                                    placeholder="e.g. 250.00"
+                                    placeholder="e.g. 100"
                                     min={0}
                                 />
                             </div>

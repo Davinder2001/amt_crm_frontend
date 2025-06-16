@@ -17,8 +17,8 @@ type CheckoutPanelProps = {
     activeTab: TabType;
     onTabChange: (tab: TabType) => void;
     cart: CartItem[];
-    onQtyChange: (itemId: number, delta: number) => void;
-    onRemoveItem: (itemId: number) => void;
+    onQtyChange: (itemId: number | string, delta: number | string) => void;
+    onRemoveItem: (itemId: number | string) => void;
     onClearCart: () => void;
     onClose?: () => void;
     items: StoreItem[];

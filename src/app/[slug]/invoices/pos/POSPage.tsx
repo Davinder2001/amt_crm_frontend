@@ -13,7 +13,7 @@ function POSPage() {
     const [selectedTopCatId, setSelectedTopCatId] = useState<number | null>(null);
     const [selectedChildCatId, setSelectedChildCatId] = useState<number | null>(null);
     const [expandedChildCats, setExpandedChildCats] = useState<number[]>([]);
-    const [cart, setCart] = useState<CartItemWithStringId[]>([]);
+    const [cart, setCart] = useState<CartItem[]>([]);
     const [activeTab, setActiveTab] = useState<TabType>('Cart');
     const [showMobileCategories, setShowMobileCategories] = useState(false);
     const [showCheckoutPanel, setShowCheckoutPanel] = useState(false);
@@ -45,10 +45,6 @@ function POSPage() {
 
 
     const topCategories: Category[] = Array.isArray(categories) ? categories : [];
-
-    // Extend CartItem to allow string id for composite keys
-    type CartItemWithStringId = Omit<CartItem, 'id'> & { id: string };
-
 
     const getAllItems = (): StoreItem[] => {
         const itemMap = new Map<number, StoreItem>(); // Maps item.id → latest StoreItem
@@ -117,58 +113,53 @@ function POSPage() {
                 : [];
 
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
-        // Unique ID for cart: 
-        // - If variant exists: `item.id + variant.id`
-        // - If no variant: `item.id`
-        const id = variant ? `${item.id}_${variant.id}` : `${item.id}`;
+        // Create a unique ID - string for variants, number for regular items
+        const id = variant ? `${item.id}-${variant.id}` : item.id;
 
         const finalCost = variant?.final_cost ?? item.final_cost;
-        const name = item.name + (
-            variant
-                ? ` (${variant.attributes.map(attr => `${attr.value}`).join(', ')})`
-                : ''
-        );
+        const name = item.name + (variant
+            ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
+            : '');
 
         setCart(prev => {
-            const existingItem = prev.find(cartItem => cartItem.id === id);
+            const existing = prev.find(ci => ci.id.toString() === id.toString());
 
-            if (existingItem) {
-                // If already in cart, increase quantity
-                return prev.map(cartItem =>
-                    cartItem.id === id
-                        ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                        : cartItem
+            if (existing) {
+                return prev.map(ci =>
+                    ci.id.toString() === id.toString()
+                        ? { ...ci, quantity: ci.quantity + 1 }
+                        : ci
                 );
             } else {
-                // If not in cart, add new entry
                 return [
                     ...prev,
                     {
-                        id,          // Unique composite ID (itemId or itemId_variantId)
-                        itemId: item.id,  // Original item ID (for reference)
-                        variantId: variant?.id,  // Variant ID (if exists)
-                        name,        // e.g., "iPhone 13 (128GB, Black)"
+                        id,
+                        itemId: item.id,
+                        variantId: variant?.id,
+                        name,
                         quantity: 1,
-                        final_cost: finalCost,
+                        final_cost: finalCost
                     }
                 ];
             }
         });
     };
-    const handleQtyChange = (itemId: number, delta: number) => {
+    const handleQtyChange = (itemId: string | number, delta: number | string) => {
         setCart(prev =>
             prev
                 .map(ci =>
-                    ci.id === itemId.toString() ? { ...ci, quantity: ci.quantity + delta } : ci
+                    ci.id.toString() === itemId.toString()
+                        ? { ...ci, quantity: ci.quantity + Number(delta) }
+                        : ci
                 )
                 .filter(ci => ci.quantity > 0)
         );
     };
 
-    const handleRemoveItem = (itemId: number) => {
-        setCart(prev => prev.filter(item => item.id !== itemId.toString()));
+    const handleRemoveItem = (itemId: string | number) => {
+        setCart(prev => prev.filter(item => item.id.toString() !== itemId.toString()));
     };
-
     const handleClearCart = () => {
         setCart([]);
     };

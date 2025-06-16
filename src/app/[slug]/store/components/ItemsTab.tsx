@@ -10,9 +10,10 @@ interface Props {
     variants: variations[];
     collapsedSections: Record<string, boolean>;
     toggleSection: (key: string) => void;
+    unit_of_measure: 'unit' | 'pieces';
 }
 
-const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, toggleSection }) => {
+const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, toggleSection, unit_of_measure }) => {
     const [activeTab, setActiveTab] = useState('variations');
 
     const tabs: { key: string; label: ReactNode; content: ReactNode }[] = [
@@ -34,7 +35,7 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, t
                     )}
                 </span>
             </div>,
-            content: <Variations setVariants={setVariants} variants={variants} setShowModal={() => { }} />
+            content: <Variations setVariants={setVariants} variants={variants} unit_of_measure={unit_of_measure} />
         },
     ];
 

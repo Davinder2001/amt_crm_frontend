@@ -275,46 +275,101 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <option value="variable_product">Variable Product</option>
                                     </select>
                                 </div>
+                                <div className="add-items-form-input-label-container">
+                                    <label>Unit of Measure*</label>
+                                    <select
+                                        value={formData.unit_of_measure}
+                                        onChange={(e) => {
+                                            const value = e.target.value as 'unit' | 'pieces';
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                unit_of_measure: value,
+                                                pieces_per_unit: value === 'unit' ? prev.pieces_per_unit : null,
+                                                per_unit_cost: value === 'unit' ? prev.per_unit_cost : null
+                                            }));
+                                        }}
+                                        className="form-select"
+                                        required
+                                    >
+                                        <option value="pieces">Pieces</option>
+                                        <option value="unit">Unit</option>
+                                    </select>
+                                </div>
                                 {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" /> */}
                             </div>
                         )}
                     </div>
 
-                    {/* pricing */}
                     {formData.product_type === 'simple_product' && (
-                        <>
-                            <div className="add-items-form-container store_column">
-                                <div className="basic_label_header">
-                                    <h2 className="basic_label">Pricing</h2>
-                                    <span
-                                        onClick={() => toggleSection('pricing')}
-                                        style={{
-                                            color: '#384b70',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                        aria-label="Toggle pricing Section"
-                                    >
-                                        {collapsedSections['pricing'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-                                    </span>
-                                </div>
-                                {!collapsedSections['pricing'] && (
-                                    <div className="store_input_feilds fields-wrapper">
-                                        <FormInput label="Regular Price" name="regular_price" type="number" value={formData.regular_price || ''} onChange={handleNumberChange} required placeholder="e.g. 280.00" />
-                                        <FormInput label="Sale Price" name="sale_price" type="number" value={formData.sale_price || ''} onChange={handleNumberChange} required placeholder="e.g. 300.00" />
-                                    </div>
-                                )}
+                        <div className="add-items-form-container store_column">
+                            <div className="basic_label_header">
+                                <h2 className="basic_label">Pricing</h2>
+                                <span
+                                    onClick={() => toggleSection('pricing')}
+                                    style={{
+                                        color: '#384b70',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                    aria-label="Toggle pricing Section"
+                                >
+                                    {collapsedSections['pricing'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+                                </span>
                             </div>
+                            {!collapsedSections['pricing'] && (
+                                <div className="store_input_feilds fields-wrapper">
+                                    <FormInput
+                                        label="Regular Price"
+                                        name="regular_price"
+                                        type="number"
+                                        value={formData.regular_price || ''}
+                                        onChange={handleNumberChange}
+                                        required
+                                        placeholder="e.g. 280.00"
+                                    />
+                                    <FormInput
+                                        label="Sale Price"
+                                        name="sale_price"
+                                        type="number"
+                                        value={formData.sale_price || ''}
+                                        onChange={handleNumberChange}
+                                        required
+                                        placeholder="e.g. 300.00"
+                                    />
 
-                        </>)}
+                                    {/* Show only if unit_of_measure is "unit" */}
+                                    {formData.unit_of_measure === 'unit' && (
+                                        <>
+                                            <FormInput
+                                                label="Pieces per Unit"
+                                                name="pieces_per_unit"
+                                                type="number"
+                                                value={formData.pieces_per_unit || ''}
+                                                onChange={handleNumberChange}
+                                                placeholder="e.g. 10"
+                                            />
+                                            <FormInput
+                                                label="Per Unit Price"
+                                                name="per_unit_cost"
+                                                type="number"
+                                                value={formData.per_unit_cost || ''}
+                                                onChange={handleNumberChange}
+                                                placeholder="e.g. 0.1"
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Attributes & Variants */}
                     {formData.product_type === 'variable_product' && (
                         <div className="items-tab-container store_column">
                             <div className="add-items-form-container">
                                 <ItemsTab setVariants={setVariants} variants={variants} collapsedSections={collapsedSections}
-                                    toggleSection={toggleSection} />
+                                    toggleSection={toggleSection} unit_of_measure={formData.unit_of_measure} />
                             </div>
                         </div>
                     )}

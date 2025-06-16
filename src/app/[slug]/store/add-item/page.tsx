@@ -25,11 +25,14 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   sale_price: 0,
   tax_id: 0,
   unit_id: 0,
+  unit_of_measure: 'pieces',
+  pieces_per_unit: null,
+  per_unit_cost: null,
   images: [],
   variants: [],
   categories: [],
   featured_image: null,
-  product_type: 'simple_product'
+  product_type: 'simple_product',
 })
 
 const AddItem: React.FC = () => {
@@ -149,9 +152,33 @@ const AddItem: React.FC = () => {
     e.preventDefault();
     const form = new FormData();
 
-    // Append simple fields
+    // Append simple fields (with unit handling)
     Object.entries(formData).forEach(([key, val]) => {
-      if (key !== 'images' && key !== 'featured_image' && key !== 'regular_price' && key !== 'sale_price' && val !== null && val !== undefined) {
+      if (key === 'images' || key === 'featured_image' || key === 'regular_price' || key === 'sale_price') return;
+
+      // Always send unit_of_measure
+      if (key === 'unit_of_measure') {
+        form.append('unit_of_measure', val.toString());
+        return;
+      }
+
+      // Conditionally send unit breakdown only if unit_of_measure === 'unit'
+      if (formData.unit_of_measure === 'unit') {
+        if (key === 'pieces_per_unit' && val !== null && val !== undefined && val !== 0) {
+          form.append('pieces_per_unit', val.toString());
+        }
+        if (key === 'per_unit_cost' && val !== null && val !== undefined && val !== 0) {
+          form.append('per_unit_cost', val.toString());
+        }
+      }
+
+      // Skip pieces_per_unit and units_per_piece if unit_of_measure !== 'unit'
+      if ((key === 'pieces_per_unit' || key === 'per_unit_cost') && formData.unit_of_measure !== 'unit') {
+        return;
+      }
+
+      // Append all other fields
+      if (val !== null && val !== undefined) {
         if (key === 'brand_name' && formData.brand_id) {
           form.append('brand_id', formData.brand_id.toString());
         }
@@ -180,6 +207,16 @@ const AddItem: React.FC = () => {
       variants.forEach((variant, i) => {
         form.append(`variants[${i}][regular_price]`, variant.regular_price.toString());
         form.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
+
+        // Add unit fields only when unit_of_measure is 'unit'
+        if (formData.unit_of_measure === 'unit') {
+          if (variant.pieces_per_unit !== null && variant.pieces_per_unit !== undefined) {
+            form.append(`variants[${i}][pieces_per_unit]`, variant.pieces_per_unit.toString());
+          }
+          if (variant.per_unit_cost !== null && variant.per_unit_cost !== undefined) {
+            form.append(`variants[${i}][per_unit_cost]`, variant.per_unit_cost.toString());
+          }
+        }
         variant.attributes?.forEach((attr, attrIndex) => {
           form.append(`variants[${i}][attributes][${attrIndex}][attribute_id]`, attr.attribute_id.toString());
           form.append(`variants[${i}][attributes][${attrIndex}][attribute_value_id]`, attr.attribute_value_id.toString());

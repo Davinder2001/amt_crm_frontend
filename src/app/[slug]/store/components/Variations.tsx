@@ -15,10 +15,10 @@ const emptyVariant = {
 interface Props {
     setVariants: (combinations: variations[]) => void;
     variants: variations[];
-    setShowModal: (value: boolean) => void;
+    unit_of_measure: 'unit' | 'pieces';
 }
 
-const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) => {
+const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure }) => {
     const { data: attributes } = useFetchVariationsQuery();
     const [combinations, setCombinations] = useState<variations[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -109,6 +109,14 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
         });
     };
 
+    const handleUnitFieldChange = (comboIndex: number, field: 'pieces_per_unit' | 'per_unit_cost', value: number | null) => {
+        setCombinations(prev => {
+            const updated = [...prev];
+            updated[comboIndex][field] = value;
+            return updated;
+        });
+    };
+
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
@@ -121,7 +129,6 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
     };
 
     const handleDone = () => {
-        setShowModal(false);
         setVariants(combinations);
     };
 
@@ -188,6 +195,39 @@ const Variations: React.FC<Props> = ({ setVariants, setShowModal, variants }) =>
                                 min={0}
                             />
                         </div>
+
+                        {/* Show only if unit_of_measure is "unit" */}
+                        {unit_of_measure === 'unit' && (
+                            <>
+                                <div>
+                                    <label>Pieces per Unit</label>
+                                    <input
+                                        type="number"
+                                        value={combo.pieces_per_unit || ''}
+                                        onChange={e => {
+                                            const val = e.target.value === '' ? null : Number(e.target.value);
+                                            handleUnitFieldChange(index, 'pieces_per_unit', val);
+                                        }}
+                                        placeholder="e.g. 10"
+                                        min={0}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Per Unit Price</label>
+                                    <input
+                                        type="number"
+                                        value={combo.per_unit_cost || ''}
+                                        onChange={e => {
+                                            const val = e.target.value === '' ? null : Number(e.target.value);
+                                            handleUnitFieldChange(index, 'per_unit_cost', val);
+                                        }}
+                                        placeholder="e.g. 0.1"
+                                        min={0}
+                                        step="0.01"
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         {index > 0 && (
                             <button

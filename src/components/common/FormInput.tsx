@@ -32,6 +32,7 @@ export const FormInput: React.FC<FormInputProps> = ({
             onChange={onChange}
             placeholder={placeholder}
             required={required}
+            onWheel={type === 'number' ? (e) => (e.target as HTMLInputElement).blur() : undefined}
         />
     </div>
 );

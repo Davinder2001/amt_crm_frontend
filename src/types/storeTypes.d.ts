@@ -23,6 +23,9 @@ interface StoreItem {
   vendor_id: number | null;
   vendor_name?: string | null;
   product_type: 'simple_product' | 'variable_product';
+  unit_of_measure: 'unit' | 'pieces';
+  pieces_per_unit?: number | null;
+  per_unit_cost?: number | null;
   availability_stock: number;
   created_at: string;
   updated_at: string;
@@ -84,6 +87,8 @@ interface variations {
   regular_price: number;
   sale_price: number;
   stock?: number;
+  pieces_per_unit?: number | null;
+  per_unit_cost?: number | null;
   images?: string[];
   final_cost?: number;
   attributes: AttributeItem[];
@@ -107,6 +112,9 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   regular_price?: number;
   sale_price?: number;
   product_type: 'simple_product' | 'variable_product';
+  unit_of_measure: 'unit' | 'pieces';
+  pieces_per_unit?: number | null;
+  per_unit_cost?: number | null;
   tax_id: number;
   unit_id: number;
   featured_image: File | string | null;

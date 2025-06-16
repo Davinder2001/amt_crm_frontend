@@ -291,7 +291,6 @@ export default function CartTabContent({
                                                             }}
                                                             width={50}
                                                             height={50}
-                                                            style={{ cursor: 'pointer' }}
                                                         />
                                                     ) : (
                                                         <div className="item-image-placeholder">

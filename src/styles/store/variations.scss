@@ -46,8 +46,15 @@
   .attr-prices-block,
   .unit-block {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+  }
+
+  .attr-prices-block {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .unit-block {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .attribute-group {
@@ -177,14 +184,14 @@
 @media (max-width: 768px) {
   .variation-block {
 
-    .attr-prices-block,
-    .unit-block {
+    .attr-prices-block {
       grid-template-columns: 1fr;
     }
   }
 
   .variation-buttons-container {
     flex-wrap: wrap;
+
     button {
       justify-content: center;
       padding: 5px 15px;

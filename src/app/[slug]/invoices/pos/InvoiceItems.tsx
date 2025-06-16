@@ -148,14 +148,34 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                     height={100}
                     className="item-image-img"
                   />
+
                   {inCart && (
                     <div className="item-selected-indicator">
                       <div className="checkmark-circle">
-                        {getItemQuantity(item.id) > 1 ? (
-                          <span className='item-qty-count'>{getItemQuantity(item.id)}</span>
-                        ) : (
-                          <FaCheck className="checkmark-icon" />
-                        )}
+                        {(() => {
+                          // For items with variants, calculate total quantity across all variants
+                          if (item.variants && item.variants.length > 0) {
+                            const totalVariantQuantity = cart.reduce((total, cartItem) => {
+                              // Match either the base item or any of its variants
+                              return cartItem.itemId === item.id ? total + cartItem.quantity : total;
+                            }, 0);
+
+                            return totalVariantQuantity > 1 ? (
+                              <span className='item-qty-count'>{totalVariantQuantity}</span>
+                            ) : (
+                              <FaCheck className="checkmark-icon" />
+                            );
+                          }
+                          // For simple items without variants
+                          else {
+                            const quantity = getItemQuantity(item.id);
+                            return quantity > 1 ? (
+                              <span className='item-qty-count'>{quantity}</span>
+                            ) : (
+                              <FaCheck className="checkmark-icon" />
+                            );
+                          }
+                        })()}
                       </div>
                     </div>
                   )}

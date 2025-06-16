@@ -9,7 +9,8 @@ const emptyVariant = {
     attributes: [],
     regular_price: 0,
     sale_price: 0,
-    attribute_value_id: 0
+    attribute_value_id: 0,
+    stock: 0
 };
 
 interface Props {
@@ -55,6 +56,12 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                         attributes: mappedAttributes,
                         regular_price: Number(v.regular_price) || 0,
                         sale_price: Number(v.sale_price) || 0,
+                        stock: typeof v.stock === 'number' ? v.stock : 0,
+                        pieces_per_unit: v.pieces_per_unit ?? null,
+                        per_unit_cost: v.per_unit_cost ?? null,
+                        images: v.images ?? [],
+                        final_cost: v.final_cost ?? 0,
+                        id: v.id
                     };
                 });
                 setCombinations(mappedVariants);
@@ -63,6 +70,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                     attributes: [],
                     regular_price: 0,
                     sale_price: 0,
+                    stock: 0,
                     attribute_value_id: 0
                 }]);
             }
@@ -120,7 +128,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
-            { attribute_value_id: 0, attributes: [], sale_price: 0, regular_price: 0 }
+            { attribute_value_id: 0, attributes: [], sale_price: 0, regular_price: 0, stock: 0 }
         ]);
     };
 
@@ -196,25 +204,25 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                     min={0}
                                 />
                             </div>
-                            {unit_of_measure === 'unit' && (
-                                <div>
-                                    <label>Stock</label>
-                                    <input
-                                        type="number"
-                                        value={combo.stock ?? ''}
-                                        onChange={e => {
-                                            const val = e.target.value === '' ? null : Number(e.target.value);
-                                            setCombinations(prev => {
-                                                const updated = [...prev];
-                                                updated[index].stock = val;
-                                                return updated;
-                                            });
-                                        }}
-                                        placeholder="e.g. 100"
-                                        min={0}
-                                    />
-                                </div>
-                            )}
+
+                            <div>
+                                <label>Stock</label>
+                                <input
+                                    type="number"
+                                    value={combo.stock ?? ''}
+                                    onChange={e => {
+                                        const val = e.target.value === '' ? null : Number(e.target.value);
+                                        setCombinations(prev => {
+                                            const updated = [...prev];
+                                            updated[index].stock = val === null ? 0 : val;
+                                            return updated;
+                                        });
+                                    }}
+                                    placeholder="e.g. 250.00"
+                                    min={0}
+                                />
+                            </div>
+
                         </div>
 
                         {/* Show only if unit_of_measure is "unit" */}

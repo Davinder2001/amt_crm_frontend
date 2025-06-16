@@ -180,18 +180,6 @@ export default function CheckoutPanel({
                                     {tab === 'Cart' && cartItemCount > 0 && (
                                         <span
                                             className="cart-badge"
-                                            style={{
-                                                position: 'absolute',
-                                                top: -8,
-                                                right: -12,
-                                                background: 'red',
-                                                color: 'white',
-                                                borderRadius: '50%',
-                                                padding: '2px 6px',
-                                                fontSize: 11,
-                                                fontWeight: 'bold',
-                                                lineHeight: 1,
-                                            }}
                                         >
                                             {cartItemCount}
                                         </span>

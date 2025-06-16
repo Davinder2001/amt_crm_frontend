@@ -161,6 +161,11 @@ const AddItem: React.FC = () => {
         form.append('unit_of_measure', val.toString());
         return;
       }
+      // Always send product_type
+      if (key === 'product_type') {
+        form.append('product_type', val.toString());
+        return;
+      }
 
       // Conditionally send unit breakdown only if unit_of_measure === 'unit'
       if (formData.unit_of_measure === 'unit') {
@@ -210,6 +215,9 @@ const AddItem: React.FC = () => {
 
         // Add unit fields only when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {
+          if (variant.stock !== null && variant.stock !== undefined) {
+            form.append(`variants[${i}][stock]`, variant.stock.toString());
+          }
           if (variant.pieces_per_unit !== null && variant.pieces_per_unit !== undefined) {
             form.append(`variants[${i}][pieces_per_unit]`, variant.pieces_per_unit.toString());
           }

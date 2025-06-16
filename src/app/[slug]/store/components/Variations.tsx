@@ -146,89 +146,111 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
             <div className="variation-container">
                 {combinations.map((combo, index) => (
                     <div key={index} className="variation-block">
-                        {attributes?.map(attr => {
-                            const selectedAttr = combo.attributes.find(a => a.attribute_id === attr.id);
-                            return (
-                                <div key={attr.id}>
-                                    <label>{attr.name}</label>
-                                    <select
-                                        value={selectedAttr?.attribute_value_id || ''}
-                                        onChange={e =>
-                                            handleAttributeChange(index, attr.id, e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select {attr.name}</option>
-                                        {attr.values.map(val => (
-                                            <option key={val.id} value={val.id.toString()}>
-                                                {val.value}
-                                            </option>
-                                        ))}
-                                    </select>
+                        <div className="attr-prices-block">
+                            {attributes?.map(attr => {
+                                const selectedAttr = combo.attributes.find(a => a.attribute_id === attr.id);
+                                return (
+                                    <div key={attr.id}>
+                                        <label>{attr.name}</label>
+                                        <select
+                                            value={selectedAttr?.attribute_value_id || ''}
+                                            onChange={e =>
+                                                handleAttributeChange(index, attr.id, e.target.value)
+                                            }
+                                        >
+                                            <option value="">Select {attr.name}</option>
+                                            {attr.values.map(val => (
+                                                <option key={val.id} value={val.id.toString()}>
+                                                    {val.value}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                );
+                            })}
+
+                            <div>
+                                <label>Regular Price</label>
+                                <input
+                                    type="number"
+                                    value={combo.regular_price === 0 ? '' : combo.regular_price}
+                                    onChange={e => {
+                                        const val = Number(e.target.value);
+                                        handlePriceChange(index, combo.sale_price, isNaN(val) ? 0 : val);
+                                    }}
+                                    placeholder="e.g. 300.00"
+                                    min={0}
+                                />
+                            </div>
+
+                            <div>
+                                <label>Sale Price</label>
+                                <input
+                                    type="number"
+                                    value={combo.sale_price === 0 ? '' : combo.sale_price}
+                                    onChange={e => {
+                                        const val = Number(e.target.value);
+                                        handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
+                                    }}
+                                    placeholder="e.g. 250.00"
+                                    min={0}
+                                />
+                            </div>
+                            {unit_of_measure === 'unit' && (
+                                <div>
+                                    <label>Stock</label>
+                                    <input
+                                        type="number"
+                                        value={combo.stock ?? ''}
+                                        onChange={e => {
+                                            const val = e.target.value === '' ? null : Number(e.target.value);
+                                            setCombinations(prev => {
+                                                const updated = [...prev];
+                                                updated[index].stock = val;
+                                                return updated;
+                                            });
+                                        }}
+                                        placeholder="e.g. 100"
+                                        min={0}
+                                    />
                                 </div>
-                            );
-                        })}
-
-                        <div>
-                            <label>Regular Price</label>
-                            <input
-                                type="number"
-                                value={combo.regular_price === 0 ? '' : combo.regular_price}
-                                onChange={e => {
-                                    const val = Number(e.target.value);
-                                    handlePriceChange(index, combo.sale_price, isNaN(val) ? 0 : val);
-                                }}
-                                placeholder="e.g. 300.00"
-                                min={0}
-                            />
-                        </div>
-
-                        <div>
-                            <label>Sale Price</label>
-                            <input
-                                type="number"
-                                value={combo.sale_price === 0 ? '' : combo.sale_price}
-                                onChange={e => {
-                                    const val = Number(e.target.value);
-                                    handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
-                                }}
-                                placeholder="e.g. 250.00"
-                                min={0}
-                            />
+                            )}
                         </div>
 
                         {/* Show only if unit_of_measure is "unit" */}
-                        {unit_of_measure === 'unit' && (
-                            <>
-                                <div>
-                                    <label>Pieces per Unit</label>
-                                    <input
-                                        type="number"
-                                        value={combo.pieces_per_unit || ''}
-                                        onChange={e => {
-                                            const val = e.target.value === '' ? null : Number(e.target.value);
-                                            handleUnitFieldChange(index, 'pieces_per_unit', val);
-                                        }}
-                                        placeholder="e.g. 10"
-                                        min={0}
-                                    />
-                                </div>
-                                <div>
-                                    <label>Per Unit Price</label>
-                                    <input
-                                        type="number"
-                                        value={combo.per_unit_cost || ''}
-                                        onChange={e => {
-                                            const val = e.target.value === '' ? null : Number(e.target.value);
-                                            handleUnitFieldChange(index, 'per_unit_cost', val);
-                                        }}
-                                        placeholder="e.g. 0.1"
-                                        min={0}
-                                        step="0.01"
-                                    />
-                                </div>
-                            </>
-                        )}
-
+                        <div className="unit-block">
+                            {unit_of_measure === 'unit' && (
+                                <>
+                                    <div>
+                                        <label>Pieces per Unit</label>
+                                        <input
+                                            type="number"
+                                            value={combo.pieces_per_unit || ''}
+                                            onChange={e => {
+                                                const val = e.target.value === '' ? null : Number(e.target.value);
+                                                handleUnitFieldChange(index, 'pieces_per_unit', val);
+                                            }}
+                                            placeholder="e.g. 10"
+                                            min={0}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label>Per Unit Price</label>
+                                        <input
+                                            type="number"
+                                            value={combo.per_unit_cost || ''}
+                                            onChange={e => {
+                                                const val = e.target.value === '' ? null : Number(e.target.value);
+                                                handleUnitFieldChange(index, 'per_unit_cost', val);
+                                            }}
+                                            placeholder="e.g. 0.1"
+                                            min={0}
+                                            step="0.01"
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
                         {index > 0 && (
                             <button
                                 type="button"

@@ -8,12 +8,12 @@
 }
 
 .variation-block {
-  background: #fff;
+  background: $white;
   border: 1px solid #e0e0e0;
   border-radius: $border-radius;
   padding: 10px 12px;
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
   position: relative;
@@ -41,6 +41,13 @@
     font-size: 10px;
     font-weight: 500;
     z-index: 1;
+  }
+
+  .attr-prices-block,
+  .unit-block {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
 
   .attribute-group {
@@ -140,7 +147,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
- 
+
     &:first-child {
       background: #f0f0f0;
       color: $dark-color;
@@ -169,10 +176,10 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .variation-block {
-    grid-template-columns: 1fr;
 
-    .price-group {
-      grid-column: 1 / -1;
+    .attr-prices-block,
+    .unit-block {
+      grid-template-columns: 1fr;
     }
   }
 

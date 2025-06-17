@@ -247,7 +247,7 @@ const UpdateItem = () => {
       variants.forEach((variant, i) => {
         formdata.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
         formdata.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
-        formdata.append(`variants[${i}][stock]`, variant.stock.toString());
+        formdata.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
 
         // Add unit-specific fields for variants when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {

@@ -86,7 +86,7 @@ interface variations {
   id?: number;
   variant_regular_price: number;
   variant_sale_price: number;
-  stock: number;
+  variant_stock: number;
   variant_pieces_per_unit?: number | null;
   variant_per_unit_cost?: number | null;
   images?: string[];

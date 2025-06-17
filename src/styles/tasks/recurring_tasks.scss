@@ -77,13 +77,15 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+
     label {
       letter-spacing: .4px;
       color: $lable-color;
       font-size: $lable-font;
       font-weight: $font-weight-regular;
       display: block;
-    } 
+    }
+
     input,
     select,
     .date-input {
@@ -127,8 +129,9 @@
       font-weight: $font-weight-semi-bold;
       cursor: pointer;
       transition: background-color $transition;
+
       &:hover {
-          background-color: darken($primary-color, 10%);
+        background-color: rgba(45, 62, 93, 1);
       }
 
       &.on {

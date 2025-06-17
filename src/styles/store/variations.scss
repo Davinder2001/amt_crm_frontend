@@ -128,7 +128,7 @@
     gap: 4px;
 
     &:hover {
-      background: darken(#ff5c5c, 10%);
+     background: rgba(230, 82, 82, 1);
       transform: translateY(-1px);
     }
   }
@@ -160,7 +160,7 @@
       color: $dark-color;
 
       &:hover {
-        background: darken(#f0f0f0, 5%);
+        background: rgba(217, 217, 217, 1);
       }
     }
 
@@ -169,7 +169,7 @@
       color: white;
 
       &:hover {
-        background: darken($primary-color, 5%);
+        background: rgba(50, 67, 101, 1);
       }
     }
   }

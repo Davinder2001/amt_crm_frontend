@@ -53,7 +53,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
   const getPriceRange = (variants: variations[]) => {
     if (!variants || variants.length <= 1) return null;
 
-    const prices = variants.map(variant => parseFloat(String(variant.variant_final_cost ?? '0')));
+    const prices = variants.map(variant => parseFloat(String(variant.final_cost ?? '0')));
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
     return { min: minPrice, max: maxPrice };
@@ -122,7 +122,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
             let priceDisplay = '';
 
             if (item.variants && item.variants.length === 1) {
-              priceDisplay = `₹${item.variants[0].variant_final_cost}`;
+              priceDisplay = `₹${item.variants[0].final_cost}`;
             } else if (item.variants && item.variants.length > 1) {
               const priceRange = getPriceRange(item.variants);
               priceDisplay = priceRange ? `₹${priceRange.min} - ₹${priceRange.max}` : '0';
@@ -234,7 +234,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   <div className="variant-name">
                     {selectedVariant.attributes.map(attr => attr.value).join(' • ')}
                   </div>
-                  <div className="variant-price">₹{selectedVariant.variant_final_cost}</div>
+                  <div className="variant-price">₹{selectedVariant.final_cost}</div>
                 </>
               ) : (
                 <div className="variant-name">Select a variant</div>

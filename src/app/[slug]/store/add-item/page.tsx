@@ -212,7 +212,7 @@ const AddItem: React.FC = () => {
       variants.forEach((variant, i) => {
         form.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
         form.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
-        form.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
+        form.append(`variants[${i}][stock]`, variant.stock.toString());
 
         // Add unit fields only when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {

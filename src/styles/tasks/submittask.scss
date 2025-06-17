@@ -137,7 +137,7 @@
                 transition: background-color $transition;
 
                 &:hover {
-                    background-color: darken($danger-color, 10%);
+                    background-color: rgba(224, 67, 71, 1);
                     color: $white;
                 }
             }
@@ -186,7 +186,7 @@
             margin: 0px;
 
             &:hover {
-                background-color: darken($primary-color, 10%);
+                background-color: rgba(42, 55, 83, 1);
             }
 
             &:disabled {

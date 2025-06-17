@@ -1,8 +1,6 @@
-/**
- * @type {import('next').NextConfig}
- */
+import withPWA from 'next-pwa';
 
-const withPWA = require('next-pwa')({
+const withPWAFunc = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
@@ -11,10 +9,7 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
-  devIndicators: false,
-  experimental: {
-    appDir: true,
-  },
+  devIndicators: false as const,
 
   images: {
     domains: ['localhost'],
@@ -33,8 +28,8 @@ const nextConfig = {
         protocol: 'http',
         hostname: '**',
       },
-    ],
+    ] as import('next/dist/shared/lib/image-config').RemotePattern[],
   },
 };
 
-module.exports = withPWA(nextConfig);
+export default withPWAFunc(nextConfig);

@@ -50,11 +50,11 @@
       color: #fff;
 
       &:hover {
-        background-color: darken(#e73c3c92, 10%);
+       background-color: rgba(179, 48, 48, 0.57);
       }
 
       &:active {
-        background-color: darken(#e74c3c, 15%);
+       background-color: rgba(176, 54, 46, 1);
       }
 
       &:disabled {

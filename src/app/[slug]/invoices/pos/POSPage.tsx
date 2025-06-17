@@ -114,7 +114,7 @@ function POSPage() {
 
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
         const id = variant ? `${item.id}-${variant.id}` : item.id;
-        const finalCost = variant?.variant_final_cost ?? item.final_cost;
+        const finalCost = variant?.final_cost ?? item.final_cost;
         const name = item.name + (variant
             ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
             : '');

@@ -10,7 +10,7 @@ const emptyVariant = {
     variant_regular_price: 0,
     variant_sale_price: 0,
     attribute_value_id: 0,
-    variant_stock: 0
+    stock: 0
 };
 
 interface Props {
@@ -45,7 +45,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                             attribute_value_id: matchedValue?.id?.toString() || '',
                             attribute: attr.attribute || '',
                             value: attr.value || '',
-                            variant_final_cost: attr.variant_final_cost ?? 0
+                            final_cost: attr.final_cost ?? 0
                         };
                     }) || [];
 
@@ -56,11 +56,11 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                         attributes: mappedAttributes,
                         variant_regular_price: Number(v.variant_regular_price) || 0,
                         variant_sale_price: Number(v.variant_sale_price) || 0,
-                        variant_stock: typeof v.variant_stock === 'number' ? v.variant_stock : 0,
+                        stock: typeof v.stock === 'number' ? v.stock : 0,
                         variant_pieces_per_unit: v.variant_pieces_per_unit ?? null,
                         variant_per_unit_cost: v.variant_per_unit_cost ?? null,
                         images: v.images ?? [],
-                        variant_final_cost: v.variant_final_cost ?? 0,
+                        final_cost: v.final_cost ?? 0,
                         id: v.id
                     };
                 });
@@ -70,7 +70,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                     attributes: [],
                     variant_regular_price: 0,
                     variant_sale_price: 0,
-                    variant_stock: 0,
+                    stock: 0,
                     attribute_value_id: 0
                 }]);
             }
@@ -98,7 +98,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                 attribute_value_id: valueId,
                 attribute: attribute?.name || '',
                 value: value?.value || '',
-                variant_final_cost: 0
+                final_cost: 0
             });
 
             updated[comboIndex].attributes = currentAttributes;
@@ -128,7 +128,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
-            { attribute_value_id: 0, attributes: [], variant_sale_price: 0, variant_regular_price: 0, variant_stock: 0 }
+            { attribute_value_id: 0, attributes: [], variant_sale_price: 0, variant_regular_price: 0, stock: 0 }
         ]);
     };
 
@@ -208,12 +208,12 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                 <label>Stock</label>
                                 <input
                                     type="number"
-                                    value={combo.variant_stock === 0 ? '' : combo.variant_stock ?? ''}
+                                    value={combo.stock === 0 ? '' : combo.stock ?? ''}
                                     onChange={e => {
                                         const val = e.target.value === '' ? null : Number(e.target.value);
                                         setCombinations(prev => {
                                             const updated = [...prev];
-                                            updated[index].variant_stock = val === null ? 0 : val;
+                                            updated[index].stock = val === null ? 0 : val;
                                             return updated;
                                         });
                                     }}

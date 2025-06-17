@@ -73,7 +73,7 @@ interface AttributeItem {
   attribute_value_id: number | string;
   attribute: string;
   value: string;
-  variant_final_cost: number;
+  final_cost: number;
 }
 
 interface AttributeOption {
@@ -86,11 +86,11 @@ interface variations {
   id?: number;
   variant_regular_price: number;
   variant_sale_price: number;
-  variant_stock: number;
+  stock: number;
   variant_pieces_per_unit?: number | null;
   variant_per_unit_cost?: number | null;
   images?: string[];
-  variant_final_cost?: number;
+  final_cost?: number;
   attributes: AttributeItem[];
 }
 

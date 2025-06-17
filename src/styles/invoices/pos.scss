@@ -708,7 +708,7 @@
         &:hover {
             transform: translateY(-2px);
             box-shadow: $secondary-shadow;
-            background: linear-gradient(135deg, darken($primary-color, 5%), $hover-color);
+            background: linear-gradient(135deg, rgba(50, 67, 101, 1), rgba(156, 185, 208, 1));
 
             &::before {
                 left: 100%;

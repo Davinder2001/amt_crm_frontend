@@ -33,7 +33,7 @@ const Page = () => {
   const hasValidSelection = selectedPackageId !== null && selectedCategoryId !== null && subscriptionType !== null;
 
   return (
-    <div className='outer-div'>
+    <>
       {hasValidSelection ? (
         <>
           <Link href="/add-company" className="back-button" onClick={() => {
@@ -62,7 +62,7 @@ const Page = () => {
           setSubscriptionType={setSubscriptionType}
         />
       )}
-    </div>
+    </>
   );
 };
 

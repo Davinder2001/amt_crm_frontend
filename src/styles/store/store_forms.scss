@@ -757,6 +757,7 @@
 
 @media (max-width:768px) {
   .store_outer_row {
+    gap: 0;
     .add-items-form-container .store_input_feilds {
       display: flex;
       flex-direction: column;

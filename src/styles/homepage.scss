@@ -3,18 +3,18 @@
 /* Fonts and colors */
 .homepage {
   background-color: $white;
+
+  .outer-div {
+    padding: 30px 20px;
+    max-width: 1520px;
+    width: 100%;
+    margin: auto;
+  }
 }
 
 .remember-forgot label {
-    display: flex !important;
+  display: flex;
 }
-
-.outer-div {
-  margin: auto;
-  max-width: 93%;
-  width: 100%;
-}
-
 
 .header-outer {
   position: sticky;
@@ -37,7 +37,8 @@
     color: white;
     font-weight: 500;
     letter-spacing: 0.2px;
-  &:hover {
+
+    &:hover {
       background-color: $hover-color;
       border-color: $hover-color;
     }
@@ -53,6 +54,7 @@
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.2px;
+
     &:hover {
       background-color: $hover-color;
       border-color: $hover-color;
@@ -65,11 +67,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background: #fff;
+  padding: 10px 20px;
+  background: $white;
   flex-wrap: wrap;
   margin: auto;
-  width: 93%;
+  max-width: 1520px;
+  width: 100%;
 
   a {
     display: flex;
@@ -85,7 +88,6 @@
 }
 
 .logo img {
-  width: 40px !important;
   margin-right: 10px;
 }
 
@@ -161,9 +163,8 @@
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 40px 10px;
   flex-wrap: wrap;
-  min-height: 400px;
+  min-height: 320px;
 }
 
 .hero-left {
@@ -188,10 +189,10 @@
 }
 
 .category-description {
-    color: #656464;
-    font-size: 16px;
-    line-height: 27px;
-    letter-spacing: 0.3px;
+  color: #656464;
+  font-size: 16px;
+  line-height: 27px;
+  letter-spacing: 0.3px;
 }
 
 
@@ -221,7 +222,7 @@
 .hero-actions {
   display: flex;
   gap: 10px;
-  margin-top:20px;
+  margin-top: 20px;
 
   .btn-filled {
     padding: 10px;
@@ -235,7 +236,7 @@
     padding: 10px;
     border-radius: $border-radius;
     cursor: pointer;
-    
+
   }
 }
 
@@ -316,16 +317,13 @@
 
 .business-section {
   background: #dee9f230;
-  padding: 50px 10px;
-  margin-top: 80px;
+  margin: 80px 0px 20px 0px;
+}
 
-  .outer-div {
-    padding: 0px 10px;
-  }
-}
 section.features-sections {
-    margin: 40px 0 10px 0px;
+  margin: 40px 0 10px 0px;
 }
+
 .team-collaboration-content {
   background: #fff;
   border: 1px solid #efefef;
@@ -346,7 +344,7 @@ section.features-sections {
     margin-bottom: 10px;
     font-weight: 600;
     color: $dark-color;
-    margin-top:30px;
+    margin-top: 30px;
   }
 
   ul {
@@ -403,7 +401,7 @@ nav.feature-card-nav-bar {
 
 
   .feature-card {
-    background: #fff;
+    background: $white;
     border: 1px solid #efefef;
     border-radius: $border-radius;
     padding: 20px;
@@ -464,8 +462,7 @@ nav.feature-card-nav-bar {
 
 .manage-section {
   background-color: $primary-color;
-  padding: 50px 10px;
-  color: white;
+  color: $white;
   position: relative;
   overflow: hidden;
 
@@ -519,23 +516,17 @@ nav.feature-card-nav-bar {
   border-radius: $border-radius;
 }
 
-.comparison-section {
-  padding: 50px 10px;
-  background-color: #fff;
-}
-
 .comparison-table {
   width: 100%;
-  max-width: 1439px;
-  margin: 0 auto;
   border-collapse: collapse;
   border-radius: $border-radius;
   overflow: hidden;
   font-size: 14px;
   text-align: left;
+
   tbody {
     border: 1px solid #e5e5e5;
-}
+  }
 }
 
 .comparison-table th,
@@ -697,14 +688,15 @@ nav.feature-card-nav-bar {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-  max-width: 93%;
+  max-width: 1520px;
+  width: 100%;
   margin: auto;
 
   p {
     color: rgb(241, 240, 240) !important;
     text-align: start;
-      font-size: 13px;
-      letter-spacing: 0.3px;
+    font-size: 13px;
+    letter-spacing: 0.3px;
   }
 }
 
@@ -727,10 +719,6 @@ nav.feature-card-nav-bar {
   align-items: center;
   padding: 50px 10px;
   background-color: #dee9f230;
-
-  .outer-div {
-    padding: 0px 10px;
-  }
 
 
   .price-heading {
@@ -807,7 +795,7 @@ nav.feature-card-nav-bar {
 
     .btnSecondary {
       background-color: #DEE9F2;
-      color:$primary-color;
+      color: $primary-color;
       border: none;
       padding: 8px 16px;
       border-radius: $border-radius;
@@ -833,6 +821,32 @@ nav.feature-card-nav-bar {
 /* ===== Responsive Styles ===== */
 
 @media (max-width: 1174px) {
+  .comparison-section {
+    margin: 20px 0px;
+  }
+
+  .hero-left {
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .business-section {
+    margin-top: 20px;
+  }
+
+  nav.feature-card-nav-bar {
+    padding: 10px 12px;
+  }
+
+  .features-wrapper,
+  .team-collaboration-content {
+    margin: 0;
+  }
+
+  section.features-sections {
+    margin: 0;
+  }
+
   .hero-right .main-image {
     max-width: 600px;
     object-fit: cover;
@@ -849,8 +863,13 @@ nav.feature-card-nav-bar {
     height: auto;
   }
 
+  .header2 {
+    padding: 10px 12px;
+  }
 
-
+  .homepage .outer-div {
+    padding: 0px 12px;
+  }
 
   .stat-box {
     padding: 20px 40px;
@@ -858,6 +877,11 @@ nav.feature-card-nav-bar {
 
   .stats-grids {
     justify-content: center;
+  }
+
+  .features-wrapper .feature-card,
+  .team-collaboration-content {
+    padding: 10px 12px;
   }
 }
 
@@ -867,14 +891,8 @@ nav.feature-card-nav-bar {
     justify-content: center;
   }
 
-  .outer-div {
-    width: 100%;
-
-  }
-
   .hero {
     flex-direction: column;
-    padding: 2rem 1rem;
   }
 
   .hero-right {
@@ -891,7 +909,6 @@ nav.feature-card-nav-bar {
 
   .features-wrapper {
     grid-template-columns: 1fr;
-    margin: 20px 0px 20px;
   }
 
   .manage-container {
@@ -952,10 +969,6 @@ nav.feature-card-nav-bar {
     display: flex;
   }
 
-  .outer-div {
-    padding: 0px 10px;
-  }
-
   .business-section .outer-div {
     padding: 0;
   }
@@ -979,7 +992,6 @@ nav.feature-card-nav-bar {
   }
 
   .header2 {
-    padding: 10px;
 
     .buttons {
       padding: 5px 15px;
@@ -990,10 +1002,6 @@ nav.feature-card-nav-bar {
     font-size: 30px;
   }
 
-  .hero-left {
-    gap: 15px;
-    margin-top: 20px;
-  }
 
   .categories li {
     font-size: 16px;
@@ -1063,11 +1071,6 @@ nav.feature-card-nav-bar {
 
   }
 
-  .comparison-section {
-    overflow: scroll;
-    margin: 20px 0px;
-  }
-
   img.absilute-image2,
   img.absilute-image3 {
     position: unset;
@@ -1128,10 +1131,6 @@ nav.feature-card-nav-bar {
 @media (max-width: 680px) {
   .pricing-container .planCard {
     max-width: 100%;
-  }
-
-  .team-collaboration-content {
-    margin: 26px 0 20px;
   }
 
   .features-wrapper .feature-card {

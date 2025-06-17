@@ -17,9 +17,9 @@ export const UserNavbar = () => {
               <Image
                 src={homelogo}
                 alt="Logo"
-                width={100}   // adjust to your preferred size
-                height={100}
-                layout='responsive'
+                width={40}
+                height={40}
+                objectFit='cover'
               />
 
               <span>Himmanav Asset Management Technology </span>
@@ -180,49 +180,51 @@ export default function Homepage() {
         </section>
 
         {/* Comparison Table Section */}
-        <div className="outer-div comparison-section">
-          <table className="comparison-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Traditional Systems</th>
-                <th>Our Platform</th>
-                <th>Custom Solutions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Dedicated business tools</td>
-                <td>✔️</td>
-                <td>✔️</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Streamlined workflow management</td>
-                <td>✔️</td>
-                <td>✔️</td>
-                <td>✔️</td>
-              </tr>
-              <tr>
-                <td>Advanced task automation</td>
-                <td></td>
-                <td>✔️</td>
-                <td>✔️</td>
-              </tr>
-              <tr>
-                <td>Integrated team collaboration</td>
-                <td></td>
-                <td>✔️</td>
-                <td>✔️</td>
-              </tr>
-              <tr>
-                <td>Data analytics and reporting</td>
-                <td></td>
-                <td>✔️</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="comparison-section">
+          <div className="outer-div">
+            <table className="comparison-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Traditional Systems</th>
+                  <th>Our Platform</th>
+                  <th>Custom Solutions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Dedicated business tools</td>
+                  <td>✔️</td>
+                  <td>✔️</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Streamlined workflow management</td>
+                  <td>✔️</td>
+                  <td>✔️</td>
+                  <td>✔️</td>
+                </tr>
+                <tr>
+                  <td>Advanced task automation</td>
+                  <td></td>
+                  <td>✔️</td>
+                  <td>✔️</td>
+                </tr>
+                <tr>
+                  <td>Integrated team collaboration</td>
+                  <td></td>
+                  <td>✔️</td>
+                  <td>✔️</td>
+                </tr>
+                <tr>
+                  <td>Data analytics and reporting</td>
+                  <td></td>
+                  <td>✔️</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Pricing />

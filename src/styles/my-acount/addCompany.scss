@@ -1,4 +1,5 @@
 @use '../variables' as *;
+
 .add-company {
   padding-bottom: 20px;
 
@@ -35,7 +36,8 @@
           border-radius: $border-radius;
           font-size: 14px;
           transition: border-color 0.3s;
-           &::placeholder {
+
+          &::placeholder {
             color: #ccc;
             font-size: 14px;
             font-weight: 400;
@@ -141,6 +143,10 @@
   }
 }
 
+.account-pricing-container {
+  padding: 20px;
+}
+
 @media (max-width: 768px) {
   .add-company {
     .company-form {
@@ -150,5 +156,9 @@
         grid-template-columns: 1fr;
       }
     }
+  }
+
+  .account-pricing-container {
+    padding: 10px;
   }
 }

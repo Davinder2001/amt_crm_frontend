@@ -3,10 +3,10 @@
 .add-packages-conatiner {
     margin: 2rem auto;
     padding: 10px 20px 20px 20px;
-    background: #fff;
+    background: $white;
     border-radius: $border-radius;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    
+
 
     .header {
         h2 {
@@ -354,10 +354,18 @@
 
 
 
-
+@media (max-width: 1440px) {
+    .packages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 
 
 @media (max-width: 800px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .add-packages-conatiner {
         .header {
             flex-direction: column;
@@ -408,6 +416,10 @@
 
             }
         }
+    }
+
+    .packages-grid {
+        grid-template-columns: 1fr;
     }
 
 }

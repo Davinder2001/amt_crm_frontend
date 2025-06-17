@@ -6,7 +6,7 @@
 
   .outer-div {
     padding: 30px 20px;
-    max-width: 1520px;
+    max-width: 90%;
     width: 100%;
     margin: auto;
   }
@@ -71,7 +71,7 @@
   background: $white;
   flex-wrap: wrap;
   margin: auto;
-  max-width: 1520px;
+  max-width: 90%;
   width: 100%;
 
   a {
@@ -688,7 +688,7 @@ nav.feature-card-nav-bar {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-  max-width: 1520px;
+  max-width: 90%;
   width: 100%;
   margin: auto;
 
@@ -865,10 +865,15 @@ nav.feature-card-nav-bar {
 
   .header2 {
     padding: 10px 12px;
+    max-width: 100%;
   }
 
   .homepage .outer-div {
     padding: 0px 12px;
+    max-width: 100%;
+  }
+  .footer-bottom-inner{
+    max-width: 100%;
   }
 
   .stat-box {

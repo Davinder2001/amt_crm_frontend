@@ -115,8 +115,8 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   unit_of_measure: 'unit' | 'pieces';
   pieces_per_unit?: number | null;
   per_unit_cost?: number | null;
-  tax_id: number;
-  unit_id: number;
+  tax_id: number | null;
+  unit_id: number | null;
   featured_image: File | string | null;
   images: (string | File)[] | File[];
   variants: variations[];

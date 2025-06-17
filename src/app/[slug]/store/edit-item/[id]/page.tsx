@@ -246,17 +246,17 @@ const UpdateItem = () => {
 
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {
       variants.forEach((variant, i) => {
-        formdata.append(`variants[${i}][regular_price]`, variant.regular_price.toString());
-        formdata.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
-        formdata.append(`variants[${i}][stock]`, variant.stock.toString());
+        formdata.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
+        formdata.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
+        formdata.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
 
         // Add unit-specific fields for variants when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {
-          if (variant.pieces_per_unit !== undefined && variant.pieces_per_unit !== null) {
-            formdata.append(`variants[${i}][pieces_per_unit]`, variant.pieces_per_unit.toString());
+          if (variant.variant_pieces_per_unit !== undefined && variant.variant_pieces_per_unit !== null) {
+            formdata.append(`variants[${i}][variant_pieces_per_unit]`, variant.variant_pieces_per_unit.toString());
           }
-          if (variant.per_unit_cost !== undefined && variant.per_unit_cost !== null) {
-            formdata.append(`variants[${i}][per_unit_cost]`, variant.per_unit_cost.toString());
+          if (variant.variant_per_unit_cost !== undefined && variant.variant_per_unit_cost !== null) {
+            formdata.append(`variants[${i}][variant_per_unit_cost]`, variant.variant_per_unit_cost.toString());
           }
         }
 

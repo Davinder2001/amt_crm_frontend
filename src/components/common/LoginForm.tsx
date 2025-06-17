@@ -161,8 +161,9 @@ const LoginForm = () => {
 
 
             <div className="login-footer-links">
-              <Link href="/register-your-company" className="register-company-link">
-                Register your company
+              <span>don&apos;t have any account?</span>
+              <Link href="/register" className="register-company-link">
+                Register
               </Link>
             </div>
           </div>

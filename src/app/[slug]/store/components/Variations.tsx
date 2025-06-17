@@ -7,10 +7,10 @@ import { FaPlus } from 'react-icons/fa';
 
 const emptyVariant = {
     attributes: [],
-    regular_price: 0,
-    sale_price: 0,
+    variant_regular_price: 0,
+    variant_sale_price: 0,
     attribute_value_id: 0,
-    stock: 0
+    variant_stock: 0
 };
 
 interface Props {
@@ -45,7 +45,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                             attribute_value_id: matchedValue?.id?.toString() || '',
                             attribute: attr.attribute || '',
                             value: attr.value || '',
-                            final_cost: attr.final_cost ?? 0
+                            variant_final_cost: attr.variant_final_cost ?? 0
                         };
                     }) || [];
 
@@ -54,13 +54,13 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                             ? Number(mappedAttributes[0].attribute_value_id)
                             : 0,
                         attributes: mappedAttributes,
-                        regular_price: Number(v.regular_price) || 0,
-                        sale_price: Number(v.sale_price) || 0,
-                        stock: typeof v.stock === 'number' ? v.stock : 0,
-                        pieces_per_unit: v.pieces_per_unit ?? null,
-                        per_unit_cost: v.per_unit_cost ?? null,
+                        variant_regular_price: Number(v.variant_regular_price) || 0,
+                        variant_sale_price: Number(v.variant_sale_price) || 0,
+                        variant_stock: typeof v.variant_stock === 'number' ? v.variant_stock : 0,
+                        variant_pieces_per_unit: v.variant_pieces_per_unit ?? null,
+                        variant_per_unit_cost: v.variant_per_unit_cost ?? null,
                         images: v.images ?? [],
-                        final_cost: v.final_cost ?? 0,
+                        variant_final_cost: v.variant_final_cost ?? 0,
                         id: v.id
                     };
                 });
@@ -68,9 +68,9 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
             } else {
                 setCombinations([{
                     attributes: [],
-                    regular_price: 0,
-                    sale_price: 0,
-                    stock: 0,
+                    variant_regular_price: 0,
+                    variant_sale_price: 0,
+                    variant_stock: 0,
                     attribute_value_id: 0
                 }]);
             }
@@ -98,7 +98,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                 attribute_value_id: valueId,
                 attribute: attribute?.name || '',
                 value: value?.value || '',
-                final_cost: 0
+                variant_final_cost: 0
             });
 
             updated[comboIndex].attributes = currentAttributes;
@@ -106,18 +106,18 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
         });
     };
 
-    const handlePriceChange = (comboIndex: number, sale_price: number, regular_price?: number) => {
+    const handlePriceChange = (comboIndex: number, variant_sale_price: number, variant_regular_price?: number) => {
         setCombinations(prev => {
             const updated = [...prev];
-            updated[comboIndex].sale_price = sale_price;
-            if (regular_price !== undefined) {
-                updated[comboIndex].regular_price = regular_price;
+            updated[comboIndex].variant_sale_price = variant_sale_price;
+            if (variant_regular_price !== undefined) {
+                updated[comboIndex].variant_regular_price = variant_regular_price;
             }
             return updated;
         });
     };
 
-    const handleUnitFieldChange = (comboIndex: number, field: 'pieces_per_unit' | 'per_unit_cost', value: number | null) => {
+    const handleUnitFieldChange = (comboIndex: number, field: 'variant_pieces_per_unit' | 'variant_per_unit_cost', value: number | null) => {
         setCombinations(prev => {
             const updated = [...prev];
             updated[comboIndex][field] = value;
@@ -128,7 +128,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
-            { attribute_value_id: 0, attributes: [], sale_price: 0, regular_price: 0, stock: 0 }
+            { attribute_value_id: 0, attributes: [], variant_sale_price: 0, variant_regular_price: 0, variant_stock: 0 }
         ]);
     };
 
@@ -181,10 +181,10 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                 <label>Regular Price</label>
                                 <input
                                     type="number"
-                                    value={combo.regular_price === 0 ? '' : combo.regular_price}
+                                    value={combo.variant_regular_price === 0 ? '' : combo.variant_regular_price}
                                     onChange={e => {
                                         const val = Number(e.target.value);
-                                        handlePriceChange(index, combo.sale_price, isNaN(val) ? 0 : val);
+                                        handlePriceChange(index, combo.variant_sale_price, isNaN(val) ? 0 : val);
                                     }}
                                     placeholder="e.g. 300.00"
                                     min={0}
@@ -195,10 +195,10 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                 <label>Sale Price</label>
                                 <input
                                     type="number"
-                                    value={combo.sale_price === 0 ? '' : combo.sale_price}
+                                    value={combo.variant_sale_price === 0 ? '' : combo.variant_sale_price}
                                     onChange={e => {
                                         const val = Number(e.target.value);
-                                        handlePriceChange(index, isNaN(val) ? 0 : val, combo.regular_price);
+                                        handlePriceChange(index, isNaN(val) ? 0 : val, combo.variant_regular_price);
                                     }}
                                     placeholder="e.g. 250.00"
                                     min={0}
@@ -208,12 +208,12 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                 <label>Stock</label>
                                 <input
                                     type="number"
-                                    value={combo.stock === 0 ? '' : combo.stock ?? ''}
+                                    value={combo.variant_stock === 0 ? '' : combo.variant_stock ?? ''}
                                     onChange={e => {
                                         const val = e.target.value === '' ? null : Number(e.target.value);
                                         setCombinations(prev => {
                                             const updated = [...prev];
-                                            updated[index].stock = val === null ? 0 : val;
+                                            updated[index].variant_stock = val === null ? 0 : val;
                                             return updated;
                                         });
                                     }}
@@ -232,10 +232,10 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                         <label>Pieces per Unit</label>
                                         <input
                                             type="number"
-                                            value={combo.pieces_per_unit || ''}
+                                            value={combo.variant_pieces_per_unit || ''}
                                             onChange={e => {
                                                 const val = e.target.value === '' ? null : Number(e.target.value);
-                                                handleUnitFieldChange(index, 'pieces_per_unit', val);
+                                                handleUnitFieldChange(index, 'variant_pieces_per_unit', val);
                                             }}
                                             placeholder="e.g. 10"
                                             min={0}
@@ -245,10 +245,10 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                         <label>Per Unit Price</label>
                                         <input
                                             type="number"
-                                            value={combo.per_unit_cost || ''}
+                                            value={combo.variant_per_unit_cost || ''}
                                             onChange={e => {
                                                 const val = e.target.value === '' ? null : Number(e.target.value);
-                                                handleUnitFieldChange(index, 'per_unit_cost', val);
+                                                handleUnitFieldChange(index, 'variant_per_unit_cost', val);
                                             }}
                                             placeholder="e.g. 0.1"
                                             min={0}

@@ -1,25 +1,28 @@
 @use '../variables' as *;
 
+.register-contianer{
+  height: auto !important;
+}
 .login-container2 {
   display: grid;
-  height: calc(100vh - 58px - 55px );
+  height: calc(100vh - 58px - 55px);
   grid-template-columns: 50% 50%;
   position: relative;
   overflow: hidden;
   align-items: center;
 
   .left-panel {
-    padding: 60px 80px;
+    padding: 60px 80px 60px 100px;
     background-color: $white;
     margin-top: -50px;
     height: 100%;
     display: flex;
     align-items: center;
-  
+
     .form-box {
       width: 100%;
     }
-   
+
     .title {
       font-size: 32px;
       font-weight: 500;
@@ -38,12 +41,12 @@
 
     .input-group {
       label {
-      margin-bottom: 5px;
-      font-weight: 400;
-      display: block;
-      font-size: 13px;
-      letter-spacing: 0.4px;
-      color:  $para-color;
+        margin-bottom: 5px;
+        font-weight: 400;
+        display: block;
+        font-size: 13px;
+        letter-spacing: 0.4px;
+        color: $para-color;
       }
 
       svg {
@@ -65,14 +68,15 @@
       height: 45px;
 
       &:focus-within {
-       background-color: transparent;
-       border-color: $hover-color;
+        background-color: transparent;
+        border-color: $hover-color;
       }
 
       .input-icon {
         color: gray;
         transition: color 0.3s ease, background 0.3s ease;
       }
+
       input:-webkit-autofill,
       textarea:-webkit-autofill,
       select:-webkit-autofill {
@@ -81,7 +85,18 @@
         box-shadow: 0 0 0px 1000px transparent inset;
         transition: background-color 5000s ease-in-out 0s;
       }
-  
+
+      .otp-button {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        background-color: $primary-color;
+        color: $white;
+        gap: 5px;
+        white-space: nowrap;
+        border-radius: $border-radius;
+        cursor: pointer;
+      }
 
       input {
         padding: 0;
@@ -153,14 +168,14 @@
     .login-footer-links {
       margin-top: 40px;
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 5px;
       font-size: 13px;
       justify-content: center;
       text-transform: capitalize;
 
       a {
-        color:$primary-color;
-        font-size: 16px;
+        color: $primary-color;
         font-weight: 600;
 
         &:hover {
@@ -186,7 +201,7 @@
   .custom-checkbox {
     display: flex;
     align-items: center;
-    gap:10px;
+    gap: 10px;
     font-size: 13px;
     letter-spacing: 0.2px;
     color: $primary-color;
@@ -219,18 +234,19 @@
     }
 
     input:checked+.checkmark {
-      background:$white;
+      background: $white;
       border-color: $primary-color;
 
       .checkmark-icon {
         opacity: 1;
         color: $primary-color;
       }
+
       span {
         color: red;
       }
     }
-     
+
   }
 
 }

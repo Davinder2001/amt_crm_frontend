@@ -28,9 +28,9 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, t
             key: 'variations',
             label: <div className="tab-label">
                 <FaBox className="tab-icon" /> <span className="tab-text">Variations
-                    {variants.filter(v => v.attributes.length > 0 || v.sale_price > 0).length > 0 && (
+                    {variants.filter(v => v.attributes.length > 0 || v.variant_sale_price > 0).length > 0 && (
                         <p className='variations-count'>
-                            {variants.filter(v => v.attributes.length > 0 || v.sale_price > 0).length}
+                            {variants.filter(v => v.attributes.length > 0 || v.variant_sale_price > 0).length}
                         </p>
                     )}
                 </span>

@@ -210,17 +210,17 @@ const AddItem: React.FC = () => {
     // For variable products, append variants
     if (formData.product_type === 'variable_product' && variants.length > 0) {
       variants.forEach((variant, i) => {
-        form.append(`variants[${i}][regular_price]`, variant.regular_price.toString());
-        form.append(`variants[${i}][sale_price]`, variant.sale_price.toString());
-        form.append(`variants[${i}][stock]`, variant.stock.toString());
+        form.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
+        form.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
+        form.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
 
         // Add unit fields only when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {
-          if (variant.pieces_per_unit !== null && variant.pieces_per_unit !== undefined) {
-            form.append(`variants[${i}][pieces_per_unit]`, variant.pieces_per_unit.toString());
+          if (variant.variant_pieces_per_unit !== null && variant.variant_pieces_per_unit !== undefined) {
+            form.append(`variants[${i}][variant_pieces_per_unit]`, variant.variant_pieces_per_unit.toString());
           }
-          if (variant.per_unit_cost !== null && variant.per_unit_cost !== undefined) {
-            form.append(`variants[${i}][per_unit_cost]`, variant.per_unit_cost.toString());
+          if (variant.variant_per_unit_cost !== null && variant.variant_per_unit_cost !== undefined) {
+            form.append(`variants[${i}][variant_per_unit_cost]`, variant.variant_per_unit_cost.toString());
           }
         }
         variant.attributes?.forEach((attr, attrIndex) => {

@@ -162,13 +162,7 @@ const UpdateItem = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof UpdateStoreItemRequest)[] = [
-      'name', 'quantity_count', 'measurement', 'purchase_date',
-      'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
-      'replacement', 'category', 'vendor_name', 'availability_stock',
-      'cost_price', 'sale_price', 'tax_id', 'product_type',
-      'unit_of_measure', 'pieces_per_unit', 'per_unit_cost'
-    ];
+    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'pieces_per_unit', 'per_unit_cost', 'tax_id', 'unit_id'];
 
     for (const field of primitiveFields) {
       if (formData[field] !== originalItemData[field]) {
@@ -201,60 +195,57 @@ const UpdateItem = () => {
     formdata.append('_method', 'PUT');
     formdata.append('id', formData.id.toString());
 
-    const primitiveFields = [
+    // Primitive fields to track changes and append
+    const primitiveFields: (keyof UpdateStoreItemRequest)[] = [
       'name', 'quantity_count', 'measurement', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
-      'replacement', 'category', 'vendor_name', 'availability_stock',
-      'cost_price', 'sale_price', 'tax_id', 'product_type', 'unit_of_measure'
+      'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock',
+      'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure',
+      'pieces_per_unit', 'per_unit_cost', 'tax_id', 'unit_id'
     ];
 
     primitiveFields.forEach((field) => {
-      const key = field as keyof UpdateStoreItemRequest;
-      const value = formData[key];
-      const originalValue = originalItemData[key];
+      const value = formData[field];
+      const originalValue = originalItemData[field];
 
+      // Only append if changed
       if (value !== originalValue) {
-        formdata.append(field, value?.toString() ?? '');
+        formdata.append(field as string, value?.toString() ?? '');
       }
     });
 
-    if (formData.unit_of_measure === 'unit') {
-      if (formData.pieces_per_unit !== originalItemData.pieces_per_unit) {
-        formdata.append('pieces_per_unit', formData.pieces_per_unit?.toString() ?? '');
-      }
-      if (formData.per_unit_cost !== originalItemData.per_unit_cost) {
-        formdata.append('per_unit_cost', formData.per_unit_cost?.toString() ?? '');
-      }
-    }
-
+    // Categories (clear + append updated)
     formdata.delete('categories[]');
     formData.categories.forEach((catId) => {
       formdata.append('categories[]', catId.toString());
     });
 
+    // New images only
     const newImages = formData.images.filter((img) => img instanceof File);
-    if (newImages.length > 0) {
-      newImages.forEach((img) => formdata.append('images[]', img));
-    }
+    newImages.forEach((img) => formdata.append('images[]', img as File));
 
+    // Featured image if it's a new File
     if (formData.featured_image instanceof File) {
       formdata.append('featured_image', formData.featured_image);
     }
 
-    removedImages.forEach((imageUrl) => formdata.append('removed_images[]', imageUrl));
+    // Removed images
+    removedImages.forEach((imageUrl) => {
+      formdata.append('removed_images[]', imageUrl);
+    });
 
+    // Variants (compare deeply then append if changed)
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {
       variants.forEach((variant, i) => {
         formdata.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
         formdata.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
         formdata.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
 
-        // Add unit-specific fields for variants when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {
-          if (variant.variant_pieces_per_unit !== undefined && variant.variant_pieces_per_unit !== null) {
+          if (variant.variant_pieces_per_unit != null) {
             formdata.append(`variants[${i}][variant_pieces_per_unit]`, variant.variant_pieces_per_unit.toString());
           }
-          if (variant.variant_per_unit_cost !== undefined && variant.variant_per_unit_cost !== null) {
+          if (variant.variant_per_unit_cost != null) {
             formdata.append(`variants[${i}][variant_per_unit_cost]`, variant.variant_per_unit_cost.toString());
           }
         }
@@ -266,6 +257,7 @@ const UpdateItem = () => {
       });
     }
 
+    // Submit
     try {
       await updateStoreItem({ id: formData.id, formdata }).unwrap();
       toast.success('Item updated successfully!');

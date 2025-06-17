@@ -26,8 +26,8 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   tax_id: null,
   unit_id: null,
   unit_of_measure: 'pieces',
-  pieces_per_unit: null,
-  per_unit_cost: null,
+  units_in_peace: null,
+  price_per_unit: null,
   images: [],
   categories: [],
   featured_image: null,
@@ -168,16 +168,16 @@ const AddItem: React.FC = () => {
 
       // Conditionally send unit breakdown only if unit_of_measure === 'unit'
       if (formData.unit_of_measure === 'unit') {
-        if (key === 'pieces_per_unit' && val !== null && val !== undefined && val !== 0) {
-          form.append('pieces_per_unit', val.toString());
+        if (key === 'units_in_peace' && val !== null && val !== undefined && val !== 0) {
+          form.append('units_in_peace', val.toString());
         }
-        if (key === 'per_unit_cost' && val !== null && val !== undefined && val !== 0) {
-          form.append('per_unit_cost', val.toString());
+        if (key === 'price_per_unit' && val !== null && val !== undefined && val !== 0) {
+          form.append('price_per_unit', val.toString());
         }
       }
 
       // Skip pieces_per_unit and units_per_piece if unit_of_measure !== 'unit'
-      if ((key === 'pieces_per_unit' || key === 'per_unit_cost') && formData.unit_of_measure !== 'unit') {
+      if ((key === 'units_in_peace' || key === 'price_per_unit') && formData.unit_of_measure !== 'unit') {
         return;
       }
 
@@ -215,11 +215,11 @@ const AddItem: React.FC = () => {
 
         // Add unit fields only when unit_of_measure is 'unit'
         if (formData.unit_of_measure === 'unit') {
-          if (variant.variant_pieces_per_unit !== null && variant.variant_pieces_per_unit !== undefined) {
-            form.append(`variants[${i}][variant_pieces_per_unit]`, variant.variant_pieces_per_unit.toString());
+          if (variant.variant_units_in_peace !== null && variant.variant_units_in_peace !== undefined) {
+            form.append(`variants[${i}][variant_units_in_peace]`, variant.variant_units_in_peace.toString());
           }
-          if (variant.variant_per_unit_cost !== null && variant.variant_per_unit_cost !== undefined) {
-            form.append(`variants[${i}][variant_per_unit_cost]`, variant.variant_per_unit_cost.toString());
+          if (variant.variant_price_per_unit !== null && variant.variant_price_per_unit !== undefined) {
+            form.append(`variants[${i}][variant_price_per_unit]`, variant.variant_price_per_unit.toString());
           }
         }
         variant.attributes?.forEach((attr, attrIndex) => {

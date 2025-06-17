@@ -284,8 +284,8 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             setFormData(prev => ({
                                                 ...prev,
                                                 unit_of_measure: value,
-                                                pieces_per_unit: value === 'unit' ? prev.pieces_per_unit : null,
-                                                per_unit_cost: value === 'unit' ? prev.per_unit_cost : null
+                                                units_in_peace: value === 'unit' ? prev.units_in_peace : null,
+                                                price_per_unit: value === 'unit' ? prev.price_per_unit : null
                                             }));
                                         }}
                                         className="form-select"
@@ -343,17 +343,17 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <>
                                             <FormInput
                                                 label="Pieces per Unit"
-                                                name="pieces_per_unit"
+                                                name="units_in_peace"
                                                 type="number"
-                                                value={formData.pieces_per_unit || ''}
+                                                value={formData.units_in_peace || ''}
                                                 onChange={handleNumberChange}
                                                 placeholder="e.g. 10"
                                             />
                                             <FormInput
                                                 label="Per Unit Price"
-                                                name="per_unit_cost"
+                                                name="price_per_unit"
                                                 type="number"
-                                                value={formData.per_unit_cost || ''}
+                                                value={formData.price_per_unit || ''}
                                                 onChange={handleNumberChange}
                                                 placeholder="e.g. 0.1"
                                             />

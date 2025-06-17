@@ -39,8 +39,8 @@ const UpdateItem = () => {
     tax_id: null,
     unit_id: null,
     unit_of_measure: 'pieces',
-    pieces_per_unit: null,
-    per_unit_cost: null,
+    units_in_peace: null,
+    price_per_unit: null,
     images: [],
     categories: [],
     featured_image: null,
@@ -84,8 +84,8 @@ const UpdateItem = () => {
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
         unit_id: (item.units && item.units.length > 0 && item.units[0]?.id) ? item.units[0].id : 0,
         unit_of_measure: item.unit_of_measure || 'pieces',
-        pieces_per_unit: item.pieces_per_unit ?? null,
-        per_unit_cost: item.per_unit_cost ?? null,
+        units_in_peace: item.units_in_peace ?? null,
+        price_per_unit: item.price_per_unit ?? null,
         images: Array.isArray(item.images) ? item.images : [],
         variants: item.variants || [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
@@ -162,7 +162,7 @@ const UpdateItem = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'pieces_per_unit', 'per_unit_cost', 'tax_id', 'unit_id'];
+    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id', 'unit_id'];
 
     for (const field of primitiveFields) {
       if (formData[field] !== originalItemData[field]) {
@@ -201,7 +201,7 @@ const UpdateItem = () => {
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock',
       'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure',
-      'pieces_per_unit', 'per_unit_cost', 'tax_id', 'unit_id'
+      'units_in_peace', 'price_per_unit', 'tax_id', 'unit_id'
     ];
 
     primitiveFields.forEach((field) => {
@@ -242,11 +242,11 @@ const UpdateItem = () => {
         formdata.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
 
         if (formData.unit_of_measure === 'unit') {
-          if (variant.variant_pieces_per_unit != null) {
-            formdata.append(`variants[${i}][variant_pieces_per_unit]`, variant.variant_pieces_per_unit.toString());
+          if (variant.variant_units_in_peace != null) {
+            formdata.append(`variants[${i}][variant_units_in_peace]`, variant.variant_units_in_peace.toString());
           }
-          if (variant.variant_per_unit_cost != null) {
-            formdata.append(`variants[${i}][variant_per_unit_cost]`, variant.variant_per_unit_cost.toString());
+          if (variant.variant_price_per_unit != null) {
+            formdata.append(`variants[${i}][variant_price_per_unit]`, variant.variant_price_per_unit.toString());
           }
         }
 

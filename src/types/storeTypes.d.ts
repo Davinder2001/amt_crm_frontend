@@ -24,8 +24,8 @@ interface StoreItem {
   vendor_name?: string | null;
   product_type: 'simple_product' | 'variable_product';
   unit_of_measure: 'unit' | 'pieces';
-  pieces_per_unit?: number | null;
-  per_unit_cost?: number | null;
+  units_in_peace?: number | null;
+  price_per_unit?: number | null;
   availability_stock: number;
   created_at: string;
   updated_at: string;
@@ -87,8 +87,8 @@ interface variations {
   variant_regular_price: number;
   variant_sale_price: number;
   variant_stock: number;
-  variant_pieces_per_unit?: number | null;
-  variant_per_unit_cost?: number | null;
+  variant_units_in_peace?: number | null;
+  variant_price_per_unit?: number | null;
   images?: string[];
   final_cost?: number;
   attributes: AttributeItem[];
@@ -113,8 +113,8 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   sale_price?: number;
   product_type: 'simple_product' | 'variable_product';
   unit_of_measure: 'unit' | 'pieces';
-  pieces_per_unit?: number | null;
-  per_unit_cost?: number | null;
+  units_in_peace?: number | null;
+  price_per_unit?: number | null;
   tax_id: number | null;
   unit_id: number | null;
   featured_image: File | string | null;

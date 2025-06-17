@@ -119,7 +119,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   unit_id: number | null;
   featured_image: File | string | null;
   images: (string | File)[] | File[];
-  variants: variations[];
+  variants?: variations[];
   categories: TCategories;
   success?: boolean;
   message?: string;

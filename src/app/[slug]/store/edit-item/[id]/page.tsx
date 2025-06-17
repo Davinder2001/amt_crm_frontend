@@ -42,7 +42,6 @@ const UpdateItem = () => {
     pieces_per_unit: null,
     per_unit_cost: null,
     images: [],
-    variants: [],
     categories: [],
     featured_image: null,
     product_type: 'simple_product',

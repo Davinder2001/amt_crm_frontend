@@ -148,7 +148,7 @@ export default function NetworkStatusBanner() {
                 align-items: center;
                 font-size: 15px;
                 line-height: 1.2;
-                gap: 5px;
+                gap: 3px;
             }
 
             .network-icon {
@@ -183,7 +183,7 @@ export default function NetworkStatusBanner() {
                 }
 
                 .network-text {
-                    font-size: 9px;
+                    font-size: 10px;
                 }
             }
 

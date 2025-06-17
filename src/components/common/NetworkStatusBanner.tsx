@@ -145,7 +145,7 @@ export default function NetworkStatusBanner() {
 
             .network-text {
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
                 font-size: 15px;
                 line-height: 1.2;
                 gap: 5px;
@@ -184,8 +184,6 @@ export default function NetworkStatusBanner() {
 
                 .network-text {
                     font-size: 9px;
-                    flex-direction: column;
-                    gap: 0px;
                 }
             }
 

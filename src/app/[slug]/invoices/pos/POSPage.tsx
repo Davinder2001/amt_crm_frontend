@@ -87,30 +87,32 @@ function POSPage() {
         return items;
     };
 
-    const selectedTopCategory = topCategories.find((cat: { id: number | null; }) => cat.id === selectedTopCatId);
-    const childCategories = selectedTopCategory?.children || [];
+    // Get all items from a specific category (including its subcategories)
+    const getItemsFromCategory = (categoryId: number | null): StoreItem[] => {
+        if (!categoryId) return getAllItems(); // Show all items when no category selected
 
-    const findCategoryById = (cats: Category[], id: number | null): Category | undefined => {
-        for (const cat of cats) {
-            if (cat.id === id) return cat;
-            if (cat.children) {
-                const found = findCategoryById(cat.children, id);
-                if (found) return found;
+        const findCategoryAndItems = (categories: Category[]): StoreItem[] => {
+            for (const category of categories) {
+                if (category.id === categoryId) {
+                    // Found the category - return its items plus all items from subcategories
+                    return getCategoryItems(category);
+                }
+
+                if (category.children) {
+                    const childItems = findCategoryAndItems(category.children);
+                    if (childItems.length) return childItems;
+                }
             }
-        }
-        return undefined;
+            return [];
+        };
+
+        return findCategoryAndItems(topCategories);
     };
 
-    const selectedChild = findCategoryById(childCategories, selectedChildCatId);
-
     // Determine which items to display based on selection
-    const displayItems = selectedTopCatId === null
-        ? getAllItems() // Show all items when "All" is selected
-        : selectedChildCatId && selectedChild
-            ? selectedChild.items as StoreItem[] // Show items from selected child category
-            : selectedTopCategory
-                ? getCategoryItems(selectedTopCategory) // Show all items from selected parent and its children
-                : [];
+    const displayItems = selectedChildCatId
+        ? getItemsFromCategory(selectedChildCatId) // Show items from selected child category
+        : getItemsFromCategory(selectedTopCatId); // Show items from selected parent or all items
 
     const handleAddToCart = (item: StoreItem, variant?: variations) => {
         const id = variant ? `${item.id}-${variant.id}` : item.id;

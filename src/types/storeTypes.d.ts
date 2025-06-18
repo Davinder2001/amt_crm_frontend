@@ -65,9 +65,10 @@ interface CartItem {
   id: string | number;
   variantId?: number;
   itemId?: number;
+  name: string;
   featured_image?: string;
   quantity: number;
-  final_cost: number | null;
+  final_cost: number;
   variants?: CartItemVariant[];
 }
 

@@ -19,6 +19,66 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       providesTags: ["Invoice"],
     }),
 
+    // createInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
+    //   query: (newInvoice) => ({
+    //     url: "invoices",
+    //     method: "POST",
+    //     body: {
+    //       ...newInvoice,
+    //       items: newInvoice.items
+    //         .filter((item) => item.item_id !== null)
+    //         .map((item) => ({
+    //           item_id: item.item_id,
+    //           quantity: item.quantity,
+    //           final_cost: item.final_cost,
+    //           variant_id: item.variant_id,
+    //         })),
+    //     },
+    //   }),
+    //   invalidatesTags: ["Invoice"],
+    // }),
+
+    // printInvoice: builder.mutation<Blob, CreateInvoicePayload>({
+    //   query: (newInvoice) => ({
+    //     url: "invoices/print",
+    //     method: "POST",
+    //     body: {
+    //       ...newInvoice,
+    //       items: newInvoice.items
+    //         .filter((item) => item.item_id !== null)
+    //         .map((item) => ({
+    //           item_id: item.item_id,
+    //           quantity: item.quantity,
+    //           final_cost: item.final_cost,
+    //           variant_id: item.variant_id,
+    //         })),
+    //     },
+    //     responseHandler: (response) => response.blob(),
+    //   }),
+    //   invalidatesTags: ["Invoice"],
+    // }),
+
+    // whatsappInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
+    //   query: (newInvoice) => ({
+    //     url: "invoices/store-whatsapp",
+    //     method: "POST",
+    //     body: {
+    //       ...newInvoice,
+    //       items: newInvoice.items
+    //         .filter((item) => item.item_id !== null)
+    //         .map((item) => ({
+    //           item_id: item.item_id,
+    //           quantity: item.quantity,
+    //           final_cost: item.final_cost,
+    //           variant_id: item.variant_id,
+    //         })),
+    //     },
+    //   }),
+    //   invalidatesTags: ["Invoice"],
+    // }),
+
+
+
     createInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
       query: (newInvoice) => ({
         url: "invoices",
@@ -30,7 +90,14 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
             .map((item) => ({
               item_id: item.item_id,
               quantity: item.quantity,
-              unit_price: item.unit_price,
+              final_cost: item.final_cost,
+              variants: item.variants?.map(variant => ({
+                variant_id: variant.variant_id,
+                quantity: variant.quantity,
+                final_cost: variant.final_cost,
+                variant_price_per_unit: variant.variant_price_per_unit,
+                units: variant.units
+              }))
             })),
         },
       }),
@@ -48,7 +115,14 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
             .map((item) => ({
               item_id: item.item_id,
               quantity: item.quantity,
-              unit_price: item.unit_price,
+              final_cost: item.final_cost,
+              variants: item.variants?.map(variant => ({
+                variant_id: variant.variant_id,
+                quantity: variant.quantity,
+                final_cost: variant.final_cost,
+                variant_price_per_unit: variant.variant_price_per_unit,
+                units: variant.units
+              }))
             })),
         },
         responseHandler: (response) => response.blob(),
@@ -67,7 +141,14 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
             .map((item) => ({
               item_id: item.item_id,
               quantity: item.quantity,
-              unit_price: item.unit_price,
+              final_cost: item.final_cost,
+              variants: item.variants?.map(variant => ({
+                variant_id: variant.variant_id,
+                quantity: variant.quantity,
+                final_cost: variant.final_cost,
+                variant_price_per_unit: variant.variant_price_per_unit,
+                units: variant.units
+              }))
             })),
         },
       }),

@@ -83,9 +83,14 @@ interface CreateInvoicePayload {
   items: {
     item_id: number;
     quantity: number;
-    unit_price: number;
-    final_cost: number;
-    total: number;
+    final_cost: number | null;
+    variants?: {
+      variant_id: number;
+      quantity: number;
+      final_cost: number | null;
+      variant_price_per_unit: number | null;
+      units: number | null;
+    }[];
   }[];
 };
 

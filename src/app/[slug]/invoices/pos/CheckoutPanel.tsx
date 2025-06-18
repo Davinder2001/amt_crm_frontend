@@ -87,10 +87,7 @@ export default function CheckoutPanel({
         items: cart.map(i => ({
             item_id: typeof i.id === 'string' ? parseInt(i.id, 10) : i.id,
             quantity: i.quantity,
-            unit_price: i.final_cost,
             final_cost: i.final_cost,
-            description: i.description || i.name,
-            total: i.quantity * i.final_cost,
         })),
     });
 

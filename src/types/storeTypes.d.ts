@@ -53,16 +53,22 @@ interface Category {
 interface CategoryResponse {
   data: Category[];
 }
+interface CartItemVariant {
+  variant_id: number;
+  quantity: number;
+  final_cost: number | null;
+  variant_price_per_unit: number | null;
+  units: number | null;
+}
 
 interface CartItem {
   id: string | number;
   variantId?: number;
   itemId?: number;
-  name: string;
   featured_image?: string;
   quantity: number;
-  final_cost: number;
-  description?: string;
+  final_cost: number | null;
+  variants?: CartItemVariant[];
 }
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';

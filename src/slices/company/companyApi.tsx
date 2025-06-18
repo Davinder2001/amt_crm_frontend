@@ -81,7 +81,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     fetchMeasuringUnits: builder.query<MeasuringUnitResponse, void>({
       query: () => ({
-        url: "measuring-units",
+        url: "store/measuring-units",
         method: "GET",
         credentials: "include",
       }),
@@ -90,7 +90,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
 
     createMeasuringUnit: builder.mutation<{ status?: boolean, error?: string, message?: string; data: MeasuringUnit }, { name: string }>({
       query: (payload) => ({
-        url: "measuring-units",
+        url: "store/measuring-units",
         method: "POST",
         body: payload,
         credentials: "include",

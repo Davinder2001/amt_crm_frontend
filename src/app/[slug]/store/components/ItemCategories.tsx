@@ -47,7 +47,6 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
   const [updateCategory, { isLoading: isUpdating }] = useUpdateCategoryMutation();
-  const [hasChanges, setHasChanges] = useState(false);
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
   const [selectedCategoriesIds, setSelectedCategoriesIds] = useState<number[]>([]);
   const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
@@ -84,21 +83,57 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     );
   };
 
+  // Update selected categories whenever selection changes
+  const updateSelectedCategories = (ids: number[]) => {
+    if (!data?.data) return;
+
+    const flattenCategories = (categories: CategoryNode[]): CategoryNode[] => {
+      return categories.reduce<CategoryNode[]>((acc, category) => {
+        if (ids.includes(category.id)) {
+          acc.push(category);
+        }
+        if (category.children) {
+          acc.push(...flattenCategories(category.children));
+        }
+        return acc;
+      }, []);
+    };
+
+    const selected = flattenCategories(data.data);
+    setSelectedCategories(
+      selected.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        company_id: cat.company_id,
+        parent_id: cat.parent_id,
+        created_at: cat.created_at || new Date().toISOString(),
+        updated_at: cat.updated_at || new Date().toISOString(),
+        children: cat.children?.map(child => ({
+          id: child.id,
+          name: child.name,
+          company_id: child.company_id,
+          parent_id: child.parent_id,
+          created_at: child.created_at || new Date().toISOString(),
+          updated_at: child.updated_at || new Date().toISOString(),
+        })),
+      }))
+    );
+  };
+
   // Handle category selection
   const handleCategorySelect = (id: number) => {
-    setHasChanges(true);
-    setSelectedCategoriesIds(prev =>
-      prev.includes(id)
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
+    const newSelectedIds = selectedCategoriesIds.includes(id)
+      ? selectedCategoriesIds.filter(item => item !== id)
+      : [...selectedCategoriesIds, id];
+    
+    setSelectedCategoriesIds(newSelectedIds);
+    updateSelectedCategories(newSelectedIds);
   };
 
   // Handle parent selection for new category
   const handleParentSelect = (id: number) => {
     setSelectedParentId(prev => prev === id ? null : id);
   };
-
 
   // Check if category name exists under the same parent
   const categoryExists = (categoryName: string, parentId: number | null) => {
@@ -166,45 +201,6 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     }
   };
 
-  // Finalize category selection
-  const handleDoneClick = () => {
-    if (!data?.data) return;
-
-    const flattenCategories = (categories: CategoryNode[]): CategoryNode[] => {
-      return categories.reduce<CategoryNode[]>((acc, category) => {
-        if (selectedCategoriesIds.includes(category.id)) {
-          acc.push(category);
-        }
-        if (category.children) {
-          acc.push(...flattenCategories(category.children));
-        }
-        return acc;
-      }, []);
-    };
-
-    const selected = flattenCategories(data.data);
-    setSelectedCategories(
-      selected.map(cat => ({
-        id: cat.id,
-        name: cat.name,
-        company_id: cat.company_id,
-        parent_id: cat.parent_id,
-        created_at: cat.created_at || new Date().toISOString(),
-        updated_at: cat.updated_at || new Date().toISOString(),
-        children: cat.children?.map(child => ({
-          id: child.id,
-          name: child.name,
-          company_id: child.company_id,
-          parent_id: child.parent_id,
-          created_at: child.created_at || new Date().toISOString(),
-          updated_at: child.updated_at || new Date().toISOString(),
-        })),
-      }))
-    );
-    setHasChanges(false);
-  };
-
-
   // Initial expansion of parent categories (only once when data loads)
   useEffect(() => {
     if (!data?.data) return;
@@ -240,14 +236,6 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       });
     }
   }, [data, selectedCategoriesIds]); // Only run when data changes
-
-  // Sync deselected categories to parent when none are selected
-  useEffect(() => {
-    if (selectedCategoriesIds.length === 0 && hasChanges) {
-      setSelectedCategories([]);
-      setHasChanges(false);
-    }
-  }, [selectedCategoriesIds, hasChanges, setSelectedCategories]);
 
   // Render category tree
   const renderCategory = (category: CategoryNode) => {
@@ -457,7 +445,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 </List>
               )}
 
-              <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+              <Box display="flex" justifyContent="flex-start" alignItems="center" mt={2} gap={1} flexWrap="wrap">
                 <Button
                   variant="outlined"
                   startIcon={<FaPlus size={12} />}
@@ -475,51 +463,6 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 >
                   Create New
                 </Button>
-                <div className='category-cancle-btn'>
-                  {hasChanges && selectedCategoriesIds.length > 0 && (
-                    <>
-
-                      <Button
-                        variant="outlined"
-                        startIcon={<FaTimes size={12} />}
-                        onClick={() => {
-                          setHasChanges(false);
-                          setSelectedCategoriesIds(selectedCategories.map(cat => cat.id));
-                        }}
-                        sx={{
-                          borderColor: '#384b70',
-                          color: '#384b70',
-                          marginRight: '5px',
-                          fontSize: '0.75rem',
-                          py: 0.5,
-                          px: 1.5,
-                          minHeight: '30px',
-                          '&:hover': { backgroundColor: '#DEE9F2' },
-                        }}
-                      >
-                        Cancel
-                      </Button>
-
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<FaCheck size={12} />}
-                        onClick={handleDoneClick}
-                        sx={{
-                          backgroundColor: '#384b70',
-                          fontSize: '0.75rem',
-                          py: 0.5,
-                          px: 1.5,
-                          minHeight: '30px',
-                          '&:hover': { backgroundColor: '#9CB9D0' },
-                        }}
-                      >
-                        Done
-                      </Button>
-                    </>
-
-                  )}
-                </div>
               </Box>
             </div>
           )}

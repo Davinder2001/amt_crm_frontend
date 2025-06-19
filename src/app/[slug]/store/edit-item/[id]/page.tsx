@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices/store/storeApi';
+import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices';
+import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
-import { useFetchTaxesQuery } from '@/slices/company/companyApi';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
@@ -18,6 +18,8 @@ const UpdateItem = () => {
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const { data: measuringUnitsResponse } = useFetchMeasuringUnitsQuery();
+  const measuringUnits = measuringUnitsResponse?.units || [];
 
   const getDefaultFormData = (): UpdateStoreItemRequest => ({
     id: Number(id),
@@ -227,9 +229,6 @@ const UpdateItem = () => {
     // Featured image if it's a new File
     if (formData.featured_image instanceof File) {
       formdata.append('featured_image', formData.featured_image);
-    } else if (formData.featured_image !== null) {
-      // Only append if not null
-      formdata.append('featured_image', formData.featured_image);
     }
 
     // Removed images
@@ -302,6 +301,7 @@ const UpdateItem = () => {
       handleClearImages={handleClearImages}
       handleRemoveImage={handleRemoveImage}
       taxesData={taxesData}
+      measuringUnits={measuringUnits}
       selectedCategories={selectedCategories}
       setSelectedCategories={setSelectedCategories}
       variants={variants}

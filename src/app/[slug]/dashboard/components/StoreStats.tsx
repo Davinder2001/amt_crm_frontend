@@ -119,26 +119,7 @@ const StoreStats = () => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <style jsx>{`
-        .store-stats {
-          position: relative;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-          padding: 16px;
-        }
-        .card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 16px;
-        }
-        .card-header h3 {
-          margin: 0;
-          font-size: 18px;
-          font-weight: 600;
-          color: #333;
-        }
+      <style>{`
         .dropdown {
           position: relative;
           display: inline-block;

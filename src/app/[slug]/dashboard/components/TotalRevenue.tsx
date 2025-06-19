@@ -57,7 +57,7 @@ const TotalRevenue = () => {
                     ₹50.4K <small className="green">↑ 5% than last month</small>
                 </span>
             </div>
-            <div className="chart-placeholder" style={{ height: '250px' }}>
+            <div className="chart-placeholder">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={revenueData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />

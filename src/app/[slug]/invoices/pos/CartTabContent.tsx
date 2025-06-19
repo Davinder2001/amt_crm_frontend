@@ -3,12 +3,14 @@
 import { useFetchCompanyAccountsQuery } from '@/slices/company/companyApi';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
 import { useCompany } from '@/utils/Company';
-import Image from 'next/image';
-import Link from 'next/link';
 import React, { useState } from 'react';
-import { FaTimes, FaWhatsapp } from 'react-icons/fa';
-import { FiTrash2, FiShoppingCart, FiList, FiUser, FiFileText } from 'react-icons/fi';
+import { FiTrash2, FiList, FiUser, FiFileText } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import ItemsTab from './components/ItemsTab';
+import ClientTab from './components/ClientTab';
+import BillTab from './components/BillTab';
+import PaymentSection from './components/PaymentSection';
+import ActionsSection from './components/ActionsSection';
 
 type CartTabContentProps = {
     activeTab: TabType;
@@ -95,7 +97,6 @@ export default function CartTabContent({
     const { data } = useFetchCompanyAccountsQuery();
     const BankAccountList = data?.accounts;
     const { companySlug } = useCompany();
-    const [popupImage, setPopupImage] = useState<string | null>(null);
 
 
     // Calculate base total (sum of all items)
@@ -263,756 +264,95 @@ export default function CartTabContent({
             <div className="inner-tab-content">
 
                 {activeInnerTab === 'Items' && (
-                    <>
-                        {cart.length > 0 ? (
-                            <>
-                                <div className="cart-items-list">
-                                    {cart.map(item => {
-                                        const storeItem = items.find(si => si.id === item.itemId);
-                                        const imageUrl = storeItem?.featured_image;
-
-                                        return (
-                                            <div key={item.id} className="cart-item-row">
-                                                <div className="item-image-container" onClick={() => {
-                                                    const storeItem = items.find(si => si.id === item.itemId);
-                                                    if (storeItem?.featured_image) {
-                                                        setPopupImage(storeItem.featured_image);
-                                                    }
-                                                }}>
-                                                    {imageUrl ? (
-                                                        <Image
-                                                            src={imageUrl}
-                                                            alt={item.name}
-                                                            className="item-image"
-                                                            onError={(e) => {
-                                                                e.currentTarget.style.display = 'none';
-                                                            }}
-                                                            width={50}
-                                                            height={50}
-                                                        />
-                                                    ) : (
-                                                        <div className="item-image-placeholder">
-                                                            {item.name.charAt(0).toUpperCase()}
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* Image Popup */}
-                                                {popupImage && (
-                                                    <div className="image-popup-overlay" onClick={() => setPopupImage(null)}>
-                                                        <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
-                                                            <button
-                                                                className="close-popup"
-                                                                onClick={() => setPopupImage(null)}
-                                                            >
-                                                                <FaTimes />
-                                                            </button>
-                                                            <Image
-                                                                src={popupImage}
-                                                                alt="Enlarged product"
-                                                                width={1000}
-                                                                height={1000}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                <div className="item-details">
-                                                    <div className="item-header">
-                                                        <span className="item-name">{item.name}</span>
-                                                        <button
-                                                            className="delete-btn"
-                                                            onClick={() => onRemoveItem(item.id)}
-                                                            title="Remove"
-                                                        >
-                                                            <FaTimes />
-                                                        </button>
-                                                    </div>
-
-                                                    <div className="item-controls">
-                                                        {/* <div className="quantity-control">
-                                                            <button
-                                                                className="item-quantity-btn"
-                                                                onClick={() => onQtyChange((item.id), -1)}
-                                                                disabled={item.quantity <= 1}
-                                                            >
-                                                                −
-                                                            </button>
-                                                            <span>{item.quantity}</span>
-                                                            <button
-                                                                className="item-quantity-btn"
-                                                                onClick={() => onQtyChange((item.id), 1)}
-                                                                disabled={(() => {
-                                                                    const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
-                                                                    return storeItem ? item.quantity >= storeItem.quantity_count : false;
-                                                                })()}
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </div> */}
-
-
-                                                        <div className="quantity-control">
-                                                            <button
-                                                                className="item-quantity-btn"
-                                                                onClick={() => onQtyChange(item.id, -1)}
-                                                                disabled={item.quantity <= 1}
-                                                                style={{
-                                                                    opacity: item.quantity <= 1 ? 0.5 : 1,
-                                                                    cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
-                                                                    backgroundColor: item.quantity <= 1 ? "#9cb9d0" : "#384b70",
-                                                                }}
-                                                            >
-                                                                −
-                                                            </button>
-
-                                                            <input
-                                                                type="number"
-                                                                value={item.quantity}
-                                                                onChange={(e) => {
-                                                                    const value = e.target.value;
-                                                                    const storeItem = items.find(si => si.id === item.itemId);
-
-                                                                    // Get max quantity based on product type
-                                                                    let maxQty;
-                                                                    if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                        // For variants, use variant_stock from the specific variant
-                                                                        const variant = storeItem?.variants?.find(v => item.variants && item.variants.length > 0 && item.variants[0] && v.id === item.variants[0].variant_id);
-                                                                        maxQty = variant?.variant_stock || Infinity;
-                                                                    } else {
-                                                                        // For simple products, use quantity_count
-                                                                        maxQty = storeItem?.quantity_count || Infinity;
-                                                                    }
-
-                                                                    if (value === '') {
-                                                                        onQtyChange(item.id, '');
-                                                                        return;
-                                                                    }
-
-                                                                    const newQty = parseInt(value);
-                                                                    if (!isNaN(newQty)) {
-                                                                        if (newQty > maxQty) {
-                                                                            toast.error(`Maximum available quantity is ${maxQty}`);
-                                                                            onQtyChange(item.id, maxQty.toString());
-                                                                        } else {
-                                                                            onQtyChange(item.id, newQty.toString());
-                                                                        }
-                                                                    }
-                                                                }}
-                                                                onBlur={(e) => {
-                                                                    const newValue = e.target.value;
-                                                                    if (newValue === '' || parseInt(newValue) < 1) {
-                                                                        onQtyChange(item.id, '1');
-                                                                    }
-                                                                }}
-                                                                min={1}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        e.currentTarget.blur();
-                                                                    }
-                                                                    if (e.key === '.' || e.key === ',') {
-                                                                        e.preventDefault();
-                                                                    }
-                                                                }}
-                                                                style={{ height: 'auto', maxWidth: '40px', width: '100%', textAlign: 'center', margin: 'auto', padding: 0, border: 'none' }}
-                                                            />
-
-                                                            <button
-                                                                className="item-quantity-btn"
-                                                                onClick={() => {
-                                                                    const storeItem = items.find(si => si.id === item.itemId);
-
-                                                                    // Get max quantity based on product type
-                                                                    let maxQty;
-                                                                    if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                        // For variants, use variant_stock from the specific variant
-                                                                        const variant = storeItem?.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id);
-                                                                        maxQty = variant?.variant_stock || Infinity;
-                                                                    } else {
-                                                                        // For simple products, use quantity_count
-                                                                        maxQty = storeItem?.quantity_count || Infinity;
-                                                                    }
-
-                                                                    if (item.quantity >= maxQty) {
-                                                                        toast.error(`Maximum available quantity is ${maxQty}`);
-                                                                    } else {
-                                                                        onQtyChange(item.id, 1);
-                                                                    }
-                                                                }}
-                                                                disabled={(() => {
-                                                                    const storeItem = items.find(si => si.id === item.itemId);
-                                                                    if (!storeItem) return false;
-
-                                                                    // Get max quantity based on product type
-                                                                    let maxQty;
-                                                                    if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                        const variant = (item.variants && item.variants.length > 0)
-                                                                            ? storeItem.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id)
-                                                                            : undefined;
-                                                                        maxQty = variant?.variant_stock || Infinity;
-                                                                    } else {
-                                                                        maxQty = storeItem.quantity_count || Infinity;
-                                                                    }
-
-                                                                    return item.quantity >= maxQty;
-                                                                })()}
-                                                                style={{
-                                                                    opacity: (() => {
-                                                                        const storeItem = items.find(si => si.id === item.itemId);
-                                                                        if (!storeItem) return 1;
-
-                                                                        let maxQty;
-                                                                        if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                            const variant = (item.variants && item.variants.length > 0)
-                                                                                ? storeItem.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id)
-                                                                                : undefined;
-                                                                            maxQty = variant?.variant_stock || Infinity;
-                                                                        } else {
-                                                                            maxQty = storeItem.quantity_count || Infinity;
-                                                                        }
-
-                                                                        return item.quantity >= maxQty ? 0.5 : 1;
-                                                                    })(),
-                                                                    cursor: (() => {
-                                                                        const storeItem = items.find(si => si.id === item.itemId);
-                                                                        if (!storeItem) return "pointer";
-
-                                                                        let maxQty;
-                                                                        if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                            const variant = (item.variants && item.variants.length > 0)
-                                                                                ? storeItem.variants?.find(v => v.id === item.variants![0].variant_id)
-                                                                                : undefined;
-                                                                            maxQty = variant?.variant_stock || Infinity;
-                                                                        } else {
-                                                                            maxQty = storeItem.quantity_count || Infinity;
-                                                                        }
-
-                                                                        return item.quantity >= maxQty ? "not-allowed" : "pointer";
-                                                                    })(),
-                                                                    backgroundColor: (() => {
-                                                                        const storeItem = items.find(si => si.id === item.itemId);
-                                                                        if (!storeItem) return "#384b70";
-
-                                                                        let maxQty;
-                                                                        if (item.product_type === 'variable_product' && item.variants?.length) {
-                                                                            const variant = (item.variants && item.variants.length > 0)
-                                                                                ? storeItem.variants?.find(v => v.id === item.variants![0].variant_id)
-                                                                                : undefined;
-                                                                            maxQty = variant?.variant_stock || Infinity;
-                                                                        } else {
-                                                                            maxQty = storeItem.quantity_count || Infinity;
-                                                                        }
-
-                                                                        return item.quantity >= maxQty ? "#9cb9d0" : "#384b70";
-                                                                    })(),
-                                                                }}
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </div>
-
-                                                        <div className="item-price">₹{item.quantity * item.final_cost}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </>
-                        ) : (
-                            <div className="empty-cart-message">
-                                <FiShoppingCart size={80} color="#ccc" />
-                                <p>Your cart is empty</p>
-                            </div>
-                        )}
-                    </>
+                    <ItemsTab
+                        cart={cart}
+                        items={items}
+                        onQtyChange={onQtyChange}
+                        onRemoveItem={onRemoveItem}
+                    />
                 )}
 
                 {activeInnerTab === 'Client' && (
-                    <div className="client-form" >
-                        <div className="form-group">
-                            <div className="form-group">
-                                <label>Phone Number</label>
-                                <input
-                                    type="tel"
-                                    value={number}
-                                    onChange={(e) => {
-                                        const digitsOnly = e.target.value.replace(/\D/g, '');
-                                        if (digitsOnly.length <= 10) {
-                                            setNumber(digitsOnly);
-                                        }
-                                    }}
-                                    onBlur={handleNumberBlur}
-                                    placeholder="Enter 10-digit phone number"
-                                    required
-                                    maxLength={10}
-                                    pattern="\d{10}"
-                                />
-                            </div>
-                            <label>Client Name</label>
-                            <input
-                                type="text"
-                                value={clientName}
-                                onChange={(e) => {
-                                    const textOnly = e.target.value.replace(/[^a-zA-Z\s\-'.]/g, '');
-                                    setClientName(textOnly);
-                                }}
-                                placeholder="Enter client name"
-                                required
-                                pattern="[A-Za-z\s\-'.]+"
-                                title="Only letters, spaces, hyphens, apostrophes, and periods are allowed"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>Email (optional)</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter email"
-                            />
-                        </div>
-                        {activeTab !== 'Cart' &&
-                            <>
-                                <div className="form-group">
-                                    <label>Address</label>
-                                    <input
-                                        type="text"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        placeholder="Enter address"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Pincode</label>
-                                    <input
-                                        type="text"
-                                        value={pincode}
-                                        onChange={(e) => setPincode(e.target.value)}
-                                        placeholder="Enter pincode"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Delivery Charge</label>
-                                    <input
-                                        type="number"
-                                        value={deliveryCharge === 0 ? '' : deliveryCharge}
-                                        onChange={(e) => {
-                                            const val = Number(e.target.value);
-                                            setDeliveryCharge(isNaN(val) ? 0 : val);
-                                        }}
-                                        placeholder="Enter delivery charge"
-                                        min={0}
-                                    />
-                                </div>
-                            </>
-                        }
-                    </div>
+                    <ClientTab
+                        activeTab={activeTab}
+                        clientName={clientName}
+                        setClientName={setClientName}
+                        email={email}
+                        setEmail={setEmail}
+                        number={number}
+                        setNumber={setNumber}
+                        address={address}
+                        setAddress={setAddress}
+                        pincode={pincode}
+                        setPincode={setPincode}
+                        deliveryCharge={deliveryCharge}
+                        setDeliveryCharge={setDeliveryCharge}
+                        customers={customers}
+                        companySlug={companySlug}
+                        handleNumberBlur={handleNumberBlur}
+                    />
                 )}
 
                 {activeInnerTab === 'Bill' && (
-                    <div className="bill-section" >
-                        <div className="total-section">
-                            <div className="total-row">
-                                <span>Base Total:</span>
-                                <span>₹{baseTotal.toFixed(2)}</span>
-                            </div>
-
-                            {isServiceChargeApplied && (
-                                <div className="total-row">
-                                    <span>
-                                        Service Charge ({serviceChargeType === 'percentage'
-                                            ? `${serviceChargePercent}%`
-                                            : `₹${serviceChargeAmount}`}) + 18% GST:
-                                    </span>
-                                    <span>₹{serviceChargeAmountWithGST.toFixed(2)}</span>
-                                </div>
-                            )}
-
-                            <div className="total-row subtotal">
-                                <span>Subtotal:</span>
-                                <span>₹{subtotalAfterServiceCharge.toFixed(2)}</span>
-                            </div>
-
-                            {isDiscountApplied && (
-                                <div className="total-row">
-                                    <span>
-                                        Discount ({discountType === 'percentage'
-                                            ? `${discountPercent}%`
-                                            : `₹${discountAmount}`}):
-                                    </span>
-                                    <span>-₹{appliedDiscount.toFixed(2)}</span>
-                                </div>
-                            )}
-
-                            <div className="total-row grand-total">
-                                <span>Final Cost:</span>
-                                <span>₹{total}</span>
-                            </div>
-                        </div>
-                    </div>
+                    <BillTab
+                        baseTotal={baseTotal}
+                        serviceChargeAmountWithGST={serviceChargeAmountWithGST}
+                        subtotalAfterServiceCharge={subtotalAfterServiceCharge}
+                        appliedDiscount={appliedDiscount}
+                        total={total}
+                        isServiceChargeApplied={isServiceChargeApplied}
+                        serviceChargeType={serviceChargeType}
+                        serviceChargePercent={serviceChargePercent}
+                        serviceChargeAmount={serviceChargeAmount}
+                        isDiscountApplied={isDiscountApplied}
+                        discountType={discountType}
+                        discountPercent={discountPercent}
+                        discountAmount={discountAmount}
+                    />
                 )}
 
-                <div className="toggle-total-outer">
-                    <div
-                        className="sectionToggle"
-                        onClick={() => setShowPaymentDetails(!showPaymentDetails)}
-                    >
-                        <span>{showPaymentDetails ? '-' : '+'}</span>
-                        <span>Payments & Discount</span>
-                    </div>
-                    <div className="total">
-                        Final Cost:{' '}
-                        <strong>
-                            ₹
-                            {total}
-                        </strong>
-                    </div>
-                </div>
-
-                {showPaymentDetails && (
-                    <div className="payment-section">
-                        <div className="section-group">
-                            <div className="options-row" style={{ marginBottom: 5 }}>
-                                <label className="custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        checked={isServiceChargeApplied}
-                                        onChange={(e) => setIsServiceChargeApplied(e.target.checked)}
-                                    />
-                                    <span className="checkmark" />
-                                    <div className="section-title" style={{ margin: 0 }}>Service Charges*</div>
-                                </label>
-                            </div>
-
-                            {isServiceChargeApplied && (
-                                <div className="discount-input-container" style={{ marginBottom: 10 }}>
-                                    <div className="options-row">
-                                        <label className="custom-radio">
-                                            <input
-                                                type="radio"
-                                                name="serviceChargeType"
-                                                value="amount"
-                                                checked={serviceChargeType === 'amount'}
-                                                onChange={() => setServiceChargeType('amount')}
-                                            />
-                                            <span className="radiomark" />
-                                            Fixed Amount
-                                        </label>
-
-                                        <label className="custom-radio">
-                                            <input
-                                                type="radio"
-                                                name="serviceChargeType"
-                                                value="percentage"
-                                                checked={serviceChargeType === 'percentage'}
-                                                onChange={() => setServiceChargeType('percentage')}
-                                            />
-                                            <span className="radiomark" />
-                                            Percentage
-                                        </label>
-                                    </div>
-
-                                    {serviceChargeType === 'amount' ? (
-                                        <input
-                                            type="number"
-                                            value={serviceChargeAmount === 0 ? '' : serviceChargeAmount}
-                                            onChange={(e) => {
-                                                const val = Number(e.target.value);
-                                                setServiceChargeAmount(isNaN(val) ? 0 : val);
-                                            }}
-                                            placeholder="Enter service charge amount"
-                                            min={0}
-                                            max={baseTotal}
-                                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                                        />
-
-                                    ) : (
-                                        <input
-                                            type="number"
-                                            value={serviceChargePercent === 0 ? '' : serviceChargePercent}
-                                            onChange={(e) => {
-                                                const val = Number(e.target.value);
-                                                setServiceChargePercent(isNaN(val) ? 0 : val);
-                                            }}
-                                            placeholder="Enter service charge %"
-                                            min={0}
-                                            max={100}
-                                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                                        />
-
-                                    )}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="section-group">
-                            <div className="options-row">
-                                <label className="custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        checked={isDiscountApplied}
-                                        onChange={(e) => setIsDiscountApplied(e.target.checked)}
-                                    />
-                                    <span className="checkmark" />
-                                    <div className="section-title" style={{ margin: 0 }}> Discount*</div>
-
-                                </label>
-
-                            </div>
-                        </div>
-                        {isDiscountApplied && (
-                            <div className="discount-input-container">
-                                <label>Discount Type</label>
-                                <div className="options-row">
-                                    <label className="custom-radio">
-                                        <input
-                                            type="checkbox"
-                                            name="discountType"
-                                            value="amount"
-                                            checked={discountType === 'amount'}
-                                            onChange={() => setDiscountType('amount')}
-                                        />
-                                        <span className="radiomark" />
-                                        Fixed Amount
-                                    </label>
-
-                                    <label className="custom-radio">
-                                        <input
-                                            type="checkbox"
-                                            name="discountType"
-                                            value="percentage"
-                                            checked={discountType === 'percentage'}
-                                            onChange={() => setDiscountType('percentage')}
-                                        />
-                                        <span className="radiomark" />
-                                        Percentage
-                                    </label>
-                                </div>
-
-                                {discountType === 'amount' ? (
-                                    <input
-                                        type="number"
-                                        value={discountAmount === 0 ? '' : discountAmount}
-                                        onChange={(e) => {
-                                            const val = Number(e.target.value);
-                                            setDiscountAmount(isNaN(val) ? 0 : val);
-                                        }}
-                                        placeholder="Enter discount amount"
-                                        min={0}
-                                        max={baseTotal}
-                                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                                    />
-
-                                ) : (
-                                    <input
-                                        type="number"
-                                        value={discountPercent === 0 ? '' : discountPercent}
-                                        onChange={(e) => {
-                                            const val = Number(e.target.value);
-                                            setDiscountPercent(isNaN(val) ? 0 : val);
-                                        }}
-                                        placeholder="Enter discount %"
-                                        min={0}
-                                        max={100}
-                                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                                    />
-                                )}
-                            </div>
-
-                        )}
-
-                        <div className="section-group">
-                            <div className="section-title">Payment Method*</div>
-                            <div className="options-row">
-                                <label className="custom-radio">
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="cash"
-                                        checked={paymentMethod === 'cash'}
-                                        onChange={() => setPaymentMethod('cash')}
-                                    />
-                                    <span className="radiomark" />
-                                    Cash
-                                </label>
-
-                                <label className="custom-radio">
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="online"
-                                        checked={paymentMethod === 'online'}
-                                        onChange={() => setPaymentMethod('online')}
-                                    />
-                                    <span className="radiomark" />
-                                    Online
-                                </label>
-
-                                {paymentMethod === 'online' && BankAccountList && BankAccountList.length > 0 && (
-                                    <div className="bank-account-selection" style={{ width: '100%', marginTop: '10px' }}>
-                                        <label>Select Bank Account*</label>
-                                        <select
-                                            value={selectedBankAccount || ''}
-                                            onChange={(e) => setSelectedBankAccount(Number(e.target.value) || null)}
-                                            required
-                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-                                        >
-                                            <option value="">Select Bank Account</option>
-                                            {BankAccountList.map((account) => (
-                                                <option key={account.id} value={account.id}>
-                                                    {account.bank_name} - {account.account_number} ({account.type})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                )}
-
-                                {paymentMethod === 'online' && (!BankAccountList || BankAccountList.length === 0) && (
-                                    <div style={{ color: 'red', marginTop: '10px' }}>
-                                        No bank accounts available. Please add <Link href={`/${companySlug}/settings#bank-accounts`}>bank accounts in</Link> settings.
-
-                                    </div>
-                                )}
-
-                                <label className="custom-radio">
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="card"
-                                        checked={paymentMethod === 'card'}
-                                        onChange={() => setPaymentMethod('card')}
-                                    />
-                                    <span className="radiomark" />
-                                    Card
-                                </label>
-
-                                <label className="custom-radio">
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="card"
-                                        checked={paymentMethod === 'self'}
-                                        onChange={() => setPaymentMethod('self')}
-                                    />
-                                    <span className="radiomark" />
-                                    Self consumption
-                                </label>
-
-                                <label className="custom-radio">
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="credit"
-                                        checked={paymentMethod === 'credit'}
-                                        onChange={() => setPaymentMethod('credit')}
-                                    />
-                                    <span className="radiomark" />
-                                    Credit
-                                </label>
-
-
-                                {paymentMethod === 'credit' && (
-                                    <div className="credit-options" style={{ width: '100%' }}>
-                                        <div className="options-row">
-                                            <label className="custom-radio">
-                                                <input
-                                                    type="radio"
-                                                    name="creditPaymentType"
-                                                    value="full"
-                                                    checked={creditPaymentType === 'full'}
-                                                    onChange={() => setCreditPaymentType('full')}
-                                                />
-                                                <span className="radiomark" />
-                                                Full Payment
-                                            </label>
-
-                                            <label className="custom-radio">
-                                                <input
-                                                    type="radio"
-                                                    name="creditPaymentType"
-                                                    value="partial"
-                                                    checked={creditPaymentType === 'partial'}
-                                                    onChange={() => setCreditPaymentType('partial')}
-                                                />
-                                                <span className="radiomark" />
-                                                Partial Payment
-                                            </label>
-                                        </div>
-
-                                        {creditPaymentType === 'partial' && (
-                                            <div className="form-group" style={{ marginTop: 10 }}>
-                                                <input
-                                                    type="number"
-                                                    value={partialAmount === 0 ? '' : partialAmount}
-                                                    onChange={(e) => {
-                                                        const val = Number(e.target.value);
-                                                        setPartialAmount(isNaN(val) ? 0 : val);
-                                                    }}
-                                                    onWheel={(e) => (e.target as HTMLInputElement).blur()} // This will remove focus when scrolling
-                                                    placeholder="Enter partial payment amount"
-                                                    min={0}
-                                                    max={parseFloat(total)}
-                                                />
-                                            </div>
-                                        )}
-
-                                        <div className="form-group" style={{ marginTop: 10 }}>
-                                            <label>Credit Note (Optional)</label>
-                                            <textarea
-                                                value={creditNote}
-                                                onChange={(e) => setCreditNote(e.target.value)}
-                                                placeholder="Enter any notes about this credit transaction"
-                                                rows={3}
-                                                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                )}
-
-                <div className="actions" >
-                    <button
-                        className="btn"
-                        onClick={() => {
-                            if (!validateFields()) return;
-                            handleSave();
-                        }}
-                        disabled={isSaving}
-                    >
-                        {isSaving ? 'Saving...' : 'Save'}
-                    </button>
-
-                    <button
-                        className="btn"
-                        onClick={() => {
-                            if (!validateFields()) return;
-                            handlePrint();
-                        }}
-                        disabled={isPrinting}
-                    >
-                        {isPrinting ? 'Printing...' : 'Save & Print'}
-                    </button>
-
-                    <button
-                        className="btn"
-                        onClick={() => {
-                            if (!validateFields()) return;
-                            handleSendWhatsapp();
-                        }}
-                        disabled={isSendWhatsapp}
-                    >
-                        {isSendWhatsapp ? 'Sending...' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>Save & <FaWhatsapp /></span>}
-                    </button>
-                </div>
+                <PaymentSection
+                    showPaymentDetails={showPaymentDetails}
+                    setShowPaymentDetails={setShowPaymentDetails}
+                    total={total}
+                    isServiceChargeApplied={isServiceChargeApplied}
+                    setIsServiceChargeApplied={setIsServiceChargeApplied}
+                    serviceChargeType={serviceChargeType}
+                    setServiceChargeType={setServiceChargeType}
+                    serviceChargeAmount={serviceChargeAmount}
+                    setServiceChargeAmount={setServiceChargeAmount}
+                    serviceChargePercent={serviceChargePercent}
+                    setServiceChargePercent={setServiceChargePercent}
+                    isDiscountApplied={isDiscountApplied}
+                    setIsDiscountApplied={setIsDiscountApplied}
+                    discountType={discountType}
+                    setDiscountType={setDiscountType}
+                    discountAmount={discountAmount}
+                    setDiscountAmount={setDiscountAmount}
+                    discountPercent={discountPercent}
+                    setDiscountPercent={setDiscountPercent}
+                    paymentMethod={paymentMethod}
+                    setPaymentMethod={setPaymentMethod}
+                    BankAccountList={BankAccountList || []}
+                    selectedBankAccount={selectedBankAccount}
+                    setSelectedBankAccount={setSelectedBankAccount}
+                    companySlug={companySlug}
+                    creditPaymentType={creditPaymentType}
+                    setCreditPaymentType={setCreditPaymentType}
+                    partialAmount={partialAmount}
+                    setPartialAmount={setPartialAmount}
+                    creditNote={creditNote}
+                    setCreditNote={setCreditNote}
+                />
+                <ActionsSection
+                    validateFields={validateFields}
+                    handleSave={handleSave}
+                    isSaving={isSaving}
+                    handlePrint={handlePrint}
+                    isPrinting={isPrinting}
+                    handleSendWhatsapp={handleSendWhatsapp}
+                    isSendWhatsapp={isSendWhatsapp}
+                />
             </div>
         </div>
     );

@@ -256,25 +256,6 @@ export default function CheckoutPanel({
                     setSelectedBankAccount={setSelectedBankAccount}
                     items={items}
                 />
-                <div className="content">
-                    {activeTab === 'Cart' && (
-                        <>
-
-                        </>
-                    )}
-
-                    {activeTab === 'Delivery' && (
-                        <div className="delivery">
-
-                        </div>
-                    )}
-
-                    {activeTab === 'Pickup' && (
-                        <div className="pickup">
-
-                        </div>
-                    )}
-                </div>
             </div>
         </>
     );

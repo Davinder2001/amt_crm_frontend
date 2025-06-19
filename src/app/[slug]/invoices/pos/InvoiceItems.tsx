@@ -45,6 +45,19 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
     return cartItem ? cartItem.quantity : 0;
   };
 
+  const getAvailableStock = (item: StoreItem, variant?: variations) => {
+    if (variant) {
+      // For variants: variant_stock minus cart quantities for this variant
+      const variantInCart = cart.find(ci => ci.itemId === item.id && ci.variantId === variant.id);
+      const cartQty = variantInCart ? variantInCart.quantity : 0;
+      return Math.max(0, (variant.variant_stock ?? 0) - cartQty);
+    }
+    // For simple products: quantity_count minus cart quantities
+    const itemInCart = cart.find(ci => ci.itemId === item.id && !ci.variantId);
+    const cartQty = itemInCart ? itemInCart.quantity : 0;
+    return Math.max(0, (item.quantity_count ?? 0) - cartQty);
+  };
+
   const filteredItems = items.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -217,20 +230,26 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   .map(attr => attr.value.substring(0, 1).toUpperCase())
                   .join('');
                 const variantQty = getVariantQuantity(variantModalItem.id, variant.id);
+                const availableStock = getAvailableStock(variantModalItem, variant);
+                const isOutOfStock = availableStock <= 0;
 
                 return (
                   <div
                     key={variant.id}
-                    className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''} ${variantQty > 0 ? 'in-cart' : ''}`}
+                    className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''} ${variantQty > 0 ? 'in-cart' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
                     onClick={() => {
                       setSelectedVariant(variant);
                       setUseUnitPrice(false);
                       setUnitQuantity(1);
                     }}
+                    title={`${availableStock} available`}
                   >
                     <div className="bubble-label">{firstLetters}</div>
                     {variantQty > 0 && (
                       <div className="variant-qty-badge">{variantQty}</div>
+                    )}
+                    {isOutOfStock && (
+                      <div className="out-of-stock-badge">0</div>
                     )}
                   </div>
                 );
@@ -248,6 +267,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                     {selectedVariant.variant_price_per_unit && (
                       <span className="unit-price"> (₹{selectedVariant.variant_price_per_unit}/unit)</span>
                     )}
+                  </div>
+                  <div className={`variant-stock ${getAvailableStock(variantModalItem, selectedVariant || undefined) <= 0 ? 'out-of-stock' : ''}`}>
+                    Available: {getAvailableStock(variantModalItem, selectedVariant || undefined)}
                   </div>
                 </>
               ) : (
@@ -279,11 +301,11 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                         value={unitQuantity || ''}
                         onChange={(e) => {
                           const numValue = e.target.value === '' ? 0 : Number(e.target.value);
-                          setUnitQuantity(isNaN(numValue) ? 0 : numValue);
+                          const maxAvailable = getAvailableStock(variantModalItem, selectedVariant);
+                          setUnitQuantity(Math.min(maxAvailable, isNaN(numValue) ? 0 : numValue));
                         }}
                         placeholder="e.g. 0.1"
                       />
-
                     </div>
                     <div className="calculated-price">
                       Total: ₹{(selectedVariant.variant_price_per_unit * unitQuantity).toFixed(2)}
@@ -294,9 +316,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
             )}
 
             <button
-              disabled={!selectedVariant}
+              disabled={!selectedVariant || getAvailableStock(variantModalItem, selectedVariant) <= 0}
               onClick={() => {
-                if (selectedVariant) {
+                if (selectedVariant && getAvailableStock(variantModalItem, selectedVariant) > 0) {
                   const calculatedPrice = useUnitPrice
                     ? Number(selectedVariant.variant_price_per_unit) * unitQuantity
                     : Number(selectedVariant.final_cost);
@@ -313,12 +335,17 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   handleVariantModalClose();
                 }
               }}
-              className="add-button"
+              className={`add-button ${getAvailableStock(variantModalItem, selectedVariant || undefined) <= 0 ? 'disabled' : ''}`}
+              style={{ cursor: getAvailableStock(variantModalItem, selectedVariant || undefined) <= 0 ? 'not-allowed' : 'pointer' }}
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16">
                 <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              {useUnitPrice ? 'Add with Unit Pricing' : 'Add To Cart'}
+              {getAvailableStock(variantModalItem, selectedVariant || undefined) <= 0 ? (
+                'Out of Stock'
+              ) : (
+                useUnitPrice ? 'Add with Unit Pricing' : 'Add To Cart'
+              )}
             </button>
           </div>
         </Modal>

@@ -6,6 +6,7 @@ import { MdOutlineFilterList } from 'react-icons/md';
 import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
 import Modal from '@/components/common/Modal';
+import { FormInput } from '@/components/common/FormInput';
 
 interface catMenuProps {
   items: StoreItem[];
@@ -271,13 +272,18 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                     </div>
                     <div className="unit-quantity-input">
                       <label>Units:</label>
-                      <input
+                      <FormInput
+                        label="Units"
+                        name="unitQuantity"
                         type="number"
-                        min="1"
-                        step="0.1"
-                        value={unitQuantity}
-                        onChange={(e) => setUnitQuantity(Number(e.target.value))}
+                        value={unitQuantity || ''}
+                        onChange={(e) => {
+                          const numValue = e.target.value === '' ? 0 : Number(e.target.value);
+                          setUnitQuantity(isNaN(numValue) ? 0 : numValue);
+                        }}
+                        placeholder="e.g. 0.1"
                       />
+
                     </div>
                     <div className="calculated-price">
                       Total: ₹{(selectedVariant.variant_price_per_unit * unitQuantity).toFixed(2)}

@@ -63,33 +63,56 @@ export default function CheckoutPanel({
 
 
     const cartItemCount = cart.length;
+    
+    const buildPayload = (): CreateInvoicePayload => {
+        const itemsPayload = cart.map(item => {
+            const baseItem = {
+                item_id: typeof item.itemId === 'string' ? parseInt(item.itemId, 10) : item.itemId!,
+                quantity: item.quantity,
+                final_cost: item.final_cost,
+                product_type: item.product_type,
+                unit_of_measure: item.unit_of_measure
+            };
 
-    const buildPayload = (): CreateInvoicePayload => ({
-        number: number,
-        client_name: clientName,
-        email: email,
-        invoice_date: new Date().toISOString().split('T')[0],
-        discount_price: discountAmount,
-        discount_percentage: discountPercent,
-        discount_type: discountType,
-        serviceChargeAmount: serviceChargeAmount,
-        serviceChargePercent: serviceChargePercent,
-        serviceChargeType: serviceChargeType,
-        creditPaymentType: creditPaymentType,
-        partialAmount: partialAmount,
-        credit_note: creditNote,
-        bank_account_id: selectedBankAccount || undefined,
-        item_type: activeTab,
-        payment_method: paymentMethod,
-        address: address,
-        pincode: pincode,
-        delivery_charge: deliveryCharge,
-        items: cart.map(i => ({
-            item_id: typeof i.id === 'string' ? parseInt(i.id, 10) : i.id,
-            quantity: i.quantity,
-            final_cost: i.final_cost,
-        })),
-    });
+            if (item.product_type === 'variable_product' && item.variants && item.variants.length > 0) {
+                return {
+                    ...baseItem,
+                    variants: item.variants.map(variant => ({
+                        variant_id: variant.variant_id,
+                        quantity: variant.quantity,
+                        final_cost: variant.final_cost,
+                        variant_price_per_unit: variant.variant_price_per_unit,
+                        units: variant.units || null
+                    }))
+                };
+            }
+
+            return baseItem;
+        });
+
+        return {
+            number: number,
+            client_name: clientName,
+            email: email,
+            invoice_date: new Date().toISOString().split('T')[0],
+            discount_price: discountAmount,
+            discount_percentage: discountPercent,
+            discount_type: discountType,
+            serviceChargeAmount: serviceChargeAmount,
+            serviceChargePercent: serviceChargePercent,
+            serviceChargeType: serviceChargeType,
+            creditPaymentType: creditPaymentType,
+            partialAmount: partialAmount,
+            credit_note: creditNote,
+            bank_account_id: selectedBankAccount || undefined,
+            item_type: activeTab,
+            payment_method: paymentMethod,
+            address: address,
+            pincode: pincode,
+            delivery_charge: deliveryCharge,
+            items: itemsPayload
+        };
+    };
 
 
     // 1) Save only

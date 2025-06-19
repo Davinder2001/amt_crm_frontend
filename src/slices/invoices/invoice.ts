@@ -87,18 +87,28 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
           ...newInvoice,
           items: newInvoice.items
             .filter((item) => item.item_id !== null)
-            .map((item) => ({
-              item_id: item.item_id,
-              quantity: item.quantity,
-              final_cost: item.final_cost,
-              variants: item.variants?.map(variant => ({
-                variant_id: variant.variant_id,
-                quantity: variant.quantity,
-                final_cost: variant.final_cost,
-                variant_price_per_unit: variant.variant_price_per_unit,
-                units: variant.units
-              }))
-            })),
+            .map((item) => {
+              const baseItem = {
+                item_id: item.item_id,
+                quantity: item.quantity,
+                final_cost: item.final_cost,
+              };
+
+              if (item.product_type === 'variable_product' && item.variants) {
+                return {
+                  ...baseItem,
+                  variants: item.variants.map(variant => ({
+                    variant_id: variant.variant_id,
+                    quantity: variant.quantity,
+                    final_cost: variant.final_cost,
+                    variant_price_per_unit: variant.variant_price_per_unit,
+                    units: variant.units || null
+                  }))
+                };
+              }
+
+              return baseItem;
+            }),
         },
       }),
       invalidatesTags: ["Invoice"],
@@ -112,18 +122,28 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
           ...newInvoice,
           items: newInvoice.items
             .filter((item) => item.item_id !== null)
-            .map((item) => ({
-              item_id: item.item_id,
-              quantity: item.quantity,
-              final_cost: item.final_cost,
-              variants: item.variants?.map(variant => ({
-                variant_id: variant.variant_id,
-                quantity: variant.quantity,
-                final_cost: variant.final_cost,
-                variant_price_per_unit: variant.variant_price_per_unit,
-                units: variant.units
-              }))
-            })),
+            .map((item) => {
+              const baseItem = {
+                item_id: item.item_id,
+                quantity: item.quantity,
+                final_cost: item.final_cost,
+              };
+
+              if (item.product_type === 'variable_product' && item.variants) {
+                return {
+                  ...baseItem,
+                  variants: item.variants.map(variant => ({
+                    variant_id: variant.variant_id,
+                    quantity: variant.quantity,
+                    final_cost: variant.final_cost,
+                    variant_price_per_unit: variant.variant_price_per_unit,
+                    units: variant.units || null
+                  }))
+                };
+              }
+
+              return baseItem;
+            }),
         },
         responseHandler: (response) => response.blob(),
       }),
@@ -138,18 +158,28 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
           ...newInvoice,
           items: newInvoice.items
             .filter((item) => item.item_id !== null)
-            .map((item) => ({
-              item_id: item.item_id,
-              quantity: item.quantity,
-              final_cost: item.final_cost,
-              variants: item.variants?.map(variant => ({
-                variant_id: variant.variant_id,
-                quantity: variant.quantity,
-                final_cost: variant.final_cost,
-                variant_price_per_unit: variant.variant_price_per_unit,
-                units: variant.units
-              }))
-            })),
+            .map((item) => {
+              const baseItem = {
+                item_id: item.item_id,
+                quantity: item.quantity,
+                final_cost: item.final_cost,
+              };
+
+              if (item.product_type === 'variable_product' && item.variants) {
+                return {
+                  ...baseItem,
+                  variants: item.variants.map(variant => ({
+                    variant_id: variant.variant_id,
+                    quantity: variant.quantity,
+                    final_cost: variant.final_cost,
+                    variant_price_per_unit: variant.variant_price_per_unit,
+                    units: variant.units || null
+                  }))
+                };
+              }
+
+              return baseItem;
+            }),
         },
       }),
       invalidatesTags: ["Invoice"],

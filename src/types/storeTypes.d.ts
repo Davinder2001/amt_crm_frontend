@@ -69,6 +69,8 @@ interface CartItem {
   featured_image?: string;
   quantity: number;
   final_cost: number;
+  product_type?: 'simple_product' | 'variable_product';
+  unit_of_measure?: 'unit' | 'pieces';
   variants?: CartItemVariant[];
 }
 
@@ -99,6 +101,7 @@ interface variations {
   images?: string[];
   final_cost?: number;
   attributes: AttributeItem[];
+  units?: number | null;
 }
 
 interface BaseStoreItemRequest<TCategories = Category[]> {

@@ -114,7 +114,7 @@ function POSPage() {
         ? getItemsFromCategory(selectedChildCatId) // Show items from selected child category
         : getItemsFromCategory(selectedTopCatId); // Show items from selected parent or all items
 
-    const handleAddToCart = (item: StoreItem, variant?: variations) => {
+    const handleAddToCart = (item: StoreItem, variant?: variations, useUnitPrice?: boolean, unitQuantity?: number | null) => {
         const id = variant ? `${item.id}-${variant.id}` : item.id;
         const finalCost = variant?.final_cost ?? item.final_cost;
         const name = item.name + (variant
@@ -123,7 +123,7 @@ function POSPage() {
 
         setCart(prev => {
             const existing = prev.find(ci => ci.id.toString() === id.toString());
-            const availableQty = item.quantity_count; // Use parent item's quantity for all variants
+            const availableQty = item.quantity_count;
 
             // Calculate total quantity of all variants of this item already in cart
             const totalVariantsInCart = prev
@@ -135,7 +135,15 @@ function POSPage() {
                 if (totalVariantsInCart < availableQty) {
                     return prev.map(ci =>
                         ci.id.toString() === id.toString()
-                            ? { ...ci, quantity: ci.quantity + 1 }
+                            ? {
+                                ...ci,
+                                quantity: ci.quantity + 1,
+                                variants: ci.variants?.map(v => ({
+                                    ...v,
+                                    quantity: v.quantity + 1,
+                                    units: useUnitPrice ? (typeof unitQuantity === 'number' ? unitQuantity : null) : null
+                                }))
+                            }
                             : ci
                     );
                 }
@@ -143,17 +151,32 @@ function POSPage() {
             } else {
                 // Only add if we have at least 1 in stock across all variants
                 if (totalVariantsInCart < availableQty) {
-                    return [
-                        ...prev,
-                        {
-                            id,
-                            itemId: item.id,
-                            variantId: variant?.id,
-                            name,
+                    const newItem: CartItem = {
+                        id,
+                        itemId: item.id,
+                        variantId: variant?.id,
+                        name,
+                        quantity: 1,
+                        final_cost: finalCost,
+                        product_type: item.product_type,
+                        unit_of_measure: item.unit_of_measure
+                    };
+
+                    if (variant && item.product_type === 'variable_product') {
+                        newItem.variants = [{
+                            variant_id: variant.id!,
                             quantity: 1,
-                            final_cost: finalCost
-                        }
-                    ];
+                            final_cost: useUnitPrice
+                                ? (variant.variant_price_per_unit !== undefined
+                                    ? Number(variant.variant_price_per_unit) * (unitQuantity || 1)
+                                    : null)
+                                : (variant.final_cost !== undefined ? variant.final_cost : null),
+                            variant_price_per_unit: variant.variant_price_per_unit !== undefined ? variant.variant_price_per_unit : null,
+                            units: useUnitPrice ? (typeof unitQuantity === 'number' ? unitQuantity : null) : null
+                        }];
+                    }
+
+                    return [...prev, newItem];
                 }
                 return prev; // Don't add if out of stock
             }
@@ -192,13 +215,24 @@ function POSPage() {
                         // Ensure quantity stays between 1 and available quantity considering other variants
                         newQty = Math.max(1, Math.min(newQty, availableQty - othersQty));
 
-                        return { ...ci, quantity: newQty };
+                        // Update variant quantity if this is a variable product
+                        const updatedItem = { ...ci, quantity: newQty };
+                        if (ci.product_type === 'variable_product' && ci.variants?.length) {
+                            updatedItem.variants = ci.variants.map(v => ({
+                                ...v,
+                                quantity: newQty
+                            }));
+                        }
+
+                        return updatedItem;
                     }
                     return ci;
                 })
                 .filter(ci => ci.quantity > 0);
         });
     };
+
+
     const handleRemoveItem = (itemId: string | number) => {
         setCart(prev => prev.filter(item => item.id.toString() !== itemId.toString()));
     };

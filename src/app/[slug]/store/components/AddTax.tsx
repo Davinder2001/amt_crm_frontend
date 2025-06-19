@@ -72,18 +72,20 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
 
             {isOpen && (
                 <ul className="vendors-menu">
-                    {taxes.map((tax) => (
-                        <li
-                            key={tax.id}
-                            className={`vendor-name ${tax.id === selectedTaxId ? 'active' : ''}`}
-                            onClick={() => {
-                                onTaxSelect(tax.id);
-                                setIsOpen(false);
-                            }}
-                        >
-                            {tax.name} - {tax.rate}%
-                        </li>
-                    ))}
+                    <div className="vendors-scroll">
+                        {taxes.map((tax) => (
+                            <li
+                                key={tax.id}
+                                className={`vendor-name ${tax.id === selectedTaxId ? 'active' : ''}`}
+                                onClick={() => {
+                                    onTaxSelect(tax.id);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                {tax.name} - {tax.rate}%
+                            </li>
+                        ))}
+                    </div>
                     <li
                         onClick={() => {
                             setAddTaxModalOpen(true);
@@ -96,7 +98,12 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            borderTop: '1px solid #ddd'
+                            borderTop: '1px solid #ddd',
+                            position: 'sticky',
+                            bottom: 0,
+                            width: '100%',
+                            backgroundColor: '#fff',
+                            zIndex: 9
                         }}
                     >
                         <FaPlus /> Add New Tax

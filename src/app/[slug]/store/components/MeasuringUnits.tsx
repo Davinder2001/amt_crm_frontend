@@ -25,6 +25,7 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [createMeasuringUnit] = useCreateMeasuringUnitMutation();
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [nameError, setNameError] = useState<string | null>(null);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -39,21 +40,36 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
     const handleSubmit = async () => {
         if (!unitName) return;
 
+        // Client-side duplicate check
+        const isDuplicate = units.some(
+            unit => unit.name.toLowerCase() === unitName.trim().toLowerCase()
+        );
+
+        if (isDuplicate) {
+            setNameError('A unit with this name already exists');
+            return;
+        }
+
         try {
             setIsSubmitting(true);
+            setNameError(null); // Clear any previous errors
+
             const response = await createMeasuringUnit({
                 name: unitName
             }).unwrap();
 
-            const newUnit = response.data;
-            toast.success('Measuring unit created successfully');
-            onUnitAdded(newUnit);
-            onUnitSelect(newUnit.id);
-            setAddUnitModalOpen(false);
-            setUnitName('');
+            if (response && response.unit) {
+                const newUnit = response.unit;
+                toast.success(response.message || 'Measuring unit created successfully');
+                onUnitAdded(newUnit);
+                onUnitSelect(newUnit.id);
+                setAddUnitModalOpen(false);
+                setUnitName('');
+            } else {
+                throw new Error('Invalid response structure');
+            }
         } catch (err) {
             console.error('Error creating measuring unit:', err);
-            toast.error('Failed to create measuring unit');
         } finally {
             setIsSubmitting(false);
         }
@@ -70,18 +86,20 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
 
             {isOpen && (
                 <ul className="vendors-menu">
-                    {units.map((unit) => (
-                        <li
-                            key={unit.id}
-                            className={`vendor-name ${unit.id === selectedUnit ? 'active' : ''}`}
-                            onClick={() => {
-                                onUnitSelect(unit.id);
-                                setIsOpen(false);
-                            }}
-                        >
-                            {unit.name}
-                        </li>
-                    ))}
+                    <div className="vendors-scroll">
+                        {units.map((unit) => (
+                            <li
+                                key={unit.id}
+                                className={`vendor-name ${unit.id === selectedUnit ? 'active' : ''}`}
+                                onClick={() => {
+                                    onUnitSelect(unit.id);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                {unit.name}
+                            </li>
+                        ))}
+                    </div>
                     <li
                         onClick={() => {
                             setAddUnitModalOpen(true);
@@ -94,7 +112,12 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            borderTop: '1px solid #ddd'
+                            borderTop: '1px solid #ddd',
+                            position: 'sticky',
+                            bottom: 0,
+                            width: '100%',
+                            backgroundColor: '#fff',
+                            zIndex: 9
                         }}
                     >
                         <FaPlus /> Add New Unit
@@ -104,7 +127,10 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
 
             <Modal
                 isOpen={addUnitModalOpen}
-                onClose={() => setAddUnitModalOpen(false)}
+                onClose={() => {
+                    setAddUnitModalOpen(false)
+                    setNameError(null);
+                }}
                 title="Add New Measuring Unit"
                 width="500px"
             >
@@ -113,9 +139,14 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
                         fullWidth
                         label="Unit Name"
                         value={unitName}
-                        onChange={(e) => setUnitName(e.target.value)}
+                        onChange={(e) => {
+                            setUnitName(e.target.value);
+                            setNameError(null);
+                        }}
                         variant="outlined"
                         size="small"
+                        error={!!nameError}
+                        helperText={nameError}
                         sx={{
                             mb: 2,
                             '& .MuiOutlinedInput-root': {

@@ -48,15 +48,17 @@ const AddVendor: React.FC<AddVendorProps> = ({
 
       {isOpen && (
         <ul className="vendors-menu">
-          {vendors.map((vendor) => (
-            <li
-              key={vendor.id}
-              onClick={() => handleVendorClick(vendor.id)}
-              className={`vendor-name ${vendor.id === selectedVendorId ? 'active' : ''}`}
-            >
-              {vendor.vendor_name}
-            </li>
-          ))}
+          <div className="vendors-scroll">
+            {vendors.map((vendor) => (
+              <li
+                key={vendor.id}
+                onClick={() => handleVendorClick(vendor.id)}
+                className={`vendor-name ${vendor.id === selectedVendorId ? 'active' : ''}`}
+              >
+                {vendor.vendor_name}
+              </li>
+            ))}
+          </div>
           <li
             onClick={() => setAddVendorModalOpen(true)}
             style={{
@@ -66,7 +68,12 @@ const AddVendor: React.FC<AddVendorProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              borderTop: '1px solid #ddd'
+              borderTop: '1px solid #ddd',
+              position: 'sticky',
+              bottom: 0,
+              width: '100%',
+              backgroundColor: '#fff',
+              zIndex: 9
             }}
           >
             <FaPlus /> Add New Vendor

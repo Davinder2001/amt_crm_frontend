@@ -88,7 +88,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
       providesTags: ["Company"],
     }),
 
-    createMeasuringUnit: builder.mutation<{ status?: boolean, error?: string, message?: string; data: MeasuringUnit }, { name: string }>({
+    createMeasuringUnit: builder.mutation<{ status?: boolean, error?: string, message?: string; unit: MeasuringUnit; }, { name: string }>({
       query: (payload) => ({
         url: "store/measuring-units",
         method: "POST",

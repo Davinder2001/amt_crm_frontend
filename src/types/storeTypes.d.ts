@@ -197,6 +197,12 @@ interface Attribute {
   status: string;
 };
 
+interface AttributesResponse {
+  status: boolean;
+  message: string;
+  data: Attribute[];
+}
+
 interface CreateAttributePayload {
   name: string;
   values: string[];

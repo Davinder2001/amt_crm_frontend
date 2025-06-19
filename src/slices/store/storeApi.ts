@@ -75,12 +75,12 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // 🆕 Fetch all attributes
-    fetchAttributes: builder.query<Attribute[], void>({
+    fetchAttributes: builder.query<AttributesResponse, void>({
       query: () => "attributes",
       providesTags: ["Store"],
     }),
 
-    fetchVariations: builder.query<Attribute[], void>({
+    fetchVariations: builder.query<AttributesResponse, void>({
       query: () => "variations",
       providesTags: ["Store"],
     }),

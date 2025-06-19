@@ -22,7 +22,8 @@ import {
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const Attributes = () => {
-    const { data: attributes, isLoading, error } = useFetchAttributesQuery();
+    const { data: response, isLoading, error } = useFetchAttributesQuery();
+    const attributes = response?.data || [];
     const [createAttribute] = useCreateAttributeMutation();
     const [deleteAttribute] = useDeleteAttributeMutation();
     const [toggleStatus] = useToggleAttributeStatusMutation();

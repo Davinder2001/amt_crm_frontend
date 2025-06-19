@@ -19,7 +19,8 @@ interface Props {
 }
 
 const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure }) => {
-    const { data: attributes } = useFetchVariationsQuery();
+    const { data: response } = useFetchVariationsQuery();
+    const attributes = useMemo(() => response?.data || [], [response]);
     const [combinations, setCombinations] = useState<variations[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -29,25 +30,25 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
             // Check if this would create a duplicate combination
             return combinations.some((combo, idx) => {
                 if (idx === comboIndex) return false; // skip current combination
-                
+
                 // Check if this combination would match another combination
                 const otherAttributes = combo.attributes.filter(attr => attr.attribute_id !== attributeId);
                 const currentAttributes = combinations[comboIndex].attributes.filter(attr => attr.attribute_id !== attributeId);
-                
+
                 // If other attributes match
                 const otherAttributesMatch = otherAttributes.every(otherAttr => {
-                    return currentAttributes.some(currentAttr => 
-                        currentAttr.attribute_id === otherAttr.attribute_id && 
+                    return currentAttributes.some(currentAttr =>
+                        currentAttr.attribute_id === otherAttr.attribute_id &&
                         currentAttr.attribute_value_id === otherAttr.attribute_value_id
                     );
                 });
-                
+
                 // And if the new value matches the other combination's value for this attribute
-                const newValueMatches = combo.attributes.some(attr => 
-                    attr.attribute_id === attributeId && 
+                const newValueMatches = combo.attributes.some(attr =>
+                    attr.attribute_id === attributeId &&
                     attr.attribute_value_id === valueId
                 );
-                
+
                 return otherAttributesMatch && newValueMatches;
             });
         };
@@ -199,8 +200,8 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                             {attr.values.map(val => {
                                                 const isDisabled = isValueDisabled(index, attr.id, val.id.toString());
                                                 return (
-                                                    <option 
-                                                        key={val.id} 
+                                                    <option
+                                                        key={val.id}
                                                         value={val.id.toString()}
                                                         disabled={isDisabled && !(selectedAttr?.attribute_value_id === val.id.toString())}
                                                     >

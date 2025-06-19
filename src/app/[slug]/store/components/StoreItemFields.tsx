@@ -37,12 +37,7 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
             rate: number;
         }>;
     };
-    measuringUnits?: {
-        data?: Array<{
-            id: number;
-            name: string;
-        }>;
-    };
+    measuringUnits?: MeasuringUnit[];
     selectedCategories: Category[];
     setSelectedCategories: (categories: Category[]) => void;
     variants: variations[];
@@ -246,7 +241,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <div className="add-items-form-input-label-container">
                                     <label>Measuring Unit</label>
                                     <MeasuringUnits
-                                        units={measuringUnits?.data ?? []}
+                                        units={measuringUnits ?? []}
                                         selectedUnit={typeof formData.unit_id === 'number' ? formData.unit_id : null}
                                         onUnitSelect={(unitId) => {
                                             const updated = { ...formData, unit_id: unitId };

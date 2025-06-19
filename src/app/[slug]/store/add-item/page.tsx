@@ -38,7 +38,8 @@ const AddItem: React.FC = () => {
   const [createStoreItem, { isLoading: isCreating }] = useCreateStoreItemMutation();
   const { currentData: vendorsData } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
-  const { data: measuringUnits } = useFetchMeasuringUnitsQuery();
+  const { data: measuringUnitsResponse } = useFetchMeasuringUnitsQuery();
+  const measuringUnits = measuringUnitsResponse?.units || [];
   const router = useRouter();
   const { companySlug } = useCompany();
   const [activeTab, setActiveTab] = useState(0);

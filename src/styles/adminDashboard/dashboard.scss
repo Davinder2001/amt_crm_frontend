@@ -15,10 +15,11 @@
         border-radius: $border-radius;
         border: 1px solid $border-color;
         padding: 15px;
+
         h3 {
-        font-size: 18px;
-        font-weight: 600;
-        color: $dark-color;
+            font-size: 18px;
+            font-weight: 600;
+            color: $dark-color;
         }
     }
 
@@ -69,6 +70,9 @@
         }
 
         .legend {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-top: 1rem;
             font-size: $font-size-small;
             color: $gray-color;
@@ -81,11 +85,11 @@
                 margin: 0 0.5rem;
 
                 &.profit {
-                    background-color: var(--primary-color);
+                    background-color: $primary-color;
                 }
 
                 &.loss {
-                    background-color: $orange-color;
+                    background-color: $hover-color;
                 }
             }
         }
@@ -280,6 +284,7 @@
                 color: $primary-color;
                 font-weight: 500;
                 cursor: pointer;
+
                 &:hover {
                     color: $hover-color;
                 }

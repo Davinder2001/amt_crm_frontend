@@ -227,9 +227,9 @@ const UpdateItem = () => {
     // Featured image if it's a new File
     if (formData.featured_image instanceof File) {
       formdata.append('featured_image', formData.featured_image);
-    } else if (formData.featured_image === null) {
-      // Backend will understand this means "remove the existing image"
-      formdata.append('featured_image', 'null'); // or omit, depending on API
+    } else if (formData.featured_image !== null) {
+      // Only append if not null
+      formdata.append('featured_image', formData.featured_image);
     }
 
     // Removed images

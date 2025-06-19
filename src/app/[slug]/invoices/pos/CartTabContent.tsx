@@ -2,7 +2,6 @@
 
 import { useFetchCompanyAccountsQuery } from '@/slices/company/companyApi';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
-import { useFetchStoreQuery } from '@/slices/store/storeApi';
 import { useCompany } from '@/utils/Company';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -93,7 +92,6 @@ export default function CartTabContent({
     const [isDiscountApplied, setIsDiscountApplied] = useState(false);
     const [isServiceChargeApplied, setIsServiceChargeApplied] = useState(false);
     const { data: customers } = useFetchAllCustomersQuery();
-    const { data: storeData } = useFetchStoreQuery();
     const { data } = useFetchCompanyAccountsQuery();
     const BankAccountList = data?.accounts;
     const { companySlug } = useCompany();
@@ -335,23 +333,131 @@ export default function CartTabContent({
                                                         <div className="quantity-control">
                                                             <button
                                                                 className="item-quantity-btn"
-                                                                onClick={() => onQtyChange((item.id), -1)}
+                                                                onClick={() => onQtyChange(item.id, -1)}
                                                                 disabled={item.quantity <= 1}
+                                                                style={{
+                                                                    opacity: item.quantity <= 1 ? 0.5 : 1,
+                                                                    cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
+                                                                    backgroundColor: item.quantity <= 1 ? "#9cb9d0" : "#384b70",
+                                                                }}
                                                             >
                                                                 −
                                                             </button>
-                                                            <span>{item.quantity}</span>
+
+                                                            <input
+                                                                type="number"
+                                                                value={item.quantity}
+                                                                onChange={(e) => {
+                                                                    const value = e.target.value;
+                                                                    const storeItem = items.find(si => si.id === item.itemId);
+                                                                    const maxQty = storeItem?.quantity_count || Infinity;
+
+                                                                    // Calculate total quantity of all variants of this item in cart
+                                                                    const totalVariantsInCart = cart
+                                                                        .filter(ci => ci.itemId === item.itemId)
+                                                                        .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                    // Current item's quantity without this one's new value
+                                                                    const othersQty = totalVariantsInCart - item.quantity;
+
+                                                                    if (value === '') {
+                                                                        onQtyChange(item.id, '');
+                                                                        return;
+                                                                    }
+
+                                                                    const newQty = parseInt(value);
+                                                                    if (!isNaN(newQty)) {
+                                                                        if (newQty + othersQty > maxQty) {
+                                                                            toast.error(`Maximum available quantity is ${maxQty}`);
+                                                                            onQtyChange(item.id, (maxQty - othersQty).toString());
+                                                                        } else {
+                                                                            onQtyChange(item.id, newQty.toString());
+                                                                        }
+                                                                    }
+                                                                }}
+                                                                onBlur={(e) => {
+                                                                    const newValue = e.target.value;
+                                                                    if (newValue === '' || parseInt(newValue) < 1) {
+                                                                        onQtyChange(item.id, '1');
+                                                                    }
+                                                                }}
+                                                                min={1}
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key === 'Enter') {
+                                                                        e.currentTarget.blur();
+                                                                    }
+                                                                    if (e.key === '.' || e.key === ',') {
+                                                                        e.preventDefault();
+                                                                    }
+                                                                }}
+                                                                style={{ height: 'auto', maxWidth: '40px', width: '100%', textAlign: 'center', margin: 'auto', padding: 0, border: 'none' }}
+                                                            />
+
                                                             <button
                                                                 className="item-quantity-btn"
-                                                                onClick={() => onQtyChange((item.id), 1)}
+                                                                onClick={() => {
+                                                                    const storeItem = items.find(si => si.id === item.itemId);
+                                                                    const maxQty = storeItem?.quantity_count || Infinity;
+
+                                                                    // Calculate total quantity of all variants of this item in cart
+                                                                    const totalVariantsInCart = cart
+                                                                        .filter(ci => ci.itemId === item.itemId)
+                                                                        .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                    if (totalVariantsInCart >= maxQty) {
+                                                                        toast.error(`Maximum available quantity is ${maxQty}`);
+                                                                    } else {
+                                                                        onQtyChange(item.id, 1);
+                                                                    }
+                                                                }}
                                                                 disabled={(() => {
-                                                                    const storeItem = storeData?.find((s: StoreItem) => s.id === item.id);
-                                                                    return storeItem ? item.quantity >= storeItem.quantity_count : false;
+                                                                    const storeItem = items.find(si => si.id === item.itemId);
+                                                                    if (!storeItem) return false;
+
+                                                                    // Calculate total quantity of all variants of this item in cart
+                                                                    const totalVariantsInCart = cart
+                                                                        .filter(ci => ci.itemId === item.itemId)
+                                                                        .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                    return totalVariantsInCart >= storeItem.quantity_count;
                                                                 })()}
+                                                                style={{
+                                                                    opacity: (() => {
+                                                                        const storeItem = items.find(si => si.id === item.itemId);
+                                                                        if (!storeItem) return 1;
+
+                                                                        const totalVariantsInCart = cart
+                                                                            .filter(ci => ci.itemId === item.itemId)
+                                                                            .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                        return totalVariantsInCart >= storeItem.quantity_count ? 0.5 : 1;
+                                                                    })(),
+                                                                    cursor: (() => {
+                                                                        const storeItem = items.find(si => si.id === item.itemId);
+                                                                        if (!storeItem) return "pointer";
+
+                                                                        const totalVariantsInCart = cart
+                                                                            .filter(ci => ci.itemId === item.itemId)
+                                                                            .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                        return totalVariantsInCart >= storeItem.quantity_count ? "not-allowed" : "pointer";
+                                                                    })(),
+                                                                    backgroundColor: (() => {
+                                                                        const storeItem = items.find(si => si.id === item.itemId);
+                                                                        if (!storeItem) return "#384b70";
+
+                                                                        const totalVariantsInCart = cart
+                                                                            .filter(ci => ci.itemId === item.itemId)
+                                                                            .reduce((sum, ci) => sum + ci.quantity, 0);
+
+                                                                        return totalVariantsInCart >= storeItem.quantity_count ? "#9cb9d0" : "#384b70";
+                                                                    })(),
+                                                                }}
                                                             >
                                                                 +
                                                             </button>
                                                         </div>
+
                                                         <div className="item-price">₹{item.quantity * item.final_cost}</div>
                                                     </div>
                                                 </div>

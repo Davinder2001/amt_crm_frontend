@@ -63,7 +63,7 @@ export default function CheckoutPanel({
 
 
     const cartItemCount = cart.length;
-    
+
     const buildPayload = (): CreateInvoicePayload => {
         const itemsPayload = cart.map(item => {
             const baseItem = {
@@ -81,7 +81,6 @@ export default function CheckoutPanel({
                         variant_id: variant.variant_id,
                         quantity: variant.quantity,
                         final_cost: variant.final_cost,
-                        variant_price_per_unit: variant.variant_price_per_unit,
                         units: variant.units || null
                     }))
                 };

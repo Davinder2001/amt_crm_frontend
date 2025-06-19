@@ -57,7 +57,6 @@ interface CartItemVariant {
   variant_id: number;
   quantity: number;
   final_cost: number | null;
-  variant_price_per_unit: number | null;
   units: number | null;
 }
 

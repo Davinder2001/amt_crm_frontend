@@ -171,7 +171,6 @@ function POSPage() {
                                     ? Number(variant.variant_price_per_unit) * (unitQuantity || 1)
                                     : null)
                                 : (variant.final_cost !== undefined ? variant.final_cost : null),
-                            variant_price_per_unit: variant.variant_price_per_unit !== undefined ? variant.variant_price_per_unit : null,
                             units: useUnitPrice ? (typeof unitQuantity === 'number' ? unitQuantity : null) : null
                         }];
                     }

@@ -103,16 +103,16 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, onSuccess }) => {
                     scrollButtons="auto"
                     sx={{
                         '& .MuiTab-root': {
-                            color: '#384b70',
+                            color: 'var(--primary-color)',
                             '&.Mui-disabled': {
                                 color: '#ccc',
                             },
                             '&.Mui-selected': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                             },
                         },
                         '& .MuiTabs-indicator': {
-                            backgroundColor: '#384b70',
+                            backgroundColor: 'var(--primary-color)',
                         },
                     }}
                 >

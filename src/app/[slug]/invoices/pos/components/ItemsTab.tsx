@@ -99,7 +99,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                             style={{
                                                 opacity: item.quantity <= 1 ? 0.5 : 1,
                                                 cursor: item.quantity <= 1 ? "not-allowed" : "pointer",
-                                                backgroundColor: item.quantity <= 1 ? "#9cb9d0" : "#384b70",
+                                                backgroundColor: item.quantity <= 1 ? "var(--primary-color)" : "var(--primary-color)",
                                             }}
                                         >
                                             −
@@ -225,7 +225,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                 })(),
                                                 backgroundColor: (() => {
                                                     const storeItem = items.find(si => si.id === item.itemId);
-                                                    if (!storeItem) return "#384b70";
+                                                    if (!storeItem) return "var(--primary-color)";
 
                                                     let maxQty;
                                                     if (item.product_type === 'variable_product' && item.variants?.length) {
@@ -237,7 +237,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                         maxQty = storeItem.quantity_count || Infinity;
                                                     }
 
-                                                    return item.quantity >= maxQty ? "#9cb9d0" : "#384b70";
+                                                    return item.quantity >= maxQty ? "var(--primary-light)" : "var(--primary-color)";
                                                 })(),
                                             }}
                                         >

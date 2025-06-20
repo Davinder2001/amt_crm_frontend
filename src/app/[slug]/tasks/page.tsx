@@ -69,16 +69,16 @@ const Page = () => {
             style={{ backgroundColor: '#fff' }}
             sx={{
               '& .MuiTab-root': {
-                color: '#384b70',
+                color: 'var(--primary-color)',
                 '&.Mui-disabled': {
                   color: '#ccc',
                 },
                 '&.Mui-selected': {
-                  color: '#384b70',
+                  color: 'var(--primary-color)',
                 },
               },
               '& .MuiTabs-indicator': {
-                backgroundColor: '#384b70',
+                backgroundColor: 'var(--primary-color)',
               },
             }}
           >

@@ -148,7 +148,7 @@ const MyTasks = () => {
         }
         
         .task-button {
-          background: #384b70;
+          background: var(--primary-color);
           color: white;
           border: none;
           padding: 0.4rem 0.6rem;

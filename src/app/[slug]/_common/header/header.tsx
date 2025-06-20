@@ -74,7 +74,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
           }
         />
       )}
-      {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
+      {!isMobile && <FaBars size={20} style={{ cursor: 'pointer', color: 'var(--primary-color)' }} onClick={handleToggleSidebar} />}
       {/* <h1 className="header-title">{title}</h1> */}
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
@@ -90,7 +90,7 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
         <Profile />
       </div>
       {isMobile && (
-        <FaBars size={20} style={{ cursor: 'pointer' }} onClick={openMenu} className="m-toggle" />
+        <FaBars size={20} style={{ cursor: 'pointer', color: 'var(--primary-color)' }} onClick={openMenu} className="m-toggle" />
       )}
     </div>
   );

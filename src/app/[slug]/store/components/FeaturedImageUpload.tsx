@@ -62,7 +62,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
           display: flex;
           flex-direction: column;
           align-items: center;
-          border: 2px dashed #9CB9D0;
+          border: 2px dashed var(--primary-light);
           border-radius: 5px;
           background-color: #f9ffff;
           cursor: pointer;

@@ -202,19 +202,19 @@ const CreateTax = () => {
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 '&.Mui-focused': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
                                 },
                             },
                         }}
@@ -231,19 +231,19 @@ const CreateTax = () => {
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 '&.Mui-focused': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
                                 },
                             },
                         }}

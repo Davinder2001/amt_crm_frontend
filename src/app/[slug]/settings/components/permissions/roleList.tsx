@@ -57,14 +57,14 @@ const RoleList: React.FC = () => {
           <FaEye onClick={() => {
             setSelectedRoleId(role.id);
             setIsViewModalOpen(true);
-          }} color="#384b70" />
+          }} color="var(--primary-color)" />
 
           {role.name !== "admin" ?
             <>
               <FaEdit onClick={() => {
                 setSelectedRoleId(role.id);
                 setIsEditModalOpen(true);
-              }} color="#384b70" />
+              }} color="var(--primary-color)" />
               <FaTrash onClick={() => handleDeleteRole(role.id)} color="#ff0000" />
             </>
             : ''

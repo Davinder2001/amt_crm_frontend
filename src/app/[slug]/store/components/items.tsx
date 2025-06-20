@@ -21,6 +21,7 @@ import { placeholderImg } from '@/assets/useImage';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
+import { MdEdit } from 'react-icons/md';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -417,7 +418,7 @@ const Items: React.FC = () => {
               .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
               .map(item => (
                 <div key={item.id} className="existing-item" style={{
-                  padding: '0.5rem',
+                  padding: '5px 0px',
                   borderBottom: '1px solid #eee',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -435,15 +436,16 @@ const Items: React.FC = () => {
                   <button
                     onClick={() => router.push(`/${companySlug}/store/edit-item/${item.id}`)}
                     className='buttons'
+                    style={{whiteSpace: 'nowrap', padding: '5px 10px'}}
                   >
-                    Update Batch
+                    <MdEdit/> Batch
                   </button>
                 </div>
               ))}
           </div>
 
-          <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p>Total: <strong>{storeItems.length}</strong></p>
+          <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <p>Total Items: <strong>{storeItems.length}</strong></p>
             <button
               onClick={() => router.push(`/${companySlug}/store/add-item`)}
               className='buttons'

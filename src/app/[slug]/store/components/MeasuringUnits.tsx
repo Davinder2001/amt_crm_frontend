@@ -107,7 +107,7 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
                         }}
                         style={{
                             padding: '8px 10px',
-                            color: '#384b70',
+                            color: 'var(--primary-color)',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
@@ -151,19 +151,19 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 '&.Mui-focused': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
                                 },
                             },
                         }}

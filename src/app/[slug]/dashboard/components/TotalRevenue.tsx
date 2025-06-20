@@ -64,8 +64,8 @@ const TotalRevenue = () => {
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Bar dataKey="profit" fill="#384B70" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="loss" fill="#9CB9D0" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="profit" fill="var(--primary-color)" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="loss" fill="var(--primary-light)" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

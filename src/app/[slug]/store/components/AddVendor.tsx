@@ -63,7 +63,7 @@ const AddVendor: React.FC<AddVendorProps> = ({
             onClick={() => setAddVendorModalOpen(true)}
             style={{
               padding: '8px 10px',
-              color: '#384B70',
+              color: 'var(--primary-color)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',

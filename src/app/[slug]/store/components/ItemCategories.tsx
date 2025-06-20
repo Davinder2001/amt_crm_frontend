@@ -267,9 +267,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             tabIndex={-1}
             disableRipple
             sx={{
-              color: '#384b70',
+              color: 'var(--primary-color)',
               '&.Mui-checked': {
-                color: '#384b70',
+                color: 'var(--primary-color)',
               },
             }}
           />
@@ -283,7 +283,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   handleEditCategory(category);
                 }}
               >
-                <FaEdit size={12} color="#384b70" />
+                <FaEdit size={12} color="var(--primary-color)" />
               </IconButton>
               <IconButton
                 size="small"
@@ -299,7 +299,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   }
                 }}
               >
-                <FaTrash size={12} color="#384b70" />
+                <FaTrash size={12} color="var(--primary-color)" />
               </IconButton>
             </Box>
           )}
@@ -350,9 +350,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             tabIndex={-1}
             disableRipple
             sx={{
-              color: '#384b70',
+              color: 'var(--primary-color)',
               '&.Mui-checked': {
-                color: '#384b70',
+                color: 'var(--primary-color)',
               },
             }}
           />
@@ -366,7 +366,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   handleEditCategory(category);
                 }}
               >
-                <FaEdit size={12} color="#384b70" />
+                <FaEdit size={12} color="var(--primary-color)" />
               </IconButton>
               <IconButton
                 size="small"
@@ -382,7 +382,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   }
                 }}
               >
-                <FaTrash size={12} color="#384b70" />
+                <FaTrash size={12} color="var(--primary-color)" />
               </IconButton>
             </Box>
           )}
@@ -418,7 +418,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <span
               onClick={() => toggleSection('categories')}
               style={{
-                color: '#384b70',
+                color: 'var(--primary-color)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -433,7 +433,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <div className="fields-wrapper">
               {isLoading ? (
                 <Box display="flex" justifyContent="center">
-                  <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+                  <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
                 </Box>
               ) : data?.data.length === 0 ? (
                 <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
@@ -476,7 +476,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <span
               onClick={() => toggleSection('categories')}
               style={{
-                color: '#384b70',
+                color: 'var(--primary-color)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -503,9 +503,9 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 }
                 InputLabelProps={{
                   sx: {
-                    color: '#384b70',
+                    color: 'var(--primary-color)',
                     '&.Mui-focused': {
-                      color: '#384b70',
+                      color: 'var(--primary-color)',
                     },
                   },
                 }}
@@ -520,7 +520,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   mb: 2,
                   '& .MuiOutlinedInput-root': {
                     '&.Mui-focused fieldset': {
-                      borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : '#384b70',
+                      borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : 'var(--primary-color)',
                     },
                   },
                   '& .MuiFormHelperText-root': {
@@ -534,7 +534,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               </Typography>
 
               {isLoading ? (
-                <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+                <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
               ) : (
                 <List sx={{ maxHeight: 200, overflow: 'auto', mb: 2 }}>
                   {data?.data?.map(renderParentOptions)}
@@ -550,8 +550,8 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                     setEditingCategory(null);
                   }}
                   sx={{
-                    borderColor: '#384b70',
-                    color: '#384b70',
+                    borderColor: 'var(--primary-color)',
+                    color: 'var(--primary-color)',
                     fontSize: '0.75rem',
                     py: 0.5,
                     px: 1.5,
@@ -568,7 +568,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   onClick={handleSubmit}
                   disabled={isCreating || !name.trim() || categoryExists(name, selectedParentId)}
                   sx={{
-                    backgroundColor: '#384b70',
+                    backgroundColor: 'var(--primary-color)',
                     fontSize: '0.75rem',
                     py: 0.5,
                     px: 1.5,

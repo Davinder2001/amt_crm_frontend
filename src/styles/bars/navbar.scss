@@ -64,7 +64,7 @@
     font-size: 14px;
 
     svg {
-      color: $hover-color;
+      color: var(--primary-light);
     }
   }
 
@@ -119,7 +119,7 @@
   text-decoration: none;
 
   svg {
-    color: $hover-color;
+    color: var(--primary-light);
   }
 
   .notification-badge {
@@ -146,7 +146,7 @@
 
   .login-btn {
     background-color: var(--primary-color);
-    color: white;
+    color: $white;
     padding: 10px 20px;
     border-radius: $border-radius;
     text-decoration: none;
@@ -175,18 +175,18 @@
       transition: all 0.3s ease;
 
       &:hover .profile-name {
-        color: $hover-color;
+        color: var(--primary-light);
       }
 
       .profile-avatar {
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        background: linear-gradient(135deg, $primary-color, $hover-color);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: $white;
         font-weight: 600;
         font-size: 16px;
       }
@@ -232,7 +232,7 @@
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: linear-gradient(135deg, $primary-color, $hover-color);
+          background: linear-gradient(135deg, $primary-color, var(--primary-light));
           display: flex;
           align-items: center;
           justify-content: center;
@@ -376,7 +376,7 @@
 
     &:focus {
       outline: none;
-      border-color: $hover-color;
+      border-color: var(--primary-light);
     }
   }
 }

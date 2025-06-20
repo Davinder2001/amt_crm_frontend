@@ -58,7 +58,7 @@ const ItemsTab: React.FC<Props> = ({ setVariants, variants, collapsedSections, t
                         <span
                             onClick={() => toggleSection('attributesVariations')}
                             style={{
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',

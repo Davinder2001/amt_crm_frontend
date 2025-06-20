@@ -106,12 +106,12 @@ const StoreStats = () => {
             <Line
               type="monotone"
               dataKey="value"
-              stroke="#384B70"
+              stroke="var(--primary-color)"
               strokeWidth={3}
               dot={false}
               activeDot={{
                 r: 6,
-                stroke: '#384B70',
+                stroke: 'var(--primary-color)',
                 strokeWidth: 2,
                 fill: '#fff'
               }}

@@ -49,7 +49,7 @@
     }
 }
 button.cancel-btn {
-    background-color: $hover-color;
+    background-color: var(--primary-light);
     color: $white;
     &:hover {
         background-color: $light-color;

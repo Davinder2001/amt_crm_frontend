@@ -90,7 +90,7 @@
       background: $primary-color;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
       }
     }
 
@@ -230,7 +230,7 @@
     }
 
     .info-card-green {
-      border-top-color: $hover-color;
+      border-top-color: var(--primary-light);
     }
 
     .info-card-yellow {

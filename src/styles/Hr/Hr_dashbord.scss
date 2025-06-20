@@ -45,7 +45,7 @@
     align-items: center;
     
       &:hover {
-      background-color: $hover-color;
+      background-color: var(--primary-light);
       }
   }
 }
@@ -124,7 +124,7 @@
   text-decoration: none;
 
   &:hover{
-    background-color: $hover-color;
+    background-color: var(--primary-light);
   }
 }
 
@@ -240,7 +240,7 @@
 }
 
 .emp-status.active {
-  color: $hover-color;
+  color: var(--primary-light);
   font-size: 12px;
 }
 

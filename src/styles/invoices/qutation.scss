@@ -52,7 +52,7 @@
 }
 
   .form-group input:focus {
-   border-color: $hover-color;
+   border-color: var(--primary-light);
   }
 
   .item-row {
@@ -132,7 +132,7 @@
       cursor: pointer;
       width: fit-content;
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
         color: $white;
       }
     }

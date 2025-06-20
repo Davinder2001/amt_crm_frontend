@@ -62,7 +62,7 @@
 
       svg {
         cursor: pointer;
-        color: $hover-color !important;
+        color: var(--primary-light) !important;
       }
     }
 
@@ -80,7 +80,7 @@
 
       &:focus-within {
         background-color: transparent;
-        border-color: $hover-color;
+        border-color: var(--primary-light);
       }
 
       .input-icon {
@@ -155,7 +155,7 @@
 
       &:hover {
         box-shadow: $box-shadow;
-        background-color: $hover-color;
+        background-color: var(--primary-light);
       }
     }
 
@@ -166,7 +166,7 @@
 
       .forgot-password-link {
         font-size: 14px;
-        color: $hover-color;
+        color: var(--primary-light);
         text-decoration: none;
         font-weight: 600;
       }
@@ -198,7 +198,7 @@
         font-weight: 600;
 
         &:hover {
-          color: $hover-color;
+          color: var(--primary-light);
         }
       }
 

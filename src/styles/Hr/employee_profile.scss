@@ -127,7 +127,7 @@
               color: $white;
 
               &:hover {
-                background: $hover-color;
+                background: var(--primary-light);
                 box-shadow: 0 8px 24px #0000001a;
               }
             }

@@ -89,7 +89,7 @@
                 }
 
                 &.loss {
-                    background-color: $hover-color;
+                    background-color: var(--primary-light);
                 }
             }
         }
@@ -176,7 +176,7 @@
 
                 .role {
                     font-size: $font-size-small;
-                    color: $hover-color;
+                    color: var(--primary-light);
                     font-weight: 600;
                 }
 
@@ -250,11 +250,11 @@
             }
 
             .orange {
-                color: $hover-color;
+                color: var(--primary-light);
             }
 
             .yellow {
-                color: $hover-color;
+                color: var(--primary-light);
             }
 
             .count {
@@ -285,7 +285,7 @@
                 cursor: pointer;
 
                 &:hover {
-                    color: $hover-color;
+                    color: var(--primary-light);
                 }
             }
         }

@@ -139,7 +139,7 @@
       }
 
       &.off {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
         color: $white;
       }
     }
@@ -160,7 +160,7 @@
       transition: all $transition;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
       }
 
       &:disabled {

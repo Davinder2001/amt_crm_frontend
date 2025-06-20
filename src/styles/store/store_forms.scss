@@ -187,7 +187,7 @@
         button {
           padding: 5px 10px;
           border-radius: $border-radius;
-          background-color: $primary-color;
+          background-color: var(--primary-color);
           color: $white;
           border: none;
         }
@@ -241,11 +241,17 @@
       gap: 20px;
       padding: 10px 20px;
       border-bottom: 1px solid #D9D9D9;
+      color: var(--primary-color);
+
+      svg {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
 
       h2 {
         font-size: 18px;
-        color: $primary-color;
-        font-family: 'DMSans';
+        color: var(--primary-color);
         font-weight: 600;
       }
     }
@@ -291,7 +297,7 @@
       border-radius: $border-radius;
 
       &:focus {
-        border-color: $hover-color;
+        border-color: var(--primary-light);
         background: transparent;
         transform: scale(1);
       }
@@ -344,7 +350,7 @@
     h1 {
       font-size: 34px;
       font-weight: $font-weight-bold;
-      color: $primary-color;
+      color: var(--primary-color);
       margin-bottom: 0.5rem;
     }
 
@@ -378,7 +384,7 @@
         letter-spacing: .4px;
 
         .input-icon {
-          color: $primary-color;
+          color: var(--primary-color);
           font-size: $input-icon-size;
         }
       }
@@ -394,7 +400,7 @@
         &:focus {
           outline: none;
           background-color: transparent;
-          border-color: $hover-color;
+          border-color: var(--primary-light);
         }
 
         &::placeholder {
@@ -426,7 +432,7 @@
     align-items: center;
 
     .primary-button {
-      background: $primary-color;
+      background: var(--primary-color);
       color: $white;
       border: none;
       padding: 10px 12px;
@@ -439,7 +445,7 @@
       gap: 0.5rem;
 
       &:hover:not(:disabled) {
-        background: $hover-color;
+        background: var(--primary-light);
         transform: translateY(-2px);
         box-shadow: $secondary-shadow;
       }
@@ -498,7 +504,7 @@
         gap: 5px;
 
         svg {
-          color: $primary-color;
+          color: var(--primary-color);
           font-size: 16px;
           display: none;
         }
@@ -512,7 +518,7 @@
         font-size: 16px;
 
         &:focus {
-          border-color: $hover-color;
+          border-color: var(--primary-light);
           background: transparent;
         }
       }
@@ -557,11 +563,11 @@
       gap: 10px;
       letter-spacing: 0.3px;
       font-weight: 500;
-      color: $primary-color;
+      color: var(--primary-color);
     }
 
     strong {
-      color: $primary-color;
+      color: var(--primary-color);
       margin-bottom: 10px;
       display: inline-flex;
     }
@@ -569,7 +575,7 @@
 
   .overall-tax {
     strong {
-      color: $primary-color;
+      color: var(--primary-color);
       margin-bottom: 10px;
       display: inline-flex;
     }
@@ -616,7 +622,7 @@
       color: $lable-color;
 
       svg {
-        color: $primary-color;
+        color: var(--primary-color);
         font-size: $input-icon-size;
       }
     }
@@ -629,7 +635,7 @@
       margin-top: 5px;
 
       &:focus {
-        border-color: $hover-color;
+        border-color: var(--primary-light);
         background: transparent;
         transform: scale(1);
       }

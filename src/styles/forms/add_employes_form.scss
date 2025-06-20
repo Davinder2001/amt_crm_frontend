@@ -123,7 +123,7 @@
 
 
       &:hover {
-        background: $hover-color;
+        background: var(--primary-light);
       }
     }
 

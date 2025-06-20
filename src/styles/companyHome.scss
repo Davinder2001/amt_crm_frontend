@@ -24,7 +24,7 @@
         font-size: $font-size-small;
 
         &:hover {
-            background: $hover-color;
+            background: var(--primary-light);
         }
     }
 }
@@ -120,7 +120,7 @@
     &:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.055);
-        border-color: $hover-color;
+        border-color: var(--primary-light);
 
         .company-header h2 {
             color: var(--primary-color);
@@ -265,7 +265,7 @@
 
 
   &:hover {
-    background-color: $hover-color;
+    background-color: var(--primary-light);
   }  
 }
 

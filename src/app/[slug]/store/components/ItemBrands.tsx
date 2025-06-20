@@ -150,7 +150,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                         <span
                             onClick={() => toggleSection('brands')}
                             style={{
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -164,7 +164,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                         <div className="fields-wrapper">
                             {isLoading ? (
                                 <Box display="flex" justifyContent="center">
-                                    <CircularProgress color="primary" sx={{ color: '#384b70' }} />
+                                    <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
                                 </Box>
                             ) : data?.length === 0 ? (
                                 <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
@@ -172,7 +172,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                 </Typography>
                             ) : (
                                 <FormControl fullWidth size="small" sx={{ maxWidth: 500, mb: 2 }}>
-                                    <InputLabel id="brand-select-label" sx={{ color: '#384b70' }}>Select Brand</InputLabel>
+                                    <InputLabel id="brand-select-label" sx={{ color: 'var(--primary-color)' }}>Select Brand</InputLabel>
                                     <Select
                                         labelId="brand-select-label"
                                         value={selectedBrand}
@@ -181,10 +181,10 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                         renderValue={(selected) => <span>{selected}</span>}
                                         sx={{
                                             '& .MuiOutlinedInput-notchedOutline': {
-                                                borderColor: '#384b70',
+                                                borderColor: 'var(--primary-color)',
                                             },
                                             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                borderColor: '#384b70',
+                                                borderColor: 'var(--primary-color)',
                                             },
                                         }}
                                     >
@@ -210,7 +210,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                                                 handleEditBrand(brand);
                                                             }}
                                                         >
-                                                            <FaEdit size={12} color="#384b70" />
+                                                            <FaEdit size={12} color="var(--primary-color)" />
                                                         </IconButton>
                                                         <IconButton
                                                             size="small"
@@ -220,7 +220,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                                                 setShowDeleteConfirm(true);
                                                             }}
                                                         >
-                                                            <FaTrash size={12} color="#384b70" />
+                                                            <FaTrash size={12} color="var(--primary-color)" />
                                                         </IconButton>
                                                     </Box>
                                                 )}
@@ -261,7 +261,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                         <span
                             onClick={() => toggleSection('brands')}
                             style={{
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -286,9 +286,9 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                 }
                                 InputLabelProps={{
                                     sx: {
-                                        color: '#384b70',
+                                        color: 'var(--primary-color)',
                                         '&.Mui-focused': {
-                                            color: '#384b70',
+                                            color: 'var(--primary-color)',
                                         },
                                     },
                                 }}
@@ -303,7 +303,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                     mb: 2,
                                     '& .MuiOutlinedInput-root': {
                                         '&.Mui-focused fieldset': {
-                                            borderColor: brandExists(name) ? '#d32f2f' : '#384b70',
+                                            borderColor: brandExists(name) ? '#d32f2f' : 'var(--primary-color)',
                                         },
                                     },
                                     '& .MuiFormHelperText-root': {
@@ -318,8 +318,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                     startIcon={<FaTimes size={12} />}
                                     onClick={handleCancel}
                                     sx={{
-                                        borderColor: '#384b70',
-                                        color: '#384b70',
+                                        borderColor: 'var(--primary-color)',
+                                        color: 'var(--primary-color)',
                                         fontSize: '0.75rem',
                                         py: 0.5,
                                         px: 1.5,
@@ -336,7 +336,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                     onClick={handleSubmit}
                                     disabled={(isCreating || isUpdating) || !name.trim() || brandExists(name)}
                                     sx={{
-                                        backgroundColor: '#384b70',
+                                        backgroundColor: 'var(--primary-color)',
                                         fontSize: '0.75rem',
                                         py: 0.5,
                                         px: 1.5,

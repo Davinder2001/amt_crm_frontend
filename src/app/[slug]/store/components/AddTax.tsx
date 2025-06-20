@@ -93,7 +93,7 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                         }}
                         style={{
                             padding: '8px 10px',
-                            color: '#384B70',
+                            color: 'var(--primary-color)',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
@@ -129,19 +129,19 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 '&.Mui-focused': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
                                 },
                             },
                         }}
@@ -158,19 +158,19 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#384b70',
+                                    borderColor: 'var(--primary-color)',
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: '#384b70',
+                                color: 'var(--primary-color)',
                                 '&.Mui-focused': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
                                 },
                             },
                         }}

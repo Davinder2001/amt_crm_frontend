@@ -20,7 +20,7 @@
         height: 41px;
         padding: 10px 12px;
         background: transparent;
-        border: 1px solid $hover-color;
+        border: 1px solid var(--primary-light);
         margin-left: 10px;
         border-radius: $border-radius;
         color: $primary-color;
@@ -80,7 +80,7 @@
         }
 
         &:hover {
-            background: $hover-color;
+            background: var(--primary-light);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.032);
 
@@ -108,7 +108,7 @@
         position: relative;
 
         &.active .toolbar-btn {
-            background: $hover-color;
+            background: var(--primary-light);
             color: $primary-color;
 
             &::after {
@@ -641,7 +641,7 @@ table {
     }
 
     .nav-arrow {
-        background: $hover-color;
+        background: var(--primary-light);
         color: $white;
         border-radius: $border-radius;
 

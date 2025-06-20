@@ -130,7 +130,7 @@ const IncomeExpense = () => {
 
   const data = getChartData();
   const isMonthly = timeRange === 'Monthly';
-  const barColor = activeTab === 'income' ? '#384B70' : '#9CB9D0';
+  const barColor = activeTab === 'income' ? 'var(--primary-color)' : 'var(--primary-light)';
 
   return (
     <div className="card income-expense">

@@ -17,7 +17,7 @@ const Employees = () => {
         <div className="card employees">
             <div className="card-header">
                 <h3>Employee</h3>
-                <button className="add-btn" onClick={() => router.push(`/${companySlug}/hr/add-employee`)}><FaPlusCircle size={16} color='#384B70' /></button>
+                <button className="add-btn" onClick={() => router.push(`/${companySlug}/hr/add-employee`)}><FaPlusCircle size={16} color='var(--primary-color)' /></button>
             </div>
             <ul className="employee-list">
                 {employeeList.slice(0, 5).map((emp: Employee, i: number) => (

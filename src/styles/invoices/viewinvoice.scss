@@ -246,7 +246,7 @@
 
         td {
           padding: 0.9rem 1rem;
-          border-bottom: 1px solid $hover-color;
+          border-bottom: 1px solid var(--primary-light);
         }
       }
     }
@@ -273,7 +273,7 @@
       font-size: $font-size;
 
       &:not(:last-child) {
-        border-bottom: 1px dashed $hover-color;
+        border-bottom: 1px dashed var(--primary-light);
       }
 
       &.total {

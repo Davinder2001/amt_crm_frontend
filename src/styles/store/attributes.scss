@@ -52,7 +52,7 @@
       &.active {
         background-color: $light_blue;
         font-weight: 500;
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
   }
@@ -75,9 +75,9 @@
     align-items: center;
     border: none;
     outline: none;
-    color: $primary-color;
+    color: var(--primary-color);
     background-color: unset;
-    border-bottom: 1px solid $primary-color;
+    border-bottom: 1px solid var(--primary-color);
 
     &:hover {
       font-size: 14px;
@@ -138,8 +138,8 @@
 
   .value-add-button {
     background-color: $light_blue;
-    border: 1px dashed $primary-color;
-    color: $primary-color;
+    border: 1px dashed var(--primary-color);
+    color: var(--primary-color);
     padding: 8px 12px;
     margin-bottom: 20px;
     font-size: 14px;
@@ -178,11 +178,11 @@
       }
 
       .delete-btn {
-        color: $primary-color;
+        color: var(--primary-color);
       }
 
       .edit-btn {
-        color: $primary-color;
+        color: var(--primary-color);
       }
 
       .status-dropdown {
@@ -227,7 +227,7 @@
           }
 
           .edit-btn {
-            color: $primary-color;
+            color: var(--primary-color);
           }
 
           .delete-btn {
@@ -352,7 +352,7 @@
           transition: 0.2s ease all;
 
           &.active {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
 
             .toggle-thumb {
               left: auto;

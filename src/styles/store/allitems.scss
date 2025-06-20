@@ -37,7 +37,7 @@
         }
 
         .import-items-cancel-button {
-            background-color: $hover-color;
+            background-color: var(--primary-light);
             color: $white;
             padding: 8px 12px;
             font-size: 16px;
@@ -62,7 +62,7 @@
             transition: background-color $transition;
 
             &:hover {
-                background-color: $hover-color;
+                background-color: var(--primary-light);
             }
         }
     }

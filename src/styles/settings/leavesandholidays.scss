@@ -68,7 +68,7 @@
     }
 
     .buttons.cancel {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
         color: $white;
     }
 
@@ -108,7 +108,7 @@
         border-radius: 6px;
 
         &.edit-button {
-            color: $primary-color;
+            color: var(--primary-color);
         }
 
         &.delete-button {
@@ -161,12 +161,12 @@
     }
 
     .tab:hover {
-        color: $primary-color;
+        color: var(--primary-color);
         background-color: #f6f8fa;
     }
 
     .tab.active {
-        color: $primary-color;
+        color: var(--primary-color);
         background-color: #ffffff;
     }
 
@@ -177,7 +177,7 @@
         left: 0;
         right: 0;
         height: 3px;
-        background-color: $primary-color;
+        background-color: var(--primary-color);
         border-radius: 3px 3px 0 0;
     }
 

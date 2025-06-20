@@ -87,7 +87,7 @@
         font-size: 16px;
 
         &:focus {
-         border-color: $hover-color;
+         border-color: var(--primary-light);
           background: transparent;
         }
 

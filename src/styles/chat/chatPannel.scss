@@ -240,7 +240,7 @@
 
     .clear-search-btn:hover,
     .start-chat-btn:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
     }
 
     /* Chat Main Area */
@@ -511,7 +511,7 @@
     }
 
     .new-chat-btn:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
         transform: translateY(-1px);
     }
 

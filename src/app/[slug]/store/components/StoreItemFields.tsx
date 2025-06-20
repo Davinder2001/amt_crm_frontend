@@ -123,12 +123,12 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             scrollButtons="auto"
                             sx={{
                                 '& .MuiTab-root': {
-                                    color: '#384b70',
+                                    color: 'var(--primary-color)',
 
                                     '&.Mui-disabled': { color: '#ccc' },
-                                    '&.Mui-selected': { color: '#384b70', fontWeight: 'bold', },
+                                    '&.Mui-selected': { color: 'var(--primary-color)', fontWeight: 'bold', },
                                 },
-                                '& .MuiTabs-indicator': { backgroundColor: '#384b70' },
+                                '& .MuiTabs-indicator': { backgroundColor: 'var(--primary-color)' },
                             }}
                         >
                             <Tab label="Basic Info" disabled={tabCompletion && !tabCompletion[0]} />
@@ -144,8 +144,8 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     toggleAllSections(anyOpen);
                                 }}
                                 className="header-icon"
-                                color="default"
-                                sx={{ color: '#384b70' }}
+                                color="primary"
+                                sx={{ color: 'var(--primary-color)' }}
                             >
                                 {sectionKeys.some(key => !collapsedSections[key]) ? <FiMinusCircle size={20} /> : <FiPlusCircle size={20} />}
                             </IconButton>
@@ -159,12 +159,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <h2 className="basic_label">Basic Info</h2>
                                 <span
                                     onClick={() => toggleSection('basicInfo')}
-                                    style={{
-                                        color: '#384b70',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
                                     aria-label="Toggle Basic Info Section"
                                 >
                                     {collapsedSections['basicInfo'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
@@ -211,12 +205,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             <h2 className="basic_label">Inventory & Dates</h2>
                             <span
                                 onClick={() => toggleSection('inventoryAndDates')}
-                                style={{
-                                    color: '#384b70',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
                                 aria-label="Toggle pricing Inventory Section"
                             >
                                 {collapsedSections['inventoryAndDates'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
@@ -299,12 +287,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <h2 className="basic_label">Pricing</h2>
                                 <span
                                     onClick={() => toggleSection('pricing')}
-                                    style={{
-                                        color: '#384b70',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
                                     aria-label="Toggle pricing Section"
                                 >
                                     {collapsedSections['pricing'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
@@ -376,12 +358,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             <h2 className="basic_label">Featured Image</h2>
                             <span
                                 onClick={() => toggleSection('featuredImage')}
-                                style={{
-                                    color: '#384b70',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
                                 aria-label="Toggle featured image Section"
                             >
                                 {collapsedSections['featuredImage'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
@@ -434,12 +410,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             <h2 className="basic_label">Media</h2>
                             <span
                                 onClick={() => toggleSection('media')}
-                                style={{
-                                    color: '#384b70',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
                                 aria-label="Toggle media and dates Section"
                             >
                                 {collapsedSections['media'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}

@@ -192,7 +192,7 @@
     
     &:focus {
         outline: none;
-       border-color: $hover-color;
+       border-color: var(--primary-light);
     }
     
     &::placeholder {
@@ -229,7 +229,7 @@
         &:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            background-color: $hover-color;
+            background-color: var(--primary-light);
         }
         
         &:active {

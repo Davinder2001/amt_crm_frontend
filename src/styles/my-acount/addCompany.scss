@@ -117,7 +117,7 @@
         transition: background-color 0.3s;
 
         &:hover {
-          background-color: $hover-color;
+          background-color: var(--primary-light);
         }
 
         &:disabled {

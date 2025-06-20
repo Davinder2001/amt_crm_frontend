@@ -32,15 +32,15 @@
     padding: .5rem 1rem;
     border-radius: $border-radius;
     cursor: pointer;
-    background-color: $primary-color;
-    border: 1px solid $primary-color;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     color: white;
     font-weight: 500;
     letter-spacing: 0.2px;
 
     &:hover {
-      background-color: $hover-color;
-      border-color: $hover-color;
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
     }
   }
 
@@ -48,16 +48,16 @@
     padding: .5rem 1rem;
     border-radius: $border-radius;
     cursor: pointer;
-    border: 1px solid $primary-color;
-    color: $primary-color;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
     background-color: white;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.2px;
 
     &:hover {
-      background-color: $hover-color;
-      border-color: $hover-color;
+      background-color: var(--primary-light);
+      border-color: var(--primary-light);
       color: $white;
     }
   }
@@ -77,7 +77,7 @@
   a {
     display: flex;
     align-items: center;
-    color: $primary-color;
+    color: var(--primary-color);
     text-decoration: none;
   }
 }
@@ -108,11 +108,11 @@
   cursor: pointer;
 
   &:hover {
-    color: $primary-color;
+    color: var(--primary-color);
   }
 
   &:active {
-    color: $primary-color;
+    color: var(--primary-color);
   }
 }
 
@@ -204,14 +204,14 @@
   width: fit-content;
 
   &:active {
-    color: $primary-color;
+    color: var(--primary-color);
     background: #e1f5f4;
     display: inline-block;
     border-radius: $border-radius;
   }
 
   &:hover {
-    color: $primary-color;
+    color: var(--primary-color);
     background: #e1f5f4;
     display: inline-block;
     border-radius: $border-radius;
@@ -228,7 +228,7 @@
     padding: 10px;
     border-radius: $border-radius;
     cursor: pointer;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
 
   }
 
@@ -387,8 +387,8 @@ nav.feature-card-nav-bar {
 
   .active-tab {
     font-weight: bold;
-    border-bottom: 2px solid $primary-color;
-    color: $primary-color;
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
   }
 }
 
@@ -461,7 +461,7 @@ nav.feature-card-nav-bar {
 }
 
 .manage-section {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   color: $white;
   position: relative;
   overflow: hidden;
@@ -536,7 +536,7 @@ nav.feature-card-nav-bar {
 }
 
 .comparison-table th {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
   font-weight: 600;
 }
 
@@ -659,7 +659,7 @@ nav.feature-card-nav-bar {
 .footer-bottom {
   padding: 15px 10px;
   font-size: 13px;
-  background-color: $primary-color;
+  background-color: var(--primary-color);
 
   .policy-links {
     list-style: none;
@@ -675,7 +675,7 @@ nav.feature-card-nav-bar {
 
       &:hover {
         text-decoration: underline;
-        border-bottom: 1px solid $primary-color;
+        border-bottom: 1px solid var(--primary-color);
       }
     }
   }
@@ -758,7 +758,7 @@ nav.feature-card-nav-bar {
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 20px;
-      color: $primary-color;
+      color: var(--primary-color);
     }
 
     .features {
@@ -783,7 +783,7 @@ nav.feature-card-nav-bar {
     }
 
     .btnPrimary {
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       color: white;
       border: none;
       padding: 8px 16px;
@@ -795,7 +795,7 @@ nav.feature-card-nav-bar {
 
     .btnSecondary {
       background-color: #DEE9F2;
-      color: $primary-color;
+      color: var(--primary-color);
       border: none;
       padding: 8px 16px;
       border-radius: $border-radius;
@@ -806,9 +806,9 @@ nav.feature-card-nav-bar {
 
     .btnOnline {
       background-color: transparent;
-      color: $primary-color;
+      color: var(--primary-color);
       padding: 8px 16px;
-      border: 1px solid $primary-color;
+      border: 1px solid var(--primary-color);
       border-radius: $border-radius;
       font-size: 14px;
       font-weight: 500;

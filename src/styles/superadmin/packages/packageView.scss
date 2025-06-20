@@ -77,9 +77,9 @@
                 cursor: pointer;
 
                 &:hover {
-                    background-color: $hover-color;
+                    background-color: var(--primary-light);
                     color: $white;
-                    border: 1px solid $hover-color;
+                    border: 1px solid var(--primary-light);
                 }
             }
         }

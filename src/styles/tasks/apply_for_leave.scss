@@ -87,7 +87,7 @@
             border-radius: $border-radius;
 
             &:hover {
-              background-color: $hover-color !important;
+              background-color: var(--primary-light) !important;
             }
           }
 
@@ -151,7 +151,7 @@
             font-size: 16px;
 
             &:focus {
-             border-color: $hover-color ;
+             border-color: var(--primary-light) ;
               outline: none;
             }
           }
@@ -167,7 +167,7 @@
             font-size: 16px;
 
             &:focus {
-             border-color: $hover-color;
+             border-color: var(--primary-light);
               outline: none;
             }
           }
@@ -269,11 +269,11 @@
           margin: 0px;
 
           &:hover {
-            background: $hover-color;
+            background: var(--primary-light);
           }
 
           &:disabled {
-            background: $hover-color;
+            background: var(--primary-light);
             cursor: not-allowed;
           }
 
@@ -300,7 +300,7 @@
     }
 
     .react-datepicker {
-      color: $hover-color;
+      color: var(--primary-light);
       font-family: Helvetica Neue, helvetica, arial, sans-serif;
       font-size: 0.8rem;
       line-height: initial;
@@ -343,7 +343,7 @@
       color: white;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--primary-light);
 
       }
     }
@@ -566,7 +566,7 @@
           }
 
           .cancel-button {
-              background-color: $hover-color;
+              background-color: var(--primary-light);
                color: $white;
 
             &:hover {
@@ -581,7 +581,7 @@
             border: none;
 
             &:hover {
-              background: $hover-color;
+              background: var(--primary-light);
             }
           }
         }
@@ -608,7 +608,7 @@
         box-shadow: $box-shadow;
 
         &:hover:not(:disabled) {
-          background: $hover-color;
+          background: var(--primary-light);
           transform: translateY(-2px);
           box-shadow: $secondary-shadow;
         }

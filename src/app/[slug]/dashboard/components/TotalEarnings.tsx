@@ -95,18 +95,18 @@ const TotalEarnings = () => {
             <Line 
               type="monotone" 
               dataKey="paid" 
-              stroke="#384B70" 
+              stroke="var(--primary-color)" 
               strokeWidth={3}
               dot={false}
-              activeDot={{ r: 6, stroke: '#384B70', strokeWidth: 2, fill: '#fff' }}
+              activeDot={{ r: 6, stroke: 'var(--primary-color)', strokeWidth: 2, fill: '#fff' }}
             />
             <Line 
               type="monotone" 
               dataKey="unpaid" 
-              stroke="#9CB9D0" 
+              stroke="var(--primary-light)" 
               strokeWidth={3}
               dot={false}
-              activeDot={{ r: 6, stroke: '#9CB9D0', strokeWidth: 2, fill: '#fff' }}
+              activeDot={{ r: 6, stroke: 'var(--primary-light)', strokeWidth: 2, fill: '#fff' }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -178,11 +178,11 @@ const TotalEarnings = () => {
         }
         
         .legend .dot.paid {
-          background-color: #384B70;
+          background-color: var(--primary-color);
         }
         
         .legend .dot.unpaid {
-          background-color: #9CB9D0;
+          background-color: var(--primary-color);
         }
       `}</style>
     </div>

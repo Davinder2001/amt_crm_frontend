@@ -27,7 +27,7 @@ const ItemList = () => {
               <tr key={index} className="border-t">
                 <td className="p-2">{index + 1}</td>
                 <td className="p-2">{item.name}</td>
-                <td className="p-2">{item.measurement || '—'}</td>
+                <td className="p-2">{typeof item.measurement === 'string' ? item.measurement : item.measurement ? String(item.measurement) : '—'}</td>
                 <td className="p-2">{item.brand_name}</td>
                 <td className="p-2">{item.replacement || '—'}</td>
                 <td className="p-2">{item.category || '—'}</td>

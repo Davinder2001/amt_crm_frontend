@@ -80,7 +80,7 @@ const ViewItem = () => {
               { label: 'Item code', value: item.item_code },
               { label: 'New Stock Added', value: item.quantity_count },
               { label: 'Available Stock', value: item.availability_stock },
-              { label: 'Measurement', value: item.measurement || '-' },
+              { label: 'Measurement', value: item.measurement ? String(item.measurement) : '-' },
               { label: 'Purchase Date', value: item.purchase_date || '-' }
             ]} />
 

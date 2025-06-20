@@ -97,10 +97,10 @@ const UserActivity = () => {
                         <Line 
                             type="monotone" 
                             dataKey="offline" 
-                            stroke="var(--primary-color)" 
+                            stroke="var(--primary-light)" 
                             strokeWidth={3}
                             dot={false}
-                            activeDot={{ r: 6, stroke: 'var(--primary-color)', strokeWidth: 2, fill: '#fff' }}
+                            activeDot={{ r: 6, stroke: 'var(--primary-light)', strokeWidth: 2, fill: '#fff' }}
                         />
                     </LineChart>
                 </ResponsiveContainer>

@@ -240,7 +240,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     <label>Measuring Unit</label>
                                     <MeasuringUnits
                                         units={measuringUnits ?? []}
-                                        selectedUnit={typeof formData.measurement === 'number' ? formData.measurement : null}
+                                        selectedUnit={formData.measurement}
                                         onUnitSelect={(unitId) => {
                                             const updated = { ...formData, measurement: unitId };
                                             setFormData(updated);

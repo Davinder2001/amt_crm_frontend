@@ -97,78 +97,78 @@ const Profile: React.FC = () => {
 
   return (
     <div className="profile-container" ref={dropdownRef}>
-      {isAuthenticated ? (
-        <div className="profile-dropdown">
-          <button
-            className="profile-trigger"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            aria-label="User profile menu"
-          >
-            <div className="profile-avatar">
-              {user?.name?.[0]?.toUpperCase() || 'U'}
-            </div>
-            <div className="profile-name">
-              {user?.name?.split(' ')[0] || 'User'}
-            </div>
-            <FaChevronDown className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
-          </button>
 
-          {isOpen && (
-            <div className="profile-menu">
-              <div className="menu-header">
-                <div className="menu-avatar">
-                  {user?.name?.[0]?.toUpperCase() || 'U'}
+      <div className="profile-dropdown">
+        <button
+          className="profile-trigger"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label="User profile menu"
+        >
+          <div className="profile-avatar">
+            {user?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
+          <div className="profile-name">
+            {user?.name?.split(' ')[0] || 'User'}
+          </div>
+          <FaChevronDown className={`dropdown-icon ${isOpen ? 'open' : ''}`} />
+        </button>
+        {isAuthenticated ? (
+          <>
+            {isOpen && (
+              <div className="profile-menu">
+                <div className="menu-header">
+                  <div className="menu-avatar">
+                    {user?.name?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                  <div className="menu-user-info">
+                    <div className="menu-username">{user?.name || 'User'}</div>
+                    <div className="menu-email">{user?.email || ''}</div>
+                  </div>
                 </div>
-                <div className="menu-user-info">
-                  <div className="menu-username">{user?.name || 'User'}</div>
-                  <div className="menu-email">{user?.email || ''}</div>
-                </div>
+
+                <nav className="menu-items">
+                  <Link
+                    href={`${basePath}/my-account`}
+                    onClick={() => setIsOpen(false)}
+                    className="menu-item"
+                  >
+                    <FaUser className="menu-icon" />
+                    <span>My Account</span>
+                  </Link>
+                  <Link
+                    href={`${basePath}/my-account/billings`}
+                    onClick={() => setIsOpen(false)}
+                    className="menu-item"
+                  >
+                    <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
+                    <span>Billing</span>
+                  </Link>
+                  <Link
+                    href={`${basePath}/my-account/settings`}
+                    onClick={() => setIsOpen(false)}
+                    className="menu-item"
+                  >
+                    <FaCog className="menu-icon" />
+                    <span>Settings</span>
+                  </Link>
+                  <ThemeSwitcher />
+
+                  <button
+                    className="menu-item logout"
+                    onClick={handleLogout}
+                  >
+                    <FaSignOutAlt className="menu-icon" />
+                    <span>Logout</span>
+                  </button>
+                </nav>
               </div>
-
-              <nav className="menu-items">
-                <Link
-                  href={`${basePath}/my-account`}
-                  onClick={() => setIsOpen(false)}
-                  className="menu-item"
-                >
-                  <FaUser className="menu-icon" />
-                  <span>My Account</span>
-                </Link>
-                <Link
-                  href={`${basePath}/my-account/billings`}
-                  onClick={() => setIsOpen(false)}
-                  className="menu-item"
-                >
-                  <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
-                  <span>Billing</span>
-                </Link>
-                <Link
-                  href={`${basePath}/my-account/settings`}
-                  onClick={() => setIsOpen(false)}
-                  className="menu-item"
-                >
-                  <FaCog className="menu-icon" />
-                  <span>Settings</span>
-                </Link>
-                <ThemeSwitcher />
-
-                <button
-                  className="menu-item logout"
-                  onClick={handleLogout}
-                >
-                  <FaSignOutAlt className="menu-icon" />
-                  <span>Logout</span>
-                </button>
-              </nav>
-            </div>
-          )}
-        </div>
-      ) : (
-        <Link href="/login" className="login-btn">
-          Sign In
-        </Link>
-      )}
+            )}
+          </>
+        ) : (
+          ''
+        )}
+      </div>
     </div>
   );
 };

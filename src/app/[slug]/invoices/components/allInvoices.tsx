@@ -11,6 +11,7 @@ import EmptyState from "@/components/common/EmptyState";
 import LoadingState from "@/components/common/LoadingState";
 import TableToolbar from "@/components/common/TableToolbar";
 import { toast } from 'react-toastify';
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 interface allInvoicesProps {
   invoices: Invoice[];
@@ -188,7 +189,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
 
   if (isLoadingInvoices) return <LoadingState />;
   if (isError) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className="empty-state-icon" />}
     title="Failed to load invoices"
     message="We encountered an error while loading your invoices. Please try again later."
   />;

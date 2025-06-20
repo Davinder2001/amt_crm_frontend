@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -269,7 +270,7 @@ const Items: React.FC = () => {
   if (isLoading) return <LoadingState />;
   if (error) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className="empty-state-icon" />}
       title="Failed to load items"
       message="We encountered an error while loading your store items. Please try again later."
     />
@@ -398,15 +399,17 @@ const Items: React.FC = () => {
         width="600px"
       >
         <div className="create-item-modal">
-          <div className="search-bar" style={{ marginBottom: '1rem' }}>
-            <FaSearch style={{ marginRight: '0.5rem' }} />
-            <input
-              type="text"
-              placeholder="Search existing items..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '100%', padding: '0.5rem' }}
-            />
+          <div className="create-item-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: '1rem', }}>
+            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #efefef', padding: '0.5rem', borderRadius: '5px', width: '100%', }}>
+              <FaSearch style={{ marginRight: '0.5rem' }} />
+              <input
+                type="text"
+                placeholder="Search existing items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ border: 'none', padding: 0, borderRadius: 0 }}
+              />
+            </div>
           </div>
 
           <div className="existing-items-list" style={{ maxHeight: '300px', overflowY: 'auto', marginBottom: '1rem' }}>
@@ -418,12 +421,20 @@ const Items: React.FC = () => {
                   borderBottom: '1px solid #eee',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  gap: '20px'
                 }}>
-                  <span>{item.name}</span>
+                  <span 
+                  style={{
+                    width: '100%',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden'
+                  }}
+                  >{item.name}</span>
                   <button
                     onClick={() => router.push(`/${companySlug}/store/edit-item/${item.id}`)}
-                    style={{ padding: '0.25rem 0.5rem' }}
+                    className='buttons'
                   >
                     Update Batch
                   </button>
@@ -431,10 +442,11 @@ const Items: React.FC = () => {
               ))}
           </div>
 
-          <div className="modal-footer" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <p>Total: <strong>{storeItems.length}</strong></p>
             <button
               onClick={() => router.push(`/${companySlug}/store/add-item`)}
-              style={{ padding: '0.5rem 1rem' }}
+              className='buttons'
             >
               <FaPlus /> Create New Item
             </button>

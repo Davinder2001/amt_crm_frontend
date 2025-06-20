@@ -47,15 +47,31 @@ export const useCompany = () => {
 
 
 // Utility function to clear storage
-export const clearStorage = () => {
-    // Remove from localStorage
-    localStorage.removeItem('company_slug');
-    localStorage.removeItem('user_type');
-    localStorage.removeItem('access_token');
+// export const clearStorage = () => {
+//     // Remove from localStorage
+//     localStorage.removeItem('company_slug');
+//     localStorage.removeItem('user_type');
+//     localStorage.removeItem('access_token');
 
-    // Remove from cookies
-    Cookies.remove('company_slug', { path: '/' });
-    Cookies.remove('user_type', { path: '/' });
-    Cookies.remove('access_token', { path: '/' });
-    Cookies.remove('company_selection_count', { path: '/' });
+//     // Remove from cookies
+//     Cookies.remove('company_slug', { path: '/' });
+//     Cookies.remove('user_type', { path: '/' });
+//     Cookies.remove('access_token', { path: '/' });
+//     Cookies.remove('company_selection_count', { path: '/' });
+// };
+
+
+
+export const clearStorage = () => {
+    if (typeof window !== 'undefined') {
+        // Clear all localStorage keys
+        Object.keys(localStorage).forEach((key) => {
+            localStorage.removeItem(key);
+        });
+
+        // Clear all cookie keys
+        Object.keys(Cookies.get()).forEach((key) => {
+            Cookies.remove(key, { path: '/' });
+        });
+    }
 };

@@ -5,8 +5,9 @@ import { useFetchCategoriesAndItemsQuery } from '@/slices/store/storeApi';
 import CheckoutPanel from './CheckoutPanel';
 import CategoriesMenu from './CategoriesMenu';
 import InvoiceItems from './InvoiceItems';
-import Loader from '@/components/common/Loader';
 import { FaTimes } from 'react-icons/fa';
+import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 function POSPage() {
     const { data: categories } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined };
@@ -239,7 +240,11 @@ function POSPage() {
         setCart([]);
     };
 
-    if (!categories) return <Loader />;
+    if (!categories) return <EmptyState
+        icon={<FaTriangleExclamation className="empty-state-icon" />}
+        title="Failed to load categories and items"
+        message="We encountered an error while loading your store items. Please try again later."
+    />;
 
     return (
         <div className="pos-wrapper">

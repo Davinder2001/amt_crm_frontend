@@ -91,15 +91,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -116,7 +107,11 @@ import {
     FaSpinner,
 } from "react-icons/fa";
 
-const Loader = () => {
+interface LoaderProps {
+    isLoading?: boolean;
+}
+
+const Loader: React.FC<LoaderProps> = ({isLoading}) => {
     const icons = [
         { icon: FaMoneyBillWave, color: '#4CAF50' },
         { icon: FaShoppingCart, color: '#FF5722' },
@@ -139,6 +134,13 @@ const Loader = () => {
     const animationRef = useRef<number | null>(null);
 
     useEffect(() => {
+        // Reset progress when loading starts
+        if (!isLoading) {
+            setProgress(0);
+        }
+    }, [isLoading]);
+
+    useEffect(() => {
         // Icon rotation
         const iconInterval = setInterval(() => {
             setCurrentIconIndex((prevIndex) =>
@@ -146,9 +148,15 @@ const Loader = () => {
             );
         }, 150);
 
-        // Progress bar
+        // Progress bar - only animate if not complete
         const progressInterval = setInterval(() => {
-            setProgress((prev) => prev >= 100 ? 100 : prev + 1);
+            if (!isLoading) {
+                setProgress((prev) => {
+                    // Slow down as we approach 100%
+                    const increment = prev < 90 ? 1 : 0.5;
+                    return prev >= 99.5 ? 99.5 : prev + increment;
+                });
+            }
         }, 30);
 
         // Rotation animation
@@ -185,7 +193,18 @@ const Loader = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [icons.length]);
+    }, [icons.length, isLoading]);
+
+    // When loading is complete, animate to 100%
+    useEffect(() => {
+        if (isLoading) {
+            setProgress(100);
+            const timer = setTimeout(() => {
+                // Optional: You could add a fade-out animation here
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [isLoading]);
 
     const CurrentIcon = icons[currentIconIndex].icon;
     const currentColor = icons[currentIconIndex].color;
@@ -203,9 +222,12 @@ const Loader = () => {
             alignItems: 'center',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(5px)',
-            zIndex: 9999
+            zIndex: '999999999999999999999',
+            opacity: progress >= 100 ? 0 : 1,
+            transition: 'opacity 0.5s ease',
+            pointerEvents: progress >= 100 ? 'none' : 'auto'
         }}>
-            {/* Static background element (no rotation to avoid hydration mismatch) */}
+            {/* Static background element */}
             <div style={{
                 position: 'absolute',
                 width: '200px',
@@ -214,7 +236,7 @@ const Loader = () => {
                 background: `radial-gradient(circle, ${currentColor}20 0%, transparent 70%)`,
                 opacity: 0.3
             }} />
-            
+
             <div style={{
                 position: 'relative',
                 width: '120px',
@@ -234,8 +256,8 @@ const Loader = () => {
                 }}>
                     <CurrentIcon />
                 </div>
-                
-                {/* Rotating border effect - now client-side only */}
+
+                {/* Rotating border effect */}
                 <div style={{
                     position: 'absolute',
                     width: '100%',
@@ -247,7 +269,7 @@ const Loader = () => {
                     transition: 'transform 0.1s linear, border-color 0.3s ease'
                 }} />
             </div>
-            
+
             {/* Progress bar */}
             <div style={{
                 width: '200px',
@@ -265,7 +287,7 @@ const Loader = () => {
                     borderRadius: '3px'
                 }} />
             </div>
-            
+
             {/* Loading text with color change */}
             <p style={{
                 color: currentColor,
@@ -275,9 +297,9 @@ const Loader = () => {
                 textAlign: 'center',
                 transition: 'color 0.3s ease'
             }}>
-                Loading your page... {progress}%
+                Loading your page... {Math.min(100, Math.floor(progress))}%
             </p>
-            
+
             {/* Subtle dots animation */}
             <div style={{ display: 'flex', marginTop: '0.5rem' }}>
                 {opacities.map((opacity, i) => (

@@ -10,11 +10,11 @@ type LayoutWrapperProps = {
 };
 
 const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
-  const { user, authChecked } = useUser();
+  const { user, authChecked , loadingComplete} = useUser();
   const role = user?.user_type;
 
-  if (!authChecked) {
-    return <Loader />;
+  if (!authChecked || !loadingComplete) { // Check both conditions
+    return <Loader isLoading={!loadingComplete} />; // Pass loading state to Loader
   }
 
   const SelectedLayout = role ? layoutMap[role] : AuthLayout;

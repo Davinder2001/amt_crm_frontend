@@ -9,6 +9,7 @@ type UserContextType = {
   user: UserProfile | null;
   setUser: (user: UserProfile | null) => void;
   authChecked: boolean;
+  loadingComplete: boolean;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -17,6 +18,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { accessToken } = useCompany();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
 
   const { data, error } = useFetchProfileQuery(undefined, {
     skip: !accessToken,
@@ -27,6 +29,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       if (data?.user) {
         setUser(data.user);
         setAuthChecked(true);
+        setLoadingComplete(true);
       } else if (error) {
         // Only handle status if error is FetchBaseQueryError
         if ('status' in error && error.status === 401) {
@@ -34,18 +37,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(null);
         }
         setAuthChecked(true);
+        setLoadingComplete(true);
       }
     } else {
       setAuthChecked(true);
+      setLoadingComplete(true);
     }
   }, [accessToken, data, error]);
 
-  if (!authChecked) {
+  if (!authChecked || (!loadingComplete && accessToken)) {
     return <Loader />;
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, authChecked }}>
+    <UserContext.Provider value={{ user, setUser, authChecked, loadingComplete }}>
       {children}
     </UserContext.Provider>
   );

@@ -214,6 +214,56 @@ const storeApi = storeApiSlice.injectEndpoints({
       }),
     }),
 
+    // Item Batch Endpoints
+    fetchItemBatches: builder.query<ItemBatch[], void>({
+      query: () => "store/item/batch",
+      providesTags: ["Store"],
+    }),
+
+    fetchItemBatchById: builder.query<ItemBatch, number>({
+      query: (id) => `store/item/batch/${id}`,
+      providesTags: (result, error, id) => [{ type: "Store", id }],
+    }),
+
+    createItemBatch: builder.mutation<ItemBatchResponse, {
+      item_id: number;
+      batch_number?: string;
+      cost_price: number;
+      quantity_count: number;
+    }>({
+      query: (data) => ({
+        url: "store/item/batch",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Store"],
+    }),
+
+    updateItemBatch: builder.mutation<ItemBatchResponse, {
+      id: number;
+      data: {
+        cost_price?: number;
+        quantity_count?: number;
+      }
+    }>({
+      query: ({ id, data }) => ({
+        url: `store/item/batch/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Store", id },
+        "Store"
+      ],
+    }),
+
+    deleteItemBatch: builder.mutation<ItemBatchResponse, number>({
+      query: (id) => ({
+        url: `store/item/batch/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Store"],
+    }),
 
   }),
 });
@@ -250,6 +300,14 @@ export const {
   useCreateBrandMutation,
   useDeleteBrandMutation,
   useUpdateBrandMutation,
+
+
+  // Item Batch hooks
+  useFetchItemBatchesQuery,
+  useFetchItemBatchByIdQuery,
+  useCreateItemBatchMutation,
+  useUpdateItemBatchMutation,
+  useDeleteItemBatchMutation,
 
 } = storeApi;
 

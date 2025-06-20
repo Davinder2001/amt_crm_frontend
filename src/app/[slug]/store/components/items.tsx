@@ -21,7 +21,7 @@ import { placeholderImg } from '@/assets/useImage';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
-import { MdEdit } from 'react-icons/md';
+import { useSelectedItem } from '@/provider/SelectedItemContext';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -39,6 +39,7 @@ const Items: React.FC = () => {
   const [showBulkActions, setShowBulkActions] = useState(false);
   const [showCreateItemModal, setShowCreateItemModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const { setItemId } = useSelectedItem();
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items)
@@ -417,30 +418,29 @@ const Items: React.FC = () => {
             {storeItems
               .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
               .map(item => (
-                <div key={item.id} className="existing-item" style={{
-                  padding: '5px 0px',
+                <Link key={item.id} className="existing-item" style={{
+                  padding: '10px 0px',
                   borderBottom: '1px solid #eee',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  gap: '20px'
-                }}>
-                  <span 
-                  style={{
-                    width: '100%',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden'
+                  gap: '20px',
+                  cursor: 'pointer'
+                }}
+                  href={`/${companySlug}/store/create-batch`}
+                  onClick={() => {
+                    setItemId(item.id);
                   }}
+                >
+                  <span
+                    style={{
+                      width: '100%',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden'
+                    }}
                   >{item.name}</span>
-                  <button
-                    onClick={() => router.push(`/${companySlug}/store/edit-item/${item.id}`)}
-                    className='buttons'
-                    style={{whiteSpace: 'nowrap', padding: '5px 10px'}}
-                  >
-                    <MdEdit/> Batch
-                  </button>
-                </div>
+                </Link>
               ))}
           </div>
 

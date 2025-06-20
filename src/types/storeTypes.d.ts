@@ -220,3 +220,25 @@ interface Brand {
   created_at?: string;
   updated_at?: string;
 }
+
+interface ItemBatch {
+  id: number;
+  item_id: number;
+  batch_number: string | null;
+  cost_price: number;
+  quantity_count: number;
+  company_id: number;
+  created_at: string;
+  updated_at: string;
+  item?: {
+    id: number;
+    name: string;
+    // Add other item properties as needed
+  };
+}
+
+interface ItemBatchResponse {
+  success: boolean;
+  message: string;
+  data?: ItemBatch | ItemBatch[];
+}

@@ -8,9 +8,10 @@ import InvoiceItems from './InvoiceItems';
 import { FaTimes } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
+import LoadingState from '@/components/common/LoadingState';
 
 function POSPage() {
-    const { data: categories } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined };
+    const { data: categories, isError } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined, isError: boolean };
     const [selectedTopCatId, setSelectedTopCatId] = useState<number | null>(null);
     const [selectedChildCatId, setSelectedChildCatId] = useState<number | null>(null);
     const [expandedChildCats, setExpandedChildCats] = useState<number[]>([]);
@@ -240,11 +241,13 @@ function POSPage() {
         setCart([]);
     };
 
-    if (!categories) return <EmptyState
+    if (isError) return <EmptyState
         icon={<FaTriangleExclamation className="empty-state-icon" />}
         title="Failed to load categories and items"
         message="We encountered an error while loading your store items. Please try again later."
     />;
+    
+    if (!categories) return <LoadingState />;
 
     return (
         <div className="pos-wrapper">

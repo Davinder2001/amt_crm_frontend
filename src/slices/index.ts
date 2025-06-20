@@ -16,3 +16,4 @@ export * from '@/slices/store/storeApi';
 export * from '@/slices/tasks/taskApi';
 export * from '@/slices/theme/themeSlice';
 export * from '@/slices/vendor/vendorApi';
+export * from '@/slices/expenditure/expenses';

@@ -25,7 +25,7 @@ const UpdateItem = () => {
     id: Number(id),
     name: '',
     quantity_count: 0,
-    measurement: '',
+    measurement: null,
     purchase_date: '',
     date_of_manufacture: '',
     date_of_expiry: '',
@@ -39,7 +39,6 @@ const UpdateItem = () => {
     regular_price: 0,
     sale_price: 0,
     tax_id: null,
-    unit_id: null,
     unit_of_measure: 'pieces',
     units_in_peace: null,
     price_per_unit: null,
@@ -70,7 +69,6 @@ const UpdateItem = () => {
         id: item.id,
         name: item.name || '',
         quantity_count: item.quantity_count || 0,
-        measurement: item.measurement || '',
         purchase_date: item.purchase_date || '',
         date_of_manufacture: item.date_of_manufacture || '',
         date_of_expiry: item.date_of_expiry || '',
@@ -84,7 +82,7 @@ const UpdateItem = () => {
         regular_price: item.regular_price || 0,
         sale_price: item.sale_price || 0,
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
-        unit_id: (item.units && item.units.length > 0 && item.units[0]?.id) ? item.units[0].id : 0,
+        measurement: (item.units && item.units.length > 0 && item.units[0]?.id) ? item.units[0].id : 0,
         unit_of_measure: item.unit_of_measure || 'pieces',
         units_in_peace: item.units_in_peace ?? null,
         price_per_unit: item.price_per_unit ?? null,
@@ -164,7 +162,7 @@ const UpdateItem = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id', 'unit_id'];
+    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id'];
 
     for (const field of primitiveFields) {
       if (formData[field] !== originalItemData[field]) {
@@ -203,7 +201,7 @@ const UpdateItem = () => {
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock',
       'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure',
-      'units_in_peace', 'price_per_unit', 'tax_id', 'unit_id'
+      'units_in_peace', 'price_per_unit', 'tax_id'
     ];
 
     primitiveFields.forEach((field) => {

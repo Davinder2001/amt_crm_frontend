@@ -106,7 +106,6 @@ interface variations {
 interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
   quantity_count: number;
-  measurement?: string;
   purchase_date?: string;
   date_of_manufacture: string;
   date_of_expiry?: string;
@@ -125,7 +124,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   units_in_peace?: number | null;
   price_per_unit?: number | null;
   tax_id: number | null;
-  unit_id: number | null;
+  measurement: number | null;
   featured_image: File | string | null;
   images: (string | File)[] | File[];
   variants?: variations[];

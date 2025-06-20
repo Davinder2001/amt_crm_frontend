@@ -9,7 +9,7 @@ import {
   useBulkDeleteStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaEdit, FaEye, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen } from 'react-icons/fa';
+import { FaEdit, FaEye, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
@@ -35,6 +35,8 @@ const Items: React.FC = () => {
   const [itemToDeleteName, setItemToDeleteName] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, string[]>>({});
   const [showBulkActions, setShowBulkActions] = useState(false);
+  const [showCreateItemModal, setShowCreateItemModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
   const storeItems: StoreItem[] = Array.isArray(items)
@@ -302,7 +304,7 @@ const Items: React.FC = () => {
         ]}
         actions={[
           ...(storeItems.length > 0
-            ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/store/add-item`) }]
+            ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => setShowCreateItemModal(true) }]
             : []),
         ]}
         extraLinks={[
@@ -388,6 +390,58 @@ const Items: React.FC = () => {
         }}
         type="delete"
       />
+
+      <Modal
+        isOpen={showCreateItemModal}
+        onClose={() => setShowCreateItemModal(false)}
+        title="Add New Item"
+        width="600px"
+      >
+        <div className="create-item-modal">
+          <div className="search-bar" style={{ marginBottom: '1rem' }}>
+            <FaSearch style={{ marginRight: '0.5rem' }} />
+            <input
+              type="text"
+              placeholder="Search existing items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '100%', padding: '0.5rem' }}
+            />
+          </div>
+
+          <div className="existing-items-list" style={{ maxHeight: '300px', overflowY: 'auto', marginBottom: '1rem' }}>
+            {storeItems
+              .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+              .map(item => (
+                <div key={item.id} className="existing-item" style={{
+                  padding: '0.5rem',
+                  borderBottom: '1px solid #eee',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span>{item.name}</span>
+                  <button
+                    onClick={() => router.push(`/${companySlug}/store/edit-item/${item.id}`)}
+                    style={{ padding: '0.25rem 0.5rem' }}
+                  >
+                    Update Batch
+                  </button>
+                </div>
+              ))}
+          </div>
+
+          <div className="modal-footer" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              onClick={() => router.push(`/${companySlug}/store/add-item`)}
+              style={{ padding: '0.5rem 1rem' }}
+            >
+              <FaPlus /> Create New Item
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </div>
   );
 };

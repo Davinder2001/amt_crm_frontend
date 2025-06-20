@@ -173,8 +173,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
                                     <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
-                                    {/* <FormInput label="Measuring Unit" name="measurement" value={formData.measurement || ''} onChange={handleChange} placeholder="e.g. kg, pcs, liters" /> */}
-
                                     <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
                                     <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
                                     <div className="add-items-form-input-label-container">
@@ -242,13 +240,13 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     <label>Measuring Unit</label>
                                     <MeasuringUnits
                                         units={measuringUnits ?? []}
-                                        selectedUnit={typeof formData.unit_id === 'number' ? formData.unit_id : null}
+                                        selectedUnit={typeof formData.measurement === 'number' ? formData.measurement : null}
                                         onUnitSelect={(unitId) => {
-                                            const updated = { ...formData, unit_id: unitId };
+                                            const updated = { ...formData, measurement: unitId };
                                             setFormData(updated);
                                         }}
                                         onUnitAdded={(newUnit) => {
-                                            setFormData((prev) => ({ ...prev, unit_id: newUnit.id }));
+                                            setFormData((prev) => ({ ...prev, measurement: newUnit.id }));
                                         }}
                                     />
                                 </div>

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const getDefaultFormData = (): CreateStoreItemRequest => ({
   name: '',
   quantity_count: 0,
-  measurement: '',
+  measurement: null,
   purchase_date: '',
   date_of_manufacture: '',
   date_of_expiry: '',
@@ -24,7 +24,6 @@ const getDefaultFormData = (): CreateStoreItemRequest => ({
   regular_price: 0,
   sale_price: 0,
   tax_id: null,
-  unit_id: null,
   unit_of_measure: 'pieces',
   units_in_peace: null,
   price_per_unit: null,

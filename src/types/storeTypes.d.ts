@@ -1,3 +1,8 @@
+interface Measurement {
+  id: number;
+  name: string;
+}
+
 interface StoreItem {
   tax_id: number;
   id: number;
@@ -5,7 +10,7 @@ interface StoreItem {
   quantity_count: number;
   price: number;
   quantity: number;
-  measurement: string | null;
+  measurement: Measurement | null;
   purchase_date: string | null;
   date_of_manufacture: string;
   date_of_expiry: string | null;

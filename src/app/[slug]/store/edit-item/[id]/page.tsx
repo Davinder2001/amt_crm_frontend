@@ -82,7 +82,7 @@ const UpdateItem = () => {
         regular_price: item.regular_price || 0,
         sale_price: item.sale_price || 0,
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
-        measurement: (item.units && item.units.length > 0 && item.units[0]?.id) ? item.units[0].id : 0,
+        measurement: item.measurement?.id || null,
         unit_of_measure: item.unit_of_measure || 'pieces',
         units_in_peace: item.units_in_peace ?? null,
         price_per_unit: item.price_per_unit ?? null,

@@ -10,7 +10,7 @@
         .import-items-title {
             font-size: $font-size-extra-large;
             font-weight: $font-weight-semi-bold;
-            color: $primary-color;
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
@@ -25,8 +25,8 @@
 
             &:focus {
                 outline: none;
-                border-color: $primary-color;
-                box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 2px rgba(var(--primary-color), 0.2);
             }
         }
 
@@ -52,7 +52,7 @@
         }
 
         .import-items-upload-button {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: $white;
             padding: 8px 12px;
             font-size: 16px;

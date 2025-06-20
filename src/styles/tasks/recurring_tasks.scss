@@ -124,7 +124,7 @@
       font-size: $font-size-small;
       border: none;
       border-radius: $border-radius;
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       color: $dark-color;
       font-weight: $font-weight-semi-bold;
       cursor: pointer;
@@ -152,7 +152,7 @@
     .form-button {
       padding: 10px 24px;
       font-size: 16px;
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       color: $white;
       border: none;
       border-radius: 5px;

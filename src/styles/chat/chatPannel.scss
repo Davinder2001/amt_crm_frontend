@@ -665,7 +665,7 @@
         width: 40px;
         height: 40px;
         border-radius: $border-radius;
-        background: $primary-color;
+        background: var(--primary-color);
         color: white;
         border: none;
         cursor: pointer;

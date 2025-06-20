@@ -85,7 +85,7 @@
                 margin: 0 0.5rem;
 
                 &.profit {
-                    background-color: $primary-color;
+                    background-color: var(--primary-color);
                 }
 
                 &.loss {
@@ -260,7 +260,7 @@
             .count {
                 font-weight: bold;
                 font-size: 16px;
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
 
@@ -280,7 +280,7 @@
                 background: none;
                 border: none;
                 font-size: 14px;
-                color: $primary-color;
+                color: var(--primary-color);
                 font-weight: 500;
                 cursor: pointer;
 
@@ -307,7 +307,7 @@
                     width: 36px;
                     height: 36px;
                     background-color: $light_blue;
-                    color: $primary-color;
+                    color: var(--primary-color);
                     border-radius: 50%;
                     font-weight: 700;
                     display: flex;
@@ -321,7 +321,7 @@
                     .r-title {
                         font-weight: 600;
                         font-size: 14px;
-                        color: $primary-color;
+                        color: var(--primary-color);
                     }
 
                     .desc {
@@ -408,7 +408,7 @@
         font-size: 20px;
         font-weight: 700;
         margin: 6px 0 4px;
-        color: $primary-color;
+        color: var(--primary-color);
         line-height: 1.2;
     }
 
@@ -647,7 +647,7 @@
             }
 
             .value-count {
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
     }

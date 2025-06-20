@@ -458,7 +458,7 @@
                     margin: 0 0 5px;
                     font-size: 14px;
                     font-weight: 600;
-                    color: $primary-color;
+                    color: var(--primary-color);
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -634,14 +634,14 @@
 
             &:hover {
                 transform: scale(1.01);
-                border-color: $primary-color;
+                border-color: var(--primary-color);
                 background: $light_blue;
             }
 
             &.selected {
-                background: $primary-color;
+                background: var(--primary-color);
                 color: $white;
-                border-color: $primary-color;
+                border-color: var(--primary-color);
                 transform: scale(1.1);
                 box-shadow: $box-shadow;
             }
@@ -669,7 +669,7 @@
         .variant-price {
             font-size: $font-size-large;
             font-weight: $font-weight-bold;
-            color: $primary-color;
+            color: var(--primary-color);
             letter-spacing: -0.5px;
         }
     }
@@ -701,7 +701,7 @@
             margin: 0;
             width: 16px;
             height: 16px;
-            accent-color: $primary-color;
+            accent-color: var(--primary-color);
             cursor: pointer;
         }
 
@@ -728,7 +728,7 @@
             background: $white;
             border-radius: $border-radius;
             font-size: 14px;
-            border-left: 3px solid $primary-color;
+            border-left: 3px solid var(--primary-color);
             color: #495057;
             font-weight: 400;
 
@@ -759,14 +759,14 @@
 
                 &:focus {
                     outline: 2px solid $border-color;
-                    border-color: $primary-color;
+                    border-color: var(--primary-color);
                 }
             }
         }
     }
 
     .add-button {
-        background: linear-gradient(135deg, $primary-color, var(--primary-light));
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
         color: $white;
         border: none;
         padding: 10px;
@@ -900,13 +900,13 @@
         }
 
         &:hover {
-            color: $primary-color;
+            color: var(--primary-color);
             background-color: #f9fafb;
         }
 
         &.active {
             background: transparent;
-            color: $primary-color;
+            color: var(--primary-color);
 
             &::after {
                 content: '';
@@ -915,7 +915,7 @@
                 left: 0;
                 right: 0;
                 height: 3px;
-                background-color: $primary-color;
+                background-color: var(--primary-color);
                 border-radius: 3px 3px 0 0;
             }
         }
@@ -945,7 +945,7 @@
         transition: all 0.2s;
 
         &.active {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: $white;
         }
 
@@ -998,7 +998,7 @@
             &.grand-total {
                 font-weight: bold;
                 font-size: 16px;
-                color: $primary-color;
+                color: var(--primary-color);
                 border-top: 1px solid #ccc;
                 padding-top: 8px;
                 margin-top: 8px;
@@ -1125,7 +1125,7 @@
                     height: 24px;
                     border-radius: 5px;
                     border: none;
-                    background-color: $primary-color;
+                    background-color: var(--primary-color);
                     color: $white;
                     font-size: 14px;
                     cursor: pointer;
@@ -1192,7 +1192,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        color: $primary-color;
+        color: var(--primary-color);
 
         &:hover {
             color: var(--primary-light);
@@ -1247,7 +1247,7 @@
     .section-title {
         font-size: 14px;
         font-weight: 600;
-        color: $primary-color;
+        color: var(--primary-color);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 0;
@@ -1500,8 +1500,8 @@
             width: 50px;
             height: 50px;
             background-color: $white;
-            color: $primary-color;
-            border: 2px solid $primary-color;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1674,8 +1674,8 @@
             width: 50px;
             height: 50px;
             background-color: $white;
-            color: $primary-color;
-            border: 2px solid $primary-color;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;

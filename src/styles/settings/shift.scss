@@ -19,7 +19,7 @@
                 }
 
                 .edit-btn {
-                    color: $primary-color;
+                    color: var(--primary-color);
                 }
 
                 .delete-btn {
@@ -53,6 +53,6 @@ button.cancel-btn {
     color: $white;
     &:hover {
         background-color: $light-color;
-        color: $primary-color;
+        color: var(--primary-color);
     }
 }

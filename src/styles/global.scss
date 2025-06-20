@@ -204,7 +204,7 @@ body {
     border-radius: $border-radius;
 
     &:hover {
-        background-color: #9CB9D0;
+        background-color: var(--primary-light);
     }
 }
 

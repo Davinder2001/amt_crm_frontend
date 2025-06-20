@@ -81,11 +81,11 @@ form .clear-button {
             }
 
             &.active {
-                background: rgba($primary-color, 0.1);
-                color: $primary-color;
+                background: rgba(var(--primary-color), 0.1);
+                color: var(--primary-color);
 
                 span {
-                    background: $primary-color;
+                    background: var(--primary-color);
                     color: white;
                 }
             }
@@ -111,7 +111,7 @@ form .clear-button {
         }
 
         button {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: $white;
             font-size: 12px;
             border: none;
@@ -150,7 +150,7 @@ form .clear-button {
             border-bottom: 1px solid #eee;
 
             svg {
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
     }
@@ -227,8 +227,8 @@ form .clear-button {
             }
 
             &:focus-within:not(.invalid) {
-                border-color: $primary-color;
-                box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
             }
 
         }
@@ -297,8 +297,8 @@ form .clear-button {
             height: 40px;
 
             &:focus {
-                border-color: $primary-color;
-                box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(var(--primary-color), 0.1);
                 outline: none;
             }
         }
@@ -343,8 +343,8 @@ form .clear-button {
 
         &:hover {
             .file-upload-box {
-                border-color: $primary-color;
-                background: rgba($primary-color, 0.03);
+                border-color: var(--primary-color);
+                background: rgba(var(--primary-color), 0.03);
             }
         }
     }
@@ -362,8 +362,8 @@ form .clear-button {
         transition: all 0.2s ease;
 
         &:hover {
-            border-color: $primary-color;
-            background: rgba($primary-color, 0.03);
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color), 0.03);
         }
 
         .upload-icon {
@@ -390,7 +390,7 @@ form .clear-button {
         top: 0;
         background-color: #ffffffe8;
         font-size: 0.85rem;
-        color: $primary-color;
+        color: var(--primary-color);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -398,7 +398,7 @@ form .clear-button {
         pointer-events: none;
         width: 100%;
         height: 100%;
-        border: 2px dashed rgba($primary-color, 0.2);
+        border: 2px dashed rgba(var(--primary-color), 0.2);
         border-radius: $border-radius;
         padding: 10px;
 
@@ -432,29 +432,29 @@ form .clear-button {
     }
 
     .primary-button {
-        background: $primary-color;
+        background: var(--primary-color);
         color: white;
         border: none;
 
         &:hover {
-            background: rgba($primary-color, 5%);
+            background: rgba(var(--primary-color), 5%);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba($primary-color, 0.2);
+            box-shadow: 0 2px 8px rgba(var(--primary-color), 0.2);
         }
     }
 
     .secondary-button {
         background: white;
-        color: $primary-color;
-        border: 1px solid $primary-color;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
 
         &:hover {
-            background: rgba($primary-color, 0.05);
+            background: rgba(var(--primary-color), 0.05);
         }
     }
 
     .complete-registration {
-        background: $primary-color;
+        background: var(--primary-color);
         color: white;
         border: none;
         padding: 8px 12px;
@@ -467,8 +467,8 @@ form .clear-button {
         gap: 8px;
 
         &:hover:not(:disabled) {
-            background: rgba($primary-color, 5%);
-            box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+            background: rgba(var(--primary-color), 5%);
+            box-shadow: 0 4px 12px rgba(var(--primary-color), 0.2);
         }
 
         &:disabled {
@@ -634,7 +634,7 @@ form .clear-button {
         }
 
         .retry-button {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: $white;
             padding: 8px 10px;
             border: none;

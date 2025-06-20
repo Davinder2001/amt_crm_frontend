@@ -23,7 +23,7 @@
         border: 1px solid var(--primary-light);
         margin-left: 10px;
         border-radius: $border-radius;
-        color: $primary-color;
+        color: var(--primary-color);
     }
 
 }
@@ -50,7 +50,7 @@
         align-items: center;
         gap: 5px;
         padding: 10px;
-        background: $primary-color;
+        background: var(--primary-color);
         color: $white;
         border: none;
         border-radius: $border-radius;
@@ -109,7 +109,7 @@
 
         &.active .toolbar-btn {
             background: var(--primary-light);
-            color: $primary-color;
+            color: var(--primary-color);
 
             &::after {
                 width: 70%;
@@ -144,7 +144,7 @@
         .filter-options-list {
             font-size: 14px;
             background-color: #f5faff;
-            color: $primary-color;
+            color: var(--primary-color);
         }
     }
 
@@ -228,7 +228,7 @@
             }
 
             input[type="checkbox"] {
-                accent-color: $primary-color;
+                accent-color: var(--primary-color);
                 width: 16px;
                 height: 16px;
             }
@@ -258,7 +258,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: $primary-color;
+                    color: var(--primary-color);
                 }
 
                 &:hover {
@@ -316,7 +316,7 @@
     bottom: 50px;
     left: 55%;
     transform: translate(-50%, 0);
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     box-shadow: $box-shadow;
     color: $white;
     padding: 5px 10px;
@@ -355,7 +355,7 @@
             font-size: 18px;
 
             &:hover {
-                color: $primary-color;
+                color: var(--primary-color);
             }
 
             &.select-checkbox {
@@ -368,14 +368,14 @@
                 }
 
                 &:hover .select-icon {
-                    color: $primary-color;
+                    color: var(--primary-color);
                 }
 
             }
         }
 
         .FaCheckSquare {
-            color: $primary-color;
+            color: var(--primary-color);
         }
 
         .select-all-pages {
@@ -433,7 +433,7 @@ table {
             cursor: pointer;
 
             th {
-                background: $primary-color;
+                background: var(--primary-color);
                 color: rgba(255, 255, 255, 1);
                 font-weight: 600;
                 padding: 10px 20px;
@@ -524,9 +524,9 @@ table {
         height: 1px;
         background: linear-gradient(90deg,
                 transparent,
-                rgba($primary-color, 0.84),
-                rgba($primary-color, 0.77),
-                rgba($primary-color, 0.82),
+                rgba(var(--primary-color), 0.84),
+                rgba(var(--primary-color), 0.77),
+                rgba(var(--primary-color), 0.82),
                 transparent);
         animation: borderFlow 4s linear infinite;
         background-size: 200% 100%;
@@ -583,7 +583,7 @@ table {
         padding: 0 8px;
         border: none;
         background: transparent;
-        color: $primary-color;
+        color: var(--primary-color);
         border-radius: $border-radius;
         cursor: pointer;
         font-size: 14px;
@@ -617,7 +617,7 @@ table {
         }
 
         &.active {
-            background-color: $primary-color;
+            background-color: var(--primary-color);
             color: $white;
 
             &::after {
@@ -636,7 +636,7 @@ table {
         &::before {
             content: '•';
             margin: 0 8px;
-            color: $primary-color;
+            color: var(--primary-color);
         }
     }
 
@@ -646,7 +646,7 @@ table {
         border-radius: $border-radius;
 
         &:hover:not(:disabled) {
-            background: $primary-color;
+            background: var(--primary-color);
         }
     }
 }

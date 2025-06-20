@@ -37,11 +37,11 @@
 
         &:hover {
             .settings-label {
-                color: $primary-color;
+                color: var(--primary-color);
             }
 
             svg {
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
 
@@ -49,12 +49,12 @@
             background-color: $light_blue;
 
             .settings-label {
-                color: $primary-color;
+                color: var(--primary-color);
                 font-weight: 600;
             }
 
             svg {
-                color: $primary-color;
+                color: var(--primary-color);
             }
         }
     }
@@ -129,7 +129,7 @@
             }
 
             &::-webkit-scrollbar-thumb {
-                background-color: $primary-color;
+                background-color: var(--primary-color);
                 border-radius: 2px;
             }
 
@@ -157,7 +157,7 @@
 
             &:focus {
                 background-color: $light_blue;
-                border-bottom: 2px solid $primary-color;
+                border-bottom: 2px solid var(--primary-color);
             }
 
             &:active {

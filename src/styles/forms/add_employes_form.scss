@@ -112,7 +112,7 @@
     gap: 10px;
 
     .form-button {
-      background-color: $primary-color;
+      background-color: var(--primary-color);
       border: unset;
       padding: 10px 30px;
       border-radius: $border-radius;
@@ -136,7 +136,7 @@
   .invite-employees-popup  {
     p {
       font-size: 16px;
-      color: $primary-color;
+      color: var(--primary-color);
       font-weight: 600;
       margin-bottom: 10px;
     }

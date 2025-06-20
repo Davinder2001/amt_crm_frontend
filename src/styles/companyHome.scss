@@ -128,7 +128,7 @@
     }
 
     p {
-        color: $primary-color;
+        color: var(--primary-color);
     }
 }
 
@@ -249,7 +249,7 @@
 }
 
 .btn-action {
-    background: $primary-color;
+    background: var(--primary-color);
     color: $white;
     border: none;
     padding: 5px 12px;

@@ -15,7 +15,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: $primary-color;
+      background: var(--primary-color);
       border-radius: $border-radius;
     }
 
@@ -57,20 +57,20 @@
     }
 
     &:hover {
-      color: $primary-color;
+      color: var(--primary-color);
       background: $light_blue;
 
       .tab-icon {
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
 
     &.active {
-      color: $primary-color;
+      color: var(--primary-color);
       font-weight: $font-weight-semi-bold;
 
       .tab-icon {
-        color: $primary-color;
+        color: var(--primary-color);
       }
 
       .active-indicator {
@@ -88,7 +88,7 @@
     height: 3px;
     right: 0;
     left: 0;
-    background: $primary-color;
+    background: var(--primary-color);
     border-radius: 3px 3px 0 0;
     opacity: 0;
     transition: $transition;

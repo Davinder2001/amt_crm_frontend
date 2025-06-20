@@ -12,6 +12,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
+import Loader from "@/components/common/Loader";
 
 
 const Profile: React.FC = () => {
@@ -22,6 +23,7 @@ const Profile: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user, setUser } = useUser();
   const { companySlug, userType, accessToken } = useCompany();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const basePath =
@@ -65,6 +67,7 @@ const Profile: React.FC = () => {
   }, [isOpen]);
 
   const handleLogout = async () => {
+    setIsLoading(true);
     try {
       const response = await logout();
 
@@ -85,6 +88,8 @@ const Profile: React.FC = () => {
       }
     } catch (error) {
       console.error("Logout failed", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -157,9 +162,16 @@ const Profile: React.FC = () => {
                   <button
                     className="menu-item logout"
                     onClick={handleLogout}
+                    disabled={isLoading}
                   >
-                    <FaSignOutAlt className="menu-icon" />
-                    <span>Logout</span>
+                    {isLoading ? (
+                      <Loader/>
+                    ) : (
+                      <>
+                        <FaSignOutAlt className="menu-icon" />
+                        <span>Logout</span>
+                      </>
+                    )}
                   </button>
                 </nav>
               </div>

@@ -1,31 +1,41 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUser } from '@/provider/UserContext';
 import { useRouter } from 'next/navigation';
 import { clearStorage, useCompany } from '@/utils/Company';
 import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
+import Loader from './Loader';
 
 function Logout() {
     const { setUser } = useUser();
     const router = useRouter();
     const { userType, accessToken } = useCompany();
     const dispatch = useDispatch<AppDispatch>();
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleLogout = async () => {
-        // Clear the user context
-        setUser(null);
+        setIsLoading(true);
+        try {
+            // Clear the user context
+            setUser(null);
+            clearStorage();
+            // Clear the theme from Redux store
+            dispatch(setTheme('light')); // Reset to default theme
 
-        clearStorage();
-        // Clear the theme from Redux store
-        dispatch(setTheme('light')); // Reset to default theme
-
-        if (userType === 'user') {
-            // Redirect to home page
-            router.push('/');
-        } else {
-            // Redirect to login page
-            router.push('/login');
+            // Add a small delay to show the spinner (optional)
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            if (userType === 'user') {
+                // Redirect to home page
+                router.push('/');
+            } else {
+                // Redirect to login page
+                router.push('/login');
+            }
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -36,7 +46,15 @@ function Logout() {
     }, [setUser, accessToken, userType]);
 
     return (
-        <div className="logout-button"><button onClick={handleLogout} className='buttons'>Logout</button></div>
+        <div className="logout-button">
+            <button 
+                onClick={handleLogout} 
+                className='buttons' 
+                disabled={isLoading}
+            >
+                {isLoading ? <Loader/> : 'Logout'}
+            </button>
+        </div>
     );
 }
 

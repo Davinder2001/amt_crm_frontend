@@ -182,7 +182,7 @@ const TotalEarnings = () => {
         }
         
         .legend .dot.unpaid {
-          background-color: var(--primary-color);
+          background-color: var(--primary-light);
         }
       `}</style>
     </div>

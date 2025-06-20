@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTachometerAlt, FaStore, FaUserTie, FaCog, FaTasks, FaFileInvoice, FaComments } from "react-icons/fa";
+import { FaTachometerAlt, FaStore, FaUserTie, FaCog, FaTasks, FaFileInvoice, FaComments,FaMoneyBillWave } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
@@ -20,6 +20,7 @@ const AdminNavs: React.FC<admNavProps> = ({ isSidebarExpanded, openMenu }) => {
         // { name: "Services", path: "services", icon: <LuClipboardList /> },
         { name: "H.R", path: "hr", icon: <FaUserTie /> },
         { name: "Invoices", path: "invoices", icon: <FaFileInvoice />, hasSubmenu: true },
+        { name: "Expenditure", path: "expenditure", icon: <FaMoneyBillWave /> },
         { name: "Task", path: "tasks", icon: <FaTasks /> },
         // { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
         // { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },

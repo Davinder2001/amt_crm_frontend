@@ -32,7 +32,7 @@ const AdminHome = () => {
             return;
         }
 
-        setLoadingCompanyId(id); // Set loading state
+        setLoadingCompanyId(id);
 
         Cookies.set('company_slug', companySlug, { path: '/' });
         localStorage.setItem('company_slug', encodeStorage(companySlug));
@@ -45,7 +45,7 @@ const AdminHome = () => {
         } catch (error) {
             console.error(error);
             toast.error('Failed to select company. Please try again.');
-            setLoadingCompanyId(null); // Reset loading on error
+            setLoadingCompanyId(null);
         }
     };
 
@@ -54,7 +54,6 @@ const AdminHome = () => {
     useEffect(() => {
         if (!isAdmin || !companies || companies.length === 0) return;
 
-        // Only auto-select the first company if no selection exists
         if (!companySlug) {
             const firstCompany = companies[0];
             localStorage.setItem('company_slug', encodeStorage(firstCompany.company_slug));
@@ -63,79 +62,142 @@ const AdminHome = () => {
     }, [companies, isAdmin, companySlug]);
 
     return (
-        <>
-            <ToastContainer />
-            <div className='admin-home-container'>
-                <div className='admin-header'>
-                    <div className="admin-header-inner">
-                        <Link href="/" className="logo-link">
-                            <Image src={homelogo} alt="Logo" width={20} height={20} />
-                            <span>Himmanav Asset Management Technology </span>
-                        </Link>
+        <div className="admin-dashboard-container">
+            <ToastContainer position="top-center" autoClose={3000} />
+
+            <header className="admin-header">
+                <div className="header-content">
+                    <div className="logo-wrapper">
+                        <Image src={homelogo} alt="Logo" width={32} height={32} />
+                        <span className="system-name">Himmanav Asset Management Technology</span>
+                    </div>
+                    <div className="header-actions">
                         <Logout />
                     </div>
                 </div>
-                <div className="admin-home-intro">
-                    <h1>Welcome to Your Admin Dashboard</h1>
-                    <p>Select a company to manage or view details</p>
-                </div>
-                <div className='company-grid'>
+            </header>
+
+            <main className="dashboard-content">
+                <section className="welcome-section">
+                    <h1 className="welcome-title">Company Management</h1>
+                    <p className="welcome-subtitle">Select a company to manage or add a new one</p>
+                </section>
+
+                <section className="companies-section">
                     {Array.isArray(companies) && companies.length > 0 ? (
                         <>
-                            {companies.map((company, index) => (
-                                <div key={index} className='company-card'>
-                                    <Link
-                                        className='company-link'
-                                        href={`/${companySlug}/dashboard`}
-                                        onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
-                                    >
-                                        <div className='company-card-content'>
-                                            <div className='company-header'>
-                                                <h2>{company.company_name}</h2>
-                                                <span className={`status ${company.verification_status}`}>{company.verification_status}</span>
+                            {/* Desktop List View */}
+                            <div className="companies-list">
+                                <div className="list-header">
+                                    <span className="header-item name">Company Name</span>
+                                    <span className="header-item id">ID</span>
+                                    <span className="header-item location">Location</span>
+                                    <span className="header-item status">Status</span>
+                                    <span className="header-item action">Action</span>
+                                </div>
+
+                                <div className="list-body">
+                                    {companies.map((company) => (
+                                        <div key={company.id} className={`company-row ${company.verification_status}`}>
+                                            <div className="row-item name">
+                                                <h3>{company.company_name}</h3>
+                                                <p className="company-description">{company.description || "No description"}</p>
                                             </div>
-                                            <p className='company-description'>{company.description || "No description available."}</p>
-                                            <div className='company-info'>
-                                                <p><strong>ID:</strong> {company.company_id}</p>
-                                                <p><strong>Location:</strong> {company.location || "N/A"}</p>
+                                            <div className="row-item id">{company.company_id}</div>
+                                            <div className="row-item location">{company.location || "N/A"}</div>
+                                            <div className="row-item status">
+                                                <span className={`status-badge ${company.verification_status}`}>
+                                                    {company.verification_status}
+                                                </span>
                                             </div>
-                                            <div className='company-actions'>
+                                            <div className="row-item action">
                                                 <button
-                                                    className='btn-action'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleClick(company.company_slug, company.id, company.verification_status === 'verified', e);
-                                                    }}
+                                                    className="manage-btn"
+                                                    onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
                                                     disabled={loadingCompanyId === company.id}
                                                 >
-                                                    {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
+                                                    {loadingCompanyId === company.id ? (
+                                                        <span className="btn-loader"></span>
+                                                    ) : (
+                                                        'Manage'
+                                                    )}
                                                 </button>
                                             </div>
                                         </div>
-                                    </Link>
+                                    ))}
                                 </div>
-                            ))}
-                            <Link href="/add-company" className="company-card add-company" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <p>Add New Company</p>
-                            </Link>
-                        </>
+                            </div>
 
+                            {/* Mobile Card View */}
+                            <div className="company-cards-container">
+                                {companies.map((company) => (
+                                    <div key={company.id} className={`company-card ${company.verification_status}`}>
+                                        <div className="card-row">
+                                            <span className="card-label">Name:</span>
+                                            <span className="card-value">{company.company_name}</span>
+                                        </div>
+                                        <div className="card-row">
+                                            <span className="card-label">ID:</span>
+                                            <span className="card-value">{company.company_id}</span>
+                                        </div>
+                                        <div className="card-row">
+                                            <span className="card-label">Location:</span>
+                                            <span className="card-value">{company.location || "N/A"}</span>
+                                        </div>
+                                        <div className="card-row">
+                                            <span className="card-label">Status:</span>
+                                            <span className={`status-badge ${company.verification_status}`}>
+                                                {company.verification_status}
+                                            </span>
+                                        </div>
+                                        {company.description && (
+                                            <p className="card-description">{company.description}</p>
+                                        )}
+                                        <div className="card-actions">
+                                            <button
+                                                className="manage-btn"
+                                                onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
+                                                disabled={loadingCompanyId === company.id}
+                                            >
+                                                {loadingCompanyId === company.id ? (
+                                                    <span className="btn-loader"></span>
+                                                ) : (
+                                                    'Manage'
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     ) : (
                         <div className="empty-state">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                            </svg>
-                            <p>No companies available</p>
-                            <Link href="/add-company" className="company-card add-company" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'fit-content', position: 'relative', margin: '20px auto', padding: 10 }}>
-                                <p>Add New Company</p>
+                            <div className="empty-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7Z" stroke="currentColor" strokeWidth="1.5" />
+                                    <path d="M3 9H21" stroke="currentColor" strokeWidth="1.5" />
+                                    <path d="M9 9V19" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                            </div>
+                            <h3>No companies available</h3>
+                            <p>Get started by adding your first company</p>
+                            <Link href="/add-company" className="add-company-btn">
+                                Add New Company
                             </Link>
                         </div>
                     )}
+                </section>
+
+                <div className="add-company-cta">
+                    <Link href="/add-company" className="add-company-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        </svg>
+                        Add New Company
+                    </Link>
                 </div>
-            </div>
-        </>
+            </main>
+        </div>
     );
 };
 

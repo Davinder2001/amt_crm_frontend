@@ -113,7 +113,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({isLoading}) => {
     const icons = [
-        { icon: FaMoneyBillWave, color: '#4CAF50' },
+        { icon: FaMoneyBillWave, color: '#384B70' },
         { icon: FaShoppingCart, color: '#FF5722' },
         { icon: FaWallet, color: '#2196F3' },
         { icon: FaTasks, color: '#9C27B0' },

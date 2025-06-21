@@ -161,7 +161,7 @@ export default function NetworkStatusBanner() {
             }
 
             .syncing-icon {
-                color: #4caf50;
+                color: #384B70;
                 animation: spinNetwork 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
             }
 

@@ -9,12 +9,15 @@ import {
 } from '@mui/material';
 import { useFetchExpensesQuery, useDeleteExpenseMutation } from '@/slices';
 import ExpenseForm from './components/ExpenseForm';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import EmptyState from '@/components/common/EmptyState';
 
 export default function ExpensesPage() {
-  const { data: expenses, isLoading, isError } = useFetchExpensesQuery();
+  const { data, isLoading, isError } = useFetchExpensesQuery();
+  const expenses = data?.data || [];
   const [deleteExpense] = useDeleteExpenseMutation();
   const [openForm, setOpenForm] = useState(false);
   const [currentExpense, setCurrentExpense] = useState<Expense | null>(null);
@@ -54,6 +57,35 @@ export default function ExpensesPage() {
     setCurrentExpense(null);
   };
 
+  type Column<T> = {
+    label: string;
+    key?: keyof T;
+    render?: (row: T) => React.ReactNode;
+  };
+
+  const columns: Column<Expense>[] = [
+    { label: 'Heading', key: 'heading' },
+    {
+      label: 'Description',
+      render: (row) => row.description || '-',
+      key: 'description'
+    },
+    {
+      label: 'Price',
+      render: (row) => `${Number(row.price).toFixed(2)}`,
+      key: 'price'
+    },
+    {
+      label: 'Actions',
+      render: (expense: Expense) => (
+        <div className="table-actions">
+          <FaEdit onClick={() => handleEdit(expense)} />
+          <FaTrash onClick={() => handleDelete(expense.id)} />
+        </div>
+      ),
+    },
+  ];
+
   if (isLoading) return <CircularProgress />;
   if (isError) return <Typography color="error">Error loading expenses</Typography>;
 
@@ -70,33 +102,24 @@ export default function ExpensesPage() {
         </button>
       </Box>
 
-      {expenses && expenses?.length > 0 ?
-        <div style={{ margin: '20px 0' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#f5f5f5' }}>
-                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Heading</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Description</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Price</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expenses?.map((expense) => (
-                <tr key={expense.id} style={{ borderBottom: '1px solid #ddd' }}>
-                  <td style={{ padding: '12px 16px' }}>{expense.heading}</td>
-                  <td style={{ padding: '12px 16px' }}>{expense.description || '-'}</td>
-                  <td style={{ padding: '12px 16px' }}>${Number(expense.price).toFixed(2)}</td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <FaEdit style={{ marginRight: '8px' }} onClick={() => handleEdit(expense)} />
-                    <FaTrash style={{ marginRight: '8px' }} onClick={() => handleDelete(expense.id)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div> : ''
-      }
+      {(expenses && expenses?.length > 0) ? (
+        <ResponsiveTable
+          data={expenses}
+          columns={columns}
+          cardViewKey="heading"
+        />
+      ) : (
+        <EmptyState
+          icon={<FaTasks className="empty-state-icon" />}
+          title="No expenses found"
+          message="You haven't added any expenses yet."
+          action={
+            <button className="buttons create-btn" onClick={() => setOpenForm(true)}>
+              <FaPlus /> Add Expense
+            </button>
+          }
+        />
+      )}
 
       <Modal
         isOpen={openForm}
@@ -104,7 +127,7 @@ export default function ExpensesPage() {
           setOpenForm(false);
           handleCancelForm();
         }}
-        title="Add New Item"
+        title={currentExpense ? "Edit Expense" : "Add New Expense"}
         width="600px"
       >
         <ExpenseForm
@@ -112,13 +135,11 @@ export default function ExpensesPage() {
           onSuccess={handleCloseForm}
           onCancel={handleCancelForm}
         />
-
       </Modal>
-
 
       <ConfirmDialog
         isOpen={showDeleteConfirm}
-        message="Are you sure you want to delete item?"
+        message="Are you sure you want to delete this expense?"
         onConfirm={handleConfirmDelete}
         onCancel={() => {
           setShowDeleteConfirm(false);

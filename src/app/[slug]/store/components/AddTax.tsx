@@ -17,9 +17,10 @@ interface AddTaxProps {
     selectedTaxId: number | null;
     onTaxSelect: (taxId: number) => void;
     onTaxAdded: (newTax: Tax) => void;
+    disabled?: boolean;
 }
 
-const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTaxAdded }) => {
+const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTaxAdded, disabled = false }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [addTaxModalOpen, setAddTaxModalOpen] = useState(false);
     const [form, setForm] = useState({ name: '', rate: '' });
@@ -64,10 +65,14 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
     const selectedTax = taxes.find((t) => t.id === selectedTaxId);
 
     return (
-        <div className="addvendor-dropdown" ref={dropdownRef}>
-            <div className="vendors-header" onClick={() => setIsOpen((prev) => !prev)}>
+        <div className="addvendor-dropdown" ref={dropdownRef}
+            style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
+            <div className={`vendors-header ${disabled ? 'disabled' : ''}`}
+                onClick={() => !disabled && setIsOpen((prev) => !prev)}
+                style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}
+            >
                 {selectedTax ? `${selectedTax.name} - ${selectedTax.rate}%` : 'Select Tax'}
-                <FaChevronDown size={14} />
+                <FaChevronDown size={14}  style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}/>
             </div>
 
             {isOpen && (

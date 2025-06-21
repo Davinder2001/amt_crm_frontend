@@ -5,7 +5,7 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
     overrideExisting: false,
     endpoints: (builder) => ({
         // Fetch all expenses
-        fetchExpenses: builder.query<Expense[], void>({
+        fetchExpenses: builder.query<ExpenseResponse, void>({
             query: () => "expenses",
             providesTags: ["Expenses"],
         }),
@@ -17,37 +17,24 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
         }),
 
         // Create expense
-        createExpense: builder.mutation<Expense, ExpenseCreateRequest>({
-            query: (body) => {
-                const formData = new FormData();
-                formData.append('heading', body.heading);
-                if (body.description) formData.append('description', body.description);
-                formData.append('price', body.price.toString());
-                formData.append('file', body.file);
-
+        createExpense: builder.mutation<Expense, { formdata: ExpenseCreateRequest }>({
+            query: ({ formdata }) => {
                 return {
                     url: 'expenses/store',
                     method: 'POST',
-                    body: formData,
+                    body: formdata,
                 };
             },
             invalidatesTags: ["Expenses"],
         }),
 
         // Update expense
-        updateExpense: builder.mutation<Expense, { id: number, data: ExpenseUpdateRequest }>({
-            query: ({ id, data }) => {
-                const formData = new FormData();
-                formData.append('heading', data.heading);
-                if (data.description) formData.append('description', data.description);
-                formData.append('price', data.price.toString());
-                if (data.file) formData.append('file', data.file);
-                formData.append('_method', 'PUT');
-
+        updateExpense: builder.mutation<Expense, { id: number, formdata: ExpenseUpdateRequest }>({
+            query: ({ id, formdata }) => {
                 return {
                     url: `expenses/${id}`,
-                    method: 'POST', // Using POST with _method=PUT for Laravel
-                    body: formData,
+                    method: 'POST',
+                    body: formdata,
                 };
             },
             invalidatesTags: (result, error, { id }) => [

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { clearStorage, useCompany } from '@/utils/Company';
 import Loader from '@/components/common/Loader';
+import { useRouter } from 'next/navigation';
 
 type UserContextType = {
   user: UserProfile | null;
@@ -19,6 +20,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const router = useRouter();
 
   const { data, error } = useFetchProfileQuery(undefined, {
     skip: !accessToken,
@@ -35,6 +37,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         if ('status' in error && error.status === 401) {
           clearStorage();
           setUser(null);
+          router.push('/login')
         }
         setAuthChecked(true);
         setLoadingComplete(true);
@@ -43,7 +46,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setAuthChecked(true);
       setLoadingComplete(true);
     }
-  }, [accessToken, data, error]);
+  }, [accessToken, data, error, router]);
 
   if (!authChecked || (!loadingComplete && accessToken)) {
     return <Loader />;

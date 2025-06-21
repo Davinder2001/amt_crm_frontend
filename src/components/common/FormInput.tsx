@@ -11,6 +11,7 @@ interface FormInputProps {
     placeholder?: string;
     required?: boolean;
     className?: string;
+    disabled?: boolean;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
@@ -22,6 +23,7 @@ export const FormInput: React.FC<FormInputProps> = ({
     placeholder = '',
     required = false,
     className = '',
+    disabled = false,
 }) => (
     <div className={`add-items-form-input-label-container ${className}`}>
         <label>{label}{required && '*'}</label>
@@ -32,6 +34,7 @@ export const FormInput: React.FC<FormInputProps> = ({
             onChange={onChange}
             placeholder={placeholder}
             required={required}
+            disabled={disabled} 
             onWheel={type === 'number' ? (e) => (e.target as HTMLInputElement).blur() : undefined}
         />
     </div>

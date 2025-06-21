@@ -144,8 +144,11 @@ type CreateStoreItemRequest = BaseStoreItemRequest<Category[]>;
 interface UpdateStoreItemRequest extends BaseStoreItemRequest<number[]> {
   id: number;
 }
+interface StoreItemBatchRequest extends BaseStoreItemRequest<number[]> {
+  id: number;
+}
 
-type StoreItemFormData = CreateStoreItemRequest | UpdateStoreItemRequest;
+type StoreItemFormData = CreateStoreItemRequest | UpdateStoreItemRequest | StoreItemBatchRequest;
 
 type StoreResponse = StoreItem[];
 

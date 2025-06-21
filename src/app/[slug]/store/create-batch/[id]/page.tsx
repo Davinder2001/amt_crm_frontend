@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
 import LoadingState from '@/components/common/LoadingState';
 
-const UpdateItem = () => {
+const Createbatch = () => {
   const { id } = useParams();
   const { companySlug } = useCompany();
   const router = useRouter();
@@ -21,7 +21,7 @@ const UpdateItem = () => {
   const { data: measuringUnitsResponse } = useFetchMeasuringUnitsQuery();
   const measuringUnits = measuringUnitsResponse?.units || [];
 
-  const getDefaultFormData = (): UpdateStoreItemRequest => ({
+  const getDefaultFormData = (): StoreItemBatchRequest => ({
     id: Number(id),
     name: '',
     quantity_count: 0,
@@ -49,8 +49,8 @@ const UpdateItem = () => {
     vendor_id: null
   });
 
-  const [formData, setFormData] = useState<UpdateStoreItemRequest>(getDefaultFormData());
-  const [originalItemData, setOriginalItemData] = useState<UpdateStoreItemRequest | null>(null);
+  const [formData, setFormData] = useState<StoreItemBatchRequest>(getDefaultFormData());
+  const [originalItemData, setOriginalItemData] = useState<StoreItemBatchRequest | null>(null);
   const [vendorsList, setVendorsList] = useState<Vendor[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
@@ -162,7 +162,7 @@ const UpdateItem = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof UpdateStoreItemRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id'];
+    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id'];
 
     for (const field of primitiveFields) {
       if (formData[field] !== originalItemData[field]) {
@@ -196,7 +196,7 @@ const UpdateItem = () => {
     formdata.append('id', formData.id.toString());
 
     // Primitive fields to track changes and append
-    const primitiveFields: (keyof UpdateStoreItemRequest)[] = [
+    const primitiveFields: (keyof StoreItemBatchRequest)[] = [
       'name', 'quantity_count', 'measurement', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
       'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock',
@@ -311,8 +311,9 @@ const UpdateItem = () => {
       isFormModified={isFormModified}
       activeTab={activeTab}
       setActiveTab={setActiveTab}
+      isBatchMode={true}
     />
   );
 };
 
-export default UpdateItem;
+export default Createbatch;

@@ -9,9 +9,16 @@ import {
     InputLabel,
     OutlinedInput,
     FormHelperText,
-    Stack
+    Stack,
+    Select,
+    MenuItem,
+    Chip,
+    Box,
+    InputAdornment,
+    IconButton
 } from '@mui/material';
 import { useCreateExpenseMutation, useUpdateExpenseMutation } from '@/slices';
+import { FaPlus } from 'react-icons/fa';
 
 interface ExpenseFormProps {
     expense?: Expense | null;
@@ -22,18 +29,52 @@ interface ExpenseFormProps {
 export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFormProps) {
     const [createExpense] = useCreateExpenseMutation();
     const [updateExpense] = useUpdateExpenseMutation();
-    const [heading, setHeading] = useState(expense?.heading || '');
-    const [description, setDescription] = useState(expense?.description || '');
-    const [price, setPrice] = useState(expense?.price.toString() || '');
-    const [file, setFile] = useState<File | null>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [tagInput, setTagInput] = useState('');
+
+    const [formData, setFormData] = useState<ExpenseCreateRequest | ExpenseUpdateRequest>({
+        heading: expense?.heading || '',
+        description: expense?.description || '',
+        price: expense?.price.toString() || '',
+        file: null,
+        tags: expense?.tags || [],
+        status: expense?.status || 'pending'
+    });
+
+    const handleChange = (
+        field: keyof typeof formData,
+        value: string | number | File | null | { name: string }[] // specify possible types
+    ) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const handleAddTag = () => {
+        if (tagInput.trim() && !formData.tags.some(tag => tag.name === tagInput.trim())) {
+            handleChange('tags', [...formData.tags, { name: tagInput.trim() }]);
+            setTagInput('');
+        }
+    };
+
+    const handleRemoveTag = (tagToRemove: string) => {
+        handleChange('tags', formData.tags.filter(tag => tag.name !== tagToRemove));
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddTag();
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: Record<string, string> = {};
 
-        if (!heading) newErrors.heading = 'Heading is required';
-        if (!price || isNaN(Number(price))) newErrors.price = 'Valid price is required';
+        if (!formData.heading) newErrors.heading = 'Heading is required';
+        if (!formData.price || isNaN(Number(formData.price))) newErrors.price = 'Valid price is required';
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -41,30 +82,36 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
         }
 
         try {
+            // Create FormData object for binary file upload
+            const formDataPayload = new FormData();
+
+            // Append all fields to FormData
+            formDataPayload.append('heading', formData.heading);
+            formDataPayload.append('description', formData.description || '');
+            formDataPayload.append('price', Number(formData.price).toString());
+            formDataPayload.append('status', formData.status);
+
+            // Append tags as JSON string
+            formDataPayload.append('tags', JSON.stringify(formData.tags));
+
+            // Append file if it exists
+            if (formData.file) {
+                formDataPayload.append('file', formData.file as File);
+            }
+
             if (expense) {
                 // Update existing expense
                 await updateExpense({
                     id: expense.id,
-                    data: {
-                        heading,
-                        description: description || null,
-                        price: Number(price),
-                        file: file || null,
-                    },
+                    formdata: formDataPayload as unknown as ExpenseUpdateRequest
                 }).unwrap();
             } else {
                 // Create new expense
-                if (!file) {
+                if (!formData.file) {
                     setErrors({ ...errors, file: 'File is required' });
                     return;
                 }
-
-                await createExpense({
-                    heading,
-                    description: description || null,
-                    price: Number(price),
-                    file,
-                }).unwrap();
+                await createExpense({ formdata: formDataPayload as unknown as ExpenseCreateRequest }).unwrap();
             }
 
             onSuccess();
@@ -76,7 +123,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
+            handleChange('file', e.target.files[0]);
         }
     };
 
@@ -89,8 +136,8 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
 
                 <TextField
                     label="Heading"
-                    value={heading}
-                    onChange={(e) => setHeading(e.target.value)}
+                    value={formData.heading}
+                    onChange={(e) => handleChange('heading', e.target.value)}
                     error={!!errors.heading}
                     helperText={errors.heading}
                     fullWidth
@@ -119,8 +166,8 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
 
                 <TextField
                     label="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={formData.description}
+                    onChange={(e) => handleChange('description', e.target.value)}
                     multiline
                     rows={4}
                     fullWidth
@@ -160,8 +207,8 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                     </InputLabel>
                     <OutlinedInput
                         type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        value={formData.price}
+                        onChange={(e) => handleChange('price', e.target.value)}
                         label="Price"
                         sx={{
                             '& .MuiOutlinedInput-notchedOutline': {
@@ -176,6 +223,100 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                         }}
                     />
                     {errors.price && <FormHelperText>{errors.price}</FormHelperText>}
+                </FormControl>
+
+                <FormControl fullWidth>
+                    <InputLabel
+                        sx={{
+                            color: 'var(--primary-color)',
+                            '&.Mui-focused': {
+                                color: 'var(--primary-color)',
+                            },
+                        }}
+                    >Status</InputLabel>
+                    <Select
+                        value={formData.status}
+                        onChange={(e) => handleChange('status', e.target.value)}
+                        label="Status"
+                        sx={{
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'var(--primary-color)',
+                            },
+                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'var(--primary-color)',
+                            },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'var(--primary-color)',
+                            }
+                        }}
+                    >
+                        <MenuItem value="pending">Pending</MenuItem>
+                        <MenuItem value="paid">Paid</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth>
+                    <TextField
+                        label="Add Tags"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        InputLabelProps={{
+                            sx: {
+                                color: 'var(--primary-color)',
+                                '&.Mui-focused': {
+                                    color: 'var(--primary-color)',
+                                },
+                            }
+                        }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--primary-color)',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--primary-color)',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--primary-color)',
+                                },
+                            },
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleAddTag}
+                                        sx={{ color: 'var(--primary-color)' }}
+                                    >
+                                        <FaPlus />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+                        {formData.tags.map((tag) => (
+                            <Chip
+                                key={tag.name}
+                                label={tag.name}
+                                onDelete={() => handleRemoveTag(tag.name)}
+                                sx={{
+                                    backgroundColor: 'rgba(56, 75, 112, 0.1)',
+                                    color: 'var(--primary-color)',
+                                    '& .MuiChip-deleteIcon': {
+                                        color: 'var(--primary-color)',
+                                        '&:hover': {
+                                            color: 'var(--primary-color)',
+                                        }
+                                    }
+                                }}
+                            />
+                        ))}
+                    </Box>
+                    <FormHelperText sx={{ color: 'var(--primary-color)' }}>
+                        Add tags to categorize your expense
+                    </FormHelperText>
                 </FormControl>
 
                 <FormControl fullWidth error={!!errors.file}>
@@ -196,28 +337,31 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                                 }
                             }}
                         >
-                            {file ? file.name : expense?.file_path ? 'Change File' : 'Upload File'}
+                            {formData.file ? (formData.file as File).name : expense?.file_path ? 'Change File' : 'Upload File'}
                         </Button>
                     </label>
                     {errors.file && <FormHelperText>{errors.file}</FormHelperText>}
-                    {expense?.file_path && !file && (
+                    {expense?.file_path && !formData.file && (
                         <FormHelperText>Current file: {expense.file_path}</FormHelperText>
                     )}
                 </FormControl>
-                <div style={{display: 'flex', justifyContent: 'flex-end', gap: 10}}>
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                     {onCancel && (
                         <button
-                            type="button"
-                            className='buttons'
                             onClick={() => {
-                                // Clear form state when canceling
-                                setHeading('');
-                                setDescription('');
-                                setPrice('');
-                                setFile(null);
+                                setFormData({
+                                    heading: '',
+                                    description: '',
+                                    price: '',
+                                    file: null,
+                                    tags: [],
+                                    status: 'pending'
+                                });
                                 setErrors({});
                                 onCancel();
                             }}
+                            className='buttons'
                             style={{ backgroundColor: '#f5f5f5', color: '#333' }}
                         >
                             Cancel
@@ -229,7 +373,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                     >
                         {expense ? 'Update Expense' : 'Add Expense'}
                     </button>
-                </div>
+                </Box>
             </Stack>
         </form>
     );

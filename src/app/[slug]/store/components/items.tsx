@@ -9,7 +9,7 @@ import {
   useBulkDeleteStoreItemsMutation,
 } from '@/slices/store/storeApi';
 import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaEdit, FaEye, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
@@ -253,11 +253,6 @@ const Items: React.FC = () => {
       render: (item: StoreItem) =>
         companySlug && (
           <div className="table-actions-wrapper">
-            <Link href={`/${companySlug}/store/view-item/${item.id}`}>
-              <span>
-                <FaEye color="var(--primary-color)" />
-              </span>
-            </Link>
             <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
               <FaEdit color="var(--primary-color)" />
             </Link>
@@ -427,7 +422,7 @@ const Items: React.FC = () => {
                   gap: '20px',
                   cursor: 'pointer'
                 }}
-                  href={`/${companySlug}/store/create-batch`}
+                  href={`/${companySlug}/store/create-batch/${item.id}`}
                   onClick={() => {
                     setItemId(item.id);
                   }}

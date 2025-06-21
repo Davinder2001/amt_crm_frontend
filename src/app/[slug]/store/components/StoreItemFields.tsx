@@ -53,6 +53,7 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
     showConfirm?: boolean;
     setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
     handleClearForm?: () => void;
+    isBatchMode?: boolean;
 }
 
 const StoreItemFields = <T extends StoreItemFormData>({
@@ -80,6 +81,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
     activeTab,
     setActiveTab,
     tabCompletion,
+    isBatchMode
 }: StoreItemFieldsProps<T>) => {
 
     const headerRef = useRef<HTMLDivElement>(null);
@@ -166,7 +168,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             </div>
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
-                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
+                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required disabled={isBatchMode}/>
                                     <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
                                     <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
                                     <div className="add-items-form-input-label-container">
@@ -176,6 +178,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             selectedVendorId={formData.vendor_id || null}
                                             onVendorSelect={onVendorSelect}
                                             onVendorAdded={onVendorAdded}
+                                            disabled={isBatchMode}
                                         />
                                     </div>
 
@@ -191,6 +194,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             onTaxAdded={(newTax) => {
                                                 setFormData((prev) => ({ ...prev, tax_id: newTax.id }));
                                             }}
+                                            disabled={isBatchMode}
                                         />
                                     </div>
                                     <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />

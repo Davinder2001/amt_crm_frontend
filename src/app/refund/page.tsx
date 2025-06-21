@@ -56,8 +56,8 @@ function Refund() {
           <section>
             <h2>6. Contact Us</h2>
             <p>
-              If you have any questions about our refund policy, please contact us:
-              <br />
+              If you have any questions about our refund policy, <h5> Please contact us:</h5>
+          
               Email: <a href="mailto:support@himmanav.com">support@himmanav.com</a>
               <br />
               Phone: <a href="tel:+919459679357">+91-9459679357</a>

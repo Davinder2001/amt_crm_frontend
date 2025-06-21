@@ -89,8 +89,7 @@ function PrivacyPolicy() {
           <section>
             <h2>11. Contact Us</h2>
             <p>
-              If you have any questions or concerns about this Privacy Policy, please contact us:
-              <br />
+              If you have any questions or concerns about this Privacy Policy, <h5> Please contact us:</h5>
               Email: <a href="mailto:support@himmanav.com">support@himmanav.com</a>
               <br />
               Phone: <a href="tel:+919459679357">+91-9459679357</a>

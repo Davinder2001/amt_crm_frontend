@@ -116,11 +116,7 @@ const AdminHome = () => {
                                                     onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
                                                     disabled={loadingCompanyId === company.id}
                                                 >
-                                                    {loadingCompanyId === company.id ? (
-                                                        <span className="btn-loader"></span>
-                                                    ) : (
-                                                        'Manage'
-                                                    )}
+                                                    {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
                                                 </button>
                                             </div>
                                         </div>
@@ -159,11 +155,7 @@ const AdminHome = () => {
                                                 onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
                                                 disabled={loadingCompanyId === company.id}
                                             >
-                                                {loadingCompanyId === company.id ? (
-                                                    <span className="btn-loader"></span>
-                                                ) : (
-                                                    'Manage'
-                                                )}
+                                                {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
                                             </button>
                                         </div>
                                     </div>

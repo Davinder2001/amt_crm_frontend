@@ -49,6 +49,11 @@ export default function ExpensesPage() {
     setCurrentExpense(null);
   };
 
+  const handleCancelForm = () => {
+    setOpenForm(false);
+    setCurrentExpense(null);
+  };
+
   if (isLoading) return <CircularProgress />;
   if (isError) return <Typography color="error">Error loading expenses</Typography>;
 
@@ -95,13 +100,17 @@ export default function ExpensesPage() {
 
       <Modal
         isOpen={openForm}
-        onClose={() => setOpenForm(false)}
+        onClose={() => {
+          setOpenForm(false);
+          handleCancelForm();
+        }}
         title="Add New Item"
         width="600px"
       >
         <ExpenseForm
           expense={currentExpense}
           onSuccess={handleCloseForm}
+          onCancel={handleCancelForm}
         />
 
       </Modal>

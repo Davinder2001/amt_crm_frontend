@@ -16,9 +16,10 @@ import { useCreateExpenseMutation, useUpdateExpenseMutation } from '@/slices';
 interface ExpenseFormProps {
     expense?: Expense | null;
     onSuccess: () => void;
+    onCancel?: () => void;
 }
 
-export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
+export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFormProps) {
     const [createExpense] = useCreateExpenseMutation();
     const [updateExpense] = useUpdateExpenseMutation();
     const [heading, setHeading] = useState(expense?.heading || '');
@@ -93,6 +94,14 @@ export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
                     error={!!errors.heading}
                     helperText={errors.heading}
                     fullWidth
+                    InputLabelProps={{
+                        sx: {
+                            color: 'var(--primary-color)',
+                            '&.Mui-focused': {
+                                color: 'var(--primary-color)',
+                            },
+                        }
+                    }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -101,16 +110,10 @@ export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
                             '&:hover fieldset': {
                                 borderColor: 'var(--primary-color)',
                             },
+                            '&.Mui-focused fieldset': {
+                                borderColor: 'var(--primary-color)',
+                            },
                         },
-                        '& .MuiInputLabel-root': {
-                            color: 'var(--primary-color)',
-                        },
-                        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'var(--primary-color) !important',
-                        },
-                        '& .Mui-focused .MuiInputLabel-root': {
-                            color: 'var(--primary-color)',
-                        }
                     }}
                 />
 
@@ -121,6 +124,14 @@ export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
                     multiline
                     rows={4}
                     fullWidth
+                    InputLabelProps={{
+                        sx: {
+                            color: 'var(--primary-color)',
+                            '&.Mui-focused': {
+                                color: 'var(--primary-color)',
+                            },
+                        }
+                    }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
@@ -129,21 +140,24 @@ export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
                             '&:hover fieldset': {
                                 borderColor: 'var(--primary-color)',
                             },
+                            '&.Mui-focused fieldset': {
+                                borderColor: 'var(--primary-color)',
+                            },
                         },
-                        '& .MuiInputLabel-root': {
-                            color: 'var(--primary-color)',
-                        },
-                        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'var(--primary-color) !important',
-                        },
-                        '& .Mui-focused .MuiInputLabel-root': {
-                            color: 'var(--primary-color)',
-                        }
                     }}
                 />
 
                 <FormControl fullWidth error={!!errors.price}>
-                    <InputLabel sx={{ color: 'var(--primary-color)' }}>Price</InputLabel>
+                    <InputLabel
+                        sx={{
+                            color: 'var(--primary-color)',
+                            '&.Mui-focused': {
+                                color: 'var(--primary-color)',
+                            },
+                        }}
+                    >
+                        Price
+                    </InputLabel>
                     <OutlinedInput
                         type="number"
                         value={price}
@@ -190,13 +204,32 @@ export default function ExpenseForm({ expense, onSuccess }: ExpenseFormProps) {
                         <FormHelperText>Current file: {expense.file_path}</FormHelperText>
                     )}
                 </FormControl>
-
-                <button
-                    type="submit"
-                    className='buttons'
-                >
-                    {expense ? 'Update Expense' : 'Add Expense'}
-                </button>
+                <div style={{display: 'flex', justifyContent: 'flex-end', gap: 10}}>
+                    {onCancel && (
+                        <button
+                            type="button"
+                            className='buttons'
+                            onClick={() => {
+                                // Clear form state when canceling
+                                setHeading('');
+                                setDescription('');
+                                setPrice('');
+                                setFile(null);
+                                setErrors({});
+                                onCancel();
+                            }}
+                            style={{ backgroundColor: '#f5f5f5', color: '#333' }}
+                        >
+                            Cancel
+                        </button>
+                    )}
+                    <button
+                        type="submit"
+                        className='buttons'
+                    >
+                        {expense ? 'Update Expense' : 'Add Expense'}
+                    </button>
+                </div>
             </Stack>
         </form>
     );

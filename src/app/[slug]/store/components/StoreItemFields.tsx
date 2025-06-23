@@ -27,9 +27,9 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
     onVendorAdded: (vendor: Vendor) => void;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleNumberChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleClearImages: () => void;
-    handleRemoveImage: (index: number) => void;
+    handleImageChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleClearImages?: () => void;
+    handleRemoveImage?: (index: number) => void;
     taxesData?: {
         data?: Array<{
             id: number;
@@ -427,8 +427,13 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         </div>
                         {!collapsedSections['media'] && (
                             <div className="fields-wrapper">
-
-                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} disabled={isBatchMode} />
+                                <ImageUpload
+                                    images={formData.images || []}
+                                    handleImageChange={handleImageChange ?? (() => {})}
+                                    handleClearImages={handleClearImages ?? (() => {})}
+                                    handleRemoveImage={handleRemoveImage ?? (() => {})}
+                                    disabled={isBatchMode}
+                                />
                             </div>
                         )}
                     </div>

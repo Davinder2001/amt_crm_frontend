@@ -162,7 +162,11 @@ const Createbatch = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['name', 'quantity_count', 'measurement', 'purchase_date', 'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id', 'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock', 'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure', 'units_in_peace', 'price_per_unit', 'tax_id'];
+    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['quantity_count', 'purchase_date',
+      'date_of_manufacture', 'date_of_expiry',
+      'replacement', 'vendor_id', 'vendor_name', 'availability_stock',
+      'cost_price','unit_of_measure',
+      'units_in_peace', 'price_per_unit',];
 
     for (const field of primitiveFields) {
       if (formData[field] !== originalItemData[field]) {
@@ -195,11 +199,11 @@ const Createbatch = () => {
 
     // Primitive fields to track changes and append
     const primitiveFields: (keyof StoreItemBatchRequest)[] = [
-      'name', 'quantity_count', 'measurement', 'purchase_date',
-      'date_of_manufacture', 'date_of_expiry', 'brand_name', 'brand_id',
-      'replacement', 'category', 'vendor_id', 'vendor_name', 'availability_stock',
-      'cost_price', 'regular_price', 'sale_price', 'product_type', 'unit_of_measure',
-      'units_in_peace', 'price_per_unit', 'tax_id'
+      'quantity_count', 'purchase_date',
+      'date_of_manufacture', 'date_of_expiry',
+      'replacement', 'vendor_id', 'vendor_name', 'availability_stock',
+      'cost_price',  'unit_of_measure',
+      'units_in_peace', 'price_per_unit',
     ];
 
     primitiveFields.forEach((field) => {
@@ -212,25 +216,18 @@ const Createbatch = () => {
       }
     });
 
-    // Categories (clear + append updated)
-    formdata.delete('categories[]');
-    formData.categories.forEach((catId) => {
-      formdata.append('categories[]', catId.toString());
-    });
+    // Always send product_type
+    formdata.append('product_type', formData.product_type?.toString() ?? '');
 
-    // New images only
-    const newImages = formData.images.filter((img) => img instanceof File);
-    newImages.forEach((img) => formdata.append('images[]', img as File));
-
-    // Featured image if it's a new File
-    if (formData.featured_image instanceof File) {
-      formdata.append('featured_image', formData.featured_image);
+    // For simple products, append regular_price and sale_price
+    if (formData.product_type === 'simple_product') {
+      if (formData.regular_price) {
+        formdata.append('regular_price', formData.regular_price.toString());
+      }
+      if (formData.sale_price) {
+        formdata.append('sale_price', formData.sale_price.toString());
+      }
     }
-
-    // Removed images
-    removedImages.forEach((imageUrl) => {
-      formdata.append('removed_images[]', imageUrl);
-    });
 
     // Variants (compare deeply then append if changed)
     if (JSON.stringify(variants) !== JSON.stringify(originalItemData.variants)) {

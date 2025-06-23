@@ -87,7 +87,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                         ))}
                     </div>
 
-                    <button className="clear-btn" onClick={handleClearImages}>
+                    <button className="clear-btn" onClick={handleClearImages} type='button'>
                         Clear All
                     </button>
                 </>

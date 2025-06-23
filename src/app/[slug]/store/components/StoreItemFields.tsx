@@ -202,16 +202,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         />
                                     </div>
 
-                                    <div className="add-items-form-input-label-container">
-                                        <label>Vendor Name*</label>
-                                        <AddVendor
-                                            vendors={vendors}
-                                            selectedVendorId={formData.vendor_id || null}
-                                            onVendorSelect={onVendorSelect}
-                                            onVendorAdded={onVendorAdded}
-                                            disabled={isBatchMode}
-                                        />
-                                    </div>
+
                                 </div>
                             )}
                         </div>
@@ -245,7 +236,16 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     const updated = { ...formData, date_of_expiry: date };
                                     setFormData(updated);
                                 }} minDate={new Date()} />
-
+                                <div className="add-items-form-input-label-container">
+                                    <label>Vendor Name*</label>
+                                    <AddVendor
+                                        vendors={vendors}
+                                        selectedVendorId={formData.vendor_id || null}
+                                        onVendorSelect={onVendorSelect}
+                                        onVendorAdded={onVendorAdded}
+                                        disabled={isBatchMode}
+                                    />
+                                </div>
                                 <div className="add-items-form-input-label-container">
                                     <label>Product Type*</label>
                                     <select
@@ -392,7 +392,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     {/* Categories */}
                     <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
-                            toggleSection={toggleSection} disabled={isBatchMode}/>
+                            toggleSection={toggleSection} disabled={isBatchMode} />
                     </div>
 
                     {/* Brands */}
@@ -428,7 +428,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         {!collapsedSections['media'] && (
                             <div className="fields-wrapper">
 
-                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} disabled={isBatchMode}/>
+                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} disabled={isBatchMode} />
                             </div>
                         )}
                     </div>

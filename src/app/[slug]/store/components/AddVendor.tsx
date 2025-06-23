@@ -42,12 +42,11 @@ const AddVendor: React.FC<AddVendorProps> = ({
   const selectedVendorName = vendors.find(v => v.id === selectedVendorId)?.vendor_name || 'Select Vendor';
 
   return (
-    <div className="addvendor-dropdown" ref={dropdownRef} style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
+    <div className="addvendor-dropdown" ref={dropdownRef}>
       <div className={`vendors-header ${disabled ? 'disabled' : ''}`}
-        onClick={() => !disabled && setIsOpen((prev) => !prev)}
-        style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
+        onClick={() => setIsOpen((prev) => !prev)}>
         {selectedVendorName}
-        <FaChevronDown size={14} style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}} />
+        <FaChevronDown size={14}/>
       </div>
 
       {isOpen && (

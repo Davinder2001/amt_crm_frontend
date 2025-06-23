@@ -11,13 +11,15 @@ interface MeasuringUnitsProps {
     selectedUnit: number | null;
     onUnitSelect: (unitId: number) => void;
     onUnitAdded: (newUnit: MeasuringUnit) => void;
+    disabled?: boolean;
 }
 
 const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
     units,
     selectedUnit,
     onUnitSelect,
-    onUnitAdded
+    onUnitAdded,
+    disabled = false
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [addUnitModalOpen, setAddUnitModalOpen] = useState(false);
@@ -78,10 +80,14 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
     const selectedUnitObj = units.find((u) => u.id === selectedUnit);
 
     return (
-        <div className="addvendor-dropdown" ref={dropdownRef}>
-            <div className="vendors-header" onClick={() => setIsOpen((prev) => !prev)}>
+        <div className="addvendor-dropdown" ref={dropdownRef}
+            style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
+            <div className={`vendors-header ${disabled ? 'disabled' : ''}`}
+                onClick={() => !disabled && setIsOpen((prev) => !prev)}
+                style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}
+            >
                 {selectedUnitObj ? selectedUnitObj.name : 'Select Unit'}
-                <FaChevronDown size={14} />
+                <FaChevronDown size={14}  style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}/>
             </div>
 
             {isOpen && (

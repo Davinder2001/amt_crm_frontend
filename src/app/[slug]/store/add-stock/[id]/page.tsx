@@ -191,7 +191,7 @@ const Createbatch = () => {
 
     if (!originalItemData) return;
     const formdata = new FormData();
-    formdata.append('id', formData.id.toString());
+    formdata.append('item_id', formData.id.toString());
 
     // Primitive fields to track changes and append
     const primitiveFields: (keyof StoreItemBatchRequest)[] = [

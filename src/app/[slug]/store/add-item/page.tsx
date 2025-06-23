@@ -426,9 +426,6 @@ const AddItem: React.FC = () => {
 
       // Append all other fields
       if (val !== null && val !== undefined) {
-        if (key === 'brand_name' && formData.brand_id) {
-          form.append('brand_id', formData.brand_id.toString());
-        }
         form.append(key, val.toString());
       }
     });

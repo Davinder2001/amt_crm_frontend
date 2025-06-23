@@ -169,7 +169,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
                                     <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required disabled={isBatchMode} />
-
                                     <div className="add-items-form-input-label-container">
                                         <label>Measuring Unit</label>
                                         <MeasuringUnits
@@ -182,8 +181,10 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             onUnitAdded={(newUnit) => {
                                                 setFormData((prev) => ({ ...prev, measurement: newUnit.id }));
                                             }}
+                                            disabled={isBatchMode}
                                         />
                                     </div>
+
 
                                     <div className="add-items-form-input-label-container">
                                         <label>Tax</label>
@@ -197,6 +198,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             onTaxAdded={(newTax) => {
                                                 setFormData((prev) => ({ ...prev, tax_id: newTax.id }));
                                             }}
+                                            disabled={isBatchMode}
                                         />
                                     </div>
 
@@ -381,6 +383,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         const updated = { ...formData, featured_image: null };
                                         setFormData(updated);
                                     }}
+                                    disabled={isBatchMode}
                                 />
                             </div>
                         )}
@@ -389,7 +392,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                     {/* Categories */}
                     <div className="add-items-form-container store_column">
                         <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
-                            toggleSection={toggleSection} />
+                            toggleSection={toggleSection} disabled={isBatchMode}/>
                     </div>
 
                     {/* Brands */}
@@ -407,6 +410,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             }}
                             collapsedSections={collapsedSections}
                             toggleSection={toggleSection}
+                            disabled={isBatchMode}
                         />
                     </div>
 
@@ -424,7 +428,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         {!collapsedSections['media'] && (
                             <div className="fields-wrapper">
 
-                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} />
+                                <ImageUpload images={formData.images || []} handleImageChange={handleImageChange} handleClearImages={handleClearImages} handleRemoveImage={handleRemoveImage} disabled={isBatchMode}/>
                             </div>
                         )}
                     </div>

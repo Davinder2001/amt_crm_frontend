@@ -8,13 +8,15 @@ interface ImageUploadProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleClearImages: () => void;
     handleRemoveImage: (index: number) => void;
+    disabled?: boolean;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
     images,
     handleImageChange,
     handleClearImages,
-    handleRemoveImage
+    handleRemoveImage,
+    disabled = false
 }) => {
     const isLimitReached = images.length >= 5;
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     };
 
     return (
-        <div className="upload-container">
+        <div className="upload-container" style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
             <label>Upload Images ({images.length}/5)*</label>
 
             <div
@@ -43,7 +45,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                         document.getElementById('file-upload-input')?.click();
                     }
                 }}
-                style={{ cursor: isLimitReached ? 'not-allowed' : 'pointer', opacity: isLimitReached ? 0.5 : 1 }}
+                style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : { cursor: isLimitReached ? 'not-allowed' : 'pointer', opacity: isLimitReached ? 0.5 : 1 }}
             >
                 <FiUpload size={18} />
                 <span className="upload-text">
@@ -56,8 +58,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     accept="image/*"
                     multiple
                     onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                    disabled={isLimitReached}
+                    style={{ display: 'none', }}
+                    disabled={isLimitReached || disabled}
                 />
             </div>
             <small className="upload-note">SVG, JPG, PNG up to 10MB</small>

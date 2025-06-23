@@ -36,6 +36,7 @@ export const FormInput: React.FC<FormInputProps> = ({
             required={required}
             disabled={disabled} 
             onWheel={type === 'number' ? (e) => (e.target as HTMLInputElement).blur() : undefined}
+            style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}
         />
     </div>
 );

@@ -30,6 +30,7 @@ interface Props {
   selectedCategories: Category[];
   collapsedSections?: Record<string, boolean>;
   toggleSection?: (key: string) => void;
+  disabled?: boolean;
 }
 
 type CategoryNode = {
@@ -42,7 +43,7 @@ type CategoryNode = {
   updated_at?: string;
 };
 
-const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories, collapsedSections, toggleSection }) => {
+const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories, collapsedSections, toggleSection, disabled = false }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
@@ -248,7 +249,11 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       <Box key={category.id}
         onMouseEnter={() => setHoveredCategoryId(category.id)}
         onMouseLeave={() => setHoveredCategoryId(null)}
-        sx={{ position: 'relative' }}
+        sx={{
+          position: 'relative', ...(disabled && {
+            cursor: 'not-allowed',
+          }),
+        }}
       >
         <ListItemButton
           onClick={() => handleExpand(category.id)}
@@ -325,7 +330,11 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       <Box key={category.id}
         onMouseEnter={() => setHoveredCategoryId(category.id)}
         onMouseLeave={() => setHoveredCategoryId(null)}
-        sx={{ position: 'relative' }}
+        sx={{
+          position: 'relative', ...(disabled && {
+            cursor: 'not-allowed',
+          }),
+        }}
       >
         <ListItemButton
           onClick={() => {
@@ -434,7 +443,18 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
           {!collapsedSections?.['categories'] && (
             <div className="fields-wrapper">
               {isLoading ? (
-                <Box display="flex" justifyContent="center">
+                <Box display="flex" justifyContent="center"
+                  sx={{
+                    maxHeight: 300,
+                    overflow: 'auto',
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
+                  }}
+                >
                   <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
                 </Box>
               ) : data?.data.length === 0 ? (
@@ -442,12 +462,27 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   No categories found
                 </Typography>
               ) : (
-                <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+                <List
+                  sx={{
+                    maxHeight: 300,
+                    overflow: 'auto',
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
+                  }}
+                >
                   {data?.data.map(renderCategory)}
                 </List>
               )}
 
-              <Box display="flex" justifyContent="flex-start" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+              <Box display="flex" justifyContent="flex-start" alignItems="center" mt={2} gap={1} flexWrap="wrap" sx={{
+                ...(disabled && {
+                  cursor: 'not-allowed',
+                }),
+              }}>
                 <Button
                   variant="outlined"
                   startIcon={<FaPlus size={12} />}
@@ -461,6 +496,12 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                     textTransform: 'capitalize !important',
                     minHeight: '30px',
                     '&:hover': { backgroundColor: '#DEE9F2' },
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
                   }}
                 >
                   Create New

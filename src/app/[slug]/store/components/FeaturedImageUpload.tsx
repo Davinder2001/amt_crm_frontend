@@ -7,12 +7,14 @@ interface FeaturedImageUploadProps {
     featuredImage: File | string | null;
     onFeaturedImageChange: (file: File) => void;
     onRemoveFeaturedImage: () => void;
+    disabled?: boolean;
 }
 
 const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
     featuredImage,
     onFeaturedImageChange,
     onRemoveFeaturedImage,
+    disabled = false
 }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +25,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
     };
 
     return (
-        <div className="featured-image-upload">
+        <div className="featured-image-upload" style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}>
             {featuredImage ? (
                 <div className="image-preview">
                     <Image
@@ -45,7 +47,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
                     className="upload-box"
                     onClick={() => fileInputRef.current?.click()}
                 >
-                    <FiUploadCloud size={40} color="#ccc" />
+                    <FiUploadCloud size={40} color="#ccc" style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}/>
                     <p>Click or Drag to Upload Featured Image</p>
                     <input
                         type="file"
@@ -53,6 +55,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
                         ref={fileInputRef}
                         style={{ display: 'none' }}
                         onChange={handleFileChange}
+                        disabled={disabled}
                     />
                 </div>
             )}

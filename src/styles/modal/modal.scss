@@ -1,0 +1,86 @@
+@use '../variables' as*;
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+}
+
+.modal-close-btn:hover {
+    color: #333;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-content h6 {
+    letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
+}
+
+.modal-content input {
+    border: 1.5px solid $border-color;
+    border-radius: 6px;
+    outline: none;
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 16px;
+    transition: border-color .3s;
+
+    &:focus {
+        border-color: var(--primary-color);
+    }
+}

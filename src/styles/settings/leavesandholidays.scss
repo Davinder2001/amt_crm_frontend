@@ -55,7 +55,7 @@
     .leave-form select:focus,
     .holiday-form input:focus,
     .holiday-form select:focus {
-        border-color: $gray-color;
+        border-color: var(--primary-color);
         /* primary color */
     }
 

@@ -37,36 +37,48 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({
     return (
         <form onSubmit={handleSubmit} className="bank-account-form-wrapper">
             <div className="bank-account-form">
-                <input
-                    name="bank_name"
-                    placeholder="Bank Name"
-                    value={form.bank_name}
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    name="account_number"
-                    placeholder="Account Number"
-                    value={form.account_number}
-                    onChange={handleChange}
-                    required
-                    type="number"
-                    className="no-spinner"
-                    onWheel={(e) => e.currentTarget.blur()}
-                />
+                <div className='form-input-lable-wrapper'>
+                    <label >Bank Name</label>
+                    <input
+                        name="bank_name"
+                        placeholder="Bank Name"
+                        value={form.bank_name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
+                <div className='form-input-lable-wrapper'>
+                    <label >Account Name</label>
+                    <input
+                        name="account_number"
+                        placeholder="Account Number"
+                        value={form.account_number}
+                        onChange={handleChange}
+                        required
+                        type="number"
+                        className="no-spinner"
+                        onWheel={(e) => e.currentTarget.blur()}
+                    />
+                </div>
 
-                <input
-                    name="ifsc_code"
-                    placeholder="IFSC Code"
-                    value={form.ifsc_code}
-                    onChange={handleChange}
-                    required
-                />
-                <select name="type" value={form.type} onChange={handleChange}>
-                    <option value="current">Current</option>
-                    <option value="savings">Savings</option>
-                </select>
+                <div className='form-input-lable-wrapper'>
+                    <label > IFSC Code</label>
+                    <input
+                        name="ifsc_code"
+                        placeholder="IFSC Code"
+                        value={form.ifsc_code}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className='form-input-lable-wrapper'>
+                    <label>Type</label>
+                    <select name="type" value={form.type} onChange={handleChange}>
+                        <option value="current">Current</option>
+                        <option value="savings">Savings</option>
+                    </select>
+                </div>
             </div>
 
             <div className="bank-form-actions">

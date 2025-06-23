@@ -153,7 +153,7 @@ const HolidayList = () => {
             )}
 
             {holidays.length > 0 && (
-                <ResponsiveTable data={holidays} columns={columns} />
+                <ResponsiveTable data={holidays} columns={columns} cardViewKey='name'/>
             )}
         </div>
     );

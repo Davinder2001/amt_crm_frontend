@@ -68,7 +68,19 @@ const LeaveForm: React.FC<Props> = ({ onSubmit, onCancel, initialData }) => {
                     <label>
                         Count
                     </label>
-                    <input type="number" name="count" value={form.count} onChange={handleChange} required />
+                    <input
+                        type="number"
+                        name="count"
+                        value={form.count}
+                        onChange={handleChange}
+                        onWheel={(e) => {
+                            const input = e.target as HTMLInputElement;
+                            input.blur();
+                        }}
+
+                        required
+                    />
+
                 </div>
             </div>
 

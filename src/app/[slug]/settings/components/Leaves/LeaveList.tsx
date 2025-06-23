@@ -142,7 +142,7 @@ const LeaveList = () => {
       )}
 
       {leaves.length > 0 && (
-        <ResponsiveTable data={leaves} columns={columns} />
+        <ResponsiveTable data={leaves} columns={columns} cardViewKey='name' />
       )}
     </div>
   );

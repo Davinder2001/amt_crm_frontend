@@ -15,8 +15,6 @@ import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import { toast } from 'react-toastify';
 import {
-    Box,
-    TextField,
     Typography,
 } from '@mui/material';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
@@ -201,42 +199,43 @@ const Attributes = () => {
                 title={editAttributeId ? 'Edit Attribute' : 'Create New Attribute'}
                 width="500px"
             >
-                <Typography variant="subtitle2" gutterBottom>
-                    Attribute Name
-                </Typography>
-                <TextField
-                    fullWidth
-                    value={newAttributeName}
-                    onChange={(e) => setNewAttributeName(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                    sx={{ mb: 2 }}
-                    placeholder="Enter attribute name"
-                />
+                <div className='attribute-outer-wrapper'>
 
-                <Typography variant="subtitle2" gutterBottom>
-                    Attribute Values
-                </Typography>
+                    <div>
+                        <Typography variant="subtitle2" gutterBottom>
+                            Attribute Name
+                        </Typography>
+                        <input
+                            value={newAttributeName}
+                            onChange={(e) => setNewAttributeName(e.target.value)}
+                            placeholder="Enter attribute name"
+                        />
+                    </div>
 
-                <div className="values-scroll-container">
-                    {values.map((val, index) => (
-                        <Box key={index} className="value-row">
-                            <TextField
-                                fullWidth
-                                value={val}
-                                onChange={(e) => handleValueChange(index, e.target.value)}
-                                placeholder={`val ${index + 1}`}
-                                size="small"
-                            />
-                            {index > 0 && (
-                                <span onClick={() => removeValueField(index)}>
-                                    <FaTimes />
-                                </span>
-                            )}
-                        </Box>
-                    ))}
+                    <div>
+                        <Typography variant="subtitle2" gutterBottom>
+                            Attribute Values
+                        </Typography>
+
+                        <div className="values-scroll-container">
+                            {values.map((val, index) => (
+                                <div key={index} className="value-row">
+                                    <input
+                                        value={val}
+                                        onChange={(e) => handleValueChange(index, e.target.value)}
+                                        placeholder={`val ${index + 1}`}
+                                    />
+                                    {index > 0 && (
+                                        <span onClick={() => removeValueField(index)}>
+                                            <FaTimes />
+                                        </span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                    </div>
                 </div>
-
                 <button onClick={addNewValueField} className="value-add-button" type='button'>
                     <FaPlus /> Add Another Value
                 </button>

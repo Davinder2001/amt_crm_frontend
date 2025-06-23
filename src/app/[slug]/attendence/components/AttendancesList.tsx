@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 import {
   useFetchMyAttenancesQuery,
@@ -9,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
-import { FaClipboardList } from 'react-icons/fa';
+import { FaClipboardList} from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import AddAttendanceForm from './AddAttendanceForm';
 
@@ -78,7 +77,13 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
                         ? 'red'
                         : 'gray',
                 color: attendance.status === 'leave' ? 'black' : 'white',
+                padding: '6px 12px',
+                margin: '4px',
+                borderRadius: '4px',
+                display: 'inline-block',
+                fontWeight: '500',
               }}
+
             >
               {attendance.status}
             </div>
@@ -99,7 +104,14 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
                         ? 'red'
                         : 'gray',
                 color: attendance.approval_status === 'pending' ? 'black' : 'white',
+                padding: '6px 12px',
+                margin: '4px',
+                borderRadius: '4px',
+                fontWeight: 500,
+                display: 'inline-block',
+                fontSize: '14px',
               }}
+
             >
               {attendance.approval_status}
             </div>
@@ -107,7 +119,13 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
         },
       ];
 
-    content = <ResponsiveTable data={attendanceList} columns={columns} />;
+    content =
+      <>
+      
+        <ResponsiveTable data={attendanceList} columns={columns} cardViewKey='attendance_date' />
+      </>
+
+      ;
   }
 
   return (

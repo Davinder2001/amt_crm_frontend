@@ -72,11 +72,12 @@ const Page = () => {
           <div className='quotation-form-wrapper'>
             <div className="form-group">
               <label>Customer Name:</label>
-              <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
+              <input placeholder='Name' type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required />
             </div>
             <div className="form-group ">
               <label>Customer Number:</label>
               <input
+                placeholder='Number'
                 type="text"
                 value={customerNumber}
                 onChange={(e) => {
@@ -92,11 +93,12 @@ const Page = () => {
             </div>
             <div className="form-group">
               <label>Customer Email (optional):</label>
-              <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
+              <input placeholder='Email' type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
             </div>
             <div className="form-group">
               <label>Tax (%)</label>
               <input
+                placeholder='tax'
                 type="number"
                 value={isTaxFocused && taxPercent === 0 ? '' : taxPercent}
                 onChange={(e) => setTaxPercent(Number(e.target.value))}
@@ -108,6 +110,7 @@ const Page = () => {
             <div className="form-group">
               <label>Service Charges</label>
               <input
+                placeholder='Service Sharges'
                 type="number"
                 value={isServiceFocused && serviceCharges === 0 ? '' : serviceCharges}
                 onChange={(e) => setServiceCharges(Number(e.target.value))}

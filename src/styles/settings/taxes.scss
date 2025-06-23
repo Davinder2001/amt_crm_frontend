@@ -3,9 +3,6 @@
 .tax-page {
 
 
-
-
-
   // Container for action buttons inside tax-box
   .action-buttons {
     display: flex;
@@ -59,13 +56,15 @@
 
 
 }
-.popup-tax {
-    input {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid $feild_border;
-        border-radius: $border-radius;
-        outline: none;
-        transition: border-color 0.2s;
-    }
+
+.tax-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .create-tax-action-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
 }

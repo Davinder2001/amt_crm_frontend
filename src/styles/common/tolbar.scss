@@ -1,0 +1,59 @@
+@use '../variables' as*;
+
+.reset-columns {
+    padding: 8px 12px;
+    cursor: pointer;
+    background: #f8f7fa;
+    font-weight: 500;
+    color: #384b70;
+}
+
+.reset-columns:hover {
+    background: #e0e0e0;
+}
+
+.dropdown-content {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.action-icons-horizontal {
+    display: flex;
+    gap: 10px;
+}
+
+.action-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 30px;
+    right: 0;
+    transform: translateX(-0%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    font-size: 12px;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .tooltip-text {
+        display: block;
+    }
+}
+
+.action-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}

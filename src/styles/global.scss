@@ -133,7 +133,8 @@
 @use './company/ViewCompany.scss' as *;
 
 // modal styling.............
-@use '../styles/modal/modal.scss' as* ;
+@use '../styles/common/modal.scss' as* ;
+@use '../styles/common/tolbar.scss' as* ;
 
 // emptystate section...................................................................................
 @use './emptystate/empatystate.scss' as *;

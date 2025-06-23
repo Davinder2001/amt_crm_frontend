@@ -5,13 +5,15 @@ import {
   useGetAllQuotationsQuery,
   useGenerateQuotationPdfMutation,
 } from '@/slices/quotation/quotationApi';
-import { FaDownload, FaFileInvoice } from 'react-icons/fa';
+import { FaArrowLeft, FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import { Quotation } from '@/slices/quotation/quotationApi';
 import EmptyState from '@/components/common/EmptyState';
+import Link from 'next/link';
+import TableToolbar from '@/components/common/TableToolbar';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();
@@ -100,6 +102,16 @@ const AllQuotations = () => {
 
   return (
     <div className="all-quotations-page">
+      <Link href={`/${companySlug}/invoices`} className='back-button'>
+        <FaArrowLeft size={20} color='#fff' />
+      </Link>
+      <TableToolbar
+        actions={[
+          ...(quotations.length > 0
+            ? [{ label: 'Generate Quotation', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/invoices/qutations/add`) }]
+            : []),
+        ]}
+      />
       <ResponsiveTable
         data={quotations}
         columns={columns}

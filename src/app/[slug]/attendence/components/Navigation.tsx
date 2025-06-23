@@ -33,5 +33,4 @@ const Navigation: React.FC<NavigationProps> = ({ setIsAttandanceOpen, setIsApply
         </>
     );
 };
-
 export default Navigation;

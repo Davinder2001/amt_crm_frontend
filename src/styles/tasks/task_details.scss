@@ -36,23 +36,13 @@
   }
 }
 
-
-
-
-
 // All Task styling end here
-
-
-
-
-
-
 .task-form {
   width: 100%;
 
   .add-task-form {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     column-gap: 15px;
     row-gap: 10px;
 
@@ -61,45 +51,16 @@
       flex-direction: column;
       gap: 0px;
 
-      .react-datepicker-wrapper{
+      .react-datepicker-wrapper {
         width: 100%;
       }
-      label {
-        font-weight: $font-weight-regular;
-        font-size: $lable-font;
-        margin-bottom: 5px;
-        color: $lable-color;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
+
+
+
       .buttons {
         padding: 8px 22px !important;
         font-size: 13px;
       }
-
-      input,
-      select,
-      textarea {
-        padding: 10px 12px;
-        border: 1px solid $feild_border;
-        border-radius: $border-radius;
-        font-size: 16px;
-
-        &:focus {
-         border-color: var(--primary-light);
-          background: transparent;
-        }
-
-      }
-
-      /* Description (textarea full width) */
-      textarea {
-        grid-column: span 2;
-        resize: vertical;
-      }
-
-
 
       .buttons.off,
       .buttons.on {
@@ -125,18 +86,7 @@
 
     }
   }
-
-
-
-
 }
-
-
-
-
-
-
-// task View styling start here 
 
 .view-task-actions-container {
   display: flex;
@@ -172,45 +122,46 @@
     border: unset;
   }
 
-  .view-task-check-icon{
-color: $success-color;
+  .view-task-check-icon {
+    color: $success-color;
   }
-  .view-times-check-icon{
-color: $danger-color;
+
+  .view-times-check-icon {
+    color: $danger-color;
   }
 
 }
 
-
-
-
-
-
-
-
-
-
-// task View styling End here 
-
 /* Responsive */
 @media (max-width: 768px) {
-
- 
-    .empty-state-icon{
-        font-family: 44px !important;
-    }
-
-  .add-task-form {
-    grid-template-columns: 1fr;
+  .empty-state-icon {
+    font-family: 44px !important;
   }
 
-  .add-task-form  {
+
+  .add-task-form {
     grid-column: span 1;
 
 
     .add-task-form .form-actions {
       flex-direction: column;
       align-items: stretch;
+    }
+  }
+}
+
+@media (max-width: 568px) {
+
+  .task-form {
+
+    .add-task-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 0px;
     }
   }
 }

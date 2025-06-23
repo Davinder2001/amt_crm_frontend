@@ -58,9 +58,7 @@
     color: #333;
 }
 
-.modal-content {
-    padding: 20px;
-}
+
 
 .modal-content h6 {
     letter-spacing: .4px;
@@ -69,18 +67,34 @@
     font-size: 13px;
     font-weight: 400;
     display: block;
+
 }
 
-.modal-content input {
-    border: 1.5px solid $border-color;
-    border-radius: 6px;
-    outline: none;
-    width: 100%;
-    padding: 9px 12px;
-    font-size: 16px;
-    transition: border-color .3s;
+.modal-content {
+padding: 20px;
+    input,
+    select,
+    textarea {
+        border: 1.5px solid $border-color;
+        border-radius: 6px;
+        outline: none;
+        width: 100%;
+        padding: 9px 12px;
+        font-size: 16px;
+        transition: border-color 0.3s;
 
-    &:focus {
-        border-color: var(--primary-color);
+        &:focus {
+            border-color: var(--primary-color);
+        }
+    }
+
+    label {
+        font-weight: $font-weight-regular;
+        font-size: $lable-font;
+        margin-bottom: 5px;
+        color: $lable-color;
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
     }
 }

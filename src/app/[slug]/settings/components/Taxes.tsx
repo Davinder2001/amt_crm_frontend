@@ -10,7 +10,6 @@ import {
 import {
     Box,
     IconButton,
-    TextField,
 } from '@mui/material';
 import { FaPlus, FaTrash, FaEdit, FaTasks } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
@@ -190,71 +189,31 @@ const CreateTax = () => {
                 title={form.id ? 'Update Tax' : 'Add New Tax'}
                 width="400px"
             >
-                <Box className="popup-tax" sx={{ mt: 1 }}>
-                    <TextField
-                        fullWidth
-                        label="Tax Name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            mb: 2,
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                            },
-                            '& .MuiInputLabel-root': {
-                                color: 'var(--primary-color)',
-                                '&.Mui-focused': {
-                                    color: 'var(--primary-color)',
-                                },
-                            },
-                        }}
-                    />
-                    <TextField
-                        fullWidth
-                        label="Tax Rate (%)"
-                        value={form.rate}
-                        onChange={(e) => setForm({ ...form, rate: e.target.value })}
-                        variant="outlined"
-                        type="number"
-                        size="small"
-                        sx={{
-                            mb: 2,
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'var(--primary-color)',
-                                },
-                            },
-                            '& .MuiInputLabel-root': {
-                                color: 'var(--primary-color)',
-                                '&.Mui-focused': {
-                                    color: 'var(--primary-color)',
-                                },
-                            },
-                        }}
-                    />
-                    <Box display="flex" justifyContent="flex-end" gap={2}>
+                <div className="tax-form-wrapper">
+                    <div>
+                        <label>Tax Name</label>
+                        <input
+                            placeholder='tax name'
+                            value={form.name}
+                            onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <label>Tax Rate (%)</label>
+                        <input
+                            placeholder='tax rate'
+                            value={form.rate}
+                            onChange={(e) => setForm({ ...form, rate: e.target.value })}
+                            type="number"
+                        />
+                    </div>
+                    <div className='create-tax-action-wrapper'>
                         <button onClick={handleClose} className="buttons cancel-btn">Cancel</button>
                         <button className="buttons" onClick={handleSubmit} disabled={isUpdating}>
                             {form.id ? (isUpdating ? 'Updating...' : 'Update') : 'Add Tax'}
                         </button>
-                    </Box>
-                </Box>
+                    </div>
+                </div>
             </Modal>
 
         </Box>

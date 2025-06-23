@@ -118,15 +118,30 @@ function ViewAttendence() {
       render: (row: Attendance) => {
         const bg =
           row.status === 'present'
-            ? '#009693'
+            ? 'green'
             : row.status === 'leave'
-            ? 'yellow'
-            : row.status === 'absent'
-            ? 'red'
-            : 'gray';
+              ? 'yellow'
+              : row.status === 'absent'
+                ? 'red'
+                : 'gray';
+
         const color = row.status === 'leave' ? 'black' : 'white';
+
         return (
-          <div className="status" style={{ backgroundColor: bg, color }}>
+          <div
+            className="status"
+            style={{
+              backgroundColor: bg,
+              color,
+              padding: '4px 10px',
+              borderRadius: '4px',
+              display: 'inline-block',
+              fontSize: '13px',
+              fontWeight: 500,
+              textTransform: 'capitalize', // So "present" -> "Present"
+              margin: '2px 0',
+            }}
+          >
             {row.status}
           </div>
         );
@@ -137,31 +152,47 @@ function ViewAttendence() {
       render: (row: Attendance) => {
         const bg =
           row.approval_status === 'approved'
-            ? '#009693'
+            ? 'var(--primary-color)'
             : row.approval_status === 'pending'
-            ? 'yellow'
-            : row.approval_status === 'unapproved'
-            ? 'red'
-            : 'gray';
+              ? 'yellow'
+              : row.approval_status === 'unapproved'
+                ? 'red'
+                : 'red';
+
         const color = row.approval_status === 'pending' ? 'black' : 'white';
+
         return (
-          <div className="status" style={{ backgroundColor: bg, color }}>
+          <div
+            className="approval-status"
+            style={{
+              backgroundColor: bg,
+              color,
+              padding: '4px 10px',
+              borderRadius: '4px',
+              display: 'inline-block',
+              fontSize: '13px',
+              fontWeight: 500,
+              textTransform: 'capitalize', // Makes "approved" -> "Approved"
+              margin: '2px 0',
+            }}
+          >
             {row.approval_status}
           </div>
         );
       },
     },
+
     {
       label: 'Action',
       render: (row: Attendance) => (
         <>
           <div className='attendamce-t-btns-outer'>
-          <span onClick={() => handleApprove(row.id)} className='approve-btn'>
-            Approve
-          </span>
-          <span onClick={() => handleReject(row.id)} className='reject-btn'>
-            Reject
-          </span>
+            <span onClick={() => handleApprove(row.id)} className='approve-btn'>
+              Approve
+            </span>
+            <span onClick={() => handleReject(row.id)} className='reject-btn'>
+              Reject
+            </span>
           </div>
         </>
       ),

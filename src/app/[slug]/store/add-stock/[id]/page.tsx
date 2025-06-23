@@ -55,7 +55,6 @@ const Createbatch = () => {
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [activeTab, setActiveTab] = useState(0);
-  const [removedImages, setRemovedImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (vendors) {
@@ -131,65 +130,6 @@ const Createbatch = () => {
     setHasUnsavedChanges(true);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      const currentImages = formData.images || [];
-      const allowedFiles = files.slice(0, 5 - currentImages.length);
-      const updatedImages = [...currentImages, ...allowedFiles];
-      setFormData(prev => ({ ...prev, images: updatedImages }));
-      setHasUnsavedChanges(true);
-    }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    const imageUrl = formData.images[index];
-    if (typeof imageUrl === 'string') {
-      setRemovedImages((prev) => [...prev, imageUrl]);
-    }
-    setFormData((prev) => {
-      const updatedImages = prev.images.filter((_, i) => i !== index);
-      return { ...prev, images: updatedImages };
-    });
-    setHasUnsavedChanges(true);
-  };
-
-  const handleClearImages = () => {
-    setFormData(prev => ({ ...prev, images: [] }));
-    setHasUnsavedChanges(true);
-  };
-
-  const isFormModified = (): boolean => {
-    if (!originalItemData) return false;
-
-    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['quantity_count', 'purchase_date',
-      'date_of_manufacture', 'date_of_expiry',
-      'replacement', 'vendor_id', 'vendor_name', 'availability_stock',
-      'cost_price','unit_of_measure',
-      'units_in_peace', 'price_per_unit',];
-
-    for (const field of primitiveFields) {
-      if (formData[field] !== originalItemData[field]) {
-        return true;
-      }
-    }
-
-    const categoriesChanged =
-      JSON.stringify(formData.categories) !== JSON.stringify(originalItemData.categories);
-    const variantsChanged =
-      JSON.stringify(variants) !== JSON.stringify(originalItemData.variants);
-    const newImages = formData.images.filter((img) => img instanceof File);
-    const imagesChanged = newImages.length > 0 || removedImages.length > 0;
-    const featuredImageChanged =
-      (formData.featured_image instanceof File) ||
-      (originalItemData.featured_image && !formData.featured_image) ||
-      (typeof originalItemData.featured_image === 'string' &&
-        typeof formData.featured_image === 'string' &&
-        originalItemData.featured_image !== formData.featured_image);
-
-    return categoriesChanged || variantsChanged || imagesChanged || featuredImageChanged;
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -202,8 +142,7 @@ const Createbatch = () => {
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'vendor_name', 'availability_stock',
-      'cost_price',  'unit_of_measure',
-      'units_in_peace', 'price_per_unit',
+      'cost_price', 'units_in_peace', 'price_per_unit',
     ];
 
     primitiveFields.forEach((field) => {
@@ -218,6 +157,7 @@ const Createbatch = () => {
 
     // Always send product_type
     formdata.append('product_type', formData.product_type?.toString() ?? '');
+    formdata.append('unit_of_measure', formData.unit_of_measure?.toString() ?? '');
 
     // For simple products, append regular_price and sale_price
     if (formData.product_type === 'simple_product') {
@@ -290,9 +230,6 @@ const Createbatch = () => {
       }}
       handleChange={handleChange}
       handleNumberChange={handleChange}
-      handleImageChange={handleImageChange}
-      handleClearImages={handleClearImages}
-      handleRemoveImage={handleRemoveImage}
       taxesData={taxesData}
       measuringUnits={measuringUnits}
       selectedCategories={selectedCategories}
@@ -302,7 +239,6 @@ const Createbatch = () => {
       handleSubmit={handleSubmit}
       companySlug={companySlug}
       isLoading={isCreating}
-      isFormModified={isFormModified}
       activeTab={activeTab}
       setActiveTab={setActiveTab}
       isBatchMode={true}

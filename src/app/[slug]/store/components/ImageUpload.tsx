@@ -47,7 +47,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 }}
                 style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : { cursor: isLimitReached ? 'not-allowed' : 'pointer', opacity: isLimitReached ? 0.5 : 1 }}
             >
-                <FiUpload size={18} />
+                <FiUpload size={18} style={disabled ? { cursor: 'not-allowed'} : {}}/>
                 <span className="upload-text">
                     {isLimitReached ? 'Maximum 5 images uploaded' : 'Click here to upload or drag & drop'}
                 </span>
@@ -80,14 +80,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                                     className="delete-btn"
                                     type="button"
                                     onClick={() => handleRemoveImage(index)}
+                                    disabled={disabled}
+                                    style={disabled ? { cursor: 'not-allowed'} : {}} 
                                 >
-                                    <FaTimes />
+                                    <FaTimes style={disabled ? { cursor: 'not-allowed'} : {}} />
                                 </button>
                             </div>
                         ))}
                     </div>
 
-                    <button className="clear-btn" onClick={handleClearImages} type='button'>
+                    <button className="clear-btn" onClick={handleClearImages} type='button' style={disabled ? { cursor: 'not-allowed'} : {}} disabled={disabled}>
                         Clear All
                     </button>
                 </>

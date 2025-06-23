@@ -37,7 +37,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
                         style={{ objectFit: 'cover', borderRadius: '8px', width: '100%' }}
                         unoptimized={typeof featuredImage !== 'string'}
                     />
-                    <button className="remove-button" onClick={onRemoveFeaturedImage}>
+                    <button className="remove-button" onClick={onRemoveFeaturedImage} style={disabled ? { cursor: 'not-allowed'} : {}} disabled={disabled}>
                         <FiXCircle size={18} />
                         Remove
                     </button>
@@ -47,7 +47,7 @@ const FeaturedImageUpload: React.FC<FeaturedImageUploadProps> = ({
                     className="upload-box"
                     onClick={() => fileInputRef.current?.click()}
                 >
-                    <FiUploadCloud size={40} color="#ccc" style={disabled ? { cursor: 'not-allowed', opacity: 0.6, backgroundColor: '#f5f5f5' } : {}}/>
+                    <FiUploadCloud size={40} color="#ccc" style={disabled ? { cursor: 'not-allowed'} : {}}/>
                     <p>Click or Drag to Upload Featured Image</p>
                     <input
                         type="file"

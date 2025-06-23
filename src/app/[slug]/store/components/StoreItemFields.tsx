@@ -168,17 +168,20 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             </div>
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
-                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required disabled={isBatchMode}/>
-                                    <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
-                                    <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
+                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required disabled={isBatchMode} />
+
                                     <div className="add-items-form-input-label-container">
-                                        <label>Vendor Name*</label>
-                                        <AddVendor
-                                            vendors={vendors}
-                                            selectedVendorId={formData.vendor_id || null}
-                                            onVendorSelect={onVendorSelect}
-                                            onVendorAdded={onVendorAdded}
-                                            disabled={isBatchMode}
+                                        <label>Measuring Unit</label>
+                                        <MeasuringUnits
+                                            units={measuringUnits ?? []}
+                                            selectedUnit={formData.measurement}
+                                            onUnitSelect={(unitId) => {
+                                                const updated = { ...formData, measurement: unitId };
+                                                setFormData(updated);
+                                            }}
+                                            onUnitAdded={(newUnit) => {
+                                                setFormData((prev) => ({ ...prev, measurement: newUnit.id }));
+                                            }}
                                         />
                                     </div>
 
@@ -194,10 +197,19 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                             onTaxAdded={(newTax) => {
                                                 setFormData((prev) => ({ ...prev, tax_id: newTax.id }));
                                             }}
+                                        />
+                                    </div>
+
+                                    <div className="add-items-form-input-label-container">
+                                        <label>Vendor Name*</label>
+                                        <AddVendor
+                                            vendors={vendors}
+                                            selectedVendorId={formData.vendor_id || null}
+                                            onVendorSelect={onVendorSelect}
+                                            onVendorAdded={onVendorAdded}
                                             disabled={isBatchMode}
                                         />
                                     </div>
-                                    <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
                                 </div>
                             )}
                         </div>
@@ -216,6 +228,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         </div>
                         {!collapsedSections['inventoryAndDates'] && (
                             <div className="store_input_feilds fields-wrapper">
+                                <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
+                                <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
+                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
                                 <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
                                     const updated = { ...formData, purchase_date: date };
                                     setFormData(updated);
@@ -228,20 +243,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     const updated = { ...formData, date_of_expiry: date };
                                     setFormData(updated);
                                 }} minDate={new Date()} />
-                                <div className="add-items-form-input-label-container">
-                                    <label>Measuring Unit</label>
-                                    <MeasuringUnits
-                                        units={measuringUnits ?? []}
-                                        selectedUnit={formData.measurement}
-                                        onUnitSelect={(unitId) => {
-                                            const updated = { ...formData, measurement: unitId };
-                                            setFormData(updated);
-                                        }}
-                                        onUnitAdded={(newUnit) => {
-                                            setFormData((prev) => ({ ...prev, measurement: newUnit.id }));
-                                        }}
-                                    />
-                                </div>
+
                                 <div className="add-items-form-input-label-container">
                                     <label>Product Type*</label>
                                     <select

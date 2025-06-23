@@ -172,7 +172,12 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                 </Typography>
                             ) : (
                                 <FormControl fullWidth size="small" sx={{ maxWidth: 500, mb: 2 }}>
-                                    <InputLabel id="brand-select-label" sx={{ color: 'var(--primary-color)' }}>Select Brand</InputLabel>
+                                    <InputLabel id="brand-select-label" sx={{
+                                        color: 'var(--primary-color)',
+                                        '&.Mui-focused': {
+                                            color: 'var(--primary-color)',
+                                        },
+                                    }}>Select Brand</InputLabel>
                                     <Select
                                         labelId="brand-select-label"
                                         value={selectedBrand}

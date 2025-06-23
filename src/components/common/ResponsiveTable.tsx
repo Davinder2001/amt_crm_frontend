@@ -290,8 +290,10 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                       {col.render
                         ? col.render(item, index)
                         : col.key
-                          ? String(item[col.key])
-                          : ''}
+                          ? item[col.key] != null
+                            ? String(item[col.key])
+                            : 'N/A'
+                          : 'N/A'}
                     </td>
                   ))}
                 </tr>
@@ -330,8 +332,10 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                           {col.render
                             ? col.render(item, index)
                             : col.key
-                              ? String(item[col.key])
-                              : ''}
+                              ? item[col.key] != null
+                                ? String(item[col.key])
+                                : 'N/A'
+                              : 'N/A'}
                         </span>
                       </div>
                     ))}

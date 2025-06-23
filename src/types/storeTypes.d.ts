@@ -108,6 +108,17 @@ interface variations {
   units?: number | null;
 }
 
+interface CreateStoreItemRequest {
+  name: string;
+  brand_name?: string;
+  brand_id?: number | null;
+  tax_id: number | null;
+  measurement: number | null;
+  featured_image: File | string | null;
+  images: (string | File)[] | File[];
+  categories: Category[];
+}
+
 interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
   quantity_count: number;
@@ -139,8 +150,6 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   error?: string;
 }
 
-
-type CreateStoreItemRequest = BaseStoreItemRequest<Category[]>;
 interface UpdateStoreItemRequest extends BaseStoreItemRequest<number[]> {
   id: number;
 }
@@ -148,7 +157,7 @@ interface StoreItemBatchRequest extends BaseStoreItemRequest<number[]> {
   id: number;
 }
 
-type StoreItemFormData = CreateStoreItemRequest | UpdateStoreItemRequest | StoreItemBatchRequest;
+type StoreItemFormData = UpdateStoreItemRequest | StoreItemBatchRequest;
 
 type StoreResponse = StoreItem[];
 

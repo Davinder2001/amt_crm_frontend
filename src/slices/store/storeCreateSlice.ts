@@ -12,6 +12,8 @@ const attendanceCreateApiSlice = createApi({
         return acc;
       }, {} as Record<string, string>);
 
+      headers.set('Accept', 'application/json');
+      
       const token = cookies['access_token'];
 
       if (token) {

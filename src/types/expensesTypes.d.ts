@@ -6,7 +6,7 @@ interface Expense {
     description: string | null;
     price: number | string;
     tags: Tag[];
-    status: 'paid' | 'pending';
+    status: 'pending' | 'paid';
     file_path: string | null;
     created_at: string;
     updated_at: string;
@@ -27,7 +27,7 @@ interface ExpenseCreateRequest {
     price: number | string;
     file: File | null;
     tags: Tag[];
-    status: 'paid' | 'pending';
+    status:  'pending' | 'paid';
 }
 
 interface ExpenseUpdateRequest {
@@ -36,5 +36,5 @@ interface ExpenseUpdateRequest {
     price: number | string;
     file?: File | null;
     tags: Tag[];
-    status: 'paid' | 'pending';
+    status: 'pending' | 'paid';
 }

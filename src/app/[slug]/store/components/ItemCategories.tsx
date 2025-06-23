@@ -28,8 +28,8 @@ import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
   selectedCategories: Category[];
-  collapsedSections: Record<string, boolean>;
-  toggleSection: (key: string) => void;
+  collapsedSections?: Record<string, boolean>;
+  toggleSection?: (key: string) => void;
 }
 
 type CategoryNode = {
@@ -125,7 +125,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     const newSelectedIds = selectedCategoriesIds.includes(id)
       ? selectedCategoriesIds.filter(item => item !== id)
       : [...selectedCategoriesIds, id];
-    
+
     setSelectedCategoriesIds(newSelectedIds);
     updateSelectedCategories(newSelectedIds);
   };
@@ -415,21 +415,23 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         <>
           <div className="basic_label_header">
             <h2 className="basic_label">Categories:</h2>
-            <span
-              onClick={() => toggleSection('categories')}
-              style={{
-                color: 'var(--primary-color)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Toggle categories Section"
-            >
-              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-            </span>
+            {toggleSection && collapsedSections && (
+              <span
+                onClick={() => toggleSection('categories')}
+                style={{
+                  color: 'var(--primary-color)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label="Toggle categories Section"
+              >
+                {(collapsedSections?.['categories']) ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+              </span>
+            )}
           </div>
 
-          {!collapsedSections['categories'] && (
+          {!collapsedSections?.['categories'] && (
             <div className="fields-wrapper">
               {isLoading ? (
                 <Box display="flex" justifyContent="center">
@@ -473,20 +475,22 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <h2 className="basic_label">
               {editingCategory ? 'Edit Category' : 'Create New Category'}:
             </h2>
-            <span
-              onClick={() => toggleSection('categories')}
-              style={{
-                color: 'var(--primary-color)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Toggle categories Section"
-            >
-              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-            </span>
+            {toggleSection && collapsedSections && (
+              <span
+                onClick={() => toggleSection('categories')}
+                style={{
+                  color: 'var(--primary-color)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label="Toggle categories Section"
+              >
+                {collapsedSections?.['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+              </span>
+            )}
           </div>
-          {!collapsedSections['categories'] && (
+          {!collapsedSections?.['categories'] && (
             <div className="fields-wrapper">
               <TextField
                 fullWidth

@@ -1,7 +1,7 @@
 // components/ExpenseForm.tsx
 'use client';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import {
     TextField,
     Button,
@@ -11,7 +11,6 @@ import {
     FormHelperText,
     Stack,
     Select,
-    MenuItem,
     Chip,
     Box,
     InputAdornment,
@@ -26,10 +25,11 @@ interface ExpenseFormProps {
     onCancel?: () => void;
 }
 
-export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFormProps) {
+export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFormProps) {
     const [createExpense] = useCreateExpenseMutation();
     const [updateExpense] = useUpdateExpenseMutation();
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [tagError, setTagError] = useState('');
     const [tagInput, setTagInput] = useState('');
 
     const [formData, setFormData] = useState<ExpenseCreateRequest | ExpenseUpdateRequest>({
@@ -52,10 +52,17 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
     };
 
     const handleAddTag = () => {
-        if (tagInput.trim() && !formData.tags.some(tag => tag.name === tagInput.trim())) {
-            handleChange('tags', [...formData.tags, { name: tagInput.trim() }]);
-            setTagInput('');
+        const trimmedTag = tagInput.trim();
+        if (!trimmedTag) return;
+
+        if (formData.tags.some(tag => tag.name === trimmedTag)) {
+            setTagError('This tag already exists');
+            return;
         }
+
+        handleChange('tags', [...formData.tags, { name: trimmedTag }]);
+        setTagInput('');
+        setTagError('');
     };
 
     const handleRemoveTag = (tagToRemove: string) => {
@@ -136,6 +143,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
 
                 <TextField
                     label="Heading"
+                    size="small"
                     value={formData.heading}
                     onChange={(e) => handleChange('heading', e.target.value)}
                     error={!!errors.heading}
@@ -166,6 +174,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
 
                 <TextField
                     label="Description"
+                    size="small"
                     value={formData.description}
                     onChange={(e) => handleChange('description', e.target.value)}
                     multiline
@@ -194,7 +203,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                     }}
                 />
 
-                <FormControl fullWidth error={!!errors.price}>
+                <FormControl fullWidth error={!!errors.price} size="small">
                     <InputLabel
                         sx={{
                             color: 'var(--primary-color)',
@@ -225,8 +234,8 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                     {errors.price && <FormHelperText>{errors.price}</FormHelperText>}
                 </FormControl>
 
-                <FormControl fullWidth>
-                    <InputLabel
+                <FormControl fullWidth size="small">
+                    <InputLabel id="status-select-label"
                         sx={{
                             color: 'var(--primary-color)',
                             '&.Mui-focused': {
@@ -235,6 +244,8 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                         }}
                     >Status</InputLabel>
                     <Select
+                        native
+                        labelId="status-select-label"
                         value={formData.status}
                         onChange={(e) => handleChange('status', e.target.value)}
                         label="Status"
@@ -250,17 +261,24 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                             }
                         }}
                     >
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="paid">Paid</MenuItem>
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
                     </Select>
                 </FormControl>
 
-                <FormControl fullWidth>
+                <FormControl fullWidth size="small">
                     <TextField
                         label="Add Tags"
+                        size="small"
                         value={tagInput}
-                        onChange={(e) => setTagInput(e.target.value)}
+                        onChange={(e) => {
+                            setTagInput(e.target.value);
+                            // Clear error when user starts typing
+                            if (tagError) setTagError('');
+                        }}
                         onKeyDown={handleKeyDown}
+                        error={!!tagError}
+                        helperText={tagError}
                         InputLabelProps={{
                             sx: {
                                 color: 'var(--primary-color)',
@@ -272,13 +290,13 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: 'var(--primary-color)',
+                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: 'var(--primary-color)',
+                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: 'var(--primary-color)',
+                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
                                 },
                             },
                         }}
@@ -319,7 +337,7 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
                     </FormHelperText>
                 </FormControl>
 
-                <FormControl fullWidth error={!!errors.file}>
+                <FormControl fullWidth error={!!errors.file} size="small">
                     <input
                         type="file"
                         id="file-upload"
@@ -377,4 +395,4 @@ export default function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFor
             </Stack>
         </form>
     );
-}
+});

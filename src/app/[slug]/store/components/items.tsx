@@ -126,8 +126,6 @@ const Items: React.FC = () => {
   const allColumns: { label: string; key: keyof StoreItem }[] = [
     { label: 'Brand Name', key: 'brand_name' },
     { label: 'Name', key: 'name' },
-    { label: 'Date of Manufacture', key: 'date_of_manufacture' },
-    { label: 'Date of Expiry', key: 'date_of_expiry' },
     { label: 'Sale Price', key: 'sale_price' },
     { label: 'Stock Available', key: 'availability_stock' },
   ];
@@ -422,7 +420,7 @@ const Items: React.FC = () => {
                   gap: '20px',
                   cursor: 'pointer'
                 }}
-                  href={`/${companySlug}/store/create-batch/${item.id}`}
+                  href={`/${companySlug}/store/add-stock/${item.id}`}
                   onClick={() => {
                     setItemId(item.id);
                   }}
@@ -450,7 +448,6 @@ const Items: React.FC = () => {
           </div>
         </div>
       </Modal>
-
     </div>
   );
 };

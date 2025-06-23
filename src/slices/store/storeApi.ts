@@ -17,7 +17,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     }),
 
     // Create a new store item
-    createStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
+    createStoreItem: builder.mutation<{ success: boolean, message: string, error: string, item: { id: number } }, FormData>({
       query: (newItem) => ({
         url: "store/add-items",
         method: "POST",
@@ -225,16 +225,11 @@ const storeApi = storeApiSlice.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "Store", id }],
     }),
 
-    createItemBatch: builder.mutation<ItemBatchResponse, {
-      item_id: number;
-      batch_number?: string;
-      cost_price: number;
-      quantity_count: number;
-    }>({
-      query: (data) => ({
+    createItemBatch: builder.mutation<StoreItemBatchRequest, FormData>({
+      query: (newBatch) => ({
         url: "store/item/batch",
         method: "POST",
-        body: data,
+        body: newBatch,
       }),
       invalidatesTags: ["Store"],
     }),

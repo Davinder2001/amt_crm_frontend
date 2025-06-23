@@ -30,9 +30,10 @@ interface Props {
     onBrandSelect: (brandName: string, brandId?: number) => void;
     collapsedSections: Record<string, boolean>;
     toggleSection: (key: string) => void;
+    disabled?: boolean;
 }
 
-const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSections, toggleSection }) => {
+const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSections, toggleSection, disabled = false }) => {
     const { data, isLoading, refetch } = useFetchBrandsQuery();
     const [createBrand, { isLoading: isCreating }] = useCreateBrandMutation();
     const [updateBrand, { isLoading: isUpdating }] = useUpdateBrandMutation();
@@ -163,7 +164,17 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                     {!collapsedSections['brands'] && (
                         <div className="fields-wrapper">
                             {isLoading ? (
-                                <Box display="flex" justifyContent="center">
+                                <Box display="flex" justifyContent="center"
+                                    sx={{
+                                        maxHeight: 300,
+                                        overflow: 'auto',
+                                        ...(disabled && {
+                                            pointerEvents: 'none',
+                                            opacity: 0.5,
+                                            backgroundColor: '#f5f5f5',
+                                            cursor: 'not-allowed',
+                                        }),
+                                    }}>
                                     <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
                                 </Box>
                             ) : data?.length === 0 ? (
@@ -171,8 +182,20 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                     No brands found
                                 </Typography>
                             ) : (
-                                <FormControl fullWidth size="small" sx={{ maxWidth: 500, mb: 2 }}>
-                                    <InputLabel id="brand-select-label" sx={{ color: 'var(--primary-color)' }}>Select Brand</InputLabel>
+                                <FormControl fullWidth size="small" sx={{
+                                    maxWidth: 500, mb: 2, ...(disabled && {
+                                        pointerEvents: 'none',
+                                        opacity: 0.5,
+                                        backgroundColor: '#f5f5f5',
+                                        cursor: 'not-allowed',
+                                    }),
+                                }}>
+                                    <InputLabel id="brand-select-label" sx={{
+                                        color: 'var(--primary-color)',
+                                        '&.Mui-focused': {
+                                            color: 'var(--primary-color)',
+                                        },
+                                    }}>Select Brand</InputLabel>
                                     <Select
                                         labelId="brand-select-label"
                                         value={selectedBrand}
@@ -230,7 +253,12 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                 </FormControl>
                             )}
 
-                            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+                            <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} gap={1} flexWrap="wrap"
+                                sx={{
+                                    ...(disabled && {
+                                        cursor: 'not-allowed',
+                                    }),
+                                }}>
                                 <Button
                                     variant="outlined"
                                     startIcon={<FaPlus size={12} />}
@@ -244,6 +272,12 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                         textTransform: 'capitalize !important',
                                         minHeight: '30px',
                                         '&:hover': { backgroundColor: '#DEE9F2' },
+                                        ...(disabled && {
+                                            pointerEvents: 'none',
+                                            opacity: 0.5,
+                                            backgroundColor: '#f5f5f5',
+                                            cursor: 'not-allowed',
+                                        }),
                                     }}
                                 >
                                     Create New Brand

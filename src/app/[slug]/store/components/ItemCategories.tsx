@@ -28,8 +28,9 @@ import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
 interface Props {
   setSelectedCategories: (categories: Category[]) => void;
   selectedCategories: Category[];
-  collapsedSections: Record<string, boolean>;
-  toggleSection: (key: string) => void;
+  collapsedSections?: Record<string, boolean>;
+  toggleSection?: (key: string) => void;
+  disabled?: boolean;
 }
 
 type CategoryNode = {
@@ -42,7 +43,7 @@ type CategoryNode = {
   updated_at?: string;
 };
 
-const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories, collapsedSections, toggleSection }) => {
+const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCategories, collapsedSections, toggleSection, disabled = false }) => {
   const { data, isLoading } = useFetchCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
@@ -125,7 +126,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     const newSelectedIds = selectedCategoriesIds.includes(id)
       ? selectedCategoriesIds.filter(item => item !== id)
       : [...selectedCategoriesIds, id];
-    
+
     setSelectedCategoriesIds(newSelectedIds);
     updateSelectedCategories(newSelectedIds);
   };
@@ -248,7 +249,11 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       <Box key={category.id}
         onMouseEnter={() => setHoveredCategoryId(category.id)}
         onMouseLeave={() => setHoveredCategoryId(null)}
-        sx={{ position: 'relative' }}
+        sx={{
+          position: 'relative', ...(disabled && {
+            cursor: 'not-allowed',
+          }),
+        }}
       >
         <ListItemButton
           onClick={() => handleExpand(category.id)}
@@ -325,7 +330,11 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
       <Box key={category.id}
         onMouseEnter={() => setHoveredCategoryId(category.id)}
         onMouseLeave={() => setHoveredCategoryId(null)}
-        sx={{ position: 'relative' }}
+        sx={{
+          position: 'relative', ...(disabled && {
+            cursor: 'not-allowed',
+          }),
+        }}
       >
         <ListItemButton
           onClick={() => {
@@ -415,24 +424,37 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         <>
           <div className="basic_label_header">
             <h2 className="basic_label">Categories:</h2>
-            <span
-              onClick={() => toggleSection('categories')}
-              style={{
-                color: 'var(--primary-color)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Toggle categories Section"
-            >
-              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-            </span>
+            {toggleSection && collapsedSections && (
+              <span
+                onClick={() => toggleSection('categories')}
+                style={{
+                  color: 'var(--primary-color)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label="Toggle categories Section"
+              >
+                {(collapsedSections?.['categories']) ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+              </span>
+            )}
           </div>
 
-          {!collapsedSections['categories'] && (
+          {!collapsedSections?.['categories'] && (
             <div className="fields-wrapper">
               {isLoading ? (
-                <Box display="flex" justifyContent="center">
+                <Box display="flex" justifyContent="center"
+                  sx={{
+                    maxHeight: 300,
+                    overflow: 'auto',
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
+                  }}
+                >
                   <CircularProgress color="primary" sx={{ color: 'var(--primary-color)' }} />
                 </Box>
               ) : data?.data.length === 0 ? (
@@ -440,12 +462,27 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   No categories found
                 </Typography>
               ) : (
-                <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+                <List
+                  sx={{
+                    maxHeight: 300,
+                    overflow: 'auto',
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
+                  }}
+                >
                   {data?.data.map(renderCategory)}
                 </List>
               )}
 
-              <Box display="flex" justifyContent="flex-start" alignItems="center" mt={2} gap={1} flexWrap="wrap">
+              <Box display="flex" justifyContent="flex-start" alignItems="center" mt={2} gap={1} flexWrap="wrap" sx={{
+                ...(disabled && {
+                  cursor: 'not-allowed',
+                }),
+              }}>
                 <Button
                   variant="outlined"
                   startIcon={<FaPlus size={12} />}
@@ -459,6 +496,12 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                     textTransform: 'capitalize !important',
                     minHeight: '30px',
                     '&:hover': { backgroundColor: '#DEE9F2' },
+                    ...(disabled && {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                      backgroundColor: '#f5f5f5',
+                      cursor: 'not-allowed',
+                    }),
                   }}
                 >
                   Create New
@@ -473,20 +516,22 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
             <h2 className="basic_label">
               {editingCategory ? 'Edit Category' : 'Create New Category'}:
             </h2>
-            <span
-              onClick={() => toggleSection('categories')}
-              style={{
-                color: 'var(--primary-color)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              aria-label="Toggle categories Section"
-            >
-              {collapsedSections['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
-            </span>
+            {toggleSection && collapsedSections && (
+              <span
+                onClick={() => toggleSection('categories')}
+                style={{
+                  color: 'var(--primary-color)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label="Toggle categories Section"
+              >
+                {collapsedSections?.['categories'] ? <FiPlusCircle size={20} /> : <FiMinusCircle size={20} />}
+              </span>
+            )}
           </div>
-          {!collapsedSections['categories'] && (
+          {!collapsedSections?.['categories'] && (
             <div className="fields-wrapper">
               <TextField
                 fullWidth

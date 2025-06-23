@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchStoreItemQuery, useUpdateStoreItemMutation } from '@/slices';
+import { useCreateItemBatchMutation, useFetchStoreItemQuery } from '@/slices';
 import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
@@ -14,7 +14,7 @@ const Createbatch = () => {
   const { companySlug } = useCompany();
   const router = useRouter();
   const { data: item, isLoading: isItemLoading } = useFetchStoreItemQuery(Number(id));
-  const [updateStoreItem, { isLoading: isUpdating }] = useUpdateStoreItemMutation();
+  const [createItemBatch, { isLoading: isCreating }] = useCreateItemBatchMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -190,10 +190,8 @@ const Createbatch = () => {
     e.preventDefault();
 
     if (!originalItemData) return;
-
     const formdata = new FormData();
-    formdata.append('_method', 'PUT');
-    formdata.append('id', formData.id.toString());
+    formdata.append('item_id', formData.id.toString());
 
     // Primitive fields to track changes and append
     const primitiveFields: (keyof StoreItemBatchRequest)[] = [
@@ -259,7 +257,7 @@ const Createbatch = () => {
 
     // Submit
     try {
-      await updateStoreItem({ id: formData.id, formdata }).unwrap();
+      await createItemBatch(formdata).unwrap();
       toast.success('Item updated successfully!');
       setHasUnsavedChanges(false);
       router.back();
@@ -306,8 +304,7 @@ const Createbatch = () => {
       setVariants={setVariants}
       handleSubmit={handleSubmit}
       companySlug={companySlug}
-      isLoading={isUpdating}
-      isEditMode={true}
+      isLoading={isCreating}
       isFormModified={isFormModified}
       activeTab={activeTab}
       setActiveTab={setActiveTab}

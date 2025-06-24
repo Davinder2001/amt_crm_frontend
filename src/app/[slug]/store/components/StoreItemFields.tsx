@@ -54,6 +54,7 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
     setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
     handleClearForm?: () => void;
     isBatchMode?: boolean;
+    isEditingBatch?: boolean;
 }
 
 const StoreItemFields = <T extends StoreItemFormData>({
@@ -81,7 +82,8 @@ const StoreItemFields = <T extends StoreItemFormData>({
     activeTab,
     setActiveTab,
     tabCompletion,
-    isBatchMode
+    isBatchMode,
+    isEditingBatch = false,
 }: StoreItemFieldsProps<T>) => {
 
     const headerRef = useRef<HTMLDivElement>(null);
@@ -285,6 +287,24 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                     </select>
                                 </div>
                                 {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" /> */}
+                                <div className="add-items-form-input-label-container">
+                                    <label>Tax Type</label>
+                                    <select
+                                        value={formData.tax_type}
+                                        onChange={(e) => {
+                                            const value = e.target.value as 'include' | 'exclude';
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                tax_type: value
+                                            }));
+                                        }}
+                                        className="form-select"
+                                        required
+                                    >
+                                        <option value="exclude">Exclude</option>
+                                        <option value="include">Include</option>
+                                    </select>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -429,9 +449,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             <div className="fields-wrapper">
                                 <ImageUpload
                                     images={formData.images || []}
-                                    handleImageChange={handleImageChange ?? (() => {})}
-                                    handleClearImages={handleClearImages ?? (() => {})}
-                                    handleRemoveImage={handleRemoveImage ?? (() => {})}
+                                    handleImageChange={handleImageChange ?? (() => { })}
+                                    handleClearImages={handleClearImages ?? (() => { })}
+                                    handleRemoveImage={handleRemoveImage ?? (() => { })}
                                     disabled={isBatchMode}
                                 />
                             </div>
@@ -444,7 +464,10 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 Cancel
                             </button>
                             <button type="submit" className="buttons" disabled={isLoading}>
-                                {isLoading ? (isEditMode ? 'Updating...' : 'Adding...') : (isEditMode ? 'Update' : 'Save')}
+                                {isLoading
+                                    ? (isEditingBatch ? 'Updating Batch...' : (isEditMode ? 'Updating...' : 'Adding...'))
+                                    : (isEditingBatch ? 'Update Batch' : (isEditMode ? 'Update' : 'Save'))
+                                }
                             </button>
                         </div>
                     )}

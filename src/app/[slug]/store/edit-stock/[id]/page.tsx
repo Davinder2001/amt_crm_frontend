@@ -1,7 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { useCreateItemBatchMutation, useFetchStoreItemQuery } from '@/slices';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useFetchStoreItemQuery,
+  useFetchItemBatchByIdQuery,
+  useUpdateItemBatchMutation
+} from '@/slices';
 import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
 import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
@@ -9,12 +13,20 @@ import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';
 import LoadingState from '@/components/common/LoadingState';
 
-const Createbatch = () => {
+const EditBatch = () => {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const batchId = searchParams.get('batchId');
   const { companySlug } = useCompany();
   const router = useRouter();
+
+  // Fetch the base item data
   const { data: item, isLoading: isItemLoading } = useFetchStoreItemQuery(Number(id));
-  const [createItemBatch, { isLoading: isCreating }] = useCreateItemBatchMutation();
+  // Fetch the specific batch data
+  const { data: batchResponse, isLoading: isBatchLoading } = useFetchItemBatchByIdQuery(Number(batchId));
+  const batchItem = batchResponse?.batch;
+
+  const [updateBatchItem, { isLoading: isUpdating }] = useUpdateItemBatchMutation();
   const { currentData: vendors } = useFetchVendorsQuery();
   const { data: taxesData } = useFetchTaxesQuery();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -23,6 +35,7 @@ const Createbatch = () => {
 
   const getDefaultFormData = (): StoreItemBatchRequest => ({
     id: Number(id),
+    batch_id: batchId ? Number(batchId) : null,
     name: '',
     quantity_count: 0,
     measurement: null,
@@ -64,42 +77,45 @@ const Createbatch = () => {
   }, [vendors]);
 
   useEffect(() => {
-    if (item) {
+    if (item && batchItem) {
+      // Combine item data with batch-specific data
       const initialData = {
         id: item.id,
+        batch_id: batchItem.id,
         name: item.name || '',
-        quantity_count: item.quantity_count || 0,
-        purchase_date: item.purchase_date || '',
-        date_of_manufacture: item.date_of_manufacture || '',
-        date_of_expiry: item.date_of_expiry || '',
-        brand_name: item.brand_name || '',
-        brand_id: item.brand_id || 0,
-        replacement: item.replacement || '',
-        category: item.category || '',
-        vendor_name: item.vendor_name || '',
-        availability_stock: item.availability_stock || 0,
-        cost_price: item.cost_price || 0,
-        regular_price: item.regular_price || 0,
-        sale_price: item.sale_price || 0,
-        tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
+        quantity_count: parseFloat(batchItem.quantity) || 0,
+        purchase_date: '',
+        date_of_manufacture: batchItem.date_of_manufacture || '',
+        date_of_expiry: batchItem.date_of_expiry || '',
+        replacement: '',
+        category: '',
+        vendor_name: '',
+        availability_stock: parseFloat(batchItem.quantity) || 0,
+        cost_price: batchItem.purchase_price || 0,
+        regular_price: 0,
+        sale_price: 0,
+        tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : null,
         tax_type: item.tax_type || 'exclude',
         measurement: item.measurement?.id || null,
-        unit_of_measure: item.unit_of_measure || 'pieces',
-        units_in_peace: item.units_in_peace ?? null,
-        price_per_unit: item.price_per_unit ?? null,
+        unit_of_measure: batchItem.unit_of_measure || 'pieces',
+        units_in_peace: batchItem.units_in_peace ?? null,
+        price_per_unit: batchItem.price_per_unit ?? null,
         images: Array.isArray(item.images) ? item.images : [],
-        variants: item.variants || [],
+        variants: batchItem.variants || [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
-        featured_image: item.featured_image ?? null,
-        product_type: item.product_type || 'simple_product',
-        vendor_id: item.vendor_id != null ? item.vendor_id : null
+        featured_image: item.featured_image || null,
+        product_type: batchItem.product_type || 'simple_product',
+        vendor_id: null,
+        purchase_price: batchItem.purchase_price || null,
+        quantity: batchItem.quantity || '0.00'
       };
+
       setFormData(initialData);
       setOriginalItemData(initialData);
-      setVariants(item.variants || []);
+      setVariants(batchItem.variants || []);
       setSelectedCategories(item.categories || []);
     }
-  }, [item]);
+  }, [item, batchItem]);
 
   useEffect(() => {
     const categoryIds = selectedCategories.map(cat => cat.id);
@@ -138,9 +154,10 @@ const Createbatch = () => {
     if (!originalItemData) return;
     const formdata = new FormData();
     formdata.append('item_id', formData.id.toString());
+    formdata.append('batch_id', (formData.batch_id ?? formData.id).toString());
 
     // Primitive fields to track changes and append
-    const primitiveFields: (keyof StoreItemBatchRequest)[] = [
+    const batchFields: (keyof StoreItemBatchRequest)[] = [
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
@@ -148,7 +165,7 @@ const Createbatch = () => {
       'tax_type'
     ];
 
-    primitiveFields.forEach((field) => {
+    batchFields.forEach((field) => {
       const value = formData[field];
       const originalValue = originalItemData[field];
 
@@ -197,7 +214,7 @@ const Createbatch = () => {
 
     // Submit
     try {
-      await createItemBatch(formdata).unwrap();
+      await updateBatchItem(formdata).unwrap();
       toast.success('Item updated successfully!');
       setHasUnsavedChanges(false);
       router.back();
@@ -207,7 +224,7 @@ const Createbatch = () => {
     }
   };
 
-  if (isItemLoading) return <LoadingState />;
+  if (isItemLoading || isBatchLoading) return <LoadingState />;
 
   return (
     <StoreItemFields
@@ -241,12 +258,13 @@ const Createbatch = () => {
       setVariants={setVariants}
       handleSubmit={handleSubmit}
       companySlug={companySlug}
-      isLoading={isCreating}
+      isLoading={isUpdating}
       activeTab={activeTab}
       setActiveTab={setActiveTab}
       isBatchMode={true}
+      isEditingBatch={true}
     />
   );
 };
 
-export default Createbatch;
+export default EditBatch;

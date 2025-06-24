@@ -220,7 +220,7 @@ const storeApi = storeApiSlice.injectEndpoints({
       providesTags: ["Store"],
     }),
 
-    fetchItemBatchById: builder.query<ItemBatch, number>({
+    fetchItemBatchById: builder.query<getSingleBatchResponse, number>({
       query: (id) => `store/item/batch/${id}`,
       providesTags: (result, error, id) => [{ type: "Store", id }],
     }),
@@ -234,22 +234,13 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
-    updateItemBatch: builder.mutation<ItemBatchResponse, {
-      id: number;
-      data: {
-        cost_price?: number;
-        quantity_count?: number;
-      }
-    }>({
-      query: ({ id, data }) => ({
-        url: `store/item/batch/${id}`,
+    updateItemBatch: builder.mutation<ItemBatchResponse, FormData>({
+      query: (Editbatch) => ({
+        url: `store/item/batch`,
         method: "PUT",
-        body: data,
+        body: Editbatch,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Store", id },
-        "Store"
-      ],
+      invalidatesTags: ["Store"],
     }),
 
     deleteItemBatch: builder.mutation<ItemBatchResponse, number>({

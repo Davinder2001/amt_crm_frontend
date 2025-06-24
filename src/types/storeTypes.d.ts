@@ -3,6 +3,31 @@ interface Measurement {
   name: string;
 }
 
+interface storeItemBatch {
+  id: number;
+  item_id: number;
+  batch_number: string | null;
+  purchase_price: number | null;
+  date_of_manufacture: string | null;
+  product_type?: 'simple_product' | 'variable_product';
+  unit_of_measure: 'unit' | 'pieces';
+  units_in_peace?: number | null;
+  price_per_unit?: number | null;
+  measurement?: Measurement | null;
+  cost_price: number;
+  variants?: variations[];
+  date_of_expiry: string | null;
+  quantity: string;
+  expiry_date: string | null;
+  variants: variations[];
+  created_at: string;
+}
+interface getSingleBatchResponse {
+  success: boolean;
+  message: string;
+  batch: storeItemBatch;
+}
+
 interface StoreItem {
   tax_id: number;
   id: number;
@@ -29,6 +54,7 @@ interface StoreItem {
   vendor_name?: string | null;
   product_type: 'simple_product' | 'variable_product';
   unit_of_measure: 'unit' | 'pieces';
+  tax_type: 'include' | 'exclude';
   units_in_peace?: number | null;
   price_per_unit?: number | null;
   availability_stock: number;
@@ -41,6 +67,7 @@ interface StoreItem {
   variants: variations[];
   taxes: Tax[];
   units: MeasuringUnit[];
+  batches?: ItemBatch[];
 }
 
 interface Category {
@@ -118,6 +145,17 @@ interface CreateStoreItemRequest {
   images: (string | File)[] | File[];
   categories: Category[];
 }
+interface UpdateStoreItemRequest {
+  id: number;
+  name: string;
+  brand_name?: string;
+  brand_id?: number | null;
+  tax_id: number | null;
+  measurement: number | null;
+  featured_image: File | string | null;
+  images: (string | File)[] | File[];
+  categories: number[];
+}
 
 interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
@@ -140,6 +178,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   units_in_peace?: number | null;
   price_per_unit?: number | null;
   tax_id: number | null;
+  tax_type: 'include' | 'exclude';
   measurement: number | null;
   featured_image: File | string | null;
   images: (string | File)[] | File[];
@@ -150,14 +189,12 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   error?: string;
 }
 
-interface UpdateStoreItemRequest extends BaseStoreItemRequest<number[]> {
-  id: number;
-}
 interface StoreItemBatchRequest extends BaseStoreItemRequest<number[]> {
   id: number;
+  batch_id?: number | null;
 }
 
-type StoreItemFormData = UpdateStoreItemRequest | StoreItemBatchRequest;
+type StoreItemFormData = StoreItemBatchRequest;
 
 type StoreResponse = StoreItem[];
 
@@ -242,6 +279,10 @@ interface ItemBatch {
   company_id: number;
   created_at: string;
   updated_at: string;
+  date_of_manufacture: string | null;
+  date_of_expiry: string | null;
+  purchase_price: number | null;
+  quantity: string;
   item?: {
     id: number;
     name: string;

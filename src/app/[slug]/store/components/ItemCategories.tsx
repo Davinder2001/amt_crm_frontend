@@ -202,41 +202,60 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
     }
   };
 
-  // Initial expansion of parent categories (only once when data loads)
+  // Initial expansion of parent categories
   useEffect(() => {
-    if (!data?.data) return;
+    if (!data?.data || selectedCategories.length === 0) return;
 
-    // Build map
-    const categoryMap = new Map<number, CategoryNode>();
-    const buildMap = (categories: CategoryNode[]) => {
-      categories.forEach(cat => {
-        categoryMap.set(cat.id, cat);
-        if (cat.children) buildMap(cat.children);
-      });
-    };
-    buildMap(data.data);
+    // Function to find all parent IDs for selected categories
+    const findParentIds = (categories: CategoryNode[], selectedIds: number[]): number[] => {
+      const parentIds = new Set<number>();
 
-    // Find parents to expand based on initially selected categories
-    const parentsToExpand = new Set<number>();
-    selectedCategoriesIds.forEach(selectedId => {
-      let current = categoryMap.get(selectedId);
-      while (current && current.parent_id) {
-        parentsToExpand.add(current.parent_id);
-        current = categoryMap.get(current.parent_id);
+      const findParents = (node: CategoryNode): boolean => {
+        if (selectedIds.includes(node.id)) {
+          // If this node is selected, we need to expand all its parents
+          let current = node;
+          while (current.parent_id) {
+            parentIds.add(current.parent_id);
+            // Find the parent node
+            const parent = data.data?.find(cat => cat.id === current.parent_id);
+            if (parent) {
+              current = parent;
+            } else {
+              break;
+            }
+          }
+          return true;
+        }
+
+        if (node.children) {
+          for (const child of node.children) {
+            if (findParents(child)) {
+              // If any child is selected, expand this node
+              parentIds.add(node.id);
+              return true;
+            }
+          }
+        }
+        return false;
+      };
+
+      for (const category of categories) {
+        findParents(category);
       }
-    });
 
-    // Only set expanded categories if we have parents to expand
-    if (parentsToExpand.size > 0) {
+      return Array.from(parentIds);
+    };
+
+    const parentIdsToExpand = findParentIds(data.data, selectedCategories.map(cat => cat.id));
+
+    if (parentIdsToExpand.length > 0) {
       setExpandedCategories(prev => {
-        const newExpanded = Array.from(parentsToExpand);
-        // Check if arrays differ
-        const areEqual = prev.length === newExpanded.length &&
-          prev.every(id => newExpanded.includes(id));
-        return areEqual ? prev : newExpanded;
+        // Merge with existing expanded categories
+        const newExpanded = new Set([...prev, ...parentIdsToExpand]);
+        return Array.from(newExpanded);
       });
     }
-  }, [data, selectedCategoriesIds]); // Only run when data changes
+  }, [data, selectedCategories]); // Run when data or selected categories change
 
   // Render category tree
   const renderCategory = (category: CategoryNode) => {

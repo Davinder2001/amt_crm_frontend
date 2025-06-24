@@ -42,6 +42,7 @@ const EditBatch = () => {
     purchase_date: null,
     date_of_manufacture: null,
     date_of_expiry: null,
+    invoice_number: null,
     brand_name: null,
     brand_id: null,
     replacement: '',
@@ -84,7 +85,10 @@ const EditBatch = () => {
         batch_id: batchItem.id,
         name: item.name || '',
         quantity_count: batchItem.quantity || null,
+        brand_id: item.brand?.id || 0,
+        brand_name: item.brand?.name || '',
         purchase_date: batchItem.purchase_date || '',
+        invoice_number: batchItem.invoice_number || null,
         date_of_manufacture: batchItem.date_of_manufacture || '',
         date_of_expiry: batchItem.date_of_expiry || '',
         replacement: batchItem.replacement || '',
@@ -103,7 +107,8 @@ const EditBatch = () => {
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image || null,
         product_type: batchItem.product_type || 'simple_product',
-        vendor_id: null,
+        vendor_id: batchItem.vendor?.id || null,
+        vendor_name: batchItem.vendor?.vendor_name || '',
         purchase_price: batchItem.purchase_price || null,
         quantity: batchItem.quantity || '0.00'
       };
@@ -154,7 +159,7 @@ const EditBatch = () => {
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'
+      'tax_type', 'invoice_number'
     ];
 
     for (const field of batchFields) {
@@ -185,7 +190,7 @@ const EditBatch = () => {
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'
+      'tax_type', 'invoice_number'
     ];
 
     batchFields.forEach((field) => {

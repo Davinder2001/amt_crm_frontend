@@ -29,6 +29,7 @@ const Createbatch = () => {
     purchase_date: '',
     date_of_manufacture: '',
     date_of_expiry: '',
+    invoice_number: null,
     brand_name: '',
     brand_id: null,
     replacement: '',
@@ -69,14 +70,13 @@ const Createbatch = () => {
         id: item.id,
         name: item.name || '',
         quantity_count: item.quantity_count || 0,
+        brand_id: item.brand?.id || 0,
+        brand_name: item.brand?.name || '',
         purchase_date: item.purchase_date || '',
         date_of_manufacture: item.date_of_manufacture || '',
         date_of_expiry: item.date_of_expiry || '',
-        brand_name: item.brand_name || '',
-        brand_id: item.brand_id || 0,
         replacement: item.replacement || '',
         category: item.category || '',
-        vendor_name: item.vendor_name || '',
         availability_stock: item.availability_stock || 0,
         cost_price: item.cost_price || 0,
         regular_price: item.regular_price || 0,
@@ -92,7 +92,8 @@ const Createbatch = () => {
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
         product_type: item.product_type || 'simple_product',
-        vendor_id: item.vendor_id != null ? item.vendor_id : null
+        vendor_id: item.vendor?.id || null,
+        vendor_name: item.vendor?.vendor_name || '',
       };
       setFormData(initialData);
       setOriginalItemData(initialData);
@@ -144,7 +145,7 @@ const Createbatch = () => {
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
-      'cost_price', 'units_in_peace', 'price_per_unit',
+      'cost_price', 'units_in_peace', 'price_per_unit', 'invoice_number'
     ];
 
     primitiveFields.forEach((field) => {

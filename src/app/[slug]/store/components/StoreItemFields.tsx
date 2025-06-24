@@ -305,6 +305,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <option value="include">Include</option>
                                     </select>
                                 </div>
+                                <FormInput label='Invoice Number' name="invoice_number" value={formData.invoice_number || ''} onChange={handleChange} placeholder="e.g. INV-12345" />
                             </div>
                         )}
                     </div>

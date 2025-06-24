@@ -59,8 +59,8 @@ const EditItem: React.FC = () => {
         images: Array.isArray(item.images) ? item.images : [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
-        vendor_id: item.vendor_id || null,
-        vendor_name: item.vendor_name || '',
+        vendor_id: item.vendor?.id || null,
+        vendor_name: item.vendor?.vendor_name || '',
       };
       setFormData(initialData);
       setOriginalItemData(initialData);

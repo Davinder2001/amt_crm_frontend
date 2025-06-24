@@ -92,8 +92,8 @@ const Createbatch = () => {
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
         product_type: item.product_type || 'simple_product',
-        vendor_id: item.vendor_id || null,
-        vendor_name: item.vendor_name || '',
+        vendor_id: item.vendor?.id || null,
+        vendor_name: item.vendor?.vendor_name || '',
       };
       setFormData(initialData);
       setOriginalItemData(initialData);

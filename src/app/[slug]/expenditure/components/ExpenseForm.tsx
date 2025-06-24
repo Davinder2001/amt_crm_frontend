@@ -135,7 +135,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form  className = "Expense-form" onSubmit={handleSubmit}>
             <Stack spacing={3}>
                 {errors.form && (
                     <FormHelperText error>{errors.form}</FormHelperText>
@@ -160,7 +160,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'var(--primary-color)',
+                                
                             },
                             '&:hover fieldset': {
                                 borderColor: 'var(--primary-color)',

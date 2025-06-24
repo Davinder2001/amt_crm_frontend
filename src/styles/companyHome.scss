@@ -63,8 +63,8 @@
         .companies-section {
             .companies-list {
                 background-color: $white;
-                border-radius: 8px;
-                box-shadow: $box-shadow;
+                border-radius: 5px;
+                border: 1px solid $border-color;
                 overflow: hidden;
 
                 .list-header {
@@ -74,7 +74,7 @@
                     background-color: #f9fafb;
                     border-bottom: 1px solid #e5e7eb;
                     font-weight: 600;
-                    color: #374151;
+                    color: $primary-color;
 
                     .header-item {
                         padding: 10px;
@@ -89,7 +89,7 @@
                         display: grid;
                         grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
                         padding: 8px 10px;
-                        border-bottom: 1px solid #e5e7eb;
+                       
                         transition: background-color 0.2s ease;
 
                         &:last-child {

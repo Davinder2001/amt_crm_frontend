@@ -878,7 +878,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                 <button
                                     type="button"
                                     onClick={handleCancelChanges}
-                                    className="form-button secondary "
+                                    className="form-button secondary cancel-btn"
                                 >
                                     Cancel
                                 </button>

@@ -258,6 +258,15 @@ const companyApi = companyCreateSlice.injectEndpoints({
       }),
       invalidatesTags: ['Company'],
     }),
+    deleteHolidaysBulk: builder.mutation<{ message: string }, { type: 'weekly' | 'monthly' | 'general' }>({
+      query: (payload) => ({
+        url: `company/holidays/bulk-delete`,
+        method: 'POST',
+        credentials: 'include',
+        body: payload,
+      }),
+      invalidatesTags: ['Company'],
+    }),
 
   }),
 });
@@ -294,8 +303,8 @@ export const {
   useFetchHolidaysQuery,
   useCreateHolidayMutation,
   useUpdateHolidayMutation,
-  useDeleteHolidayMutation
-
+  useDeleteHolidayMutation,
+  useDeleteHolidaysBulkMutation
 } = companyApi;
 
 export default companyApi;

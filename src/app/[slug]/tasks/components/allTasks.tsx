@@ -145,6 +145,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
       <ToastContainer />
       {tasks?.data && tasks.data.length > 0 ? (
         <ResponsiveTable
+          cardViewKey="name"
           data={tasks.data}
           columns={columns}
           onDelete={handleDelete}

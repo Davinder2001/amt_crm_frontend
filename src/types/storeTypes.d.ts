@@ -18,6 +18,11 @@ interface storeItemBatch {
   cost_price: number;
   variants?: variations[];
   date_of_expiry: string | null;
+  cost_price: number;
+  regular_price?: number;
+  sale_price?: number;
+  purchase_date: string | null;
+  replacement: string | null;
   quantity: number;
   expiry_date: string | null;
   variants: variations[];
@@ -161,11 +166,11 @@ interface UpdateStoreItemRequest {
 
 interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
-  quantity_count?: number;
-  purchase_date?: string;
-  date_of_manufacture: string;
-  date_of_expiry?: string;
-  brand_name?: string;
+  quantity_count?: number | null;
+  purchase_date?: string | null;
+  date_of_manufacture: string | null;
+  date_of_expiry?: string | null;
+  brand_name?: string | null;
   brand_id?: number | null;
   replacement?: string;
   category?: string;

@@ -234,8 +234,8 @@ const storeApi = storeApiSlice.injectEndpoints({
       invalidatesTags: ["Store"],
     }),
 
-    updateItemBatch: builder.mutation<ItemBatchResponse, { batch_id: number, formdata: FormData}>({
-      query: ({batch_id, formdata}) => ({
+    updateItemBatch: builder.mutation<{ success?: boolean, message?: string, error?: string }, { batch_id: number, formdata: FormData }>({
+      query: ({ batch_id, formdata }) => ({
         url: `store/item/batch/${batch_id}`,
         method: "POST",
         body: formdata,

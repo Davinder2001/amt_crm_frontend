@@ -416,6 +416,11 @@ const AddItem: React.FC = () => {
     setHasUnsavedChanges(true);
   };
 
+  const handleCategoryChange = (categories: Category[]) => {
+    setSelectedCategories(categories);
+    setHasUnsavedChanges(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = new FormData();
@@ -596,11 +601,11 @@ const AddItem: React.FC = () => {
 
         {/* Categories */}
         <div className="add-items-form-container store_column">
-          <ItemCategories setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
+          <ItemCategories setSelectedCategories={handleCategoryChange} selectedCategories={selectedCategories} collapsedSections={collapsedSections}
             toggleSection={toggleSection} />
         </div>
 
-        
+
 
 
 

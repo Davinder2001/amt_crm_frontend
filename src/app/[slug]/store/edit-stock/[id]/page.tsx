@@ -37,12 +37,12 @@ const EditBatch = () => {
     id: Number(id),
     batch_id: batchId ? Number(batchId) : null,
     name: '',
-    quantity_count: 0,
+    quantity_count: null,
     measurement: null,
-    purchase_date: '',
-    date_of_manufacture: '',
-    date_of_expiry: '',
-    brand_name: '',
+    purchase_date: null,
+    date_of_manufacture: null,
+    date_of_expiry: null,
+    brand_name: null,
     brand_id: null,
     replacement: '',
     category: '',
@@ -83,17 +83,15 @@ const EditBatch = () => {
         id: item.id,
         batch_id: batchItem.id,
         name: item.name || '',
-        quantity_count: batchItem.quantity || 0,
-        purchase_date: '',
+        quantity_count: batchItem.quantity || null,
+        purchase_date: batchItem.purchase_date || '',
         date_of_manufacture: batchItem.date_of_manufacture || '',
         date_of_expiry: batchItem.date_of_expiry || '',
-        replacement: '',
-        category: '',
-        vendor_name: '',
+        replacement: batchItem.replacement || '',
         availability_stock: batchItem.availability_stock || 0,
-        cost_price: batchItem.purchase_price || 0,
-        regular_price: 0,
-        sale_price: 0,
+        cost_price: batchItem.cost_price || 0,
+        regular_price: batchItem.regular_price || 0,
+        sale_price: batchItem.sale_price || 0,
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : null,
         tax_type: item.tax_type || 'exclude',
         measurement: item.measurement?.id || null,
@@ -151,13 +149,15 @@ const EditBatch = () => {
   const isFormModified = (): boolean => {
     if (!originalItemData) return false;
 
-    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['quantity_count', 'purchase_date',
+    const batchFields: (keyof StoreItemBatchRequest)[] = [
+      'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'];
+      'tax_type'
+    ];
 
-    for (const field of primitiveFields) {
+    for (const field of batchFields) {
       if (formData[field] !== originalItemData[field]) {
         return true;
       }
@@ -191,6 +191,8 @@ const EditBatch = () => {
     batchFields.forEach((field) => {
       const value = formData[field];
       const originalValue = originalItemData[field];
+
+      // Only append if changed
       if (value !== originalValue) {
         formdata.append(field as string, value?.toString() ?? '');
       }

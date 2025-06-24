@@ -351,7 +351,7 @@ import ImageUpload from '../../components/ImageUpload';
 import { useParams } from 'next/navigation';
 import LoadingState from '@/components/common/LoadingState';
 
-const AddItem: React.FC = () => {
+const EditItem: React.FC = () => {
   const { id } = useParams();
   const { companySlug } = useCompany();
   const router = useRouter();
@@ -399,6 +399,13 @@ const AddItem: React.FC = () => {
     }
   }, [item]);
 
+  useEffect(() => {
+    const categoryIds = selectedCategories.map(cat => cat.id);
+    setFormData(prev => ({
+      ...prev,
+      categories: categoryIds
+    }));
+  }, [selectedCategories]);
 
   const sectionKeys = ['basicInfo', 'featuredImage', 'categories', 'brands', 'media',];
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -713,4 +720,4 @@ const AddItem: React.FC = () => {
   );
 };
 
-export default AddItem;
+export default EditItem;

@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
@@ -62,6 +62,9 @@ const ViewItem = () => {
           <FaArrowLeft size={16} color="#fff" />
         </Link>
         <div className="item-actions">
+          <Link href={`/${companySlug}/store/add-stock/${item.id}`} className="edit-btn">
+            <FaPlus/> Add Stock
+          </Link>
           <Link href={`/${companySlug}/store/edit-item/${item.id}`} className="edit-btn">
             <FaEdit /> Edit Item
           </Link>
@@ -82,11 +85,13 @@ const ViewItem = () => {
 
             {item.categories?.length > 0 && (
               <div className="item-categories">
-                Categories: {item.categories.map((cat, i) => (
-                  <span key={cat.id} className="category-tag">
-                    {cat.name}{i < item.categories.length - 1 ? ',' : ''}
-                  </span>
-                ))}
+                Categories: <div className='item-categories-inner'>
+                  {item.categories.map((cat, i) => (
+                    <span key={cat.id} className="category-tag">
+                      {cat.name}{i < item.categories.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
           </div>

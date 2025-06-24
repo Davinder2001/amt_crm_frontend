@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import {
   Box,
-  CircularProgress,
   Typography
 } from '@mui/material';
 import { useFetchExpensesQuery, useDeleteExpenseMutation } from '@/slices';
@@ -14,6 +13,7 @@ import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
+import Loader from '@/components/common/Loader';
 
 export default function ExpensesPage() {
   const { data, isLoading, isError } = useFetchExpensesQuery();
@@ -86,21 +86,23 @@ export default function ExpensesPage() {
     },
   ];
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <Loader />;
   if (isError) return <Typography color="error">Error loading expenses</Typography>;
 
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">Expenses</Typography>
-        <button
-          onClick={() => setOpenForm(true)}
-          className='buttons'
-        >
-          <FaPlus />
-          Add Expense
-        </button>
+        {expenses.length > 0 && (
+          <button
+            onClick={() => setOpenForm(true)}
+            className='buttons'
+          >
+            <FaPlus />
+            Add Expense
+          </button>
+        )}
       </Box>
+
 
       {(expenses && expenses?.length > 0) ? (
         <ResponsiveTable

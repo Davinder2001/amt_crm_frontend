@@ -385,6 +385,7 @@ const AddItem: React.FC = () => {
         id: item.id,
         name: item.name || '',
         brand_id: item.brand_id || 0,
+        brand: (item.brand && item.brand.length > 0 && item.brand[0]?.id) ? item.brand[0].id : 0,
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
         measurement: item.measurement?.id || null,
         images: Array.isArray(item.images) ? item.images : [],

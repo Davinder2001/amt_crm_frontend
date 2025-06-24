@@ -83,14 +83,14 @@ const EditBatch = () => {
         id: item.id,
         batch_id: batchItem.id,
         name: item.name || '',
-        quantity_count: parseFloat(batchItem.quantity) || 0,
+        quantity_count: batchItem.quantity || 0,
         purchase_date: '',
         date_of_manufacture: batchItem.date_of_manufacture || '',
         date_of_expiry: batchItem.date_of_expiry || '',
         replacement: '',
         category: '',
         vendor_name: '',
-        availability_stock: parseFloat(batchItem.quantity) || 0,
+        availability_stock: batchItem.availability_stock || 0,
         cost_price: batchItem.purchase_price || 0,
         regular_price: 0,
         sale_price: 0,
@@ -148,13 +148,36 @@ const EditBatch = () => {
     setHasUnsavedChanges(true);
   };
 
+  const isFormModified = (): boolean => {
+    if (!originalItemData) return false;
+
+    const primitiveFields: (keyof StoreItemBatchRequest)[] = ['quantity_count', 'purchase_date',
+      'date_of_manufacture', 'date_of_expiry',
+      'replacement', 'vendor_id', 'availability_stock',
+      'cost_price', 'units_in_peace', 'price_per_unit',
+      'tax_type'];
+
+    for (const field of primitiveFields) {
+      if (formData[field] !== originalItemData[field]) {
+        return true;
+      }
+    }
+
+    const categoriesChanged =
+      JSON.stringify(formData.categories) !== JSON.stringify(originalItemData.categories);
+    const variantsChanged =
+      JSON.stringify(variants) !== JSON.stringify(originalItemData.variants);
+
+    return categoriesChanged || variantsChanged
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!originalItemData) return;
     const formdata = new FormData();
+    formdata.append('_method', 'PUT');
     formdata.append('item_id', formData.id.toString());
-    formdata.append('batch_id', (formData.batch_id ?? formData.id).toString());
 
     // Primitive fields to track changes and append
     const batchFields: (keyof StoreItemBatchRequest)[] = [
@@ -168,8 +191,6 @@ const EditBatch = () => {
     batchFields.forEach((field) => {
       const value = formData[field];
       const originalValue = originalItemData[field];
-
-      // Only append if changed
       if (value !== originalValue) {
         formdata.append(field as string, value?.toString() ?? '');
       }
@@ -214,7 +235,7 @@ const EditBatch = () => {
 
     // Submit
     try {
-      await updateBatchItem(formdata).unwrap();
+      await updateBatchItem({ batch_id: Number(formData.batch_id ?? formData.id), formdata }).unwrap();
       toast.success('Item updated successfully!');
       setHasUnsavedChanges(false);
       router.back();
@@ -263,6 +284,7 @@ const EditBatch = () => {
       setActiveTab={setActiveTab}
       isBatchMode={true}
       isEditingBatch={true}
+      isFormModified={isFormModified}
     />
   );
 };

@@ -14,10 +14,11 @@ interface storeItemBatch {
   units_in_peace?: number | null;
   price_per_unit?: number | null;
   measurement?: Measurement | null;
+  availability_stock: number;
   cost_price: number;
   variants?: variations[];
   date_of_expiry: string | null;
-  quantity: string;
+  quantity: number;
   expiry_date: string | null;
   variants: variations[];
   created_at: string;
@@ -66,6 +67,7 @@ interface StoreItem {
   categories: Category[];
   variants: variations[];
   taxes: Tax[];
+  brand: Brand[];
   units: MeasuringUnit[];
   batches?: ItemBatch[];
 }
@@ -159,7 +161,7 @@ interface UpdateStoreItemRequest {
 
 interface BaseStoreItemRequest<TCategories = Category[]> {
   name: string;
-  quantity_count: number;
+  quantity_count?: number;
   purchase_date?: string;
   date_of_manufacture: string;
   date_of_expiry?: string;

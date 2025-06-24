@@ -145,7 +145,6 @@ const Createbatch = () => {
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'
     ];
 
     primitiveFields.forEach((field) => {
@@ -161,6 +160,7 @@ const Createbatch = () => {
     // Always send product_type
     formdata.append('product_type', formData.product_type?.toString() ?? '');
     formdata.append('unit_of_measure', formData.unit_of_measure?.toString() ?? '');
+    formdata.append('tax_type', formData.tax_type?.toString() ?? '');
 
     // For simple products, append regular_price and sale_price
     if (formData.product_type === 'simple_product') {

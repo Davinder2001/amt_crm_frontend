@@ -21,6 +21,7 @@ interface storeItemBatch {
   cost_price: number;
   date_of_expiry: string | null;
   cost_price: number;
+  vendor: Vendor;
   regular_price?: number;
   sale_price?: number;
   purchase_date: string | null;

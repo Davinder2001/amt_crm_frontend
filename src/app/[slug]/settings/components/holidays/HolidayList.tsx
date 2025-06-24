@@ -90,16 +90,17 @@ const HolidayList = () => {
     };
 
     const handleBulkDelete = async () => {
-        if (selectedIds.length === 0) {
-            toast.info('No holidays selected');
+        if (bulkType.length === 0) {
+            toast.info('Please select a holiday type');
             return;
         }
+
         setIsBulkDeleting(true);
         try {
-            await deleteHolidaysBulk(selectedIds).unwrap();
-            toast.success(`Deleted ${selectedIds.length} holidays successfully`);
+            await deleteHolidaysBulk({ type: bulkType[0] }).unwrap();
+            toast.success(`Deleted ${bulkType[0]} holidays successfully`);
         } catch {
-            toast.error('Failed to delete selected holidays');
+            toast.error('Failed to delete holidays');
         } finally {
             setIsBulkDeleting(false);
             closeBulkPopup();

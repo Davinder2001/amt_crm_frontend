@@ -258,17 +258,15 @@ const companyApi = companyCreateSlice.injectEndpoints({
       }),
       invalidatesTags: ['Company'],
     }),
-    deleteHolidaysBulk: builder.mutation<{ message: string }, number[]>({
-      query: (ids) => ({
+    deleteHolidaysBulk: builder.mutation<{ message: string }, { type: 'weekly' | 'monthly' | 'general' }>({
+      query: (payload) => ({
         url: `company/holidays/bulk-delete`,
         method: 'POST',
         credentials: 'include',
-        body: { ids },
+        body: payload,
       }),
       invalidatesTags: ['Company'],
     }),
-
-
 
   }),
 });

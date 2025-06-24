@@ -18,6 +18,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 // Types
 type Tax = {
@@ -47,7 +48,8 @@ const CreateTax = () => {
     const [createTax] = useCreateTaxMutation();
     const [updateTax] = useUpdateTaxMutation();
     const [deleteTax] = useDeleteTaxMutation();
-
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [form, setForm] = useState<{ id: number | null; name: string; rate: string }>({
@@ -114,20 +116,21 @@ const CreateTax = () => {
     };
 
 
-    const handleDelete = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this tax?')) return;
+    const handleDelete = (id: number) => {
+        setItemToDelete(id);
+        setShowDeleteConfirm(true);
+    };
 
-        try {
-            const response: ApiResponse = await deleteTax(id).unwrap();
-            if (response.status) {
-                toast.success(response.message);
-                refetch();
-            } else {
-                toast.error(response.message || response.error || 'Failed to delete tax');
+    const handleConfirmDelete = async () => {
+        if (itemToDelete !== null) {
+            try {
+                await deleteTax(itemToDelete).unwrap();
+            } catch (error) {
+                console.error("Failed to delete this Tax:", error);
+            } finally {
+                setShowDeleteConfirm(false);
+                setItemToDelete(null);
             }
-        } catch (err: unknown) {
-            const error = err as ApiError;
-            toast.error(error?.data?.message || error?.data?.error || 'Failed to delete tax');
         }
     };
 
@@ -215,7 +218,16 @@ const CreateTax = () => {
                     </div>
                 </div>
             </Modal>
-
+            <ConfirmDialog
+                isOpen={showDeleteConfirm}
+                message="Are you sure you want to delete this Tax ?"
+                onConfirm={handleConfirmDelete}
+                onCancel={() => {
+                    setShowDeleteConfirm(false);
+                    setItemToDelete(null);
+                }}
+                type="delete"
+            />
         </Box>
     );
 };

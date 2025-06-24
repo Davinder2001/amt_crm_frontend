@@ -9,27 +9,32 @@ import Loader from "@/components/common/Loader";
 import RoleForm from "./RoleForm";
 import Modal from "@/components/common/Modal";
 import ViewRole from "./ViewRole";
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
   const [deleteRole] = useDeleteRoleMutation();
-
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
-  const handleDeleteRole = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this role?")) return;
-    try {
-      await deleteRole(id).unwrap();
-      toast.success("Role deleted successfully");
-    } catch (err: unknown) {
-      if (err && typeof err === "object" && "data" in err) {
-        const error = err as { data: { message: string } };
-        toast.error(error?.data?.message || "Error deleting role");
-      } else {
-        toast.error("An unexpected error occurred.");
+  const handleDeleteRole = (id: number) => {
+    setItemToDelete(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (itemToDelete !== null) {
+      try {
+        await deleteRole(itemToDelete).unwrap();
+      } catch (error) {
+        console.error("Failed to delete this Role:", error);
+      } finally {
+        setShowDeleteConfirm(false);
+        setItemToDelete(null);
       }
     }
   };
@@ -140,7 +145,16 @@ const RoleList: React.FC = () => {
       >
         {selectedRoleId !== null && <ViewRole roleId={selectedRoleId} />}
       </Modal>
-
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        message="Are you sure you want to delete this Role ?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setShowDeleteConfirm(false);
+          setItemToDelete(null);
+        }}
+        type="delete"
+      />
     </div>
   );
 };

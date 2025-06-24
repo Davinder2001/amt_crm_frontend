@@ -15,6 +15,7 @@ import LeaveForm from './LeaveForm';
 
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const LeaveList = () => {
   const { data, isLoading, error, refetch } = useFetchLeavesQuery();
@@ -24,7 +25,8 @@ const LeaveList = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [editLeave, setEditLeave] = useState<Leave | null>(null);
-
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const leaves = data?.data ?? [];
   const noLeaves = !isLoading && !error && leaves.length === 0;
 
@@ -51,14 +53,21 @@ const LeaveList = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this leave?')) return;
-    try {
-      await deleteLeave(id).unwrap();
-      toast.success('Leave deleted successfully');
-      refetch();
-    } catch {
-      toast.error('Failed to delete leave');
+  const handleDelete = (id: number) => {
+    setItemToDelete(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (itemToDelete !== null) {
+      try {
+        await deleteLeave(itemToDelete).unwrap();
+      } catch (error) {
+        console.error("Failed to delete this Leave:", error);
+      } finally {
+        setShowDeleteConfirm(false);
+        setItemToDelete(null);
+      }
     }
   };
 
@@ -95,7 +104,7 @@ const LeaveList = () => {
       {!noLeaves && (
         <div className="add-holiday-leave-btn-wrapper">
           <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
-           <FaPlus/> Add Leave
+            <FaPlus /> Add Leave
           </button>
         </div>
       )}
@@ -117,7 +126,16 @@ const LeaveList = () => {
           initialData={editLeave || undefined}
         />
       </Modal>
-
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        message="Are you sure you want to delete this Leave ?"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setShowDeleteConfirm(false);
+          setItemToDelete(null);
+        }}
+        type="delete"
+      />
       {isLoading && <p>Loading leaves...</p>}
 
       {error && (
@@ -135,7 +153,7 @@ const LeaveList = () => {
           message="You haven't added any leave policies yet."
           action={
             <button className="buttons" onClick={() => setShowForm(true)}>
-            <FaPlus /> Add Leave
+              <FaPlus /> Add Leave
             </button>
           }
         />

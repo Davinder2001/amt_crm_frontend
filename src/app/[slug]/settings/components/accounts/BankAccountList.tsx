@@ -12,6 +12,7 @@ import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
 import { FaUniversity, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const BankAccountList = () => {
     const { data, isLoading, error, refetch } = useFetchCompanyAccountsQuery();
@@ -20,7 +21,8 @@ const BankAccountList = () => {
     const [deleteAccount] = useDeleteCompanyAccountMutation();
 
     const accounts = data?.accounts ?? [];
-
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
     const [showForm, setShowForm] = useState(false);
     const [editAccount, setEditAccount] = useState<BankAccount | null>(null);
 
@@ -70,17 +72,24 @@ const BankAccountList = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        if (!window.confirm('Are you sure you want to delete this account?')) return;
-        try {
-            await deleteAccount(id).unwrap();
-            toast.success('Bank account deleted successfully');
-            refetch();
-        } catch (e) {
-            toast.error('Failed to delete bank account');
-            console.error('Delete failed', e);
+    const handleDelete = (id: number) => {
+        setItemToDelete(id);
+        setShowDeleteConfirm(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (itemToDelete !== null) {
+            try {
+                await deleteAccount(itemToDelete).unwrap();
+            } catch (error) {
+                console.error("Failed to delete this Account:", error);
+            } finally {
+                setShowDeleteConfirm(false);
+                setItemToDelete(null);
+            }
         }
     };
+
 
     const noAccounts = !isLoading && !error && accounts.length === 0;
 
@@ -120,7 +129,7 @@ const BankAccountList = () => {
             {!noAccounts && (
                 <div className="add-bank-btn-outer">
                     <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm} type="button">
-                       <FaPlus/> Add Bank Account
+                        <FaPlus /> Add Bank Account
                     </button>
                 </div>
             )}
@@ -137,7 +146,16 @@ const BankAccountList = () => {
                     onCancel={closeModal}
                 />
             </Modal>
-
+            <ConfirmDialog
+                isOpen={showDeleteConfirm}
+                message="Are you sure you want to delete this Account ?"
+                onConfirm={handleConfirmDelete}
+                onCancel={() => {
+                    setShowDeleteConfirm(false);
+                    setItemToDelete(null);
+                }}
+                type="delete"
+            />
             {isLoading && <p>Loading accounts...</p>}
 
             {error && (
@@ -169,6 +187,7 @@ const BankAccountList = () => {
             {accounts.length > 0 && (
                 <ResponsiveTable data={accounts} columns={columns} cardViewKey='bank_name' />
             )}
+
         </div>
     );
 };

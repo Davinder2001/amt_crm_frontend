@@ -261,7 +261,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     deleteHolidaysBulk: builder.mutation<{ message: string }, { type: 'weekly' | 'monthly' | 'general' }>({
       query: (payload) => ({
         url: `company/holidays/bulk-delete`,
-        method: 'POST',
+        method: 'delete',
         credentials: 'include',
         body: payload,
       }),

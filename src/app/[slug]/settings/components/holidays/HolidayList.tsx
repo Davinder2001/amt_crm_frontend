@@ -5,6 +5,7 @@ import {
     useCreateHolidayMutation,
     useUpdateHolidayMutation,
     useDeleteHolidayMutation,
+    useDeleteHolidaysBulkMutation,
 } from '@/slices/company/companyApi';
 
 import HolidayForm from './HolidayForm';
@@ -21,6 +22,8 @@ const HolidayList = () => {
     const [createHoliday] = useCreateHolidayMutation();
     const [updateHoliday] = useUpdateHolidayMutation();
     const [deleteHoliday] = useDeleteHolidayMutation();
+    const [deleteHolidaysBulk] = useDeleteHolidaysBulkMutation();
+
     const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
     const holidays = data?.data ?? [];
@@ -91,30 +94,17 @@ const HolidayList = () => {
             toast.info('No holidays selected');
             return;
         }
-
         setIsBulkDeleting(true);
-
-        const idsToDelete = selectedIds.slice(0);
-        const remaining = selectedIds.length - idsToDelete.length;
-        let failed = 0;
-
-        for (const id of idsToDelete) {
-            try {
-                await deleteHoliday(id).unwrap();
-            } catch {
-                failed++;
-            }
+        try {
+            await deleteHolidaysBulk(selectedIds).unwrap();
+            toast.success(`Deleted ${selectedIds.length} holidays successfully`);
+        } catch {
+            toast.error('Failed to delete selected holidays');
+        } finally {
+            setIsBulkDeleting(false);
+            closeBulkPopup();
+            await refetch();
         }
-
-        if (failed === 0) {
-            toast.success(`Deleted ${idsToDelete.length} holidays successfully${remaining > 0 ? `, ${remaining} not deleted (limit 80)` : ''}`);
-        } else {
-            toast.error(`${failed} holidays failed to delete${remaining > 0 ? `, ${remaining} not deleted (limit 80)` : ''}`);
-        }
-
-        setIsBulkDeleting(false);
-        closeBulkPopup();
-        await refetch();
     };
 
 
@@ -247,8 +237,8 @@ const HolidayList = () => {
 
                     <div className="popup-actions">
                         <button className="btn delete" onClick={handleBulkDelete} disabled={isBulkDeleting}>
-    {isBulkDeleting ? 'Deleting...' : 'Delete'}
-</button>
+                            {isBulkDeleting ? 'Deleting...' : 'Delete'}
+                        </button>
 
                         <button className="btn cancel" onClick={closeBulkPopup}>
                             Cancel

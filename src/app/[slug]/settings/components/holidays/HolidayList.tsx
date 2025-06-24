@@ -149,15 +149,15 @@ const HolidayList = () => {
                     ...(holidays.length > 0
                         ? [
                             {
+                                label: 'Bulk Select & Delete',
+                                icon: <FaTrash />,
+                                onClick: () => setShowBulkSelectPopup(true),
+                            },
+                            {
                                 label: 'Add Holiday',
                                 icon: <FaPlus />,
                                 onClick: () => setShowForm(true),
                             },
-                            {
-                                label: 'Bulk Select & Delete',
-                                icon: <FaTrash />,
-                                onClick: () => setShowBulkSelectPopup(true),
-                            }
                         ]
                         : []
                     )

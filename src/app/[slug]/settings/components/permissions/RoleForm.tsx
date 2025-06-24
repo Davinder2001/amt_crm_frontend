@@ -8,7 +8,7 @@ import {
     useGetRoleQuery,
 } from '@/slices/roles/rolesApi';
 import { toast } from 'react-toastify';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Box } from '@mui/material';
 
 interface RoleFormProps {
     mode: 'add' | 'edit';
@@ -116,9 +116,35 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, onSuccess }) => {
                         },
                     }}
                 >
-                    {permissionGroups.map((g) => (
-                        <Tab key={g.group} label={g.group} />
-                    ))}
+                    {permissionGroups.map((g) => {
+                        const total = g.permissions.length;
+                        const selected = g.permissions.filter((p) => selectedPermissions.includes(p.name)).length;
+
+                        return (
+                            <Tab
+                                key={g.group}
+                                label={
+                                    <Box display="flex" alignItems="center" gap={1}>
+                                        <span>{g.group}</span>
+                                        <Box
+                                            component="span"
+                                            sx={{
+                                                backgroundColor: 'var(--primary-color)',
+                                                color: '#fff',
+                                                borderRadius: '12px',
+                                                padding: '2px 8px',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            {selected}/{total}
+                                        </Box>
+                                    </Box>
+                                }
+                            />
+                        );
+                    })}
+
                 </Tabs>
 
                 {/* Permissions Checkbox List */}
@@ -128,13 +154,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, onSuccess }) => {
                         .flatMap((g) =>
                             g.permissions.map((p) => (
                                 <label key={p.id}>
-                                    <p className='role-name-select'> {p.name}</p> 
+                                    <p className='role-name-select'> {p.name}</p>
                                     <input className='role-checkboxes'
                                         type="checkbox"
                                         checked={selectedPermissions.includes(p.name)}
                                         onChange={() => handleTogglePermission(p.name)}
                                     />
-                                   
+
                                 </label>
                             ))
                         )}

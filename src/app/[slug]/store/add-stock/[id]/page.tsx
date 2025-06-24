@@ -29,6 +29,7 @@ const Createbatch = () => {
     purchase_date: '',
     date_of_manufacture: '',
     date_of_expiry: '',
+    invoice_id: null,
     brand_name: '',
     brand_id: null,
     replacement: '',
@@ -69,11 +70,11 @@ const Createbatch = () => {
         id: item.id,
         name: item.name || '',
         quantity_count: item.quantity_count || 0,
+        brand_id: item.brand?.id || 0,
+        brand_name: item.brand?.name || '',
         purchase_date: item.purchase_date || '',
         date_of_manufacture: item.date_of_manufacture || '',
         date_of_expiry: item.date_of_expiry || '',
-        brand_name: item.brand_name || '',
-        brand_id: item.brand_id || 0,
         replacement: item.replacement || '',
         category: item.category || '',
         vendor_name: item.vendor_name || '',
@@ -144,7 +145,7 @@ const Createbatch = () => {
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
-      'cost_price', 'units_in_peace', 'price_per_unit',
+      'cost_price', 'units_in_peace', 'price_per_unit', 'invoice_id'
     ];
 
     primitiveFields.forEach((field) => {

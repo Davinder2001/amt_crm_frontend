@@ -9,6 +9,7 @@ interface storeItemBatch {
   batch_number: string | null;
   purchase_price: number | null;
   date_of_manufacture: string | null;
+  invoice_id?: number | null;
   product_type?: 'simple_product' | 'variable_product';
   unit_of_measure: 'unit' | 'pieces';
   units_in_peace?: number | null;
@@ -45,6 +46,7 @@ interface StoreItem {
   purchase_date: string | null;
   date_of_manufacture: string;
   date_of_expiry: string | null;
+  invoice_id?: number | null;
   cost_price: number;
   regular_price?: number;
   sale_price?: number;
@@ -72,7 +74,7 @@ interface StoreItem {
   categories: Category[];
   variants: variations[];
   taxes: Tax[];
-  brand: Brand[];
+  brand: Brand;
   units: MeasuringUnit[];
   batches?: ItemBatch[];
 }
@@ -170,6 +172,7 @@ interface BaseStoreItemRequest<TCategories = Category[]> {
   purchase_date?: string | null;
   date_of_manufacture: string | null;
   date_of_expiry?: string | null;
+  invoice_id?: number | null;
   brand_name?: string | null;
   brand_id?: number | null;
   replacement?: string;

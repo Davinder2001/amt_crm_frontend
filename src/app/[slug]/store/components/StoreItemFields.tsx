@@ -223,6 +223,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         </div>
                         {!collapsedSections['inventoryAndDates'] && (
                             <div className="store_input_feilds fields-wrapper">
+                                <FormInput label='Invoice Id' name="invoice_id" value={formData.invoice_id || ''} onChange={handleChange} placeholder="e.g. INV-12345" />
                                 <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
                                 <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
                                 <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />

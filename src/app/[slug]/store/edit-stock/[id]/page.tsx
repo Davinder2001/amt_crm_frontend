@@ -42,6 +42,7 @@ const EditBatch = () => {
     purchase_date: null,
     date_of_manufacture: null,
     date_of_expiry: null,
+    invoice_id: null,
     brand_name: null,
     brand_id: null,
     replacement: '',
@@ -84,7 +85,10 @@ const EditBatch = () => {
         batch_id: batchItem.id,
         name: item.name || '',
         quantity_count: batchItem.quantity || null,
+        brand_id: item.brand?.id || 0,
+        brand_name: item.brand?.name || '',
         purchase_date: batchItem.purchase_date || '',
+        invoice_id: batchItem.invoice_id || null,
         date_of_manufacture: batchItem.date_of_manufacture || '',
         date_of_expiry: batchItem.date_of_expiry || '',
         replacement: batchItem.replacement || '',
@@ -154,7 +158,7 @@ const EditBatch = () => {
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'
+      'tax_type', 'invoice_id'
     ];
 
     for (const field of batchFields) {
@@ -185,7 +189,7 @@ const EditBatch = () => {
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
       'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type'
+      'tax_type', 'invoice_id'
     ];
 
     batchFields.forEach((field) => {

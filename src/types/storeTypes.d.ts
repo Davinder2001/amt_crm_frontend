@@ -12,12 +12,13 @@ interface storeItemBatch {
   invoice_number?: number | null;
   product_type?: 'simple_product' | 'variable_product';
   unit_of_measure: 'unit' | 'pieces';
+  vendor_id: number | null;
+  vendor_name?: string | null;
   units_in_peace?: number | null;
   price_per_unit?: number | null;
   measurement?: Measurement | null;
   availability_stock: number;
   cost_price: number;
-  variants?: variations[];
   date_of_expiry: string | null;
   cost_price: number;
   regular_price?: number;
@@ -75,6 +76,7 @@ interface StoreItem {
   variants: variations[];
   taxes: Tax[];
   brand: Brand;
+  vendor: Vendor;
   units: MeasuringUnit[];
   batches?: ItemBatch[];
 }

@@ -107,7 +107,8 @@ const EditBatch = () => {
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image || null,
         product_type: batchItem.product_type || 'simple_product',
-        vendor_id: null,
+        vendor_id: batchItem.vendor_id || null,
+        vendor_name: batchItem.vendor_name || '',
         purchase_price: batchItem.purchase_price || null,
         quantity: batchItem.quantity || '0.00'
       };

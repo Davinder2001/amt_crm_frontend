@@ -77,7 +77,6 @@ const Createbatch = () => {
         date_of_expiry: item.date_of_expiry || '',
         replacement: item.replacement || '',
         category: item.category || '',
-        vendor_name: item.vendor_name || '',
         availability_stock: item.availability_stock || 0,
         cost_price: item.cost_price || 0,
         regular_price: item.regular_price || 0,
@@ -93,7 +92,8 @@ const Createbatch = () => {
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
         product_type: item.product_type || 'simple_product',
-        vendor_id: item.vendor_id != null ? item.vendor_id : null
+        vendor_id: item.vendor_id || null,
+        vendor_name: item.vendor_name || '',
       };
       setFormData(initialData);
       setOriginalItemData(initialData);

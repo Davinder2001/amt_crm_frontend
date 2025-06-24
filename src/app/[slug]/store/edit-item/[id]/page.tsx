@@ -52,14 +52,15 @@ const EditItem: React.FC = () => {
       const initialData = {
         id: item.id,
         name: item.name || '',
-        brand_id: item.brand?.id || 0,
+        brand_id: item.brand?.id || null,
         brand_name: item.brand?.name || '',
         tax_id: (item.taxes && item.taxes.length > 0 && item.taxes[0]?.id) ? item.taxes[0].id : 0,
         measurement: item.measurement?.id || null,
         images: Array.isArray(item.images) ? item.images : [],
         categories: item.categories ? item.categories.map((cat: Category) => cat.id) : [],
         featured_image: item.featured_image ?? null,
-        vendor_id: item.vendor_id != null ? item.vendor_id : null
+        vendor_id: item.vendor_id || null,
+        vendor_name: item.vendor_name || '',
       };
       setFormData(initialData);
       setOriginalItemData(initialData);

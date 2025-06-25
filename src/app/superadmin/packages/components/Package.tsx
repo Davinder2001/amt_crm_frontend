@@ -34,6 +34,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         invoices_number: 0,
         monthly_price: 0,
         annual_price: 0,
+        three_years_price:0,
         business_categories: [],
     });
     const router = useRouter();
@@ -166,6 +167,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                         invoices_number: 0,
                         monthly_price: 0,
                         annual_price: 0,
+                        three_years_price:0,
                         business_categories: [],
                     });
                 }
@@ -231,6 +233,22 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                         type="number"
                                         name="annual_price"
                                         value={formData.annual_price || ''}
+                                        onChange={handleInputChange}
+                                        placeholder="0"
+                                        className="form-input"
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">3 Years Price <span className="required">*</span></label>
+                                <div className="input-with-icon">
+                                    <FaRupeeSign className="input-icon" />
+                                    <input
+                                        type="number"
+                                        name="three_years_price"
+                                        value={formData.three_years_price || ''}
                                         onChange={handleInputChange}
                                         placeholder="0"
                                         className="form-input"

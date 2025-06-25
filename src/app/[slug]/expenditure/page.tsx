@@ -89,15 +89,12 @@ export default function ExpensesPage() {
       label: 'Tags',
       render: (row) =>
         Array.isArray(row.tags) && row.tags.length > 0
-          ? row.tags.map((tag: Tag, idx: number) => {
-            const tagName = typeof tag === 'string' ? tag : tag.name;
-            const isLast = idx === row.tags.length - 1;
-            return (
-              <span key={idx} style={{ marginRight: 4 }}>
-                {tagName}{!isLast && ','}
-              </span>
-            );
-          })
+          ? row.tags
+            .map((tag: Tag) => {
+              const name = typeof tag === 'string' ? tag : tag.name;
+              return name.charAt(0).toUpperCase() + name.slice(1);
+            })
+            .join(', ')
           : '-',
       key: 'tags'
     },
@@ -115,11 +112,12 @@ export default function ExpensesPage() {
       label: 'Actions',
       render: (expense: Expense) => (
         <div className="table-actions">
-          <FaEdit onClick={() => handleEdit(expense)} />
+          <FaEdit onClick={() => handleEdit(expense)} style={{ marginRight: 10 }} />
           <FaTrash onClick={() => handleDelete(expense.id)} />
         </div>
       ),
     },
+
   ];
 
   if (isLoading) return <Loader />;

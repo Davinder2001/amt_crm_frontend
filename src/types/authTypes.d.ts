@@ -135,6 +135,7 @@ interface PackagePlan {
     name: string;
     monthly_price: number;
     annual_price: number;
+    three_years_price: number;
     employee_numbers: number;
     items_number: number;
     daily_tasks_number: number;

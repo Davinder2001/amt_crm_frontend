@@ -11,8 +11,9 @@ interface PackagesProps {
     categories: BusinessCategory[];
     setSelectedCategoryId: (id: number) => void;
     selectedCategoryId: number | null;
-    subscriptionType: 'monthly' | 'annually' | null;
-    setSubscriptionType: (type: 'monthly' | 'annually') => void;
+    subscriptionType: 'monthly' | 'annually' | 'three_years' | null;
+    setSubscriptionType: (type: 'monthly' | 'annually' | 'three_years') => void;
+
 }
 
 const Packages: React.FC<PackagesProps> = ({
@@ -86,13 +87,15 @@ const Packages: React.FC<PackagesProps> = ({
                             id="subscription-select"
                             value={subscriptionType ?? ''}
                             onChange={(e) =>
-                                setSubscriptionType(e.target.value as 'monthly' | 'annually')
+                                setSubscriptionType(e.target.value as 'monthly' | 'annually' | 'three_years')
                             }
                         >
                             <option value="">Select Type</option>
                             <option value="monthly">Monthly</option>
                             <option value="annually">Annually</option>
+                            <option value="three_years">3 Years</option>
                         </select>
+
                     </div>
                 </div>
             </div>
@@ -105,16 +108,27 @@ const Packages: React.FC<PackagesProps> = ({
                         const price =
                             subscriptionType === 'monthly'
                                 ? plan.monthly_price
-                                : plan.annual_price;
+                                : subscriptionType === 'annually'
+                                    ? plan.annual_price
+                                    : plan.three_years_price;
+
 
                         return (
                             <div key={plan.id} className="package-card">
                                 <div className="ribbon">
-                                    {subscriptionType === 'monthly' ? '1 Month' : '1 Year'}
+                                    {subscriptionType === 'monthly'
+                                        ? '1 Month'
+                                        : subscriptionType === 'annually'
+                                            ? '1 Year'
+                                            : '3 Years'}
                                 </div>
                                 <h3 className="planPrice">
                                     ₹ {price ?? 0} /{' '}
-                                    {subscriptionType === 'monthly' ? 'Month' : 'Year'}
+                                    {subscriptionType === 'monthly'
+                                        ? 'Month'
+                                        : subscriptionType === 'annually'
+                                            ? 'Year'
+                                            : '3 Years'}
                                 </h3>
                                 <ul className="features">
                                     <li>✓ {plan.employee_numbers} Employees</li>

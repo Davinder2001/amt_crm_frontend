@@ -5,48 +5,63 @@
     font-family: Arial, sans-serif;
     background-color: #f8f8f8;
 
+    .company-details-inner-wrapper {
+        display: flex;
+        gap: 20px;
+
+        .package-upgrade-btn {
+            padding: 4px 10px;
+            border: unset;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            color: white;
+            &:hover{
+                background-color: $primary-light;
+                cursor: pointer;
+            }
+        }
+    }
 
     h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #333;
-}
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-.card {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: $border-radius;
-    padding: 16px;
-    margin-bottom: 20px;
-}
+    .card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: $border-radius;
+        padding: 16px;
+        margin-bottom: 20px;
+    }
 
-.card h2 {
-    font-size: 20px;
-    margin-bottom: 12px;
-    color: #444;
-}
+    .card h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: #444;
+    }
 
-.card p {
-    margin: 6px 0;
-    color: #555;
-}
+    .card p {
+        margin: 6px 0;
+        color: #555;
+    }
 
-.card.green {
-    background-color: #e6f7e6;
-    border-color: #8bd18b;
-}
+    .card.green {
+        background-color: #e6f7e6;
+        border-color: #8bd18b;
+    }
 
-.card.gray {
-    background-color: #f0f0f0;
-}
+    .card.gray {
+        background-color: #f0f0f0;
+    }
 
-.package-item {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
+    .package-item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
 
-.package-item:last-child {
-    border-bottom: none;
+    .package-item:last-child {
+        border-bottom: none;
+    }
 }
-}
-

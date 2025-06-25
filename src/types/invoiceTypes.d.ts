@@ -33,6 +33,7 @@ interface InvoiceCredit {
 }
 
 interface Invoice {
+  [x: string]: ReactNode;
   client_phone: string;
   id: number;
   invoice_number: string;

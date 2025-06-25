@@ -402,7 +402,7 @@ const Items: React.FC = () => {
                 placeholder="Search existing items..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ border: 'none', padding: 0, borderRadius: 0 }}
+                style={{ border: 'none', padding: 0, borderRadius: 0, width:'100%' }}
               />
             </div>
           </div>

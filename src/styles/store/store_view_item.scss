@@ -21,7 +21,7 @@
 
     .item-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 5px;
 
       .edit-btn,
       .delete-btn {
@@ -96,10 +96,10 @@
         flex-direction: row;
 
         .item-code {
-          padding: 0.5rem 1rem;
+          padding: 5px 8px;
           background: rgba(59, 130, 246, 0.1);
           border-radius: 8px;
-          font-size: 0.9rem;
+          font-size: 14px;
           font-weight: 500;
           width: fit-content;
           color: $primary-color;
@@ -445,7 +445,7 @@
   }
 
   // Media queries nested within the main selector
-  @media (max-width: 1729px) {
+  @media (max-width: 1440px) {
     .item-details {
       .item-main {
         .item-media-section {
@@ -611,7 +611,6 @@
       padding: 10px;
 
       .item-actions {
-
         .delete-btn,
         .edit-btn {
           gap: 5px;
@@ -651,16 +650,15 @@
   }
 
   @media (max-width: 390px) {
-
     .item-header {
       .item-actions {
-        .edit-btn, .delete-btn {
+
+        .edit-btn,
+        .delete-btn {
           flex-direction: column;
           text-align: center;
         }
       }
     }
   }
-
-
 }

@@ -1,23 +1,8 @@
-// components/ExpenseForm.tsx
 'use client';
 
 import { memo, useState } from 'react';
-import {
-    TextField,
-    Button,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    FormHelperText,
-    Stack,
-    Select,
-    Chip,
-    Box,
-    InputAdornment,
-    IconButton
-} from '@mui/material';
 import { useCreateExpenseMutation, useUpdateExpenseMutation } from '@/slices';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 
 interface ExpenseFormProps {
     expense?: Expense | null;
@@ -31,19 +16,34 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [tagError, setTagError] = useState('');
     const [tagInput, setTagInput] = useState('');
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const openImageModal = () => setIsImageModalOpen(true);
+    const closeImageModal = () => setIsImageModalOpen(false);
 
     const [formData, setFormData] = useState<ExpenseCreateRequest | ExpenseUpdateRequest>({
         heading: expense?.heading || '',
         description: expense?.description || '',
-        price: expense?.price.toString() || '',
+        price: expense?.price?.toString() || '',
         file: null,
         tags: expense?.tags || [],
         status: expense?.status || 'pending'
     });
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            handleChange('file', file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+    const handleRemoveImage = () => {
+        handleChange('file', null);
+        setImagePreview(null);
+    };
 
     const handleChange = (
         field: keyof typeof formData,
-        value: string | number | File | null | { name: string }[] // specify possible types
+        value: string | number | File | null | { name: string }[]
     ) => {
         setFormData(prev => ({
             ...prev,
@@ -89,31 +89,23 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         }
 
         try {
-            // Create FormData object for binary file upload
             const formDataPayload = new FormData();
-
-            // Append all fields to FormData
             formDataPayload.append('heading', formData.heading);
             formDataPayload.append('description', formData.description || '');
             formDataPayload.append('price', Number(formData.price).toString());
             formDataPayload.append('status', formData.status);
+            formData.tags.forEach((tag, index) => {
+                formDataPayload.append(`tags[${index}][name]`, tag.name);
+            });
 
-            // Append tags as JSON string
-            formDataPayload.append('tags', JSON.stringify(formData.tags));
-
-            // Append file if it exists
-            if (formData.file) {
-                formDataPayload.append('file', formData.file as File);
-            }
+            if (formData.file) formDataPayload.append('file', formData.file);
 
             if (expense) {
-                // Update existing expense
                 await updateExpense({
                     id: expense.id,
                     formdata: formDataPayload as unknown as ExpenseUpdateRequest
                 }).unwrap();
             } else {
-                // Create new expense
                 if (!formData.file) {
                     setErrors({ ...errors, file: 'File is required' });
                     return;
@@ -128,271 +120,160 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         }
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            handleChange('file', e.target.files[0]);
-        }
-    };
+
 
     return (
-        <form  className = "Expense-form" onSubmit={handleSubmit}>
-            <Stack spacing={3}>
-                {errors.form && (
-                    <FormHelperText error>{errors.form}</FormHelperText>
-                )}
+        <form className="expense-form" onSubmit={handleSubmit}>
+            {errors.form && <p className="error-message">{errors.form}</p>}
 
-                <TextField
-                    label="Heading"
-                    size="small"
+            <div className="form-group heading-group">
+                <label>Heading</label>
+                <input
+                    className="input heading-input"
+                    type="text"
                     value={formData.heading}
-                    onChange={(e) => handleChange('heading', e.target.value)}
-                    error={!!errors.heading}
-                    helperText={errors.heading}
-                    fullWidth
-                    InputLabelProps={{
-                        sx: {
-                            color: 'var(--primary-color)',
-                            '&.Mui-focused': {
-                                color: 'var(--primary-color)',
-                            },
-                        }
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                
-                            },
-                            '&:hover fieldset': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                        },
-                    }}
+                    onChange={e => handleChange('heading', e.target.value)}
+                    placeholder='Heading'
                 />
+                {errors.heading && <p className="error-message">{errors.heading}</p>}
+            </div>
 
-                <TextField
-                    label="Description"
-                    size="small"
-                    value={formData.description}
-                    onChange={(e) => handleChange('description', e.target.value)}
-                    multiline
-                    rows={4}
-                    fullWidth
-                    InputLabelProps={{
-                        sx: {
-                            color: 'var(--primary-color)',
-                            '&.Mui-focused': {
-                                color: 'var(--primary-color)',
-                            },
-                        }
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                        },
-                    }}
+            <div className="form-group description-group">
+                <label>Description</label>
+                <textarea
+                    className="textarea description-input"
+                    value={formData.description ?? ''}
+                    onChange={e => handleChange('description', e.target.value)}
+                    placeholder='Description'
                 />
+            </div>
 
-                <FormControl fullWidth error={!!errors.price} size="small">
-                    <InputLabel
-                        sx={{
-                            color: 'var(--primary-color)',
-                            '&.Mui-focused': {
-                                color: 'var(--primary-color)',
-                            },
-                        }}
-                    >
-                        Price
-                    </InputLabel>
-                    <OutlinedInput
-                        type="number"
-                        value={formData.price}
-                        onChange={(e) => handleChange('price', e.target.value)}
-                        label="Price"
-                        sx={{
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            }
-                        }}
-                    />
-                    {errors.price && <FormHelperText>{errors.price}</FormHelperText>}
-                </FormControl>
+            <div className="form-group price-group">
+                <label>Price</label>
+                <input
+                    className="input price-input"
+                    type="number"
+                    value={formData.price}
+                    onChange={e => handleChange('price', e.target.value)}
+                    placeholder="123"
+                    onWheel={e => e.currentTarget.blur()}
+                />
+                {errors.price && <p className="error-message">{errors.price}</p>}
+            </div>
 
-                <FormControl fullWidth size="small">
-                    <InputLabel id="status-select-label"
-                        sx={{
-                            color: 'var(--primary-color)',
-                            '&.Mui-focused': {
-                                color: 'var(--primary-color)',
-                            },
-                        }}
-                    >Status</InputLabel>
-                    <Select
-                        native
-                        labelId="status-select-label"
-                        value={formData.status}
-                        onChange={(e) => handleChange('status', e.target.value)}
-                        label="Status"
-                        sx={{
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            },
-                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'var(--primary-color)',
-                            }
-                        }}
-                    >
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                    </Select>
-                </FormControl>
+            <div className="form-group status-group">
+                <label>Status</label>
+                <select
+                    className="select status-select"
+                    value={formData.status}
+                    onChange={e => handleChange('status', e.target.value)}
+                >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                </select>
+            </div>
 
-                <FormControl fullWidth size="small">
-                    <TextField
-                        label="Add Tags"
-                        size="small"
+            <div className="form-group tag-group">
+                <label>Add Tags</label>
+                <div className='tag-group-input-btn-wrapper'>
+                    <input
+                        className="input tag-input add-tag-input"
+                        type="text"
                         value={tagInput}
-                        onChange={(e) => {
+                        onChange={e => {
                             setTagInput(e.target.value);
-                            // Clear error when user starts typing
                             if (tagError) setTagError('');
                         }}
                         onKeyDown={handleKeyDown}
-                        error={!!tagError}
-                        helperText={tagError}
-                        InputLabelProps={{
-                            sx: {
-                                color: 'var(--primary-color)',
-                                '&.Mui-focused': {
-                                    color: 'var(--primary-color)',
-                                },
-                            }
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: tagError ? 'red' : 'var(--primary-color)',
-                                },
-                            },
-                        }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleAddTag}
-                                        sx={{ color: 'var(--primary-color)' }}
-                                    >
-                                        <FaPlus />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
+                        placeholder='Add Tags'
                     />
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
-                        {formData.tags.map((tag) => (
-                            <Chip
-                                key={tag.name}
-                                label={tag.name}
-                                onDelete={() => handleRemoveTag(tag.name)}
-                                sx={{
-                                    backgroundColor: 'rgba(56, 75, 112, 0.1)',
-                                    color: 'var(--primary-color)',
-                                    '& .MuiChip-deleteIcon': {
-                                        color: 'var(--primary-color)',
-                                        '&:hover': {
-                                            color: 'var(--primary-color)',
-                                        }
-                                    }
-                                }}
-                            />
-                        ))}
-                    </Box>
-                    <FormHelperText sx={{ color: 'var(--primary-color)' }}>
-                        Add tags to categorize your expense
-                    </FormHelperText>
-                </FormControl>
+                    <button type="button" className=" add-tag-btn" onClick={handleAddTag}><FaPlus /></button>
+                </div>
+                {tagError && <p className="error-message">{tagError}</p>}
 
-                <FormControl fullWidth error={!!errors.file} size="small">
-                    <input
-                        type="file"
-                        id="file-upload"
-                        onChange={handleFileChange}
-                        style={{ display: 'none' }}
-                    />
-                    <label htmlFor="file-upload">
-                        <Button variant="outlined" component="span" fullWidth
-                            sx={{
-                                color: 'var(--primary-color)',
-                                borderColor: 'var(--primary-color)',
-                                '&:hover': {
-                                    borderColor: 'var(--primary-color)',
-                                    backgroundColor: 'rgba(56, 75, 112, 0.04)'
-                                }
-                            }}
-                        >
-                            {formData.file ? (formData.file as File).name : expense?.file_path ? 'Change File' : 'Upload File'}
-                        </Button>
-                    </label>
-                    {errors.file && <FormHelperText>{errors.file}</FormHelperText>}
-                    {expense?.file_path && !formData.file && (
-                        <FormHelperText>Current file: {expense.file_path}</FormHelperText>
-                    )}
-                </FormControl>
+                <div className="tag-list">
+                    {formData.tags.map(tag => (
+                        <span key={tag.name} className="tag-item">
+                            {tag.name}
+                            <button type="button" className="tag-remove-btn" onClick={() => handleRemoveTag(tag.name)}> <FaTimes /> </button>
+                        </span>
+                    ))}
+                </div>
+            </div>
 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                    {onCancel && (
+            <div className="form-group file-group">
+                <label>Upload File</label>
+                <input
+                    className="file-input"
+                    type="file"
+                    onChange={handleFileChange}
+                />
+
+                {errors.file && <p className="error-message">{errors.file}</p>}
+
+                {expense?.file_path && !formData.file && (
+                    <p className="current-file">Current file: {expense.file_path}</p>
+                )}
+
+                {imagePreview && (
+                    <div className="image-preview-wrapper">
+                        <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="image-preview"
+                            onClick={openImageModal}
+                        />
+
+
                         <button
-                            onClick={() => {
-                                setFormData({
-                                    heading: '',
-                                    description: '',
-                                    price: '',
-                                    file: null,
-                                    tags: [],
-                                    status: 'pending'
-                                });
-                                setErrors({});
-                                onCancel();
-                            }}
-                            className='buttons'
-                            style={{ backgroundColor: '#f5f5f5', color: '#333' }}
+                            type="button"
+                            className="remove-image-btn"
+                            onClick={handleRemoveImage}
                         >
-                            Cancel
+                            <FaTimes />
                         </button>
-                    )}
+                    </div>
+                )}
+                {isImageModalOpen && (
+                    <div className="image-modal-overlay" onClick={closeImageModal}>
+                        <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <button className="image-modal-close-btn" onClick={closeImageModal}>
+                                &times;
+                            </button>
+                            <img src={imagePreview!} alt="Full Preview" />
+                        </div>
+                    </div>
+                )}
+
+
+            </div>
+
+
+            <div className="form-group button-group">
+                {onCancel && (
                     <button
-                        type="submit"
-                        className='buttons'
+                        type="button"
+                        className="btn cancel-btn"
+                        onClick={() => {
+                            setFormData({
+                                heading: '',
+                                description: '',
+                                price: '',
+                                file: null,
+                                tags: [],
+                                status: 'pending'
+                            });
+                            setErrors({});
+                            onCancel();
+                        }}
                     >
-                        {expense ? 'Update Expense' : 'Add Expense'}
+                        Cancel
                     </button>
-                </Box>
-            </Stack>
+                )}
+                <button type="submit" className=" button submit-btn">
+                    {expense ? 'Update Expense' : 'Add Expense'}
+                </button>
+            </div>
         </form>
     );
 });

@@ -76,6 +76,11 @@ export default function ExpensesPage() {
       key: 'price'
     },
     {
+      label: 'Status',
+      render: (row) => row.status || '-',
+      key: 'status'
+    },
+    {
       label: 'Actions',
       render: (expense: Expense) => (
         <div className="table-actions">
@@ -91,7 +96,7 @@ export default function ExpensesPage() {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>
         {expenses.length > 0 && (
           <button
             onClick={() => setOpenForm(true)}

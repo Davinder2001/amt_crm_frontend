@@ -848,12 +848,23 @@
 
     /* Form Elements */
     .form-group input {
-        padding: 10px 12px;
-        border: 1px solid $feild_border;
-        border-radius: 5px;
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: $border-radius;
+        border: 1px solid $border-color;
+        width: 100%;
 
         &:focus {
             border-color: var(--primary-light);
+            background: transparent;
+        }
+
+        &::placeholder {
+            color: #ccc;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            background-color: transparent;
         }
     }
 
@@ -962,8 +973,13 @@
     .cart-tab-content {
         padding: 0 10px;
 
-        .inner-tab-content {
-            margin: 20px 0;
+    }
+
+    .inner-tab-content {
+        margin: 20px 0;
+
+        .client-form {
+            padding: 0px 10px;
         }
 
         .client-form label {
@@ -971,6 +987,7 @@
             color: #333;
             font-size: 13px;
             font-weight: 400;
+
         }
     }
 

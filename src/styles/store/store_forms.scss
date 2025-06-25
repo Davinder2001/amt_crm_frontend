@@ -41,8 +41,6 @@
       }
     }
   }
-
-
   // ---------- Category Section ----------
   .categories-filds-outer {
     display: grid;
@@ -495,31 +493,32 @@
       flex-direction: column;
 
       label {
-        font-weight: $font-weight-regular;
-        font-size: $lable-font;
+        letter-spacing: .4px;
+        color: #333;
         margin-bottom: 5px;
-        color: $lable-color;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-
-        svg {
-          color: var(--primary-color);
-          font-size: 16px;
-          display: none;
-        }
+        font-size: 13px;
+        font-weight: 400;
+        display: block;
       }
 
       input {
-        border: 1px solid $feild_border;
-        padding: 10px 12px;
-        width: 100%;
-        border-radius: $border-radius;
+        padding: 8px 12px;
         font-size: 16px;
+        border-radius: $border-radius;
+        border: 1px solid $border-color;
+        width: 100%;
 
         &:focus {
           border-color: var(--primary-light);
           background: transparent;
+        }
+
+        &::placeholder {
+          color: #ccc;
+          font-size: 14px;
+          font-weight: 400;
+          letter-spacing: 0.3px;
+          background-color: transparent;
         }
       }
     }

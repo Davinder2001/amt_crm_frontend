@@ -72,31 +72,7 @@
 
 .modal-content {
     padding: 20px;
-
-    input,
-    select,
-    textarea {
-        border: 1.5px solid $border-color;
-        border-radius: 6px;
-        outline: none;
-        width: 100%;
-        padding: 9px 12px;
-        font-size: 16px;
-        transition: border-color 0.3s;
-
-        &:focus {
-            border-color: var(--primary-color);
-        }
-    }
-
-
 }
-
-
-
-
-
-
 
 
 // bulk delete popup model ..................................

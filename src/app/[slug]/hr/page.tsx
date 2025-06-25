@@ -7,7 +7,7 @@ import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
 
 // Icons
-import { FaPlus, FaUserCheck, FaMoneyBillWave, FaUserPlus } from 'react-icons/fa';
+import { FaPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
 import InviteEmployeeForm from './components/InviteEmployeeForm';
 import Modal from '@/components/common/Modal';
 import { useCompany } from '@/utils/Company';
@@ -24,30 +24,33 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <TableToolbar
-        actions={[
-          {
-            label: 'Add Employee',
-            icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/hr/add-employee`),
-          },
-          {
-            label: 'Status View',
-            icon: <FaUserCheck />,
-            onClick: () => router.push(`/${companySlug}/hr/status-view`),
-          },
-          {
-            label: 'Employee Salary',
-            icon: <FaMoneyBillWave />,
-            onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
-          },
-          {
-            label: 'Invite Employee',
-            icon: <FaUserPlus />,
-            onClick: () => setInviteModalOpen(true),
-          },
-        ]}
-      />
+      <div className='hr_navigation'>
+
+        <TableToolbar
+          actions={[
+            {
+              label: 'Add Employee',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+            },
+            {
+              label: 'Status View',
+              icon: <FaUserCheck />,
+              onClick: () => router.push(`/${companySlug}/hr/status-view`),
+            },
+            {
+              label: 'Employee Salary',
+              icon: <FaMoneyBillWave />,
+              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
+            },
+            // {
+            //   label: 'Invite Employee',
+            //   icon: <FaUserPlus />,
+            //   onClick: () => setInviteModalOpen(true),
+            // },
+          ]}
+        />
+      </div>
 
       <Modal
         isOpen={isInviteModalOpen}

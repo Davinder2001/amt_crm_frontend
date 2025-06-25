@@ -1,5 +1,7 @@
 // types/expense.ts
 interface Expense {
+    file_url: string | StaticImport;
+    file_url: React.JSX.Element;
     id: number;
     company_id: number;
     heading: string;

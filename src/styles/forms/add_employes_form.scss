@@ -13,7 +13,7 @@
     margin-bottom: 0px;
 
 
-}
+  }
 
 
 
@@ -22,8 +22,8 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding-bottom: 10px;
-  
- 
+
+
 
 
     .employee-field {
@@ -31,11 +31,7 @@
       flex-direction: column;
       position: relative;
 
-  
 
-      input::placeholder {
-        color: grey;
-      }
 
 
       .error-message {
@@ -47,37 +43,24 @@
       }
 
       .employee-field input[type="text"]::placeholder {
-        
+
         color: #ccc;
       }
-
-
-
-      label {
-        letter-spacing: .4px;
-        color: $lable-color;
-        margin-bottom: 5px;
-        font-size: $lable-font;
-        font-weight: $font-weight-regular;
-        display: block;
-      }
-
     }
 
   }
 
   input,
   select {
-    padding: 10px 12px;
+    padding: 8px 12px;
     font-size: 16px;
     border-radius: $border-radius;
-    border: 1px solid $feild_border;
+    border: 1px solid $border-color;
     width: 100%;
 
     &:focus {
-      border-color: $gray-color;
-      background: #ffffff;
-      transform: scale(1);
+      border-color: var(--primary-light);
+      background: transparent;
     }
 
     &::placeholder {
@@ -96,15 +79,7 @@
     font-size: 13px;
     font-weight: 400;
     display: block;
-    letter-spacing: .4px;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 13px;
-    font-weight: 400;
-    display: block;
   }
-
-
 
   .create-employess-action {
     display: flex;
@@ -133,26 +108,29 @@
 
 }
 
-  .invite-employees-popup  {
-    p {
-      font-size: 16px;
-      color: var(--primary-color);
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    input  {
-      margin-bottom: 20px;
-    }
-    .close-btn {
-      color: #fff;
-      background-color: #9cb9d0;
-    }
-    .invites-btn {
-      display: flex;
-      gap: 20px;
-    }
-
+.invite-employees-popup {
+  p {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
   }
+
+  input {
+    margin-bottom: 20px;
+  }
+
+  .close-btn {
+    color: #fff;
+    background-color: #9cb9d0;
+  }
+
+  .invites-btn {
+    display: flex;
+    gap: 20px;
+  }
+
+}
 
 
 

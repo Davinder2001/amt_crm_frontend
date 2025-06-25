@@ -26,29 +26,6 @@
 }
 }
 
-.hr_navigation {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-
-  a {
-    text-decoration: none;
-    display: flex;
-    gap: 5px;
-    color: $white;
-    background-color:  var(--primary-color);
-    padding: 5px 10px;
-    border-radius: $border-radius;
-    height: 40px;
-    align-items: center;
-    
-      &:hover {
-      background-color: var(--primary-light);
-      }
-  }
-}
 
 .hr-hero-wrapper {
   display: flex;

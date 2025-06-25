@@ -46,7 +46,7 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
         // Delete expense
         deleteExpense: builder.mutation<void, number>({
             query: (id) => ({
-                url: `expenses/${id}`,
+                url: `expenses/${id}/delete`,
                 method: 'DELETE',
             }),
             invalidatesTags: ["Expenses"],

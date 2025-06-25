@@ -97,6 +97,13 @@ const PackagesView = () => {
       )
     },
     {
+      label: 'Three years Price',
+      key: 'three_years_price' as keyof PackagePlan,
+      render: (plan: PackagePlan) => (
+        <span className="">{plan.three_years_price}</span>
+      )
+    },
+    {
       label: 'Employees',
       key: 'employee_numbers' as keyof PackagePlan,
       render: (plan: PackagePlan) => <span>{plan.employee_numbers}</span>

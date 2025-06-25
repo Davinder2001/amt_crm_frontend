@@ -180,7 +180,7 @@ const AddItem: React.FC = () => {
             </div>
             {!collapsedSections['basicInfo'] && (
               <div className="store_input_feilds fields-wrapper">
-                <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required />
+                <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="Samsung Monitor 24 inch" required />
 
                 <div className="add-items-form-input-label-container">
                   <label>Tax</label>

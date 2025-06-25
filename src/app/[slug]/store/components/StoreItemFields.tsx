@@ -170,7 +170,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                             </div>
                             {!collapsedSections['basicInfo'] && (
                                 <div className="store_input_feilds fields-wrapper">
-                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Samsung Monitor 24 inch" required disabled={isBatchMode} />
+                                    <FormInput label="Item Name" name="name" value={formData.name} onChange={handleChange} placeholder="Samsung Monitor 24 inch" required disabled={isBatchMode} />
                                     <div className="add-items-form-input-label-container">
                                         <label>Measuring Unit</label>
                                         <MeasuringUnits
@@ -223,9 +223,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         </div>
                         {!collapsedSections['inventoryAndDates'] && (
                             <div className="store_input_feilds fields-wrapper">
-                                <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="e.g. 100" />
-                                <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="e.g. 250.00" />
-                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="e.g. Replace after 2 years" />
+                                <FormInput label="Quantity Count" name="quantity_count" type="number" value={formData.quantity_count || ''} onChange={handleNumberChange} required placeholder="100" />
+                                <FormInput label="Cost Price" name="cost_price" type="number" value={formData.cost_price || ''} onChange={handleNumberChange} required placeholder="250.00" />
+                                <FormInput label="Replacement" name="replacement" value={formData.replacement || ''} onChange={handleChange} placeholder="Replace after 2 years" />
                                 <DatePickerField label="Purchase Date" selectedDate={formData.purchase_date || null} onChange={(date) => {
                                     const updated = { ...formData, purchase_date: date };
                                     setFormData(updated);
@@ -286,7 +286,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <option value="unit">Unit</option>
                                     </select>
                                 </div>
-                                {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="e.g. 50" /> */}
+                                {/* <FormInput label="Availability Stock" name="availability_stock" type="number" value={formData.availability_stock || ''} onChange={handleNumberChange} placeholder="50" /> */}
                                 <div className="add-items-form-input-label-container">
                                     <label>Tax Type</label>
                                     <select
@@ -305,7 +305,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         <option value="include">Include</option>
                                     </select>
                                 </div>
-                                <FormInput label='Invoice Number' name="invoice_number" value={formData.invoice_number || ''} onChange={handleChange} placeholder="e.g. INV-12345" />
+                                <FormInput label='Invoice Number' name="invoice_number" value={formData.invoice_number || ''} onChange={handleChange} placeholder="INV-12345" />
                             </div>
                         )}
                     </div>
@@ -330,7 +330,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         value={formData.regular_price || ''}
                                         onChange={handleNumberChange}
                                         required
-                                        placeholder="e.g. 280.00"
+                                        placeholder="280.00"
                                     />
                                     <FormInput
                                         label="Sale Price"
@@ -339,7 +339,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                         value={formData.sale_price || ''}
                                         onChange={handleNumberChange}
                                         required
-                                        placeholder="e.g. 300.00"
+                                        placeholder="300.00"
                                     />
 
                                     {/* Show only if unit_of_measure is "unit" */}
@@ -351,7 +351,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                                 type="number"
                                                 value={formData.units_in_peace || ''}
                                                 onChange={handleNumberChange}
-                                                placeholder="e.g. 10"
+                                                placeholder="10"
                                             />
                                             <FormInput
                                                 label="Per Unit Price"
@@ -359,7 +359,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                                 type="number"
                                                 value={formData.price_per_unit || ''}
                                                 onChange={handleNumberChange}
-                                                placeholder="e.g. 0.1"
+                                                placeholder="0.1"
                                             />
                                         </>
                                     )}

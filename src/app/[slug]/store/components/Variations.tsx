@@ -224,7 +224,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                         const val = Number(e.target.value);
                                         handlePriceChange(index, combo.variant_sale_price, isNaN(val) ? 0 : val);
                                     }}
-                                    placeholder="e.g. 300.00"
+                                    placeholder="300.00"
                                     min={0}
                                 />
                             </div>
@@ -238,7 +238,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                         const val = Number(e.target.value);
                                         handlePriceChange(index, isNaN(val) ? 0 : val, combo.variant_regular_price);
                                     }}
-                                    placeholder="e.g. 250.00"
+                                    placeholder="250.00"
                                     min={0}
                                 />
                             </div>
@@ -255,7 +255,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                             return updated;
                                         });
                                     }}
-                                    placeholder="e.g. 100"
+                                    placeholder="100"
                                     min={0}
                                 />
                             </div>
@@ -275,7 +275,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                                 const val = e.target.value === '' ? null : Number(e.target.value);
                                                 handleUnitFieldChange(index, 'variant_units_in_peace', val);
                                             }}
-                                            placeholder="e.g. 10"
+                                            placeholder="10"
                                             min={0}
                                         />
                                     </div>
@@ -288,7 +288,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                                 const val = e.target.value === '' ? null : Number(e.target.value);
                                                 handleUnitFieldChange(index, 'variant_price_per_unit', val);
                                             }}
-                                            placeholder="e.g. 0.1"
+                                            placeholder="0.1"
                                             min={0}
                                             step="0.01"
                                         />

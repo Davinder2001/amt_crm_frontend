@@ -45,6 +45,8 @@ const Items: React.FC = () => {
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
       ...item,
+      brand_name: item.brand?.name || '',
+      categories: item.categories || [],
       purchase_date: item.purchase_date || '',
       date_of_manufacture: item.date_of_manufacture || '',
       date_of_expiry: item.date_of_expiry || '',
@@ -124,10 +126,10 @@ const Items: React.FC = () => {
   };
 
   const allColumns: { label: string; key: keyof StoreItem }[] = [
-    { label: 'Brand Name', key: 'brand_name' },
     { label: 'Name', key: 'name' },
-    { label: 'Sale Price', key: 'sale_price' },
-    { label: 'Stock Available', key: 'availability_stock' },
+    { label: 'Brand', key: 'brand_name' },
+    { label: 'Category', key: 'category' },
+    { label: 'Stock', key: 'availability_stock' },
   ];
 
   const [visibleColumns, setVisibleColumns] = useState<string[]>(() => {
@@ -154,11 +156,11 @@ const Items: React.FC = () => {
       options: [...new Set(storeItems.map((item) => item.brand_name))].filter(Boolean) as string[]
     },
     {
-      key: 'sale_price',
-      label: 'Sale Price',
+      key: 'category',
+      label: 'Category',
       type: 'multi-select' as const,
-      options: [...new Set(storeItems.map((item) => String(item.sale_price)))].filter(Boolean) as string[]
-    }
+      options: [...new Set(storeItems.flatMap((item) => item.categories.map(cat => cat.name)))].filter(Boolean) as string[]
+    },
   ];
 
   const toggleColumn = (key: string) => {
@@ -197,6 +199,12 @@ const Items: React.FC = () => {
         .every(([field, values]) => {
           if (!values || values.length === 0) return true;
 
+          // Special handling for categories
+          if (field === 'category') {
+            const categoryNames = item.categories?.map(cat => cat.name) || [];
+            return values.some(value => categoryNames.includes(value));
+          }
+
           const itemValue = item[field as keyof StoreItem];
           if (itemValue === undefined) return false;
 
@@ -222,17 +230,17 @@ const Items: React.FC = () => {
           <Image
             src={item.featured_image}
             alt={item.name}
-            width={60}
-            height={60}
-            style={{ objectFit: 'cover' }}
+            width={40}
+            height={40}
+            style={{ objectFit: 'contain' }}
           />
         ) : (
           <Image
             src={placeholderImg}
             alt="no-image"
-            width={60}
-            height={60}
-            style={{ objectFit: 'cover' }}
+            width={40}
+            height={40}
+            style={{ objectFit: 'contain' }}
           />
         )
       ),
@@ -240,6 +248,20 @@ const Items: React.FC = () => {
     ...allColumns
       .filter((col) => visibleColumns.includes(col.key as string))
       .map((col) => {
+        if (col.key === 'brand') {
+          return {
+            label: col.label,
+            render: (item: StoreItem) => item.brand?.name || 'N/A',
+            key: col.key,
+          };
+        }
+        if (col.key === 'category') {
+          return {
+            label: col.label,
+            render: (item: StoreItem) => item.categories?.map(cat => cat.name).join(', ') || 'N/A',
+            key: col.key,
+          };
+        }
         return {
           label: col.label,
           key: col.key,

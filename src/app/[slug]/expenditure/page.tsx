@@ -14,6 +14,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import Loader from '@/components/common/Loader';
+import Image from 'next/image';
 
 export default function ExpensesPage() {
   const { data, isLoading, isError } = useFetchExpensesQuery();
@@ -64,11 +65,41 @@ export default function ExpensesPage() {
   };
 
   const columns: Column<Expense>[] = [
+    {
+      label: 'Image',
+      render: (row) =>
+        row.file_url ? (
+          <Image
+            src={row.file_url}
+            alt="Expense file"
+            width={40}
+            height={40}
+          />
+        ) : (
+          <span>-</span>
+        ),
+    },
     { label: 'Heading', key: 'heading' },
     {
       label: 'Description',
       render: (row) => row.description || '-',
       key: 'description'
+    },
+    {
+      label: 'Tags',
+      render: (row) =>
+        Array.isArray(row.tags) && row.tags.length > 0
+          ? row.tags.map((tag: Tag, idx: number) => {
+            const tagName = typeof tag === 'string' ? tag : tag.name;
+            const isLast = idx === row.tags.length - 1;
+            return (
+              <span key={idx} style={{ marginRight: 4 }}>
+                {tagName}{!isLast && ','}
+              </span>
+            );
+          })
+          : '-',
+      key: 'tags'
     },
     {
       label: 'Price',

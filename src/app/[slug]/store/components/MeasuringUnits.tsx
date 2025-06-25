@@ -173,7 +173,7 @@ const MeasuringUnits: React.FC<MeasuringUnitsProps> = ({
                                 },
                             },
                         }}
-                        placeholder="e.g. kg, pcs, liters"
+                        placeholder="kg, pcs, liters"
                     />
                     <Box display="flex" justifyContent="flex-end" gap={2}>
                         <button onClick={() => setAddUnitModalOpen(false)} className="buttons cancel-btn">

@@ -8,6 +8,7 @@ import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus } from 'react-icon
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
+import LoadingState from '@/components/common/LoadingState';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -49,7 +50,7 @@ const ViewItem = () => {
     }
   };
 
-  if (isLoading) return <div className="loading">Loading item...</div>;
+  if (isLoading) return <LoadingState/>;
   if (error) return <div className="error">Error loading item.</div>;
   if (!item) return <div className="error">Item not found.</div>;
 

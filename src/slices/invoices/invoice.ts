@@ -18,174 +18,33 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       query: () => "invoices",
       providesTags: ["Invoice"],
     }),
-
-    // createInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
-    //   query: (newInvoice) => ({
-    //     url: "invoices",
-    //     method: "POST",
-    //     body: {
-    //       ...newInvoice,
-    //       items: newInvoice.items
-    //         .filter((item) => item.item_id !== null)
-    //         .map((item) => ({
-    //           item_id: item.item_id,
-    //           quantity: item.quantity,
-    //           final_cost: item.final_cost,
-    //           variant_id: item.variant_id,
-    //         })),
-    //     },
-    //   }),
-    //   invalidatesTags: ["Invoice"],
-    // }),
-
-    // printInvoice: builder.mutation<Blob, CreateInvoicePayload>({
-    //   query: (newInvoice) => ({
-    //     url: "invoices/print",
-    //     method: "POST",
-    //     body: {
-    //       ...newInvoice,
-    //       items: newInvoice.items
-    //         .filter((item) => item.item_id !== null)
-    //         .map((item) => ({
-    //           item_id: item.item_id,
-    //           quantity: item.quantity,
-    //           final_cost: item.final_cost,
-    //           variant_id: item.variant_id,
-    //         })),
-    //     },
-    //     responseHandler: (response) => response.blob(),
-    //   }),
-    //   invalidatesTags: ["Invoice"],
-    // }),
-
-    // whatsappInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
-    //   query: (newInvoice) => ({
-    //     url: "invoices/store-whatsapp",
-    //     method: "POST",
-    //     body: {
-    //       ...newInvoice,
-    //       items: newInvoice.items
-    //         .filter((item) => item.item_id !== null)
-    //         .map((item) => ({
-    //           item_id: item.item_id,
-    //           quantity: item.quantity,
-    //           final_cost: item.final_cost,
-    //           variant_id: item.variant_id,
-    //         })),
-    //     },
-    //   }),
-    //   invalidatesTags: ["Invoice"],
-    // }),
-
-
-
-    createInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
-      query: (newInvoice) => ({
+    createInvoice: builder.mutation<{ status?: boolean, message?: string, error?: string }, FormData>({
+      query: (formData) => ({
         url: "invoices",
         method: "POST",
-        body: {
-          ...newInvoice,
-          items: newInvoice.items
-            .filter((item) => item.item_id !== null)
-            .map((item) => {
-              const baseItem = {
-                item_id: item.item_id,
-                quantity: item.quantity,
-                final_cost: item.final_cost,
-              };
-
-              if (item.product_type === 'variable_product' && item.variants) {
-                return {
-                  ...baseItem,
-                  variants: item.variants.map(variant => ({
-                    variant_id: variant.variant_id,
-                    quantity: variant.quantity,
-                    final_cost: variant.final_cost,
-                    units: variant.units || null
-                  }))
-                };
-              }
-
-              return baseItem;
-            }),
-        },
+        body: formData,
       }),
       invalidatesTags: ["Invoice"],
     }),
 
-    printInvoice: builder.mutation<Blob, CreateInvoicePayload>({
-      query: (newInvoice) => ({
+    printInvoice: builder.mutation<Blob, FormData>({
+      query: (formData) => ({
         url: "invoices/print",
         method: "POST",
-        body: {
-          ...newInvoice,
-          items: newInvoice.items
-            .filter((item) => item.item_id !== null)
-            .map((item) => {
-              const baseItem = {
-                item_id: item.item_id,
-                quantity: item.quantity,
-                final_cost: item.final_cost,
-              };
-
-              if (item.product_type === 'variable_product' && item.variants) {
-                return {
-                  ...baseItem,
-                  variants: item.variants.map(variant => ({
-                    variant_id: variant.variant_id,
-                    quantity: variant.quantity,
-                    final_cost: variant.final_cost,
-                    units: variant.units || null
-                  }))
-                };
-              }
-
-              return baseItem;
-            }),
-        },
+        body: formData,
         responseHandler: (response) => response.blob(),
       }),
       invalidatesTags: ["Invoice"],
     }),
 
-    whatsappInvoice: builder.mutation<Invoice, CreateInvoicePayload>({
-      query: (newInvoice) => ({
+    whatsappInvoice: builder.mutation<{ status?: boolean, message?: string, error?: string }, FormData>({
+      query: (formData) => ({
         url: "invoices/store-whatsapp",
         method: "POST",
-        body: {
-          ...newInvoice,
-          items: newInvoice.items
-            .filter((item) => item.item_id !== null)
-            .map((item) => {
-              const baseItem = {
-                item_id: item.item_id,
-                quantity: item.quantity,
-                final_cost: item.final_cost,
-              };
-
-              if (item.product_type === 'variable_product' && item.variants) {
-                return {
-                  ...baseItem,
-                  variants: item.variants.map(variant => ({
-                    variant_id: variant.variant_id,
-                    quantity: variant.quantity,
-                    final_cost: variant.final_cost,
-                    units: variant.units || null
-                  }))
-                };
-              }
-
-              return baseItem;
-            }),
-        },
+        body: formData,
       }),
       invalidatesTags: ["Invoice"],
     }),
-
-    // getInvoiceById: builder.query<{ invoice: Invoice }, string | number>({
-    //   query: (id) => `invoices/${id}`,
-    //   providesTags: (result, error, id) => [{ type: "Invoice", id }],
-    // }),
     getInvoiceById: builder.query<{ invoice: Invoice }, string | number>({
       query: (id) => `invoices/${id}`,
       providesTags: (result, error, id) => [{ type: "Invoice", id }],

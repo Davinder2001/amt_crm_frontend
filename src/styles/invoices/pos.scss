@@ -578,7 +578,7 @@
 }
 
 /* Variant Modal */
-.variant-modal-content {
+.variant-modal-content,.unit-modal-content{
     display: flex;
     flex-direction: column;
     gap: 0;

@@ -112,9 +112,9 @@ function POSPage() {
     };
 
     // Determine which items to display based on selection
-    const displayItems = selectedChildCatId
-        ? getItemsFromCategory(selectedChildCatId) // Show items from selected child category
-        : getItemsFromCategory(selectedTopCatId); // Show items from selected parent or all items
+    const displayItems = (selectedChildCatId
+        ? getItemsFromCategory(selectedChildCatId)
+        : getItemsFromCategory(selectedTopCatId)).filter(item => item.batches && item.batches.length > 0);
 
     const handleAddToCart = (item: StoreItem, variant?: variations, useUnitPrice?: boolean, unitQuantity?: number | null) => {
         const id = variant ? `${item.id}-${variant.id}` : item.id;
@@ -246,7 +246,7 @@ function POSPage() {
         title="Failed to load categories and items"
         message="We encountered an error while loading your store items. Please try again later."
     />;
-    
+
     if (!categories) return <LoadingState />;
 
     return (

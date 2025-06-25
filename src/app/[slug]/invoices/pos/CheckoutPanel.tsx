@@ -109,16 +109,33 @@ export default function CheckoutPanel({
             address: address,
             pincode: pincode,
             delivery_charge: deliveryCharge,
-            items: itemsPayload
+            invoice_items: itemsPayload
         };
     };
 
+    // Flatten and append all fields
+    function appendToFormData(formData: FormData, data: CreateInvoicePayload, prefix = '') {
+        for (const [key, value] of Object.entries(data)) {
+            if (value !== undefined && value !== null) {
+                const formKey = prefix ? `${prefix}.${key}` : key;
+
+                if (typeof value === 'object' && !(value instanceof File)) {
+                    // Recursively handle nested objects
+                    appendToFormData(formData, value, formKey);
+                } else {
+                    formData.append(formKey, value);
+                }
+            }
+        }
+    }
 
     // 1) Save only
     const handleSave = async () => {
         try {
             const payload = buildPayload();
-            const invoice = await createInvoice(payload).unwrap();
+            const formData = new FormData();
+            appendToFormData(formData, payload);
+            const invoice = await createInvoice(formData).unwrap();
             if (invoice.status === true) {
                 toast.success(invoice.message || 'Invoice created successfully.');
                 router.push(`/${companySlug}/invoices`);
@@ -134,7 +151,9 @@ export default function CheckoutPanel({
     const handlePrint = async () => {
         try {
             const payload = buildPayload();
-            const pdfBlob = await printInvoice(payload).unwrap();
+            const formData = new FormData();
+            appendToFormData(formData, payload);
+            const pdfBlob = await printInvoice(formData).unwrap();
             const url = URL.createObjectURL(pdfBlob);
             window.open(url, '_blank');
         } catch (err) {
@@ -146,7 +165,9 @@ export default function CheckoutPanel({
     const handleSendWhatsapp = async () => {
         try {
             const payload = buildPayload();
-            const invoice = await whatsappInvoice(payload).unwrap();
+            const formData = new FormData();
+            appendToFormData(formData, payload);
+            const invoice = await whatsappInvoice(formData).unwrap();
             if (invoice.status === true) {
                 toast.success(invoice.message);
                 router.push(`/${companySlug}/invoices`);

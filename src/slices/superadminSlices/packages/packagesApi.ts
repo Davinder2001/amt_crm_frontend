@@ -54,8 +54,8 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
 
     // POST: Upgrade company package
     upgradeCompanyPackage: builder.mutation<{ message: string }, { companyId: number; package_id: number; package_type: 'monthly' | 'annual' }>({
-      query: ({ companyId, package_id, package_type }) => ({
-        url: `companies/${companyId}/upgrade-package`,
+      query: ({  package_id, package_type }) => ({
+        url: `payments/upgrade-package`,
         method: "POST",
         body: { package_id, package_type },
         credentials: "include",

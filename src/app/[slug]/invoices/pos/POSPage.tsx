@@ -52,8 +52,8 @@ function POSPage() {
         const itemMap = new Map<number, StoreItem>(); // Maps item.id → latest StoreItem
 
         const collectItems = (category: Category) => {
-            if (category.items) {
-                for (const item of category.items) {
+            if (category.invoice_items && Array.isArray(category.invoice_items)) {
+                for (const item of category.invoice_items || []) {
                     itemMap.set(item.id, item); // Always overwrite with the latest occurrence
                 }
             }
@@ -72,8 +72,8 @@ function POSPage() {
         const seenItemIds = new Set<number>();
 
         const collectUniqueItems = (cat: Category) => {
-            if (cat.items) {
-                for (const item of cat.items) {
+            if (cat.invoice_items && Array.isArray(cat.invoice_items)) {
+                for (const item of cat.invoice_items || []) {
                     if (!seenItemIds.has(item.id)) {
                         seenItemIds.add(item.id);
                         items.push(item);

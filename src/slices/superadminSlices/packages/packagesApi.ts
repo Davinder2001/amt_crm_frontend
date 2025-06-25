@@ -51,6 +51,19 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Package"],
     }),
+
+    // POST: Upgrade company package
+    upgradeCompanyPackage: builder.mutation<{ message: string }, { companyId: number; package_id: number; package_type: 'monthly' | 'annual' }>({
+      query: ({ companyId, package_id, package_type }) => ({
+        url: `companies/${companyId}/upgrade-package`,
+        method: "POST",
+        body: { package_id, package_type },
+        credentials: "include",
+      }),
+      invalidatesTags: ["Package"],
+    }),
+
+
   }),
 });
 
@@ -60,6 +73,7 @@ export const {
   useCreatePackageMutation,
   useUpdatePackageMutation,
   useDeletePackageMutation,
+  useUpgradeCompanyPackageMutation,
 } = packagesApi;
 
 export default packagesApi;

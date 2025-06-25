@@ -90,7 +90,7 @@ interface Category {
   created_at: string;
   updated_at: string;
   children?: Category[];
-  items?: StoreItem[];
+  invoice_items?: StoreItem[];
   [key: string]: unknown;
 }
 

@@ -32,7 +32,7 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
         updateExpense: builder.mutation<Expense, { id: number, formdata: ExpenseUpdateRequest }>({
             query: ({ id, formdata }) => {
                 return {
-                    url: `expenses/${id}`,
+                    url: `expenses/${id}/update`,
                     method: 'POST',
                     body: formdata,
                 };

@@ -90,6 +90,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
 
         try {
             const formDataPayload = new FormData();
+            formDataPayload.append('method', '_PUT');
             formDataPayload.append('heading', formData.heading);
             formDataPayload.append('description', formData.description || '');
             formDataPayload.append('price', Number(formData.price).toString());

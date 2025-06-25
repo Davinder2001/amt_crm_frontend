@@ -48,25 +48,43 @@
 
 
 
-
-
-
-
-
-
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useFetchCompanyDetailsQuery } from '@/slices/company/companyApi';
-
+import {
+  useFetchPackagesQuery,
+  useUpgradeCompanyPackageMutation
+} from '@/slices/superadminSlices/packages/packagesApi';
+import Modal from '@/components/common/Modal';
 
 function CompanyDetails() {
   const { data, isLoading, isError } = useFetchCompanyDetailsQuery();
+  const { data: allPlans = [] } = useFetchPackagesQuery();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeCompanyPackage] = useUpgradeCompanyPackageMutation();
 
   if (isLoading) return <p>Loading...</p>;
   if (isError || !data) return <p>Something went wrong.</p>;
 
-  const { company, subscribed_package, related_packages } = data;
+  const { company, subscribed_package } = data;
+
+  const handleUpgrade = async (packageId: number, packageType: 'monthly' | 'annual') => {
+    try {
+      const payload = {
+        companyId: company.id,
+        package_id: packageId,
+        package_type: packageType,
+      };
+      console.log('Sending Payload:', payload);
+      await upgradeCompanyPackage(payload).unwrap();
+      alert('Package upgraded successfully!');
+      setShowUpgradeModal(false);
+    } catch (error) {
+      console.error('Upgrade failed:', error);
+      alert('Failed to upgrade package.');
+    }
+  };
 
   return (
     <div className="company-details-container">
@@ -88,29 +106,100 @@ function CompanyDetails() {
       <div className="card green">
         <h2>Subscribed Package</h2>
         <p><strong>Name:</strong> {subscribed_package.name}</p>
-        <p><strong>Annual Price:</strong> {subscribed_package.annual_price}</p>
+        <p><strong>Annual Price:</strong> ₹{subscribed_package.annual_price}</p>
         <p><strong>Monthly Price:</strong> ₹{subscribed_package.monthly_price}</p>
         <p><strong>Employees Allowed:</strong> {subscribed_package.employee_numbers}</p>
         <p><strong>Items Allowed:</strong> {subscribed_package.items_number}</p>
         <p><strong>Daily Tasks:</strong> {subscribed_package.daily_tasks_number}</p>
         <p><strong>Invoices Allowed:</strong> {subscribed_package.invoices_number}</p>
-      </div>
 
-      <div className="card gray">
-        <h2>Other Available Packages</h2>
-        {related_packages.map((pkg) => (
-          <div key={pkg.id} className="package-item">
-            <p><strong>Name:</strong> {pkg.name}</p>
-            <p><strong>Annual Price:</strong> {pkg.annual_price}</p>
-            <p><strong>Monthly Price:</strong> ₹{pkg.monthly_price}</p>
-            <p><strong>Employees Allowed:</strong> {pkg.employee_numbers}</p>
-            <p><strong>Items Allowed:</strong> {pkg.items_number}</p>
-            <p><strong>Daily Tasks:</strong> {pkg.daily_tasks_number}</p>
-            <p><strong>Invoices Allowed:</strong> {pkg.invoices_number}</p>
-          </div>
-        ))}
+        <button onClick={() => setShowUpgradeModal(true)}>Upgrade</button>
+
+        {showUpgradeModal && (
+          <Modal
+            isOpen={showUpgradeModal}
+            onClose={() => setShowUpgradeModal(false)}
+            title="Upgrade Plan"
+            width="700px"
+          >
+            <div className="packages-grid">
+              {allPlans
+                .filter(plan => plan.name === subscribed_package.name)
+                .flatMap((plan) => {
+                  const currentMonthlyPrice = subscribed_package.monthly_price;
+
+                  const packagesToRender = [];
+
+                  if (parseFloat(String(plan.monthly_price)) > 0) {
+                    const isCurrent = subscribed_package.id === plan.id && company.subscription_type === 'monthly';
+                    const isEligible = parseFloat(String(plan.monthly_price)) > currentMonthlyPrice;
+
+                    packagesToRender.push({
+                      id: `${plan.id}-monthly`,
+                      type: 'monthly',
+                      price: plan.monthly_price,
+                      isCurrent,
+                      isEligible,
+                      originalPlan: plan,
+                    });
+                  }
+
+                  if (parseFloat(String(plan.annual_price)) > 0) {
+                    const isCurrent = subscribed_package.id === plan.id && company.subscription_type === 'annual';
+                    const isEligible = parseFloat(String(plan.annual_price)) > currentMonthlyPrice;
+
+                    packagesToRender.push({
+                      id: `${plan.id}-annual`,
+                      type: 'annual',
+                      price: plan.annual_price,
+                      isCurrent,
+                      isEligible,
+                      originalPlan: plan,
+                    });
+                  }
+
+                  return packagesToRender;
+                })
+                .map((pkg) => (
+                  <div key={pkg.id} className="package-card">
+                    <h3>{pkg.originalPlan.name} ({pkg.type})</h3>
+                    <p className="price">₹{pkg.price}</p>
+
+                    <span className={`badge ${pkg.isCurrent
+                      ? 'badge-current'
+                      : pkg.isEligible
+                        ? 'badge-upgrade'
+                        : 'badge-disabled'
+                      }`}>
+                      {pkg.isCurrent
+                        ? 'Current Plan'
+                        : pkg.isEligible
+                          ? 'Upgrade Available'
+                          : 'Not Eligible'}
+                    </span>
+
+                    <button
+                      className={`upgrade-button ${pkg.isEligible
+                        ? 'btn-upgrade'
+                        : pkg.isCurrent
+                          ? 'btn-current'
+                          : 'btn-disabled'
+                        }`}
+                      disabled={!pkg.isEligible && !pkg.isCurrent}
+                      onClick={() => handleUpgrade(pkg.originalPlan.id ?? 0, pkg.type as 'monthly' | 'annual')}
+                    >
+                      {pkg.isCurrent
+                        ? 'Current Plan (Click to Re-Submit)'
+                        : pkg.isEligible
+                          ? 'Upgrade'
+                          : 'Not Eligible'}
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </Modal>
+        )}
       </div>
-        
     </div>
   );
 }

@@ -34,7 +34,7 @@ interface InvoiceCredit {
 
 interface Invoice {
   [x: string]: ReactNode;
-  client_phone: ReactNode;
+  client_phone: string;
   id: number;
   invoice_number: string;
   client_name: string;
@@ -80,12 +80,16 @@ interface CreateInvoicePayload {
   address?: string;
   pincode?: string;
   delivery_charge?: number;
-  items: {
+  invoice_items: {
     item_id: number;
     quantity: number;
     final_cost: number | null;
     product_type?: 'simple_product' | 'variable_product';
-    variants?: CartItemVariant[];
+    batches?: {
+      batch_id: number;
+      quantity: number;
+      variants?: CartItemVariant[];
+    }[];
   }[];
 };
 

@@ -177,21 +177,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
               </div>
             </label>
           </div>
-
-          {useUnitPrice && (
-            <div className="unit-quantity" style={{ marginBottom: '16px' }}>
-              <label htmlFor="unitQuantity" style={{ display: 'block', marginBottom: '4px' }}>Unit Quantity</label>
-              <input
-                id="unitQuantity"
-                type="number"
-                min={1}
-                value={unitQuantity}
-                onChange={(e) => setUnitQuantity(Number(e.target.value) || 1)}
-                style={{ width: '100%', padding: '8px' }}
-              />
-            </div>
-          )}
-
+          
           <button
             onClick={() => {
               onAddToCart(item, undefined, useUnitPrice, useUnitPrice ? unitQuantity : undefined, batch);
@@ -276,20 +262,6 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                         </div>
                       </label>
                     </div>
-
-                    {useUnitPrice && (
-                      <div className="unit-quantity">
-                        <label htmlFor="variantUnitQuantity" style={{ display: 'block', marginBottom: '4px' }}>Unit Quantity</label>
-                        <input
-                          id="variantUnitQuantity"
-                          type="number"
-                          min={1}
-                          value={unitQuantity}
-                          onChange={(e) => setUnitQuantity(Number(e.target.value) || 1)}
-                          style={{ width: '100%', padding: '8px' }}
-                        />
-                      </div>
-                    )}
                   </div>
                 )}
               </>
@@ -409,7 +381,30 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                 className={`item ${isHovered ? 'hovered' : ''} ${inCart ? 'in-cart' : ''}`}
                 onMouseEnter={() => setHoveredItemId(item.id)}
                 onMouseLeave={() => setHoveredItemId(null)}
-                onClick={() => setBatchModalItem(item)}
+                onClick={() => {
+                  // If there's only one batch, handle it directly
+                  if (item.batches && item.batches.length === 1) {
+                    const singleBatch = item.batches[0];
+                    
+                    if (isStoreItemBatch(singleBatch)) {
+                      if (singleBatch.product_type === 'simple_product') {
+                        if (singleBatch.unit_of_measure === 'unit' && singleBatch.price_per_unit) {
+                          // Open simple unit modal directly
+                          setSimpleUnitModal({ item, batch: singleBatch });
+                        } else {
+                          // Add directly to cart (no unit pricing)
+                          onAddToCart(item, undefined, false, undefined, singleBatch);
+                        }
+                      } else if (singleBatch.product_type === 'variable_product') {
+                        // Open variant modal directly
+                        setBatchVariantModal({ item, batch: singleBatch });
+                      }
+                    }
+                  } else {
+                    // Multiple batches or no batches - show batch modal
+                    setBatchModalItem(item);
+                  }
+                }}
               >
                 <div className="item-image">
                   <Image
@@ -428,7 +423,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                   )}
                 </div>
                 <div className="item-details">
-                  <h4 className="item-name">{item.name}</h4>
+                  <h4 className="item-name" title={item.name}>{item.name}</h4>
                   <div className="item-price">{priceDisplay}</div>
                 </div>
               </li>

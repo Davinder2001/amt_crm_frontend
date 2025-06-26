@@ -155,8 +155,7 @@ function POSPage() {
 
         // Rest of the function remains the same, but use actualQuantity instead of hardcoded 1
         const name = item.name +
-            (variant ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})` : '') +
-            (batch ? ` (Batch: ${batch.batch_number || batch.id})` : '');
+            (variant ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})` : '');
 
         setCart(prev => {
             const existing = prev.find(ci => ci.id.toString() === id.toString());

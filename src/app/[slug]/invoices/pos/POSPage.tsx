@@ -118,7 +118,6 @@ function POSPage() {
         : getItemsFromCategory(selectedTopCatId)).filter(item => item.batches && item.batches.length > 0);
 
 
-    // Updated handleAddToCart function
     const handleAddToCart = (
         item: StoreItem,
         variant?: variations,
@@ -129,21 +128,32 @@ function POSPage() {
         // Generate unique ID for the cart item
         const id = variant ? `${item.id}-${variant.id}` : batch ? `${item.id}-${batch.id}` : item.id;
 
-        // Calculate final cost
+        // Calculate final cost and determine actual quantity
         let finalCost: number;
+        let actualQuantity: number;
+
         if (variant) {
-            finalCost = useUnitPrice && variant.variant_price_per_unit && unitQuantity
-                ? variant.variant_price_per_unit * unitQuantity
-                : variant.variant_sale_price || 0;
+            if (useUnitPrice && variant.variant_price_per_unit && unitQuantity) {
+                finalCost = variant.variant_price_per_unit * unitQuantity;
+                actualQuantity = unitQuantity; // Use unit quantity as actual quantity
+            } else {
+                finalCost = variant.variant_sale_price || 0;
+                actualQuantity = 1; // Default to 1 for regular pricing
+            }
         } else if (batch) {
-            finalCost = useUnitPrice && batch.price_per_unit && unitQuantity
-                ? batch.price_per_unit * unitQuantity
-                : batch.sale_price || 0;
+            if (useUnitPrice && batch.price_per_unit && unitQuantity) {
+                finalCost = batch.price_per_unit * unitQuantity;
+                actualQuantity = unitQuantity; // Use unit quantity as actual quantity
+            } else {
+                finalCost = batch.sale_price || 0;
+                actualQuantity = 1; // Default to 1 for regular pricing
+            }
         } else {
             finalCost = item.sale_price || 0;
+            actualQuantity = 1; // Default to 1 for regular pricing
         }
 
-        // Build display name
+        // Rest of the function remains the same, but use actualQuantity instead of hardcoded 1
         const name = item.name +
             (variant ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})` : '') +
             (batch ? ` (Batch: ${batch.batch_number || batch.id})` : '');
@@ -175,19 +185,19 @@ function POSPage() {
                         ci.id.toString() === id.toString()
                             ? {
                                 ...ci,
-                                quantity: ci.quantity + 1,
+                                quantity: ci.quantity + actualQuantity,
                                 variants: ci.variants?.map(v => ({
                                     ...v,
-                                    quantity: v.quantity + 1,
+                                    quantity: v.quantity + actualQuantity,
                                     final_cost: finalCost,
                                     units: useUnitPrice ? unitQuantity || null : null
                                 })),
                                 batches: ci.batches?.map(b => ({
                                     ...b,
-                                    quantity: b.quantity + 1,
+                                    quantity: b.quantity + actualQuantity,
                                     variants: b.variants?.map(v => ({
                                         ...v,
-                                        quantity: v.quantity + 1,
+                                        quantity: v.quantity + actualQuantity,
                                         final_cost: finalCost,
                                         units: useUnitPrice ? unitQuantity || null : null
                                     }))
@@ -206,22 +216,23 @@ function POSPage() {
                         itemId: item.id,
                         variantId: variant?.id,
                         name,
-                        quantity: 1,
+                        quantity: actualQuantity, // Use actualQuantity here
+                        featured_image: item.featured_image,
                         final_cost: finalCost,
                         product_type: item.product_type,
                         unit_of_measure: item.unit_of_measure,
                         variants: variant && typeof variant.id === 'number' ? [{
                             variant_id: variant.id,
-                            quantity: 1,
+                            quantity: actualQuantity, // Use actualQuantity here
                             final_cost: finalCost,
                             units: useUnitPrice ? unitQuantity || null : null
                         }] : undefined,
                         batches: batch ? [{
                             batch_id: batch.id,
-                            quantity: 1,
+                            quantity: actualQuantity, // Use actualQuantity here
                             variants: (variant && typeof variant.id === 'number') ? [{
                                 variant_id: variant.id,
-                                quantity: 1,
+                                quantity: actualQuantity, // Use actualQuantity here
                                 final_cost: finalCost,
                                 units: useUnitPrice ? unitQuantity || null : null
                             }] : undefined
@@ -235,7 +246,6 @@ function POSPage() {
         });
     };
 
-    // Updated handleQtyChange function
     const handleQtyChange = (itemId: string | number, delta: number | string) => {
         setCart(prev => {
             return prev
@@ -251,7 +261,7 @@ function POSPage() {
                         // Determine available quantity based on product type and batch
                         let availableQty = storeItem.quantity_count;
                         let batch: storeItemBatch | undefined;
-                        
+
                         // If this is a batch item, find the specific batch
                         if (cartItem.batches?.[0]?.batch_id) {
                             batch = (storeItem.batches as storeItemBatch[] | undefined)?.find(b => b.id === cartItem.batches?.[0]?.batch_id);
@@ -310,14 +320,27 @@ function POSPage() {
                         // Ensure quantity stays between 1 and available quantity considering other variants/batches
                         newQty = Math.max(1, Math.min(newQty, availableQty - othersQty));
 
+                        // Update final cost based on pricing mode
+                        let finalCost = ci.final_cost;
+                        if (ci.variants?.[0]?.units) {
+                            // For unit pricing, recalculate cost
+                            const unitPrice = ci.variants[0].units / ci.quantity * finalCost;
+                            finalCost = unitPrice * newQty;
+                        } else if (ci.batches?.[0]?.variants?.[0]?.units) {
+                            // For batch unit pricing, recalculate cost
+                            const unitPrice = ci.batches[0].variants[0].units / ci.quantity * finalCost;
+                            finalCost = unitPrice * newQty;
+                        }
+
                         // Update variant quantity if this is a variable product
-                        const updatedItem = { ...ci, quantity: newQty };
+                        const updatedItem = { ...ci, quantity: newQty, final_cost: finalCost };
 
                         // Update variants array if exists
                         if (ci.variants?.length) {
                             updatedItem.variants = ci.variants.map(v => ({
                                 ...v,
-                                quantity: newQty
+                                quantity: newQty,
+                                final_cost: finalCost
                             }));
                         }
 
@@ -328,7 +351,8 @@ function POSPage() {
                                 quantity: newQty,
                                 variants: b.variants?.map(v => ({
                                     ...v,
-                                    quantity: newQty
+                                    quantity: newQty,
+                                    final_cost: finalCost
                                 }))
                             }));
                         }

@@ -121,11 +121,12 @@ interface CartItem {
   variantId?: number;
   itemId?: number;
   name: string;
-  featured_image?: string;
+  featured_image?: string | null;
   quantity: number;
   final_cost: number;
   product_type?: 'simple_product' | 'variable_product';
   unit_of_measure?: 'unit' | 'pieces';
+  isMaxQuantity?: boolean;
   variants?: {
     variant_id: number;
     quantity: number;
@@ -329,6 +330,7 @@ interface ItemBatch {
     name: string;
     // Add other item properties as needed
   };
+  variants?: variations[];
 }
 
 interface ItemBatchResponse {

@@ -30,15 +30,13 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
         <>
             <div className="cart-items-list">
                 {cart.map(item => {
-                    const storeItem = items.find(si => si.id === item.itemId);
-                    const imageUrl = storeItem?.featured_image;
+                    const imageUrl = item.featured_image;
 
                     return (
                         <div key={item.id} className="cart-item-row">
                             <div className="item-image-container" onClick={() => {
-                                const storeItem = items.find(si => si.id === item.itemId);
-                                if (storeItem?.featured_image) {
-                                    setPopupImage(storeItem.featured_image);
+                                if (imageUrl) {
+                                    setPopupImage(imageUrl);
                                 }
                             }}>
                                 {imageUrl ? (

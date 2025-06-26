@@ -120,7 +120,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
                     <div style={{ fontSize: 13, color: '#384B70', marginBottom: 2 }}>
                       {isVariable
                         ? (priceRange ? `₹${priceRange.min} - ₹${priceRange.max}` : 'No variants')
-                        : isStoreItemBatch(batch) ? `₹${batch.cost_price}` : ''}
+                        : isStoreItemBatch(batch) ? `₹${batch.sale_price}` : ''}
                     </div>
                     {isStoreItemBatch(batch) && (
                       <div style={{ fontSize: 12, color: '#888', marginBottom: 2 }}>
@@ -161,7 +161,7 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
               />
               <div>
                 <div style={{ fontWeight: 'bold' }}>Regular Price</div>
-                <div>₹{batch.cost_price} per item</div>
+                <div>₹{batch.sale_price} per item</div>
               </div>
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -389,9 +389,9 @@ const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilt
               priceDisplay = 'No batches available';
             } else if (batchToShow) {
               if (isStoreItemBatch(batchToShow) && batchToShow.product_type === 'simple_product') {
-                priceDisplay = `₹${batchToShow.cost_price}`;
+                priceDisplay = `₹${batchToShow.sale_price}`;
                 if (batchToShow.unit_of_measure === 'unit' && batchToShow.price_per_unit) {
-                  priceDisplay += ` (or ₹${batchToShow.price_per_unit}/unit)`;
+                  priceDisplay += ` (₹${batchToShow.price_per_unit}/unit)`;
                 }
               } else if (isStoreItemBatch(batchToShow) && batchToShow.product_type === 'variable_product') {
                 const priceRange = getBatchPriceRange(batchToShow);

@@ -104,18 +104,47 @@ interface CartItemVariant {
   units: number | null;
 }
 
+interface cartBaseItem {
+  item_id: number;
+  quantity: number;
+  final_cost: number | null;
+  product_type?: "simple_product" | "variable_product";
+  unit_of_measure?: "unit" | "pieces";
+  batch_id?: number | null;
+  variant_id?: number;
+  units?: number | null;
+}
+
+
 interface CartItem {
   id: string | number;
   variantId?: number;
   itemId?: number;
   name: string;
-  featured_image?: string;
+  featured_image?: string | null;
   quantity: number;
   final_cost: number;
   product_type?: 'simple_product' | 'variable_product';
   unit_of_measure?: 'unit' | 'pieces';
-  variants?: CartItemVariant[];
+  isMaxQuantity?: boolean;
+  variants?: {
+    variant_id: number;
+    quantity: number;
+    final_cost: number | null;
+    units: number | null;
+  }[];
+  batches?: {
+    batch_id: number;
+    quantity: number;
+    variants?: {
+      variant_id: number;
+      quantity: number;
+      final_cost: number | null;
+      units: number | null;
+    }[];
+  }[];
 }
+
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';
 
@@ -301,6 +330,7 @@ interface ItemBatch {
     name: string;
     // Add other item properties as needed
   };
+  variants?: variations[];
 }
 
 interface ItemBatchResponse {

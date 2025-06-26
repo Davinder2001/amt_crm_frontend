@@ -131,6 +131,7 @@ interface createPackagePlan {
 }
 
 interface PackagePlan {
+    category_id: number;
     id?: number;
     name: string;
     monthly_price: number;
@@ -157,4 +158,18 @@ interface BusinessCategory {
     description: string | null;
     created_at: string;
     updated_at: string;
+}
+
+
+// Upgrade payload sent to backend
+interface UpgradePackagePayload {
+    companyId: number;
+    package_id: number;
+    success: boolean;
+    redirect_url?: string;
+    merchantOrderId?: string;
+    message?: string;
+    transactionDetails?: TransactionDetails;
+    package_type: 'monthly' | 'annual';
+    
 }

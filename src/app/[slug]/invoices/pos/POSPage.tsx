@@ -9,6 +9,7 @@ import { FaTimes } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
 import LoadingState from '@/components/common/LoadingState';
+import { toast } from 'react-toastify';
 
 function POSPage() {
     const { data: categories, isError } = useFetchCategoriesAndItemsQuery() as { data: Category[] | undefined, isError: boolean };
@@ -116,25 +117,60 @@ function POSPage() {
         ? getItemsFromCategory(selectedChildCatId)
         : getItemsFromCategory(selectedTopCatId)).filter(item => item.batches && item.batches.length > 0);
 
-    const handleAddToCart = (item: StoreItem, variant?: variations, useUnitPrice?: boolean, unitQuantity?: number | null) => {
-        const id = variant ? `${item.id}-${variant.id}` : item.id;
-        const finalCost = variant?.final_cost ?? item.final_cost;
-        const name = item.name + (variant
-            ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})`
-            : '');
+
+    // Updated handleAddToCart function
+    const handleAddToCart = (
+        item: StoreItem,
+        variant?: variations,
+        useUnitPrice?: boolean,
+        unitQuantity?: number | null,
+        batch?: storeItemBatch
+    ) => {
+        // Generate unique ID for the cart item
+        const id = variant ? `${item.id}-${variant.id}` : batch ? `${item.id}-${batch.id}` : item.id;
+
+        // Calculate final cost
+        let finalCost: number;
+        if (variant) {
+            finalCost = useUnitPrice && variant.variant_price_per_unit && unitQuantity
+                ? variant.variant_price_per_unit * unitQuantity
+                : variant.variant_sale_price || 0;
+        } else if (batch) {
+            finalCost = useUnitPrice && batch.price_per_unit && unitQuantity
+                ? batch.price_per_unit * unitQuantity
+                : batch.sale_price || 0;
+        } else {
+            finalCost = item.sale_price || 0;
+        }
+
+        // Build display name
+        const name = item.name +
+            (variant ? ` (${variant.attributes.map(attr => `${attr.attribute}: ${attr.value}`).join(', ')})` : '') +
+            (batch ? ` (Batch: ${batch.batch_number || batch.id})` : '');
 
         setCart(prev => {
             const existing = prev.find(ci => ci.id.toString() === id.toString());
-            const availableQty = item.quantity_count;
+            const availableQty = batch?.quantity || item.quantity_count;
 
-            // Calculate total quantity of all variants of this item already in cart
-            const totalVariantsInCart = prev
-                .filter(ci => ci.itemId === item.id)
+            // Calculate total quantity of this item/variant/batch already in cart
+            const totalInCart = prev
+                .filter(ci => {
+                    // Same item
+                    if (ci.itemId !== item.id) return false;
+
+                    // If batch is specified, match batch
+                    if (batch && (!ci.batches || !ci.batches.some(b => b.batch_id === batch.id))) return false;
+
+                    // If variant is specified, match variant
+                    if (variant && (!ci.variants || !ci.variants.some(v => v.variant_id === variant.id))) return false;
+
+                    return true;
+                })
                 .reduce((sum, ci) => sum + ci.quantity, 0);
 
             if (existing) {
-                // Only increase if we have stock available across all variants
-                if (totalVariantsInCart < availableQty) {
+                // Only increase if we have stock available
+                if (totalInCart < availableQty) {
                     return prev.map(ci =>
                         ci.id.toString() === id.toString()
                             ? {
@@ -143,16 +179,28 @@ function POSPage() {
                                 variants: ci.variants?.map(v => ({
                                     ...v,
                                     quantity: v.quantity + 1,
-                                    units: useUnitPrice ? (typeof unitQuantity === 'number' ? unitQuantity : null) : null
+                                    final_cost: finalCost,
+                                    units: useUnitPrice ? unitQuantity || null : null
+                                })),
+                                batches: ci.batches?.map(b => ({
+                                    ...b,
+                                    quantity: b.quantity + 1,
+                                    variants: b.variants?.map(v => ({
+                                        ...v,
+                                        quantity: v.quantity + 1,
+                                        final_cost: finalCost,
+                                        units: useUnitPrice ? unitQuantity || null : null
+                                    }))
                                 }))
                             }
                             : ci
                     );
                 }
-                return prev; // Don't change if we can't increase
+                toast.error(`Maximum quantity reached for ${name}`);
+                return prev;
             } else {
-                // Only add if we have at least 1 in stock across all variants
-                if (totalVariantsInCart < availableQty) {
+                // Only add if we have stock available
+                if (totalInCart < availableQty) {
                     const newItem: CartItem = {
                         id,
                         itemId: item.id,
@@ -161,29 +209,33 @@ function POSPage() {
                         quantity: 1,
                         final_cost: finalCost,
                         product_type: item.product_type,
-                        unit_of_measure: item.unit_of_measure
-                    };
-
-                    if (variant && item.product_type === 'variable_product') {
-                        newItem.variants = [{
-                            variant_id: variant.id!,
+                        unit_of_measure: item.unit_of_measure,
+                        variants: variant && typeof variant.id === 'number' ? [{
+                            variant_id: variant.id,
                             quantity: 1,
-                            final_cost: useUnitPrice
-                                ? (variant.variant_price_per_unit !== undefined
-                                    ? Number(variant.variant_price_per_unit) * (unitQuantity || 1)
-                                    : null)
-                                : (variant.final_cost !== undefined ? variant.final_cost : null),
-                            units: useUnitPrice ? (typeof unitQuantity === 'number' ? unitQuantity : null) : null
-                        }];
-                    }
-
+                            final_cost: finalCost,
+                            units: useUnitPrice ? unitQuantity || null : null
+                        }] : undefined,
+                        batches: batch ? [{
+                            batch_id: batch.id,
+                            quantity: 1,
+                            variants: (variant && typeof variant.id === 'number') ? [{
+                                variant_id: variant.id,
+                                quantity: 1,
+                                final_cost: finalCost,
+                                units: useUnitPrice ? unitQuantity || null : null
+                            }] : undefined
+                        }] : undefined
+                    };
                     return [...prev, newItem];
                 }
-                return prev; // Don't add if out of stock
+                toast.error(`Not enough stock available for ${name}`);
+                return prev;
             }
         });
     };
 
+    // Updated handleQtyChange function
     const handleQtyChange = (itemId: string | number, delta: number | string) => {
         setCart(prev => {
             return prev
@@ -196,15 +248,57 @@ function POSPage() {
                         const storeItem = displayItems.find(item => item.id === cartItem.itemId);
                         if (!storeItem) return ci;
 
-                        const availableQty = storeItem.quantity_count;
+                        // Determine available quantity based on product type and batch
+                        let availableQty = storeItem.quantity_count;
+                        let batch: storeItemBatch | undefined;
+                        
+                        // If this is a batch item, find the specific batch
+                        if (cartItem.batches?.[0]?.batch_id) {
+                            batch = (storeItem.batches as storeItemBatch[] | undefined)?.find(b => b.id === cartItem.batches?.[0]?.batch_id);
+                            if (batch) {
+                                availableQty = batch.quantity;
+                            }
+                        }
+                        // For variable products with variants
+                        if (cartItem.product_type === 'variable_product' && cartItem.variants?.[0]?.variant_id) {
+                            const variant = storeItem.variants?.find(v => v.id === cartItem.variants?.[0]?.variant_id);
+                            if (variant) {
+                                availableQty = variant.variant_stock || availableQty;
+                            }
+                        }
 
-                        // Calculate total quantity of all variants of this item already in cart
-                        const totalVariantsInCart = prev
-                            .filter(item => item.itemId === cartItem.itemId)
+                        // For batch items with variants
+                        if (cartItem.batches?.[0]?.variants?.[0]?.variant_id) {
+                            const batchVariant = batch?.variants?.find(
+                                v => v.id === cartItem.batches?.[0]?.variants?.[0]?.variant_id
+                            );
+                            if (batchVariant) {
+                                availableQty = batchVariant.variant_stock || availableQty;
+                            }
+                        }
+
+                        // Calculate total quantity of all variants/batches of this item already in cart
+                        const totalInCart = prev
+                            .filter(item => {
+                                // Same item
+                                if (item.itemId !== cartItem.itemId) return false;
+
+                                // If batch is specified, match batch
+                                if (cartItem.batches?.[0]?.batch_id) {
+                                    return item.batches?.[0]?.batch_id === cartItem.batches[0].batch_id;
+                                }
+
+                                // If variant is specified, match variant
+                                if (cartItem.variants?.[0]?.variant_id) {
+                                    return item.variants?.[0]?.variant_id === cartItem.variants[0].variant_id;
+                                }
+
+                                return true;
+                            })
                             .reduce((sum, item) => sum + item.quantity, 0);
 
                         // Calculate current item's quantity without this one's delta
-                        const othersQty = totalVariantsInCart - ci.quantity;
+                        const othersQty = totalInCart - ci.quantity;
 
                         let newQty = ci.quantity;
                         if (typeof delta === 'number') {
@@ -213,15 +307,29 @@ function POSPage() {
                             newQty = Number(delta);
                         }
 
-                        // Ensure quantity stays between 1 and available quantity considering other variants
+                        // Ensure quantity stays between 1 and available quantity considering other variants/batches
                         newQty = Math.max(1, Math.min(newQty, availableQty - othersQty));
 
                         // Update variant quantity if this is a variable product
                         const updatedItem = { ...ci, quantity: newQty };
-                        if (ci.product_type === 'variable_product' && ci.variants?.length) {
+
+                        // Update variants array if exists
+                        if (ci.variants?.length) {
                             updatedItem.variants = ci.variants.map(v => ({
                                 ...v,
                                 quantity: newQty
+                            }));
+                        }
+
+                        // Update batches array if exists
+                        if (ci.batches?.length) {
+                            updatedItem.batches = ci.batches.map(b => ({
+                                ...b,
+                                quantity: newQty,
+                                variants: b.variants?.map(v => ({
+                                    ...v,
+                                    quantity: newQty
+                                }))
                             }));
                         }
 
@@ -232,7 +340,6 @@ function POSPage() {
                 .filter(ci => ci.quantity > 0);
         });
     };
-
 
     const handleRemoveItem = (itemId: string | number) => {
         setCart(prev => prev.filter(item => item.id.toString() !== itemId.toString()));

@@ -140,15 +140,14 @@ export default function CartTabContent({
 
     const validateFields = (): boolean => {
         if (cart.length === 0) {
-            setActiveInnerTab('Client');
-            toast.error('Please fill in required client details.');
-
+            setActiveInnerTab('Items');
+            toast.error('Cart is empty. Please add at least one item.');
             return false;
         }
 
         if (!number || !clientName) {
-            setActiveInnerTab('Items');
-            toast.error('Cart is empty. Please add at least one item.');
+            setActiveInnerTab('Client');
+            toast.error('Please fill in required client details.');
             return false;
         }
 

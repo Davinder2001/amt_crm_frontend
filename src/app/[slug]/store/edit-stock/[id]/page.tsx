@@ -158,8 +158,7 @@ const EditBatch = () => {
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
-      'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type', 'invoice_number'
+      'cost_price', 'units_in_peace', 'price_per_unit', 'invoice_number'
     ];
 
     for (const field of batchFields) {
@@ -183,14 +182,14 @@ const EditBatch = () => {
     const formdata = new FormData();
     formdata.append('_method', 'PUT');
     formdata.append('item_id', formData.id.toString());
+    formdata.append('tax_type', formData.tax_type?.toString() ?? '');
 
     // Primitive fields to track changes and append
     const batchFields: (keyof StoreItemBatchRequest)[] = [
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
-      'cost_price', 'units_in_peace', 'price_per_unit',
-      'tax_type', 'invoice_number'
+      'cost_price', 'units_in_peace', 'price_per_unit', 'invoice_number'
     ];
 
     batchFields.forEach((field) => {

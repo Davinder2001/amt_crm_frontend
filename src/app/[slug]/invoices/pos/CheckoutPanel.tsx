@@ -65,25 +65,37 @@ export default function CheckoutPanel({
     const cartItemCount = cart.length;
 
     const buildPayload = (): CreateInvoicePayload => {
-        const itemsPayload = cart.map(item => {
-            const baseItem = {
-                item_id: typeof item.itemId === 'string' ? parseInt(item.itemId, 10) : item.itemId!,
+        const invoiceItems = cart.map((item) => {
+            // Ensure item_id is always a number and never undefined
+            const parsedItemId = typeof item.itemId === 'string' ? parseInt(item.itemId, 10) : item.itemId;
+            if (typeof parsedItemId !== 'number' || isNaN(parsedItemId)) {
+                throw new Error('Invalid item_id in cart item');
+            }
+
+            // Base item properties that apply to all product types
+            const baseItem: cartBaseItem = {
+                item_id: parsedItemId,
                 quantity: item.quantity,
-                final_cost: item.final_cost,
+                final_cost: item.final_cost ?? null,
                 product_type: item.product_type,
                 unit_of_measure: item.unit_of_measure
             };
 
-            if (item.product_type === 'variable_product' && item.variants && item.variants.length > 0) {
-                return {
-                    ...baseItem,
-                    variants: item.variants.map(variant => ({
-                        variant_id: variant.variant_id,
-                        quantity: variant.quantity,
-                        final_cost: variant.final_cost,
-                        units: variant.units || null
-                    }))
-                };
+            // Include batch_id if the item has batches
+            if (item.batches?.[0]?.batch_id) {
+                baseItem.batch_id = item.batches[0].batch_id;
+            }
+
+            // Handle variable products with variants
+            if (item.variants?.[0]?.variant_id) {
+                baseItem.variant_id = item.variants[0].variant_id;
+                baseItem.units = item.variants[0].units || null;
+            }
+
+            // Handle batch items with variants
+            if (item.batches?.[0]?.variants?.[0]?.variant_id) {
+                baseItem.variant_id = item.batches[0].variants[0].variant_id;
+                baseItem.units = item.batches[0].variants[0].units || null;
             }
 
             return baseItem;
@@ -109,23 +121,28 @@ export default function CheckoutPanel({
             address: address,
             pincode: pincode,
             delivery_charge: deliveryCharge,
-            invoice_items: itemsPayload
+            invoice_items: invoiceItems
         };
     };
 
     // Flatten and append all fields
-    function appendToFormData(formData: FormData, data: CreateInvoicePayload, prefix = '') {
+    function appendToFormData(formData: FormData, data: CreateInvoicePayload) {
+        // Append regular fields
         for (const [key, value] of Object.entries(data)) {
-            if (value !== undefined && value !== null) {
-                const formKey = prefix ? `${prefix}.${key}` : key;
-
-                if (typeof value === 'object' && !(value instanceof File)) {
-                    // Recursively handle nested objects
-                    appendToFormData(formData, value, formKey);
-                } else {
-                    formData.append(formKey, value);
-                }
+            if (key !== 'invoice_items' && value !== undefined && value !== null) {
+                formData.append(key, value.toString());
             }
+        }
+
+        // Handle invoice_items array specially
+        if (data.invoice_items && data.invoice_items.length > 0) {
+            data.invoice_items.forEach((item, index) => {
+                for (const [itemKey, itemValue] of Object.entries(item)) {
+                    if (itemValue !== undefined && itemValue !== null) {
+                        formData.append(`invoice_items[${index}][${itemKey}]`, itemValue.toString());
+                    }
+                }
+            });
         }
     }
 

@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
 
     if (userType === 'super-admin') {
       // ✅ Redirect super-admin if they hit "/", "/login", or any non-/superadmin route
-      if (!isSuperAdminPath || pathname === '/login' || pathname === '/') {
+      if (!isSuperAdminPath || pathname === '/login' || pathname === '/' || pathname === '/superadmin') {
         return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
       return NextResponse.next();

@@ -1,14 +1,106 @@
 @use '../variables' as *;
-.Sdash-container{
-    padding: 20px;
-    background-color: $white;
+
+.Sdash-container {
+  padding: 12px;
+  background: $white;
+  border-radius: $border-radius;
+  
+  .overview-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  
+  .s-card {
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
     border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    border: none;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, $primary-color, $primary-light);
+    }
+    
+    .card-bg-pattern {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba($primary-light, 0.1) 0%, rgba($primary-light, 0) 70%);
+    }
+    
+    .card-content { display: flex; flex-direction: column; }
+    
+    .icon-shell {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      background: rgba($primary-color, 0.1);
+      .card-icon { font-size: 16px; color: $primary-color; }
+    }
+    
     .card-title {
-        font-size: 18px;
+      font-size: 13px;
+      font-weight: $font-weight-medium;
+      color: $gray-color;
+      margin-bottom: 2px;
     }
-    p{
-        color: coral;
-        font-size: 26px;
-        
+    
+    .card-value {
+      font-size: 24px;
+      font-weight: $font-weight-bold;
+      color: $primary-color;
+      margin: 6px 0;
     }
+    
+    .progress-tag {
+      .trend {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 8px;
+        &.up { background: rgba($success-color, 0.1); color: $success-color; }
+        &.down { background: rgba($danger-color, 0.1); color: $danger-color; }
+      }
+    }
+    
+    &.admin-card { .icon-shell, .card-icon, .card-value { background: rgba(#4299e1, 0.1); color: #4299e1; } }
+    &.company-card { .icon-shell, .card-icon, .card-value { background: rgba(#48bb78, 0.1); color: #48bb78; } }
+    &.verified-card { .icon-shell, .card-icon, .card-value { background: rgba(#9f7aea, 0.1); color: #9f7aea; } }
+    &.pending-card { .icon-shell, .card-icon, .card-value { background: rgba(#ed8936, 0.1); color: #ed8936; } }
+  }
+  
+  .shimmer {
+    background: $light-bg;
+    position: relative;
+    overflow: hidden;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba($white, 0), rgba($white, 0.8), rgba($white, 0));
+      animation: shimmer 1.5s infinite;
+    }
+    .shimmer-content { height: 90px; }
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 }

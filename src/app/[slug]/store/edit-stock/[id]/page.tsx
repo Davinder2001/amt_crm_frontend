@@ -189,8 +189,12 @@ const EditBatch = () => {
       'quantity_count', 'purchase_date',
       'date_of_manufacture', 'date_of_expiry',
       'replacement', 'vendor_id', 'availability_stock',
-      'cost_price', 'units_in_peace', 'price_per_unit', 'invoice_number'
+      'cost_price', 'invoice_number'
     ];
+
+    if (formData.unit_of_measure === 'unit') {
+      batchFields.push('units_in_peace', 'price_per_unit');
+    }
 
     batchFields.forEach((field) => {
       const value = formData[field];

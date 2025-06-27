@@ -142,6 +142,7 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
   const renderSimpleUnitModal = () => {
     if (!simpleUnitModal) return null;
     const { item, batch } = simpleUnitModal;
+    const showUnitOption = batch.unit_of_measure === 'unit' && batch.price_per_unit;
 
     return (
       <Modal
@@ -164,20 +165,22 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                 <div>₹{batch.sale_price} per item</div>
               </div>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input
-                type="radio"
-                name="priceOption"
-                checked={useUnitPrice}
-                onChange={() => setUseUnitPrice(true)}
-              />
-              <div>
-                <div style={{ fontWeight: 'bold' }}>Unit Price</div>
-                <div>₹{batch.price_per_unit} per unit</div>
-              </div>
-            </label>
+            {showUnitOption && (
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="radio"
+                  name="priceOption"
+                  checked={useUnitPrice}
+                  onChange={() => setUseUnitPrice(true)}
+                />
+                <div>
+                  <div style={{ fontWeight: 'bold' }}>Unit Price</div>
+                  <div>₹{batch.price_per_unit} per unit</div>
+                </div>
+              </label>
+            )}
           </div>
-          
+
           <button
             onClick={() => {
               onAddToCart(item, undefined, useUnitPrice, useUnitPrice ? unitQuantity : undefined, batch);
@@ -199,7 +202,12 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
   const renderBatchVariantModal = () => {
     if (!batchVariantModal) return null;
     const { item, batch } = batchVariantModal;
-    const supportsUnit = selectedVariant && selectedVariant.variant_price_per_unit !== undefined && selectedVariant.variant_price_per_unit !== null;
+    const supportsRegularPrice = selectedVariant && selectedVariant.variant_sale_price !== undefined;
+
+    const supportsUnitPrice = selectedVariant &&
+      selectedVariant.variant_price_per_unit !== undefined &&
+      selectedVariant.variant_price_per_unit !== null &&
+      batch.unit_of_measure === 'unit';
 
     return (
       <Modal
@@ -234,9 +242,9 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                 <div className="variant-price">
                   ₹{selectedVariant.variant_sale_price}
                 </div>
-                {supportsUnit && (
-                  <div style={{ marginTop: '16px' }}>
-                    <div className="price-options" style={{ marginBottom: '8px' }}>
+                <div style={{ marginTop: '16px' }}>
+                  <div className="price-options" style={{ marginBottom: '8px' }}>
+                    {supportsRegularPrice && (
                       <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <input
                           type="radio"
@@ -249,6 +257,8 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                           <div>₹{selectedVariant.variant_sale_price} per item</div>
                         </div>
                       </label>
+                    )}
+                    {supportsUnitPrice && (
                       <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <input
                           type="radio"
@@ -261,9 +271,11 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                           <div>₹{selectedVariant.variant_price_per_unit} per unit</div>
                         </div>
                       </label>
-                    </div>
+                    )}
+
                   </div>
-                )}
+                </div>
+
               </>
             ) : (
               <div className="variant-name">Select a variant</div>
@@ -385,14 +397,14 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                   // If there's only one batch, handle it directly
                   if (item.batches && item.batches.length === 1) {
                     const singleBatch = item.batches[0];
-                    
+
                     if (isStoreItemBatch(singleBatch)) {
                       if (singleBatch.product_type === 'simple_product') {
+                        // Only open simple unit modal if unit_of_measure is 'unit' and has price_per_unit
                         if (singleBatch.unit_of_measure === 'unit' && singleBatch.price_per_unit) {
-                          // Open simple unit modal directly
                           setSimpleUnitModal({ item, batch: singleBatch });
                         } else {
-                          // Add directly to cart (no unit pricing)
+                          // For 'pieces' or other unit_of_measure values, add directly to cart
                           onAddToCart(item, undefined, false, undefined, singleBatch);
                         }
                       } else if (singleBatch.product_type === 'variable_product') {

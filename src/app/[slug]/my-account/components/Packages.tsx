@@ -131,10 +131,10 @@ const Packages: React.FC<PackagesProps> = ({
                                             : '3 Years'}
                                 </h3>
                                 <ul className="features">
-                                    <li>✓ {plan.employee_numbers} Employees</li>
+                                    {/* <li>✓ {plan.employee_numbers} Employees</li>
                                     <li>✓ {plan.items_number} Items</li>
                                     <li>✓ {plan.daily_tasks_number} Tasks/day</li>
-                                    <li>✓ {plan.invoices_number} Invoices</li>
+                                    <li>✓ {plan.invoices_number} Invoices</li> */}
                                 </ul>
 
                                 <div className="pricing-buttons">

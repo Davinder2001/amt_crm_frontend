@@ -21,7 +21,7 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
     }),
 
     // POST: Create a new package
-    createPackage: builder.mutation<createPackagePlan, FormData>({
+    createPackage: builder.mutation<{ success?: boolean, message?: string, error?: string }, FormData>({
       query: (formdata) => ({
         url: "pricing-packages",
         method: "POST",
@@ -32,11 +32,11 @@ const packagesApi = companyCreateApiSlice.injectEndpoints({
     }),
 
     // PUT: Update an existing package
-    updatePackage: builder.mutation<PackagePlan, { id: number; data: PackagePlan }>({
-      query: ({ id, data }) => ({
+    updatePackage: builder.mutation<{ success?: boolean, message?: string, error?: string }, { id: number; fomdata: PackagePlan }>({
+      query: ({ id, fomdata }) => ({
         url: `pricing-packages/${id}`,
         method: "PUT",
-        body: data,
+        body: fomdata,
         credentials: "include",
       }),
       invalidatesTags: ["Package"],

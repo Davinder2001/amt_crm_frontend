@@ -119,45 +119,35 @@ interface SelectedCompanyResponse {
     selected_company: Profile;
 }
 
-interface createPackagePlan {
+
+interface BusinessCategory {
+    id: number;
     name: string;
-    price: number;
+    created_at: string;
+    updated_at: string;
+}
+
+interface PlanLimits {
     employee_numbers: number;
     items_number: number;
     daily_tasks_number: number;
     invoices_number: number;
-    business_categories: { id: number; name: string }[];
-    package_type: 'monthly' | 'yearly';
 }
 
 interface PackagePlan {
-    category_id: number;
     id?: number;
     name: string;
     monthly_price: number;
     annual_price: number;
     three_years_price: number;
-    employee_numbers: number;
-    items_number: number;
-    daily_tasks_number: number;
-    invoices_number: number;
-    business_categories: {
-        updated_at: string;
-        created_at: string;
-        description: string; id: number, name: string
-    }[];
+    monthly_limits: PlanLimits;
+    annual_limits: PlanLimits;
+    three_years_limits: PlanLimits;
+    business_categories: BusinessCategory[];
 }
 
 interface PackagePlanResponse {
     data: PackagePlan[];
-}
-
-interface BusinessCategory {
-    id: number;
-    name: string;
-    description: string | null;
-    created_at: string;
-    updated_at: string;
 }
 
 
@@ -171,5 +161,5 @@ interface UpgradePackagePayload {
     message?: string;
     transactionDetails?: TransactionDetails;
     package_type: 'monthly' | 'annual';
-    
+
 }

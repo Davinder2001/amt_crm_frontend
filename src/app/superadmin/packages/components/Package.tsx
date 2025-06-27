@@ -8,17 +8,16 @@ import {
     FiBox,
     FiCheckCircle,
     FiFileText,
-    FiTag
 } from 'react-icons/fi';
-import { FaArrowLeft, FaRupeeSign } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import {
     useCreatePackageMutation,
     useFetchSinglePackageQuery,
     useUpdatePackageMutation
 } from '@/slices/superadminSlices/packages/packagesApi';
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useRouter } from 'next/navigation';
+import { useClickOutside } from '@/components/common/useClickOutside';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -26,22 +25,29 @@ interface PackageProps {
 }
 
 const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
-    const [formData, setFormData] = useState<PackagePlan>({
-        name: '',
+    const initialLimits = React.useMemo<PlanLimits>(() => ({
         employee_numbers: 0,
         items_number: 0,
         daily_tasks_number: 0,
         invoices_number: 0,
+    }), []);
+
+    const [formData, setFormData] = useState<PackagePlan>({
+        name: '',
         monthly_price: 0,
         annual_price: 0,
         three_years_price: 0,
+        monthly_limits: { ...initialLimits },
+        annual_limits: { ...initialLimits },
+        three_years_limits: { ...initialLimits },
         business_categories: [],
-        category_id: 0,
     });
+
     const router = useRouter();
     const dropdownRef = useRef<HTMLDivElement>(null);
+    useClickOutside(dropdownRef, () => setShowDropdown(false));
+
     const [showDropdown, setShowDropdown] = useState(false);
-    const { setTitle } = useBreadcrumb();
 
     const { data: categories } = useGetBusinessCategoriesQuery();
     const [createPackage] = useCreatePackageMutation();
@@ -56,35 +62,57 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
             setFormData({
                 ...packageData,
                 business_categories: packageData.business_categories || [],
-                annual_price: packageData.annual_price || 0,
-                monthly_price: packageData.monthly_price || 0,
+                monthly_limits: packageData.monthly_limits || { ...initialLimits },
+                annual_limits: packageData.annual_limits || { ...initialLimits },
+                three_years_limits: packageData.three_years_limits || { ...initialLimits },
             });
         }
-    }, [packageData, mode]);
+    }, [packageData, mode, initialLimits]);
 
-    useEffect(() => {
-        setTitle(mode === 'edit' ? 'Edit Package' : 'Create New Package');
-    }, [mode, setTitle]);
+    const clearCardData = (planType: 'monthly' | 'annual' | 'three_years') => {
+        setFormData(prev => {
+            // Create a new limits object with all values set to 0
+            const clearedLimits = Object.fromEntries(
+                Object.keys(initialLimits).map(key => [key, 0])
+            ) as unknown as PlanLimits;
+
+            return {
+                ...prev,
+                [`${planType}_price`]: 0,
+                [`${planType}_limits`]: clearedLimits,
+            };
+        });
+    };
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
 
-        const numberFields = [
-            'employee_numbers',
-            'items_number',
-            'daily_tasks_number',
-            'invoices_number',
-            'monthly_price',
-            'annual_price'
-        ];
-
-        if (numberFields.includes(name)) {
+        if (name === 'monthly_price' || name === 'annual_price' || name === 'three_years_price') {
             const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
             setFormData(prev => ({
                 ...prev,
                 [name]: digitsOnly ? Number(digitsOnly) : 0,
+            }));
+            return;
+        }
+
+        const limitFieldPrefixes = ['monthly_limits.', 'annual_limits.', 'three_years_limits.'];
+        const isLimitField = limitFieldPrefixes.some(prefix => name.startsWith(prefix));
+
+        if (isLimitField) {
+            const [limitType, fieldName] = name.split('.');
+            const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
+
+            setFormData(prev => ({
+                ...prev,
+                [limitType]: {
+                    ...((typeof prev[limitType as keyof PackagePlan] === 'object' && prev[limitType as keyof PackagePlan] !== null)
+                        ? (prev[limitType as keyof PackagePlan] as object)
+                        : {}),
+                    [fieldName]: digitsOnly ? Number(digitsOnly) : 0,
+                },
             }));
         } else {
             setFormData(prev => ({
@@ -103,29 +131,13 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     ...prev.business_categories,
                     {
                         ...category,
-                        description: category.description ?? '',
                     },
                 ];
-            // Ensure all descriptions are strings
             const normalizedCategories = updatedCategories.map(c => ({
                 ...c,
-                description: c.description ?? '',
             }));
             return { ...prev, business_categories: normalizedCategories };
         });
-    };
-
-    const isFormValid = () => {
-        return (
-            formData.name.trim() !== '' &&
-            formData.monthly_price > 0 &&
-            formData.annual_price > 0 &&
-            formData.employee_numbers >= 0 &&
-            formData.items_number >= 0 &&
-            formData.daily_tasks_number >= 0 &&
-            formData.invoices_number >= 0 &&
-            formData.business_categories.length > 0
-        );
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -137,6 +149,10 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 (value as BusinessCategory[]).forEach(category => {
                     formDataToSubmit.append('business_category_ids[]', category.id.toString());
                 });
+            } else if (typeof value === 'object' && value !== null) {
+                Object.entries(value).forEach(([subKey, subValue]) => {
+                    formDataToSubmit.append(`${key}[${subKey}]`, String(subValue));
+                });
             } else if (value !== null && value !== undefined) {
                 formDataToSubmit.append(key, value.toString());
             } else {
@@ -144,13 +160,12 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
             }
         });
 
-
         try {
             if (mode === 'edit' && packageId) {
                 const { business_categories, ...rest } = formData;
                 await updatePackage({
                     id: packageId,
-                    data: {
+                    fomdata: {
                         ...rest,
                         business_category_ids: business_categories.map(c => c.id),
                     } as unknown as PackagePlan
@@ -162,15 +177,13 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 if (mode === 'add') {
                     setFormData({
                         name: '',
-                        employee_numbers: 0,
-                        items_number: 0,
-                        daily_tasks_number: 0,
-                        invoices_number: 0,
                         monthly_price: 0,
                         annual_price: 0,
                         three_years_price: 0,
+                        monthly_limits: { ...initialLimits },
+                        annual_limits: { ...initialLimits },
+                        three_years_limits: { ...initialLimits },
                         business_categories: [],
-                        category_id: 0,
                     });
                 }
             }
@@ -188,12 +201,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 <FaArrowLeft size={16} color="#fff" />
             </button>
             <div className="add-packages-conatiner">
-                <div className="header">
-                    <h2>{mode === 'edit' ? 'Edit Package' : 'Add New Plan'}</h2>
-                    <p>{mode === 'edit'
-                        ? 'Modify existing package details'
-                        : 'Configure a new subscription package for businesses'}</p>
-                </div>
 
                 <form onSubmit={handleSubmit} className="form">
                     <div className="form-section">
@@ -212,119 +219,42 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label className="form-label">Monthly Price <span className="required">*</span></label>
-                                <div className="input-with-icon">
-                                    <FaRupeeSign className="input-icon" />
-                                    <input
-                                        type="number"
-                                        name="monthly_price"
-                                        value={formData.monthly_price || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="0"
-                                        className="form-input"
-                                        min="0"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Annual Price <span className="required">*</span></label>
-                                <div className="input-with-icon">
-                                    <FaRupeeSign className="input-icon" />
-                                    <input
-                                        type="number"
-                                        name="annual_price"
-                                        value={formData.annual_price || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="0"
-                                        className="form-input"
-                                        min="0"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">3 Years Price <span className="required">*</span></label>
-                                <div className="input-with-icon">
-                                    <FaRupeeSign className="input-icon" />
-                                    <input
-                                        type="number"
-                                        name="three_years_price"
-                                        value={formData.three_years_price || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="0"
-                                        className="form-input"
-                                        min="0"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                <label className="form-label">Applicable Categories</label>
+                                <div className="multi-select" ref={dropdownRef}>
+                                    <div className="dropdown-container">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowDropdown(!showDropdown)}
+                                            className="dropdown-toggle"
+                                        >
+                                            <span>Select categories</span>
+                                            <FiChevronDown className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
+                                        </button>
+                                        {showDropdown && (
+                                            <div className="dropdown-menu">
+                                                {categories?.map(category => (
+                                                    <div
+                                                        key={category.id}
+                                                        className="dropdown-item"
+                                                        onClick={() => toggleCategory(category)}
+                                                    >
+                                                        <div className="checkbox-container">
+                                                            {formData.business_categories.some(c => c.id === category.id) ? (
+                                                                <FiCheck className="checkbox checked" />
+                                                            ) : (
+                                                                <div className="checkbox unchecked" />
+                                                            )}
+                                                        </div>
+                                                        <span>{category.name}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
 
-                    <div className="form-section">
-                        <h2 className="section-title">Package Limits</h2>
-                        <div className="grids grid-cols-2 gap-6">
-                            <div className="form-group">
-                                <label className="form-label"><FiUsers className="icon" /> Employees</label>
-                                <input
-                                    type="number"
-                                    name="employee_numbers"
-                                    value={formData.employee_numbers || ''}
-                                    onChange={handleInputChange}
-                                    className="form-input"
-                                    min="0"
-                                    placeholder="Max employees"
-                                    required
-                                />
+                                </div>
                             </div>
-                            <div className="form-group">
-                                <label className="form-label"><FiBox className="icon" /> Inventory Items</label>
-                                <input
-                                    type="number"
-                                    name="items_number"
-                                    value={formData.items_number || ''}
-                                    onChange={handleInputChange}
-                                    className="form-input"
-                                    min="0"
-                                    placeholder="Max items allowed"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label"><FiCheckCircle className="icon" /> Daily Tasks</label>
-                                <input
-                                    type="number"
-                                    name="daily_tasks_number"
-                                    value={formData.daily_tasks_number || ''}
-                                    onChange={handleInputChange}
-                                    className="form-input"
-                                    min="0"
-                                    placeholder="Max daily tasks"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label"><FiFileText className="icon" /> Invoices</label>
-                                <input
-                                    type="number"
-                                    name="invoices_number"
-                                    value={formData.invoices_number || ''}
-                                    onChange={handleInputChange}
-                                    className="form-input"
-                                    min="0"
-                                    placeholder="Max invoices/month"
-                                    required
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="form-section">
-                        <h2 className="section-title">Business Categories</h2>
-                        <div className="form-group">
-                            <label className="form-label"><FiTag /> Applicable Categories</label>
-                            <div className="multi-select" ref={dropdownRef}>
+                            <div className='form-group bc-group-span'>
                                 <div className="selected-items">
                                     {formData.business_categories.map(category => (
                                         <span key={category.id} className="selected-item">
@@ -339,54 +269,265 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                         </span>
                                     ))}
                                 </div>
-                                <div className="dropdown-container">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowDropdown(!showDropdown)}
-                                        className="dropdown-toggle"
-                                    >
-                                        <span>Select categories</span>
-                                        <FiChevronDown className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
-                                    </button>
-                                    {showDropdown && (
-                                        <div className="dropdown-menu">
-                                            {categories?.map(category => (
-                                                <div
-                                                    key={category.id}
-                                                    className="dropdown-item"
-                                                    onClick={() => toggleCategory(category)}
-                                                >
-                                                    <div className="checkbox-container">
-                                                        {formData.business_categories.some(c => c.id === category.id) ? (
-                                                            <FiCheck className="checkbox checked" />
-                                                        ) : (
-                                                            <div className="checkbox unchecked" />
-                                                        )}
-                                                    </div>
-                                                    <span>{category.name}</span>
-                                                </div>
-                                            ))}
-                                        </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="form-section">
+                        <h2 className="section-title">Package Pricing & Limits</h2>
+                        <div className="pricing-cards-container">
+                            {/* Monthly Card */}
+                            <div className="pricing-card">
+                                <div className="card-header">
+                                    <h3>Monthly Plan</h3>
+                                    {(formData.monthly_price > 0 || Object.values(formData.monthly_limits).some(val => val > 0)) && (
+                                        <span
+                                            className="clear-card-btn"
+                                            onClick={() => clearCardData('monthly')}
+                                        >
+                                            Clear All
+                                        </span>
                                     )}
+                                </div>
+                                <div className="card-body">
+                                    <div className="price-input-group">
+                                        <label>Price (₹)</label>
+                                        <input
+                                            type="number"
+                                            name="monthly_price"
+                                            value={formData.monthly_price || ''}
+                                            onChange={handleInputChange}
+                                            placeholder="0"
+                                            min="0"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiUsers className="icon" /> Employees</label>
+                                        <input
+                                            type="number"
+                                            name="monthly_limits.employee_numbers"
+                                            value={formData.monthly_limits.employee_numbers || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max employees"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiBox className="icon" /> Inventory Items</label>
+                                        <input
+                                            type="number"
+                                            name="monthly_limits.items_number"
+                                            value={formData.monthly_limits.items_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max items"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiCheckCircle className="icon" /> Daily Tasks</label>
+                                        <input
+                                            type="number"
+                                            name="monthly_limits.daily_tasks_number"
+                                            value={formData.monthly_limits.daily_tasks_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max tasks"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiFileText className="icon" /> Invoices</label>
+                                        <input
+                                            type="number"
+                                            name="monthly_limits.invoices_number"
+                                            value={formData.monthly_limits.invoices_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max invoices"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Annual Card */}
+                            <div className="pricing-card">
+                                <div className="card-header">
+                                    <h3>Annual Plan</h3>
+                                    {(formData.annual_price > 0 || Object.values(formData.annual_limits).some(val => val > 0)) && (
+                                        <span
+                                            className="clear-card-btn"
+                                            onClick={() => clearCardData('annual')}
+                                        >
+                                            Clear All
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="card-body">
+                                    <div className="price-input-group">
+                                        <label>Price (₹)</label>
+                                        <input
+                                            type="number"
+                                            name="annual_price"
+                                            value={formData.annual_price || ''}
+                                            onChange={handleInputChange}
+                                            placeholder="0"
+                                            min="0"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiUsers className="icon" /> Employees</label>
+                                        <input
+                                            type="number"
+                                            name="annual_limits.employee_numbers"
+                                            value={formData.annual_limits.employee_numbers || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max employees"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiBox className="icon" /> Inventory Items</label>
+                                        <input
+                                            type="number"
+                                            name="annual_limits.items_number"
+                                            value={formData.annual_limits.items_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max items"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiCheckCircle className="icon" /> Daily Tasks</label>
+                                        <input
+                                            type="number"
+                                            name="annual_limits.daily_tasks_number"
+                                            value={formData.annual_limits.daily_tasks_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max tasks"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiFileText className="icon" /> Invoices</label>
+                                        <input
+                                            type="number"
+                                            name="annual_limits.invoices_number"
+                                            value={formData.annual_limits.invoices_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max invoices"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 3 Years Card */}
+                            <div className="pricing-card">
+                                <div className="card-header">
+                                    <h3>3 Years Plan</h3>
+                                    {(formData.three_years_price > 0 || Object.values(formData.three_years_limits).some(val => val > 0)) && (
+                                        <span
+                                            className="clear-card-btn"
+                                            onClick={() => clearCardData('three_years')}
+                                        >
+                                            Clear All
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="card-body">
+                                    <div className="price-input-group">
+                                        <label>Price (₹)</label>
+                                        <input
+                                            type="number"
+                                            name="three_years_price"
+                                            value={formData.three_years_price || ''}
+                                            onChange={handleInputChange}
+                                            placeholder="0"
+                                            min="0"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiUsers className="icon" /> Employees</label>
+                                        <input
+                                            type="number"
+                                            name="three_years_limits.employee_numbers"
+                                            value={formData.three_years_limits.employee_numbers || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max employees"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiBox className="icon" /> Inventory Items</label>
+                                        <input
+                                            type="number"
+                                            name="three_years_limits.items_number"
+                                            value={formData.three_years_limits.items_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max items"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiCheckCircle className="icon" /> Daily Tasks</label>
+                                        <input
+                                            type="number"
+                                            name="three_years_limits.daily_tasks_number"
+                                            value={formData.three_years_limits.daily_tasks_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max tasks"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="limit-input-group">
+                                        <label><FiFileText className="icon" /> Invoices</label>
+                                        <input
+                                            type="number"
+                                            name="three_years_limits.invoices_number"
+                                            value={formData.three_years_limits.invoices_number || ''}
+                                            onChange={handleInputChange}
+                                            min="0"
+                                            placeholder="Max invoices"
+                                            required
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="tooltip-container">
+                    <div className="package-action">
                         <button
                             type="submit"
-                            className="submit-button"
-                            disabled={!isFormValid()}
+                            className="buttons"
                         >
                             {mode === 'edit' ? 'Update Package' : 'Create Package'}
                         </button>
-                        {!isFormValid() && (
-                            <div className="hover-tooltip">
-                                Please fill all required fields
-                                <div className="tooltip-arrow"></div>
-                            </div>
-                        )}
                     </div>
                 </form>
             </div>

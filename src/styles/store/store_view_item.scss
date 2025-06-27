@@ -13,11 +13,12 @@
     align-items: center;
     margin-bottom: 2rem;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.9);
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
     backdrop-filter: blur(10px);
-    border-radius: 5px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
+
 
     .item-actions {
       display: flex;
@@ -64,11 +65,11 @@
     margin-top: 10px;
 
     .item-main {
-      background: rgba(255, 255, 255, 0.9);
+      background: $white;
       backdrop-filter: blur(10px);
       border-radius: 5px;
       padding: 10px 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: $box-shadow;
       border: 1px solid rgba(255, 255, 255, 0.2);
       margin-bottom: 2rem;
       display: flex;
@@ -181,7 +182,7 @@
               height: 100%;
               display: block;
               cursor: pointer;
-              object-fit: cover;
+              object-fit: contain;
             }
 
             .image-label {
@@ -215,7 +216,7 @@
               img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: contain;
               }
             }
           }
@@ -275,6 +276,12 @@
 
     .item-batches {
       margin-top: 2rem;
+      background: $white;
+      border-radius: $border-radius;
+      padding: 20px;
+      box-shadow: $box-shadow;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
 
       h2 {
         font-size: 1.5rem;
@@ -321,12 +328,6 @@
             right: 0;
             height: 3px;
             background: var(--primary-color);
-          }
-
-          &:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-            border-color: rgba(59, 130, 246, 0.2);
           }
 
           .batch-header {
@@ -611,6 +612,7 @@
       padding: 10px;
 
       .item-actions {
+
         .delete-btn,
         .edit-btn {
           gap: 5px;

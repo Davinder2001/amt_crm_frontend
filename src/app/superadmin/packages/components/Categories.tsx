@@ -1,179 +1,158 @@
 "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     useGetBusinessCategoriesQuery,
     useCreateBusinessCategoryMutation,
     useUpdateBusinessCategoryMutation,
     useDeleteBusinessCategoryMutation,
 } from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-
-import {
-    Box,
-    Button,
-    TextField,
-    Typography,
-    Paper,
-    IconButton,
-    CircularProgress,
-} from "@mui/material";
-import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
-import { useMediaQuery } from '@mui/material';
+import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
+import LoadingState from "@/components/common/LoadingState";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
 
 const BusinessCategories = () => {
-    const { data: categories, isLoading, isError } = useGetBusinessCategoriesQuery();
+    // API hooks
+    const {
+        data: categories = [],
+        isLoading,
+        isError
+    } = useGetBusinessCategoriesQuery();
+
     const [createCategory] = useCreateBusinessCategoryMutation();
     const [updateCategory] = useUpdateBusinessCategoryMutation();
     const [deleteCategory] = useDeleteBusinessCategoryMutation();
-    const [isUpdating, setIsUpdating] = useState(false);
-    const { setTitle } = useBreadcrumb();
 
-    const [form, setForm] = useState({ id: null as number | null, name: "" });
+    // Component state
+    const [form, setForm] = useState<{ id: number | null; name: string }>({
+        id: null,
+        name: ""
+    });
 
-    const isMobile = useMediaQuery('(max-width:483px)');
+    const [deleteState, setDeleteState] = useState<{
+        id: number | null;
+        name: string;
+        showDialog: boolean;
+    }>({
+        id: null,
+        name: "",
+        showDialog: false
+    });
 
-
-
-    // Add this state at the top of your component
-    const [showAll, setShowAll] = useState(false);
-    // Right after showAll
-    const visibleCategories = isMobile
-        ? (showAll ? categories : categories?.slice(0, 4))
-        : (showAll ? categories : categories?.slice(0, 6));
-
-
-    const handleSubmit = async () => {
-        if (form.id) {
-            setIsUpdating(true);
-            await updateCategory({ id: form.id, name: form.name });
-            setIsUpdating(false);
-        } else {
-            await createCategory({ name: form.name });
-        }
-        setForm({ id: null, name: "" });
-    };
-
-
-    const handleEdit = (category: BusinessCategory) => {
-        setForm({ id: category.id, name: category.name });
-    };
-
-    const handleCancel = () => {
-        setForm({ id: null, name: "" });
-    };
-
-    const handleDelete = async (id: number) => {
-        if (confirm("Are you sure you want to delete this category?")) {
-            await deleteCategory(id);
+    // Handlers
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            if (form.id) {
+                await updateCategory({ id: form.id, name: form.name }).unwrap();
+            } else {
+                await createCategory({ name: form.name }).unwrap();
+            }
+            setForm({ id: null, name: "" });
+        } catch (error) {
+            console.error("Failed to save category:", error);
         }
     };
-    useEffect(() => {
-        setTitle('Manage Categories');
-    }, [setTitle]);
+
+    const handleDeleteInit = (id: number, name: string) => {
+        setDeleteState({
+            id,
+            name,
+            showDialog: true
+        });
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deleteState.id) return;
+
+        try {
+            await deleteCategory(deleteState.id).unwrap();
+            setDeleteState({
+                id: null,
+                name: "",
+                showDialog: false
+            });
+        } catch (error) {
+            console.error("Failed to delete category:", error);
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteState({
+            id: null,
+            name: "",
+            showDialog: false
+        });
+    };
 
     return (
-        <Box className="business-category-page">
+        <div className="business-categories">
+            {/* Header Section */}
+            <div className="section-header">
+                <h2>Business Categories</h2>
+                <p>Manage your Package categories</p>
+            </div>
 
-            <Paper className="glass-form">
-
-                <TextField
-                    fullWidth
-                    label="Category Name"
-                    variant="outlined"
-                    size="small"
+            {/* Form Section */}
+            <form onSubmit={handleSubmit} className="category-form">
+                <input
+                    type="text"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    InputLabelProps={{
-                        sx: {
-                            color: '#009693',
-                            '&.Mui-focused': {
-                                color: '#009693',
-                            },
-                        },
-                    }}
-                    InputProps={{
-                        sx: {
-                            paddingRight: 1,
-                        },
-                    }}
-                    sx={{
-                        maxWidth: 500,
-                        width: '100%',
-                        '& .MuiOutlinedInput-root.Mui-focused': {
-                            '& fieldset': {
-                                borderColor: '#009693',
-                            },
-                        },
-                    }}
+                    placeholder="Category name"
+                    required
                 />
-
-                <Box className="form-actions">
+                <div className="form-buttons">
                     {form.id && (
-                        <Button className="cancel-btn" onClick={handleCancel}>
+                        <button
+                            type="button"
+                            onClick={() => setForm({ id: null, name: "" })}
+                            className="secondary"
+                        >
                             Cancel
-                        </Button>
+                        </button>
                     )}
-                    <Button
-                        className="add-btn"
-                        onClick={handleSubmit}
-                        startIcon={!form.id ? <FaPlus /> : null}
-                        disabled={isUpdating}
-                    >
-                        {form.id ? (isUpdating ? "Updating..." : "Update") : "Add"}
-                    </Button>
-
-
-
-                </Box>
-            </Paper>
-
-
-
-            {categories && categories.length > 6 && (
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 1.5, }}>
-                    <Button
-                        variant="outlined"
-                        onClick={() => setShowAll(!showAll)}
-                        sx={{
-                            color: '#009693',
-                            borderColor: '#009693',
-                            '&:hover': {
-                                backgroundColor: '#00969315',
-                                borderColor: '#009693'
-                            }
-                        }}
-                    >
-                        {showAll ? 'Show Less' : 'See All'}
-                    </Button>
-                </Box>
-            )}
-            {isLoading ? (
-                <Box className="loading-center">
-                    <CircularProgress />
-                </Box>
-            ) : isError ? (
-                <Typography color="error">Failed to load categories.</Typography>
-            ) : (
-                <div className="category-grid">
-                    {visibleCategories?.map((cat) => (
-                        <Paper key={cat.id} className="category-box">
-                            <Typography className="category-name">{cat.name}</Typography>
-                            <Box className="action-buttons">
-                                <IconButton className="edit-btn" onClick={() => handleEdit(cat)}>
-                                    <FaEdit />
-                                </IconButton>
-                                <IconButton className="delete-btn" onClick={() => handleDelete(cat.id)}>
-                                    <FaTrash />
-                                </IconButton>
-                            </Box>
-                        </Paper>
-                    ))}
+                    <button type="submit" className="primary">
+                        <FiPlus /> {form.id ? "Update" : "Add"}
+                    </button>
                 </div>
+            </form>
 
-            )}
+            {/* Categories List */}
+            <div className="categories-list">
+                {isLoading ? (
+                    <LoadingState />
+                ) : isError ? (
+                    <div className="error">Error loading categories</div>
+                ) : (
+                    categories.map((cat) => (
+                        <div key={cat.id} className="category-item">
+                            <span>{cat.name}</span>
+                            <div className="item-actions">
+                                <button onClick={() => setForm({ id: cat.id, name: cat.name })}>
+                                    <FiEdit2 />
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteInit(cat.id, cat.name)}
+                                    className="danger"
+                                >
+                                    <FiTrash2 />
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
 
-        </Box>
+            {/* Delete Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={deleteState.showDialog}
+                title="Delete Category"
+                message={`Are you sure you want to delete "${deleteState.name}"?`}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+                type="delete"
+            />
+        </div>
     );
 };
 

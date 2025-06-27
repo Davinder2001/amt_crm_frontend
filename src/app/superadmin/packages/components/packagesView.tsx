@@ -1,11 +1,11 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useDeletePackageMutation, useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
-import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import LoadingState from '@/components/common/LoadingState';
 
 const PackagesView = () => {
   const { setTitle } = useBreadcrumb();
@@ -104,26 +104,6 @@ const PackagesView = () => {
       )
     },
     {
-      label: 'Employees',
-      key: 'employee_numbers' as keyof PackagePlan,
-      render: (plan: PackagePlan) => <span>{plan.employee_numbers}</span>
-    },
-    {
-      label: 'Inventory Items',
-      key: 'items_number' as keyof PackagePlan,
-      render: (plan: PackagePlan) => <span>{plan.items_number}</span>
-    },
-    {
-      label: 'Daily Tasks',
-      key: 'daily_tasks_number' as keyof PackagePlan,
-      render: (plan: PackagePlan) => <span>{plan.daily_tasks_number}</span>
-    },
-    {
-      label: 'Invoices',
-      key: 'invoices_number' as keyof PackagePlan,
-      render: (plan: PackagePlan) => <span>{plan.invoices_number}</span>
-    },
-    {
       label: 'Applicable Categories',
       key: 'business_categories' as keyof PackagePlan,
       render: (plan: PackagePlan) => (
@@ -175,12 +155,12 @@ const PackagesView = () => {
   ];
 
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <LoadingState />;
   if (error) return <div className="error-message">Error loading packages.</div>;
 
   return (
     <div className="superadmin-packages-container">
-      <div className="header">
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
         <button onClick={() => router.push('/superadmin/packages/create')} className='buttons'>
           <FaPlus /> Create New Package
         </button>

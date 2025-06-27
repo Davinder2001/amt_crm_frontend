@@ -189,7 +189,6 @@ function POSPage() {
                                     ...v,
                                     quantity: v.quantity + actualQuantity,
                                     final_cost: finalCost,
-                                    units: useUnitPrice ? unitQuantity || null : null
                                 })),
                                 batches: ci.batches?.map(b => ({
                                     ...b,
@@ -198,7 +197,6 @@ function POSPage() {
                                         ...v,
                                         quantity: v.quantity + actualQuantity,
                                         final_cost: finalCost,
-                                        units: useUnitPrice ? unitQuantity || null : null
                                     }))
                                 }))
                             }
@@ -224,7 +222,6 @@ function POSPage() {
                             variant_id: variant.id,
                             quantity: actualQuantity, // Use actualQuantity here
                             final_cost: finalCost,
-                            units: useUnitPrice ? unitQuantity || null : null
                         }] : undefined,
                         batches: batch ? [{
                             batch_id: batch.id,
@@ -233,7 +230,6 @@ function POSPage() {
                                 variant_id: variant.id,
                                 quantity: actualQuantity, // Use actualQuantity here
                                 final_cost: finalCost,
-                                units: useUnitPrice ? unitQuantity || null : null
                             }] : undefined
                         }] : undefined
                     };
@@ -320,17 +316,7 @@ function POSPage() {
                         newQty = Math.max(1, Math.min(newQty, availableQty - othersQty));
 
                         // Update final cost based on pricing mode
-                        let finalCost = ci.final_cost;
-                        if (ci.variants?.[0]?.units) {
-                            // For unit pricing, recalculate cost
-                            const unitPrice = ci.variants[0].units / ci.quantity * finalCost;
-                            finalCost = unitPrice * newQty;
-                        } else if (ci.batches?.[0]?.variants?.[0]?.units) {
-                            // For batch unit pricing, recalculate cost
-                            const unitPrice = ci.batches[0].variants[0].units / ci.quantity * finalCost;
-                            finalCost = unitPrice * newQty;
-                        }
-
+                        const finalCost = ci.final_cost;
                         // Update variant quantity if this is a variable product
                         const updatedItem = { ...ci, quantity: newQty, final_cost: finalCost };
 

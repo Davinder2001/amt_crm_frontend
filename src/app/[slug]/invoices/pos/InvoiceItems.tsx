@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { placeholderImg } from '@/assets/useImage';
 import Modal from '@/components/common/Modal';
 
-interface catMenuProps {
+interface InvoiceItemsProps {
   items: StoreItem[];
   cart: CartItem[];
   onAddToCart: (item: StoreItem, variant?: variations, useUnitPrice?: boolean, unitQuantity?: number | null, batch?: storeItemBatch) => void;
@@ -20,7 +20,7 @@ function isStoreItemBatch(batch: storeItemBatch | ItemBatch): batch is storeItem
   return (batch as storeItemBatch).product_type !== undefined;
 }
 
-const InvoiceItems: React.FC<catMenuProps> = ({ items, onAddToCart, cart, onFilterClick, onCartClick }) => {
+const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, onFilterClick, onCartClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredItemId, setHoveredItemId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');

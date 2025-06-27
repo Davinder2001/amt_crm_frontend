@@ -34,8 +34,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         invoices_number: 0,
         monthly_price: 0,
         annual_price: 0,
-        three_years_price:0,
+        three_years_price: 0,
         business_categories: [],
+        category_id: 0,
     });
     const router = useRouter();
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -167,8 +168,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                         invoices_number: 0,
                         monthly_price: 0,
                         annual_price: 0,
-                        three_years_price:0,
+                        three_years_price: 0,
                         business_categories: [],
+                        category_id: 0,
                     });
                 }
             }

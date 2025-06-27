@@ -80,7 +80,7 @@ interface CreateInvoicePayload {
   address?: string;
   pincode?: string;
   delivery_charge?: number;
-  invoice_items: {
+  items: {
     item_id: number;
     quantity: number;
     final_cost: number | null;

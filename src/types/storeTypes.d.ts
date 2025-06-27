@@ -101,7 +101,6 @@ interface CartItemVariant {
   variant_id: number;
   quantity: number;
   final_cost: number | null;
-  units: number | null;
 }
 
 interface cartBaseItem {
@@ -112,7 +111,6 @@ interface cartBaseItem {
   unit_of_measure?: "unit" | "pieces";
   batch_id?: number | null;
   variant_id?: number;
-  units?: number | null;
 }
 
 
@@ -131,7 +129,6 @@ interface CartItem {
     variant_id: number;
     quantity: number;
     final_cost: number | null;
-    units: number | null;
   }[];
   batches?: {
     batch_id: number;
@@ -140,7 +137,6 @@ interface CartItem {
       variant_id: number;
       quantity: number;
       final_cost: number | null;
-      units: number | null;
     }[];
   }[];
 }

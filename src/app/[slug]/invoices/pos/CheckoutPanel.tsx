@@ -89,13 +89,11 @@ export default function CheckoutPanel({
             // Handle variable products with variants
             if (item.variants?.[0]?.variant_id) {
                 baseItem.variant_id = item.variants[0].variant_id;
-                baseItem.units = item.variants[0].units || null;
             }
 
             // Handle batch items with variants
             if (item.batches?.[0]?.variants?.[0]?.variant_id) {
                 baseItem.variant_id = item.batches[0].variants[0].variant_id;
-                baseItem.units = item.batches[0].variants[0].units || null;
             }
 
             return baseItem;
@@ -121,7 +119,7 @@ export default function CheckoutPanel({
             address: address,
             pincode: pincode,
             delivery_charge: deliveryCharge,
-            invoice_items: invoiceItems
+            items: invoiceItems
         };
     };
 
@@ -129,17 +127,17 @@ export default function CheckoutPanel({
     function appendToFormData(formData: FormData, data: CreateInvoicePayload) {
         // Append regular fields
         for (const [key, value] of Object.entries(data)) {
-            if (key !== 'invoice_items' && value !== undefined && value !== null) {
+            if (key !== 'items' && value !== undefined && value !== null) {
                 formData.append(key, value.toString());
             }
         }
 
-        // Handle invoice_items array specially
-        if (data.invoice_items && data.invoice_items.length > 0) {
-            data.invoice_items.forEach((item, index) => {
+        // Handle items array specially
+        if (data.items && data.items.length > 0) {
+            data.items.forEach((item, index) => {
                 for (const [itemKey, itemValue] of Object.entries(item)) {
                     if (itemValue !== undefined && itemValue !== null) {
-                        formData.append(`invoice_items[${index}][${itemKey}]`, itemValue.toString());
+                        formData.append(`items[${index}][${itemKey}]`, itemValue.toString());
                     }
                 }
             });

@@ -45,24 +45,26 @@ export default function Homepage() {
   return (
     <div className='homepage-outer'>
       <div className="homepage">
-        <div className='outer-div'>
-          {/* Hero Section */}
-          <section className="hero">
-            <div className="hero-left">
-              <h1>Optimized Business Management<br />For Growth and Success</h1>
-              <p className="category-description">
-                We offer personalized solutions for founders, business owners, professionals, and families. Whether you&apos;re scaling your business, managing daily operations, or securing your family&apos;s future, our platform simplifies your workflow and enhances productivity. Our technology streamlines customer management, operational processes, and decision-making.
-              </p>
-              <div className="hero-actions">
-                <button className="btn-outline buttons" onClick={() => router.push('/register')}>Try The Dashboard</button>
+        <div className='hero-outer'>
+          <div className='outer-div'>
+            {/* Hero Section */}
+            <section className="hero">
+              <div className="hero-left">
+                <h1>Optimized Business Management<br />For Growth and Success</h1>
+                <p className="category-description">
+                  We offer personalized solutions for founders, business owners, professionals, and families. Whether you&apos;re scaling your business, managing daily operations, or securing your family&apos;s future, our platform simplifies your workflow and enhances productivity. Our technology streamlines customer management, operational processes, and decision-making.
+                </p>
+                <div className="hero-actions">
+                  <button className="btn-outline buttons" onClick={() => router.push('/register')}>Try The Dashboard</button>
+                </div>
               </div>
-            </div>
-            <div className="hero-right">
-              <div className='hero-right-inner'>
-                <Image src={homeimg2.src} alt="Business Professional" className="main-image" width={841} height={400} />
+              <div className="hero-right">
+                <div className='hero-right-inner'>
+                  <Image src={homeimg2.src} alt="Business Professional" className="main-image" width={841} height={400} />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </div>
         </div>
 
         <div className='business-section'>

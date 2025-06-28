@@ -169,7 +169,7 @@
     linear-gradient(rgba(180, 220, 255, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(180, 220, 255, 0.1) 1px, transparent 1px);
   background-size: 100% 100%, 50px 50px, 50px 50px;
-  padding: 20px 0 100px;
+  padding: 20px 0 60px;
   position: relative;
   overflow: hidden;
 
@@ -412,6 +412,55 @@
     transform: translateY(-100%);
     opacity: 0;
   }
+}
+
+/* Counters Section */
+.counters-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+
+  .counter-item {
+    text-align: center;
+
+    .counter-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      display: block;
+      line-height: 1;
+    }
+
+    .counter-label {
+      font-size: 1rem;
+      color: var(--text-color-light);
+      margin-top: 0.5rem;
+      display: block;
+    }
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .counters-section {
+    gap: 10px;
+
+    .counter-item {
+      white-space: nowrap;
+
+      .counter-number {
+        font-size: 20px;
+      }
+
+      .counter-label {
+        font-size: 12px;
+      }
+    }
+  }
+
 }
 
 

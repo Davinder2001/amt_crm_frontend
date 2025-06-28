@@ -36,6 +36,43 @@ export const UserNavbar = () => {
   )
 }
 
+interface CounterProps {
+  endValue: number;
+  duration: number;
+  label: string;
+  suffix?: string;
+}
+
+const Counter = ({ endValue, duration, label, suffix = '' }: CounterProps) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const increment = endValue / (duration * 60); // Adjust for smooth animation
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= endValue) {
+        setCount(endValue);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 1000 / 60); // 60fps
+
+    return () => clearInterval(timer);
+  }, [endValue, duration]);
+
+  return (
+    <div className="counter-content">
+      <span className="counter-number">
+        {count.toLocaleString()}
+        {suffix}
+      </span>
+      <span className="counter-label">{label}</span>
+    </div>
+  );
+};
+
 export default function Homepage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('crm');
@@ -78,6 +115,17 @@ export default function Homepage() {
                 </p>
                 <div className="hero-actions">
                   <button className="btn-outline buttons" onClick={() => router.push('/register')}>Try The Dashboard</button>
+                </div>
+                <div className="counters-section">
+                  <div className="counter-item">
+                    <Counter endValue={10000} duration={2} label="Active Users" />
+                  </div>
+                  <div className="counter-item">
+                    <Counter endValue={5000} duration={2} label="Businesses" />
+                  </div>
+                  <div className="counter-item">
+                    <Counter endValue={95} duration={2} label="Customer Satisfaction" suffix="%" />
+                  </div>
                 </div>
               </div>
               <div className={`hero-right slide-${slideDirection}`}>

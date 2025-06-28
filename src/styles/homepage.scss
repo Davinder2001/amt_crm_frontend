@@ -1020,6 +1020,14 @@ nav.feature-card-nav-bar {
 
 
 /* ===== Responsive Styles ===== */
+@media (max-width: 1440px) {
+
+  .hero-right .main-image {
+    max-width: 500px;
+    object-fit: cover;
+
+  }
+}
 
 @media (max-width: 1174px) {
   .comparison-section {
@@ -1046,12 +1054,6 @@ nav.feature-card-nav-bar {
 
   section.features-sections {
     margin: 0;
-  }
-
-  .hero-right .main-image {
-    max-width: 500px;
-    object-fit: cover;
-
   }
 
   .hero-left h1 {

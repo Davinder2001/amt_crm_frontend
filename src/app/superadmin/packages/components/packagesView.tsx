@@ -4,17 +4,59 @@ import { useDeletePackageMutation, useFetchPackagesQuery } from '@/slices/supera
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import LoadingState from '@/components/common/LoadingState';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const PackagesView = () => {
-  const { setTitle } = useBreadcrumb();
   const { data, error, isLoading } = useFetchPackagesQuery();
   const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
   const categoriesCellRef = useRef<HTMLDivElement | null>(null);
   // Updated toggle handler with ref capture
+
+
+  const [deleteState, setDeleteState] = useState<{
+    id: number | null;
+    name: string;
+    showDialog: boolean;
+  }>({
+    id: null,
+    name: "",
+    showDialog: false
+  });
+
+  const handleDeleteInit = (id: number, name: string) => {
+    setDeleteState({
+      id,
+      name,
+      showDialog: true
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteState.id) return;
+
+    try {
+      await deletepackage(String(deleteState.id)).unwrap();
+      setDeleteState({
+        id: null,
+        name: "",
+        showDialog: false
+      });
+    } catch (error) {
+      console.error("Failed to delete category:", error);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteState({
+      id: null,
+      name: "",
+      showDialog: false
+    });
+  };
+
   const handleToggle = (event: React.MouseEvent, planId: number) => {
     const newId = openCategoryId === planId ? null : planId;
     setOpenCategoryId(newId);
@@ -22,21 +64,6 @@ const PackagesView = () => {
       categoriesCellRef.current = (event.currentTarget as HTMLElement).closest('.categories-cell');
     }
   };
-  const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this package?')) {
-      try {
-        await deletepackage(String(id)).unwrap();
-      } catch (err) {
-        console.error('Failed to delete the package:', err);
-        alert('Failed to delete package. Please try again.');
-      }
-    }
-  };
-
-  useEffect(() => {
-    setTitle('All packages Plan');
-  }, [setTitle]);
-
 
   // Add this effect right after your other useEffect hooks
   // Example state for form data (adjust fields as needed)
@@ -144,7 +171,7 @@ const PackagesView = () => {
           <span
             title="Delete"
             className="package-delete-icon"
-            onClick={() => { if (typeof plan.id === 'number') handleDelete(plan.id); }}
+            onClick={() => { if (typeof plan.id === 'number') handleDeleteInit(plan.id, plan.name); }}
           >
             <FaTrash />
           </span>
@@ -159,19 +186,33 @@ const PackagesView = () => {
   if (error) return <div className="error-message">Error loading packages.</div>;
 
   return (
-    <div className="superadmin-packages-container">
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-        <button onClick={() => router.push('/superadmin/packages/create')} className='buttons'>
-          <FaPlus /> Create New Package
-        </button>
-      </div>
+    <>
+      <div className="superadmin-packages-container">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <button onClick={() => router.push('/superadmin/packages/create')} className='buttons'>
+            <FaPlus /> Create New Package
+          </button>
+        </div>
 
-      <ResponsiveTable
-        data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
-        columns={columns}
-        onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
+        <ResponsiveTable
+          data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
+          columns={columns}
+          onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
+        />
+
+
+
+      </div>
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteState.showDialog}
+        title="Delete Category"
+        message={`Are you sure you want to delete "${deleteState.name} Package"?`}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        type="delete"
       />
-    </div>
+    </>
   );
 };
 

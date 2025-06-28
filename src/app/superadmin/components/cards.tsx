@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useFetchAdminsQuery } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import { useFetchCompaniesQuery } from '@/slices/superadminSlices/company/companyApi';
 import { FaUsers, FaBuilding, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 const Cards = () => {
-  const router = useRouter();
   const { data: adminData, isLoading: loadingAdmins } = useFetchAdminsQuery();
   const { data: companyData, isLoading: loadingCompanies } = useFetchCompaniesQuery();
 
@@ -30,15 +29,16 @@ const Cards = () => {
     <div className="dashboard-container Sdash-container">
       <div className='overview-grid-container'>
         {/* Admin Card */}
-        <div 
-          className="s-card clickable admin-card" 
-          onClick={() => router.push('/superadmin/admins')}
+        <Link
+          href="/superadmin/admins"
+          className="s-card clickable admin-card"
+          title="View all admins"
         >
-          <div className="card-bg-pattern"></div>
+
           <div className="card-content">
             <div className="icon-shell">
               <FaUsers className="card-icon" />
-            </div>    
+            </div>
             <div className="dash-card-content">
               <h2 className="card-title">Total Admins</h2>
               <p className="card-value">{admins.length}</p>
@@ -47,14 +47,15 @@ const Cards = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Company Card */}
-        <div 
-          className="s-card clickable company-card" 
-          onClick={() => router.push('/superadmin/companies')}
+        <Link
+          href="/superadmin/companies"
+          className="s-card clickable company-card"
+          title="View all companies"
         >
-          <div className="card-bg-pattern"></div>
+
           <div className="card-content">
             <div className="icon-shell">
               <FaBuilding className="card-icon" />
@@ -67,14 +68,14 @@ const Cards = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Verified Companies Card */}
-        <div 
-          className="s-card clickable verified-card" 
-          onClick={() => router.push('/companies?status=verified')}
+        <Link
+          href="/companies?status=verified"
+          className="s-card clickable verified-card"
+          title="View verified companies"
         >
-          <div className="card-bg-pattern"></div>
           <div className="card-content">
             <div className="icon-shell">
               <FaCheckCircle className="card-icon" />
@@ -89,14 +90,15 @@ const Cards = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Pending Companies Card */}
-        <div 
-          className="s-card clickable pending-card" 
-          onClick={() => router.push('/superadmin/companies/pending')}
+        <Link
+          href="/superadmin/companies/pending"
+          className="s-card clickable pending-card"
+          title="View pending companies"
         >
-          <div className="card-bg-pattern"></div>
+
           <div className="card-content">
             <div className="icon-shell">
               <FaClock className="card-icon" />
@@ -111,7 +113,7 @@ const Cards = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

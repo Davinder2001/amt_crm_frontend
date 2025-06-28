@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { featurecardimg1, featurecardimg2, footerlogoimage, homeimg2, homelogo, manageimage } from '@/assets/useImage';
+import React, { useEffect, useState } from 'react';
+import { featurecardimg1, featurecardimg2, homeimg1, homeimg2, homeimg3, homelogo, manageimage } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import Image from 'next/image';
@@ -39,6 +39,28 @@ export const UserNavbar = () => {
 export default function Homepage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('crm');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'right' | 'bottom'>('right');
+
+  const heroImages = [
+    homeimg1.src,
+    homeimg2.src,
+    homeimg3.src
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => {
+        const nextIndex = prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1;
+        // Alternate between right and bottom directions
+        setSlideDirection(nextIndex % 2 === 0 ? 'right' : 'bottom');
+        return nextIndex;
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
@@ -58,9 +80,15 @@ export default function Homepage() {
                   <button className="btn-outline buttons" onClick={() => router.push('/register')}>Try The Dashboard</button>
                 </div>
               </div>
-              <div className="hero-right">
+              <div className={`hero-right slide-${slideDirection}`}>
                 <div className='hero-right-inner'>
-                  <Image src={homeimg2.src} alt="Business Professional" className="main-image" width={841} height={400} />
+                  <Image
+                    src={heroImages[currentImageIndex]}
+                    alt="Business Professional"
+                    className="main-image"
+                    width={841}
+                    height={400}
+                  />
                 </div>
               </div>
             </section>
@@ -243,11 +271,15 @@ export const UserFooter = () => {
         <div className="footer-bottom">
           <div className='footer-bottom-inner'>
             <div className="footer-logo">
-              <div className='footer-logo-text'>
-                <Link href="/">
-                  <Image src={footerlogoimage} alt="Logo" />
-                  <span>Himmanav Asset Management Technology </span></Link>
-              </div>
+              <Link href="/">
+                <Image
+                  src={homelogo}
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  objectFit='cover'
+                />
+              </Link>
             </div>
             <ul className='policy-links'>
               <li><Link href={'/about'}>About</Link></li>

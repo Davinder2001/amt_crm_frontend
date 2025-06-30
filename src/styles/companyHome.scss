@@ -178,7 +178,7 @@
                 border-radius: 9999px;
                 text-transform: capitalize;
 
-                &.verified {
+                &.verified,&.completed {
                     background-color: #ecfdf5;
                     color: #059669;
                 }

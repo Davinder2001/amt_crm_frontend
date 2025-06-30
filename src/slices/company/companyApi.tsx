@@ -117,14 +117,13 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
-    addNewCompany: builder.mutation<AddCompany, { orderId: string, formdata: FormData }>({
-      query: ({ orderId, formdata }) => ({
+    addNewCompany: builder.mutation<AddCompany, string>({
+      query: (orderId) => ({
         url: `add-new-company/${orderId}`,
-        method: "POST",
-        body: formdata,
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
       }),
-      invalidatesTags: ["Company"],
+      invalidatesTags: ['Company'],
     }),
 
     fetchCompanyDetails: builder.query<CompanyDetailsResponse, void>({

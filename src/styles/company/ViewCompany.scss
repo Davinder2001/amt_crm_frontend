@@ -5,12 +5,21 @@
     font-family: Arial, sans-serif;
     background-color: #f8f8f8;
 
+    .company-details-inner {
+
+        h1 {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            color: var(--primary-color);
+        }
+    }
+
     .company-details-inner-wrapper {
         display: flex;
         gap: 20px;
 
         .package-upgrade-btn {
-            padding: 4px 10px;
+            padding: 5px 10px;
             border: unset;
             background-color: var(--primary-color);
             border-radius: 5px;
@@ -23,11 +32,6 @@
         }
     }
 
-    h1 {
-        font-size: 28px;
-        margin-bottom: 20px;
-        color: #333;
-    }
 
     .card {
         background-color: white;
@@ -79,7 +83,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
-        margin-bottom: 30px;
+        margin: 30px 0px;
     }
 
     .company-details-card {
@@ -144,6 +148,25 @@
         &:hover {
             transform: translateY(-3px);
         }
+
+        .available-packages-ribbon {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: .4rem 3rem;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            top: 12px;
+            right: -50px;
+            transform: rotate(45deg);
+            box-shadow: 0 2px 6px #0003;
+        }
+
+        .available-packages-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 
     .card.green {
@@ -166,6 +189,12 @@
 
     .available-packages {
         margin-top: 30px;
+
+        h2 {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            color: var(--primary-color);
+        }
     }
 
     .package-cards {

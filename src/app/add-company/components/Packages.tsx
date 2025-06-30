@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import Modal from '@/components/common/Modal'; // Make sure you have this component
+import Modal from '@/components/common/Modal';
 
 interface PackagesProps {
     plans: PackagePlan[];

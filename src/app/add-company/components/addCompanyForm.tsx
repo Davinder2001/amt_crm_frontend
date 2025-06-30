@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
+const LOCAL_STORAGE_KEY = 'addCompanyData';
+
 interface AddCompany {
   company_name: string;
   package_id: number;
@@ -24,81 +26,66 @@ interface AddCompanyFormProps {
   categoryId: number | null;
 }
 
-const LOCAL_STORAGE_KEY = 'addCompany';
-
-const getStoredFormData = (): Partial<AddCompany> | null => {
-  if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  }
-  return null;
-};
-
-const saveFormData = (data: Partial<AddCompany>) => {
-  if (typeof window !== 'undefined') {
-    const dataToStore = { ...data };
-    Object.keys(dataToStore).forEach(key => {
-      if (dataToStore[key as keyof AddCompany] instanceof File) {
-        delete dataToStore[key as keyof AddCompany];
-      }
-    });
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToStore));
-  }
-};
-
-const getDefaultFormData = (
-  packageId: number,
-  limitId: number,
-  variantType: string,
-  categoryId: number | null
-): AddCompany => ({
-  company_name: '',
-  package_id: packageId,
-  limit_id: limitId,
-  variant_type: variantType,
-  business_category_id: categoryId,
-  company_logo: null,
-  business_address: '',
-  pin_code: '',
-  business_proof_type: '',
-  business_id: '',
-  business_proof_front: null,
-  business_proof_back: null,
-});
-
 const Page: React.FC<AddCompanyFormProps> = ({
   packageId,
   limitId,
   variantType,
   categoryId
 }) => {
-  const [formData, setFormData] = useState<AddCompany>(
-    getDefaultFormData(packageId, limitId, variantType, categoryId)
-  );
+  const [formData, setFormData] = useState<AddCompany>({
+    company_name: '',
+    package_id: packageId,
+    limit_id: limitId,
+    variant_type: variantType,
+    business_category_id: categoryId,
+    company_logo: null,
+    business_address: '',
+    pin_code: '',
+    business_proof_type: '',
+    business_id: '',
+    business_proof_front: null,
+    business_proof_back: null,
+  });
+
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
   useEffect(() => {
-    const stored = getStoredFormData();
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
-      setFormData(prev => ({ ...prev, ...stored }));
+      try {
+        const parsed = JSON.parse(stored);
+        setFormData(prev => ({
+          ...prev,
+          company_name: parsed.company_name || '',
+          business_address: parsed.business_address || '',
+          pin_code: parsed.pin_code || '',
+          business_proof_type: parsed.business_proof_type || '',
+          business_id: parsed.business_id || '',
+        }));
+      } catch (e) {
+        console.error('Failed to parse stored data', e);
+      }
     }
   }, []);
 
-  // Handles input changes and saves to localStorage
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };
-    setFormData(updatedFormData);
-    saveFormData(updatedFormData);
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+
+    // Update only the changed field in localStorage
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const storedData = stored ? JSON.parse(stored) : {};
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+      ...storedData,
+      [name]: value
+    }));
   };
 
-  // Handles file input changes and saves to localStorage
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files.length > 0) {
-      const updatedFormData = { ...formData, [name]: files[0] };
-      setFormData(updatedFormData);
-      saveFormData(updatedFormData);
+      setFormData(prev => ({ ...prev, [name]: files[0] }));
     }
   };
 
@@ -114,7 +101,7 @@ const Page: React.FC<AddCompanyFormProps> = ({
       payload.append('company_name', formData.company_name);
       payload.append('package_id', formData.package_id.toString());
       payload.append('limit_id', formData.limit_id.toString());
-      payload.append('variant_type', formData.variant_type);
+      payload.append('subscription_type', formData.variant_type);
       payload.append('business_category_id', formData.business_category_id.toString());
       payload.append('business_address', formData.business_address);
       payload.append('pin_code', formData.pin_code);
@@ -126,7 +113,8 @@ const Page: React.FC<AddCompanyFormProps> = ({
 
       const response = await orderNewCompany(payload).unwrap();
 
-      localStorage.setItem("addCompany", JSON.stringify({ ...formData, order_id: response.orderId }));
+      // Clear storage after successful submission
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
 
       if (response.redirect_url) {
         window.location.href = response.redirect_url;

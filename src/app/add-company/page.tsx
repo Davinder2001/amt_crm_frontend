@@ -6,6 +6,8 @@ import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
 
+const LOCAL_STORAGE_KEY = 'addCompanyData';
+
 const Page = () => {
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
   const plans = Array.isArray(plansData) ? plansData : [];
@@ -17,19 +19,32 @@ const Page = () => {
 
   // Load from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('addCompany');
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed.packageId && parsed.limitId && parsed.variantType) {
-        setSelectedPackage({
-          packageId: parsed.packageId,
-          limitId: parsed.limitId,
-          variantType: parsed.variantType
-        });
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed.packageId && parsed.limitId && parsed.variantType) {
+          setSelectedPackage({
+            packageId: parsed.packageId,
+            limitId: parsed.limitId,
+            variantType: parsed.variantType
+          });
+        }
+        if (parsed.category_id) {
+          setSelectedCategoryId(parsed.category_id);
+        }
+      } catch (e) {
+        console.error('Failed to parse stored data', e);
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
       }
-      if (parsed.category_id) setSelectedCategoryId(parsed.category_id);
     }
   }, []);
+
+  const clearSelection = () => {
+    setSelectedPackage(null);
+    setSelectedCategoryId(null);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  };
 
   if (isPlansLoading) return <Loader />;
   if (!plans || !categories) return <div>No plans or categories available.</div>;
@@ -40,10 +55,7 @@ const Page = () => {
     <>
       {hasValidSelection ? (
         <>
-          <Link href="/add-company" className="back-button" onClick={() => {
-            setSelectedPackage(null);
-            localStorage.removeItem('addCompany');
-          }}>
+          <Link href="/add-company" className="back-button" onClick={clearSelection}>
             ← Back
           </Link>
           <AddCompanyForm

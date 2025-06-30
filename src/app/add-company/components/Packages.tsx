@@ -3,6 +3,8 @@ import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 
+const LOCAL_STORAGE_KEY = 'addCompanyData';
+
 interface PackagesProps {
     plans: PackagePlan[];
     setSelectedPackage: (pkg: SelectedPackage) => void;
@@ -22,7 +24,6 @@ const Packages: React.FC<PackagesProps> = ({
 }) => {
     const isInitialLoad = useRef(true);
 
-    // Show all packages if no category is selected or filter by selected category
     const filteredPlans = selectedCategoryId
         ? plans.filter((plan) =>
             plan.business_categories.some((category) => category.id === selectedCategoryId)
@@ -31,39 +32,43 @@ const Packages: React.FC<PackagesProps> = ({
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedId = Number(e.target.value);
-        setSelectedCategoryId(selectedId === 0 ? null : selectedId);
+        const newCategoryId = selectedId === 0 ? null : selectedId;
+        setSelectedCategoryId(newCategoryId);
         isInitialLoad.current = false;
 
-        if (typeof window !== 'undefined') {
-            const existing = localStorage.getItem('addCompany');
-            const parsed = existing ? JSON.parse(existing) : {};
-            localStorage.setItem('addCompany', JSON.stringify({
-                ...parsed,
-                category_id: selectedId === 0 ? null : selectedId,
-            }));
-        }
+        // Update only the category in storage
+        const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
+        const storedData = existing ? JSON.parse(existing) : {};
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+            ...storedData,
+            category_id: newCategoryId
+        }));
     };
 
     const handlePackageSelection = (packageId: number, limitId: number, variantType: string) => {
-        setSelectedPackage({ packageId, limitId, variantType });
+        const newSelection = { packageId, limitId, variantType };
+        setSelectedPackage(newSelection);
 
-        if (typeof window !== 'undefined') {
-            const existing = localStorage.getItem('addCompany');
-            const parsed = existing ? JSON.parse(existing) : {};
-            localStorage.setItem('addCompany', JSON.stringify({
-                ...parsed,
-                packageId,
-                limitId,
-                variantType,
-                // Ensure we store the actual category ID from the selected plan
-                category_id: parsed.category_id || plans.find(p => p.id === packageId)?.business_categories[0]?.id || null
-            }));
+        // Find the selected plan to get its category
+        const selectedPlan = plans.find(plan => plan.id === packageId);
+        const packageCategoryId = selectedPlan?.business_categories?.[0]?.id || null;
+
+        // Store all selection data with the package's actual category
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+            packageId,
+            limitId,
+            variantType,
+            category_id: packageCategoryId  // Use the package's category instead of selectedCategoryId
+        }));
+
+        // Also update the selected category in state if we were in "All" mode
+        if (selectedCategoryId === null && packageCategoryId) {
+            setSelectedCategoryId(packageCategoryId);
         }
     };
 
     useEffect(() => {
         if (isInitialLoad.current && categories.length > 0 && plans.length > 0) {
-            // Don't set any category by default - show all packages initially
             isInitialLoad.current = false;
         }
     }, [plans, categories]);

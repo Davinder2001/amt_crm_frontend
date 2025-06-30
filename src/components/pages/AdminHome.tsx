@@ -25,8 +25,21 @@ const AdminHome = () => {
         }
     }, [profile]);
 
-    const handleClick = async (companySlug: string, id: number, isVerified: boolean, e: React.MouseEvent) => {
+    const handleClick = async (
+        companySlug: string,
+        id: number,
+        isVerified: boolean,
+        status: string,
+        e: React.MouseEvent
+    ) => {
         e.preventDefault();
+
+        if (status === 'pending') {
+            // Redirect to payment page
+            router.push(`/payment?company_id=${id}`);
+            return;
+        }
+
         if (!isVerified) {
             toast.error('This company is not verified. Please contact support.');
             return;
@@ -113,11 +126,24 @@ const AdminHome = () => {
                                             <div className="row-item action">
                                                 <button
                                                     className="manage-btn"
-                                                    onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
+                                                    onClick={(e) =>
+                                                        handleClick(
+                                                            company.company_slug,
+                                                            company.id,
+                                                            company.verification_status === 'verified',
+                                                            company.verification_status,
+                                                            e,
+                                                        )
+                                                    }
                                                     disabled={loadingCompanyId === company.id}
                                                 >
-                                                    {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
+                                                    {loadingCompanyId === company.id
+                                                        ? 'Loading...'
+                                                        : company.verification_status === 'pending'
+                                                            ? 'Payment'
+                                                            : 'Manage'}
                                                 </button>
+
                                             </div>
                                         </div>
                                     ))}
@@ -152,11 +178,24 @@ const AdminHome = () => {
                                         <div className="card-actions">
                                             <button
                                                 className="manage-btn"
-                                                onClick={(e) => handleClick(company.company_slug, company.id, company.verification_status === 'verified', e)}
+                                                onClick={(e) =>
+                                                    handleClick(
+                                                        company.company_slug,
+                                                        company.id,
+                                                        company.verification_status === 'verified',
+                                                        company.verification_status,
+                                                        e,
+                                                    )
+                                                }
                                                 disabled={loadingCompanyId === company.id}
                                             >
-                                                {loadingCompanyId === company.id ? 'Loading...' : 'Manage'}
+                                                {loadingCompanyId === company.id
+                                                    ? 'Loading...'
+                                                    : company.verification_status === 'pending'
+                                                        ? 'Payment'
+                                                        : 'Manage'}
                                             </button>
+
                                         </div>
                                     </div>
                                 ))}

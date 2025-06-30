@@ -127,38 +127,47 @@ function CompanyDetails() {
         )}
 
         <div className='company-details-inner-wrapper'>
-          <div className="card">
+          <div className="company-details-card">
             <h2>General Info</h2>
-            <p><strong>Name:</strong> {company.company_name}</p>
-            <p><strong>Company ID:</strong> {company.company_id}</p>
-            <p><strong>Slug:</strong> {company.company_slug}</p>
-            <p><strong>Business Category:</strong> {company.business_category}</p>
-            <p><strong>Subscription Status:</strong> {company.subscription_status}</p>
-            <p><strong>Payment Status:</strong> {company.payment_status}</p>
-            <p><strong>Verification Status:</strong> {company.verification_status}</p>
-            <p><strong>Created At:</strong> {new Date(company.created_at).toLocaleString()}</p>
-            <p><strong>Updated At:</strong> {new Date(company.updated_at).toLocaleString()}</p>
+            <div className="info-grid">
+              <p><span>Name:</span> Company Name</p>
+              <p><span>Company ID:</span> 12345</p>
+              <p><span>Slug:</span> company-slug</p>
+              <p><span>Business Category:</span> IT</p>
+              <p><span>Subscription Status:</span> Active</p>
+              <p><span>Payment Status:</span> Paid</p>
+              <p><span>Verification Status:</span> Verified</p>
+              <p><span>Created At:</span> 2023-01-01</p>
+              <p><span>Updated At:</span> 2023-06-25</p>
+            </div>
           </div>
 
-          <div className="card green">
+
+          <div className="subscribed-package-card">
+            <div className="ribbon">
+              {company.subscription_type}
+            </div>
             <h2>Subscribed Package</h2>
-            <p><strong>Name:</strong> {subscribed_package.name}</p>
-            <p><strong>Type:</strong> {company.subscription_type}</p>
-            <p><strong>Monthly Price:</strong> ₹{subscribed_package.monthly_price}</p>
-            <p><strong>Annual Price:</strong> ₹{subscribed_package.annual_price}</p>
-            <p><strong>Three Years Price:</strong> ₹{subscribed_package.three_years_price}</p>
-            <p><strong>Employees Allowed:</strong> {subscribed_package.employee_numbers}</p>
-            <p><strong>Items Allowed:</strong> {subscribed_package.items_number}</p>
-            <p><strong>Daily Tasks:</strong> {subscribed_package.daily_tasks_number}</p>
-            <p><strong>Invoices Allowed:</strong> {subscribed_package.invoices_number}</p>
-
-            <button
-              onClick={() => handleUpgradeClick(subscribed_package)}
-              className='package-upgrade-btn'
-            >
-              Change Plan
-            </button>
+            <ul>
+              <li><strong>Name:</strong> {subscribed_package.name}</li>
+              <li><strong>Monthly Price:</strong> ₹{subscribed_package.monthly_price.toLocaleString()}</li>
+              <li><strong>Annual Price:</strong> ₹{subscribed_package.annual_price.toLocaleString()}</li>
+              <li><strong>Three Years Price:</strong> ₹{subscribed_package.three_years_price.toLocaleString()}</li>
+              <li><strong>Employees Allowed:</strong> {subscribed_package.employee_numbers}</li>
+              <li><strong>Items Allowed:</strong> {subscribed_package.items_number}</li>
+              <li><strong>Daily Tasks:</strong> {subscribed_package.daily_tasks_number}</li>
+              <li><strong>Invoices Allowed:</strong> {subscribed_package.invoices_number}</li>
+            </ul>
+            <div className='package-upgrade-btn-outer'>
+              <button
+                onClick={() => handleUpgradeClick(subscribed_package)}
+                className="package-upgrade-btn"
+              >
+                Change Plan
+              </button>
+            </div>
           </div>
+
         </div>
 
         {/* Available Packages Section */}
@@ -194,113 +203,65 @@ function CompanyDetails() {
             title={`${selectedPackage.id === subscribed_package.id ? 'Change' : 'Upgrade to'} ${selectedPackage.name}`}
             width="900px"
           >
-            {/** 👇 Insert the constants here */}
-            {/* {(() => {
-              const isSubscribedPackage = selectedPackage.id === subscribed_package.id;
-              const currentType = company.subscription_type;
-
-              return (
-                <div className="subscription-options">
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'monthly' ? 'current-plan' : ''}`}>
-                    <h3>Monthly</h3>
-                    <p className="price">₹{selectedPackage.monthly_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('monthly')}
-                      disabled={isSubscribedPackage && (currentType === 'monthly' || currentType === 'annual' || currentType === 'three_years')}
-                    >
-                      {isSubscribedPackage && (currentType === 'monthly' || currentType === 'annual' || currentType === 'three_years')
-                        ? 'Not Allowed'
-                        : 'Select'}
-                    </button>
-                  </div>
-
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'annual' ? 'current-plan' : ''}`}>
-                    <h3>Annual</h3>
-                    <p className="price">₹{selectedPackage.annual_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('annual')}
-                      disabled={isSubscribedPackage && currentType === 'three_years'}
-                    >
-                      {isSubscribedPackage && currentType === 'three_years'
-                        ? 'Not Allowed'
-                        : isSubscribedPackage && currentType === 'annual'
-                          ? 'Current Plan'
-                          : 'Select'}
-                    </button>
-                  </div>
-
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'three_years' ? 'current-plan' : ''}`}>
-                    <h3>Three Years</h3>
-                    <p className="price">₹{selectedPackage.three_years_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('three_years')}
-                      disabled={isSubscribedPackage && currentType === 'three_years'}
-                    >
-                      {isSubscribedPackage && currentType === 'three_years'
-                        ? 'Current Plan'
-                        : 'Select'}
-                    </button>
-                  </div>
-                </div>
-              );
-            })()} */}
             {(() => {
               const isSubscribedPackage = selectedPackage.id === subscribed_package.id;
               const currentType = company.subscription_type;
 
               return (
-                <div className="subscription-options">
-                  {/* Monthly */}
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'monthly' ? 'current-plan' : ''}`}>
-                    <h3>Monthly</h3>
-                    <p className="price">₹{selectedPackage.monthly_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('monthly')}
-                      disabled={
-                        isSubscribedPackage &&
-                        (currentType === 'monthly' || currentType === 'annual' || currentType === 'three_years')
-                      }
-                    >
-                      {isSubscribedPackage && currentType === 'monthly'
-                        ? 'Current Plan'
-                        : isSubscribedPackage
-                          ? 'Not Allowed'
-                          : 'Select'}
-                    </button>
-                  </div>
+                <div className="subscription-options-outer" >
+                  <div className="subscription-options">
+                    {/* Monthly */}
+                    <div className={`subscription-card ${isSubscribedPackage && currentType === 'monthly' ? 'current-plan' : ''}`}>
+                      <h3>Monthly</h3>
+                      <p className="price">₹{selectedPackage.monthly_price}</p>
+                      <button
+                        onClick={() => handlePackageUpgrade('monthly')}
+                        disabled={
+                          isSubscribedPackage &&
+                          (currentType === 'monthly' || currentType === 'annual' || currentType === 'three_years')
+                        }
+                      >
+                        {isSubscribedPackage && currentType === 'monthly'
+                          ? 'Current Plan'
+                          : isSubscribedPackage
+                            ? 'Not Allowed'
+                            : 'Select'}
+                      </button>
+                    </div>
 
-                  {/* Annual */}
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'annual' ? 'current-plan' : ''}`}>
-                    <h3>Annual</h3>
-                    <p className="price">₹{selectedPackage.annual_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('annual')}
-                      disabled={
-                        isSubscribedPackage && currentType === 'three_years'
-                      }
-                    >
-                      {isSubscribedPackage && currentType === 'annual'
-                        ? 'Current Plan'
-                        : isSubscribedPackage && currentType === 'three_years'
-                          ? 'Not Allowed'
-                          : 'Select'}
-                    </button>
-                  </div>
+                    {/* Annual */}
+                    <div className={`subscription-card ${isSubscribedPackage && currentType === 'annual' ? 'current-plan' : ''}`}>
+                      <h3>Annual</h3>
+                      <p className="price">₹{selectedPackage.annual_price}</p>
+                      <button
+                        onClick={() => handlePackageUpgrade('annual')}
+                        disabled={
+                          isSubscribedPackage && currentType === 'three_years'
+                        }
+                      >
+                        {isSubscribedPackage && currentType === 'annual'
+                          ? 'Current Plan'
+                          : isSubscribedPackage && currentType === 'three_years'
+                            ? 'Not Allowed'
+                            : 'Select'}
+                      </button>
+                    </div>
 
-                  {/* Three Years */}
-                  <div className={`subscription-card ${isSubscribedPackage && currentType === 'three_years' ? 'current-plan' : ''}`}>
-                    <h3>Three Years</h3>
-                    <p className="price">₹{selectedPackage.three_years_price}</p>
-                    <button
-                      onClick={() => handlePackageUpgrade('three_years')}
-                      disabled={
-                        isSubscribedPackage && currentType === 'three_years'
-                      }
-                    >
-                      {isSubscribedPackage && currentType === 'three_years'
-                        ? 'Current Plan'
-                        : 'Select'}
-                    </button>
+                    {/* Three Years */}
+                    <div className={`subscription-card ${isSubscribedPackage && currentType === 'three_years' ? 'current-plan' : ''}`}>
+                      <h3>Three Years</h3>
+                      <p className="price">₹{selectedPackage.three_years_price}</p>
+                      <button
+                        onClick={() => handlePackageUpgrade('three_years')}
+                        disabled={
+                          isSubscribedPackage && currentType === 'three_years'
+                        }
+                      >
+                        {isSubscribedPackage && currentType === 'three_years'
+                          ? 'Current Plan'
+                          : 'Select'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -310,115 +271,6 @@ function CompanyDetails() {
         )}
 
       </div>
-
-      <style jsx>{`
-      
-        .company-details-container {
-          padding: 20px;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-        
-        .company-details-inner-wrapper {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-          margin-bottom: 30px;
-        }
-        
-        .card {
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          padding: 20px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .card.green {
-          border-top: 4px solid #4CAF50;
-        }
-        
-        .package-upgrade-btn {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 15px;
-          border-radius: 4px;
-          cursor: pointer;
-          margin-top: 15px;
-        }
-        
-        .package-upgrade-btn:hover {
-          background-color: #45a049;
-        }
-        
-        .available-packages {
-          margin-top: 30px;
-        }
-        
-        .package-cards {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 20px;
-          margin-top: 15px;
-        }
-        
-        .subscription-options {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          padding: 20px;
-        }
-        
-        .subscription-card {
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          padding: 20px;
-          text-align: center;
-        }
-        
-        .subscription-card.current-plan {
-          border: 2px solid #4CAF50;
-          background-color: #f8fff8;
-        }
-        
-        .subscription-card h3 {
-          margin-top: 0;
-        }
-        
-        .price {
-          font-size: 24px;
-          font-weight: bold;
-          margin: 15px 0;
-        }
-        
-        .subscription-card button {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 10px 15px;
-          border-radius: 4px;
-          cursor: pointer;
-          width: 100%;
-        }
-        
-        .subscription-card button:disabled {
-          background-color: #cccccc;
-          cursor: not-allowed;
-        }        
-        .error-message {
-          color: #d32f2f;
-          background-color: #fde8e8;
-          padding: 15px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-          border: 1px solid #f5c6cb;
-        }
-        
-        .error-message ul {
-          margin: 10px 0 0 0;
-          padding-left: 20px;
-        }
-      `}</style>
     </>
   );
 }

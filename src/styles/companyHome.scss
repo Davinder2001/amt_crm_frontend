@@ -206,6 +206,7 @@
                 transition: background-color 0.2s;
                 width: 100%;
                 max-width: 120px;
+                white-space: nowrap;
 
                 &:hover {
                     background-color: $primary-light;

@@ -368,7 +368,7 @@
             text-transform: capitalize;
 
             &.verified,
-            &.paid {
+            &.paid, &.completed{
               background: #e8f5e9;
               color: var(--verified);
             }
@@ -388,10 +388,10 @@
         }
 
         .view-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
+          width: fit-content;
+          border-radius: $border-radius;
           background: transparent;
+          padding: 5px 10px;
           border: 1px solid var(--primary-color);
           color: var(--primary-color);
           cursor: pointer;

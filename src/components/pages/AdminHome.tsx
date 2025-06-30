@@ -363,7 +363,7 @@ const AdminHome = () => {
                                                     {loadingCompanyId === company.id
                                                         ? 'Loading...'
                                                         : company.payment_status === 'pending'
-                                                            ? 'Recheck'
+                                                            ? 'Check Status'
                                                             : 'Manage'}
                                                 </button>
                                             </div>
@@ -406,7 +406,7 @@ const AdminHome = () => {
                                                 {loadingCompanyId === company.id
                                                     ? 'Loading...'
                                                     : company.payment_status === 'pending'
-                                                        ? 'Recheck'
+                                                        ? 'Check Status'
                                                         : 'Manage'}
                                             </button>
                                         </div>

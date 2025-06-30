@@ -109,7 +109,9 @@ function CompanyDetails() {
   return (
     <>
       <div className="company-details-container">
-        <h1>Company Details</h1>
+        <div className="company-details-inner">
+          <h1>Company Details</h1>
+        </div>
 
         {error && (
           <div className="error-message">
@@ -176,14 +178,16 @@ function CompanyDetails() {
           <div className="package-cards">
             {related_packages.filter(pkg => pkg.id !== subscribed_package.id).map((pkg: PackagePlan) => (
               <div key={pkg.id} className="available-packages-card">
-                <h3>{pkg.name}</h3>
-                <p><strong>Monthly Price:</strong> ₹{pkg.monthly_price}</p>
-                <p><strong>Annual Price:</strong> ₹{pkg.annual_price}</p>
-                <p><strong>Three Years Price:</strong> ₹{pkg.three_years_price}</p>
-                <p><strong>Employees:</strong> {pkg.employee_numbers}</p>
-                <p><strong>Items:</strong> {pkg.items_number}</p>
-                <p><strong>Daily Tasks:</strong> {pkg.daily_tasks_number}</p>
-                <p><strong>Invoices:</strong> {pkg.invoices_number}</p>
+                <div className='available-packages-ribbon'>{pkg.name}</div>
+                <div className='available-packages-details'>
+                  <p><strong>Monthly Price:</strong> ₹{pkg.monthly_price}</p>
+                  <p><strong>Annual Price:</strong> ₹{pkg.annual_price}</p>
+                  <p><strong>Three Years Price:</strong> ₹{pkg.three_years_price}</p>
+                  <p><strong>Employees:</strong> {pkg.employee_numbers}</p>
+                  <p><strong>Items:</strong> {pkg.items_number}</p>
+                  <p><strong>Daily Tasks:</strong> {pkg.daily_tasks_number}</p>
+                  <p><strong>Invoices:</strong> {pkg.invoices_number}</p>
+                </div>
                 <button
                   onClick={() => handleUpgradeClick(pkg)}
                   className='package-upgrade-btn'

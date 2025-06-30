@@ -1,12 +1,10 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
 import Loader from '@/components/common/Loader';
 import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
-
-const LOCAL_STORAGE_KEY = 'addCompanyData';
 
 const Page = () => {
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
@@ -17,33 +15,9 @@ const Page = () => {
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.packageId && parsed.limitId && parsed.variantType) {
-          setSelectedPackage({
-            packageId: parsed.packageId,
-            limitId: parsed.limitId,
-            variantType: parsed.variantType
-          });
-        }
-        if (parsed.category_id) {
-          setSelectedCategoryId(parsed.category_id);
-        }
-      } catch (e) {
-        console.error('Failed to parse stored data', e);
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-      }
-    }
-  }, []);
-
   const clearSelection = () => {
     setSelectedPackage(null);
     setSelectedCategoryId(null);
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   if (isPlansLoading) return <Loader />;
@@ -69,7 +43,6 @@ const Page = () => {
         <Packages
           plans={plans}
           setSelectedPackage={setSelectedPackage}
-          selectedPackage={selectedPackage}
           categories={categories}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}

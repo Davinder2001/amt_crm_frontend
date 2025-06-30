@@ -1,8 +1,6 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
-
-const LOCAL_STORAGE_KEY = 'addCompanyData';
 
 interface AddCompany {
   company_name: string;
@@ -49,37 +47,9 @@ const Page: React.FC<AddCompanyFormProps> = ({
 
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
-  useEffect(() => {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setFormData(prev => ({
-          ...prev,
-          company_name: parsed.company_name || '',
-          business_address: parsed.business_address || '',
-          pin_code: parsed.pin_code || '',
-          business_proof_type: parsed.business_proof_type || '',
-          business_id: parsed.business_id || '',
-        }));
-      } catch (e) {
-        console.error('Failed to parse stored data', e);
-      }
-    }
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const updated = { ...formData, [name]: value };
-    setFormData(updated);
-
-    // Update only the changed field in localStorage
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    const storedData = stored ? JSON.parse(stored) : {};
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
-      ...storedData,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,9 +82,6 @@ const Page: React.FC<AddCompanyFormProps> = ({
       if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
 
       const response = await orderNewCompany(payload).unwrap();
-
-      // Clear storage after successful submission
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
 
       if (response.redirect_url) {
         window.location.href = response.redirect_url;

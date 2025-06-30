@@ -12,17 +12,21 @@ const Page = () => {
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
   const categories = categoriesData ?? [];
 
-  const [subscriptionType, setSubscriptionType] = useState<'monthly' | 'annual' | null>(null);
-  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  // 🔄 Load from localStorage on mount
+  // Load from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem('addCompany');
     if (stored) {
       const parsed = JSON.parse(stored);
-      if (parsed.subscription_type) setSubscriptionType(parsed.subscription_type);
-      if (parsed.package_id) setSelectedPackageId(parsed.package_id);
+      if (parsed.packageId && parsed.limitId && parsed.variantType) {
+        setSelectedPackage({
+          packageId: parsed.packageId,
+          limitId: parsed.limitId,
+          variantType: parsed.variantType
+        });
+      }
       if (parsed.category_id) setSelectedCategoryId(parsed.category_id);
     }
   }, []);
@@ -30,36 +34,33 @@ const Page = () => {
   if (isPlansLoading) return <Loader />;
   if (!plans || !categories) return <div>No plans or categories available.</div>;
 
-  const hasValidSelection = selectedPackageId !== null && selectedCategoryId !== null && subscriptionType !== null;
+  const hasValidSelection = selectedPackage !== null && selectedCategoryId !== null;
 
   return (
     <>
       {hasValidSelection ? (
         <>
           <Link href="/add-company" className="back-button" onClick={() => {
-            setSelectedPackageId(null);
-            setSelectedCategoryId(null);
-            setSubscriptionType(null);
+            setSelectedPackage(null);
             localStorage.removeItem('addCompany');
           }}>
             ← Back
           </Link>
           <AddCompanyForm
-            packageId={selectedPackageId}
+            packageId={selectedPackage.packageId}
+            limitId={selectedPackage.limitId}
+            variantType={selectedPackage.variantType}
             categoryId={selectedCategoryId}
-            subscriptionType={subscriptionType}
           />
         </>
       ) : (
         <Packages
           plans={plans}
-          setSelectedPackageId={setSelectedPackageId}
-          selectedPackageId={selectedPackageId}
+          setSelectedPackage={setSelectedPackage}
+          selectedPackage={selectedPackage}
           categories={categories}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
-          subscriptionType={subscriptionType}
-          setSubscriptionType={setSubscriptionType}
         />
       )}
     </>

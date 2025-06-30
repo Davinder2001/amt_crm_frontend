@@ -134,6 +134,15 @@ interface PlanLimits {
     invoices_number: number;
 }
 
+type Limit = {
+    id: number;
+    variant_type: string;
+    employee_numbers: number;
+    items_number: number;
+    daily_tasks_number: number;
+    invoices_number: number;
+};
+
 interface PackagePlan {
     id?: number;
     name: string;
@@ -144,12 +153,18 @@ interface PackagePlan {
     annual_limits: PlanLimits;
     three_years_limits: PlanLimits;
     business_categories: BusinessCategory[];
+    limits?: Limit[];
 }
 
 interface PackagePlanResponse {
     data: PackagePlan[];
 }
 
+interface SelectedPackage {
+    packageId: number;
+    limitId: number;
+    variantType: string;
+}
 
 // Upgrade payload sent to backend
 interface UpgradePackagePayload {

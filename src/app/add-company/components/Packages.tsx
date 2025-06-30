@@ -5,34 +5,33 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 interface PackagesProps {
     plans: PackagePlan[];
-    setSelectedPackageId: (id: number) => void;
-    selectedPackageId: number | null;
+    setSelectedPackage: (pkg: SelectedPackage) => void;
+    selectedPackage: SelectedPackage | null;
     categories: BusinessCategory[];
-    setSelectedCategoryId: (id: number) => void;
+    setSelectedCategoryId: (id: number | null) => void;
     selectedCategoryId: number | null;
-    subscriptionType: 'monthly' | 'annual' | null;
-    setSubscriptionType: (type: 'monthly' | 'annual') => void;
 }
 
 const Packages: React.FC<PackagesProps> = ({
     plans,
-    setSelectedPackageId,
-    selectedPackageId,
+    setSelectedPackage,
+    selectedPackage,
     categories,
     selectedCategoryId,
     setSelectedCategoryId,
-    subscriptionType,
-    setSubscriptionType,
 }) => {
     const isInitialLoad = useRef(true);
 
-    const filteredPlans = plans.filter((plan) =>
-        plan.business_categories.some((category) => category.id === selectedCategoryId)
-    );
+    // Show all packages if no category is selected or filter by selected category
+    const filteredPlans = selectedCategoryId
+        ? plans.filter((plan) =>
+            plan.business_categories.some((category) => category.id === selectedCategoryId)
+        )
+        : plans;
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedId = Number(e.target.value);
-        setSelectedCategoryId(selectedId);
+        setSelectedCategoryId(selectedId === 0 ? null : selectedId);
         isInitialLoad.current = false;
 
         if (typeof window !== 'undefined') {
@@ -40,59 +39,34 @@ const Packages: React.FC<PackagesProps> = ({
             const parsed = existing ? JSON.parse(existing) : {};
             localStorage.setItem('addCompany', JSON.stringify({
                 ...parsed,
-                category_id: selectedId,
+                category_id: selectedId === 0 ? null : selectedId,
             }));
         }
     };
 
-    const handleSubscriptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newType = e.target.value as 'monthly' | 'annual';
-        setSubscriptionType(newType);
+    const handlePackageSelection = (packageId: number, limitId: number, variantType: string) => {
+        setSelectedPackage({ packageId, limitId, variantType });
 
         if (typeof window !== 'undefined') {
             const existing = localStorage.getItem('addCompany');
             const parsed = existing ? JSON.parse(existing) : {};
             localStorage.setItem('addCompany', JSON.stringify({
                 ...parsed,
-                subscription_type: newType,
-            }));
-        }
-    };
-
-    const handlePackageSelection = (packageId: number) => {
-        setSelectedPackageId(packageId);
-
-        if (typeof window !== 'undefined') {
-            const existing = localStorage.getItem('addCompany');
-            const parsed = existing ? JSON.parse(existing) : {};
-            localStorage.setItem('addCompany', JSON.stringify({
-                ...parsed,
-                package_id: packageId,
+                packageId,
+                limitId,
+                variantType,
+                // Ensure we store the actual category ID from the selected plan
+                category_id: parsed.category_id || plans.find(p => p.id === packageId)?.business_categories[0]?.id || null
             }));
         }
     };
 
     useEffect(() => {
         if (isInitialLoad.current && categories.length > 0 && plans.length > 0) {
-            const firstCategoryWithPackages = categories.find((category) =>
-                plans.some((plan) =>
-                    plan.business_categories.some(
-                        (planCategory) => planCategory.id === category.id
-                    )
-                )
-            );
-
-            if (firstCategoryWithPackages) {
-                setSelectedCategoryId(firstCategoryWithPackages.id);
-            }
-
-            if (!subscriptionType) {
-                setSubscriptionType('monthly');
-            }
-
+            // Don't set any category by default - show all packages initially
             isInitialLoad.current = false;
         }
-    }, [plans, categories, subscriptionType, setSelectedCategoryId, setSubscriptionType]);
+    }, [plans, categories]);
 
     return (
         <div className="account-pricing-container">
@@ -106,10 +80,10 @@ const Packages: React.FC<PackagesProps> = ({
                         <label htmlFor="category-select">Category:</label>
                         <select
                             id="category-select"
-                            value={selectedCategoryId ?? ''}
+                            value={selectedCategoryId ?? 0}
                             onChange={handleCategoryChange}
                         >
-                            <option value="">Select Category</option>
+                            <option value={0}>All Categories</option>
                             {categories.map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -117,63 +91,51 @@ const Packages: React.FC<PackagesProps> = ({
                             ))}
                         </select>
                     </div>
-
-                    <div className="filter-group">
-                        <label htmlFor="subscription-select">Billing:</label>
-                        <select
-                            id="subscription-select"
-                            value={subscriptionType ?? ''}
-                            onChange={handleSubscriptionChange}
-                        >
-                            <option value="">Select Type</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="annual">Annually</option>
-                        </select>
-                    </div>
                 </div>
             </div>
 
             <div className="packages-grid">
                 {filteredPlans.length > 0 ? (
-                    filteredPlans.map((plan) => {
-                        const isSelected = plan.id === selectedPackageId;
-                        const price = subscriptionType === 'monthly'
-                            ? plan.monthly_price
-                            : plan.annual_price;
+                    filteredPlans.flatMap((plan) =>
+                        plan.limits?.map((limit) => {
+                            const isSelected = selectedPackage?.packageId === plan.id &&
+                                selectedPackage?.limitId === limit.id;
+                            const price =
+                                limit.variant_type === 'monthly' ? plan.monthly_price :
+                                    limit.variant_type === 'annual' ? plan.annual_price :
+                                        plan.three_years_price;
 
-                        return (
-                            <div key={plan.id} className="package-card">
-                                <div className="ribbon">
-                                    {subscriptionType === 'monthly' ? '1 Month' : '1 Year'}
+                            return (
+                                <div key={`${plan.id}-${limit.id}`} className="package-card">
+                                    <div className="ribbon">
+                                        {limit.variant_type === 'monthly' ? 'Monthly' :
+                                            limit.variant_type === 'annual' ? 'Annual' : '3 Years'}
+                                    </div>
+                                    <h3 className="planName">{plan.name}</h3>
+                                    <h3 className="planPrice">
+                                        ₹ {price ?? 0}
+                                    </h3>
+                                    <ul className="features">
+                                        <li>{limit.employee_numbers} Employees</li>
+                                        <li>{limit.items_number} Items</li>
+                                        <li>{limit.daily_tasks_number} Tasks/day</li>
+                                        <li>{limit.invoices_number} Invoices</li>
+                                    </ul>
+
+                                    <div className="pricing-buttons">
+                                        <button
+                                            type='button'
+                                            className={isSelected ? 'btnPrimary' : 'btnSecondary'}
+                                            onClick={() => handlePackageSelection(plan.id ?? 0, limit.id, limit.variant_type)}
+                                        >
+                                            {isSelected ? 'Selected' : 'Choose Plan'}
+                                        </button>
+                                        <button type='button' className="btnOnline">✓ Online</button>
+                                    </div>
                                 </div>
-                                <h3 className="planPrice">
-                                    ₹ {price ?? 0} / {subscriptionType === 'monthly' ? 'Month' : 'Year'}
-                                </h3>
-                                <ul className="features">
-                                    {/* <li>{plan.employee_numbers} Employees</li>
-                                    <li>{plan.items_number} Items</li>
-                                    <li>{plan.daily_tasks_number} Tasks/day</li>
-                                    <li>{plan.invoices_number} Invoices</li> */}
-                                </ul>
-
-                                <div className="pricing-buttons">
-                                    <button
-                                    type='button'
-                                        className={isSelected ? 'btnPrimary' : 'btnSecondary'}
-                                        onClick={() => handlePackageSelection(plan.id ?? 0)}
-                                        disabled={!subscriptionType}
-                                    >
-                                        {isSelected ? 'Selected' : 'Choose Plan'}
-                                    </button>
-                                    <button type='button' className="btnOnline">✓ Online</button>
-                                </div>
-
-                                {!subscriptionType && (
-                                    <p className="text-xs text-red-500 mb-1">Please select a subscription type first</p>
-                                )}
-                            </div>
-                        );
-                    })
+                            );
+                        })
+                    )
                 ) : (
                     <div className="no-packages-message">
                         <div className="empty-box-icon">📦</div>

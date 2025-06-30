@@ -5,8 +5,9 @@ import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 interface AddCompany {
   company_name: string;
   package_id: number;
+  limit_id: number;
+  variant_type: string;
   business_category_id: number | null;
-  subscription_type: string;
   company_logo: File | null;
   business_address: string;
   pin_code: string;
@@ -18,8 +19,9 @@ interface AddCompany {
 
 interface AddCompanyFormProps {
   packageId: number;
+  limitId: number;
+  variantType: string;
   categoryId: number | null;
-  subscriptionType: string | null;
 }
 
 const LOCAL_STORAGE_KEY = 'addCompany';
@@ -44,11 +46,17 @@ const saveFormData = (data: Partial<AddCompany>) => {
   }
 };
 
-const getDefaultFormData = (packageId: number, categoryId: number | null, subscriptionType: string | null): AddCompany => ({
+const getDefaultFormData = (
+  packageId: number,
+  limitId: number,
+  variantType: string,
+  categoryId: number | null
+): AddCompany => ({
   company_name: '',
   package_id: packageId,
+  limit_id: limitId,
+  variant_type: variantType,
   business_category_id: categoryId,
-  subscription_type: subscriptionType ?? '',
   company_logo: null,
   business_address: '',
   pin_code: '',
@@ -58,9 +66,14 @@ const getDefaultFormData = (packageId: number, categoryId: number | null, subscr
   business_proof_back: null,
 });
 
-const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscriptionType }) => {
+const Page: React.FC<AddCompanyFormProps> = ({
+  packageId,
+  limitId,
+  variantType,
+  categoryId
+}) => {
   const [formData, setFormData] = useState<AddCompany>(
-    getDefaultFormData(packageId, categoryId, subscriptionType)
+    getDefaultFormData(packageId, limitId, variantType, categoryId)
   );
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
@@ -71,6 +84,7 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
     }
   }, []);
 
+  // Handles input changes and saves to localStorage
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
@@ -78,10 +92,13 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
     saveFormData(updatedFormData);
   };
 
+  // Handles file input changes and saves to localStorage
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files.length > 0) {
-      setFormData(prev => ({ ...prev, [name]: files[0] }));
+      const updatedFormData = { ...formData, [name]: files[0] };
+      setFormData(updatedFormData);
+      saveFormData(updatedFormData);
     }
   };
 
@@ -96,8 +113,9 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
       const payload = new FormData();
       payload.append('company_name', formData.company_name);
       payload.append('package_id', formData.package_id.toString());
+      payload.append('limit_id', formData.limit_id.toString());
+      payload.append('variant_type', formData.variant_type);
       payload.append('business_category_id', formData.business_category_id.toString());
-      payload.append('subscription_type', formData.subscription_type);
       payload.append('business_address', formData.business_address);
       payload.append('pin_code', formData.pin_code);
       payload.append('business_proof_type', formData.business_proof_type);

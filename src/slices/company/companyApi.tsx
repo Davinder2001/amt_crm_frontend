@@ -98,7 +98,16 @@ const companyApi = companyCreateSlice.injectEndpoints({
       invalidatesTags: ["Company"],
     }),
 
-    orderNewCompany: builder.mutation<{ redirect_url: string, orderId: string, formdata: FormData }, FormData>({
+    orderNewCompany: builder.mutation<{
+      success: boolean;
+      message: string;
+      payment: {
+        success: boolean;
+        merchantOrderId: string;
+        redirect_url: string;
+      };
+      company: string;
+    }, FormData>({
       query: (formData) => ({
         url: "add-new-company/pay",
         method: "POST",
@@ -107,7 +116,6 @@ const companyApi = companyCreateSlice.injectEndpoints({
       }),
       invalidatesTags: ["Company"],
     }),
-
 
     addNewCompany: builder.mutation<AddCompany, { orderId: string, formdata: FormData }>({
       query: ({ orderId, formdata }) => ({

@@ -83,8 +83,8 @@ const Page: React.FC<AddCompanyFormProps> = ({
 
       const response = await orderNewCompany(payload).unwrap();
 
-      if (response.redirect_url) {
-        window.location.href = response.redirect_url;
+      if (response.payment.redirect_url) {
+        window.location.href = response.payment.redirect_url;
       }
     } catch (err) {
       console.error("Failed to start payment:", err);

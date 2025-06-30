@@ -1,164 +1,150 @@
 @use '../variables' as *;
 
 .add-company {
-  padding-bottom: 20px;
+  max-width: 80%;
+  margin: auto;
+  padding: 20px;
+  background: $white;
+  border-radius: $border-radius;
+  box-shadow: $secondary-shadow;
+  font-family: $font-family;
 
   .company-form {
-    background: #fff;
-    border-radius: $border-radius;
-    padding: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 10px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
 
       .form-group {
+        margin-bottom: 0.5rem;
+
         &.full-width {
-          grid-column: 1 / -1;
+          grid-column: span 2;
         }
 
         .form-label {
-          letter-spacing: .4px;
-          color: #333;
-          font-size: 13px;
-          font-weight: 400;
           display: block;
+          margin-bottom: 0.5rem;
+          font-size: $font-size-small;
+          font-weight: $font-weight-medium;
+          color: $lable-color;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          &::after {
+            content: '*';
+            color: $danger-color;
+            margin-left: 0.25rem;
+            opacity: 0;
+            transition: $transition;
+          }
+
+          &.required::after {
+            opacity: 1;
+          }
         }
 
         .form-input,
         .form-textarea {
           width: 100%;
-          padding: 10px 12px;
-          border: 1px solid #ddd;
+          padding: 0.75rem 1rem;
+          border: 1px solid $border-color;
           border-radius: $border-radius;
-          font-size: 14px;
-          transition: border-color 0.3s;
-
-          &::placeholder {
-            color: #ccc;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            background-color: transparent;
-          }
+          font-size: $font-size-one;
+          font-family: $font-family;
+          transition: $transition;
+          background-color: $light-bg;
+          color: $text-dark;
 
           &:focus {
             outline: none;
-            border-color: var(--primary-color);
-            background: #ffffff;
-            transform: scale(1);
+            border-color: $primary-light;
+            box-shadow: 0 0 0 2px rgba($primary-light, 0.2);
+          }
+
+          &::placeholder {
+            color: rgba($gray-color, 0.6);
           }
         }
 
         .form-textarea {
-          min-height: 80px;
           resize: vertical;
+          min-height: 100px;
         }
 
         .file-upload {
+          position: relative;
           display: flex;
           align-items: center;
-          position: relative;
 
           .file-input {
-            width: 100%;
-            overflow: hidden;
             position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
             cursor: pointer;
-            padding: 8px 12px;
+            z-index: 2;
           }
 
           .file-label {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-            font-size: 14px;
-            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px dashed $border-color;
+            border-radius: $border-radius;
+            font-size: $font-size-small;
+            color: $gray-color;
+            background-color: $light-bg;
+            transition: $transition;
             overflow: hidden;
             text-overflow: ellipsis;
-            background: #f9f9f9;
+            white-space: nowrap;
+
+            &::before {
+              content: '\eb41'; // Unicode for upload icon
+              font-family: 'remixicon';
+              font-style: normal;
+              font-size: $font-size-large;
+              margin-right: 0.75rem;
+            }
           }
 
-          .file-button {
-            padding: 10px 15px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-
-            &:hover {
-              background: #2980b9;
-            }
+          &:hover .file-label {
+            border-color: $primary-light;
+            background-color: rgba($primary-light, 0.05);
           }
         }
       }
     }
 
     .form-actions {
-      text-align: center;
-      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
 
-      .submit-button {
-        padding: 8px 15px;
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: $border-radius;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
-        &:hover {
-          background-color: var(--primary-light);
-        }
-
-        &:disabled {
-          background-color: #95a5a6;
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    .success-message {
-      color: #27ae60;
-      text-align: center;
-      margin-top: 20px;
-      font-weight: 500;
-    }
-
-    .error-message {
-      color: #e74c3c;
-      text-align: center;
-      margin-top: 20px;
-      font-weight: 500;
     }
   }
 }
 
-.account-pricing-container {
-  padding: 20px;
-}
-
+// Responsive adjustments
 @media (max-width: 768px) {
   .add-company {
-    .company-form {
-      padding: 20px;
+    padding: 1.5rem;
 
+    .company-form {
       .form-grid {
         grid-template-columns: 1fr;
+
+        .form-group.full-width {
+          grid-column: span 1;
+        }
+      }
+
+      .form-actions {
+        justify-content: center;
       }
     }
-  }
-
-  .account-pricing-container {
-    padding: 10px;
   }
 }

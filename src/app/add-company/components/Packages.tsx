@@ -69,7 +69,7 @@ const Packages: React.FC<PackagesProps> = ({
                     <FaArrowLeft size={16} color="#fff" />
                 </Link>
 
-                <div className="filters">
+                <div className="category-filter">
                     <div className="filter-group">
                         <label htmlFor="category-select">Category:</label>
                         <select

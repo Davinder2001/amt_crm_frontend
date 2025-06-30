@@ -175,7 +175,7 @@ function CompanyDetails() {
           <h2>Available Packages</h2>
           <div className="package-cards">
             {related_packages.filter(pkg => pkg.id !== subscribed_package.id).map((pkg: PackagePlan) => (
-              <div key={pkg.id} className="card">
+              <div key={pkg.id} className="available-packages-card">
                 <h3>{pkg.name}</h3>
                 <p><strong>Monthly Price:</strong> ₹{pkg.monthly_price}</p>
                 <p><strong>Annual Price:</strong> ₹{pkg.annual_price}</p>

@@ -2,38 +2,42 @@
 
 
 .account-packages-header {
-  display: flex;
+  max-width: 80%;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   margin-top: 20px;
+  display: flex;
+  margin: auto;
+
 
   .category-filter {
     display: flex;
     align-items: center;
     gap: 10px;
+
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        label {
+          display: block;
+          font-size: 14px;
+          color: $dark-color;
+        }
+      }
+
+      select {
+        padding: 7px;
+        font-size: 14px;
+        border-radius: $border-radius;
+        border-color: $light-blue;
+        cursor: pointer;
+      }
+    }
   }
-}
 
-.filters {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.filter-group label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: $dark-color;
-}
-
-.filter-group select {
-  padding: 7px;
-  font-size: 14px;
-  border-radius: $border-radius;
-  border-color: $light-blue;
-}
 
 
 .no-packages-message {
@@ -129,6 +133,13 @@
     100% {
       transform: rotate(0deg);
     }
+  }
+}
+
+.select-button-container {
+  button {
+    width: 100%;
+    margin-top: 10px;
   }
 }
 
@@ -281,7 +292,6 @@
 
         .role-badge {
           background: var(--light-bg);
-          padding: 0.2rem 0.6rem;
           border-radius: 4px;
           text-transform: capitalize;
         }

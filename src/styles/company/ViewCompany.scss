@@ -167,7 +167,13 @@
             align-items: center;
         }
 
-        .available-packages-details {
+        .available-packages-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        * .available-packages-details {
             display: flex;
             flex-direction: column;
             gap: 10px;

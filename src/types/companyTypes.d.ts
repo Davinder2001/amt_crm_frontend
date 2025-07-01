@@ -248,3 +248,24 @@ interface CreateHolidayPayload {
 interface UpdateHolidayPayload extends Partial<CreateHolidayPayload> {
   id: number;
 }
+
+
+
+interface SubscribedPackage {
+  id: number;
+  name: string;
+  monthly_price: string;
+  annual_price: string;
+  three_years_price: string;
+  limits?: PackageLimit[];
+}
+interface PackageLimit {
+  id: number;
+  package_id: number;
+  variant_type: 'monthly' | 'annual' | 'three_years';
+  employee_numbers: number;
+  items_number: number;
+  daily_tasks_number: number;
+  invoices_number: number;
+}
+

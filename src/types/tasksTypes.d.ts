@@ -24,6 +24,7 @@ interface Task {
     created_at: string;
     updated_at: string;
     priority: string;
+    attachment?: string;
 }
 interface Attachment {
     url: string;

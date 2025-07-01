@@ -16,7 +16,7 @@ export const tasksApi = apiSlice.injectEndpoints({
     }),
 
 
-    createTask: builder.mutation<Task, Partial<Task>>({
+    createTask: builder.mutation<Task, FormData>({
       query: (newTask) => ({
         url: 'tasks',
         method: 'POST',
@@ -25,14 +25,15 @@ export const tasksApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Task'],
     }),
 
-    updateTask: builder.mutation<Task, Partial<Task> & Pick<Task, 'id'>>({
-      query: ({ id, ...taskData }) => ({
+    updateTask: builder.mutation<Task, { id: number; formData: FormData }>({
+      query: ({ id, formData }) => ({
         url: `tasks/${id}`,
         method: 'PUT',
-        body: taskData,
+        body: formData,
       }),
       invalidatesTags: ['Task'],
     }),
+
 
     deleteTask: builder.mutation<{ success: boolean; id: number }, number>({
       query: (id) => ({

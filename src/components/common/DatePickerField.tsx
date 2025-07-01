@@ -68,9 +68,9 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({
                             onChange={({ target: { value } }) => changeYear(Number(value))}
                             className="mr-2 p-1 bg-white border rounded"
                         >
-                            {Array.from({ length: 100 }, (_, i) => (
-                                <option key={i} value={new Date().getFullYear() - 99 + i}>
-                                    {new Date().getFullYear() - 99 + i}
+                            {Array.from({ length: 3000 - (new Date().getFullYear() - 100) + 1 }, (_, i) => (
+                                <option key={i} value={new Date().getFullYear() - 100 + i}>
+                                    {new Date().getFullYear() - 100 + i}
                                 </option>
                             ))}
                         </select>

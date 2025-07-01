@@ -218,6 +218,7 @@ function POSPage() {
                         final_cost: finalCost,
                         product_type: item.product_type,
                         unit_of_measure: item.unit_of_measure,
+                        useUnitPrice: useUnitPrice,
                         variants: variant && typeof variant.id === 'number' ? [{
                             variant_id: variant.id,
                             quantity: actualQuantity, // Use actualQuantity here
@@ -325,7 +326,7 @@ function POSPage() {
                             updatedItem.variants = ci.variants.map(v => ({
                                 ...v,
                                 quantity: newQty,
-                                final_cost: finalCost
+                                regular_price: finalCost
                             }));
                         }
 
@@ -337,7 +338,7 @@ function POSPage() {
                                 variants: b.variants?.map(v => ({
                                     ...v,
                                     quantity: newQty,
-                                    final_cost: finalCost
+                                    regular_price: finalCost
                                 }))
                             }));
                         }

@@ -103,18 +103,34 @@ interface CartItemVariant {
   final_cost: number | null;
 }
 
-interface cartBaseItem {
+interface ItemPriceFields {
+  cost_price?: string | number | null;
+  regular_price?: number | null;
+  sale_price?: number | null;
+  price_per_unit?: number | null;
+}
+
+interface BatchPriceFields extends ItemPriceFields {
+  batch_number?: string;
+}
+
+interface VariantPriceFields {
+  variant_regular_price?: number | null;
+  variant_sale_price?: number | null;
+  variant_price_per_unit?: number | null;
+}
+
+interface cartBaseItem extends ItemPriceFields, VariantPriceFields {
   item_id: number;
-  quantity: number;
-  final_cost: number | null;
+  quantity?: number;
+  units_quantity?: number;
   product_type?: "simple_product" | "variable_product";
   unit_of_measure?: "unit" | "pieces";
   batch_id?: number | null;
   variant_id?: number;
 }
 
-
-interface CartItem {
+interface CartItem extends ItemPriceFields {
   id: string | number;
   variantId?: number;
   itemId?: number;
@@ -123,13 +139,14 @@ interface CartItem {
   quantity: number;
   final_cost: number;
   product_type?: 'simple_product' | 'variable_product';
+  useUnitPrice?: boolean;
   unit_of_measure?: 'unit' | 'pieces';
   isMaxQuantity?: boolean;
   variants?: {
     variant_id: number;
     quantity: number;
     final_cost: number | null;
-  }[];
+  }[] & VariantPriceFields;
   batches?: {
     batch_id: number;
     quantity: number;
@@ -137,10 +154,9 @@ interface CartItem {
       variant_id: number;
       quantity: number;
       final_cost: number | null;
-    }[];
-  }[];
+    }[] & VariantPriceFields;
+  }[] & BatchPriceFields;
 }
-
 
 type TabType = 'Cart' | 'Delivery' | 'Pickup';
 
@@ -313,6 +329,9 @@ interface ItemBatch {
   item_id: number;
   batch_number: string | null;
   cost_price: number;
+  regular_price?: number | null;
+  sale_price?: number | null;
+  price_per_unit?: number | null; 
   quantity_count: number;
   company_id: number;
   created_at: string;
@@ -321,6 +340,8 @@ interface ItemBatch {
   date_of_expiry: string | null;
   purchase_price: number | null;
   quantity: string;
+  product_type?: 'simple_product' | 'variable_product';
+  unit_of_measure?: 'unit' | 'pieces';
   item?: {
     id: number;
     name: string;

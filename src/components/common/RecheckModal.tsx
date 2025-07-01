@@ -2,7 +2,7 @@
 import React from 'react';
 import Modal from '../common/Modal';
 import { useCompanyStatusDetailsQuery } from '@/slices';
-import Loader from '../common/Loader';
+import LoadingState from './LoadingState';
 
 interface RecheckModalProps {
     isOpen: boolean;
@@ -45,7 +45,7 @@ const RecheckModal: React.FC<RecheckModalProps> = ({
         >
             <div className="recheck-modal-content">
                 {isLoading ? (
-                    <Loader />
+                    <LoadingState/>
                 ) : data ? (
                     <>
                         <div className="status-details-grid">

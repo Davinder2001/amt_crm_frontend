@@ -128,6 +128,7 @@ interface cartBaseItem extends ItemPriceFields, VariantPriceFields {
   unit_of_measure?: "unit" | "pieces";
   batch_id?: number | null;
   variant_id?: number;
+  sale_by?: 'piece' | 'unit';
 }
 
 interface CartItem extends ItemPriceFields {

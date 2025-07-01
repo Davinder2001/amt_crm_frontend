@@ -227,8 +227,6 @@
 
 
 
-
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -256,7 +254,7 @@ interface FormState {
     endDate: string;
     notify: boolean;
     description: string;
-    attachment: File | null;
+    attachments: File[];
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
@@ -274,7 +272,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
         endDate: '',
         notify: true,
         description: '',
-        attachment: null,
+        attachments: [],
     });
 
     const convertToDatetimeLocal = (dateStr: string): string => {
@@ -306,7 +304,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                         : '',
                     notify: taskToEdit.notify ?? true,
                     description: taskToEdit.description || '',
-                    attachment: null,
+                    attachments: [],
                 });
             }
         }
@@ -340,6 +338,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
         }));
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        setFormData((prev) => ({
+            ...prev,
+            attachments: files,
+        }));
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
@@ -351,9 +357,11 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
         payload.append('end_date', convertToBackendFormat(formData.endDate));
         payload.append('notify', formData.notify ? 'true' : 'false');
         payload.append('description', formData.description);
-        if (formData.attachment) {
-            payload.append('attachment', formData.attachment);
-        }
+
+        // ✅ Append all files as "attachment"
+        formData.attachments.forEach((file) => {
+            payload.append('attachment', file); // depends on backend; may need 'attachment[]'
+        });
 
         try {
             if (mode === 'add') {
@@ -407,7 +415,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
 
                 <div className="form-group">
                     <label>Assign Task to Role</label>
-                    <input type="text" value={formData.role} readOnly placeholder="" />
+                    <input type="text" value={formData.role} readOnly />
                 </div>
 
                 <div className="form-group">
@@ -435,18 +443,15 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>Upload Attachment</label>
+                    <label>Upload Attachments (Images/Videos)</label>
                     <input
                         type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                attachment: e.target.files?.[0] ?? null,
-                            }))
-                        }
+                        accept="image/*,video/*"
+                        multiple
+                        onChange={handleFileChange}
                     />
                 </div>
+
                 <div className="form-group">
                     <label>Description</label>
                     <textarea
@@ -457,7 +462,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                         placeholder="Write description for the task"
                     />
                 </div>
-
 
                 <div className="form-group">
                     <label>Notification</label>

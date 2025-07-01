@@ -360,7 +360,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
 
         // ✅ Append all files as "attachment"
         formData.attachments.forEach((file) => {
-            payload.append('attachment', file); // depends on backend; may need 'attachment[]'
+            payload.append('attachments[]', file);
         });
 
         try {

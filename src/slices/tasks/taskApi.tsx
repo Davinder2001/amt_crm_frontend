@@ -59,7 +59,7 @@ export const tasksApi = apiSlice.injectEndpoints({
 
 
 
-    approveHistory: builder.mutation<{ message: string }, number>({
+    approveHistory: builder.mutation< TasksResponse, { message: string }, number>({
       query: (historyId) => ({
         url: `tasks/${historyId}/approve`,
         method: 'POST',

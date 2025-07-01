@@ -34,15 +34,15 @@ function CompanyDetails() {
   const [selectedPackage, setSelectedPackage] = useState<PackagePlan | null>(null);
   const [upgradeCompanyPackage] = useUpgradeCompanyPackageMutation();
   const [error, setError] = useState<{ message: string; errors?: Record<string, string[]> } | null>(null);
+  const [processingVariant, setProcessingVariant] = useState<'monthly' | 'annual' | 'three_years' | null>(null);
 
-  if (isLoading) return <p>Loading...</p>;
+   if (isLoading) return <p>Loading...</p>;
   if (isError || !data) return <p>Something went wrong.</p>;
-
   const { company, subscribed_package, related_packages } = data as CompanyDetailsResponse;
-
+  
   const normalizedSubscribed = normalizePackageLimits(subscribed_package);
   const normalizedPackages = related_packages.map(normalizePackageLimits);
-
+  
   const handleUpgradeClick = (pkg: PackagePlan) => {
     setSelectedPackage(pkg);
     setShowUpgradeModal(true);
@@ -50,6 +50,7 @@ function CompanyDetails() {
   };
 
   const handlePackageUpgrade = async (subscriptionType: 'monthly' | 'annual' | 'three_years') => {
+    setProcessingVariant(subscriptionType);
     try {
       if (!selectedPackage) throw new Error('No package selected');
 
@@ -70,18 +71,22 @@ function CompanyDetails() {
 
       await refetch();
       setShowUpgradeModal(false);
-
+      
       if (response.redirect_url) {
         window.location.href = response.redirect_url;
       } else {
         window.location.reload();
       }
-
+      
     } catch (err) {
       console.error("Upgrade failed:", err);
       setError({ message: 'Package upgrade failed' });
+    } finally {
+      setProcessingVariant(null);
     }
   };
+
+ 
 
   return (
     <div className="company-details-container">
@@ -257,9 +262,18 @@ function CompanyDetails() {
                           <button
                             className="buttons"
                             onClick={() => handlePackageUpgrade(limit.variant_type as 'monthly' | 'annual' | 'three_years')}
-                            disabled={isCurrent}
+                            disabled={isCurrent || processingVariant === limit.variant_type}
+                            style={isCurrent?{
+                              backgroundColor:'#eee',
+                              cursor:'not-allowed',
+                              color:'black',
+                            }:{}}
                           >
-                            {isCurrent ? 'Current Plan' : 'Select Plan'}
+                            {isCurrent
+                              ? 'Current Plan'
+                              : processingVariant === limit.variant_type
+                                ? 'Processing...'
+                                : 'Select Plan'}
                           </button>
                         </div>
                       </div>

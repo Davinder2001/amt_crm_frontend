@@ -59,15 +59,39 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
     useEffect(() => {
         if (mode === 'edit' && packageData) {
+            const limitsMap = {
+                monthly: { ...initialLimits },
+                annual: { ...initialLimits },
+                three_years: { ...initialLimits },
+            };
+
+            if (packageData.limits) {
+                packageData.limits.forEach(limit => {
+                    const { variant_type, ...rest } = limit;
+                    if (limitsMap[variant_type as keyof typeof limitsMap]) {
+                        limitsMap[variant_type as keyof typeof limitsMap] = {
+                            employee_numbers: rest.employee_numbers,
+                            items_number: rest.items_number,
+                            daily_tasks_number: rest.daily_tasks_number,
+                            invoices_number: rest.invoices_number,
+                        };
+                    }
+                });
+            }
+
             setFormData({
-                ...packageData,
+                name: packageData.name || '',
+                monthly_price: Number(packageData.monthly_price) || 0,
+                annual_price: Number(packageData.annual_price) || 0,
+                three_years_price: Number(packageData.three_years_price) || 0,
+                monthly_limits: limitsMap.monthly,
+                annual_limits: limitsMap.annual,
+                three_years_limits: limitsMap.three_years,
                 business_categories: packageData.business_categories || [],
-                monthly_limits: packageData.monthly_limits || { ...initialLimits },
-                annual_limits: packageData.annual_limits || { ...initialLimits },
-                three_years_limits: packageData.three_years_limits || { ...initialLimits },
             });
         }
     }, [packageData, mode, initialLimits]);
+
 
     const clearCardData = (planType: 'monthly' | 'annual' | 'three_years') => {
         setFormData(prev => {

@@ -5,6 +5,7 @@ import Loader from '@/components/common/Loader';
 import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Page = () => {
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
@@ -29,9 +30,11 @@ const Page = () => {
     <>
       {hasValidSelection ? (
         <>
-          <Link href="/add-company" className="back-button" onClick={clearSelection}>
-            ← Back
-          </Link>
+          <div className='add-company-form-nav'>
+            <Link href="/add-company" className="back-button" onClick={clearSelection}>
+              <FaArrowLeft />
+            </Link>
+          </div>
           <AddCompanyForm
             packageId={selectedPackage.packageId}
             limitId={selectedPackage.limitId}

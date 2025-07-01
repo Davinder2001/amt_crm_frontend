@@ -18,6 +18,7 @@ import {
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useRouter } from 'next/navigation';
 import { useClickOutside } from '@/components/common/useClickOutside';
+import LoadingState from '@/components/common/LoadingState';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -217,7 +218,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         }
     };
 
-    if (mode === 'edit' && isPackageLoading) return <div>Loading package data...</div>;
+    if (mode === 'edit' && isPackageLoading) return <LoadingState/>;
 
     return (
         <div>

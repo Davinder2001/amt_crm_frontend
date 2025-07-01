@@ -89,7 +89,7 @@
                         display: grid;
                         grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
                         padding: 8px 10px;
-                       
+
                         transition: background-color 0.2s ease;
 
                         &:last-child {
@@ -178,7 +178,8 @@
                 border-radius: 9999px;
                 text-transform: capitalize;
 
-                &.verified,&.completed {
+                &.verified,
+                &.completed {
                     background-color: #ecfdf5;
                     color: #059669;
                 }
@@ -365,5 +366,74 @@
 
     .companies-list {
         display: block;
+    }
+}
+
+@media (max-width:768px) {
+    .admin-dashboard-container {
+        .admin-header .header-content {
+            padding: 10px;
+
+            .logo-wrapper {
+                span {
+                    display: none;
+                }
+            }
+        }
+
+        .dashboard-content {
+            padding: 10px;
+
+            .welcome-section {
+                margin-bottom: 20px;
+                text-align: center;
+
+                .welcome-title {
+                    font-size: 22px;
+                }
+
+                .welcome-subtitle {
+                    font-size: 14px;
+                }
+            }
+
+            .companies-section {
+                .company-cards-container .company-card {
+                    padding: 10px;
+
+                    .card-row {
+
+                        .card-label {
+                            font-size: 14px;
+                            font-weight: bold;
+                        }
+
+                        .card-value {
+                            font-size: 12px;
+                        }
+                    }
+
+                    .manage-btn {
+                        padding: 5px 10px;
+                    }
+                }
+
+                .status-badge {
+                    padding: 2px 8px;
+                    font-size: 10px;
+                }
+            }
+
+            .add-company-cta {
+                margin-top: 20px;
+
+                .add-company-link {
+                    padding: 5px 10px;
+                    font-size: 14px;
+                    gap: 5px;
+                }
+            }
+        }
+
     }
 }

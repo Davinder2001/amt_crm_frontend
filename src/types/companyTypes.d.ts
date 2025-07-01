@@ -30,6 +30,24 @@ interface Payment {
   refund: string | null;
 }
 
+// CompanyStatusData
+interface CompanyStatusData {
+  company_name: string;
+  company_id: string;
+  order_id: string | null;
+  payment_status: string;
+  payment_recoad_status: string;
+  subscription_status: string;
+  verification_status: string;
+  subscription_date: string | null;
+}
+
+interface CompanyStatusResponse {
+  success: boolean;
+  message: string;
+  data: CompanyStatusData;
+}
+
 interface AdminBillingResponse {
   success: boolean;
   payments: Payment[];

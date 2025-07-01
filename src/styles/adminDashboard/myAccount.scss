@@ -16,27 +16,27 @@
     align-items: center;
     gap: 10px;
 
-      .filter-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
-        label {
-          display: block;
-          font-size: 14px;
-          color: $dark-color;
-        }
-      }
-
-      select {
-        padding: 7px;
+      label {
+        display: block;
         font-size: 14px;
-        border-radius: $border-radius;
-        border-color: $light-blue;
-        cursor: pointer;
+        color: $dark-color;
       }
     }
+
+    select {
+      padding: 7px;
+      font-size: 14px;
+      border-radius: $border-radius;
+      border-color: $light-blue;
+      cursor: pointer;
+    }
   }
+}
 
 
 
@@ -208,7 +208,7 @@
       .action-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 5px;
         padding: 5px 10px;
         background: rgba(255, 255, 255, 0.1);
         color: $white;
@@ -321,10 +321,73 @@
         padding: 10px;
         display: flex;
         align-items: center;
+        position: relative;
+        overflow: hidden;
         gap: 10px;
         border-bottom: 1px solid var(--border);
         transition: all 0.2s;
         cursor: pointer;
+
+        .switch-badge {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) scale(0.8);
+          background: var(--primary-color);
+          color: white;
+          padding: 5px 10px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          transition: all 0.3s ease;
+          z-index: 3;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          white-space: nowrap;
+          pointer-events: none;
+
+          &::before {
+            content: '↻';
+            font-size: 12px;
+            display: inline-block;
+            animation:
+              spin 3s linear infinite,
+              pulse 2s ease infinite;
+          }
+        }
+
+        &:hover .switch-badge {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+        // Keep your existing animations
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+          }
+
+          50% {
+            transform: scale(1.2);
+          }
+
+          100% {
+            transform: scale(1);
+          }
+        }
 
         &:hover {
           background: var(--light-bg);
@@ -368,7 +431,8 @@
             text-transform: capitalize;
 
             &.verified,
-            &.paid, &.completed{
+            &.paid,
+            &.completed {
               background: #e8f5e9;
               color: var(--verified);
             }
@@ -413,6 +477,71 @@
       }
     }
   }
+}
+
+.recheck-modal-content {
+  .status-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+
+    .status-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .status-label {
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+
+    &.status-pending {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    &.status-completed {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    &.status-verified {
+      background-color: #E3F2FD;
+      color: #1565C0;
+    }
+
+    &.status-rejected {
+      background-color: #FFEBEE;
+      color: #C62828;
+    }
+
+    &.status-active {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    &.status-inactive {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    &.status-expired {
+      background-color: #F5F5F5;
+      color: #616161;
+    }
+  }
+
 }
 
 @media (max-width: 768px) {

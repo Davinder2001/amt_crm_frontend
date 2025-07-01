@@ -360,7 +360,7 @@ textarea {
 
 // datepicker-styling start...............................................................................
 .react-datepicker-popper {
-    z-index: 999999;
+    z-index: 999999 !important;
     box-shadow: $box-shadow;
 
     .react-datepicker {

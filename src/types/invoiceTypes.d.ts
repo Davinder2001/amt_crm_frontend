@@ -59,6 +59,8 @@ interface Variant {
   final_cost: number;
   quantity: number;
 }
+
+
 interface CreateInvoicePayload {
   id?: number | string;
   number: string;
@@ -80,18 +82,8 @@ interface CreateInvoicePayload {
   address?: string;
   pincode?: string;
   delivery_charge?: number;
-  items: {
-    item_id: number;
-    quantity: number;
-    final_cost: number | null;
-    product_type?: 'simple_product' | 'variable_product';
-    batches?: {
-      batch_id: number;
-      quantity: number;
-      variants?: CartItemVariant[];
-    }[];
-  }[];
-};
+  items: cartBaseItem[];
+}
 
 
 interface InvoicePdfDownloadResponse {

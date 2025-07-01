@@ -237,7 +237,7 @@ const StoreItemFields = <T extends StoreItemFormData>({
                                 <DatePickerField label="Date Of Expiry" selectedDate={formData.date_of_expiry || null} onChange={(date) => {
                                     const updated = { ...formData, date_of_expiry: date };
                                     setFormData(updated);
-                                }} minDate={new Date()} />
+                                }} />
                                 <div className="add-items-form-input-label-container">
                                     <label>Vendor Name*</label>
                                     <AddVendor

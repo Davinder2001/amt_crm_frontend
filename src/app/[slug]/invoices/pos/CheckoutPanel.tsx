@@ -65,65 +65,112 @@ export default function CheckoutPanel({
     const cartItemCount = cart.length;
 
     const buildPayload = (): CreateInvoicePayload => {
-        const invoiceItems = cart.map((item) => {
-            // Ensure item_id is always a number and never undefined
-            const parsedItemId = typeof item.itemId === 'string' ? parseInt(item.itemId, 10) : item.itemId;
-            if (typeof parsedItemId !== 'number' || isNaN(parsedItemId)) {
-                throw new Error('Invalid item_id in cart item');
-            }
+    const invoiceItems = cart.map((cartItem) => {
+        // Ensure item_id is always a number and never undefined
+        const parsedItemId = typeof cartItem.itemId === 'string' ? parseInt(cartItem.itemId, 10) : cartItem.itemId;
+        if (typeof parsedItemId !== 'number' || isNaN(parsedItemId)) {
+            throw new Error('Invalid item_id in cart item');
+        }
 
-            // Base item properties that apply to all product types
-            const baseItem: cartBaseItem = {
-                item_id: parsedItemId,
-                quantity: item.quantity,
-                final_cost: item.final_cost ?? null,
-                product_type: item.product_type,
-                unit_of_measure: item.unit_of_measure
-            };
+        // Find the original item from the items array
+        const originalItem = items.find(i => i.id === parsedItemId);
+        if (!originalItem) {
+            throw new Error(`Original item not found for id: ${parsedItemId}`);
+        }
 
-            // Include batch_id if the item has batches
-            if (item.batches?.[0]?.batch_id) {
-                baseItem.batch_id = item.batches[0].batch_id;
-            }
-
-            // Handle variable products with variants
-            if (item.variants?.[0]?.variant_id) {
-                baseItem.variant_id = item.variants[0].variant_id;
-            }
-
-            // Handle batch items with variants
-            if (item.batches?.[0]?.variants?.[0]?.variant_id) {
-                baseItem.variant_id = item.batches[0].variants[0].variant_id;
-            }
-
-            return baseItem;
-        });
-
-        return {
-            number: number,
-            client_name: clientName,
-            email: email,
-            invoice_date: new Date().toISOString().split('T')[0],
-            discount_price: discountAmount,
-            discount_percentage: discountPercent,
-            discount_type: discountType,
-            serviceChargeAmount: serviceChargeAmount,
-            serviceChargePercent: serviceChargePercent,
-            serviceChargeType: serviceChargeType,
-            creditPaymentType: creditPaymentType,
-            partialAmount: partialAmount,
-            credit_note: creditNote,
-            bank_account_id: selectedBankAccount || undefined,
-            item_type: activeTab,
-            payment_method: paymentMethod,
-            address: address,
-            pincode: pincode,
-            delivery_charge: deliveryCharge,
-            items: invoiceItems
+        // Base item properties
+        const baseItem: cartBaseItem = {
+            item_id: parsedItemId,
+            product_type: cartItem.product_type,
+            unit_of_measure: cartItem.unit_of_measure,
+            // Always include these fields for all items
+            cost_price: originalItem.cost_price,
+            regular_price: originalItem.regular_price,
+            sale_price: originalItem.sale_price
         };
-    };
 
-    // Flatten and append all fields
+        // Handle quantity field based on pricing mode
+        if (cartItem.useUnitPrice) {
+            baseItem.units_quantity = cartItem.quantity;
+        } else {
+            baseItem.quantity = cartItem.quantity;
+        }
+
+        // Include batch details if the item has batches
+        if (cartItem.batches?.[0]?.batch_id) {
+            const batchId = cartItem.batches[0].batch_id;
+            baseItem.batch_id = batchId;
+
+            // Find the original batch
+            const originalBatch = originalItem.batches?.find(b => b.id === batchId);
+            if (originalBatch) {
+                // For simple products, include batch prices
+                if (cartItem.product_type === 'simple_product') {
+                    baseItem.cost_price = originalBatch.cost_price;
+                    baseItem.regular_price = originalBatch.regular_price;
+                    baseItem.sale_price = originalBatch.sale_price;
+                    
+                    // Only include price_per_unit if unit pricing was selected
+                    if (cartItem.useUnitPrice && originalBatch.price_per_unit) {
+                        baseItem.price_per_unit = originalBatch.price_per_unit;
+                    }
+                }
+            }
+        }
+
+        // Handle variable products with variants
+        if (cartItem.variants?.[0]?.variant_id) {
+            const variantId = cartItem.variants[0].variant_id;
+            baseItem.variant_id = variantId;
+
+            // Find the original variant (either from item or batch)
+            let originalVariant;
+            if (originalItem.variants) {
+                originalVariant = originalItem.variants.find(v => v.id === variantId);
+            } else if (baseItem.batch_id && originalItem.batches) {
+                const batch = originalItem.batches.find(b => b.id === baseItem.batch_id);
+                originalVariant = batch?.variants?.find(v => v.id === variantId);
+            }
+
+            if (originalVariant) {
+                // Include variant-specific price fields
+                baseItem.variant_regular_price = originalVariant.variant_regular_price;
+                baseItem.variant_sale_price = originalVariant.variant_sale_price;
+                
+                // Only include variant price_per_unit if unit pricing was selected
+                if (cartItem.useUnitPrice && originalVariant.variant_price_per_unit) {
+                    baseItem.variant_price_per_unit = originalVariant.variant_price_per_unit;
+                }
+            }
+        }
+
+        return baseItem as cartBaseItem;
+    });
+
+    return {
+        number: number,
+        client_name: clientName,
+        email: email,
+        invoice_date: new Date().toISOString().split('T')[0],
+        discount_price: discountAmount,
+        discount_percentage: discountPercent,
+        discount_type: discountType,
+        serviceChargeAmount: serviceChargeAmount,
+        serviceChargePercent: serviceChargePercent,
+        serviceChargeType: serviceChargeType,
+        creditPaymentType: creditPaymentType,
+        partialAmount: partialAmount,
+        credit_note: creditNote,
+        bank_account_id: selectedBankAccount || undefined,
+        item_type: activeTab,
+        payment_method: paymentMethod,
+        address: address,
+        pincode: pincode,
+        delivery_charge: deliveryCharge,
+        items: invoiceItems
+    };
+};
+
     function appendToFormData(formData: FormData, data: CreateInvoicePayload) {
         // Append regular fields
         for (const [key, value] of Object.entries(data)) {

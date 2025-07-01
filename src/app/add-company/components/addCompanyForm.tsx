@@ -209,7 +209,7 @@ const Page: React.FC<AddCompanyFormProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="submit-button"
+            className="buttons"
           >
             {isLoading ? "Processing..." : "Create Company"}
           </button>

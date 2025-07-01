@@ -142,7 +142,6 @@
 
 
 
-
 'use client';
 
 import React, { useEffect } from 'react';
@@ -175,7 +174,7 @@ function TaskViewPage() {
   const task = tasks?.data.find((task) => task.id.toString() === id);
 
   if (!task) {
-    return <p className="p-4 text-center">No task found with ID: {id}</p>;
+    return <p className="no-task-message">No task found with ID: {id}</p>;
   }
 
   const handleApprove = async () => {
@@ -198,76 +197,101 @@ function TaskViewPage() {
     }
   };
 
-  const statusColor = {
-    pending: 'bg-red-100 text-red-600',
-    ended: 'bg-green-100 text-green-600',
-    default: 'bg-gray-100 text-gray-600'
-  };
+  const status = task.status?.toLowerCase();
+  const statusClass =
+    status === 'pending'
+      ? 'status-badge pending'
+      : status === 'ended'
+        ? 'status-badge ended'
+        : 'status-badge default';
 
-  const statusClass = statusColor[task.status?.toLowerCase() as keyof typeof statusColor] || statusColor.default;
+  const attachmentUrls = Array.isArray(task.attachment_urls)
+    ? task.attachment_urls
+    : [];
+
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <Link href={`/${companySlug}/tasks`} className="inline-flex items-center mb-4 text-blue-600 hover:underline">
-        <FaArrowLeft className="mr-2" /> Back to Tasks
+    <div className="task-view-wrapper">
+      <Link href={`/${companySlug}/tasks`} className="back-button">
+        <FaArrowLeft /> 
       </Link>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div><strong>Task Name:</strong> <p>{task.name}</p></div>
-          <div><strong>Description:</strong> <p>{task.description}</p></div>
-          <div><strong>Assigned By:</strong> <p>{task.assigned_by_name}</p></div>
-          <div><strong>Assigned To:</strong> <p>{task.assigned_to_name}</p></div>
-          <div><strong>Assigned Role:</strong> <p>{task.assigned_role}</p></div>
-          <div><strong>Company Name:</strong> <p>{task.company_name}</p></div>
-          <div><strong>Start Date:</strong> <p>{task.start_date?.replace('T', ' ').slice(0, 16)}</p></div>
-          <div><strong>End Date:</strong> <p>{task.end_date?.replace('T', ' ').slice(0, 16)}</p></div>
-          <div className="col-span-2">
+      <div className="task-card">
+        <div className="task-grid">
+          <div>
+            <strong>Task Name:</strong>
+            <p>{task.name}</p>
+          </div>
+          <div>
+            <strong>Description:</strong>
+            <p>{task.description}</p>
+          </div>
+          <div>
+            <strong>Assigned By:</strong>
+            <p>{task.assigned_by_name}</p>
+          </div>
+          <div>
+            <strong>Assigned To:</strong>
+            <p>{task.assigned_to_name}</p>
+          </div>
+          <div>
+            <strong>Assigned Role:</strong>
+            <p>{task.assigned_role}</p>
+          </div>
+          <div>
+            <strong>Company Name:</strong>
+            <p>{task.company_name}</p>
+          </div>
+          <div>
+            <strong>Start Date:</strong>
+            <p>{task.start_date?.replace('T', ' ').slice(0, 16)}</p>
+          </div>
+          <div>
+            <strong>End Date:</strong>
+            <p>{task.end_date?.replace('T', ' ').slice(0, 16)}</p>
+          </div>
+          <div className="full-width">
             <strong>Status:</strong>
-            <span className={`inline-block ml-2 px-3 py-1 rounded-full text-sm font-semibold ${statusClass}`}>
+            <span className={statusClass}>
               {task.status ? task.status.charAt(0).toUpperCase() + task.status.slice(1) : 'N/A'}
             </span>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-4">
+        <div className="action-buttons">
           <button
+            className="approve"
             onClick={handleApprove}
             disabled={isApproving}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
           >
-            {isApproving ? <span className="loader" /> : <><FaCheck className="inline mr-1" /> Approve</>}
+            {isApproving ? 'Approving...' : <>
+              <FaCheck /> Approve
+            </>}
           </button>
           <button
+            className="reject"
             onClick={handleReject}
             disabled={isRejecting}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-50"
           >
-            {isRejecting ? <span className="loader" /> : <><FaTimes className="inline mr-1" /> Reject</>}
+            {isRejecting ? 'Rejecting...' : <>
+              <FaTimes /> Reject
+            </>}
           </button>
         </div>
 
-        {/* Attachments Images */}
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Attachments</h3>
-          {Array.isArray(task.attachment_url) && task.attachment_url.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {task.attachment_url.map((url: string, index: number) => (
-                <Image
-                  key={index}
-                  src={url}
-                  width={100}
-                  height={100}
-                  alt={`Attachments ${index + 1}`}
-                  className="w-full h-48 object-cover rounded shadow border"
-                />
+        <div className="attachments">
+          <h3>Attachments</h3>
+          {attachmentUrls.length > 0 ? (
+            <div className="images-grid">
+              {attachmentUrls.map((url, idx) => (
+                <Image key={idx} src={url} alt={`Attachment ${idx + 1}`} />
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">No attachments available.</p>
+            <p className="no-attachments">No attachments available.</p>
           )}
         </div>
+
       </div>
     </div>
   );

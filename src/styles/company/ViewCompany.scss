@@ -288,6 +288,20 @@
         .company-details-inner-wrapper {
             display: flex;
             flex-direction: column;
+
+            .company-details-card {
+                max-width: 100%;
+                width: 100%;
+            }
+
+
+        }
+
+        .company-details-container {
+            .subscribed-package-card {
+                width: 100%;
+                max-width: 100%;
+            }
         }
     }
 

@@ -373,6 +373,16 @@
 
 // Responsive
 @media (max-width: 768px) {
+    .packages-grid {
+        max-width: 100%;
+        padding: 20px;
+        margin: 0px;
+    }
+
+    .account-packages-header{
+        margin-top: 20px;
+        justify-content: flex-end;
+    } 
     .add-packages-conatiner {
         .form-section {
             padding: 1rem;

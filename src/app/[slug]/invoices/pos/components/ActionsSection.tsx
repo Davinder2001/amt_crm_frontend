@@ -28,7 +28,7 @@ export default function ActionsSection({
             <button
                 className="btn"
                 onClick={() => {
-                    // if (!validateFields()) return;
+                    if (!validateFields()) return;
                     handleSave();
                 }}
                 disabled={isSaving}
@@ -39,7 +39,7 @@ export default function ActionsSection({
             <button
                 className="btn"
                 onClick={() => {
-                    // if (!validateFields()) return;
+                    if (!validateFields()) return;
                     handlePrint();
                 }}
                 disabled={isPrinting}

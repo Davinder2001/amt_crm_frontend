@@ -103,7 +103,13 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container" ref={dropdownRef}>
 
-      <div className="profile-dropdown">
+      <div className={`profile-dropdown ${isOpen ? 'open' : ''}`}>
+        {isOpen && (
+          <div
+            className="profile-overlay"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
         <button
           className="profile-trigger"
           onClick={() => setIsOpen(!isOpen)}
@@ -165,7 +171,7 @@ const Profile: React.FC = () => {
                     disabled={isLoading}
                   >
                     {isLoading ? (
-                      <Loader/>
+                      <Loader />
                     ) : (
                       <>
                         <FaSignOutAlt className="menu-icon" />

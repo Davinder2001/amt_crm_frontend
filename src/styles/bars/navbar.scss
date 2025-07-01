@@ -5,7 +5,7 @@
   background-color: $white;
   position: sticky;
   top: 0;
-  z-index: 99999;
+  z-index: 999999999999999;
   box-shadow: $box-shadow;
 
   .nav-container {
@@ -580,6 +580,74 @@
         }
       }
     }
+  }
+}
+
+.profile-container {
+  position: relative;
+  height: 100%;
+
+  // Add this for the mobile overlay
+  .profile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999999999998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .profile-dropdown {
+    position: relative;
+
+    &.open {
+      .profile-overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .profile-menu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100% ;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 10px 10px 0 0 !important;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+        animation: slideUp 0.3s ease-out;
+
+        .menu-header {
+          padding: 12px 16px;
+        }
+
+        .menu-items {
+          .menu-item {
+            padding: 10px 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 

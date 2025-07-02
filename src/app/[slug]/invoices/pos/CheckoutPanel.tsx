@@ -83,19 +83,12 @@ export default function CheckoutPanel({
                 item_id: parsedItemId,
                 product_type: cartItem.product_type,
                 unit_of_measure: cartItem.unit_of_measure,
-                // Always include these fields for all items
                 cost_price: originalItem.cost_price,
                 regular_price: originalItem.regular_price,
                 sale_price: originalItem.sale_price,
-                sale_by: cartItem.useUnitPrice ? 'unit' : 'piece'
+                sale_by: cartItem.useUnitPrice ? 'unit' : 'piece',
+                quantity: cartItem.quantity // Always use 'quantity'
             };
-
-            // Handle quantity field based on pricing mode
-            if (cartItem.useUnitPrice) {
-                baseItem.units_quantity = cartItem.quantity;
-            } else {
-                baseItem.quantity = cartItem.quantity;
-            }
 
             // Include batch details if the item has batches
             if (cartItem.batches?.[0]?.batch_id) {
@@ -111,7 +104,6 @@ export default function CheckoutPanel({
                         baseItem.regular_price = originalBatch.regular_price;
                         baseItem.sale_price = originalBatch.sale_price;
 
-                        // Only include price_per_unit if unit pricing was selected
                         if (cartItem.useUnitPrice && originalBatch.price_per_unit) {
                             baseItem.price_per_unit = originalBatch.price_per_unit;
                         }
@@ -134,11 +126,9 @@ export default function CheckoutPanel({
                 }
 
                 if (originalVariant) {
-                    // Include variant-specific price fields
                     baseItem.variant_regular_price = originalVariant.variant_regular_price;
                     baseItem.variant_sale_price = originalVariant.variant_sale_price;
 
-                    // Only include variant price_per_unit if unit pricing was selected
                     if (cartItem.useUnitPrice && originalVariant.variant_price_per_unit) {
                         baseItem.variant_price_per_unit = originalVariant.variant_price_per_unit;
                     }
@@ -171,6 +161,7 @@ export default function CheckoutPanel({
             items: invoiceItems
         };
     };
+
 
     function appendToFormData(formData: FormData, data: CreateInvoicePayload) {
         // Append regular fields

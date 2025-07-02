@@ -3,6 +3,7 @@
 import { memo, useState } from 'react';
 import { useCreateExpenseMutation, useUpdateExpenseMutation } from '@/slices';
 import { FaPlus, FaTimes } from 'react-icons/fa';
+import Image from 'next/image';
 
 interface ExpenseFormProps {
     expense?: Expense | null;
@@ -218,11 +219,13 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
 
                 {imagePreview && (
                     <div className="image-preview-wrapper">
-                        <img
+                        <Image
                             src={imagePreview}
                             alt="Preview"
                             className="image-preview"
                             onClick={openImageModal}
+                            width={100}
+                            height={100}
                         />
 
 
@@ -241,7 +244,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                             <button className="image-modal-close-btn" onClick={closeImageModal}>
                                 &times;
                             </button>
-                            <img src={imagePreview!} alt="Full Preview" />
+                            <Image width={100} height={100} src={imagePreview!} alt="Full Preview" />
                         </div>
                     </div>
                 )}

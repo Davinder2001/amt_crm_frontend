@@ -578,7 +578,8 @@
 }
 
 /* Variant Modal */
-.variant-modal-content,.unit-modal-content{
+.variant-modal-content,
+.unit-modal-content {
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -980,6 +981,15 @@
 
         .client-form {
             padding: 0px 10px;
+
+
+            select {
+                border: 1px solid #efefef;
+                border-radius: 5px;
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 16px;
+            }
         }
 
         .client-form label {

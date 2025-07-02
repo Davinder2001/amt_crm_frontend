@@ -1,6 +1,7 @@
 // components/cart/ClientTab.tsx
 'use client';
 
+import { useFetchEmployesQuery } from '@/slices';
 import React from 'react';
 
 type ClientTabProps = {
@@ -38,6 +39,7 @@ export default function ClientTab({
     setDeliveryCharge,
     handleNumberBlur
 }: ClientTabProps) {
+    const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployesQuery();
     return (
         <div className="client-form">
             <div className="form-group">
@@ -116,6 +118,17 @@ export default function ClientTab({
                             placeholder="Enter delivery charge"
                             min={0}
                         />
+                    </div>
+                    <div className="form-group">
+                        <label>Select Employee</label>
+                        <select disabled={isEmployeeLoading}>
+                            <option value="">Select an employee</option>
+                            {employeeData?.employees?.map((emp) => (
+                                <option key={emp.id} value={emp.name}>
+                                    {emp.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </>
             }

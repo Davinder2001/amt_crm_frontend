@@ -328,6 +328,7 @@ interface Brand {
 interface ItemBatch {
   id: number;
   item_id: number;
+  stock:number;
   batch_number: string | null;
   cost_price: number;
   regular_price?: number | null;

@@ -14,6 +14,7 @@
         border-radius: $border-radius;
         border: 1px solid $border-color;
         width: 300px;
+
         &:focus {
             border-color: var(--primary-light);
             background: transparent;
@@ -510,6 +511,15 @@ table {
 /* ResponsiveTable.css */
 .table-view {
     display: block;
+
+    .store-t-e-e-icons {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        button{
+            border: unset;
+        }
+    }
 }
 
 .card-view {
@@ -864,11 +874,6 @@ table {
         color: #555;
     }
 
-    .store-t-e-e-icons {
-        display: flex;
-        justify-content: space-around;
-        gap: 10px;
-    }
 
     .bulk-actions-toolbar {
         gap: 8px;

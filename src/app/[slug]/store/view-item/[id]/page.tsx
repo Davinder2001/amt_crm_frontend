@@ -50,7 +50,7 @@ const ViewItem = () => {
     }
   };
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
   if (error) return <div className="error">Error loading item.</div>;
   if (!item) return <div className="error">Item not found.</div>;
 
@@ -64,7 +64,7 @@ const ViewItem = () => {
         </Link>
         <div className="item-actions">
           <Link href={`/${companySlug}/store/add-stock/${item.id}`} className="edit-btn">
-            <FaPlus/> Add Stock
+            <FaPlus /> Add Stock
           </Link>
           <Link href={`/${companySlug}/store/edit-item/${item.id}`} className="edit-btn">
             <FaEdit /> Edit Item
@@ -185,16 +185,16 @@ const ViewItem = () => {
                     </div>
                   </div>
                   <div className="batch-details">
+
                     <div className="batch-row">
-                      <span>Added:</span>
-                      <span>{batch.created_at || '-'}</span>
+                      <span>Quantity:</span>
+                      <span>{batch.quantity || '-'}</span>
                     </div>
-                    {batch.purchase_price && (
-                      <div className="batch-row">
-                        <span>Price:</span>
-                        <span>${batch.purchase_price}</span>
-                      </div>
-                    )}
+                    <div className="batch-row">
+                      <span>Stock:</span>
+                      <span>{batch.stock || '-'}</span>
+                    </div>
+
                     {batch.date_of_manufacture && (
                       <div className="batch-row">
                         <span>Manufactured:</span>

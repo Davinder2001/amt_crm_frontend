@@ -74,12 +74,12 @@ const TotalEarnings = () => {
               dataKey="date" 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888' }}
+              tick={{ fill: '#888', fontSize:'12px' }}
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888' }}
+              tick={{ fill: '#888', fontSize: '12px' }}
               tickFormatter={(value) => `₹${value}`}
             />
             <Tooltip 

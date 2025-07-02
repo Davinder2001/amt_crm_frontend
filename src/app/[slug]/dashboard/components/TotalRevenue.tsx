@@ -61,8 +61,8 @@ const TotalRevenue = () => {
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={revenueData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                        <XAxis dataKey="name" style={{ fontSize: '12px', fill: '#384B70' }} />
+                        <YAxis  style={{ fontSize: '12px', fill: '#384B70' }}/>
                         <Tooltip />
                         <Bar dataKey="profit" fill="var(--primary-color)" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="loss" fill="var(--primary-light)" radius={[4, 4, 0, 0]} />

@@ -6,26 +6,14 @@
 }
 
 .filter-search-table .search-filter-container {
-    display: flex;
-
     input {
-        padding: 8px 12px;
-        font-size: 16px;
-        border-radius: $border-radius;
+        height: 41px;
+        padding: 10px 12px;
+        border-radius: 5px;
         border: 1px solid $border-color;
         width: 300px;
-        &:focus {
-            border-color: var(--primary-light);
-            background: transparent;
-        }
+        font-size: 14px;
 
-        &::placeholder {
-            color: #ccc;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            background-color: transparent;
-        }
     }
 
     button.clear-search-btn {
@@ -757,14 +745,12 @@ table {
 
 @media (max-width: 768px) {
 
-    .filter-search-table .search-filter-container {
+    .filter-search-table .search-filter-container{
         margin-bottom: 12px;
-
-        input {
+        input{
             width: 100%;
         }
     }
-
     .desktop-render-table-searchbar {
         display: none;
     }

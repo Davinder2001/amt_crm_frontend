@@ -68,12 +68,12 @@ const UserActivity = () => {
                             dataKey="name" 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#888' }}
+                            tick={{ fill: '#888', fontSize: '12px' }}
                         />
                         <YAxis 
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#888' }}
+                            tick={{ fill: '#888', fontSize: '12px' }}
                             tickFormatter={(value) => `${value / 1000}k`}
                         />
                         <Tooltip 

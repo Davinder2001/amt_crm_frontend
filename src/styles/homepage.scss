@@ -414,10 +414,94 @@
   }
 }
 
+
+// Supplychain Section 
+.supplychain-section {
+    display: grid;
+    position: relative;
+    grid-template-columns: 40% calc(100% - 40% - 50px);
+    grid-column-gap: 50px;
+    margin: 30px 0px;
+}
+  .left-icon-section {
+      border-right: 1px solid #efefef;
+      h1 {
+        font-weight: 800;
+        text-align: center;
+        width: 80%;
+        margin: 0 auto;
+        letter-spacing: 0.3px;
+      }
+  }
+ .supplychain-info {
+    margin-right: 50px;
+     p {
+      font-size: 16px;
+      font-weight: 400;
+      word-break: break-word;
+      color: #646565;
+      line-height: 26px;
+    }
+ }
+
+//  Why CRM 
+.why-crm-section {
+    background: #f6f8fc;
+    .why-crm-both-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 50px;
+    }
+    .why-info-section {
+      h1 {
+        color: #2c2b2e;
+        font-size: 35px;
+        font-weight: 600;
+      }
+      p {
+        font-size: 16px;
+        font-weight: 400;
+        color: #646565;
+        line-height: 26px;
+        margin-top: 20px;
+        width: 70%;
+        letter-spacing: 0.3px;
+      }
+    }
+    .list-point {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 30px 0px;
+      align-items: center;
+      .number {
+        font-size: 50px;
+        font-weight: 600;
+        color: $primary-light;
+      }
+      .numberinfo {
+        color:  $para-color;
+        span {
+          color: $primary-color;
+          font-weight: 700;
+        }
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
 /* Counters Section */
 .counters-section {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   margin-top: 20px;
@@ -930,21 +1014,17 @@ nav.feature-card-nav-bar {
 
   .plans {
     display: flex;
-    flex-wrap: wrap;
     gap: 30px;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .planCard {
     background: white;
     border-radius: $border-radius;
     padding: 20px;
-    max-width: 320px;
     width: 100%;
     border: 1px solid #efefef;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+ 
 
     .planTitle {
       font-size: 20px;
@@ -1039,6 +1119,7 @@ nav.feature-card-nav-bar {
 
   .business-section {
     margin-top: 20px;
+    padding: 30px 0px;
   }
 
   nav.feature-card-nav-bar {
@@ -1092,7 +1173,21 @@ nav.feature-card-nav-bar {
   }
 }
 
-/* Medium devices (tablets, 768px and up) */
+@media screen and (max-width:1023px ) {
+  .plans {
+    flex-wrap: wrap;
+  }
+  .why-crm-section .why-crm-both-section {
+    flex-wrap: wrap;
+    padding: 30px 0px;
+    gap: 20px;
+  }
+  .why-crm-section .list-point {
+    padding: 20px 0px;
+  }
+}
+
+
 @media (max-width: 991px) {
   .hero {
     flex-direction: column;
@@ -1158,8 +1253,17 @@ nav.feature-card-nav-bar {
   }
 }
 
-/* Small devices (phones, less than 768px) */
+
 @media (max-width: 767px) {
+  .supplychain-section {
+    display: block;
+  }
+  .left-icon-section h1 {
+    width: 100%;
+    margin: auto;
+    text-align: left;
+    margin-bottom: 20px;
+}
   .logo span {
     display: none;
   }
@@ -1368,8 +1472,6 @@ nav.feature-card-nav-bar {
           gap: 10px;
 
           button {
-            height: 28px;
-            font-size: 12px;
             margin: auto;
             display: flex;
             justify-content: center;
@@ -1553,9 +1655,9 @@ nav.feature-card-nav-bar {
     top: 10px;
     left: 10px;
   }
-
-
-
+  .why-crm-section .list-point .number {
+      font-size: 30px;
+  }
 }
 
 @media (max-width:368px) {

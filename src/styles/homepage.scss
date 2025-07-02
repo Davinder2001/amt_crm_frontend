@@ -427,9 +427,8 @@
       border-right: 1px solid #efefef;
       h1 {
         font-weight: 800;
-        text-align: center;
+        text-align: left;
         width: 80%;
-        margin: 0 auto;
         letter-spacing: 0.3px;
       }
   }
@@ -527,25 +526,6 @@
 }
 
 
-
-@media (max-width: 768px) {
-  .counters-section {
-    gap: 10px;
-
-    .counter-item {
-      white-space: nowrap;
-
-      .counter-number {
-        font-size: 20px;
-      }
-
-      .counter-label {
-        font-size: 12px;
-      }
-    }
-  }
-
-}
 
 
 
@@ -1251,6 +1231,26 @@ nav.feature-card-nav-bar {
   .manage-text {
     padding: 20px 0px;
   }
+}
+
+
+@media (max-width: 768px) {
+  .counters-section {
+    gap: 10px;
+
+    .counter-item {
+      white-space: nowrap;
+
+      .counter-number {
+        font-size: 20px;
+      }
+
+      .counter-label {
+        font-size: 12px;
+      }
+    }
+  }
+
 }
 
 

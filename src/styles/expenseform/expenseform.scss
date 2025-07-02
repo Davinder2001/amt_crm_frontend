@@ -97,14 +97,7 @@
 
         .btn {
         
-            &.cancel-btn {
-                background: $danger-color;
-                color: $white;
-
-                &:hover {
-                    background: rgba(255, 0, 0, 0.527);
-                }
-            }
+          
 
             &.submit-btn {
                 background: var(--primary-light);
@@ -166,14 +159,14 @@
 
         .add-tag-btn {
             position: absolute;
-            right: 3;
+            right: 8px;
             background-color: var(--primary-color);
-            font-size: 20px;
+            font-size: 13px;
             border: unset;
             color: white;
             border-radius: $border-radius;
             display: flex;
-            top: 5px;
+            top: 8px;
             padding: 5px;
             margin-right: 2px;
         }

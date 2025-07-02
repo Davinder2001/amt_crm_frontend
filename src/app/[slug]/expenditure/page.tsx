@@ -111,9 +111,9 @@ export default function ExpensesPage() {
     {
       label: 'Actions',
       render: (expense: Expense) => (
-        <div className="table-actions">
-          <FaEdit onClick={() => handleEdit(expense)} style={{ marginRight: 10 }} />
-          <FaTrash onClick={() => handleDelete(expense.id)} />
+        <div className="table-actions ">
+          <FaEdit onClick={() => handleEdit(expense)} style={{ marginRight: 10, color: '#384B70' }} />
+          <FaTrash onClick={() => handleDelete(expense.id)}  style={{  color: '#384B70' }} />
         </div>
       ),
     },

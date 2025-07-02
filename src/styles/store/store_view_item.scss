@@ -22,16 +22,16 @@
 
     .item-actions {
       display: flex;
-      gap: 5px;
+      gap: 10px;
 
       .edit-btn,
       .delete-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 5px;
         padding: 8px 10px;
         border-radius: 5px;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 500;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -50,8 +50,8 @@
       }
 
       .delete-btn {
-        color: white;
-        background: $danger-color;
+        background: #ff4c511a;
+        color: $danger-color;
 
         &:hover {
           transform: translateY(-2px);
@@ -354,14 +354,12 @@
 
             .batch-actions {
               display: flex;
-              gap: 0.5rem;
-
               .batch-edit-btn {
                 background: none;
                 border: none;
                 cursor: pointer;
                 padding: 0.5rem;
-                border-radius: 8px;
+                border-radius: 5px;
                 display: flex;
                 align-items: center;
                 justify-content: center;

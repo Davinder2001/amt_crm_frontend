@@ -2,8 +2,9 @@
 
 // All Task styling start here
 .table-actions-wrapper {
-  display: flex;
-  justify-content: space-around;
+     justify-content: flex-start;
+    display: flex;
+    gap: 15px;
 
   .table-e-d-v-buttons {
     cursor: pointer;

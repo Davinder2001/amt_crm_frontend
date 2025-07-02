@@ -75,6 +75,7 @@ interface CreateInvoicePayload {
   serviceChargeType?: string;
   partialAmount?: number;
   bank_account_id?: number;
+  delivery_boy: number | null;
   creditPaymentType?: string;
   credit_note?: string;
   item_type: TabType;

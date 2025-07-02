@@ -58,6 +58,8 @@ type CartTabContentProps = {
     setDeliveryCharge: React.Dispatch<React.SetStateAction<number>>;
     selectedBankAccount: number | null;
     setSelectedBankAccount: React.Dispatch<React.SetStateAction<number | null>>;
+    deliveryBoyId: number | null;
+    setDeliveryBoyId: React.Dispatch<React.SetStateAction<number | null>>;
     items: StoreItem[];
 };
 
@@ -86,6 +88,7 @@ export default function CartTabContent({
     partialAmount, setPartialAmount,
     creditNote, setCreditNote,
     selectedBankAccount, setSelectedBankAccount,
+    deliveryBoyId, setDeliveryBoyId,
     items
 
 }: CartTabContentProps) {
@@ -289,6 +292,8 @@ export default function CartTabContent({
                         customers={customers}
                         companySlug={companySlug}
                         handleNumberBlur={handleNumberBlur}
+                        deliveryBoyId={deliveryBoyId}
+                        setDeliveryBoyId={setDeliveryBoyId}
                     />
                 )}
 

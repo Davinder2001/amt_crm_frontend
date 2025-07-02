@@ -60,6 +60,7 @@ export default function CheckoutPanel({
     const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
     const router = useRouter();
     const { companySlug } = useCompany();
+    const [deliveryBoyId, setDeliveryBoyId] = useState<number | null>(null);
 
 
     const cartItemCount = cart.length;
@@ -158,6 +159,7 @@ export default function CheckoutPanel({
             address: address,
             pincode: pincode,
             delivery_charge: deliveryCharge,
+            delivery_boy: deliveryBoyId,
             items: invoiceItems
         };
     };
@@ -330,6 +332,8 @@ export default function CheckoutPanel({
                     selectedBankAccount={selectedBankAccount}
                     setSelectedBankAccount={setSelectedBankAccount}
                     items={items}
+                    deliveryBoyId={deliveryBoyId}
+                    setDeliveryBoyId={setDeliveryBoyId}
                 />
             </div>
         </>

@@ -1,4 +1,3 @@
-// components/cart/ClientTab.tsx
 'use client';
 
 import { useFetchEmployesQuery } from '@/slices';
@@ -18,9 +17,12 @@ type ClientTabProps = {
     setPincode: React.Dispatch<React.SetStateAction<string>>;
     deliveryCharge: number;
     setDeliveryCharge: React.Dispatch<React.SetStateAction<number>>;
+    deliveryBoyId: number | null;
+    setDeliveryBoyId: React.Dispatch<React.SetStateAction<number | null>>;
     customers?: { customers: Customer[] };
     companySlug: string;
     handleNumberBlur: () => void;
+
 };
 
 export default function ClientTab({
@@ -37,30 +39,34 @@ export default function ClientTab({
     setPincode,
     deliveryCharge,
     setDeliveryCharge,
+    deliveryBoyId,
+    setDeliveryBoyId,
     handleNumberBlur
 }: ClientTabProps) {
     const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployesQuery();
+
     return (
         <div className="client-form">
             <div className="form-group">
-                <div className="form-group">
-                    <label>Phone Number</label>
-                    <input
-                        type="tel"
-                        value={number}
-                        onChange={(e) => {
-                            const digitsOnly = e.target.value.replace(/\D/g, '');
-                            if (digitsOnly.length <= 10) {
-                                setNumber(digitsOnly);
-                            }
-                        }}
-                        onBlur={handleNumberBlur}
-                        placeholder="Enter 10-digit phone number"
-                        required
-                        maxLength={10}
-                        pattern="\d{10}"
-                    />
-                </div>
+                <label>Phone Number</label>
+                <input
+                    type="tel"
+                    value={number}
+                    onChange={(e) => {
+                        const digitsOnly = e.target.value.replace(/\D/g, '');
+                        if (digitsOnly.length <= 10) {
+                            setNumber(digitsOnly);
+                        }
+                    }}
+                    onBlur={handleNumberBlur}
+                    placeholder="Enter 10-digit phone number"
+                    required
+                    maxLength={10}
+                    pattern="\d{10}"
+                />
+            </div>
+
+            <div className="form-group">
                 <label>Client Name</label>
                 <input
                     type="text"
@@ -75,6 +81,7 @@ export default function ClientTab({
                     title="Only letters, spaces, hyphens, apostrophes, and periods are allowed"
                 />
             </div>
+
             <div className="form-group">
                 <label>Email (optional)</label>
                 <input
@@ -84,7 +91,8 @@ export default function ClientTab({
                     placeholder="Enter email"
                 />
             </div>
-            {activeTab !== 'Cart' &&
+
+            {activeTab !== 'Cart' && (
                 <>
                     <div className="form-group">
                         <label>Address</label>
@@ -119,19 +127,24 @@ export default function ClientTab({
                             min={0}
                         />
                     </div>
+
                     <div className="form-group">
-                        <label>Select Employee</label>
-                        <select disabled={isEmployeeLoading}>
+                        <label>Select Delivery Boy</label>
+                        <select
+                            value={deliveryBoyId ?? ''}
+                            onChange={(e) => setDeliveryBoyId(e.target.value === '' ? null : Number(e.target.value))}
+                            disabled={isEmployeeLoading}
+                        >
                             <option value="">Select an employee</option>
                             {employeeData?.employees?.map((emp) => (
-                                <option key={emp.id} value={emp.name}>
+                                <option key={emp.id} value={emp.id}>
                                     {emp.name}
                                 </option>
                             ))}
                         </select>
                     </div>
                 </>
-            }
+            )}
         </div>
     );
 }

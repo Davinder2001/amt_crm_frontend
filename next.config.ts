@@ -12,7 +12,7 @@ const nextConfig = {
   devIndicators: false as const,
 
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'amt.sparkweb.sbs'],
     remotePatterns: [
       {
         protocol: 'http',

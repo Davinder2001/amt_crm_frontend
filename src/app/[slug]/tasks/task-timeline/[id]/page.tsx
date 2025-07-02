@@ -19,6 +19,7 @@ import Link from 'next/link';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
 import SubmitTaskComponent from '../../submit-task/SubmitTaskComponent';
+import Modal from '@/components/common/Modal';
 
 const ViewTimeline = () => {
   const params = useParams();
@@ -38,6 +39,28 @@ const ViewTimeline = () => {
   const [reminderAt, setReminderAt] = useState('');
   const [endDate, setEndDate] = useState('');
   const [showReminderForm, setShowReminderForm] = useState(false);
+  const [openImage, setOpenImage] = useState<string | null>(null);
+
+  const handleDownload = (url: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', url.split('/').pop() || 'image.jpg');
+    link.setAttribute('target', '_blank');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  const handleDownloadAll = (attachments: string[]) => {
+    attachments.forEach((url, index) => {
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', url.split('/').pop() || `image-${index + 1}.jpg`);
+      link.setAttribute('target', '_blank');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
 
   useEffect(() => {
     if (reminderData?.reminder) {
@@ -148,20 +171,65 @@ const ViewTimeline = () => {
             )}
             {Array.isArray(history.attachments) && history.attachments.length > 0 && (
               <div className="content-block attachments">
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+                  <button 
+                    onClick={() => handleDownloadAll(history.attachments)}
+                    className='task-timeline-downloadall-btn'
+                  >
+                    Download All
+                  </button>
+                </div>
                 <div className="attachment-list">
                   {history.attachments.map((img: string, index: number) => (
-                    <Image
+                    <div
                       key={index}
-                      src={img}
-                      alt={`Attachment ${index}`}
-                      className="attachment-image"
-                      width={200}
-                      height={200}
-                    />
+                      className="attachment-image-wrapper"
+                      onClick={() => setOpenImage(img)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <Image
+                        src={img}
+                        alt={`Attachment ${index}`}
+                        className="attachment-image"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
             )}
+
+            {openImage && (
+              <Modal isOpen={true} onClose={() => setOpenImage(null)} title="Image Preview">
+                <div style={{ textAlign: 'center' }}>
+                  <Image
+                    src={openImage}
+                    alt="Full Preview"
+                    width={600}
+                    height={400}
+                    style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                  />
+                  <button
+                    onClick={() => handleDownload(openImage)}
+                    style={{
+                      marginTop: '1rem',
+                      padding: '10px 20px',
+                      backgroundColor: '#007bff',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 500,
+                    }}
+                  >
+                    Download Image
+                  </button>
+                </div>
+              </Modal>
+            )}
+
           </div>
         </div>
       </React.Fragment>
@@ -272,7 +340,7 @@ const ViewTimeline = () => {
           type="end"
         />
         <button
-         type='button'
+          type='button'
           className="button primary"
           onClick={() => setShowConfirm(true)}
           disabled={isEnding}

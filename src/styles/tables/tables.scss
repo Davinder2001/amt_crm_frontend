@@ -12,8 +12,18 @@
         border-radius: 5px;
         border: 1px solid $border-color;
         width: 300px;
-        font-size: 14px;
+        &:focus {
+            border-color: var(--primary-light);
+            background: transparent;
+        }
 
+        &::placeholder {
+            color: #ccc;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            background-color: transparent;
+        }
     }
 
     button.clear-search-btn {
@@ -497,6 +507,15 @@ table {
 /* ResponsiveTable.css */
 .table-view {
     display: block;
+
+    .store-t-e-e-icons {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        button{
+            border: unset;
+        }
+    }
 }
 
 .card-view {
@@ -849,11 +868,6 @@ table {
 
    
 
-    .store-t-e-e-icons {
-        display: flex;
-        justify-content: space-around;
-        gap: 10px;
-    }
 
     .bulk-actions-toolbar {
         gap: 8px;

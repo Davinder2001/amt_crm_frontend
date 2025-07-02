@@ -363,7 +363,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                 />
                 {onView && (
                   <div className="go-button" onClick={() => onView(item.id)}>
-                    <FaExternalLinkAlt color="#007bff" />
+                    <FaExternalLinkAlt />
                   </div>
                 )}
               </div>

@@ -188,12 +188,12 @@ const IncomeExpense = () => {
             margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis
+            <XAxis  style={{ fontSize: '12px', fill: '#384B70' }}
               dataKey={isMonthly ? "name" : "year"}
               axisLine={false}
               tickLine={false}
             />
-            <YAxis
+            <YAxis  style={{ fontSize: '12px', fill: '#384B70' }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(value) => `${value}k`}

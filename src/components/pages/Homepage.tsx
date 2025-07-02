@@ -231,6 +231,65 @@ export default function Homepage() {
           </div>
         </div>
 
+        {/* Supply Chain Section */}   
+        <div className='outer-div'>
+          <div className='supplychain-section'> 
+            <div className='left-icon-section'>
+              <h1> SLA Compliant Supply Chain Solutions </h1>
+
+            </div>
+           
+            <div className='supplychain-info'>
+                <p> CRM is not just another supply chain company; we live by (and die for) the SLAs we sign with our clients. Our performance-driven, SLA-compliant approach ensures   that we consistently meet and exceed our clients' expectations. </p>
+                <p> We prioritize operational performance and technological integration, creating a seamless supply chain experience that is second to none.</p>
+            </div>
+          </div>
+          
+        </div>
+        
+       {/* Why CRM */}
+       <div className='why-crm-section'>
+        <div className='outer-div'>
+            <div className='why-crm-both-section'>
+              <div className='why-info-section'>
+                <h1> Why CRM</h1>
+                <p> Why settle for a fragmented supply chain with multiple partners and disconnected technology solutions when Prozo offers a comprehensive, full-stack solution.</p>
+              </div>
+              <div className='why-info-points'>
+                <div className='why-list-point-section'>
+                  <div className='list-point'>
+                    <div className='number'> 01</div>
+                    <div className='numberinfo'> <span> Agility </span> - Through Prozo’s tech and pay-per-use fulfilment network, we make your supply chains agile</div>
+                  </div>
+                  <div className='list-point'>
+                    <div className='number'> 02</div>
+                    <div className='numberinfo'> <span> Elasticity  </span> - Seamlessly align your supply chains with your growing customer needs </div>
+                  </div>
+                  <div className='list-point'>
+                    <div className='number'> 03</div>
+                    <div className='numberinfo'> <span> Accuracy </span> - Delight your customers with 99%+ OTIF service levels </div>
+                  </div>
+                  <div className='list-point'>
+                    <div className='number'> 04</div>
+                    <div className='numberinfo'> <span> Resilience  </span> - Benefit from a resilient supply chain built on top of Prozo’s unified digital and physical infrastructure</div>
+                  </div>
+                  <div className='list-point'>
+                    <div className='number'> 05</div>
+                    <div className='numberinfo'> <span> Visibility  </span> - Have real-time visibility into your supply chain through our warehousing and freight control tower dashboards. Enable inventory planning like never before to outperform your competitors</div>
+                  </div>
+                  <div className='list-point'>
+                    <div className='number'> 06</div>
+                    <div className='numberinfo'> <span> Accountability </span> - No more root cause analysis with multiple partners for fixing your supply chain. Prozo is the only supply chain partner you will ever need</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+       </div>
+
+
         {/* Manage Everything Section */}
         <section className="manage-section">
           <div className='outer-div'>

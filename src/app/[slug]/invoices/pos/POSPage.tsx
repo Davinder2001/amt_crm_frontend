@@ -269,7 +269,7 @@ function POSPage() {
                         if (cartItem.product_type === 'variable_product' && cartItem.variants?.[0]?.variant_id) {
                             const variant = storeItem.variants?.find(v => v.id === cartItem.variants?.[0]?.variant_id);
                             if (variant) {
-                                availableQty = variant.variant_stock || availableQty;
+                                availableQty = variant.stock || availableQty;
                             }
                         }
 
@@ -279,7 +279,7 @@ function POSPage() {
                                 v => v.id === cartItem.batches?.[0]?.variants?.[0]?.variant_id
                             );
                             if (batchVariant) {
-                                availableQty = batchVariant.variant_stock || availableQty;
+                                availableQty = batchVariant.stock || availableQty;
                             }
                         }
 

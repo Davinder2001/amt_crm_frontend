@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
@@ -168,6 +168,13 @@ const ViewItem = () => {
                     <span className="batch-number">{batch.batch_number || `Batch ${index + 1}`}</span>
                     <span className="batch-quantity">{batch.quantity} units</span>
                     <div className="batch-actions">
+                      <Link
+                        href={`/${companySlug}/store/view-stock/${item.id}?batchId=${batch.id}`}
+                        className="batch-view-btn"
+                        title="View this batch"
+                      >
+                        <FaEye size={12} />
+                      </Link>
                       <Link
                         href={`/${companySlug}/store/edit-stock/${item.id}?batchId=${batch.id}`}
                         className="batch-edit-btn"

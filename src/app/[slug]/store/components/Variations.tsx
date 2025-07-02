@@ -9,7 +9,7 @@ const emptyVariant = {
     variant_regular_price: 0,
     variant_sale_price: 0,
     attribute_value_id: 0,
-    variant_stock: 0
+    stock: 0
 };
 
 interface Props {
@@ -86,7 +86,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                         attributes: mappedAttributes,
                         variant_regular_price: Number(v.variant_regular_price) || 0,
                         variant_sale_price: Number(v.variant_sale_price) || 0,
-                        variant_stock: typeof v.variant_stock === 'number' ? v.variant_stock : 0,
+                        stock: typeof v.stock === 'number' ? v.stock : 0,
                         variant_units_in_peace: v.variant_units_in_peace ?? null,
                         variant_price_per_unit: v.variant_price_per_unit ?? null,
                         images: v.images ?? [],
@@ -100,7 +100,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                     attributes: [],
                     variant_regular_price: 0,
                     variant_sale_price: 0,
-                    variant_stock: 0,
+                    stock: 0,
                     attribute_value_id: 0
                 }]);
             }
@@ -158,7 +158,7 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
     const handleAddCombination = () => {
         setCombinations(prev => [
             ...prev,
-            { attribute_value_id: 0, attributes: [], variant_sale_price: 0, variant_regular_price: 0, variant_stock: 0 }
+            { attribute_value_id: 0, attributes: [], variant_sale_price: 0, variant_regular_price: 0, stock: 0 }
         ]);
     };
 
@@ -246,12 +246,12 @@ const Variations: React.FC<Props> = ({ setVariants, variants, unit_of_measure })
                                 <label>Stock</label>
                                 <input
                                     type="number"
-                                    value={combo.variant_stock === 0 ? '' : combo.variant_stock ?? ''}
+                                    value={combo.stock === 0 ? '' : combo.stock ?? ''}
                                     onChange={e => {
                                         const val = e.target.value === '' ? null : Number(e.target.value);
                                         setCombinations(prev => {
                                             const updated = [...prev];
-                                            updated[index].variant_stock = val === null ? 0 : val;
+                                            updated[index].stock = val === null ? 0 : val;
                                             return updated;
                                         });
                                     }}

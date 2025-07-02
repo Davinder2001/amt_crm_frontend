@@ -11,6 +11,7 @@ interface storeItemBatch {
   date_of_manufacture: string | null;
   invoice_number?: number | null;
   product_type?: 'simple_product' | 'variable_product';
+  tax_type: string | number | null | undefined;
   unit_of_measure: 'unit' | 'pieces';
   vendor_id: number | null;
   vendor_name?: string | null;
@@ -180,7 +181,7 @@ interface variations {
   id?: number;
   variant_regular_price: number;
   variant_sale_price: number;
-  variant_stock: number;
+  stock: number;
   variant_units_in_peace?: number | null;
   variant_price_per_unit?: number | null;
   images?: string[];

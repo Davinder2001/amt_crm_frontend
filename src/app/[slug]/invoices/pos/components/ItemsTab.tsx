@@ -113,7 +113,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                 let maxQty;
                                                 if (item.product_type === 'variable_product' && item.variants?.length) {
                                                     const variant = storeItem?.variants?.find(v => item.variants && item.variants.length > 0 && item.variants[0] && v.id === item.variants[0].variant_id);
-                                                    maxQty = variant?.variant_stock || Infinity;
+                                                    maxQty = variant?.stock || Infinity;
                                                 } else {
                                                     maxQty = storeItem?.quantity_count || Infinity;
                                                 }
@@ -161,7 +161,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                     const variant = (item.variants && item.variants.length > 0)
                                                         ? storeItem?.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id)
                                                         : undefined;
-                                                    maxQty = variant?.variant_stock || Infinity;
+                                                    maxQty = variant?.stock || Infinity;
                                                 } else {
                                                     maxQty = storeItem?.quantity_count || Infinity;
                                                 }
@@ -181,7 +181,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                     const variant = (item.variants && item.variants.length > 0)
                                                         ? storeItem.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id)
                                                         : undefined;
-                                                    maxQty = variant?.variant_stock || Infinity;
+                                                    maxQty = variant?.stock || Infinity;
                                                 } else {
                                                     maxQty = storeItem.quantity_count || Infinity;
                                                 }
@@ -198,7 +198,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                         const variant = (item.variants && item.variants.length > 0)
                                                             ? storeItem.variants?.find(v => item.variants && item.variants.length > 0 && v.id === item.variants[0].variant_id)
                                                             : undefined;
-                                                        maxQty = variant?.variant_stock || Infinity;
+                                                        maxQty = variant?.stock || Infinity;
                                                     } else {
                                                         maxQty = storeItem.quantity_count || Infinity;
                                                     }
@@ -214,7 +214,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                         const variant = (item.variants && item.variants.length > 0)
                                                             ? storeItem.variants?.find(v => v.id === item.variants![0].variant_id)
                                                             : undefined;
-                                                        maxQty = variant?.variant_stock || Infinity;
+                                                        maxQty = variant?.stock || Infinity;
                                                     } else {
                                                         maxQty = storeItem.quantity_count || Infinity;
                                                     }
@@ -230,7 +230,7 @@ export default function ItemsTab({ cart, items, onQtyChange, onRemoveItem }: Ite
                                                         const variant = (item.variants && item.variants.length > 0)
                                                             ? storeItem.variants?.find(v => v.id === item.variants![0].variant_id)
                                                             : undefined;
-                                                        maxQty = variant?.variant_stock || Infinity;
+                                                        maxQty = variant?.stock || Infinity;
                                                     } else {
                                                         maxQty = storeItem.quantity_count || Infinity;
                                                     }

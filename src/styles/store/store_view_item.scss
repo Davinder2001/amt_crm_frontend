@@ -374,6 +374,24 @@
                 }
               }
 
+              .batch-view-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary-color);
+                transition: all 0.2s ease;
+
+                &:hover {
+                  background: $primary-light;
+                  transform: scale(1.1);
+                }
+              }
+
               .batch-delete-btn {
                 @extend .batch-edit-btn;
                 color: $danger-color;

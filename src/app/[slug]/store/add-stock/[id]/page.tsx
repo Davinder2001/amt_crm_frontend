@@ -178,7 +178,7 @@ const Createbatch = () => {
       variants.forEach((variant, i) => {
         formdata.append(`variants[${i}][variant_regular_price]`, variant.variant_regular_price.toString());
         formdata.append(`variants[${i}][variant_sale_price]`, variant.variant_sale_price.toString());
-        formdata.append(`variants[${i}][variant_stock]`, variant.variant_stock.toString());
+        formdata.append(`variants[${i}][stock]`, variant.stock.toString());
 
         if (formData.unit_of_measure === 'unit') {
           if (variant.variant_units_in_peace != null) {

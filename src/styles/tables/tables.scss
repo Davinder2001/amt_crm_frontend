@@ -310,7 +310,6 @@
 .responsive-table {
     overflow: hidden;
     margin-bottom: 30px;
-    box-shadow: $box-shadow;
 
 
     .action-buttons {
@@ -743,8 +742,9 @@ table {
         .expand-text {
             background: none;
             border: none;
-            color: #007bff;
+            color: $primary-light;
             cursor: pointer;
+            font-weight: 600;
         }
 
         .card-actions {
@@ -752,6 +752,7 @@ table {
             align-items: center;
             gap: 10px;
             font-size: 15px;
+            color:$primary-color
         }
 
         .go-button {
@@ -847,9 +848,9 @@ table {
 
     .t-card {
         background: #fff;
-        border: 1px solid #e0e0e0;
+        border: 1px solid $border-color;
         border-radius: $border-radius;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: none;
         font-size: 16px;
         margin-top: 20px;
     }
@@ -865,9 +866,7 @@ table {
         color: #333;
     }
 
-    .card-row span {
-        color: #555;
-    }
+   
 
 
     .bulk-actions-toolbar {

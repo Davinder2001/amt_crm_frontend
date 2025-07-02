@@ -424,7 +424,7 @@ const Items: React.FC = () => {
                 placeholder="Search existing items..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ border: 'none', padding: 0, borderRadius: 0, width:'100%' }}
+                style={{ border: 'none', padding: 0,fontSize:'16px', borderRadius: 0, width:'100%' }}
               />
             </div>
           </div>
@@ -440,7 +440,8 @@ const Items: React.FC = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   gap: '20px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  color: '#384B70'
                 }}
                   href={`/${companySlug}/store/add-stock/${item.id}`}
                   onClick={() => {

@@ -516,14 +516,16 @@ textarea::placeholder {
         }
     }
 }
-
+@media screen and (max-width:767px) {
+      .main .main-content {
+        padding-bottom: 80px;
+    }
+}
 @media (max-width:468px) {
     .buttons {
         padding: 5px 15px;
 
     }
 
-    .main .main-content {
-        padding-bottom: 80px;
-    }
+  
 }

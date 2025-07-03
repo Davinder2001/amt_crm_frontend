@@ -11,7 +11,6 @@ import ListOverview from './components/ListOverview';
 import UserActivity from './components/UserActivity';
 import CustomerReview from './components/CustomerReview';
 import TotalEarnings from './components/TotalEarnings';
-import Footer from '../_common/footer/footer';
 
 function Page() {
   const { setTitle } = useBreadcrumb();
@@ -39,7 +38,6 @@ function Page() {
           <TotalEarnings />
         </div>
       </div>
-      <Footer />
     </>
   );
 }

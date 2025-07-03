@@ -257,7 +257,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 {onCancel && (
                     <button
                         type="button"
-                        className="btn cancel-btn"
+                        className="btn buttons cancel-btn"
                         onClick={() => {
                             setFormData({
                                 heading: '',

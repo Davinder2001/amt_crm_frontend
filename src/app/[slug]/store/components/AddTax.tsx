@@ -134,7 +134,7 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: 'var(--primary-color)',
+                                    borderColor: '#efefef',
                                 },
                                 '&:hover fieldset': {
                                     borderColor: 'var(--primary-color)',
@@ -144,7 +144,7 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: 'var(--primary-color)',
+                                   color: '#ccc',
                                 '&.Mui-focused': {
                                     color: 'var(--primary-color)',
                                 },
@@ -163,7 +163,7 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                             mb: 2,
                             '& .MuiOutlinedInput-root': {
                                 '& fieldset': {
-                                    borderColor: 'var(--primary-color)',
+                                     borderColor: '#efefef',
                                 },
                                 '&:hover fieldset': {
                                     borderColor: 'var(--primary-color)',
@@ -173,7 +173,7 @@ const AddTax: React.FC<AddTaxProps> = ({ taxes, selectedTaxId, onTaxSelect, onTa
                                 },
                             },
                             '& .MuiInputLabel-root': {
-                                color: 'var(--primary-color)',
+                                color: '#ccc',
                                 '&.Mui-focused': {
                                     color: 'var(--primary-color)',
                                 },

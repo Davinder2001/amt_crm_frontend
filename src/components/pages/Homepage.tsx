@@ -240,7 +240,7 @@ export default function Homepage() {
             </div>
            
             <div className='supplychain-info'>
-                <p> CRM is not just another supply chain company; we live by (and die for) the SLAs we sign with our clients. Our performance-driven, SLA-compliant approach ensures   that we consistently meet and exceed our clients' expectations. </p>
+                <p> CRM is not just another supply chain company; we live by (and die for) the SLAs we sign with our clients. Our performance-driven, SLA-compliant approach ensures   that we consistently meet and exceed our clients&apos; expectations. </p>
                 <p> We prioritize operational performance and technological integration, creating a seamless supply chain experience that is second to none.</p>
             </div>
           </div>

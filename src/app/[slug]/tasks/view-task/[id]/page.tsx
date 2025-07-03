@@ -194,7 +194,9 @@ function TaskViewPage() {
         <div className="task-attachment-outer">
           <div className='task-attachment-header'>
             <h2>Attachments:</h2>
-            <button onClick={handleDownloadAll}>Download All</button>
+            {attachments.length > 1 && (
+              <button onClick={handleDownloadAll}>Download All</button>
+            )}
 
           </div>
 

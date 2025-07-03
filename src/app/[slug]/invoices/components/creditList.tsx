@@ -177,6 +177,7 @@ const CreditList: React.FC = () => {
               onColumnToggle={toggleColumn}
               onResetColumns={onResetColumns}
               actions={[]}
+              introKey='credit_list_intro'
             />
 
             <ResponsiveTable

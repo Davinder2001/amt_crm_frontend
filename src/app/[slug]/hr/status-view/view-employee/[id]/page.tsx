@@ -102,6 +102,7 @@ const ViewUserPage: React.FC = () => {
               onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
             }
           ]}
+          introKey='view_emp_intro'
         />
       </div>
       <div className="employee-profile-inner-container">

@@ -111,6 +111,7 @@ const AllQuotations = () => {
             ? [{ label: 'Generate Quotation', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/invoices/qutations/add`) }]
             : []),
         ]}
+        introKey='quotation_intro'
       />
       <ResponsiveTable
         data={quotations}

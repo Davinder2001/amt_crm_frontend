@@ -49,6 +49,7 @@ const Page: React.FC = () => {
             //   onClick: () => setInviteModalOpen(true),
             // },
           ]}
+          introKey='hr_intro'
         />
       </div>
 

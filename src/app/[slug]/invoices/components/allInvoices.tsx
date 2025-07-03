@@ -177,6 +177,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
         visibleColumns={visibleColumns}
         onColumnToggle={toggleColumn}
         onResetColumns={onResetColumns}
+        introKey="invoice_intro"
         actions={[
 
           ...(invoices.length > 0

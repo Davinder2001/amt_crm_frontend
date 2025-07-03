@@ -42,6 +42,7 @@ function Page() {
             onClick: () => router.push(`/${companySlug}/leaves`)
           },
         ]}
+        introKey='attendence_into'
       />
       <AttendancesList
         isAttandanceOpen={isAttandanceOpen}

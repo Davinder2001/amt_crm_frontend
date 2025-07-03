@@ -108,6 +108,7 @@ const Page: React.FC = () => {
             columns={columns.map((col) => ({ label: col.label, key: col.label }))}
             visibleColumns={visibleColumns}
             onColumnToggle={toggleColumn}
+            introKey='vendors_intro'
             actions={[
               {
                 label: 'Add Vendor',

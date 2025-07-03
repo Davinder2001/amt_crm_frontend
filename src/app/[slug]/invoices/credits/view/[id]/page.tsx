@@ -123,6 +123,7 @@ const ViewCredits: React.FC = () => {
           );
         }}
         actions={[]}
+        introKey='view_credits_intro'
       />
 
       <ResponsiveTable

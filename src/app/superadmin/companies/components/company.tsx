@@ -239,6 +239,7 @@ if (error)
             onClick: () => router.push('/superadmin/companies/refunds'),
           },
         ]}
+        introKey='companies_intro'
       />
       <ResponsiveTable
         data={filteredData}

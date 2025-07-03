@@ -74,6 +74,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     // Intro popup state
     const [showIntro, setShowIntro] = React.useState(false);
     const [hasSeenIntro, setHasSeenIntro] = React.useState(true);
+    const introPopupRef = React.useRef<HTMLDivElement>(null);
 
     // Check screen size and localStorage after mount with delay
     React.useEffect(() => {
@@ -105,17 +106,33 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         };
     }, [introKey, isMobile]);
 
-    const handleDismissIntro = () => {
+    const handleDismissIntro = React.useCallback(() => {
         if (introKey) {
             setIntroKey(introKey, true);
             setHasSeenIntro(true);
         }
         setShowIntro(false);
-    };
+    }, [introKey]);
 
     const showHelpGuide = () => {
         setShowIntro(true);
     };
+
+
+    React.useEffect(() => {
+        if (!showIntro) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (introPopupRef.current && !introPopupRef.current.contains(event.target as Node)) {
+                handleDismissIntro();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showIntro, handleDismissIntro]);
 
     // Get all unique icons from toolbar actions
     const allToolbarIcons = React.useMemo(() => {
@@ -255,7 +272,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         <>
             {showIntro && isMobile && (
                 <div className="toolbar-intro-popup">
-                    <div className="intro-content">
+                    <div className="intro-content" ref={introPopupRef}>
                         <h3>Toolbar Guide</h3>
                         <ul>
                             {allToolbarIcons.map((item, index) => (

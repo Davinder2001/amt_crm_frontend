@@ -38,6 +38,7 @@ interface TableToolbarProps {
     onToggleBulkActions?: (enabled: boolean) => void;
 }
 
+
 const TableToolbar: React.FC<TableToolbarProps> = ({
     filters,
     onFilterChange,

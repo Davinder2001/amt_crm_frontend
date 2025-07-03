@@ -210,14 +210,16 @@ const ViewTimeline = () => {
             )}
             {Array.isArray(history.attachments) && history.attachments.length > 0 && (
               <div className="content-block attachments">
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
-                  <button
-                    onClick={handleDownloadAll}
-                    className="task-timeline-downloadall-btn"
-                  >
-                    Download All
-                  </button>
-                </div>
+                {history.attachments.length > 1 && (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+                    <button
+                      onClick={handleDownloadAll}
+                      className="task-timeline-downloadall-btn"
+                    >
+                      Download All
+                    </button>
+                  </div>
+                )}
                 <div className="attachment-list">
                   {history.attachments.map((img: string, index: number) => (
                     <div
@@ -239,9 +241,10 @@ const ViewTimeline = () => {
               </div>
             )}
 
+
             {openImage && (
               <Modal isOpen={true} onClose={() => setOpenImage(null)} title="Image Preview">
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center' }} className='timeline-modal-wrapper'>
                   <Image
                     src={openImage}
                     alt="Full Preview"
@@ -249,22 +252,14 @@ const ViewTimeline = () => {
                     height={400}
                     style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
                   />
-                  <button
-                    onClick={() => handleDownload(openImage)}
-                    style={{
-                      marginTop: '1rem',
-                      padding: '10px 20px',
-                      backgroundColor: '#007bff',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                      fontSize: '16px',
-                      fontWeight: 500,
-                    }}
-                  >
-                    Download Image
-                  </button>
+                  <div className='timeline-dawnload-imaeg-btn-outer'>
+                    <button
+                      onClick={() => handleDownload(openImage)}
+                      className='buttons'
+                    >
+                      Download Image
+                    </button>
+                  </div>
                 </div>
               </Modal>
             )}

@@ -419,10 +419,12 @@
 
 .help-btn {
     gap: 2px !important;
-    svg{
+
+    svg {
         width: 14px !important;
         height: 14px !important;
     }
+
     span {
         display: block !important;
     }
@@ -924,11 +926,8 @@ table {
         }
 
         .dropdown-right .dropdown-content {
-            right: auto;
-        }
-
-        .extra-links .dropdown-content {
-            right: 0;
+            left: auto;
+            right: 10px;
         }
     }
 
@@ -1042,6 +1041,11 @@ table {
         .right-group {
             gap: 10px;
 
+        }
+
+        .dropdown-right .dropdown-content {
+            left: -50%;
+            right: -50%;
         }
 
     }

@@ -5,6 +5,7 @@ import { useGetQuotationByIdQuery } from '@/slices/quotation/quotationApi';
 import { FaClipboardList, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
+import LoadingState from '@/components/common/LoadingState';
 
 const QuotationPage = () => {
   const params = useParams();
@@ -12,12 +13,13 @@ const QuotationPage = () => {
   const id = rawId ? Number(rawId) : undefined;
   const { companySlug } = useCompany();
 
-  const { data: quotation, isLoading, isError } = useGetQuotationByIdQuery(id!, {
+  const { data: quotation, isLoading, error } = useGetQuotationByIdQuery(id!, {
     skip: !id || isNaN(id),
   });
 
-  if (isLoading) return <p className="invoice-loading">Loading...</p>;
-  if (isError || !quotation) return <p className="invoice-error">Something went wrong while fetching quotation.</p>;
+  if (isLoading) return <LoadingState/>;
+  if (error || !quotation) return 
+  ;
 
   return (
     <div className="quotation-container">

@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/slices/users/userApi';
-import Loader from '@/components/common/Loader';
 import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
+import LoadingState from '@/components/common/LoadingState';
 
 const Page = () => {
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
@@ -21,7 +21,7 @@ const Page = () => {
     setSelectedCategoryId(null);
   };
 
-  if (isPlansLoading) return <Loader />;
+  if (isPlansLoading) return <LoadingState />;
   if (!plans || !categories) return <div>No plans or categories available.</div>;
 
   const hasValidSelection = selectedPackage !== null && selectedCategoryId !== null;

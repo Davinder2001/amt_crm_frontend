@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
@@ -12,6 +12,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import TaskForm from './TaskForm';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 
 interface AllTasksProps {
@@ -35,20 +36,31 @@ const AllTasks: React.FC<AllTasksProps> = ({
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { companySlug } = useCompany();
   const { refetch: refetchNotifications } = useFetchNotificationsQuery();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [taskIdToDelete, setTaskIdToDelete] = useState<number | null>(null);
 
-  const handleDelete = async (id: number) => {
-    if (confirm('Are you sure you want to delete this task?')) {
-      try {
-        await deleteTask(id).unwrap();
-        toast.success('Task deleted successfully');
-        refetch();
-        refetchNotifications();
-      } catch (err) {
-        console.error('Error deleting task:', err);
-        toast.error('Error deleting task');
-      }
+  const confirmDelete = async () => {
+    if (taskIdToDelete === null) return;
+
+    try {
+      await deleteTask(taskIdToDelete).unwrap();
+      toast.success('Task deleted successfully');
+      refetch();
+      refetchNotifications();
+    } catch (err) {
+      console.error('Error deleting task:', err);
+      toast.error('Error deleting task');
+    } finally {
+      setShowDeleteConfirm(false);
+      setTaskIdToDelete(null);
     }
   };
+
+  const handleDelete = (id: number) => {
+    setTaskIdToDelete(id);
+    setShowDeleteConfirm(true);
+  };
+
 
   const handleEditClick = (id: number) => {
     setCurrentTaskId(id);
@@ -135,6 +147,17 @@ const AllTasks: React.FC<AllTasksProps> = ({
           >
             <FaTrash />
           </button>
+          <ConfirmDialog
+            isOpen={showDeleteConfirm}
+            message="Are you sure you want to delete this task?"
+            onConfirm={confirmDelete}
+            onCancel={() => {
+              setShowDeleteConfirm(false);
+              setTaskIdToDelete(null);
+            }}
+            type="delete"
+          />
+
         </div>
       ),
     },

@@ -13,6 +13,7 @@ import TableToolbar from '@/components/common/TableToolbar';
 import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaUniversity, FaHourglassHalf, FaUndoAlt } from 'react-icons/fa';
+import EmptyState from '@/components/common/EmptyState';
 
 interface Company {
   id: number;
@@ -192,8 +193,14 @@ const CompanyComponent = () => {
   const filteredData = filterData(companies);
 
   if (isLoading) return <Loader />;
-  if (error) return <p className="text-red-500">Error loading companies.</p>;
-
+if (error)
+        return (
+            <EmptyState
+                icon="alert"
+                title="Error loading companies."
+                message="Something went wrong while loading companies."
+            />
+        );
   return (
     <div className="company-table-outer">
       <TableToolbar

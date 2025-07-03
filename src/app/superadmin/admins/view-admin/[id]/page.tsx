@@ -7,6 +7,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { adminlogo } from "@/assets/useImage";
 import { FaArrowLeft, FaBuilding, FaCalendarAlt, FaCheckCircle, FaEnvelope, FaFingerprint, FaPhoneAlt, FaUserShield } from "react-icons/fa";
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 
 const ViewAdminPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -18,9 +20,15 @@ const ViewAdminPage = () => {
   const { id } = useParams();
   const { data, isLoading, error } = useGetAdminByIdQuery(id as string);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading admin.</p>;
-
+  if (isLoading) return <LoadingState/>;
+ if (error)
+        return (
+            <EmptyState
+                icon="alert"
+                title="Error loading admin."
+                message="Something went wrong while loading admin."
+            />
+        );
   const admin = data?.admin;
 
   if (!admin) return <p>No admin data available.</p>;

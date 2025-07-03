@@ -6,13 +6,15 @@ import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoice';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 const InvoiceViewPage = () => {
   const params = useParams();
   const id = params?.id;
 
   const { setTitle } = useBreadcrumb(); // ✅ Move this hook to the top
   const router = useRouter();
-  const { data, isLoading, isError } = useGetInvoiceByIdQuery(id as string, {
+  const { data, isLoading, error } = useGetInvoiceByIdQuery(id as string, {
     skip: !id,
   });
 
@@ -20,8 +22,14 @@ const InvoiceViewPage = () => {
     setTitle('Invoice');
   }, [setTitle]);
 
-  if (isLoading) return <div className="invoice-loading">Loading invoice...</div>;
-  if (isError || !data?.invoice) return <div className="invoice-error">Failed to load invoice.</div>;
+  if (isLoading) return <LoadingState />;
+  if (error || !data?.invoice) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to fetching employees."
+      message="Something went wrong while fetching employees."
+    />
+  );;
 
   const { invoice } = data;
 

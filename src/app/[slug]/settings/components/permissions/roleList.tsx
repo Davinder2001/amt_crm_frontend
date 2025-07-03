@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
 import { FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
-import Loader from "@/components/common/Loader";
 import RoleForm from "./RoleForm";
 import Modal from "@/components/common/Modal";
 import ViewRole from "./ViewRole";
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
@@ -39,12 +39,15 @@ const RoleList: React.FC = () => {
     }
   };
 
-  if (isLoading) return <Loader />;
-  if (error) {
-    toast.error("Error loading roles");
-    return <div>Error loading roles.</div>;
-  }
-
+  if (isLoading) return <LoadingState />;
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching roles data."
+        message="Something went wrong while fetching roles data."
+      />
+    );
   const columns = [
     { label: "Role Name", key: "name" as keyof Role },
     {

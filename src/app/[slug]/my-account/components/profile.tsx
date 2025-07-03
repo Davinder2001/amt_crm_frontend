@@ -1,5 +1,4 @@
 'use client'
-import Loader from '@/components/common/Loader'
 import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,9 +10,11 @@ import { invalidateAllCompanyApis } from '@/utils/ApiDispatch'
 import { AppDispatch } from '@/store/store'
 import { useDispatch } from 'react-redux'
 import RecheckModal from '@/components/common/RecheckModal'
+import LoadingState from '@/components/common/LoadingState'
+import EmptyState from '@/components/common/EmptyState'
 
 const Profile = () => {
-  const { data, isLoading, isError } = useFetchProfileQuery()
+  const { data, isLoading, error } = useFetchProfileQuery()
   const [sendCompanyId] = useSelectedCompanyMutation()
   const [companies, setCompanies] = useState<Company[]>([])
   const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null)
@@ -77,9 +78,15 @@ const Profile = () => {
     }
   }
 
-  if (isLoading) return <Loader />
-  if (isError) return <div className="radical-error">⚠️ Failed to load profile</div>
-
+  if (isLoading) return <LoadingState />
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching profile data."
+        message="Something went wrong while fetching profile data."
+      />
+    );
   return (
     <div className="radical-profile">
       {/* Header */}
@@ -102,7 +109,7 @@ const Profile = () => {
         {/* Left Panel */}
         <div className="panel personal-panel">
           <div className="panel-header">
-            <h2>🧑 USER PROFILE</h2>
+            <h2>🧑 USER PROFLE</h2>
           </div>
           <div className="info-stack">
             <div className="info-line"><span>📧</span><span>{user?.email}</span></div>

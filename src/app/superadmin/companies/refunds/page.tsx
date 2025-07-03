@@ -8,9 +8,11 @@ import {
     useDeclineRefundMutation,
 } from '@/slices/superadminSlices/payments/paymentApi';
 import Modal from '@/components/common/Modal';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const Refunds = () => {
-    const { data, isLoading, isError } = useFetchRefundsQuery();
+    const { data, isLoading, error } = useFetchRefundsQuery();
     const [approveRefund] = useApproveRefundMutation();
     const [completeRefund] = useCompleteRefundMutation();
     const [declineRefund] = useDeclineRefundMutation();
@@ -46,8 +48,13 @@ const Refunds = () => {
         closeDeclineModal();
     };
 
-    if (isLoading) return <p>Loading...</p>;
-    if (isError) return <p>Error loading refunds.</p>;
+    if (isLoading) return <LoadingState />;
+    if (error) return (
+        <EmptyState
+            icon="alert"
+            title="Error loading companies."
+            message="Something went wrong while loading companies."
+        />);
 
     return (
         <div className="p-6 max-w-6xl mx-auto">

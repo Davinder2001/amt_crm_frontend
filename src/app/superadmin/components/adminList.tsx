@@ -9,6 +9,7 @@ import {
 import Loader from '@/components/common/Loader';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
+import EmptyState from '@/components/common/EmptyState';
 
 const statusOptions = ['active', 'blocked'];
 const COLUMN_STORAGE_KEY = 'visible_columns_admins';
@@ -151,8 +152,12 @@ const AdminList = () => {
   ];
 
   if (isLoading) return <Loader />;
-  if (error) return <p className="text-red-500">Failed to fetch admins.</p>;
-
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Failed to fetch admins."
+      message="Something went wrong while fetch admins."
+    />);
   return (
     <div className="items-page">
       <TableToolbar

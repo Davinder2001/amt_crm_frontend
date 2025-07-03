@@ -13,6 +13,7 @@ import EmptyState from '@/components/common/EmptyState';
 import { FaUniversity, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import LoadingState from '@/components/common/LoadingState';
 
 const BankAccountList = () => {
     const { data, isLoading, error, refetch } = useFetchCompanyAccountsQuery();
@@ -155,8 +156,8 @@ const BankAccountList = () => {
                     setItemToDelete(null);
                 }}
                 type="delete"
-            />
-            {isLoading && <p>Loading accounts...</p>}
+            />s
+            {isLoading && <LoadingState />}
 
             {error && (
                 <EmptyState

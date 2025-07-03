@@ -23,7 +23,6 @@ const COLUMN_STORAGE_KEY = 'visible_columns_invoice';
 
 const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
-  // const [sendToWhatsapp, { isLoading: sending }] = useSendInvoiceToWhatsappMutation();
   const router = useRouter();
   const { companySlug } = useCompany();
   const [filters, setFilters] = useState<Record<string, string[]>>({});
@@ -123,35 +122,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
     }
   };
 
-  // const handleSendWhatsapp = async (invoiceId: number) => {
-  //   try {
-  //     const res = await sendToWhatsapp(invoiceId).unwrap() as unknown as { pdf_base64: string; filename: string; whatsapp_url: string };
-
-  //     const byteCharacters = atob(res.pdf_base64);
-  //     const byteNumbers = new Array(byteCharacters.length)
-  //       .fill(0)
-  //       .map((_, i) => byteCharacters.charCodeAt(i));
-  //     const byteArray = new Uint8Array(byteNumbers);
-  //     const blob = new Blob([byteArray], { type: "application/pdf" });
-  //     const file = new File([blob], res.filename, { type: "application/pdf" });
-
-  //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-  //       await navigator.share({
-  //         title: "Invoice",
-  //         text: "Please find your invoice attached.",
-  //         files: [file],
-  //       });
-  //       toast.success("Shared via WhatsApp or other app.");
-  //     } else {
-  //       window.open(res.whatsapp_url, "_blank");
-  //       toast.info("Opened WhatsApp Web for manual sharing.");
-  //     }
-  //   } catch (err) {
-  //     console.error("WhatsApp share error:", err);
-  //     toast.error("Failed to share invoice.");
-  //   }
-  // };
-
   const columns = [
     ...allColumns
       .filter(col => visibleColumns.includes(col.key))
@@ -174,14 +144,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           <button className="buttons" onClick={() => handleDownloadPdf(invoice.id)}>
             Download
           </button>
-          {/* <button
-            className="buttons"
-            onClick={() => handleSendWhatsapp(invoice.id)}
-            title="Send to WhatsApp"
-            disabled={sending}
-          >
-            <FaWhatsapp size={18} style={{ marginRight: 4 }} /> WhatsApp
-          </button> */}
         </div>
       ),
     },

@@ -16,6 +16,7 @@ import EmptyState from '@/components/common/EmptyState';
 import { FaPlus, FaCalendar, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import TableToolbar from '@/components/common/TableToolbar';
+import LoadingState from '@/components/common/LoadingState';
 
 const HolidayList = () => {
     const { data, isLoading, error, refetch } = useFetchHolidaysQuery();
@@ -249,7 +250,7 @@ const HolidayList = () => {
             </Modal>
 
 
-            {isLoading && <p>Loading holidays...</p>}
+            {isLoading && <LoadingState/>}
 
             {error && (
                 <EmptyState

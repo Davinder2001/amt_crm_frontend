@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft} from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const EditVendorPage: React.FC = () => {
     const { companySlug } = useCompany();
@@ -63,11 +65,15 @@ const EditVendorPage: React.FC = () => {
         }
     };
 
-
-
-    if (isLoading) return <p className="loading-text">Loading vendor...</p>;
-    if (error) return <p className="error-text">Failed to load vendor details.</p>;
-
+    if (isLoading) return <LoadingState />;
+    if (error)
+        return (
+            <EmptyState
+                icon="alert"
+                title="Failed to fetching vendor details."
+                message="Something went wrong while fetching vendor details."
+            />
+        );
     return (
         <div className="vendor-creation-page-outer">
             <button onClick={() => router.back()} className="back-button">
@@ -84,7 +90,7 @@ const EditVendorPage: React.FC = () => {
 
                         {/* Vendor Name */}
                         <div className="input-group">
-                            <label> 
+                            <label>
                                 Vendor Name
                             </label>
                             <input

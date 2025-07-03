@@ -9,6 +9,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import SubmitTaskComponent from '../submit-task/SubmitTaskComponent';
 import EmptyState from '@/components/common/EmptyState';
+import LoadingState from '@/components/common/LoadingState';
 
 // Define the Task type based on your API response
 type Task = {
@@ -77,7 +78,7 @@ const Page = () => {
     },
   ];
 
-  if (isLoading) return <p>Loading working tasks...</p>;
+  if (isLoading) return <LoadingState/>;
   if (error) {
     return (
       <EmptyState

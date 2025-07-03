@@ -8,6 +8,7 @@ import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Modal from '@/components/common/Modal';
+import EmptyState from '@/components/common/EmptyState';
 
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
@@ -207,8 +208,14 @@ const PackagesView = () => {
 
 
   if (isLoading) return <LoadingState />;
-  if (error) return <div className="error-message">Error loading packages.</div>;
-
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Error loading packages."
+        message="Something went wrong while loading packages."
+      />
+    );
   return (
     <>
       <div className="superadmin-packages-container">

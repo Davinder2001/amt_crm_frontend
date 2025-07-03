@@ -119,11 +119,14 @@ const Attributes = () => {
     };
 
     if (isLoading) return <LoadingState />;
-    if (error) {
-        toast.error('Failed to load attributes');
-        return <div>Error loading attributes.</div>;
-    }
-
+    if (error)
+        return (
+            <EmptyState
+                icon="alert"
+                title="Failed to fetching attributes data."
+                message="Something went wrong while fetching attributes data."
+            />
+        );
     const columns = [
         { label: 'Attribute Name', key: 'name' as keyof Attribute },
         {

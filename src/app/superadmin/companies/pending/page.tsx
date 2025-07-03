@@ -8,6 +8,8 @@ import {
   useVerifyCompanyStatusMutation,
 } from '@/slices/superadminSlices/company/companyApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 
 const PendingCompaniesPage = () => {
@@ -52,19 +54,24 @@ const PendingCompaniesPage = () => {
           <div><button type='button' onClick={() => handleVerifyPayment(company.id)} disabled={isVerifyingPayment}>
             Verify Payment
           </button>
-        </div>
-        <div>
-            <button  type='button' onClick={() => handleVerifyStatus(company.id)} disabled={isVerifyingStatus}>
-            Verify Status
-          </button>
-        </div>
+          </div>
+          <div>
+            <button type='button' onClick={() => handleVerifyStatus(company.id)} disabled={isVerifyingStatus}>
+              Verify Status
+            </button>
+          </div>
         </div>
       ),
     },
   ];
 
-  if (isLoading) return <p>Loading pending companies...</p>;
-  if (error) return <p>Error loading companies.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Error loading companies."
+      message="Something went wrong while loading companies."
+    />);
 
   return (
     <div>

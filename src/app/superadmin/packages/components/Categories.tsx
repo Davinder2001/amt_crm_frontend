@@ -9,6 +9,7 @@ import {
 import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
 import LoadingState from "@/components/common/LoadingState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
+import EmptyState from "@/components/common/EmptyState";
 
 const BusinessCategories = () => {
     // API hooks
@@ -122,7 +123,12 @@ const BusinessCategories = () => {
                 {isLoading ? (
                     <LoadingState />
                 ) : isError ? (
-                    <div className="error">Error loading categories</div>
+                    <EmptyState
+                        icon="alert"
+                        title="Error loading categories."
+                        message="Something went wrong while loading categories ."
+                    />
+
                 ) : (
                     categories.map((cat) => (
                         <div key={cat.id} className="category-item">

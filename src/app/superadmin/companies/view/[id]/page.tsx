@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { adminlogo } from "@/assets/useImage";
 import Loader from '@/components/common/Loader';
+import EmptyState from '@/components/common/EmptyState';
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -19,21 +20,7 @@ const ViewCompanyPage = () => {
 
   const { id } = useParams();
   const { data, isLoading, error } = useFetchSingleCompanyQuery(id as string);
-  // const router = useRouter();
-  // const [deleteCompany] = useDeleteCompanyMutation();
-  // const handleDeleteCompany = async (companyId: string) => {
-  //   const confirmed = window.confirm("Are you sure you want to delete this company?");
-  //   if (!confirmed) return;
 
-  //   try {
-  //     await deleteCompany(companyId).unwrap();
-  //     alert("Company deleted successfully.");
-  //     router.push("/superadmin/companies");
-  //   } catch (err) {
-  //     console.error("Delete failed:", err);
-  //     alert("Failed to delete the company. Please try again.");
-  //   }
-  // };
   const getStatusClass = (status: string) => {
     const normalized = status.toLowerCase();
     if (normalized === 'verified') return 'vc-status-success';
@@ -58,8 +45,13 @@ const ViewCompanyPage = () => {
     verification_status: string;
   };
 
-  if (isLoading) return <Loader/>;
-  if (error) return <div>Error loading company details.</div>;
+  if (isLoading) return <Loader />;
+  if (error) return (
+    <EmptyState
+      icon="alert"
+      title="Error loading companies."
+      message="Something went wrong while loading  details."
+    />);
 
   return (
     <div>

@@ -5,6 +5,8 @@ import { useFetchEmployesQuery, useDeleteEmployeMutation, useUpdateEmployeeStatu
 import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const UserList: React.FC = () => {
   const router = useRouter();
@@ -15,8 +17,16 @@ const UserList: React.FC = () => {
   const [updateStatus] = useUpdateEmployeeStatusMutation();
   const employees: Employee[] = employeesData?.employees ?? [];
 
-  if (isLoading) return <p>Loading employees...</p>;
-  if (error) return <p>Error fetching employees.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching employees."
+        message="Something went wrong while fetching employees."
+      />
+    );
+  }
   if (employees.length === 0) return <p>No employees found.</p>;
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

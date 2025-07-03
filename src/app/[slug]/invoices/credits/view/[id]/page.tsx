@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 type CreditItem = {
   credit_id: number;
@@ -86,8 +88,12 @@ const ViewCredits: React.FC = () => {
     },
   }));
 
-  if (isLoading) return <div>Loading credit data...</div>;
-  if (isError || !data?.customer) return <div>Error loading credit data.</div>;
+  if (isLoading) return <LoadingState />;
+  if (isError || !data?.customer) return <EmptyState
+    icon="alert"
+    title="Failed to fetching credit data."
+    message="Something went wrong while fetching credit data."
+  />;
 
   const customer = data.customer;
 

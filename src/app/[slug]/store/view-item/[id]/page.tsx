@@ -9,6 +9,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
 import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -51,7 +52,14 @@ const ViewItem = () => {
   };
 
   if (isLoading) return <LoadingState />;
-  if (error) return <div className="error">Error loading item.</div>;
+   if (error)
+        return (
+            <EmptyState
+                icon="alert"
+                title="Failed to fetching item."
+                message="Something went wrong while fetching item."
+            />
+        );
   if (!item) return <div className="error">Item not found.</div>;
 
   const batches = Array.isArray(item.batches) ? item.batches : [];

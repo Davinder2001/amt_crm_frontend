@@ -1,12 +1,21 @@
 import React from 'react';
 import { useFetchCatalogItemsQuery } from '@/slices/catalog/catalogApi';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const ItemList = () => {
-  const { data: items = [], isLoading, isError } = useFetchCatalogItemsQuery();
+  const { data: items = [], isLoading, error } = useFetchCatalogItemsQuery();
 
-  if (isLoading) return <div className="p-4">Loading catalog items...</div>;
-  if (isError) return <div className="p-4 text-red-500">Failed to load catalog items.</div>;
-
+  if (isLoading) return <LoadingState/>;
+ if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to load catalog items."
+        message="Something went wrong while fetching your working catalog items."
+      />
+    );
+  }
   return (
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">Catalog Items</h2>

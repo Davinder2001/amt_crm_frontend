@@ -16,6 +16,7 @@ import LeaveForm from './LeaveForm';
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import LoadingState from '@/components/common/LoadingState';
 
 const LeaveList = () => {
   const { data, isLoading, error, refetch } = useFetchLeavesQuery();
@@ -136,7 +137,7 @@ const LeaveList = () => {
         }}
         type="delete"
       />
-      {isLoading && <p>Loading leaves...</p>}
+      {isLoading && <LoadingState/>}
 
       {error && (
         <EmptyState

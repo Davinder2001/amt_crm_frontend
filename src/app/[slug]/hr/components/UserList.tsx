@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 
 const UserList: React.FC = () => {
@@ -22,8 +24,16 @@ const UserList: React.FC = () => {
     company_name: emp.company_name || 'Unknown',
   })) ?? [];
 
-  if (isLoading) return <p>Loading employees...</p>;
-  if (error) return <p>Error fetching employees.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching employees."
+        message="Something went wrong while fetching employees."
+      />
+    );
+  }
   if (employees.length === 0) return <p>No employees found.</p>;
 
   const update = (employee: Employee) => {

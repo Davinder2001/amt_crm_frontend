@@ -11,6 +11,8 @@ import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
 import { FaEnvelope } from "react-icons/fa";
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
@@ -44,8 +46,16 @@ const SalaryView: React.FC = () => {
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
-  if (isLoading) return <p>Loading employees...</p>;
-  if (error) return <p>Error fetching employees.</p>;
+  if (isLoading) return <LoadingState/>;
+  if (error) {
+      return (
+        <EmptyState
+          icon="alert"
+          title="Failed to fetching employees."
+          message="Something went wrong while fetching employees."
+        />
+      );
+    }
   if (!employeesData?.data?.length) return <p>No employees found.</p>;
 
   const columns = [

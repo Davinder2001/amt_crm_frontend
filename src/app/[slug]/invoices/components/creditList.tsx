@@ -5,12 +5,13 @@ import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useGetCreditUsersQuery } from '@/slices/invoices/invoice';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
-import { FaUsers } from 'react-icons/fa'; 
+import { FaUsers } from 'react-icons/fa';
 
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaMoneyBill, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
+import LoadingState from '@/components/common/LoadingState';
 
 interface CreditUser {
   customer_id: number;
@@ -40,7 +41,7 @@ const allColumns: { label: string; key: ColumnKey }[] = [
 const CreditList: React.FC = () => {
   const router = useRouter();
   const { setTitle } = useBreadcrumb();
-  const { data, isLoading, isError } = useGetCreditUsersQuery();
+  const { data, isLoading, error } = useGetCreditUsersQuery();
   const { companySlug } = useCompany();
 
   const [filters, setFilters] = useState<Record<string, string[]>>({});
@@ -138,8 +139,12 @@ const CreditList: React.FC = () => {
       };
     });
 
-  if (isLoading) return <p>Loading…</p>;
-  if (isError) return <p>Something went wrong.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error) return <EmptyState
+    icon="alert"
+    title="Failed to fetching Data."
+    message="Something went wrong while fetching Data."
+  />;
 
   return (
     <div>

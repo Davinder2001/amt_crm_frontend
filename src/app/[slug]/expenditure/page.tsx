@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import {
   Box,
-  Typography
 } from '@mui/material';
 import { useFetchExpensesQuery, useDeleteExpenseMutation } from '@/slices';
 import ExpenseForm from './components/ExpenseForm';
@@ -13,11 +12,11 @@ import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
-import Loader from '@/components/common/Loader';
 import Image from 'next/image';
+import LoadingState from '@/components/common/LoadingState';
 
 export default function ExpensesPage() {
-  const { data, isLoading, isError } = useFetchExpensesQuery();
+  const { data, isLoading, error } = useFetchExpensesQuery();
   const expenses = data?.data || [];
   const [deleteExpense] = useDeleteExpenseMutation();
   const [openForm, setOpenForm] = useState(false);
@@ -120,9 +119,16 @@ export default function ExpensesPage() {
 
   ];
 
-  if (isLoading) return <Loader />;
-  if (isError) return <Typography color="error">Error loading expenses</Typography>;
-
+  if (isLoading) return <LoadingState />;
+if (error) {
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching expenses."
+        message="Something went wrong while fetching expenses."
+      />
+    );
+  }
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>

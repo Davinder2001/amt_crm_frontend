@@ -61,7 +61,7 @@
             gap: 1.5rem;
 
             .description-span-two-columns {
-                grid-column: span 2;
+                grid-column: span 3;
 
                 strong {
                     font-size: $font-size-small;
@@ -81,7 +81,6 @@
                     padding: 0.75rem 1rem;
                     border-radius: $border-radius;
                     border: 1px solid $feild_border;
-                    height: 100px;
                 }
             }
 
@@ -255,16 +254,34 @@
         text-align: center;
         margin-top: 4rem;
     }
+}
 
+.view-task-modal-outer {
 
+    .task-single-image-dawnload {
+        display: flex;
+        justify-content: center;
+
+    }
 }
 
 @media (max-width: 1024px) {
     .task-view-outer {
         grid-template-columns: 1fr;
 
+        .task-view-wrapper {
+
+            .task-grid {
+
+                .description-span-two-columns {
+                    grid-column: span 4;
+                }
+            }
+        }
+
         .task-attachment-outer {
             margin-top: 0px;
+
 
             .task-images-outer {
                 grid-template-columns: repeat(4, 1fr);
@@ -280,12 +297,21 @@
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 
                 .description-span-two-columns {
-                    grid-column: span 2;
+                    grid-column: span 4;
+
+                }
+
+                .description-field {
+                    p {
+                        padding: 10px;
+                        font-size: 14px;
+                    }
                 }
             }
 
             .task-card {
                 gap: 10px;
+                padding: 10px;
 
                 .Status-wrapper {
                     flex-wrap: wrap;
@@ -303,6 +329,15 @@
         }
 
         .task-attachment-outer {
+            .task-attachment-header {
+                margin-bottom: 5px;
+                padding-bottom: 5px;
+
+                h2 {
+                    font-size: 20px;
+                }
+            }
+
             .task-images-outer {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -322,7 +357,7 @@
             .task-grid {
                 display: flex;
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
 
                 .task-grid-values {
                     flex-direction: row;
@@ -332,12 +367,22 @@
                         font-size: $font-size-extra-small;
                     }
                 }
+
+                .description-field {
+                    p {
+                        padding: 10px;
+                        font-size: 12px;
+                    }
+                }
             }
 
             .status-badge {
                 padding: 3px 10px;
             }
 
+            .action-buttons {
+                margin-top: 0px;
+            }
 
         }
     }

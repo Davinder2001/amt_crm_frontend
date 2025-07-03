@@ -6,6 +6,7 @@ import { useFetchBalanceLeaveQuery } from '@/slices/attendance/attendance';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
+import LoadingState from '@/components/common/LoadingState';
 
 type Leave = {
   id: number;
@@ -22,7 +23,7 @@ const LeavesPage = () => {
   const { companySlug } = useCompany();
 
   if (isLoading) {
-    return <p className="text-center py-4">Loading leave balance...</p>;
+    return <LoadingState />;
   }
 
   if (isError || !data) {

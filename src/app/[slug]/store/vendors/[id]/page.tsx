@@ -6,6 +6,8 @@ import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const Page = () => {
   const params = useParams();
@@ -30,8 +32,15 @@ const Page = () => {
     }
   };
 
-  if (isLoading) return <p className="loading-text">Loading vendor...</p>;
-  if (error) return <p className="error-text">Failed to fetch vendor details.</p>;
+  if (isLoading) return <LoadingState />;
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching vendor details."
+        message="Something went wrong while fetching vendor details."
+      />
+    );
   if (!vendor) return <p className="empty-text">Vendor not found.</p>;
 
   return (

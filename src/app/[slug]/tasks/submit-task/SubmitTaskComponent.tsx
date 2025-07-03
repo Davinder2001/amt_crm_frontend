@@ -6,6 +6,7 @@ import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices/tasks/taskApi'
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';
+import LoadingState from '@/components/common/LoadingState';
 
 export interface SubmitTaskProps {
     onTaskSubmit?: () => void;
@@ -36,8 +37,8 @@ export default function SubmitTaskComponent({ onTaskSubmit, onSuccess, taskId }:
         return () => urls.forEach((u) => URL.revokeObjectURL(u));
     }, [files]);
 
-    if (isLoading) return <p>Loading…</p>;
-    if (!task) return <p>No task found with ID: {taskId}</p>;
+    if (isLoading) return <LoadingState/>;
+    if (!task) return (<p>No task found with ID: {taskId}</p>);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFiles(e.target.files ? Array.from(e.target.files) : []);

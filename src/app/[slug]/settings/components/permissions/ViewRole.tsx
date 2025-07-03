@@ -2,8 +2,9 @@
 
 import React, { useMemo } from 'react';
 import { useGetRolesQuery } from '@/slices/roles/rolesApi';
-import Loader from '@/components/common/Loader';
 import { toast } from 'react-toastify';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 interface ViewRoleProps {
     roleId: number;
@@ -16,11 +17,17 @@ const ViewRole: React.FC<ViewRoleProps> = ({ roleId }) => {
         return data?.roles?.find((role: Role) => role.id === roleId);
     }, [data, roleId]);
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <LoadingState />;
 
     if (error || !roleData) {
         toast.error('Error fetching role details.');
-        return <div>Error loading role details.</div>;
+        return (
+            <EmptyState
+                icon="alert"
+                title="Failed to fetching roles details."
+                message="Something went wrong while fetching roles details."
+            />
+        );
     }
 
     return (

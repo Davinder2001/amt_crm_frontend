@@ -15,6 +15,8 @@ import { useCompany } from '@/utils/Company';
 import Image from 'next/image';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 function TaskViewPage() {
   const { id } = useParams();
@@ -72,18 +74,42 @@ function TaskViewPage() {
     document.body.removeChild(link);
   };
 
-  const handleDownloadAll = () => {
-    attachments.forEach((url, index) => {
-      const imageUrl = typeof url === 'string' ? url : url.url;
-      const link = document.createElement('a');
-      link.href = imageUrl;
-      link.setAttribute('download', imageUrl.split('/').pop() || `attachment-${index + 1}.jpg`);
-      link.setAttribute('target', '_blank');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+  const handleDownloadAll = async () => {
+    if (!attachments.length) {
+      toast.info("No attachments to download.");
+      return;
+    }
+
+    const zip = new JSZip();
+    const folder = zip.folder("attachments");
+
+    await Promise.all(
+      attachments.map(async (attachment, index) => {
+        const url = typeof attachment === 'string' ? attachment : attachment.url;
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+          const blob = await response.blob();
+          const filename = url.split('/').pop() || `file-${index + 1}.jpg`;
+          folder?.file(filename, blob);
+        } catch (err) {
+          console.error("Download failed for", url, err);
+          toast.error(`Failed to include some attachments.`);
+        }
+      })
+    );
+
+    try {
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `task-${task.id}-attachments.zip`);
+      toast.success("ZIP file downloaded!");
+    } catch (err) {
+      console.error("ZIP generation failed", err);
+      toast.error("ZIP creation failed.");
+    }
   };
+
 
   const status = task.status?.toLowerCase();
   const statusClass =
@@ -168,11 +194,8 @@ function TaskViewPage() {
         <div className="task-attachment-outer">
           <div className='task-attachment-header'>
             <h2>Attachments:</h2>
-            <button
-              onClick={handleDownloadAll}
-            >
-              Download All
-            </button>
+            <button onClick={handleDownloadAll}>Download All</button>
+
           </div>
 
           <div className="task-images-outer">
@@ -195,7 +218,7 @@ function TaskViewPage() {
 
       {openImage && (
         <Modal isOpen={true} onClose={() => setOpenImage(null)} title="Image Preview">
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }} className='view-task-modal-outer'>
             <Image
               src={openImage}
               alt="Full Preview"
@@ -203,22 +226,14 @@ function TaskViewPage() {
               height={400}
               style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
             />
-            <button
-              onClick={() => handleDownload(openImage)}
-              style={{
-                marginTop: '1rem',
-                padding: '10px 20px',
-                backgroundColor: '#007bff',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '16px',
-                fontWeight: 500,
-              }}
-            >
-              Download Image
-            </button>
+            <div className='task-single-image-dawnload'>
+              <button
+                onClick={() => handleDownload(openImage)}
+                className='buttons'
+              >
+                Download Image
+              </button>
+            </div>
           </div>
         </Modal>
       )}

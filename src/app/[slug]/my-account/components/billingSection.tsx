@@ -6,6 +6,8 @@ import {
   useCreateRefundMutation,
 } from '@/slices/paymentsAndBillings/payBillApi';
 import Modal from '@/components/common/Modal';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 const BillingSection = () => {
   const { data, isLoading, error, refetch } = useFetchAdminBillingQuery();
@@ -36,17 +38,17 @@ const BillingSection = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4">
-        <p className="text-gray-600">Loading billing data...</p>
-      </div>
+      <LoadingState/>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4">
-        <p className="text-red-500">Failed to load billing data. Please try again later.</p>
-      </div>
+      <EmptyState
+              icon="alert"
+              title="Failed to fetching billing data."
+              message="Something went wrong while fetching billing data."
+          />
     );
   }
 

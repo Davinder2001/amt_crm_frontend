@@ -7,6 +7,8 @@ import {
   useFetchSingleCompanyQuery,
   useUpdateCompanyMutation,
 } from '@/slices/superadminSlices/company/companyApi';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
 
 interface Company {
   id: number;
@@ -35,10 +37,10 @@ interface FormDataState {
 
 const EditCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
-    
-      useEffect(() => {
-        setTitle('Edit Company'); // Update breadcrumb title
-      }, [setTitle]);
+
+  useEffect(() => {
+    setTitle('Edit Company'); // Update breadcrumb title
+  }, [setTitle]);
   const params = useParams();
   const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : '';
   const router = useRouter();
@@ -64,8 +66,8 @@ const EditCompanyPage = () => {
 
   useEffect(() => {
     if (companyResponse?.data) {
-      const company = (companyResponse.data && typeof companyResponse.data === 'object' && 'id' in companyResponse.data) 
-        ? (companyResponse.data as Company) 
+      const company = (companyResponse.data && typeof companyResponse.data === 'object' && 'id' in companyResponse.data)
+        ? (companyResponse.data as Company)
         : null;
       setFormData({
         company_name: company?.company_name ?? '',
@@ -100,14 +102,19 @@ const EditCompanyPage = () => {
 
   const isImage = (url: string) => /\.(jpg|jpeg|png|webp)$/i.test(url);
 
-  if (isLoading) return <div>Loading company...</div>;
-  if (error || !companyResponse?.data) return <div>Error loading company.</div>;
+  if (isLoading) return <LoadingState />;
+  if (error || !companyResponse?.data) return (
+    <EmptyState
+      icon="alert"
+      title="Error loading companies."
+      message="Something went wrong while loading companies."
+    />);
 
-  const company = (companyResponse.data && typeof companyResponse.data === 'object' && 'id' in companyResponse.data) 
-    ? (companyResponse.data as Company) 
+  const company = (companyResponse.data && typeof companyResponse.data === 'object' && 'id' in companyResponse.data)
+    ? (companyResponse.data as Company)
     : null;
 
-  return  (
+  return (
     <div className="edit-company-wrapper">
       <form onSubmit={handleSubmit} className="edit-company-form">
         {([

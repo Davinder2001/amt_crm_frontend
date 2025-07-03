@@ -2,6 +2,21 @@ import React from 'react';
 import { FaCheckSquare, FaQuestion, FaRegSquare, FaTimes } from 'react-icons/fa';
 import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
 
+
+// Helper functions for managing the intro keys
+const getIntroKeys = (): Record<string, boolean> => {
+    const stored = localStorage.getItem('introKeys');
+    return stored ? JSON.parse(stored) : {};
+};
+
+const setIntroKey = (key: string, value: boolean) => {
+    const currentKeys = getIntroKeys();
+    localStorage.setItem(
+        'introKeys',
+        JSON.stringify({ ...currentKeys, [key]: value })
+    );
+};
+
 interface Column {
     key: string;
     label: string;
@@ -67,20 +82,18 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
             setIsMobile(window.innerWidth < 768);
         };
 
-        // Initial check
         checkScreenSize();
-
-        // Add event listener for window resize
         window.addEventListener('resize', checkScreenSize);
 
         if (introKey && isMobile) {
             const timer = setTimeout(() => {
-                const seen = localStorage.getItem(introKey);
+                const introKeys = getIntroKeys();
+                const seen = introKeys[introKey];
                 setHasSeenIntro(!!seen);
                 if (!seen) {
                     setShowIntro(true);
                 }
-            }, 1500); // 1.5 second delay
+            }, 1500);
 
             return () => {
                 clearTimeout(timer);
@@ -95,7 +108,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
 
     const handleDismissIntro = () => {
         if (introKey) {
-            localStorage.setItem(introKey, 'true');
+            setIntroKey(introKey, true);
             setHasSeenIntro(true);
         }
         setShowIntro(false);

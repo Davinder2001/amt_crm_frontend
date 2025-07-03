@@ -151,6 +151,9 @@ const AddItem: React.FC = () => {
           <Link href={`/${companySlug}/store`} className="back-button">
             <FaArrowLeft size={16} color="#fff" />
           </Link>
+          <h4 className='store_page_heading'>
+            Add New Product
+          </h4>
           <Tooltip title={sectionKeys.some(key => !collapsedSections[key]) ? "Collapse all" : "Expand all"}>
             <IconButton
               onClick={() => {

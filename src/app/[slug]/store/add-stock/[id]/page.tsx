@@ -56,7 +56,6 @@ const Createbatch = () => {
   const [vendorsList, setVendorsList] = useState<Vendor[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     if (vendors) {
@@ -243,9 +242,8 @@ const Createbatch = () => {
       handleSubmit={handleSubmit}
       companySlug={companySlug}
       isLoading={isCreating}
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
       isBatchMode={true}
+      pageTitle={`Add New Stock for :  ${formData.name}`}
     />
   );
 };

@@ -312,7 +312,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: #00000080;
     z-index: 9999999999999;
     display: flex;
     justify-content: center;
@@ -974,12 +974,11 @@ table {
     }
 
     .t-card {
-        background: #fff;
+        background: $white;
         border: 1px solid $border-color;
         border-radius: $border-radius;
         box-shadow: none;
         font-size: 16px;
-        margin-top: 20px;
     }
 
     .card-row {

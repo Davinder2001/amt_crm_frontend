@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { Tabs, Tab, Tooltip, IconButton } from '@mui/material';
+import { Tooltip, IconButton } from '@mui/material';
 import { FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import AddVendor from './AddVendor';
@@ -47,14 +47,12 @@ interface StoreItemFieldsProps<T extends StoreItemFormData> {
     isLoading: boolean;
     isEditMode?: boolean;
     isFormModified?: () => boolean;
-    activeTab: number;
-    setActiveTab: React.Dispatch<React.SetStateAction<number>>;
-    tabCompletion?: boolean[];
     showConfirm?: boolean;
     setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
     handleClearForm?: () => void;
     isBatchMode?: boolean;
     isEditingBatch?: boolean;
+    pageTitle?: string;
 }
 
 const StoreItemFields = <T extends StoreItemFormData>({
@@ -79,11 +77,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
     isLoading,
     isEditMode = false,
     isFormModified,
-    activeTab,
-    setActiveTab,
-    tabCompletion,
     isBatchMode,
     isEditingBatch = false,
+    pageTitle,
 }: StoreItemFieldsProps<T>) => {
 
     const headerRef = useRef<HTMLDivElement>(null);
@@ -118,29 +114,9 @@ const StoreItemFields = <T extends StoreItemFormData>({
                         <Link href={`/${companySlug}/store`} className="back-button">
                             <FaArrowLeft size={16} color="#fff" />
                         </Link>
-                        <Tabs
-                            value={activeTab}
-                            onChange={(e, newValue) => {
-                                if (!tabCompletion || tabCompletion[newValue]) setActiveTab(newValue);
-                            }}
-                            variant="scrollable"
-                            scrollButtons="auto"
-                            sx={{
-                                '& .MuiTab-root': {
-                                    color: 'var(--primary-color)',
-
-                                    '&.Mui-disabled': { color: '#ccc' },
-                                    '&.Mui-selected': { color: 'var(--primary-color)', fontWeight: 'bold', },
-                                },
-                                '& .MuiTabs-indicator': { backgroundColor: 'var(--primary-color)' },
-                            }}
-                        >
-                            <Tab label="Basic Info" disabled={tabCompletion && !tabCompletion[0]} />
-                            <Tab label="Pricing & Inventory" disabled={tabCompletion && !tabCompletion[1]} />
-                            <Tab label="Media & Dates" disabled={tabCompletion && !tabCompletion[2]} />
-                            <Tab label="Categories" disabled={tabCompletion && !tabCompletion[3]} />
-                            <Tab label="Product Options" disabled={tabCompletion && !tabCompletion[4]} />
-                        </Tabs>
+                        <h4 className='store_page_heading'>
+                            {pageTitle}
+                        </h4>
                         <Tooltip title={sectionKeys.some(key => !collapsedSections[key]) ? "Collapse all" : "Expand all"}>
                             <IconButton
                                 onClick={() => {

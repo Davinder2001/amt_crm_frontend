@@ -468,162 +468,6 @@
         }
     }
 
-    // Color variants for different card types
-    // .card {
-    //     &[data-card-type="revenue"] {
-    //         .icon-shell {
-    //             background-color: rgba(16, 185, 129, 0.1);
-
-    //             svg {
-    //                 color: #10b981;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #10b981;
-    //         }
-    //     }
-
-    //     &[data-card-type="sales"] {
-    //         .icon-shell {
-    //             background-color: rgba(59, 130, 246, 0.1);
-
-    //             svg {
-    //                 color: #3b82f6;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #3b82f6;
-    //         }
-    //     }
-
-    //     &[data-card-type="expenses"] {
-    //         .icon-shell {
-    //             background-color: rgba(239, 68, 68, 0.1);
-
-    //             svg {
-    //                 color: #ef4444;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #ef4444;
-    //         }
-    //     }
-
-    //     &[data-card-type="tasks"] {
-    //         .icon-shell {
-    //             background-color: rgba(139, 92, 246, 0.1);
-
-    //             svg {
-    //                 color: #8b5cf6;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #8b5cf6;
-    //         }
-    //     }
-
-    //     &[data-card-type="orders"] {
-    //         .icon-shell {
-    //             background-color: rgba(234, 179, 8, 0.1);
-
-    //             svg {
-    //                 color: #eab308;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #eab308;
-    //         }
-    //     }
-
-    //     &[data-card-type="earnings"] {
-    //         .icon-shell {
-    //             background-color: rgba(22, 163, 74, 0.1);
-
-    //             svg {
-    //                 color: #16a34a;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #16a34a;
-    //         }
-    //     }
-
-    //     &[data-card-type="customers"] {
-    //         .icon-shell {
-    //             background-color: rgba(6, 182, 212, 0.1);
-
-    //             svg {
-    //                 color: #06b6d4;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #06b6d4;
-    //         }
-    //     }
-
-    //     &[data-card-type="employees"] {
-    //         .icon-shell {
-    //             background-color: rgba(124, 58, 237, 0.1);
-
-    //             svg {
-    //                 color: #7c3aed;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #7c3aed;
-    //         }
-    //     }
-
-    //     &[data-card-type="vendors"] {
-    //         .icon-shell {
-    //             background-color: rgba(249, 115, 22, 0.1);
-
-    //             svg {
-    //                 color: #f97316;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #f97316;
-    //         }
-    //     }
-
-    //     &[data-card-type="receivables"] {
-    //         .icon-shell {
-    //             background-color: rgba(5, 150, 105, 0.1);
-
-    //             svg {
-    //                 color: #059669;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #059669;
-    //         }
-    //     }
-
-    //     &[data-card-type="payables"] {
-    //         .icon-shell {
-    //             background-color: rgba(220, 38, 38, 0.1);
-
-    //             svg {
-    //                 color: #dc2626;
-    //             }
-    //         }
-
-    //         .value-count {
-    //             color: #dc2626;
-    //         }
-    //     }
-    // }
     .card {
         .icon-shell {
             background-color: rgba(var(--primary-color), 0.1);
@@ -692,6 +536,80 @@
 
 
 @media (max-width: 768px) {
+    .dashboard-container {
+        padding: 10px 0px 0px;
+
+        .overview-grid-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            scroll-snap-type: x proximity;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .card {
+                scroll-snap-align: start;
+                min-width: 200px;
+                max-width: 300px;
+                flex-shrink: 0;
+                display: flex;
+                padding: 5px 10px;
+                border-radius: $border-radius;
+                border: none;
+                position: relative;
+                overflow: hidden;
+                box-shadow: $box-shadow;
+
+
+                &::before {
+                    content: "";
+                    background-color: var(--primary-color);
+                    width: 10px;
+                    height: 20px;
+                    box-shadow: 0 0 0 2px rgba(var(--primary-color), .2);
+                    position: absolute;
+                    top: -6px;
+                    right: -3px;
+                    transform: rotate(-38deg);
+                }
+
+                &:hover {
+                    transform: none;
+                    box-shadow: none;
+                    border: none;
+                }
+
+                .icon-shell {
+                    width: 35px;
+                    height: 35px;
+                    margin: 0;
+                    padding: 0;
+                    background: var(--primary-light) !important;
+                }
+
+                .dash-card-content {
+                    text-align: left;
+                    width: 100%;
+                }
+
+                p {
+                    font-size: 13px;
+                }
+
+                .value-count {
+                    font-size: 16px;
+                }
+
+                .green {
+                    font-size: 10px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
 
     .expenses-sale-container,
     .stat-revenue-container,
@@ -699,15 +617,34 @@
         grid-template-columns: 1fr;
         grid-template-rows: auto;
         row-gap: 15px;
+
+        .card-header {
+            align-items: flex-start;
+            
+            .dropdown{
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+
+             .revenue-value {
+                font-size: 14px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: flex-end;
+                small{
+                    font-size: 10px;
+                }
+            }
+        }
     }
 
-    .card-header h3 {
-        font-size: 14px;
-    }
 
-    .stat-revenue-container .total-revenue .revenue-value {
-        font-size: $font-size-large;
-    }
+
 
     .overview-grid-container {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -729,6 +666,7 @@
         font-size: 22px;
     }
 }
+
 
 @media (max-width: 640px) {
     .overview-grid-container {
@@ -756,85 +694,6 @@
 
         .green {
             font-size: 12px;
-        }
-    }
-
-}
-
-
-@media (max-width: 768px) {
-    .dashboard-container {
-        padding: 10px 0px 0px;
-    }
-
-    .overview-grid-container {
-        display: flex;
-        overflow-x: auto;
-        gap: 10px;
-        scroll-snap-type: x proximity;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        .card {
-            scroll-snap-align: start;
-            min-width: 200px;
-            max-width: 300px;
-            flex-shrink: 0;
-            display: flex;
-            padding: 5px 10px;
-            border-radius: $border-radius;
-            border: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: $box-shadow;
-
-
-            &::before {
-                content: "";
-                background-color: var(--primary-color);
-                width: 10px;
-                height: 20px;
-                box-shadow: 0 0 0 2px rgba(var(--primary-color), .2);
-                position: absolute;
-                top: -6px;
-                right: -3px;
-                transform: rotate(-38deg);
-            }
-
-            &:hover {
-                transform: none;
-                box-shadow: none;
-                border: none;
-            }
-
-            .icon-shell {
-                width: 35px;
-                height: 35px;
-                margin: 0;
-                padding: 0;
-                background: var(--primary-light) !important;
-            }
-
-            .dash-card-content {
-                text-align: left;
-                width: 100%;
-            }
-
-            p {
-                font-size: 13px;
-            }
-
-            .value-count {
-                font-size: 16px;
-            }
-
-            .green {
-                font-size: 10px;
-                display: inline-block;
-            }
         }
     }
 }

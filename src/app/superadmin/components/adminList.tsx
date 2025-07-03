@@ -180,6 +180,7 @@ const AdminList = () => {
         onColumnToggle={toggleColumn}
         onResetColumns={onResetColumns}
         actions={[]}
+        introKey='admin_list_intro'
       />
 
       <ResponsiveTable

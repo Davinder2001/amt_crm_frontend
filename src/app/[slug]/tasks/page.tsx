@@ -58,6 +58,7 @@ const Page = () => {
             onClick: () => router.push(`/${companySlug}/tasks/recurring-tasks`),
           },
         ]}
+        introKey='tasks_intro'
       />
 
       {/* Conditionally render the Tabs component */}

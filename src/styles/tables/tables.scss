@@ -12,6 +12,7 @@
         border-radius: 5px;
         border: 1px solid $border-color;
         width: 300px;
+
         &:focus {
             border-color: var(--primary-light);
             background: transparent;
@@ -304,6 +305,130 @@
 
 
 
+/* Toolbar Intro Popup Styles */
+.toolbar-intro-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999999999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.toolbar-intro-popup .intro-content {
+    background: $white;
+    border-radius: $border-radius;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: $box-shadow;
+    transform: scale(0.5);
+    animation: flowerOpen 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transform-origin: center center;
+}
+
+@keyframes flowerOpen {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.toolbar-intro-popup h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.toolbar-intro-popup ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.toolbar-intro-popup li {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.toolbar-intro-popup .intro-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-top: 2px;
+}
+
+.toolbar-intro-popup strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.toolbar-intro-popup p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.dismiss-btn {
+    background: var(--primary-color);
+    color: $white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .toolbar-intro-popup .intro-content {
+        max-width: 90%;
+    }
+}
+
+.help-btn {
+    gap: 2px !important;
+    svg{
+        width: 14px !important;
+        height: 14px !important;
+    }
+    span {
+        display: block !important;
+    }
+}
+
+
 
 
 // Table Styles
@@ -512,7 +637,8 @@ table {
         display: flex;
         justify-content: space-around;
         gap: 10px;
-        button{
+
+        button {
             border: unset;
         }
     }
@@ -752,7 +878,7 @@ table {
             align-items: center;
             gap: 10px;
             font-size: 15px;
-            color:$primary-color
+            color: $primary-color
         }
 
         .go-button {
@@ -765,12 +891,14 @@ table {
 
 @media (max-width: 768px) {
 
-    .filter-search-table .search-filter-container{
+    .filter-search-table .search-filter-container {
         margin-bottom: 12px;
-        input{
+
+        input {
             width: 100%;
         }
     }
+
     .desktop-render-table-searchbar {
         display: none;
     }
@@ -866,7 +994,7 @@ table {
         color: #333;
     }
 
-   
+
 
 
     .bulk-actions-toolbar {

@@ -316,6 +316,7 @@ const Items: React.FC = () => {
         visibleColumns={visibleColumns}
         onResetColumns={onResetColumns}
         onColumnToggle={toggleColumn}
+        introKey='store_intro'
         downloadActions={[
           { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
           { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },

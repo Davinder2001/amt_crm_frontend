@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { FaBars, FaHome, FaTasks, FaFileInvoice, FaUserTie } from 'react-icons/fa';
+import { FaBars, FaHome, FaFileInvoice, FaUserTie, FaStore } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
 
@@ -20,9 +20,9 @@ const FooterBarMenu: React.FC<FooterBarMenuProps> = ({ openMenu }) => {
             icon: <FaHome size={20} />,
         },
         {
-            name: 'Tasks',
-            href: `/${companySlug}${userType === 'employee' ? '/employee/tasks' : '/tasks'}`,
-            icon: <FaTasks size={20} />,
+            name: 'Store',
+            href: `/${companySlug}${userType === 'employee' ? '/employee/store' : '/store'}`,
+            icon: <FaStore size={20} />,
         },
         {
             name: 'Hr',

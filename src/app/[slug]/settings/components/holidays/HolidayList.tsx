@@ -163,6 +163,7 @@ const HolidayList = () => {
                         : []
                     )
                 ]}
+                introKey='holidays_intro'
             />
 
 

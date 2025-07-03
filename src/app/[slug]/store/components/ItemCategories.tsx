@@ -297,7 +297,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               },
             }}
           />
-          <ListItemText primary={category.name} className='category-name' />
+          <ListItemText primary={category.name} className='' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <Box display="flex" gap={1} marginLeft="auto">
               <IconButton
@@ -384,7 +384,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
               },
             }}
           />
-          <ListItemText primary={category.name} className='category-name' />
+          <ListItemText primary={category.name} className='' />
           {isHovered && category.name.toLowerCase() !== 'uncategorized' && (
             <Box display="flex" gap={1} marginLeft="auto">
               <IconButton
@@ -567,7 +567,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                 }
                 InputLabelProps={{
                   sx: {
-                    color: 'var(--primary-color)',
+                    color: '#ccc',
                     '&.Mui-focused': {
                       color: 'var(--primary-color)',
                     },
@@ -584,7 +584,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   mb: 2,
                   '& .MuiOutlinedInput-root': {
                     '&.Mui-focused fieldset': {
-                      borderColor: categoryExists(name, selectedParentId) ? '#d32f2f' : 'var(--primary-color)',
+                      borderColor: categoryExists(name, selectedParentId) ? '#efefef' : 'var(--primary-color)',
                     },
                   },
                   '& .MuiFormHelperText-root': {

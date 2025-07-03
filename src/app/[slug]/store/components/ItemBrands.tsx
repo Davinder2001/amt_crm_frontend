@@ -320,7 +320,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                 }
                                 InputLabelProps={{
                                     sx: {
-                                        color: 'var(--primary-color)',
+                                        color: '#ccc',
                                         '&.Mui-focused': {
                                             color: 'var(--primary-color)',
                                         },

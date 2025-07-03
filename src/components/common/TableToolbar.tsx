@@ -78,7 +78,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     // Check screen size and localStorage after mount with delay
     React.useEffect(() => {
         const checkScreenSize = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsMobile(window.innerWidth < 769);
         };
 
         checkScreenSize();

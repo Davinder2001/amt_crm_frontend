@@ -24,9 +24,9 @@ const ListOverview = () => {
   const { companySlug } = useCompany();
 
   const cards = [
-    { label: "Revenue", value: "₹350.4", icon: FaMoneyBillWave, type: "revenue", link: "/revenue" },
     { label: "Sales", value: "₹574.34", extra: "+23% since last month", icon: FaShoppingCart, type: "sales", link: "/sales" },
     { label: "Expenses", value: "₹874.34", extra: "+40% since last month", icon: FaWallet, type: "expenses", link: "/expenses" },
+    { label: "Revenue", value: "₹350.4", icon: FaMoneyBillWave, type: "revenue", link: "/revenue" },
     { label: "Task", value: "642.39", icon: FaTasks, type: "tasks", link: "/tasks" },
     { label: "Orders", value: "154", icon: FaClipboardList, type: "orders", link: "/orders" },
     { label: "Earning", value: "₹10,000", icon: FaHandHoldingUsd, type: "earnings", link: "/earnings" },

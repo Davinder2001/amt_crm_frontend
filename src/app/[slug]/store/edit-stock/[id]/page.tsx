@@ -69,7 +69,6 @@ const EditBatch = () => {
   const [vendorsList, setVendorsList] = useState<Vendor[]>([]);
   const [variants, setVariants] = useState<variations[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     if (vendors) {
@@ -290,11 +289,10 @@ const EditBatch = () => {
       handleSubmit={handleSubmit}
       companySlug={companySlug}
       isLoading={isUpdating}
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
       isBatchMode={true}
       isEditingBatch={true}
       isFormModified={isFormModified}
+      pageTitle={`Update Stock for :  ${formData.name}`}
     />
   );
 };

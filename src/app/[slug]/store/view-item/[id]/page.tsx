@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import TableToolbar from '@/components/common/TableToolbar';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -52,36 +53,45 @@ const ViewItem = () => {
   };
 
   if (isLoading) return <LoadingState />;
-   if (error)
-        return (
-            <EmptyState
-                icon="alert"
-                title="Failed to fetching item."
-                message="Something went wrong while fetching item."
-            />
-        );
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching item."
+        message="Something went wrong while fetching item."
+      />
+    );
   if (!item) return <div className="error">Item not found.</div>;
 
   const batches = Array.isArray(item.batches) ? item.batches : [];
 
   return (
     <div className="item-view">
-      <div className="item-header">
-        <Link href={`/${companySlug}/store`} className="back-button">
-          <FaArrowLeft size={16} color="#fff" />
-        </Link>
-        <div className="item-actions">
-          <Link href={`/${companySlug}/store/add-stock/${item.id}`} className="edit-btn">
-            <FaPlus /> Add Stock
-          </Link>
-          <Link href={`/${companySlug}/store/edit-item/${item.id}`} className="edit-btn">
-            <FaEdit /> Edit Item
-          </Link>
-          <button onClick={() => setShowConfirm(true)} className="delete-btn">
-            <FaTrash /> Delete Item
-          </button>
-        </div>
-      </div>
+      <Link href={`/${companySlug}/store`} className="back-button">
+        <FaArrowLeft size={16} color="#fff" />
+      </Link>
+      <TableToolbar
+      
+        actions={[
+          
+          {
+            label: 'Add Stock',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
+          },
+          {
+            label: 'Edit Item',
+            icon: <FaEdit />,
+            onClick: () => router.push(`/${companySlug}/store/edit-item/${item.id}`),
+          },
+          {
+            label: 'Delete Item',
+            icon: <FaTrash />,
+            onClick: () => setShowConfirm(true),
+          },
+        ]}
+        introKey="view-item-toolbar" // optional for mobile guide popup
+      />
 
       <div className="item-details">
         <div className="item-main">

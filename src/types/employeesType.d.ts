@@ -14,7 +14,7 @@ interface Employee {
   number: string;
   salary: string;
   password: string;
-  profile_picture: string;
+  profilePicture: string;
   company_id: string;
   company_name: string;
   company_slug: string;
@@ -75,60 +75,13 @@ interface Employee {
     upiId?: string;
     addressProof?: string;
     profilePicture?: string;
+    utility_bill_image?: string;
   };
   message?: string;
   error?: string;
 }
 
-// interface employee {
-//   id?: number | string;
-//   // Personal Information
-//   name: string;
-//   number: string;
-//   address: string;
-//   nationality: string;
-//   dob: string;
-//   religion: string;
-//   maritalStatus: string;
-//   passportNo?: string;
 
-//   // Identification
-//   idProofType: string;
-//   idProofValue: string;
-//   idProofImage: File | null;
-
-//   // Emergency Contact
-//   emergencyContact: string;
-//   emergencyContactRelation: string;
-
-//   // Account Information
-//   email: string;
-//   password: string;
-
-//   // Employment Information
-//   salary: string;
-//   role: string;
-//   department: string;
-//   currentSalary: string;
-//   shiftTimings: string;
-//   dateOfHire: string;
-//   workLocation: string;
-//   joiningDate: string;
-//   joiningType: string;
-//   previousEmployer: string;
-//   medicalInfo: string;
-
-//   // Financial Information
-//   bankName: string;
-//   accountNo: string;
-//   ifscCode: string;
-//   panNo: string;
-//   upiId: string;
-//   addressProof: string;
-
-//   // Profile
-//   profilePicture: File | string;
-// }
 
 
 interface PaySlipResponse {

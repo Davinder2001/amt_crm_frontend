@@ -108,9 +108,9 @@ const ViewUserPage: React.FC = () => {
       <div className="employee-profile-inner-container">
         <div className="profile-header">
           <div className="profile-avatar">
-            {employee.profile_picture ? (
+            {employee.profilePicture ? (
               <Image
-                src={employee.profile_picture}
+                src={employee.profilePicture}
                 alt={employee.name}
                 className="avatar-image"
                 width={120}

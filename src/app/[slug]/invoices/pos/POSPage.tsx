@@ -386,6 +386,7 @@ function POSPage() {
             {/* Mobile Categories Overlay */}
             {showMobileCategories && (
                 <div className="mobile-categories-overlay">
+                    <div className="mobile-categories-backdrop"/>
                     <div className="mobile-categories-content" ref={mobileCategoriesRef}>
                         <div className="m-cat-header">
                             <h4>Ctaegories</h4>

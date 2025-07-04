@@ -7,16 +7,15 @@ import {
     useDeleteHolidayMutation,
     useDeleteHolidaysBulkMutation,
 } from '@/slices/company/companyApi';
-
 import HolidayForm from './HolidayForm';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
-
 import { FaPlus, FaCalendar, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const HolidayList = () => {
     const { data, isLoading, error, refetch } = useFetchHolidaysQuery();
@@ -25,68 +24,103 @@ const HolidayList = () => {
     const [deleteHoliday] = useDeleteHolidayMutation();
     const [deleteHolidaysBulk] = useDeleteHolidaysBulkMutation();
 
-    const [isBulkDeleting, setIsBulkDeleting] = useState(false);
-
     const holidays = data?.data ?? [];
+    const noHolidays = !isLoading && !error && holidays.length === 0;
 
+    // Form and edit state
     const [showForm, setShowForm] = useState(false);
     const [editHoliday, setEditHoliday] = useState<Holiday | null>(null);
 
-    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [, setShowRowCheckboxes] = useState(false);
-    const closeBulkPopup = () => {
-        setShowBulkSelectPopup(false);
-        setBulkType([]);
-        setSelectedIds([]);
-        setShowRowCheckboxes(false);
+    // Delete states
+    const [deleteState, setDeleteState] = useState<{
+        id: number | null;
+        name: string;
+        showDialog: boolean;
+    }>({
+        id: null,
+        name: "",
+        showDialog: false
+    });
+
+    // Bulk delete states
+    const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+    const [showBulkDelete, setShowBulkDelete] = useState(false);
+    const [bulkType, setBulkType] = useState<('weekly' | 'monthly' | 'general')[]>([]);
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+    const openAddModal = () => {
+        setEditHoliday(null);
+        setShowForm(true);
     };
 
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [showBulkSelectPopup, setShowBulkSelectPopup] = useState(false);
-    const [bulkType, setBulkType] = useState<('weekly' | 'monthly' | 'general')[]>([]);
+    const openEditModal = (holiday: Holiday) => {
+        setEditHoliday(holiday);
+        setShowForm(true);
+    };
 
+    const closeModal = () => {
+        setEditHoliday(null);
+        setShowForm(false);
+    };
+
+    const closeBulkDelete = () => {
+        setShowBulkDelete(false);
+        setBulkType([]);
+        setSelectedIds([]);
+    };
 
     const handleCreate = async (holiday: CreateHolidayPayload) => {
         try {
             await createHoliday(holiday).unwrap();
             toast.success('Holiday created successfully');
-            setShowForm(false);
+            closeModal();
             refetch();
-        } catch {
+        } catch (err) {
             toast.error('Failed to create holiday');
+            console.error('Create holiday failed:', err);
         }
     };
 
-    const handleUpdate = async (holiday: UpdateHolidayPayload) => {
+    const handleUpdate = async (holiday: Omit<UpdateHolidayPayload, 'id'>) => {
         if (!editHoliday) return;
         try {
             await updateHoliday({ ...holiday, id: editHoliday.id }).unwrap();
             toast.success('Holiday updated successfully');
-            setEditHoliday(null);
+            closeModal();
             refetch();
-        } catch {
+        } catch (err) {
             toast.error('Failed to update holiday');
+            console.error('Update holiday failed:', err);
         }
     };
 
-    const handleDelete = (id: number) => {
-        setItemToDelete(id);
-        setShowDeleteConfirm(true);
+    const promptDelete = (id: number, name: string) => {
+        setDeleteState({
+            id,
+            name,
+            showDialog: true
+        });
     };
 
-    const handleConfirmDelete = async () => {
-        if (itemToDelete !== null) {
-            try {
-                await deleteHoliday(itemToDelete).unwrap();
-                toast.success('Holiday deleted');
-            } catch {
-                toast.error('Failed to delete holiday');
-            } finally {
-                setShowDeleteConfirm(false);
-                setItemToDelete(null);
-                refetch();
-            }
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteHoliday(id).unwrap();
+            toast.success('Holiday deleted successfully');
+            refetch();
+        } catch (err) {
+            toast.error('Failed to delete holiday');
+            console.error('Delete holiday failed:', err);
+        }
+    };
+
+    const confirmDelete = async () => {
+        if (deleteState.id) {
+            await handleDelete(deleteState.id);
+            setDeleteState({
+                id: null,
+                name: "",
+                showDialog: false
+            });
         }
     };
 
@@ -100,17 +134,15 @@ const HolidayList = () => {
         try {
             await deleteHolidaysBulk({ type: bulkType[0] }).unwrap();
             toast.success(`Deleted ${bulkType[0]} holidays successfully`);
-        } catch {
+            closeBulkDelete();
+            await refetch();
+        } catch (err) {
             toast.error('Failed to delete holidays');
+            console.error('Bulk delete failed:', err);
         } finally {
             setIsBulkDeleting(false);
-            closeBulkPopup();
-            await refetch();
         }
     };
-
-
-
 
     const columns = [
         { label: 'Name', key: 'name' as keyof Holiday },
@@ -123,14 +155,14 @@ const HolidayList = () => {
                 <div className="action-buttons">
                     <button
                         className="icon-button edit-button"
-                        onClick={() => setEditHoliday(holiday)}
+                        onClick={() => openEditModal(holiday)}
                         title="Edit"
                     >
                         <FaEdit />
                     </button>
                     <button
                         className="icon-button delete-button"
-                        onClick={() => handleDelete(holiday.id)}
+                        onClick={() => promptDelete(holiday.id, holiday.name)}
                         title="Delete"
                     >
                         <FaTrash />
@@ -140,9 +172,6 @@ const HolidayList = () => {
         },
     ];
 
-
-    const noHolidays = !isLoading && !error && holidays.length === 0;
-
     return (
         <div className="holiday-list">
             <TableToolbar
@@ -150,14 +179,14 @@ const HolidayList = () => {
                     ...(holidays.length > 0
                         ? [
                             {
-                                label: 'Bulk Select & Delete',
+                                label: 'Bulk Delete',
                                 icon: <FaTrash />,
-                                onClick: () => setShowBulkSelectPopup(true),
+                                onClick: () => setShowBulkDelete(true),
                             },
                             {
                                 label: 'Add Holiday',
                                 icon: <FaPlus />,
-                                onClick: () => setShowForm(true),
+                                onClick: openAddModal,
                             },
                         ]
                         : []
@@ -166,50 +195,33 @@ const HolidayList = () => {
                 introKey='holidays_intro'
             />
 
-
-
             <Modal
-                isOpen={showForm || editHoliday !== null}
-                onClose={() => {
-                    setShowForm(false);
-                    setEditHoliday(null);
-                }}
-                title={showForm ? 'Add Holiday' : 'Edit Holiday'}
+                isOpen={showForm}
+                onClose={closeModal}
+                title={editHoliday ? 'Edit Holiday' : 'Add Holiday'}
             >
                 <HolidayForm
-                    onSubmit={async (data) => {
-                        if (showForm) {
-                            await handleCreate(data);
-                        } else {
-                            await handleUpdate({ ...data, id: editHoliday!.id });
-                        }
-                    }}
-                    onCancel={() => {
-                        setShowForm(false);
-                        setEditHoliday(null);
-                    }}
+                    onSubmit={editHoliday ? handleUpdate : handleCreate}
+                    onCancel={closeModal}
                     initialData={editHoliday || undefined}
                 />
             </Modal>
 
-            <Modal
-                isOpen={showDeleteConfirm}
-                onClose={() => {
-                    setShowDeleteConfirm(false);
-                    setItemToDelete(null);
-                }}
-                title="Confirm Delete"
-            >
-                <p>Are you sure you want to delete this holiday?</p>
-                <div className="popup-actions" style={{ marginTop: '1rem', display: 'flex', gap: '8px' }}>
-                    <button className="buttons delete" onClick={handleConfirmDelete}>Delete</button>
-                    <button className="buttons cancel" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
-                </div>
-            </Modal>
+            <ConfirmDialog
+                isOpen={deleteState.showDialog}
+                message={`Are you sure you want to delete the holiday "${deleteState.name}"?`}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteState({
+                    id: null,
+                    name: "",
+                    showDialog: false
+                })}
+                type="delete"
+            />
 
             <Modal
-                isOpen={showBulkSelectPopup}
-                onClose={closeBulkPopup}
+                isOpen={showBulkDelete}
+                onClose={closeBulkDelete}
                 title="Bulk Delete Holidays"
             >
                 <div className="bulk-delete-popup">
@@ -239,19 +251,21 @@ const HolidayList = () => {
                     </p>
 
                     <div className="popup-actions">
-                        <button className="btn delete" onClick={handleBulkDelete} disabled={isBulkDeleting}>
+                        <button
+                            className="buttons delete"
+                            onClick={handleBulkDelete}
+                            disabled={isBulkDeleting || bulkType.length === 0}
+                        >
                             {isBulkDeleting ? 'Deleting...' : 'Delete'}
                         </button>
-
-                        <button className="btn cancel" onClick={closeBulkPopup}>
+                        <button className="buttons cancel" onClick={closeBulkDelete}>
                             Cancel
                         </button>
                     </div>
                 </div>
             </Modal>
 
-
-            {isLoading && <LoadingState/>}
+            {isLoading && <LoadingState />}
 
             {error && (
                 <EmptyState
@@ -267,17 +281,35 @@ const HolidayList = () => {
                     title="No Holidays Found"
                     message="You haven't added any holidays yet."
                     action={
-                        <div className="add-holiday-action">
-                            <button className="buttons" onClick={() => setShowForm(true)}>
-                                <FaPlus /> Add Holiday
-                            </button>
-                        </div>
+                        <button className="buttons" onClick={openAddModal} type="button">
+                            <FaPlus /> Add Holiday
+                        </button>
                     }
                 />
             )}
 
             {holidays.length > 0 && (
-                <ResponsiveTable data={holidays} columns={columns}/>
+                <ResponsiveTable
+                    data={holidays}
+                    columns={columns}
+                    onEdit={(id) => {
+                        const holiday = holidays.find(h => h.id === id);
+                        if (holiday) openEditModal(holiday);
+                    }}
+                    onDelete={handleDelete}
+                    cardView={(holiday: Holiday) => (
+                        <>
+                            <div className="card-row">
+                                <h5>{holiday.name}</h5>
+                                <p className="holiday-type">Type: {holiday.type}</p>
+                            </div>
+                            <div className="card-row">
+                                <p>Day: {holiday.day}</p>
+                                <p>Company ID: {holiday.company_id}</p>
+                            </div>
+                        </>
+                    )}
+                />
             )}
         </div>
     );

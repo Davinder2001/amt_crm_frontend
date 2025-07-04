@@ -7,12 +7,10 @@ import {
   useUpdateLeaveMutation,
   useDeleteLeaveMutation,
 } from '@/slices/company/companyApi';
-
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import LeaveForm from './LeaveForm';
-
 import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
@@ -26,19 +24,43 @@ const LeaveList = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [editLeave, setEditLeave] = useState<Leave | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+  const [deleteState, setDeleteState] = useState<{
+    id: number | null;
+    name: string;
+    showDialog: boolean;
+  }>({
+    id: null,
+    name: "",
+    showDialog: false
+  });
+
   const leaves = data?.data ?? [];
   const noLeaves = !isLoading && !error && leaves.length === 0;
+
+  const openAddModal = () => {
+    setEditLeave(null);
+    setShowForm(true);
+  };
+
+  const openEditModal = (leave: Leave) => {
+    setEditLeave(leave);
+    setShowForm(true);
+  };
+
+  const closeModal = () => {
+    setEditLeave(null);
+    setShowForm(false);
+  };
 
   const handleCreate = async (leave: CreateLeavePayload) => {
     try {
       await createLeave(leave).unwrap();
       toast.success('Leave created successfully');
-      setShowForm(false);
+      closeModal();
       refetch();
-    } catch {
+    } catch (err) {
       toast.error('Failed to create leave');
+      console.error('Create leave failed:', err);
     }
   };
 
@@ -47,28 +69,41 @@ const LeaveList = () => {
     try {
       await updateLeave({ ...leave, id: editLeave.id }).unwrap();
       toast.success('Leave updated successfully');
-      setEditLeave(null);
+      closeModal();
       refetch();
-    } catch {
+    } catch (err) {
       toast.error('Failed to update leave');
+      console.error('Update leave failed:', err);
     }
   };
 
-  const handleDelete = (id: number) => {
-    setItemToDelete(id);
-    setShowDeleteConfirm(true);
+  const promptDelete = (id: number, name: string) => {
+    setDeleteState({
+      id,
+      name,
+      showDialog: true
+    });
   };
 
-  const handleConfirmDelete = async () => {
-    if (itemToDelete !== null) {
-      try {
-        await deleteLeave(itemToDelete).unwrap();
-      } catch (error) {
-        console.error("Failed to delete this Leave:", error);
-      } finally {
-        setShowDeleteConfirm(false);
-        setItemToDelete(null);
-      }
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteLeave(id).unwrap();
+      toast.success('Leave deleted successfully');
+      refetch();
+    } catch (err) {
+      toast.error('Failed to delete leave');
+      console.error('Delete leave failed:', err);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (deleteState.id) {
+      await handleDelete(deleteState.id);
+      setDeleteState({
+        id: null,
+        name: "",
+        showDialog: false
+      });
     }
   };
 
@@ -83,14 +118,14 @@ const LeaveList = () => {
         <div className="action-buttons">
           <button
             className="icon-button edit-button"
-            onClick={() => setEditLeave(leave)}
+            onClick={() => openEditModal(leave)}
             title="Edit"
           >
             <FaEdit />
           </button>
           <button
             className="icon-button delete-button"
-            onClick={() => handleDelete(leave.id)}
+            onClick={() => promptDelete(leave.id, leave.name)}
             title="Delete"
           >
             <FaTrash />
@@ -104,39 +139,36 @@ const LeaveList = () => {
     <div className="leave-list">
       {!noLeaves && (
         <div className="add-holiday-leave-btn-wrapper">
-          <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm}>
+          <button onClick={openAddModal} className="buttons" disabled={showForm} type="button">
             <FaPlus /> Add Leave
           </button>
         </div>
       )}
 
       <Modal
-        isOpen={showForm || editLeave !== null}
-        onClose={() => {
-          setShowForm(false);
-          setEditLeave(null);
-        }}
-        title={showForm ? 'Add Leave' : 'Edit Leave'}
+        isOpen={showForm}
+        onClose={closeModal}
+        title={editLeave ? 'Edit Leave' : 'Add Leave'}
       >
         <LeaveForm
-          onSubmit={showForm ? handleCreate : handleUpdate}
-          onCancel={() => {
-            setShowForm(false);
-            setEditLeave(null);
-          }}
+          onSubmit={editLeave ? handleUpdate : handleCreate}
+          onCancel={closeModal}
           initialData={editLeave || undefined}
         />
       </Modal>
+
       <ConfirmDialog
-        isOpen={showDeleteConfirm}
-        message="Are you sure you want to delete this Leave ?"
-        onConfirm={handleConfirmDelete}
-        onCancel={() => {
-          setShowDeleteConfirm(false);
-          setItemToDelete(null);
-        }}
+        isOpen={deleteState.showDialog}
+        message={`Are you sure you want to delete the leave "${deleteState.name}"?`}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteState({
+          id: null,
+          name: "",
+          showDialog: false
+        })}
         type="delete"
       />
+
       {isLoading && <LoadingState />}
 
       {error && (
@@ -153,7 +185,7 @@ const LeaveList = () => {
           title="No Leaves Found"
           message="You haven't added any leave policies yet."
           action={
-            <button className="buttons" onClick={() => setShowForm(true)}>
+            <button className="buttons" onClick={openAddModal} type="button">
               <FaPlus /> Add Leave
             </button>
           }
@@ -161,7 +193,27 @@ const LeaveList = () => {
       )}
 
       {leaves.length > 0 && (
-        <ResponsiveTable data={leaves} columns={columns} />
+        <ResponsiveTable
+          data={leaves}
+          columns={columns}
+          onEdit={(id) => {
+            const leave = leaves.find(l => l.id === id);
+            if (leave) openEditModal(leave);
+          }}
+          onDelete={handleDelete}
+          cardView={(leave: Leave) => (
+            <>
+              <div className="card-row">
+                <h5>{leave.name}</h5>
+                <p className="leave-type">Type: {leave.type}</p>
+              </div>
+              <div className="card-row">
+                <p>Frequency: {leave.frequency}</p>
+                <p>Count: {leave.count}</p>
+              </div>
+            </>
+          )}
+        />
       )}
     </div>
   );

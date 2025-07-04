@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     useFetchTaxesQuery,
     useCreateTaxMutation,
@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import { FaPlus, FaTrash, FaEdit, FaTasks } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
@@ -43,13 +42,10 @@ type ApiError = {
 };
 
 const CreateTax = () => {
-    const { setTitle } = useBreadcrumb();
     const { data: taxesData, isLoading, isError, refetch } = useFetchTaxesQuery();
     const [createTax] = useCreateTaxMutation();
     const [updateTax] = useUpdateTaxMutation();
     const [deleteTax] = useDeleteTaxMutation();
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [form, setForm] = useState<{ id: number | null; name: string; rate: string }>({
@@ -58,9 +54,15 @@ const CreateTax = () => {
         rate: '',
     });
 
-    useEffect(() => {
-        setTitle('All Taxes');
-    }, [setTitle]);
+    const [deleteState, setDeleteState] = useState<{
+        id: number | null;
+        name: string;
+        showDialog: boolean;
+    }>({
+        id: null,
+        name: "",
+        showDialog: false
+    });
 
     const handleOpen = () => {
         setForm({ id: null, name: '', rate: '' });
@@ -116,22 +118,38 @@ const CreateTax = () => {
     };
 
 
-    const handleDelete = (id: number) => {
-        setItemToDelete(id);
-        setShowDeleteConfirm(true);
+    const deleteTaxCore = async (id: number) => {
+        try {
+            await deleteTax(id).unwrap();
+            toast.success('Tax deleted successfully!');
+            refetch();
+        } catch (err) {
+            console.error(err);
+            toast.error('Failed to delete tax');
+        }
     };
 
-    const handleConfirmDelete = async () => {
-        if (itemToDelete !== null) {
-            try {
-                await deleteTax(itemToDelete).unwrap();
-            } catch (error) {
-                console.error("Failed to delete this Tax:", error);
-            } finally {
-                setShowDeleteConfirm(false);
-                setItemToDelete(null);
-            }
+    const promptDelete = (id: number, name: string) => {
+        setDeleteState({
+            id,
+            name,
+            showDialog: true
+        });
+    };
+
+    const confirmDelete = async () => {
+        if (deleteState.id) {
+            await deleteTaxCore(deleteState.id);
+            setDeleteState({
+                id: null,
+                name: "",
+                showDialog: false
+            });
         }
+    };
+
+    const handleDelete = async (id: number) => {
+        await deleteTaxCore(id);
     };
 
     if (isLoading) return <LoadingState />;
@@ -153,7 +171,7 @@ const CreateTax = () => {
             render: (tax: Tax) => (
                 <Box display="flex" gap={1} className="action-buttons">
                     <IconButton onClick={() => handleEdit(tax)} className="edit-btn"><FaEdit /></IconButton>
-                    <IconButton onClick={() => handleDelete(tax.id)} className="delete-btn"><FaTrash /></IconButton>
+                    <IconButton onClick={() => promptDelete(tax.id, tax.name)} className="delete-btn"><FaTrash /></IconButton>
                 </Box>
             ),
         },
@@ -183,7 +201,23 @@ const CreateTax = () => {
                     }
                 />
             ) : (
-                <ResponsiveTable data={taxesData?.data || []} columns={columns}/>
+                <ResponsiveTable
+                    data={taxesData?.data || []}
+                    columns={columns}
+                    onDelete={handleDelete}
+                    onEdit={(id) => {
+                        const tax = taxesData?.data.find(t => t.id === id);
+                        if (tax) handleEdit(tax);
+                    }}
+                    cardView={(tax) => (
+                        <>
+                            <div className="card-row">
+                                <h5>{tax.name}</h5>
+                                <p className="tax-rate">{tax.rate}%</p>
+                            </div>
+                        </>
+                    )}
+                />
             )}
 
             <Modal
@@ -219,13 +253,14 @@ const CreateTax = () => {
                 </div>
             </Modal>
             <ConfirmDialog
-                isOpen={showDeleteConfirm}
-                message="Are you sure you want to delete this Tax ?"
-                onConfirm={handleConfirmDelete}
-                onCancel={() => {
-                    setShowDeleteConfirm(false);
-                    setItemToDelete(null);
-                }}
+                isOpen={deleteState.showDialog}
+                message={`Are you sure you want to delete the tax "${deleteState.name}"?`}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteState({
+                    id: null,
+                    name: "",
+                    showDialog: false
+                })}
                 type="delete"
             />
         </Box>

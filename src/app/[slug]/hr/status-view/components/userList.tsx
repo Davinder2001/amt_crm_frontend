@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useFetchEmployesQuery, useDeleteEmployeMutation, useUpdateEmployeeStatusMutation } from '@/slices/employe/employe';
@@ -7,15 +7,28 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 
 const UserList: React.FC = () => {
   const router = useRouter();
-  const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
+  const { data: employeesData, error, isLoading, refetch } = useFetchEmployesQuery();
   const { companySlug } = useCompany();
 
   const [deleteEmployee] = useDeleteEmployeMutation();
   const [updateStatus] = useUpdateEmployeeStatusMutation();
   const employees: Employee[] = employeesData?.employees ?? [];
+
+  // Delete state
+  const [deleteState, setDeleteState] = useState<{
+    id: number | null;
+    name: string;
+    showDialog: boolean;
+  }>({
+    id: null,
+    name: "",
+    showDialog: false
+  });
 
   if (isLoading) return <LoadingState />;
   if (error) {
@@ -31,13 +44,33 @@ const UserList: React.FC = () => {
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
+  const promptDelete = (id: number, name: string) => {
+    setDeleteState({
+      id,
+      name,
+      showDialog: true
+    });
+  };
+
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this employee?')) return;
     try {
       await deleteEmployee(id).unwrap();
       toast.success('Employee deleted successfully!');
-    } catch {
+      refetch();
+    } catch (err) {
       toast.error('Failed to delete employee. Please try again.');
+      console.error('Delete employee error:', err);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (deleteState.id) {
+      await handleDelete(deleteState.id);
+      setDeleteState({
+        id: null,
+        name: "",
+        showDialog: false
+      });
     }
   };
 
@@ -53,7 +86,6 @@ const UserList: React.FC = () => {
     {
       label: 'Status',
       render: (emp: Employee) => {
-
         const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
           const newStatus = e.target.value as "active" | "inactive" | "blocked";
           try {
@@ -64,7 +96,6 @@ const UserList: React.FC = () => {
           }
         };
 
-        // Dynamic class based on status
         const getStatusClass = (status: string) => {
           switch (status) {
             case "active":
@@ -90,14 +121,57 @@ const UserList: React.FC = () => {
           </select>
         );
       },
+    },
+    {
+      label: 'Actions',
+      render: (emp: Employee) => (
+        <>
+          <FaEye onClick={() => router.push(`/${companySlug}/hr/status-view/view-employee/${emp.id}`)} />
+          <FaEdit onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${emp.id}`)} />
+          <FaTrash onClick={() => promptDelete(emp.id, emp.name)} />
+        </>
+      ),
     }
-
   ];
 
-  return <ResponsiveTable data={employees} columns={columns}
-    onDelete={(id) => handleDelete(id)}
-    onEdit={(id) => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
-    onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)} />;
+  return (
+    <>
+      <ResponsiveTable
+        data={employees}
+        columns={columns}
+        onDelete={handleDelete}
+        onEdit={(id) => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+        cardView={(employee: Employee) => (
+          <>
+            <div className="card-row">
+              <h5>{employee.name}</h5>
+              <p>{employee.number}</p>
+            </div>
+            <div className="card-row">
+              <p>{employee.email}</p>
+              <p>Status: {employee.user_status}</p>
+            </div>
+            <div className="card-row">
+              <p>Company: {employee.company_name}</p>
+            </div>
+          </>
+        )}
+      />
+
+      <ConfirmDialog
+        isOpen={deleteState.showDialog}
+        message={`Are you sure you want to delete the employee "${deleteState.name}"?`}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteState({
+          id: null,
+          name: "",
+          showDialog: false
+        })}
+        type="delete"
+      />
+    </>
+  );
 };
 
 export default UserList;

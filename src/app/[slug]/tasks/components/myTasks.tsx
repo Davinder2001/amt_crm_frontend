@@ -67,23 +67,23 @@ const MyTasks = () => {
         </div>
       ))}
 
-      <style jsx>{`
+      <style>{`
         .tasks-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 1rem;
-          padding: 0.5rem;
+          gap: 10px;
+          margin-top: 10px;
         }
         
         .task-card {
           background: white;
-          border-radius: 8px;
+          border-radius: 5px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-          padding: 0.75rem;
+          padding: 10px;
           border: 1px solid #f0f0f0;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 10px;
         }
         
         .task-header {
@@ -159,8 +159,8 @@ const MyTasks = () => {
           background: var(--primary-color);
           color: white;
           border: none;
-          padding: 0.4rem 0.6rem;
-          border-radius: 6px;
+          padding: 5px 10px;
+          border-radius: 5px;
           font-size: 13px;
           font-weight: 500;
           display: flex;

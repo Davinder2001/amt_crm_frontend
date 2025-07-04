@@ -31,14 +31,15 @@
 }
 
 .shift-form-inner {
-    label {  
-      letter-spacing: .4px;
-      color: $lable-color;
-      margin-bottom: 5px;
-      font-size: $lable-font;
-      font-weight: $font-weight-regular;
-      display: block;
+    label {
+        letter-spacing: .4px;
+        color: $lable-color;
+        margin-bottom: 5px;
+        font-size: $lable-font;
+        font-weight: $font-weight-regular;
+        display: block;
     }
+
     input {
         width: 100%;
         padding: 8px 12px;
@@ -48,12 +49,22 @@
         transition: border-color 0.2s;
     }
 }
+
 button.cancel-btn {
     background-color: var(--primary-light);
     color: $white;
+
     &:hover {
         background-color: $light-color;
         color: var(--primary-color);
     }
 }
 
+
+@media (max-width: 768px) {
+    .shift-page {
+        .navigation-buttons {
+            margin-bottom: 20px;
+        }
+    }
+}

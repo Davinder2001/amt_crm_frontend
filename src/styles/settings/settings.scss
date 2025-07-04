@@ -191,8 +191,11 @@
     }
 
     @media (max-width: 768px) {
+        .modal-actions{
+            margin: 0;
+        }
         .settings-content {
-            padding: 1rem 0.5rem;
+            padding: 10px 0px 0px 0px;
         }
 
         .settings-text {

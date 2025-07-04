@@ -218,7 +218,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           data={filteredInvoices}
           columns={columns}
           storageKey="invoice_table_page"
-          cardViewKey="invoice_number"
           onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
           onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
         />

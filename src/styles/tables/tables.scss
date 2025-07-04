@@ -649,6 +649,87 @@ table {
 .card-view {
     display: none;
     margin-bottom: 20px;
+
+    .card-bulk-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #4261da1c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 2;
+        border-radius: $border-radius;
+
+        .card-bulk-checkbox {
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: $white;
+            border-radius: $border-radius 0px 0px 0px;
+            padding: 5px;
+
+            .select-checkbox {
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .select-icon {
+                    color: var(--primary-color);
+                    border: 1px solid $white;
+                    border-radius: $border-radius;
+                    font-size: 20px;
+                }
+            }
+
+        }
+    }
+
+    .card-bulk-header {
+        padding: 10px 5px;
+        background: #f5f5f5;
+        border-radius: $border-radius;
+
+        .select-all-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+
+            span {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    color: var(--primary-color);
+                }
+            }
+
+            .select-icon {
+                font-size: 18px;
+                color: var(--primary-color);
+            }
+
+            .select-label {
+                font-size: 12px;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .t-card {
+        position: relative;
+    }
+
+
+
 }
 
 /* ============ PAGINATION ============ */
@@ -833,36 +914,19 @@ table {
     .card-body {
 
         .card-row {
-            padding: 8px 10px;
-            white-space: nowrap;
+            padding: 5px 10px;
 
-            strong {
-                margin-right: 0.5rem;
-            }
-
-            span {
-                width: 100%;
-                text-align: right;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        .expanded-content {
-            margin-top: 0.75rem;
-            background: #f8f8f8;
-            border-radius: $border-radius;
-
-            .card-row {
-                padding: 5px 10px;
-                margin: 0;
+            p {
+                font-size: 12px;
+                font-weight: bold;
+                color: var(--primary-color);
             }
         }
     }
 
     .card-footer {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         padding: 8px 10px;
         border-top: 1px solid #e0e0e0;
@@ -878,7 +942,7 @@ table {
         .card-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             font-size: 15px;
             color: $primary-color
         }
@@ -982,7 +1046,6 @@ table {
     }
 
     .card-row {
-        margin-bottom: 5px;
         display: flex;
     }
 

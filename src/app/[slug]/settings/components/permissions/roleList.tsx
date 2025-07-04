@@ -94,7 +94,6 @@ const RoleList: React.FC = () => {
         data={rolesData?.roles || []}
         columns={columns}
         onDelete={(id) => handleDeleteRole(id)}
-        cardViewKey="name"
       />
 
 

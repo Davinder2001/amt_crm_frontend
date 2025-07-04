@@ -137,7 +137,7 @@ const LeaveList = () => {
         }}
         type="delete"
       />
-      {isLoading && <LoadingState/>}
+      {isLoading && <LoadingState />}
 
       {error && (
         <EmptyState
@@ -161,7 +161,7 @@ const LeaveList = () => {
       )}
 
       {leaves.length > 0 && (
-        <ResponsiveTable data={leaves} columns={columns} cardViewKey='name' />
+        <ResponsiveTable data={leaves} columns={columns} />
       )}
     </div>
   );

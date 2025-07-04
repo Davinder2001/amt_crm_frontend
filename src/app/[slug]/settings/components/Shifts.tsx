@@ -188,7 +188,7 @@ const Shifts: React.FC = () => {
           }
         />
       ) : (
-        <ResponsiveTable data={data?.data || []} columns={columns} cardViewKey='shift_name'/>
+        <ResponsiveTable data={data?.data || []} columns={columns}/>
       )}
 
       <Modal

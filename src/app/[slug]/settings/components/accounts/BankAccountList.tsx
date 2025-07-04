@@ -186,7 +186,7 @@ const BankAccountList = () => {
             )}
 
             {accounts.length > 0 && (
-                <ResponsiveTable data={accounts} columns={columns} cardViewKey='bank_name' />
+                <ResponsiveTable data={accounts} columns={columns}/>
             )}
 
         </div>

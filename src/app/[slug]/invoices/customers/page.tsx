@@ -59,7 +59,6 @@ const CustomerList = () => {
           data={customers}
           columns={columns}
           onView={(id) => router.push(`/${companySlug}/invoices/customers/${id}`)}
-          cardViewKey='name'
         />
       )}
     </div>

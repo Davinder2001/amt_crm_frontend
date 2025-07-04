@@ -82,7 +82,6 @@ export default function OnlinePayments() {
       <ResponsiveTable
         data={flattenedTransactions}
         columns={columns}
-        cardViewKey="invoice_number"
       />
     </div>
   );

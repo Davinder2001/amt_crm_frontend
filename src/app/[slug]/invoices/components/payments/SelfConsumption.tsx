@@ -69,7 +69,6 @@ export default function SelfConsumption() {
       <ResponsiveTable
         data={flattenedData}
         columns={columns}
-        cardViewKey="invoice_number"
       />
     </div>
   );

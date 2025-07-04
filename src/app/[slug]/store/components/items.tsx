@@ -344,8 +344,29 @@ const Items: React.FC = () => {
           onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
           storageKey="store_table_page"
-          cardViewKey="name"
           showBulkActions={showBulkActions}
+          cardView={(item) => (
+            <>
+              <div className="card-row">
+                <h5>{item.name}</h5>
+                <Image
+                  src={item.featured_image || placeholderImg}
+                  alt={item.name}
+                  width={30}
+                  height={30}
+                />
+              </div>
+              <div className="card-row">
+                <p>Brand : {item.brand_name}</p>
+                <p>Stock : {item.availability_stock}</p>
+              </div>
+              {item.description && (
+                <div className="custom-description">
+                  {item.description}
+                </div>
+              )}
+            </>
+          )}
         />
         :
         <EmptyState
@@ -425,7 +446,7 @@ const Items: React.FC = () => {
                 placeholder="Search existing items..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ border: 'none', padding: 0,fontSize:'16px', borderRadius: 0, width:'100%' }}
+                style={{ border: 'none', padding: 0, fontSize: '16px', borderRadius: 0, width: '100%' }}
               />
             </div>
           </div>

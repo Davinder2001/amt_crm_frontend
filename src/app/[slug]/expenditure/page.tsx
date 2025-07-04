@@ -148,7 +148,6 @@ if (error) {
         <ResponsiveTable
           data={expenses}
           columns={columns}
-          cardViewKey="heading"
         />
       ) : (
         <EmptyState

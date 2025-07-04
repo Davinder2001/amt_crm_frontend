@@ -70,7 +70,6 @@ const LeavesPage = () => {
         <ResponsiveTable
           data={leavesWithId}
           columns={columns}
-          cardViewKey="leave_type"
         />
       )}
     </div>

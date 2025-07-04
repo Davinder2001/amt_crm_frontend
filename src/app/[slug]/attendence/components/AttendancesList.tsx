@@ -122,7 +122,7 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
     content =
       <>
       
-        <ResponsiveTable data={attendanceList} columns={columns} cardViewKey='attendance_date' />
+        <ResponsiveTable data={attendanceList} columns={columns}/>
       </>
 
       ;

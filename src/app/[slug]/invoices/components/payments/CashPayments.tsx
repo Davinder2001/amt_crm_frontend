@@ -71,7 +71,6 @@ export default function CashPayments() {
       <ResponsiveTable
         data={flattenedData}
         columns={columns}
-        cardViewKey="invoice_number"
       />
     </div>
   );

@@ -136,10 +136,22 @@
 }
 
 @media (max-width: 768px) {
-    
-.bulk-delete-popup {
-    padding:0;
-    
-}
-    
+
+    .bulk-delete-popup {
+        padding: 0;
+
+    }
+
+    .modal-header {
+        padding: 5px 10px;
+
+        .modal-title {
+            font-size: 18px;
+        }
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+
 }

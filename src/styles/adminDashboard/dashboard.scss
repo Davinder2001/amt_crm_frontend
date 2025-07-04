@@ -313,6 +313,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding: 5px;
                 }
 
                 .review-content {
@@ -322,6 +323,10 @@
                         font-weight: 600;
                         font-size: 14px;
                         color: var(--primary-color);
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        width: 100%;
                     }
 
                     .desc {
@@ -619,7 +624,8 @@
         row-gap: 15px;
 
         .card {
-            padding: 0;
+
+            padding: 10px;
 
             .card-header {
                 align-items: flex-start;
@@ -648,16 +654,28 @@
             }
         }
     }
-    .legend{
-        margin-bottom: 10px !important;
-        font-size: 12px !important;
-        gap: 10px !important;
-        align-items: center;
+
+
+    .card.total-earnings,
+    .stat-revenue-container .total-revenue {
+        .legend {
+            margin-bottom: 10px;
+            font-size: 12px;
+            gap: 10px;
+            align-items: center;
+
+            .dot {
+                margin: 0;
+                width: 10px;
+                height: 10px;
+            }
+        }
+
     }
 
     .expenses-sale-container .sale-items,
     .earning-review-container .user-activity {
-        padding: 10px;
+
 
         h3 {
             font-size: 16px;
@@ -671,6 +689,18 @@
             .count {
                 font-size: 12px;
             }
+        }
+    }
+
+    .earning-review-container .customer-review .review-list .review-item {
+        border: none;
+        border-bottom: 1px solid rgb(223, 240, 240);
+        padding: 0px 0px 10px 0px;
+        .avatar {
+            font-size: 14px;
+        }
+        .review-content .desc{
+            font-size: 12px;
         }
     }
 

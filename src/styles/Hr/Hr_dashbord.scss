@@ -1,379 +1,328 @@
 @use '../variables' as *;
 
-
-.custom_header_hr {
-.MuiTab-root {
-    background: #dee9f2;
-    color: #656464;
-    margin-right: 6px;
-
-  }
-  .Mui-selected {
-    background: var(--primary-color) !important;
-    color: white !important;
-}
-
-}
-.css-6cy0zc-MuiTabs-root .MuiTabs-indicator {
-  background-color: transparent !important;
-}
-.css-6cy0zc-MuiTabs-root .MuiTabs-indicator {
-  background-color: transparent !important;
-
-.css-1muzjf8 {
-  border-bottom :none !important;
-  margin-bottom: 0px !important;
-}
-}
-
-
 .hr-hero-wrapper {
   display: flex;
-  justify-content: space-between;
   gap: 20px;
-  border-radius: $border-radius;
-  margin-top: 30px;
-}
-
-.time-stats-wrapper {
-  background-color: $white;
-  display: flex;
   width: 100%;
-  gap: 20px;
-  padding: 30px 30px;
-  border-radius: $border-radius;
-}
-
-.time-section {
-  background-color: $white;
-  padding: 16px;
-  border-radius: $border-radius;
-  border: 1px solid #efefef;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
-
-}
-
-.sun-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-
-  svg {
-    transition: all 1s ease-out;
-    cursor: pointer;
-
-  }
-}
-
-.realtime-label {
-  font-size: 12px;
-  color: #999;
-}
-
-.time {
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.date {
-  font-size: 14px;
-  color: #666;
-  text-align: center;
-}
-
-.attendance-btn {
-  margin: 10px auto;
-  background: var(--primary-color);
-  color: $white;
-  padding: 10px 20px;
-  border-radius: $border-radius;
-  font-weight: 500;
-  text-decoration: none;
-
-  &:hover{
-    background-color: var(--primary-light);
-  }
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  flex: 1;
-}
-
-.stat-card-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.stat-card-box {
-  background: $white;
-  padding: 16px;
-  border-radius: 5px;
-  transition: transform 0.3s ease;
-  border: 1px solid #efefef;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
-}
-
-.card-left h2 {
-  font-size: 24px;
-  margin: 0;
-}
-
-.card-left .label {
-  letter-spacing: .4px;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 13px;
-    font-weight: 400;
-    display: block;
-  letter-spacing: .4px;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 13px;
-    font-weight: 400;
-    display: block;
-}
-
-.card-left .note {
-  font-size: 12px;
-  color: $gray-color;
-}
-.stat-card-box{
-
-  .card-icon {
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-
-  svg {
-    color: var(--primary-color);
-  }
-}
-}
-
-.employee-field svg
- {
-    display: none;
-}
-
-
-.active-employee-box {
-  width: 100%;
-  max-width: 300px;
-  background: white;
-  padding: 20px;
-  border-radius: $border-radius;
-}
-
-.active-employee-box h3 {
-  margin-bottom: 16px;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.employee-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.emp-avatar {
-  width: 36px;
-  height: 36px;
-  background: $light_blue;
-  color: var(--primary-color);
-  font-weight: 600;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
-}
-
-.emp-info p {
-  margin: 0;
-  font-weight: 500;
-}
-
-.emp-status.active {
-  color: var(--primary-light);
-  font-size: 12px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Responsive Styling
-@media (max-width: 1200px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hr-hero-wrapper {
-    flex-direction: column;
-    gap: 24px;
-  }
+  margin: 20px 0px;
 
   .time-stats-wrapper {
-    gap: 16px;
+    display: flex;
+    gap: 20px;
+    flex: 1;
+
+    .time-section {
+      background: $white;
+      border-radius: $border-radius;
+      padding: 20px;
+      min-width: 220px;
+      text-align: center;
+      border: 1px solid $feild_border;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .sun-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+
+        svg {
+          transition: all 1s ease-out;
+          cursor: pointer;
+        }
+      }
+
+      .time {
+        font-size: 24px;
+        font-weight: $font-weight-semi-bold;
+        color: $heading;
+        margin: 8px 0;
+        letter-spacing: -0.5px;
+      }
+
+      .date {
+        font-size: 14px;
+        color: $gray-color;
+        font-weight: $font-weight-medium;
+      }
+
+      .realtime-label {
+        font-size: 12px;
+        color: $gray-color;
+        margin-top: 8px;
+        padding: 4px 8px;
+        background: $light-bg;
+        border-radius: 10px;
+      }
+
+      .attendance-btn {
+        background: var(--primary-color);
+        color: $white;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: $font-weight-medium;
+        margin-top: 16px;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: var(--primary-light);
+          transform: translateY(-1px);
+        }
+      }
+
+      svg {
+        margin-bottom: 8px;
+      }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      flex: 1;
+
+      .stat-card-box {
+        background: $white;
+        border-radius: $border-radius;
+        padding: 20px;
+        border: 1px solid $feild_border;
+
+        .stat-card-inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+        }
+
+        h2 {
+          font-size: 22px;
+          margin: 0;
+          color: $heading;
+          letter-spacing: -0.5px;
+        }
+
+        .label {
+          font-size: 13px;
+          color: $lable-color;
+          margin-bottom: 6px;
+          font-weight: $font-weight-medium;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .note {
+          font-size: 12px;
+          color: $gray-color;
+          margin-top: 4px;
+        }
+
+        .card-icon {
+          width: 35px;
+          height: 35px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $white;
+          background: var(--primary-color);
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  .active-employee-box {
+    background: $white;
+    border-radius: $border-radius;
+    padding: 20px;
+    min-width: 260px;
+    border: 1px solid $feild_border;
+
+    h3 {
+      font-size: 16px;
+      font-weight: $font-weight-semi-bold;
+      color: $heading;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &:before {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 16px;
+        background: $primary-color;
+        border-radius: 2px;
+      }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .employee-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $feild_border;
+
+      &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+    }
+
+    .emp-avatar {
+      width: 36px;
+      height: 36px;
+      background: $light_blue;
+      color: $primary-color;
+      font-weight: $font-weight-semi-bold;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 14px;
+    }
+
+    .emp-info {
+      p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: $font-weight-medium;
+        color: $heading;
+      }
+
+      .emp-status.active {
+        font-size: 12px;
+        color: $success-color;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 2px;
+
+        &:before {
+          content: "";
+          display: block;
+          width: 6px;
+          height: 6px;
+          background: $success-color;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .hr-hero-wrapper {
+    flex-direction: column;
   }
 
   .active-employee-box {
     width: 100%;
+    min-width: auto;
   }
+}
+
+@media (max-width: 992px) {
+  .hr-hero-wrapper {
+    margin-top: 10px;
+    .active-employee-box {
+      padding: 10px;
+    }
+
+    .time-stats-wrapper {
+      .time-section {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        .sun-container {
+          flex-direction: row;
+          align-items: center;
+
+          svg {
+            margin: 0;
+            height: 40px;
+            width: 40px;
+          }
+
+          span {
+            margin: 0;
+            white-space: nowrap;
+          }
+        }
+
+        .time {
+          margin: 0;
+          font-size: 18px;
+        }
+
+        .date {
+          grid-column: span 2;
+        }
+
+        .attendance-btn {
+          grid-column: span 2;
+          width: fit-content;
+          margin: 10px auto 5px auto;
+          padding: 5px 10px;
+        }
+
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+
+        .stat-card-box {
+          padding: 10px;
+
+          .stat-card-inner {
+            margin-bottom: 6px;
+          }
+
+          h2 {
+            font-size: 20px;
+          }
+
+          .label {
+            font-size: 12px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            margin-top: 10px;
+          }
+
+          .note {
+            font-size: 11px;
+          }
+
+          .card-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+
 }
 
 @media (max-width: 768px) {
-
-  .time-stats-wrapper {
+  .hr-hero-wrapper .time-stats-wrapper {
     flex-direction: column;
-  }
-
-  .time {
-    font-size: 18px;
-  }
-
-  .date {
-    font-size: 12px;
-  }
-
-  .card-left h2 {
-    font-size: 20px;
-  }
-
-  .card-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
-
-  .time-section {
-    max-width: 100%;
-    width: 100%;
-    flex-direction: row;
-  }
-
-
-  .stat-card-box {
-    padding: 14px;
-  }
-
-  .active-employee-box {
-    padding: 16px;
-  }
-
-  .employee-item {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .emp-avatar {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-
-  .attendance-btn {
-    text-align: center;
-  }
-
-  .hr_navigation {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 12px;
-    justify-content: flex-start;
-
-    a {
-      justify-content: center;
-      font-size: 16px;
-      padding: 7px 12px;
-    }
-  
-  }
-}
-
-
-
-@media (max-width: 500px) {
-
-  .time-section {
-    flex-direction: column;
-  }
-
-
-
-
-}
-
-
-
-
-
-@media (max-width: 480px) {
-  .stat-card-box {
-    padding: 12px;
-  }
-
-  .card-left h2 {
-    font-size: 18px;
-  }
-
-  .card-icon {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-  }
-
-  .emp-info p {
-    font-size: 14px;
-  }
-
-  .emp-status.active {
-    font-size: 11px;
-  }
-
-  .hr_navigation {
-    gap: 8px;
-
-    a {
-      padding: 5px 10px;
-      font-size: 10px;
-    }
-  }
-
-  .attendance-btn {
-    padding: 8px 16px;
-    font-size: 14px;
   }
 }

@@ -100,7 +100,7 @@
                 background: rgba($success-color, 0.1);
                 color: $success-color;
               }
-              
+
             }
           }
         }
@@ -153,7 +153,7 @@
       .profile-card {
         background: $white;
         border-radius: $border-radius;
-        padding:10px;
+        padding: 10px;
         border: 1px solid $border-color;
         transition: $transition;
 
@@ -414,6 +414,336 @@
           }
         }
       }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Employee Form Container */
+.employee-form-container {
+  display: flex;
+  flex-direction: column;
+
+
+  /* Header */
+  .form-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+
+    .back-button {
+      margin: 0px;
+    }
+  }
+
+  .form-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+  }
+
+  /* Main Content Wrapper */
+  .form-content-wrapper form {
+    display: flex;
+    gap: 20px;
+  }
+
+  /* Sidebar */
+  .form-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .image-upload-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  .image-upload-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .image-preview {
+    width: 100%;
+    height: 200px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-preview .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #999;
+  }
+
+  .upload-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  .upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    color: #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+  }
+
+  .upload-button:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* Main Form Content */
+  .form-main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .form-card-title {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .form-card-title .icon {
+    color: var(--primary-color);
+  }
+
+  .form-card-content {
+    padding: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .employee-field label {
+    letter-spacing: .4px;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
+  }
+
+  .employee-field {
+    input {
+      &::placeholder {
+        color: gray;
+        font-size: 14px;
+        text-transform: unset;
+
+      }
+    }
+  }
+
+  .employee-field input,
+  .employee-field select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid $feild_border;
+    border-radius: $border-radius;
+
+    &:focus {
+      border-color: var(--primary-light);
+      background: transparent;
+      transform: scale(1);
+    }
+  }
+
+
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  /* Form Actions */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 20px 0;
+  }
+
+  .form-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .form-button {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .form-button:hover {
+    background-color: var(--primary-light);
+  }
+
+  .form-button.secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .form-button.secondary:hover {
+    background-color: var(--primary-light);
+  }
+
+  .form-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .form-content-wrapper form {
+      flex-direction: column;
+    }
+
+    .form-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200, 3fr));
+      gap: 10px 20px;
+    }
+
+    .form-sidebar {
+      width: 100%;
+      display: flex;
+      grid-template-columns: 1fr 1fr;
+      flex-direction: row;
+    }
+
+    .image-upload-card {
+      width: calc(50% - 10px);
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0px;
+
+    .form-card {
+      margin: 0px;
+    }
+
+    .form-header {
+      padding: 0px;
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+
+    .image-upload-card {
+      width: 100%;
+    }
+
+    .form-card-title {
+      padding: 10px;
+    }
+
+    .form-card-content {
+      padding: 10px;
+    }
+
+    .form-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 468px) {
+    .form-sidebar {
+      display: flex;
+      flex-direction: column;
     }
   }
 }

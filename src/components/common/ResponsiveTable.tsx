@@ -347,11 +347,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                     setShowConfirmDialog(true);
                   }}
                 />
-                {/* {onView && (
-                  <div className="go-button" onClick={() => onView(item.id)}>
-                    <FaExternalLinkAlt />
-                  </div>
-                )} */}
               </div>
             </div>
           </div>

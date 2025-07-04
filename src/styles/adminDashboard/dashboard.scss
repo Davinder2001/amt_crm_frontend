@@ -619,7 +619,8 @@
         row-gap: 15px;
 
         .card {
-            padding: 0;
+
+            padding: 10px;
 
             .card-header {
                 align-items: flex-start;
@@ -648,16 +649,28 @@
             }
         }
     }
-    .legend{
-        margin-bottom: 10px !important;
-        font-size: 12px !important;
-        gap: 10px !important;
-        align-items: center;
+
+
+    .card.total-earnings,
+    .stat-revenue-container .total-revenue {
+        .legend {
+            margin-bottom: 10px;
+            font-size: 12px;
+            gap: 10px;
+            align-items: center;
+
+            .dot {
+                margin: 0;
+                width: 10px;
+                height: 10px;
+            }
+        }
+
     }
 
     .expenses-sale-container .sale-items,
     .earning-review-container .user-activity {
-        padding: 10px;
+
 
         h3 {
             font-size: 16px;

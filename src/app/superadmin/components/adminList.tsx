@@ -187,6 +187,18 @@ const AdminList = () => {
         data={filteredAdmins}
         columns={columns}
         onView={(id) => router.push(`/superadmin/admins/view-admin/${id}`)}
+        cardView={(admin) => (
+          <>
+            <div className="card-row">
+              <h5>{admin.name}</h5>
+              <p>{admin.email}</p>
+            </div>
+            <div className="card-row">
+              <p>UID: {admin.uid}</p>
+              <p>Status: {admin.user_status}</p>
+            </div>
+          </>
+        )}
       />
     </div>
   );

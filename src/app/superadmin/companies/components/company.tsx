@@ -193,14 +193,14 @@ const CompanyComponent = () => {
   const filteredData = filterData(companies);
 
   if (isLoading) return <Loader />;
-if (error)
-        return (
-            <EmptyState
-                icon="alert"
-                title="Error loading companies."
-                message="Something went wrong while loading companies."
-            />
-        );
+  if (error)
+    return (
+      <EmptyState
+        icon="alert"
+        title="Error loading companies."
+        message="Something went wrong while loading companies."
+      />
+    );
   return (
     <div className="company-table-outer">
       <TableToolbar
@@ -245,6 +245,21 @@ if (error)
         data={filteredData}
         columns={columns}
         onView={(id) => router.push(`/superadmin/companies/view/${id}`)}
+        cardView={(company) => (
+          <>
+            <div className="card-row">
+              <h5>{company.company_name}</h5>
+              <p>{company.company_id}</p>
+            </div>
+            <div className="card-row">
+              <p>Slug: {company.company_slug}</p>
+            </div>
+            <div className="card-row">
+              <p>Payment: {company.payment_status}</p>
+              <p>Verification: {company.verification_status}</p>
+            </div>
+          </>
+        )}
       />
     </div>
   );

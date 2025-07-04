@@ -90,6 +90,17 @@ const Attributes = () => {
         setEditAttributeId(id);
         setIsModalOpen(true);
     };
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteAttribute(id).unwrap();
+            toast.success('Attribute deleted successfully');
+        } catch (err) {
+            console.error('Error deleting attribute:', err);
+            toast.error('Failed to delete attribute');
+        }
+    };
+
     const promptDelete = (id: number) => {
         setDeleteId(id);
         setShowConfirm(true);
@@ -151,12 +162,8 @@ const Attributes = () => {
             render: (attr: Attribute) => (
                 <>
                     <div className="attribute-actions-btn-outer">
-                        <button onClick={() => handleEdit(attr.id)} className="edit-btn" type='button'>
-                            <FaEdit />
-                        </button>
-                        <button onClick={() => promptDelete(attr.id)} className="delete-btn" type='button'>
-                            <FaTrash />
-                        </button>
+                        <FaEdit onClick={() => handleEdit(attr.id)} className="edit-btn" />
+                        <FaTrash onClick={() => promptDelete(attr.id)} className="delete-btn" />
                     </div>
                 </>
             ),
@@ -191,6 +198,23 @@ const Attributes = () => {
                             a.status === 'active' && b.status !== 'active' ? -1 : 1
                         )}
                         columns={columns}
+                        onEdit={(id) => handleEdit(id)}
+                        onDelete={(id) => handleDelete(id)}
+                        cardView={(attribute) => (
+                            <>
+                                <div className="card-row">
+                                    <h5>{attribute.name}</h5>
+                                    <p className={`status ${attribute.status}`}>
+                                        {attribute.status.charAt(0).toUpperCase() + attribute.status.slice(1)}
+                                    </p>
+                                </div>
+                                <div className="card-row">
+                                    <p className="values">
+                                        {attribute.values?.map(v => v.value).join(', ') || 'No values'}
+                                    </p>
+                                </div>
+                            </>
+                        )}
                     />
                 </div>
             )}

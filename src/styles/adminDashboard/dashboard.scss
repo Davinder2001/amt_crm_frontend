@@ -313,6 +313,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding: 5px;
                 }
 
                 .review-content {
@@ -322,6 +323,10 @@
                         font-weight: 600;
                         font-size: 14px;
                         color: var(--primary-color);
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        width: 100%;
                     }
 
                     .desc {
@@ -684,6 +689,18 @@
             .count {
                 font-size: 12px;
             }
+        }
+    }
+
+    .earning-review-container .customer-review .review-list .review-item {
+        border: none;
+        border-bottom: 1px solid rgb(223, 240, 240);
+        padding: 0px 0px 10px 0px;
+        .avatar {
+            font-size: 14px;
+        }
+        .review-content .desc{
+            font-size: 12px;
         }
     }
 

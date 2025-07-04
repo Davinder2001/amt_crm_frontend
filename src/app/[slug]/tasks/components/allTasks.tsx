@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
-import { FaEdit, FaPlus, FaTasks, FaTrash, } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
@@ -13,7 +13,6 @@ import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import TaskForm from './TaskForm';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-
 
 interface AllTasksProps {
   isAddModalOpen: boolean;
@@ -33,17 +32,24 @@ const AllTasks: React.FC<AllTasksProps> = ({
   setCurrentTaskId,
 }) => {
   const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
-  const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation();
   const { companySlug } = useCompany();
   const { refetch: refetchNotifications } = useFetchNotificationsQuery();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [taskIdToDelete, setTaskIdToDelete] = useState<number | null>(null);
+  const [deleteState, setDeleteState] = useState<{
+    id: number | null;
+    name: string;
+    showDialog: boolean;
+  }>({
+    id: null,
+    name: "",
+    showDialog: false
+  });
 
   const confirmDelete = async () => {
-    if (taskIdToDelete === null) return;
+    if (deleteState.id === null) return;
 
     try {
-      await deleteTask(taskIdToDelete).unwrap();
+      await deleteTask(deleteState.id).unwrap();
       toast.success('Task deleted successfully');
       refetch();
       refetchNotifications();
@@ -51,16 +57,21 @@ const AllTasks: React.FC<AllTasksProps> = ({
       console.error('Error deleting task:', err);
       toast.error('Error deleting task');
     } finally {
-      setShowDeleteConfirm(false);
-      setTaskIdToDelete(null);
+      setDeleteState({
+        id: null,
+        name: "",
+        showDialog: false
+      });
     }
   };
 
-  const handleDelete = (id: number) => {
-    setTaskIdToDelete(id);
-    setShowDeleteConfirm(true);
+  const promptDelete = (id: number, name: string) => {
+    setDeleteState({
+      id,
+      name,
+      showDialog: true
+    });
   };
-
 
   const handleEditClick = (id: number) => {
     setCurrentTaskId(id);
@@ -75,25 +86,15 @@ const AllTasks: React.FC<AllTasksProps> = ({
       message="We encountered an error while loading tasks. Please try again later."
     />
   );
-  if (!tasks?.data || tasks.data.length === 0) (
-    <EmptyState
-      icon={<FaTasks className="empty-state-icon" />}
-      title="No tasks found"
-      message="You haven't created any tasks yet. Start by assigning your first task."
-      action={
-        <button
-          className="buttons"
-          type='button'
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          <FaPlus size={18} /> Add New Task
-        </button>
-      }
-    />
-  );
+
+  const noTasks = !tasksLoading && !tasksError && (!tasks?.data || tasks.data.length === 0);
 
   // Define columns for the responsive table
   const columns = [
+    {
+      label: 'Task Name',
+      key: 'name' as keyof Task,
+    },
     {
       label: 'Employee Name',
       key: 'assigned_to_name' as keyof Task,
@@ -101,10 +102,6 @@ const AllTasks: React.FC<AllTasksProps> = ({
     {
       label: 'Employee Role',
       key: 'assigned_role' as keyof Task,
-    },
-    {
-      label: 'Task Name',
-      key: 'name' as keyof Task,
     },
     {
       label: 'Start Date',
@@ -126,39 +123,15 @@ const AllTasks: React.FC<AllTasksProps> = ({
       label: 'Actions',
       render: (task: Task) => (
         <div className='store-t-e-e-icons'>
-          <button
-            type='button'
-            className="table-e-d-v-buttons edit-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEditClick(task.id);
-            }}
-          >
-            <FaEdit />
-          </button>
-          <button
-            type='button'
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(task.id);
-            }}
-            disabled={isDeleting}
-            className="table-e-d-v-buttons delete-button"
-          >
-            <FaTrash />
-          </button>
-          <ConfirmDialog
-            isOpen={showDeleteConfirm}
-            message="Are you sure you want to delete this task?"
-            onConfirm={confirmDelete}
-            onCancel={() => {
-              setShowDeleteConfirm(false);
-              setTaskIdToDelete(null);
-            }}
-            type="delete"
-          />
-
-        </div>
+          <FaEdit onClick={(e) => {
+            e.stopPropagation();
+            handleEditClick(task.id);
+          }} />
+          <FaTrash onClick={(e) => {
+            e.stopPropagation();
+            promptDelete(task.id, task.name);
+          }} />
+        </div >
       ),
     },
   ];
@@ -166,15 +139,22 @@ const AllTasks: React.FC<AllTasksProps> = ({
   return (
     <>
       <ToastContainer />
-      {tasks?.data && tasks.data.length > 0 ? (
-        <ResponsiveTable
-          cardViewKey="name"
-          data={tasks.data}
-          columns={columns}
-          onDelete={handleDelete}
-          onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
-        />
-      ) : (
+
+      <ConfirmDialog
+        isOpen={deleteState.showDialog}
+        message={`Are you sure you want to delete the task "${deleteState.name}"?`}
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setDeleteState({
+            id: null,
+            name: "",
+            showDialog: false
+          });
+        }}
+        type="delete"
+      />
+
+      {noTasks ? (
         <EmptyState
           icon={<FaTasks className="empty-state-icon" />}
           title="No tasks found"
@@ -189,6 +169,39 @@ const AllTasks: React.FC<AllTasksProps> = ({
             </button>
           }
         />
+      ) : (
+        <div className='tasks_list'>
+          {tasks?.data && (
+            <ResponsiveTable
+              data={tasks.data}
+              columns={columns}
+              onEdit={(id) => handleEditClick(id)}
+              onDelete={(id) => {
+                const task = tasks.data.find(t => t.id === id);
+                if (task) promptDelete(id, task.name);
+              }}
+              onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
+              cardView={(task: Task) => (
+                <>
+                  <div className="card-row">
+                    <h5>{task.name}</h5>
+                    <p>Status: {task.status}</p>
+                  </div>
+                  <div className="card-row">
+                    <p>Assigned to: {task.assigned_to_name}</p>
+                    <p>Role: {task.assigned_role}</p>
+                  </div>
+                  <div className="card-row">
+                    <p>Dates: {task.start_date} to {task.end_date}</p>
+                  </div>
+                  <div className="card-row">
+                    <p>Assigned by: {task.assigned_by_name}</p>
+                  </div>
+                </>
+              )}
+            />
+          )}
+        </div>
       )}
 
       {/* Add Task Modal */}

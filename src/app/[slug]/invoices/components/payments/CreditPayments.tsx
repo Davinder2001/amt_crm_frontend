@@ -69,7 +69,6 @@ export default function CreditPayments() {
       <ResponsiveTable
         data={flattenedData}
         columns={columns}
-        cardViewKey="invoice_number"
       />
     </div>
   );

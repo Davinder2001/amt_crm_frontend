@@ -116,7 +116,6 @@ const AllQuotations = () => {
       <ResponsiveTable
         data={quotations}
         columns={columns}
-        cardViewKey='customer_name'
         onView={(id) => router.push(`/${companySlug}/invoices/qutations/${id}`)}
       />
     </div>

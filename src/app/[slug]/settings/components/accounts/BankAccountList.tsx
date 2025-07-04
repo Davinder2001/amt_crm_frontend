@@ -22,8 +22,13 @@ const BankAccountList = () => {
     const [deleteAccount] = useDeleteCompanyAccountMutation();
 
     const accounts = data?.accounts ?? [];
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+    const [deleteState, setDeleteState] = useState<{
+        id: number | null;
+        showDialog: boolean;
+    }>({
+        id: null,
+        showDialog: false
+    });
     const [showForm, setShowForm] = useState(false);
     const [editAccount, setEditAccount] = useState<BankAccount | null>(null);
 
@@ -73,24 +78,33 @@ const BankAccountList = () => {
         }
     };
 
-    const handleDelete = (id: number) => {
-        setItemToDelete(id);
-        setShowDeleteConfirm(true);
+    const promptDelete = (id: number) => {
+        setDeleteState({
+            id,
+            showDialog: true
+        });
     };
 
-    const handleConfirmDelete = async () => {
-        if (itemToDelete !== null) {
-            try {
-                await deleteAccount(itemToDelete).unwrap();
-            } catch (error) {
-                console.error("Failed to delete this Account:", error);
-            } finally {
-                setShowDeleteConfirm(false);
-                setItemToDelete(null);
-            }
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteAccount(id).unwrap();
+            toast.success('Bank account deleted successfully');
+            refetch();
+        } catch (error) {
+            console.error("Failed to delete account:", error);
+            toast.error('Failed to delete bank account');
         }
     };
 
+    const confirmDelete = async () => {
+        if (deleteState.id) {
+            await handleDelete(deleteState.id);
+            setDeleteState({
+                id: null,
+                showDialog: false
+            });
+        }
+    };
 
     const noAccounts = !isLoading && !error && accounts.length === 0;
 
@@ -115,7 +129,7 @@ const BankAccountList = () => {
                     <button
                         type="button"
                         className="icon-button delete-button"
-                        onClick={() => handleDelete(account.id)}
+                        onClick={() => promptDelete(account.id)}
                         title="Delete"
                     >
                         <FaTrash />
@@ -129,7 +143,7 @@ const BankAccountList = () => {
         <div className="bank-account-list">
             {!noAccounts && (
                 <div className="add-bank-btn-outer">
-                    <button onClick={() => setShowForm(true)} className="buttons" disabled={showForm} type="button">
+                    <button onClick={openAddModal} className="buttons" disabled={showForm} type="button">
                         <FaPlus /> Add Bank Account
                     </button>
                 </div>
@@ -147,16 +161,20 @@ const BankAccountList = () => {
                     onCancel={closeModal}
                 />
             </Modal>
+            
             <ConfirmDialog
-                isOpen={showDeleteConfirm}
-                message="Are you sure you want to delete this Account ?"
-                onConfirm={handleConfirmDelete}
+                isOpen={deleteState.showDialog}
+                message="Are you sure you want to delete this account?"
+                onConfirm={confirmDelete}
                 onCancel={() => {
-                    setShowDeleteConfirm(false);
-                    setItemToDelete(null);
+                    setDeleteState({
+                        id: null,
+                        showDialog: false
+                    });
                 }}
                 type="delete"
-            />s
+            />
+            
             {isLoading && <LoadingState />}
 
             {error && (
@@ -186,9 +204,30 @@ const BankAccountList = () => {
             )}
 
             {accounts.length > 0 && (
-                <ResponsiveTable data={accounts} columns={columns} cardViewKey='bank_name' />
+                <ResponsiveTable
+                    data={accounts}
+                    columns={columns}
+                    onEdit={(id) => {
+                        const account = accounts.find(a => a.id === id);
+                        if (account) openEditModal(account);
+                    }}
+                    onDelete={handleDelete}
+                    cardView={(account: BankAccount) => (
+                        <>
+                            <div className="card-row">
+                                <h5>{account.bank_name}</h5>
+                                {account.type && (
+                                    <p className="account-type">Type: {account.type}</p>
+                                )}
+                            </div>
+                            <div className="card-row">
+                                <p> Account No: {account.account_number}</p>
+                                <p>{account.ifsc_code && `IFSC: ${account.ifsc_code}`}</p>
+                            </div>
+                        </>
+                    )}
+                />
             )}
-
         </div>
     );
 };

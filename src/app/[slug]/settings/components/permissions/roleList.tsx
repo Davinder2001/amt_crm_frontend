@@ -93,8 +93,23 @@ const RoleList: React.FC = () => {
       <ResponsiveTable
         data={rolesData?.roles || []}
         columns={columns}
-        onDelete={(id) => handleDeleteRole(id)}
-        cardViewKey="name"
+        cardView={(role) => (
+          <>
+            <div className="card-row">
+              <h5>{role.name}</h5>
+              {role.company_id && (
+                <p className="company-id">Company ID: {role.company_id}</p>
+              )}
+            </div>
+            <div className="card-row">
+              <p className="role-permissions">
+                {role.permissions?.length
+                  ? role.permissions.map((perm) => perm.name).join(", ")
+                  : "No permissions"}
+              </p>
+            </div>
+          </>
+        )}
       />
 
 

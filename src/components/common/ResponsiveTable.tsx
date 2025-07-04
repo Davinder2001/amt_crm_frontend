@@ -4,12 +4,11 @@ import React, { useEffect, useState } from 'react';
 import {
   FaEdit,
   FaTrash,
-  FaExternalLinkAlt,
   FaCheckSquare,
   FaSquare,
 } from 'react-icons/fa';
 import ConfirmDialog from './ConfirmDialog';
-import { useDragScroll } from '@/components/common/useDragScroll'
+import { useDragScroll } from '@/components/common/useDragScroll';
 
 type Column<T> = {
   label: string;
@@ -27,8 +26,8 @@ type Props<T extends { id: number; name?: string }> = {
   onEdit?: (id: number) => void;
   onView?: (id: number) => void;
   storageKey?: string;
-  cardViewKey?: keyof T;
   showBulkActions?: boolean;
+  cardView?: (item: T) => React.ReactNode;
 };
 
 function ResponsiveTable<T extends { id: number; name?: string }>({
@@ -40,17 +39,15 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   onEdit,
   onView,
   storageKey,
-  cardViewKey,
   showBulkActions = false,
+  cardView,
 }: Props<T>) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const { ref, handleMouseDown, wasDraggedRef } = useDragScroll();
-
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [showBulkConfirmDialog, setShowBulkConfirmDialog] = useState(false);
-
+  const [showIndividualCheckboxes, setShowIndividualCheckboxes] = useState(false);
   const [selectedItems, setSelectedItems] = useState<{
     all: boolean;
     ids: number[];
@@ -60,7 +57,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentData = data.slice(startIndex, endIndex);
-
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const shouldShowPagination = totalPages > 1 && data.length > itemsPerPage;
 
@@ -81,9 +77,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
     if (newPage < 1 || newPage > totalPages) return;
     setCurrentPage(newPage);
     setSelectedItems(prev => ({ ...prev, page: newPage }));
-    if (storageKey) {
-      localStorage.setItem(storageKey, String(newPage));
-    }
+    if (storageKey) localStorage.setItem(storageKey, String(newPage));
   };
 
   useEffect(() => {
@@ -94,65 +88,52 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
     }
   }, [data, currentPage, itemsPerPage]);
 
-  const toggleExpand = (index: number) => {
-    setExpandedCard(expandedCard === index ? null : index);
-  };
-
   const toggleSelectAll = () => {
     setSelectedItems(prev => {
-      // If we're in "all pages" mode, switch to current page selection
       if (prev.all) {
-        const pageIds = currentData.map(item => item.id);
-        return { all: false, ids: pageIds, page: currentPage };
-      }
-      // If current page is already fully selected, deselect all
-      else if (prev.ids.length === currentData.length) {
         return { all: false, ids: [], page: currentPage };
-      }
-      // Otherwise select current page
-      else {
+      } else if (prev.ids.length === currentData.length) {
+        return { all: false, ids: [], page: currentPage };
+      } else {
         const pageIds = currentData.map(item => item.id);
         return { all: false, ids: pageIds, page: currentPage };
       }
     });
+    setShowIndividualCheckboxes(true);
   };
 
   const toggleSelectAllPages = () => {
-    setSelectedItems(prev => {
-      // If already in "all pages" mode, deselect all
-      if (prev.all) {
-        return { all: false, ids: [], page: currentPage };
-      }
-      // Otherwise enable "all pages" mode
-      else {
-        return { all: true, ids: [], page: currentPage };
-      }
-    });
+    setSelectedItems(prev => ({
+      all: !prev.all,
+      ids: [],
+      page: currentPage
+    }));
+    setShowIndividualCheckboxes(true);
   };
 
   const toggleSelectItem = (id: number) => {
     setSelectedItems(prev => {
-      // In "all pages" mode, we track exceptions
       if (prev.all) {
+        // When "all" is selected, unselecting an item means we're excluding it
         const newIds = prev.ids.includes(id)
           ? prev.ids.filter(itemId => itemId !== id)
           : [...prev.ids, id];
         return { ...prev, ids: newIds };
-      }
-      // In normal mode, toggle the item
-      else {
+      } else {
+        // When "all" is not selected, normal selection behavior
         const newIds = prev.ids.includes(id)
           ? prev.ids.filter(itemId => itemId !== id)
           : [...prev.ids, id];
         return { all: false, ids: newIds, page: currentPage };
       }
     });
+    setShowIndividualCheckboxes(true);
   };
 
   const handleBulkDelete = async () => {
     if (onBulkDelete) {
       const idsToDelete = selectedItems.all
-        ? data.map(item => item.id)
+        ? data.filter(item => !selectedItems.ids.includes(item.id)).map(item => item.id)
         : selectedItems.ids;
       await onBulkDelete(idsToDelete);
       setSelectedItems({ all: false, ids: [], page: currentPage });
@@ -160,21 +141,27 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
     }
   };
 
-  const getSelectedCount = () => {
+  const getSelectedCount = React.useCallback(() => {
     if (selectedItems.all) {
-      return data.length;
+      return data.length - selectedItems.ids.length;
+    } else {
+      return selectedItems.ids.length;
     }
-    return selectedItems.ids.length;
-  };
+  }, [selectedItems, data.length]);
 
   const isItemSelected = (id: number) => {
-    // In "all pages" mode, items are selected unless explicitly excluded
     if (selectedItems.all) {
       return !selectedItems.ids.includes(id);
+    } else {
+      return selectedItems.ids.includes(id);
     }
-    // In normal mode, check if item is in selected ids
-    return selectedItems.ids.includes(id);
   };
+
+  useEffect(() => {
+    if (getSelectedCount() === 0) {
+      setShowIndividualCheckboxes(false);
+    }
+  }, [selectedItems, getSelectedCount]);
 
   return (
     <div className="responsive-table">
@@ -196,21 +183,19 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       )}
 
       {/* Table View */}
-      <div className="table-view"
+      <div
+        className="table-view"
         ref={ref}
         onMouseDown={handleMouseDown}
-        style={{ width: '100%', overflow: 'auto', whiteSpace: 'nowrap' }}>
+        style={{ width: '100%', overflow: 'auto', whiteSpace: 'nowrap' }}
+      >
         <table>
           <thead>
             <tr>
               {showBulkActions && (
                 <th className='bulk-action-th'>
                   <div className="select-all-container">
-                    {/* Current page checkbox */}
-                    <span
-                      onClick={toggleSelectAll}
-                      title="Select current page"
-                    >
+                    <span onClick={toggleSelectAll} title="Select current page">
                       {selectedItems.all ? (
                         <FaSquare className="select-icon" />
                       ) : selectedItems.ids.length === currentData.length ? (
@@ -219,8 +204,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                         <FaSquare className="select-icon" />
                       )}
                     </span>
-
-                    {/* All pages checkbox */}
                     {totalPages > 1 && (
                       <span
                         className="select-all-pages"
@@ -244,130 +227,140 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item, index) => {
-              const serialNumber = startIndex + index + 1;
-              return (
-                <tr key={index} onClick={(e) => {
-                  if (wasDraggedRef.current) {
+            {currentData.map((item, index) => (
+              <tr
+                key={index}
+                onClick={(e) => {
+                  if (wasDraggedRef.current ||
+                    (e.target as HTMLElement).closest('button, svg, .action-icon, select, .select-checkbox')) {
                     wasDraggedRef.current = false;
                     return;
                   }
-
-                  const target = e.target as HTMLElement;
-                  if (
-                    target.closest('button') ||
-                    target.closest('svg') ||
-                    target.closest('.action-icon') ||
-                    target.closest('.ellipsis-icon') ||
-                    target.closest('select') ||
-                    target.closest('.select-checkbox')
-                  ) {
-                    return;
-                  }
-
                   if (onView) onView(item.id);
-                }}>
-                  {showBulkActions && (
-                    <td className='bulk-action-td'>
-                      <span
-                        className="select-checkbox"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSelectItem(item.id);
-                        }}
-                      >
-                        {isItemSelected(item.id) ? (
-                          <FaCheckSquare className="select-icon" />
-                        ) : (
-                          <FaSquare className="select-icon" />
-                        )}
-                      </span>
-                    </td>
-                  )}
-                  <td>{serialNumber}</td>
-                  {columns.map((col, i) => (
-                    <td key={i}>
-                      {col.render
-                        ? col.render(item, index)
-                        : col.key
-                          ? item[col.key] != null
-                            ? String(item[col.key])
-                            : 'N/A'
-                          : 'N/A'}
-                    </td>
-                  ))}
-                </tr>
-              )
-            })}
+                }}
+              >
+                {showBulkActions && (
+                  <td className='bulk-action-td'>
+                    <span
+                      className="select-checkbox"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSelectItem(item.id);
+                      }}
+                    >
+                      {isItemSelected(item.id) ? (
+                        <FaCheckSquare className="select-icon" />
+                      ) : (
+                        <FaSquare className="select-icon" />
+                      )}
+                    </span>
+                  </td>
+                )}
+                <td>{startIndex + index + 1}</td>
+                {columns.map((col, i) => (
+                  <td key={i}>
+                    {col.render
+                      ? col.render(item, index)
+                      : col.key
+                        ? item[col.key] != null
+                          ? String(item[col.key])
+                          : 'N/A'
+                        : 'N/A'}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      {/* Card View */}
+      {/* Card View - Always expanded with bulk selection */}
       <div className="card-view">
+        {showBulkActions && (
+          <div className="card-bulk-header">
+            <div className="select-all-container">
+              <span onClick={toggleSelectAll} title="Select current page">
+                {selectedItems.all ? (
+                  <FaSquare className="select-icon" />
+                ) : selectedItems.ids.length === currentData.length ? (
+                  <FaCheckSquare className="select-icon" />
+                ) : (
+                  <FaSquare className="select-icon" />
+                )}
+                <span className="select-label">Select Current Page</span>
+              </span>
+
+              {totalPages > 1 && (
+                <span
+                  className="select-all-pages"
+                  onClick={toggleSelectAllPages}
+                  title="Select all items across all pages"
+                >
+                  {selectedItems.all ? (
+                    <FaCheckSquare className="select-icon" />
+                  ) : (
+                    <FaSquare className="select-icon" />
+                  )}
+                  <span className="select-label">Select All Items</span>
+                </span>
+              )}
+            </div>
+          </div>
+        )}
         {currentData.map((item, index) => (
           <div key={index} className="t-card">
-            {/* Card Content */}
-            <div className="card-body">
-
-              {cardViewKey && (
-                <div className="card-row">
-                  <strong>
-                    {columns.find(col => col.key === cardViewKey)?.label || cardViewKey.toString()}:
-                  </strong>
-                  <span>{String(item[cardViewKey])}</span>
+            {/* Overlay for bulk selection */}
+            {showBulkActions && showIndividualCheckboxes && (
+              <div className="card-bulk-overlay">
+                <div className="card-bulk-checkbox">
+                  <span
+                    className="select-checkbox"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelectItem(item.id);
+                    }}
+                  >
+                    {isItemSelected(item.id) ? (
+                      <FaCheckSquare className="select-icon" />
+                    ) : (
+                      <FaSquare className="select-icon" />
+                    )}
+                  </span>
                 </div>
-              )}
-
-              {expandedCard === index && (
-                <div className="expanded-content">
-                  {columns
-                    .filter(col =>
-                      col.key !== cardViewKey && col.label.toLowerCase() !== 'actions'
-                    )
-                    .map((col, i) => (
-                      <div key={i} className={`card-row ${col.className || ''}`}>
-                        <strong>{col.label}: </strong>
-                        <span>
-                          {col.render
-                            ? col.render(item, index)
-                            : col.key
-                              ? item[col.key] != null
-                                ? String(item[col.key])
-                                : 'N/A'
-                              : 'N/A'}
-                        </span>
-                      </div>
-                    ))}
-
-                </div>
-              )}
-            </div>
-
-            {/* Card Footer */}
-            <div className="card-footer">
-              <button className="expand-text" onClick={() => toggleExpand(index)}>
-                {expandedCard === index ? 'Collapse' : 'Expand'}
-              </button>
-              <div className="card-actions">
-                <FaEdit
-                  className="action-icon edit"
-                  onClick={() => onEdit && onEdit(item.id)}
-                />
-                <FaTrash
-                  className="action-icon delete"
-                  onClick={() => {
-                    setDeleteTargetId(item.id);
-                    setShowConfirmDialog(true);
-                  }}
-                />
-                {onView && (
-                  <div className="go-button" onClick={() => onView(item.id)}>
-                    <FaExternalLinkAlt />
-                  </div>
-                )}
               </div>
+            )}
+
+            <div className="card-body" onClick={() => onView && onView(item.id)}>
+              {cardView && cardView(item)}
             </div>
+
+            {
+              (onEdit || onDelete) && (
+                <div className="card-footer">
+                  <div className="card-actions">
+                    {onEdit && (
+                      <FaEdit
+                        className="action-icon edit"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(item.id);
+                        }}
+                      />
+                    )}
+                    {onDelete && (
+                      <FaTrash
+                        className="action-icon delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteTargetId(item.id);
+                          setShowConfirmDialog(true);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              )
+            }
           </div>
         ))}
       </div>
@@ -384,7 +377,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               >
                 ←
               </button>
-
               <div className="pagination-btns-counts">
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
@@ -396,7 +388,6 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   </button>
                 ))}
               </div>
-
               <button
                 className="nav-arrow"
                 onClick={() => handlePageChange(currentPage + 1)}
@@ -417,9 +408,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
         isOpen={showConfirmDialog}
         message="Are you sure you want to delete this item?"
         onConfirm={async () => {
-          if (deleteTargetId !== null && onDelete) {
-            await onDelete(deleteTargetId);
-          }
+          if (deleteTargetId !== null && onDelete) await onDelete(deleteTargetId);
           setShowConfirmDialog(false);
           setDeleteTargetId(null);
         }}

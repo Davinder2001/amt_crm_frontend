@@ -9,6 +9,7 @@ import LoadingState from '@/components/common/LoadingState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
+import { toast } from 'react-toastify';
 
 const PackagesView = () => {
   const { data, error, isLoading } = useFetchPackagesQuery();
@@ -37,19 +38,25 @@ const PackagesView = () => {
     });
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await deletePackage(String(id)).unwrap();
+      toast.success(response.message || "Package deleted successfully");
+    } catch (err) {
+      console.error('Error deleting package:', err);
+      toast.error('Failed to delete package');
+    }
+  };
+
   const handleDeleteConfirm = async () => {
     if (!deleteState.id) return;
 
-    try {
-      await deletePackage(String(deleteState.id)).unwrap();
-      setDeleteState({
-        id: null,
-        name: "",
-        showDialog: false
-      });
-    } catch (error) {
-      console.error("Failed to delete package:", error);
-    }
+    await handleDelete(deleteState.id);
+    setDeleteState({
+      id: null,
+      name: "",
+      showDialog: false
+    });
   };
 
   const handleDeleteCancel = () => {
@@ -59,6 +66,7 @@ const PackagesView = () => {
       showDialog: false
     });
   };
+
 
   const handleToggle = (event: React.MouseEvent, planId: number) => {
     const newId = openCategoryId === planId ? null : planId;
@@ -232,7 +240,25 @@ const PackagesView = () => {
           data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
           columns={columns}
           onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
-          cardViewKey='name'
+          onDelete={(id) => handleDelete(id)}
+          onView={(id) => {
+            const pkg = data?.find(p => p.id === id);
+            if (pkg) handleViewDetails(pkg);
+          }}
+          cardView={(plan) => (
+            <>
+              <div className="card-row">
+                <h5>{plan.name}</h5>
+                <p>Monthly: ₹{Math.floor(Number(plan.monthly_price))}</p>
+              </div>
+              <div className="card-row">
+                <p>Annual: ₹{plan.annual_price}</p>
+                {plan.three_years_price && (
+                  <p>3 Years: ₹{plan.three_years_price}</p>
+                )}
+              </div>
+            </>
+          )}
         />
 
         <Modal

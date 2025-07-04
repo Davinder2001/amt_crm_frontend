@@ -16,6 +16,7 @@ import { FaPlus, FaTasks, FaTrash, FaEdit } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 const Shifts: React.FC = () => {
   const { data, refetch } = useFetchCompanyShiftsQuery();
@@ -44,6 +45,15 @@ const Shifts: React.FC = () => {
 
   const startTimeRef = React.useRef<HTMLInputElement>(null);
   const endTimeRef = React.useRef<HTMLInputElement>(null);
+  const [deleteState, setDeleteState] = useState<{
+    id: number | null;
+    name: string;
+    showDialog: boolean;
+  }>({
+    id: null,
+    name: "",
+    showDialog: false
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -120,17 +130,38 @@ const Shifts: React.FC = () => {
     setModalOpen(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this shift?')) {
-      try {
-        await deleteShift(id).unwrap();
-        toast.success('Shift deleted successfully!');
-        refetch();
-      } catch (err) {
-        console.error(err);
-        toast.error('Failed to delete shift');
-      }
+  const deleteShiftCore = async (id: number) => {
+    try {
+      await deleteShift(id).unwrap();
+      toast.success('Shift deleted successfully!');
+      refetch();
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to delete shift');
     }
+  };
+
+  const promptDelete = (id: number, name: string) => {
+    setDeleteState({
+      id,
+      name,
+      showDialog: true
+    });
+  };
+
+  const confirmDelete = async () => {
+    if (deleteState.id) {
+      await deleteShiftCore(deleteState.id);
+      setDeleteState({
+        id: null,
+        name: "",
+        showDialog: false
+      });
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteShiftCore(id);
   };
 
   type Column<T> = {
@@ -157,7 +188,7 @@ const Shifts: React.FC = () => {
           <button className="edit-btn" onClick={() => handleEdit(shift)}>
             <FaEdit />
           </button>
-          <button className="delete-btn" onClick={() => handleDelete(shift.id)}>
+          <button className="delete-btn" onClick={() => promptDelete(shift.id, shift.shift_name)}>
             <FaTrash />
           </button>
         </div>
@@ -188,8 +219,41 @@ const Shifts: React.FC = () => {
           }
         />
       ) : (
-        <ResponsiveTable data={data?.data || []} columns={columns} cardViewKey='shift_name'/>
+        <ResponsiveTable
+          data={data?.data || []}
+          columns={columns}
+          onEdit={(id) => {
+            const shift = data?.data.find(s => s.id === id);
+            if (shift) handleEdit(shift);
+          }}
+          onDelete={handleDelete}
+          cardView={(shift) => (
+            <>
+              <div className="card-row">
+                <h5>{shift.shift_name}</h5>
+                <p className="time-range">
+                  {formatTo12Hour(shift.start_time)} - {formatTo12Hour(shift.end_time)}
+                </p>
+              </div>
+              <div className="card-row">
+                <p>Weekly Off: {shift.weekly_off_day}</p>
+              </div>
+            </>
+          )}
+        />
       )}
+
+      <ConfirmDialog
+        isOpen={deleteState.showDialog}
+        message={`Are you sure you want to delete the shift "${deleteState.name}"?`}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteState({
+          id: null,
+          name: "",
+          showDialog: false
+        })}
+        type="delete"
+      />
 
       <Modal
         isOpen={modalOpen}
@@ -200,95 +264,95 @@ const Shifts: React.FC = () => {
         title={editId !== null ? 'Edit Shift' : 'Create New Shift'}
       >
 
-          <div className="shift-form-inner">
-            <Box sx={{ mb: 2 }}>
-              <label htmlFor="shift_name">Shift Name</label>
-              <TextField
-                id="shift_name"
-                name="shift_name"
-                value={form.shift_name}
-                onChange={handleChange}
-                fullWidth
-                size="small"
-                placeholder="Enter Shift Name"
-                error={!!formErrors.shift_name}
-                helperText={formErrors.shift_name}
-              />
-            </Box>
-
-            <Box sx={{ mb: 2 }} onClick={() => startTimeRef.current?.showPicker?.()}>
-              <label htmlFor="start_time">Start Time</label>
-              <TextField
-                id="start_time"
-                inputRef={startTimeRef}
-                name="start_time"
-                type="time"
-                value={form.start_time}
-                onChange={handleChange}
-                fullWidth
-                size="small"
-                error={!!formErrors.start_time}
-                helperText={formErrors.start_time}
-              />
-            </Box>
-
-            <Box sx={{ mb: 2 }} onClick={() => endTimeRef.current?.showPicker?.()}>
-              <label htmlFor="end_time">End Time</label>
-              <TextField
-                id="end_time"
-                inputRef={endTimeRef}
-                name="end_time"
-                type="time"
-                value={form.end_time}
-                onChange={handleChange}
-                fullWidth
-                size="small"
-                error={!!formErrors.end_time}
-                helperText={formErrors.end_time}
-              />
-            </Box>
-
-            <div>
-              <label htmlFor="weekly_off_day">Weekly Off Day</label>
-              <select
-                id="weekly_off_day"
-                name="weekly_off_day"
-                value={form.weekly_off_day}
-                onChange={handleSelectChange}
-                className={`form-input ${formErrors.weekly_off_day ? 'error' : ''}`}
-              >
-                <option value="" disabled>
-                  Select Weekly Off Day
-                </option>
-                {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
-                  <option key={day} value={day}>
-                    {day}
-                  </option>
-                ))}
-              </select>
-              {formErrors.weekly_off_day && (
-                <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>
-                  {formErrors.weekly_off_day}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-            <button
-              className="cancel-btn buttons"
-              onClick={() => {
-                setModalOpen(false);
-                resetForm();
-              }}
-              type='button'
-            >
-              Cancel
-            </button>
-            <button onClick={handleSubmit} className="buttons create-btn" type='button'>
-              {editId !== null ? 'Update' : 'Create'}
-            </button>
+        <div className="shift-form-inner">
+          <Box sx={{ mb: 2 }}>
+            <label htmlFor="shift_name">Shift Name</label>
+            <TextField
+              id="shift_name"
+              name="shift_name"
+              value={form.shift_name}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              placeholder="Enter Shift Name"
+              error={!!formErrors.shift_name}
+              helperText={formErrors.shift_name}
+            />
           </Box>
+
+          <Box sx={{ mb: 2 }} onClick={() => startTimeRef.current?.showPicker?.()}>
+            <label htmlFor="start_time">Start Time</label>
+            <TextField
+              id="start_time"
+              inputRef={startTimeRef}
+              name="start_time"
+              type="time"
+              value={form.start_time}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              error={!!formErrors.start_time}
+              helperText={formErrors.start_time}
+            />
+          </Box>
+
+          <Box sx={{ mb: 2 }} onClick={() => endTimeRef.current?.showPicker?.()}>
+            <label htmlFor="end_time">End Time</label>
+            <TextField
+              id="end_time"
+              inputRef={endTimeRef}
+              name="end_time"
+              type="time"
+              value={form.end_time}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              error={!!formErrors.end_time}
+              helperText={formErrors.end_time}
+            />
+          </Box>
+
+          <div>
+            <label htmlFor="weekly_off_day">Weekly Off Day</label>
+            <select
+              id="weekly_off_day"
+              name="weekly_off_day"
+              value={form.weekly_off_day}
+              onChange={handleSelectChange}
+              className={`form-input ${formErrors.weekly_off_day ? 'error' : ''}`}
+            >
+              <option value="" disabled>
+                Select Weekly Off Day
+              </option>
+              {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
+                <option key={day} value={day}>
+                  {day}
+                </option>
+              ))}
+            </select>
+            {formErrors.weekly_off_day && (
+              <div style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                {formErrors.weekly_off_day}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+          <button
+            className="cancel-btn buttons"
+            onClick={() => {
+              setModalOpen(false);
+              resetForm();
+            }}
+            type='button'
+          >
+            Cancel
+          </button>
+          <button onClick={handleSubmit} className="buttons create-btn" type='button'>
+            {editId !== null ? 'Update' : 'Create'}
+          </button>
+        </Box>
 
       </Modal>
     </div>

@@ -44,7 +44,7 @@ const ViewUserPage: React.FC = () => {
             <h1>{firstLetter}</h1>
             :
             <Image
-              src={user.profile_picture || 'https://via.placeholder.com/100'}
+              src={user.profilePicture || 'https://via.placeholder.com/100'}
               alt={user.name}
               className="profile-image"
               width={100}

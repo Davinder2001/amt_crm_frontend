@@ -218,8 +218,20 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           data={filteredInvoices}
           columns={columns}
           storageKey="invoice_table_page"
-          onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
+          // onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
           onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
+          cardView={(invoice) => (
+            <>
+              <div className="card-row">
+                <h5>{invoice.invoice_number}</h5>
+                <p>{invoice.client_name}</p>
+              </div>
+              <div className="card-row">
+                <p>Date: {invoice.invoice_date}</p>
+                <p>Total: ₹{invoice.final_amount}</p>
+              </div>
+            </>
+          )}
         />
         :
         <EmptyState

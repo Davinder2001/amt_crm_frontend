@@ -1004,6 +1004,7 @@ table {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .table-view {
@@ -1044,19 +1045,6 @@ table {
         box-shadow: none;
         font-size: 16px;
     }
-
-    .card-row {
-        display: flex;
-    }
-
-    .card-row strong {
-        margin-right: 0.25rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-
-
 
     .bulk-actions-toolbar {
         gap: 8px;

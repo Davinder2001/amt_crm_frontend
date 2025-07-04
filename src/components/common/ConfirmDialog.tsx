@@ -48,7 +48,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .dialog-overlay {
           position: fixed;
           inset: 0;

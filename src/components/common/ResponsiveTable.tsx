@@ -334,21 +334,33 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               {cardView && cardView(item)}
             </div>
 
-            <div className="card-footer">
-              <div className="card-actions">
-                <FaEdit
-                  className="action-icon edit"
-                  onClick={() => onEdit && onEdit(item.id)}
-                />
-                <FaTrash
-                  className="action-icon delete"
-                  onClick={() => {
-                    setDeleteTargetId(item.id);
-                    setShowConfirmDialog(true);
-                  }}
-                />
-              </div>
-            </div>
+            {
+              (onEdit || onDelete) && (
+                <div className="card-footer">
+                  <div className="card-actions">
+                    {onEdit && (
+                      <FaEdit
+                        className="action-icon edit"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(item.id);
+                        }}
+                      />
+                    )}
+                    {onDelete && (
+                      <FaTrash
+                        className="action-icon delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteTargetId(item.id);
+                          setShowConfirmDialog(true);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              )
+            }
           </div>
         ))}
       </div>

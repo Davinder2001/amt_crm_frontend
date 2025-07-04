@@ -226,114 +226,117 @@
       }
     }
   }
-}
 
-.profile-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-}
 
-.desktop-only {
-  display: flex;
-  gap: 15px;
-}
-
-.mobile-only {
-  display: none;
-}
-
-.dots-button {
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-size: 27px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  border-radius: $border-radius;
-  width: 150px;
-  padding: 10px 0px;
-}
-
-.dropdown-menu button {
-  display: block;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 0.5rem 1rem;
-  text-align: left;
-  cursor: pointer;
-  font-size: 15px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
-
-  &:active {
-    background-color: rgb(241, 249, 249);
-    border-right: 2px solid var(--primary-color);
+  .profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
   }
 
-  svg {
-    color: $success-color;
+  .desktop-only {
+    display: flex;
+    gap: 15px;
   }
 
-
-}
-
-.dropdown-delete-btn {
-  color: $danger-color;
-
-  svg {
-    color: $danger-color !important;
+  .mobile-only {
+    display: none;
   }
 
-}
+  .dots-button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 27px;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
 
-.dropdown-edit-btn {
-  border-bottom: 1px solid gray;
-  color: green;
-}
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    border-radius: $border-radius;
+    width: 150px;
+    padding: 10px 0px;
+  }
+
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    &:active {
+      background-color: rgb(241, 249, 249);
+      border-right: 2px solid var(--primary-color);
+    }
+
+    svg {
+      color: $success-color;
+    }
 
 
+  }
 
+  .dropdown-delete-btn {
+    color: $danger-color;
 
+    svg {
+      color: $danger-color !important;
+    }
 
+  }
 
+  .dropdown-edit-btn {
+    border-bottom: 1px solid gray;
+    color: green;
+  }
 
-@media (max-width: 668px) {
-  .employee-profile-container {
+  @media (max-width: 668px) {
+    .desktop-only {
+      display: none !important;
+    }
+
+    .mobile-only {
+      display: block;
+    }
+
     .employee-profile-inner-container {
       padding: 10px;
+
+      .profile-header {
+        .profile-avatar {
+          .avatar-initial {
+            width: 60px;
+            height: 60px;
+          }
+        }
+      }
 
       .profile-grid {
         gap: 20px;
       }
 
       .profile-header {
-        gap: 20px;
+        gap: 10px;
         padding: 0px 0px 20px;
-
-        .profile-avatar {
-          .avatar-initial {
-            width: 80px;
-            height: 80px;
-          }
-        }
 
         .profile-header-content {
           .profile-title {
             h1 {
-              font-size: 22px;
+              font-size: 20px;
             }
 
             .profile-meta {
@@ -358,18 +361,12 @@
       }
     }
   }
-}
 
-@media (max-width: 525px) {
-  .desktop-only {
-    display: none;
-  }
 
-  .mobile-only {
-    display: block;
-  }
+  @media (max-width: 525px) {
 
-  .employee-profile-container {
+
+
     .employee-profile-inner-container {
       .profile-header {
         .profile-header-content {
@@ -378,19 +375,12 @@
       }
     }
   }
-}
 
-@media (max-width: 425px) {
-  .employee-profile-container {
+
+
+  @media (max-width: 425px) {
     .employee-profile-inner-container {
-      .profile-header {
-        .profile-avatar {
-          .avatar-initial {
-            width: 70px;
-            height: 70px;
-          }
-        }
-      }
+
 
 
 
@@ -416,4 +406,6 @@
       }
     }
   }
+
+
 }

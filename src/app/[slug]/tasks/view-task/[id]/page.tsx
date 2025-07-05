@@ -91,7 +91,16 @@ function TaskViewPage() {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`Failed to fetch ${url}`);
           const blob = await response.blob();
-          const filename = url.split('/').pop() || `file-${index + 1}.jpg`;
+
+          // Extract file extension from URL or use default
+          let extension = 'jpg';
+          const match = url.match(/\.([a-z0-9]+)(?:[?#]|$)/i);
+          if (match) extension = match[1];
+
+          // Create unique filename using task ID, index, and timestamp
+          const timestamp = new Date().getTime();
+          const filename = `task-${task.id}-${timestamp}-${index}.${extension}`;
+
           folder?.file(filename, blob);
         } catch (err) {
           console.error("Download failed for", url, err);
@@ -103,10 +112,10 @@ function TaskViewPage() {
     try {
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `task-${task.id}-attachments.zip`);
-      toast.success("ZIP file downloaded!");
+      toast.success("All attachments downloaded successfully!");
     } catch (err) {
       console.error("ZIP generation failed", err);
-      toast.error("ZIP creation failed.");
+      toast.error("Failed to create ZIP file.");
     }
   };
 

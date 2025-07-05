@@ -268,7 +268,7 @@
         font-weight: 500;
 
         &:hover {
-          background: darken(#384B70, 5%);
+          background: var(--primary-light);
         }
       }
     }

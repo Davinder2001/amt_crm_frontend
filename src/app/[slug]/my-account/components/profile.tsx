@@ -150,9 +150,6 @@ const Profile = () => {
                 onClick={(e) => handleCardClick(company, e)}
               >
 
-                <div className="switch-badge">
-                  <div className="badge-text">Switch</div>
-                </div>
                 <div className="company-main">
                   <h3>{company.company_name}</h3>
                   <div className="company-id">#{company.company_id}</div>
@@ -161,6 +158,9 @@ const Profile = () => {
                 <div className="company-status">
                   <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
                   <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
+                  <div className="switch-badge">
+                    <div className="badge-text">Switch</div>
+                  </div>
                 </div>
 
                 {company.payment_status === 'pending' ? (

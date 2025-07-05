@@ -417,75 +417,87 @@
 
 // Supplychain Section 
 .supplychain-section {
-    display: grid;
-    position: relative;
-    grid-template-columns: 40% calc(100% - 40% - 50px);
-    grid-column-gap: 50px;
-    margin: 30px 0px;
+  display: grid;
+  position: relative;
+  grid-template-columns: 40% calc(100% - 40% - 50px);
+  grid-column-gap: 50px;
+  margin: 30px 0px;
 }
-  .left-icon-section {
-      border-right: 1px solid #efefef;
-      h1 {
-        font-weight: 800;
-        text-align: left;
-        width: 80%;
-        letter-spacing: 0.3px;
-      }
+
+.left-icon-section {
+  border-right: 1px solid #efefef;
+
+  h1 {
+    font-weight: 800;
+    text-align: left;
+    width: 80%;
+    letter-spacing: 0.3px;
+    color: #2c2b2e;
   }
- .supplychain-info {
-    margin-right: 50px;
-     p {
-      font-size: 16px;
-      font-weight: 400;
-      word-break: break-word;
-      color: #646565;
-      line-height: 26px;
-    }
- }
+}
+
+.supplychain-info {
+  margin-right: 50px;
+
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    word-break: break-word;
+    color: #646565;
+    line-height: 26px;
+  }
+}
 
 //  Why CRM 
 .why-crm-section {
-    background: #f6f8fc;
-    .why-crm-both-section {
-      display: flex;
-      justify-content: space-between;
-      gap: 50px;
+  background: #f6f8fc;
+
+  .why-crm-both-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+  }
+
+  .why-info-section {
+    h1 {
+      color: #2c2b2e;
+      font-size: 35px;
+      font-weight: 600;
     }
-    .why-info-section {
-      h1 {
-        color: #2c2b2e;
-        font-size: 35px;
-        font-weight: 600;
-      }
-      p {
-        font-size: 16px;
-        font-weight: 400;
-        color: #646565;
-        line-height: 26px;
-        margin-top: 20px;
-        width: 70%;
-        letter-spacing: 0.3px;
+
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      color: #646565;
+      line-height: 26px;
+      margin-top: 20px;
+      width: 70%;
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .list-point {
+    display: flex;
+    gap: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 30px 0px;
+    align-items: center;
+
+    .number {
+      font-size: 50px;
+      font-weight: 600;
+      color: $primary-light;
+    }
+
+    .numberinfo {
+      color: $para-color;
+
+      span {
+        color: $primary-color;
+        font-weight: 700;
       }
     }
-    .list-point {
-      display: flex;
-      gap: 20px;
-      border-bottom: 1px solid #e0e0e0;
-      padding: 30px 0px;
-      align-items: center;
-      .number {
-        font-size: 50px;
-        font-weight: 600;
-        color: $primary-light;
-      }
-      .numberinfo {
-        color:  $para-color;
-        span {
-          color: $primary-color;
-          font-weight: 700;
-        }
-      }
-    }
+  }
 }
 
 
@@ -1004,7 +1016,7 @@ nav.feature-card-nav-bar {
     padding: 20px;
     width: 100%;
     border: 1px solid #efefef;
- 
+
 
     .planTitle {
       font-size: 20px;
@@ -1153,15 +1165,17 @@ nav.feature-card-nav-bar {
   }
 }
 
-@media screen and (max-width:1023px ) {
+@media screen and (max-width:1023px) {
   .plans {
     flex-wrap: wrap;
   }
+
   .why-crm-section .why-crm-both-section {
     flex-wrap: wrap;
     padding: 30px 0px;
     gap: 20px;
   }
+
   .why-crm-section .list-point {
     padding: 20px 0px;
   }
@@ -1257,15 +1271,58 @@ nav.feature-card-nav-bar {
 @media (max-width: 767px) {
   .supplychain-section {
     display: block;
+    margin: 10px 0px;
   }
+
   .left-icon-section h1 {
     width: 100%;
     margin: auto;
     text-align: left;
-    margin-bottom: 20px;
-}
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .supplychain-info p {
+    font-size: 14px;
+  }
+
+  .why-crm-section .why-crm-both-section {
+    padding: 10px 0px;
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .list-point {
+      padding: 10px 0px;
+
+      .number {
+        font-size: 20px;
+      }
+
+      .numberinfo {
+        font-size: 13px;
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
   .logo span {
     display: none;
+  }
+
+  .business-section {
+    padding: 10px 0px;
   }
 
   .footer-bottom .policy-links {
@@ -1439,7 +1496,8 @@ nav.feature-card-nav-bar {
   .pricing-container {
     .price-heading {
       margin-bottom: 10px;
-      font-size: 22px;
+      font-size: 18px;
+      font-weight: 600;
     }
 
     .plans {
@@ -1451,12 +1509,12 @@ nav.feature-card-nav-bar {
         padding: 10px;
 
         .planTitle {
-          font-size: 18px;
+          font-size: 16px;
           margin-bottom: 5px;
         }
 
         .planPrice {
-          font-size: 16px;
+          font-size: 15px;
           margin-bottom: 8px;
         }
 
@@ -1465,6 +1523,7 @@ nav.feature-card-nav-bar {
 
           li {
             margin-bottom: 5px;
+            font-size: 14px;
           }
         }
 
@@ -1495,7 +1554,8 @@ nav.feature-card-nav-bar {
       gap: 10px;
 
       h1 {
-        font-size: 22px;
+        font-size: 18px;
+        font-weight: 600;
       }
 
       .hero-actions {
@@ -1518,7 +1578,7 @@ nav.feature-card-nav-bar {
 
     span {
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 
@@ -1529,7 +1589,7 @@ nav.feature-card-nav-bar {
 
     .feature-card {
       h3 {
-        font-size: 18px;
+        font-size: 15px;
       }
     }
   }
@@ -1538,7 +1598,7 @@ nav.feature-card-nav-bar {
 
     h3,
     h4 {
-      font-size: 18px;
+      font-size: 15px;
     }
 
     h4 {
@@ -1553,7 +1613,8 @@ nav.feature-card-nav-bar {
       padding: 10px 0px;
 
       h2 {
-        font-size: 22px;
+        font-size: 18px;
+        font-weight: 600;
         margin-bottom: 10px;
       }
 
@@ -1655,8 +1716,9 @@ nav.feature-card-nav-bar {
     top: 10px;
     left: 10px;
   }
+
   .why-crm-section .list-point .number {
-      font-size: 30px;
+    font-size: 30px;
   }
 }
 

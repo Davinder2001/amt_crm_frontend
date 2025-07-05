@@ -295,9 +295,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div>
             )}
             <div className="toolbar">
-                <div className="left-group">
+               
                     {filters && filters.length > 0 && (
-                        <>
+                        <div className="left-group">
                             <div className="dropdown dropdown-left hover-group">
                                 <button className="toolbar-btn">
                                     <FiFilter />
@@ -349,9 +349,9 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                             <div className='desktop-render-table-searchbar filter-search-table'>
                                 {renderActiveFilterInputs()}
                             </div>
-                        </>
+                        </div>
                     )}
-                </div>
+                
 
                 <div className="right-group">
                     {columns && columns.length > 0 && (

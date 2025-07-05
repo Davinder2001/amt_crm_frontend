@@ -1039,6 +1039,11 @@
         }
     }
 
+    .no-bank-acc-found {
+        margin-top: 10px;
+        color: $danger-color;
+    }
+
     /* Cart Items List */
     .cart-items-list {
         display: flex;
@@ -1734,6 +1739,85 @@
 }
 
 @media (max-width: 768px) {
+    .checkout-panel {
+        .section-title {
+            font-size: 12px;
+        }
+
+        .discount-input-container label {
+            margin-bottom: 10px;
+        }
+
+        .inner-tab-content .client-form {
+            padding: 0;
+
+            .form-group {
+                gap: 5px;
+                margin-bottom: 10px;
+
+                label {
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: var(--primary-color);
+                }
+
+                input {
+                    height: 32px;
+                }
+            }
+        }
+
+        .no-bank-acc-found {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .custom-radio,
+        .custom-checkbox {
+            font-size: 12px;
+            padding-left: 20px;
+
+            .radiomark,
+            .checkmark {
+                width: 14px;
+                height: 14px;
+            }
+
+            input:checked~.radiomark,
+            input:checked~.checkmark {
+                box-shadow: inset 0 0 0 3px $white;
+            }
+        }
+
+        .credit-options {
+            label {
+                font-size: 12px;
+            }
+        }
+
+        .bank-account-selection {
+            label {
+                font-size: 12px;
+            }
+
+            select {
+                margin-top: 5px;
+            }
+        }
+
+
+        .toggle-total-outer {
+            .sectionToggle {
+                font-size: 14px;
+                gap: 2px;
+            }
+
+            .total {
+                font-size: 14px;
+            }
+        }
+    }
+
     .invoice-items-wrapper {
 
         .searchbar-desktop {

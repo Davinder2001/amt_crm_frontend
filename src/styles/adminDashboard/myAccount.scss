@@ -175,6 +175,7 @@
     position: relative;
     margin-bottom: -40;
     z-index: 0;
+    border-radius: $border-radius;
 
     .header-content {
       max-width: 1400px;
@@ -546,29 +547,187 @@
 
 @media (max-width: 768px) {
   .radical-profile {
+    margin-top: 10px;
+
     .radical-header {
       clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
-      padding: 12px 10px 50px 10px;
+      padding: 8px 10px 30px 10px;
+      margin-bottom: -50px;
+
+      .header-content {
+        white-space: nowrap;
+        gap: 8px;
+
+        h1 {
+          .name-highlight {
+            font-size: 20px;
+
+            span.name-highlight {
+              width: 100%;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+          }
+
+          .id-badge {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        .action-btn {
+          font-size: 12px;
+          padding: 4px 8px;
+        }
+      }
     }
 
     .radical-layout {
       padding: 0 10px;
       grid-template-columns: 1fr;
+      gap: 15px;
     }
 
-    .company-item {
+    .panel {
+      .panel-header {
+        padding: 8px 12px;
+
+        h2 {
+          font-size: 16px;
+        }
+
+        .add-btn {
+          font-size: 12px;
+          padding: 4px 8px;
+        }
+      }
+    }
+
+    .company-stack .company-item .company-status .switch-badge {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+      position: relative;
+      top: 0;
+      left: 0;
+      transform: none;
+    }
+
+    .personal-panel {
+      margin-top: 30px;
+
+      .info-stack {
+        .info-line {
+          padding: 8px 12px;
+          font-size: 13px;
+        }
+      }
+
+      .meta-grid {
+        padding: 0 1rem 1rem;
+        font-size: 12px;
+        gap: 0.8rem;
+
+        .meta-item {
+          div:first-child {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    .companies-panel {
+      .company-item {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.8rem !important;
+        padding: 8px;
+
+        .company-main {
+          h3 {
+            font-size: 14px;
+            margin-bottom: 0.2rem;
+          }
+
+          .company-id {
+            font-size: 12px;
+          }
+        }
+
+        .company-status {
+          width: 100%;
+          justify-content: space-between;
+
+          .status-tag {
+            font-size: 12px;
+            padding: 0.1rem 0.5rem;
+          }
+        }
+
+        .view-btn {
+          align-self: flex-end;
+          font-size: 12px;
+          padding: 4px 8px;
+        }
+      }
+    }
+  }
+
+  .account-packages-header {
+    max-width: 95%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 15px;
+
+    .category-filter {
       flex-direction: column;
-      align-items: flex-start !important;
-      gap: 0.8rem !important;
+      align-items: flex-start;
+      width: 100%;
+      gap: 8px;
 
-      .company-status {
+      .filter-group {
         width: 100%;
-        justify-content: space-between;
-      }
+        gap: 8px;
 
-      .view-btn {
-        align-self: flex-end;
+        label {
+          font-size: 13px;
+          min-width: 80px;
+        }
+
+        select {
+          font-size: 13px;
+          padding: 6px;
+          width: 100%;
+        }
       }
+    }
+  }
+
+  .no-packages-message {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 13px;
+    }
+
+    .empty-box-icon {
+      font-size: 3rem;
+    }
+
+    .wave-hand {
+      font-size: 1.5rem;
     }
   }
 }

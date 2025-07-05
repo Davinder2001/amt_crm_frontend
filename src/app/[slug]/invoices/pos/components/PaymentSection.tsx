@@ -282,8 +282,8 @@ export default function PaymentSection({
                             )}
 
                             {paymentMethod === 'online' && (!BankAccountList || BankAccountList.length === 0) && (
-                                <div style={{ color: 'red', marginTop: '10px' }}>
-                                    No bank accounts available. Please add <Link href={`/${companySlug}/settings#bank-accounts`}>bank accounts in</Link> settings.
+                                <div className="no-bank-acc-found">
+                                    No bank accounts available. Please <Link href={`/${companySlug}/settings#bank-accounts`}>add bank accounts </Link> in settings.
                                 </div>
                             )}
 

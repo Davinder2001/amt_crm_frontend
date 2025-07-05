@@ -47,6 +47,11 @@
     border-radius: 5px 5px 0px 0px;
     position: relative;
 
+    .right-group {
+        flex: 1;
+        justify-content: flex-end;
+    }
+
     // Groups
     .left-group,
     .right-group {
@@ -1087,11 +1092,11 @@ table {
     .toolbar {
         justify-content: flex-start;
         gap: 8px;
-        padding: 10px;
+        padding: 10px 10px 10px 2px;
 
         .right-group {
             gap: 10px;
-
+            justify-content: flex-start;
         }
 
         .dropdown-right .dropdown-content {

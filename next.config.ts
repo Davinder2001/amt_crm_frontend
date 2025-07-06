@@ -9,7 +9,6 @@ const withPWAFunc = withPWA({
 
 const nextConfig = {
   reactStrictMode: true,
-  devIndicators: false as const,
   
   // Enable standalone output for Docker
   output: 'standalone',

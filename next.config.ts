@@ -11,7 +11,7 @@ const nextConfig = {
   reactStrictMode: true,
   
   // Enable standalone output for Docker
-  output: 'standalone',
+  output: 'standalone' as const,
   
   // Experimental features for better performance
   experimental: {

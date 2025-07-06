@@ -1,9 +1,9 @@
 'use client';
 import React from 'react'
-import ViewAttendance from './components/ViewAttendance'
 import Link from 'next/link'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useCompany } from '@/utils/Company'
+import ViewAttendance from './components/ViewAttendance'
 
 const Page = () => {
   const { companySlug } = useCompany();

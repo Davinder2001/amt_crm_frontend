@@ -16,6 +16,7 @@
     "deploy:aws": "./aws/deploy.sh",
     "health:check": "curl -f http://localhost:3000/api/health"
   },
+  
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",

@@ -6,7 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "test": "echo \"No tests specified\" && exit 0",
+    "docker:build": "docker build -t amt-crm-frontend .",
+    "docker:run": "docker run -p 3000:3000 amt-crm-frontend",
+    "docker:compose": "docker-compose up --build",
+    "docker:compose:prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "deploy:aws": "./aws/deploy.sh",
+    "health:check": "curl -f http://localhost:3000/api/health"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -53,5 +61,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
-  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
 }

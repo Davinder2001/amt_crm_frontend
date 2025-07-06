@@ -1,0 +1,268 @@
+name: CI/CD Pipeline - AMT CRM Frontend
+
+on:
+  push:
+    branches: [ production, main ]
+  pull_request:
+    branches: [ production, main ]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: amt-crm-frontend
+  ECS_CLUSTER: amt-crm-cluster
+  ECS_SERVICE: amt-crm-frontend-service
+  ECS_TASK_DEFINITION: amt-crm-frontend-task
+
+jobs:
+  # Test and Build Job
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run type checking
+        run: npx tsc --noEmit
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: .next/
+          retention-days: 1
+
+  # Security Scan Job
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: test-and-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+  # Docker Build and Deploy Job (Production)
+  docker-build-deploy:
+    runs-on: ubuntu-latest
+    needs: [test-and-build, security-scan]
+    if: github.ref == 'refs/heads/production'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create environment files from secrets
+        run: |
+          # Create env file from GitHub secrets
+          cat > env << EOF
+          # Backend API Configuration
+          NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          EOF
+          
+          # Create env.docker file from GitHub secrets
+          cat > env.docker << EOF
+          # Backend API Configuration
+          NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          EOF
+          
+          echo "✅ Environment files created from GitHub secrets"
+
+      - name: Create deployment package
+        run: |
+          # Create a clean deployment directory
+          mkdir -p deployment
+          
+          # Copy only necessary files for production
+          cp -r src deployment/
+          cp -r public deployment/
+          cp -r infra deployment/
+          cp -r docker deployment/
+          
+          # Copy individual files
+          cp package.json deployment/
+          cp package-lock.json deployment/
+          cp Dockerfile deployment/
+          cp docker-compose.yml deployment/
+          cp docker-compose.prod.yml deployment/
+          cp next.config.ts deployment/
+          cp tsconfig.json deployment/
+          cp .dockerignore deployment/
+          cp README-PRODUCTION.md deployment/
+          
+          # Copy environment files
+          cp env deployment/
+          cp env.docker deployment/
+          
+          # Create tar.gz for deployment
+          tar -czf deployment.tar.gz -C deployment .
+
+      - name: Copy files to server via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT || 22 }}
+          source: "deployment.tar.gz"
+          target: "/srv/amt-crm-frontend"
+          overwrite: true
+
+      - name: Deploy with SSH and Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT || 22 }}
+          script: |
+            cd /srv/amt-crm-frontend
+            
+            # Extract deployment package
+            tar -xzf deployment.tar.gz
+            
+            # Stop existing containers gracefully
+            docker compose -f docker-compose.prod.yml down --remove-orphans
+            
+            # Build and start containers
+            docker compose -f docker-compose.prod.yml up --build -d
+            
+            # Wait for application to be ready
+            echo "Waiting for application to be ready..."
+            sleep 30
+            
+            # Check if frontend container is running
+            if ! docker compose -f docker-compose.prod.yml ps frontend | grep -q "Up"; then
+              echo "❌ Frontend container is not running. Checking logs..."
+              docker compose -f docker-compose.prod.yml logs frontend
+              exit 1
+            fi
+            
+            # Health check
+            for i in {1..10}; do
+              if curl -f http://localhost/api/health; then
+                echo "✅ Application is healthy"
+                break
+              fi
+              echo "Attempt $i: Application not ready yet, waiting..."
+              sleep 30
+            done
+            
+            # Clean up deployment package
+            rm -f deployment.tar.gz
+            
+            echo "Deployment completed successfully!"
+
+  # AWS ECS Deployment Job (Alternative)
+  aws-ecs-deploy:
+    runs-on: ubuntu-latest
+    needs: [test-and-build, security-scan]
+    if: github.ref == 'refs/heads/production' && false  # Disabled by default
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} \
+          --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v2
+        with:
+          task-definition: task-definition.json
+          container-name: amt-crm-frontend
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+  # Health Check and Notification Job
+  health-check:
+    runs-on: ubuntu-latest
+    needs: [docker-build-deploy]
+    if: github.ref == 'refs/heads/production'
+    steps:
+      - name: Health Check
+        run: |
+          echo "🏥 Performing health check..."
+          sleep 60  # Wait for deployment to stabilize
+          
+          # Check frontend health
+          if curl -f https://${{ secrets.FRONTEND_DOMAIN }}/api/health; then
+            echo "✅ Frontend is healthy"
+          else
+            echo "❌ Frontend health check failed"
+            exit 1
+          fi
+          
+          # Check backend connectivity
+          if curl -f ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}/health; then
+            echo "✅ Backend is accessible"
+          else
+            echo "⚠️  Warning: Backend is not accessible"
+          fi
+
+      - name: Notify Slack (Optional)
+        if: secrets.SLACK_WEBHOOK_URL
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          channel: '#deployments'
+          text: 'AMT CRM Frontend deployment ${{ job.status }}' 

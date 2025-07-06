@@ -21,7 +21,7 @@ const nextConfig = {
   },
 
   images: {
-    domains: ['localhost', 'amt.sparkweb.sbs'],
+    domains: ['localhost', 'himmanav.com', 'api.himmanav.com'],
     remotePatterns: [
       {
         protocol: 'http',

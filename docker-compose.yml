@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  # Nginx Reverse Proxy
+  # Nginx Reverse Proxy with SSL
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: nginx-proxy
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -14,8 +14,10 @@ services:
       - ./infra/certs:/etc/nginx/certs:ro
       - ./infra/vhost.d:/etc/nginx/vhost.d
       - ./infra/html:/usr/share/nginx/html
+      - ./infra/nginx/default.conf:/etc/nginx/vhost.d/himmanav.com
     environment:
       - ENABLE_IPV6=true
+      - DEFAULT_HOST=himmanav.com
     networks:
       - frontend
     healthcheck:
@@ -23,12 +25,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 10s
 
   # Let's Encrypt SSL
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: nginx-proxy-le
-    restart: always
+    restart: unless-stopped
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
       - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL:-himmanav11@gmail.com}

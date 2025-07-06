@@ -75,5 +75,5 @@ infra/certs
 infra/vhost.d
 infra/html
 
-# Deployment scripts
-deploy.sh 
+# Deployment scripts (keep deploy.sh for production)
+# deploy.sh 

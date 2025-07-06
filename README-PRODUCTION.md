@@ -62,22 +62,20 @@ aws ssm put-parameter \
 
 ### GitHub Secrets Required
 
-Add the following secrets to your GitHub repository:
+**Required Secrets (for deployment):**
+- `PROD_HOST`: Production server IP
+- `PROD_USER`: Production server username  
+- `PROD_SSH_KEY`: SSH private key for server access
+- `PROD_PORT`: SSH port (default: 22)
+- `NEXT_PUBLIC_API_BASE_URL`: Backend API URL
 
-- `AWS_ACCESS_KEY_ID`: AWS access key with ECS/ECR permissions
-- `AWS_SECRET_ACCESS_KEY`: AWS secret access key
-- `DOMAIN_NAME`: Your application domain
-- `SNYK_TOKEN`: Snyk security scan token (optional)
-- `SLACK_WEBHOOK_URL`: Slack webhook for notifications (optional)
+
 
 ### Pipeline Stages
 
 1. **Test & Build**: Linting, type checking, and build
-2. **Security Scan**: npm audit and Snyk vulnerability scan
-3. **Docker Build**: Build and push Docker image to ECR
-4. **Deploy**: Deploy to AWS ECS with zero downtime
-5. **Health Check**: Verify deployment success
-6. **Notify**: Send deployment status to Slack
+2. **Docker Deploy**: Deploy to production server via SSH
+3. **Health Check**: Verify deployment success
 
 ## 🐳 Docker Configuration
 
@@ -88,12 +86,12 @@ Add the following secrets to your GitHub repository:
 docker-compose up --build
 
 # Production build
-docker-compose -f docker-compose.prod.yml up --build
+docker-compose up --build
 ```
 
 ### Docker Images
 
-- **Base**: Node.js 18 Alpine
+- **Base**: Node.js 22 Alpine
 - **Builder**: Multi-stage build for optimized production image
 - **Runtime**: Minimal production image with security best practices
 
@@ -180,21 +178,6 @@ curl -f https://your-domain.com/api/health
 docker logs <container-id>
 ```
 
-### Emergency Rollback
-
-```bash
-# Manual rollback to previous version
-aws ecs update-service \
-  --cluster production-amt-crm-cluster \
-  --service production-amt-crm-frontend-service \
-  --task-definition production-amt-crm-frontend-task:1
-```
-
-Or use the GitHub Actions rollback workflow:
-1. Go to Actions tab
-2. Select "Emergency Rollback"
-3. Enter the commit SHA to rollback to
-4. Run the workflow
 
 ## 🔒 Security
 

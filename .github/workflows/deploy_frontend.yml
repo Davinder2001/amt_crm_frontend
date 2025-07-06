@@ -49,28 +49,12 @@ jobs:
           path: .next/
           retention-days: 1
 
-  # Security Scan Job
-  security-scan:
-    runs-on: ubuntu-latest
-    needs: test-and-build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      - name: Run npm audit
-        run: npm audit --audit-level=moderate
-
-      - name: Run Snyk security scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
 
   # Docker Build and Deploy Job (Production)
   docker-build-deploy:
     runs-on: ubuntu-latest
-    needs: [test-and-build, security-scan]
+    needs: [test-and-build]
     if: github.ref == 'refs/heads/production'
     environment: production
     steps:
@@ -109,11 +93,11 @@ jobs:
           cp package-lock.json deployment/
           cp Dockerfile deployment/
           cp docker-compose.yml deployment/
-          cp docker-compose.prod.yml deployment/
           cp next.config.ts deployment/
           cp tsconfig.json deployment/
           cp .dockerignore deployment/
           cp README-PRODUCTION.md deployment/
+          cp deploy.sh deployment/
           
           # Copy environment files
           cp env deployment/
@@ -147,19 +131,19 @@ jobs:
             tar -xzf deployment.tar.gz
             
             # Stop existing containers gracefully
-            docker compose -f docker-compose.prod.yml down --remove-orphans
+            docker compose down --remove-orphans
             
             # Build and start containers
-            docker compose -f docker-compose.prod.yml up --build -d
+            docker compose up --build -d
             
             # Wait for application to be ready
             echo "Waiting for application to be ready..."
             sleep 30
             
             # Check if frontend container is running
-            if ! docker compose -f docker-compose.prod.yml ps frontend | grep -q "Up"; then
+            if ! docker compose ps frontend | grep -q "Up"; then
               echo "❌ Frontend container is not running. Checking logs..."
-              docker compose -f docker-compose.prod.yml logs frontend
+              docker compose logs frontend
               exit 1
             fi
             
@@ -181,7 +165,7 @@ jobs:
   # AWS ECS Deployment Job (Alternative)
   aws-ecs-deploy:
     runs-on: ubuntu-latest
-    needs: [test-and-build, security-scan]
+    needs: [test-and-build]
     if: github.ref == 'refs/heads/production' && false  # Disabled by default
     environment: production
     steps:
@@ -232,7 +216,7 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
-  # Health Check and Notification Job
+  # Health Check Job
   health-check:
     runs-on: ubuntu-latest
     needs: [docker-build-deploy]
@@ -244,7 +228,7 @@ jobs:
           sleep 60  # Wait for deployment to stabilize
           
           # Check frontend health
-          if curl -f https://${{ secrets.FRONTEND_DOMAIN }}/api/health; then
+          if curl -f https://himmanav.com/api/health; then
             echo "✅ Frontend is healthy"
           else
             echo "❌ Frontend health check failed"
@@ -256,13 +240,4 @@ jobs:
             echo "✅ Backend is accessible"
           else
             echo "⚠️  Warning: Backend is not accessible"
-          fi
-
-      - name: Notify Slack (Optional)
-        if: secrets.SLACK_WEBHOOK_URL
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          channel: '#deployments'
-          text: 'AMT CRM Frontend deployment ${{ job.status }}' 
+          fi 

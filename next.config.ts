@@ -1,4 +1,5 @@
 import withPWA from 'next-pwa';
+import path from 'path';
 
 const withPWAFunc = withPWA({
   dest: 'public',
@@ -67,6 +68,13 @@ const nextConfig = {
   
   // Power by header
   poweredByHeader: false,
+
+  webpack: (config: any) => {
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    return config;
+  },
 };
 
 export default withPWAFunc(nextConfig);

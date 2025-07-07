@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import withPWA from 'next-pwa';
 import path from 'path';
 
@@ -5,10 +6,8 @@ const withPWAFunc = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  // Optimize PWA for faster builds
-  buildExcludes: [/middleware-manifest\.json$/],
-  maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+  disable: process.env.NODE_ENV === 'development', // process.env is available in Next.js config
+  // maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Not a valid PWAOptions property
 });
 
 const nextConfig = {
@@ -21,23 +20,13 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
-    // Add build optimizations
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
 
-  // Optimize build performance
-  swcMinify: true,
-  
+  // Remove swcMinify (no longer needed)
+
   // Reduce bundle size
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: process.env.NODE_ENV === 'production', // process.env is available in Next.js config
   },
 
   images: {
@@ -57,7 +46,7 @@ const nextConfig = {
         protocol: 'http',
         hostname: '**',
       },
-    ] as import('next/dist/shared/lib/image-config').RemotePattern[],
+    ],
   },
   
   // Security headers
@@ -92,6 +81,7 @@ const nextConfig = {
   webpack: (config: any, { dev, isServer }: any) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
+    // __dirname is available in Node.js context for webpack config
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
     
     // Optimize webpack for production builds

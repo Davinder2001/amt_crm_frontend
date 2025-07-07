@@ -17,24 +17,18 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*",
-      ],
-      "@types/*": [
-        "./src/types/*"
-      ],
-      "@/slices/*": [
-        "./src/slices/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ]
+      "@/*": ["./src/*"],
+      "@types/*": ["./src/types/*"],
+      "@/slices/*": ["./src/slices/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/slices": ["./src/slices/index"]
     }
   },
   "include": [
@@ -43,8 +37,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts",
-    "types"
-, "src/slices/company/companyApi.ts"  ],
+    "types",
+    "src/slices/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

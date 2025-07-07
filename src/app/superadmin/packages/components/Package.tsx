@@ -728,9 +728,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             items_number: rest.items_number,
                             daily_tasks_number: rest.daily_tasks_number,
                             invoices_number: rest.invoices_number,
-                            task: rest?.Task || false,
-                            chat: rest?.Chat || false,
-                            hr: rest?.Hr     || false,
+                            task: rest.Task || false,  // Note the capitalized 'Task'
+                            chat: rest.Chat || false,  // Note the capitalized 'Chat'
+                            hr: rest.Hr || false,     // Note the capitalized 'Hr'
                         };
                     }
                 });
@@ -811,45 +811,65 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const formDataToSubmit = new FormData();
 
+        // Prepare the payload data
         const payloadData = {
             ...formData,
-            user_id: formData.package_type === 'specific' ? formData.user_id : null
-        };
-
-        Object.entries(payloadData).forEach(([key, value]) => {
-            if (key === 'business_categories') {
-                (value as BusinessCategory[]).forEach(category => {
-                    formDataToSubmit.append('business_category_ids[]', category.id.toString());
-                });
-            } else if (typeof value === 'object' && value !== null) {
-                Object.entries(value).forEach(([subKey, subValue]) => {
-                    formDataToSubmit.append(`${key}[${subKey}]`, String(subValue));
-                });
-            } else if (value !== null && value !== undefined) {
-                formDataToSubmit.append(key, value.toString());
-            } else {
-                formDataToSubmit.append(key, '');
+            user_id: formData.package_type === 'specific' ? formData.user_id : null,
+            // Ensure all boolean fields are properly set
+            monthly_limits: {
+                ...formData.monthly_limits,
+                task: Boolean(formData.monthly_limits.task),
+                chat: Boolean(formData.monthly_limits.chat),
+                hr: Boolean(formData.monthly_limits.hr),
+            },
+            annual_limits: {
+                ...formData.annual_limits,
+                task: Boolean(formData.annual_limits.task),
+                chat: Boolean(formData.annual_limits.chat),
+                hr: Boolean(formData.annual_limits.hr),
+            },
+            three_years_limits: {
+                ...formData.three_years_limits,
+                task: Boolean(formData.three_years_limits.task),
+                chat: Boolean(formData.three_years_limits.chat),
+                hr: Boolean(formData.three_years_limits.hr),
             }
-        });
+        };
 
         try {
             if (mode === 'edit' && packageId) {
-                const { business_categories, ...rest } = payloadData;
                 await updatePackage({
                     id: packageId,
                     fomdata: {
-                        ...rest,
-                        business_categories: business_categories.map(c => ({
-                            ...c,
-                            created_at: '', // or a valid date string if required
-                            updated_at: '', // or a valid date string if required
-                        })),
+                        ...payloadData,
+                        business_categories: payloadData.business_categories,
                     }
                 }).unwrap();
                 router.back();
             } else {
+                // For create, use FormData but ensure boolean values are properly handled
+                const formDataToSubmit = new FormData();
+
+                Object.entries(payloadData).forEach(([key, value]) => {
+                    if (key === 'business_categories') {
+                        (value as BusinessCategory[]).forEach(category => {
+                            formDataToSubmit.append('business_category_ids[]', category.id.toString());
+                        });
+                    } else if (typeof value === 'object' && value !== null) {
+                        Object.entries(value).forEach(([subKey, subValue]) => {
+                            // Convert boolean values to '1' or '0' for FormData
+                            if (typeof subValue === 'boolean') {
+                                formDataToSubmit.append(`${key}[${subKey}]`, subValue ? '1' : '0');
+                            } else {
+                                formDataToSubmit.append(`${key}[${subKey}]`, String(subValue));
+                            }
+                        });
+                    } else if (value !== null && value !== undefined) {
+                        formDataToSubmit.append(key, value.toString());
+                    }
+                });
+
                 await createPackage(formDataToSubmit).unwrap();
                 alert('Package created successfully!');
                 if (mode === 'add') {

@@ -137,18 +137,16 @@ interface PlanLimits {
   hr: boolean;
 }
 
-type Limit = {
-  id: number;
-  variant_type: string;
+interface Limit {
+  variant_type: 'monthly' | 'annual' | 'three_years';
   employee_numbers: number;
   items_number: number;
   daily_tasks_number: number;
   invoices_number: number;
-  Limit: boolean;
-  Task: boolean;
-  Chat: boolean;
-  Hr: boolean;
-};
+  Task: boolean;  // Capitalized
+  Chat: boolean;  // Capitalized
+  Hr: boolean;    // Capitalized
+}
 
 interface PackagePlan {
   name: string;

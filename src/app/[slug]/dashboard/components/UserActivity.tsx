@@ -54,9 +54,9 @@ const UserActivity = () => {
                             tickFormatter={(value) => `${value / 1000}k`}
                         />
                         <Tooltip
-                            formatter={(value, name, props) => [
+                            formatter={(value: number, name: string) => [
                                 value.toLocaleString(),
-                                props.dataKey === 'online' ? 'Online' : 'Offline'
+                                name === 'online' ? 'Online' : 'Offline'
                             ]}
                             labelFormatter={(label) => label}
                             contentStyle={{

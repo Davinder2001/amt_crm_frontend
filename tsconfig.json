@@ -24,10 +24,16 @@
     ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "./src/*",
       ],
       "@types/*": [
         "./src/types/*"
+      ],
+      "@/slices/*": [
+        "./src/slices/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
       ]
     }
   },

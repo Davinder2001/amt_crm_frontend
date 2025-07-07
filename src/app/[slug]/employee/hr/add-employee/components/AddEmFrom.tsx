@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useCreateEmployeMutation } from "@/slices/employe/employe";
-import { useGetRolesQuery } from "@/slices/roles/rolesApi";
+import { useCreateEmployeMutation } from "@/slices";
+import { useGetRolesQuery } from "@/slices";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";

@@ -4,10 +4,8 @@ import React, { useState, useEffect } from "react";
 import {
     useCreateEmployeMutation,
     useUpdateEmployeMutation,
-    useFetchEmployeByIdQuery
-} from "@/slices/employe/employe";
-import { useGetRolesQuery } from "@/slices/roles/rolesApi";
-import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
+    useFetchEmployeByIdQuery, useGetRolesQuery, useFetchCompanyShiftsQuery
+} from "@/slices";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";

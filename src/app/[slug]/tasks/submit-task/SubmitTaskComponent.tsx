@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices/tasks/taskApi';
+import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaChevronDown, FaPlus } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
-import { useCreateTaxMutation } from '@/slices/company/companyApi';
+import { useCreateTaxMutation } from '@/slices';
 import { toast } from 'react-toastify';
 import { Box, TextField } from '@mui/material';
 

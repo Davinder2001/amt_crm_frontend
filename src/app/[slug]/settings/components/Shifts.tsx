@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  useCreateShiftMutation,
-  useDeleteShiftMutation,
-  useUpdateShiftMutation,
-  useFetchCompanyShiftsQuery,
-} from '@/slices/company/companyApi';
+import { useCreateShiftMutation, useDeleteShiftMutation, useUpdateShiftMutation, useFetchCompanyShiftsQuery, } from '@/slices';
 import { toast } from 'react-toastify';
 import {
   Box,
@@ -14,9 +9,9 @@ import {
 } from '@mui/material';
 import { FaPlus, FaTasks, FaTrash, FaEdit } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const Shifts: React.FC = () => {
   const { data, refetch } = useFetchCompanyShiftsQuery();

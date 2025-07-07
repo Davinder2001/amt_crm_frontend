@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
-} from "@/slices/employe/employe";
-import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
+} from "@/slices";
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
 import { FaEnvelope } from "react-icons/fa";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import ResponsiveTable from "@/components/common/ResponsiveTable";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
@@ -44,25 +44,19 @@ const SalaryView: React.FC = () => {
     router.push(`/${employee.company_slug}/hr/employee-salary/pay-slip/${employee.id}`);
   };
 
-  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
   if (error) {
-      return (
-        <EmptyState
-          icon="alert"
-          title="Failed to fetching employees."
-          message="Something went wrong while fetching employees."
-        />
-      );
-    }
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching employees."
+        message="Something went wrong while fetching employees."
+      />
+    );
+  }
   if (!employeesData?.data?.length) return <p>No employees found.</p>;
 
   const columns = [
-    {
-      label: "Sr. No",
-      render: (_: Employee, index: number) => index + 1,
-    },
     { label: "Name", key: "name" as keyof Employee },
     { label: "Email", key: "email" as keyof Employee },
     { label: "Contact Number", key: "number" as keyof Employee },
@@ -71,18 +65,11 @@ const SalaryView: React.FC = () => {
       render: (employee: Employee) => employee.employee_salary?.current_salary ?? "N/A",
     },
     {
-      label: "Roles",
-      render: (employee: Employee) =>
-        employee.roles?.length
-          ? employee.roles.map((role) => capitalize(role.name)).join(", ")
-          : "N/A",
-    },
-    {
       label: "Salary Slip",
       render: (employee: Employee) => (
-        <span onClick={() => viewSlip(employee)} className="salary-slip">
-          <FaEnvelope /> <span>Slip</span>
-        </span>
+        <button onClick={() => viewSlip(employee)} className="salary-slip" style={{background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1}}>
+          <FaEnvelope /> Slip
+        </button>
       ),
     },
     {
@@ -108,7 +95,57 @@ const SalaryView: React.FC = () => {
       data={employeesData.data}
       columns={columns}
       onDelete={(id) => handleDelete(id)}
-      onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)} // not much used here
+      onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+      cardView={(employee: Employee) => (
+        <div className="employee-card">
+          <div className="card-row">
+            <h5>{employee.name}</h5>
+            <p>{employee.number}</p>
+          </div>
+          <div className="card-row">
+            <p>{employee.email}</p>
+            <p>Status: {employee.user_status}</p>
+          </div>
+          <div className="card-row">
+            <button
+              onClick={() => viewSlip(employee)}
+              className="btn-slip"
+              style={{
+                backgroundColor: 'var(--primary-color)',
+                color: 'white',
+                padding: '5px 10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+                borderRadius: 5,
+                border: 'none',
+                fontSize: 12
+              }}
+            >
+              <FaEnvelope /> View Slip
+            </button>
+            <button
+              onClick={() => router.push(`/${employee.company_slug}/hr/employee-salary/monthly/${employee.id}`)}
+              className="btn-monthly"
+              style={{
+                backgroundColor: 'var(--primary-color)',
+                color: 'white',
+                padding: '5px 10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+                borderRadius: 5,
+                border: 'none',
+                fontSize: 12
+              }}
+            >
+              Monthly Salary
+            </button>
+          </div>
+        </div>
+      )}
     />
   );
 };

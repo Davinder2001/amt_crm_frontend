@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useFetchCategoriesAndItemsQuery } from '@/slices/store/storeApi';
+import { useFetchCategoriesAndItemsQuery } from '@/slices';
 import CheckoutPanel from './CheckoutPanel';
 import CategoriesMenu from './CategoriesMenu';
 import InvoiceItems from './InvoiceItems';

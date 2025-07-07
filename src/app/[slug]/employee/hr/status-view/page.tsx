@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import UserList from './components/userList'
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi'
+import { useFetchSelectedCompanyQuery } from '@/slices'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaArrowLeft } from 'react-icons/fa';
 

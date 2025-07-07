@@ -5,7 +5,7 @@ import {
     useAddCompanyAccountsMutation,
     useUpdateCompanyAccountMutation,
     useDeleteCompanyAccountMutation,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import BankAccountForm from './BankAccountForm';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';

@@ -2,7 +2,6 @@
 'use client';
 
 import React from 'react';
-import { FaWhatsapp } from 'react-icons/fa';
 
 type ActionsSectionProps = {
     validateFields: () => boolean;
@@ -10,8 +9,8 @@ type ActionsSectionProps = {
     isSaving: boolean;
     handlePrint: () => void;
     isPrinting: boolean;
-    handleSendWhatsapp: () => void;
-    isSendWhatsapp: boolean;
+    handleShareInvoice: () => void;
+    isSharing: boolean;
 };
 
 export default function ActionsSection({
@@ -20,8 +19,8 @@ export default function ActionsSection({
     isSaving,
     handlePrint,
     isPrinting,
-    handleSendWhatsapp,
-    isSendWhatsapp
+    handleShareInvoice,
+    isSharing
 }: ActionsSectionProps) {
     return (
         <div className="actions">
@@ -51,11 +50,11 @@ export default function ActionsSection({
                 className="btn"
                 onClick={() => {
                     if (!validateFields()) return;
-                    handleSendWhatsapp();
+                    handleShareInvoice();
                 }}
-                disabled={isSendWhatsapp}
+                disabled={isSharing}
             >
-                {isSendWhatsapp ? 'Sending...' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>Save & <FaWhatsapp /></span>}
+                {isSharing ? 'Sending...' : 'Save & Share'}
             </button>
         </div>
     );

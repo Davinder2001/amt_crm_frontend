@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
+import { useApplyForLeaveMutation } from '@/slices';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';

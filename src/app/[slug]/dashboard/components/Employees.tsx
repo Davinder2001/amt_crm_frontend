@@ -1,5 +1,5 @@
 'use client';
-import { useFetchEmployesQuery } from '@/slices/employe/employe';
+import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
 import { useCompany } from '@/utils/Company';
 import { useRouter } from 'next/navigation';
 import React from 'react';

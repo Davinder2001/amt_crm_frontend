@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaCog } from "react-icons/fa";
-import { useLogoutMutation } from "@/slices/auth/authApi";
+import { useLogoutMutation } from "@/slices";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";

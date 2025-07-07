@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices/tasks/taskApi';
+import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { FaEdit, FaPlus, FaTrash, FaTasks } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';

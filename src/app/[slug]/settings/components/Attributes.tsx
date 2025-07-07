@@ -7,9 +7,8 @@ import {
     useDeleteAttributeMutation,
     useToggleAttributeStatusMutation,
     useUpdateAttributeMutation,
-} from '@/slices/store/storeApi';
+} from '@/slices';
 import { FaPlus, FaTrash, FaTimes, FaTasks, FaEdit } from 'react-icons/fa';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
@@ -18,6 +17,7 @@ import {
     Typography,
 } from '@mui/material';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const Attributes = () => {
     const { data: response, isLoading, error } = useFetchAttributesQuery();

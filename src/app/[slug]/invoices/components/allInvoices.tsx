@@ -2,9 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaFileInvoice, FaPlus, FaUsers, FaCreditCard, FaMoneyBill } from "react-icons/fa";
-import {
-  useLazyDownloadInvoicePdfQuery,
-} from "@/slices/invoices/invoice";
+import { useLazyDownloadInvoicePdfQuery } from "@/slices";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { useCompany } from "@/utils/Company";
 import EmptyState from "@/components/common/EmptyState";

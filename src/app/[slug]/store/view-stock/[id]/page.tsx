@@ -2,10 +2,7 @@
 
 import React from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import {
-    useFetchStoreItemQuery,
-    useFetchItemBatchByIdQuery,
-} from '@/slices';
+import { useFetchStoreItemQuery, useFetchItemBatchByIdQuery} from '@/slices';
 import LoadingState from '@/components/common/LoadingState';
 import Image from 'next/image';
 
@@ -41,17 +38,23 @@ const ViewBatch = () => {
                         <h1>{item.name}</h1>
                         <p>Batch ID: #{batch.id}</p>
                     </div>
-                    <div>
-                        {item.featured_image && (
-                            <div className="featured-image">
-                                <Image
-                                    src={item.featured_image}
-                                    alt="Featured"
-                                    width={70}
-                                    height={70}
-                                />
-                            </div>
-                        )}                    </div>
+                    <div className="details-grid">
+                        <DetailCard
+                            label="Invoice Number"
+                            value={batch.invoice_number || 'Not specified'}
+                            icon="🧾"
+                        />
+                    </div>
+                    {item.featured_image && (
+                        <div className="featured-image">
+                            <Image
+                                src={item.featured_image}
+                                alt="Featured"
+                                width={50}
+                                height={50}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className="stats-grid">
                     <StatCard
@@ -144,6 +147,10 @@ const ViewBatch = () => {
                             label="Vendor"
                             value={batch.vendor?.vendor_name || 'Not specified'}
                         />
+                        <InfoCard
+                            label="Tax Type"
+                            value={batch.tax_type ?? ''}
+                        />
                     </div>
                 </div>
 
@@ -170,25 +177,6 @@ const ViewBatch = () => {
                             status={expiryStatus}
                         />
                     </div>
-                </div>
-            </div>
-
-            {/* Additional Details Card */}
-            <div className="content-card">
-                <div className="card-header">
-                    <h2><span className="icon">📋</span>Additional Details</h2>
-                </div>
-                <div className="details-grid">
-                    <DetailCard
-                        label="Invoice Number"
-                        value={batch.invoice_number || 'Not specified'}
-                        icon="🧾"
-                    />
-                    <DetailCard
-                        label="Tax Type"
-                        value={batch.tax_type ?? ''}
-                        icon="💰"
-                    />
                 </div>
             </div>
 
@@ -309,22 +297,22 @@ const VariantCard = ({ variant, index }: {
 
         <div className="variant-grid">
             <div className="variant-metric blue">
-                <p className="metric-label">Regular</p>
+                <p className="metric-label">Regular Price: </p>
                 <p className="metric-value">₹{variant.variant_regular_price}</p>
             </div>
             <div className="variant-metric orange">
-                <p className="metric-label">Sale</p>
+                <p className="metric-label">Sale Price: </p>
                 <p className="metric-value">₹{variant.variant_sale_price}</p>
             </div>
             {variant.variant_price_per_unit && (
                 <div className="variant-metric green">
-                    <p className="metric-label">Unit Price</p>
+                    <p className="metric-label">Unit Price : </p>
                     <p className="metric-value">₹{variant.variant_price_per_unit}</p>
                 </div>
             )}
             {variant.variant_units_in_peace && (
                 <div className="variant-metric purple">
-                    <p className="metric-label">Units/Peace</p>
+                    <p className="metric-label">Units/Peace :</p>
                     <p className="metric-value">{variant.variant_units_in_peace}</p>
                 </div>
             )}

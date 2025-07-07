@@ -7,8 +7,8 @@ import {
   useImportStoreItemsMutation,
   useLazyExportStoreItemsQuery,
   useBulkDeleteStoreItemsMutation,
-} from '@/slices/store/storeApi';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+  useFetchSelectedCompanyQuery,
+} from '@/slices';
 import { FaEdit, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -312,6 +312,7 @@ const Items: React.FC = () => {
         }}
         showBulkActions={showBulkActions}
         onToggleBulkActions={setShowBulkActions}
+        hasBulkActions={true}
         columns={allColumns}
         visibleColumns={visibleColumns}
         onResetColumns={onResetColumns}

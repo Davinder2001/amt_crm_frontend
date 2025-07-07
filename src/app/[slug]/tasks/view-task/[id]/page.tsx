@@ -7,7 +7,7 @@ import {
   useGetTasksQuery,
   useApproveHistoryMutation,
   useRejectHistoryMutation,
-} from '@/slices/tasks/taskApi';
+} from '@/slices';
 import { toast } from 'react-toastify';
 import { FaArrowLeft, FaCheck, FaTimes } from 'react-icons/fa';
 import Link from 'next/link';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useGetRolesQuery } from '@/slices/roles/rolesApi';
+import { useGetRolesQuery } from '@/slices';
 import { toast } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';

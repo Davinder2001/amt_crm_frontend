@@ -1,7 +1,6 @@
 'use client';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AttendancesList from './components/AttendancesList'
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaCalendarPlus, FaClipboardList, FaUserCheck } from 'react-icons/fa';
@@ -11,15 +10,11 @@ import ApplyForLeave from './components/ApplyForLeave';
 import TableToolbar from '@/components/common/TableToolbar';
 
 function Page() {
-  const { setTitle } = useBreadcrumb();
 
   // Modal states
   const [isAttandanceOpen, setIsAttandanceOpen] = useState(false);
   const [isApplyForLeaveOpen, setIsApplyForLeaveOpen] = useState(false);
   const router = useRouter();
-  useEffect(() => {
-    setTitle('Attendances');
-  }, [setTitle]);
   const { companySlug } = useCompany();
   return (
     <>

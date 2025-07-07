@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from "react";
-import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
+import { useOrderNewCompanyMutation } from "@/slices";
 
 interface AddCompany {
   company_name: string;

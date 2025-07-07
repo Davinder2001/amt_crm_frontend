@@ -3,8 +3,7 @@
 import React from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
+import { useGetRolesQuery, useDeleteRoleMutation, useFetchSelectedCompanyQuery } from "@/slices";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 
 const RoleList: React.FC = () => {

@@ -31,7 +31,7 @@ const userApi = userCreateApiSlice.injectEndpoints({
 
     updateUser: builder.mutation<
       UserProfile,
-      { id: number; name: string; email: string; role: string }
+      { id: number; name: string; email: string; }
     >({
       query: ({ id, ...data }) => ({
         url: `users/${id}`,

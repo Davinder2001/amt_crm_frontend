@@ -6,7 +6,7 @@ import {
     useCreateInvoiceMutation,
     usePrintInvoiceMutation,
     useWhatsappInvoiceMutation,
-} from '@/slices/invoices/invoice';
+} from '@/slices';
 import CartTabContent from './CartTabContent';
 import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -40,7 +40,8 @@ export default function CheckoutPanel({
     // RTK Query hooks
     const [createInvoice, { isLoading: isSaving }] = useCreateInvoiceMutation();
     const [printInvoice, { isLoading: isPrinting }] = usePrintInvoiceMutation();
-    const [whatsappInvoice, { isLoading: isSendWhatsapp }] = useWhatsappInvoiceMutation();
+    const [whatsappInvoice] = useWhatsappInvoiceMutation();
+    const [isSharing, setIsSharing] = useState(false);
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -217,21 +218,49 @@ export default function CheckoutPanel({
         }
     };
 
-    // 3) Save & whatsapp (or KOT)
-    const handleSendWhatsapp = async () => {
+    // 3) Save & Share
+    const handleShareInvoice = async () => {
         try {
+            setIsSharing(true);
+
+            // First create the invoice via WhatsApp API
             const payload = buildPayload();
             const formData = new FormData();
             appendToFormData(formData, payload);
-            const invoice = await whatsappInvoice(formData).unwrap();
-            if (invoice.status === true) {
-                toast.success(invoice.message);
-                router.push(`/${companySlug}/invoices`);
-            } else {
-                toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
+
+            // Call WhatsApp API first
+            const whatsappResponse = await whatsappInvoice(formData).unwrap();
+            if (!whatsappResponse.status) {
+                throw new Error(whatsappResponse.message || 'Failed to generate invoice');
             }
+
+            // Then get the PDF
+            const pdfBlob = await printInvoice(formData).unwrap();
+            const file = new File(
+                [pdfBlob],
+                `invoice_${number || new Date().getTime()}.pdf`,
+                { type: 'application/pdf' }
+            );
+
+            // Share the file directly using Web Share API
+            if (navigator.share) {
+                await navigator.share({
+                    title: `Invoice ${number}`,
+                    text: `Invoice for ${clientName}`,
+                    files: [file]
+                });
+            } else {
+                // Fallback for browsers without Web Share API
+                const url = URL.createObjectURL(file);
+                window.open(url, '_blank');
+            }
+
+            toast.success('Invoice shared successfully');
         } catch (err) {
-            console.error('Mail error:', err);
+            console.error('Share error:', err);
+            toast.error('Failed to share invoice');
+        } finally {
+            setIsSharing(false);
         }
     };
 
@@ -295,8 +324,8 @@ export default function CheckoutPanel({
                     isSaving={isSaving}
                     handlePrint={handlePrint}
                     isPrinting={isPrinting}
-                    handleSendWhatsapp={handleSendWhatsapp}
-                    isSendWhatsapp={isSendWhatsapp}
+                    handleShareInvoice={handleShareInvoice}
+                    isSharing={isSharing}
                     clientName={clientName}
                     setClientName={setClientName}
                     email={email}

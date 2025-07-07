@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLoginMutation } from '@/slices/auth/authApi';
+import { useLoginMutation } from '@/slices';
 import { toast } from 'react-toastify';
 import Image from "next/image";
 import 'react-toastify/dist/ReactToastify.css';

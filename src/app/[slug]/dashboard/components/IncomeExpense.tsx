@@ -1,66 +1,3 @@
-// // File: app/dashboard/components/IncomeExpense.tsx
-// import React, { useState } from 'react';
-
-// const IncomeExpense = () => {
-//   const [activeTab, setActiveTab] = useState<'income' | 'expense'>('income');
-
-//   const handleTabClick = (tab: 'income' | 'expense') => {
-//     setActiveTab(tab);
-//   };
-
-//   return (
-//     <div className="card income-expense">
-//       <div className="card-header">
-//         <div className="tabs">
-//           <button
-//             className={activeTab === 'income' ? 'active' : ''}
-//             onClick={() => handleTabClick('income')}
-//           >
-//             Income
-//           </button>
-//           <button
-//             className={activeTab === 'expense' ? 'active' : ''}
-//             onClick={() => handleTabClick('expense')}
-//           >
-//             Expense
-//           </button>
-//         </div>
-//         <div className="dropdown">Monthly <span>▼</span></div>
-//       </div>
-
-//       <div className="chart-placeholder">
-//         {activeTab === 'income' ? (
-//           <div>[Bar Chart: Income]</div>
-//         ) : (
-//           <div>[Bar Chart: Expense]</div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default IncomeExpense;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // File: app/dashboard/components/IncomeExpense.tsx
 "use client";
 
@@ -185,17 +122,26 @@ const IncomeExpense = () => {
         <ResponsiveContainer width="100%" height={250}>
           <BarChart
             data={data}
-            margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
+            margin={{
+              top: 20,
+              right: 0,
+              left: 0,
+              bottom: 5,
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis  style={{ fontSize: '12px', fill: '#384B70' }}
+            <XAxis
               dataKey={isMonthly ? "name" : "year"}
               axisLine={false}
               tickLine={false}
+              tick={{ fill: '#888', fontSize: 12 }}
+              padding={{ left: 10, right: 10 }}
             />
-            <YAxis  style={{ fontSize: '12px', fill: '#384B70' }}
+            <YAxis
               axisLine={false}
               tickLine={false}
+              tick={{ fill: '#888', fontSize: 12 }}
+              width={40}
               tickFormatter={(value) => `${value}k`}
             />
             <Tooltip

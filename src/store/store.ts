@@ -7,7 +7,6 @@ import vendorApiSlice from '@/slices/vendor/vendorCreateSlice';
 import roleApiSlice from '@/slices/roles/rolesCreateSlice';
 import permissionApiSlice from '@/slices/permissions/permissionCreateSlice';
 import tasksApi from '@/slices/tasks/taskApiCreateSlice';
-import attendanceApiSlice from '@/slices/attendance/attendance';
 import companyApiSlice from '@/slices/superadminSlices/company/companyCreateSlice';
 import catalogCreateApiSlice from '@/slices/catalog/catalogCreateSlice';
 import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
@@ -24,6 +23,7 @@ import themeReducer from '@/slices/theme/themeSlice';
 import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
 import paymentCreateApiSlice from '@/slices/superadminSlices/payments/paymentCreateSlice';
 import expensesCreateApiSlice from '@/slices/expenditure/expensesCreateSlice';
+import attendanceCreateApiSlice from '@/slices/attendance/attendanceCreateSlice';
 
 
 
@@ -39,7 +39,6 @@ const store = configureStore({
     [roleApiSlice.reducerPath]: roleApiSlice.reducer,
     [permissionApiSlice.reducerPath]: permissionApiSlice.reducer,
     [tasksApi.reducerPath]: tasksApi.reducer,
-    [attendanceApiSlice.reducerPath]: attendanceApiSlice.reducer,
     [companyApiSlice.reducerPath]: companyApiSlice.reducer,
     [catalogCreateApiSlice.reducerPath]: catalogCreateApiSlice.reducer,
     [invoiceCreateApiSlice.reducerPath]: invoiceCreateApiSlice.reducer,
@@ -55,6 +54,7 @@ const store = configureStore({
     [billingCreateApiSlice.reducerPath]: billingCreateApiSlice.reducer,
     [paymentCreateApiSlice.reducerPath]: paymentCreateApiSlice.reducer,
     [expensesCreateApiSlice.reducerPath]: expensesCreateApiSlice.reducer,
+    [attendanceCreateApiSlice.reducerPath]: attendanceCreateApiSlice.reducer,
   },
   middleware:  (getDefaultMiddleware)=>
     getDefaultMiddleware()
@@ -66,7 +66,6 @@ const store = configureStore({
       .concat(roleApiSlice.middleware)
       .concat(permissionApiSlice.middleware)
       .concat(tasksApi.middleware)
-      .concat(attendanceApiSlice.middleware)
       .concat(companyApiSlice.middleware)
       .concat(catalogCreateApiSlice.middleware)
       .concat(invoiceCreateApiSlice.middleware)
@@ -82,6 +81,7 @@ const store = configureStore({
       .concat(billingCreateApiSlice.middleware)
       .concat(paymentCreateApiSlice.middleware)
       .concat(expensesCreateApiSlice.middleware)
+      .concat(attendanceCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

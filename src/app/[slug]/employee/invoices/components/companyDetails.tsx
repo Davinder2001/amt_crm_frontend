@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { useFetchSelectedCompanyQuery } from "@/slices/auth/authApi";
+import { useFetchSelectedCompanyQuery } from "@/slices";
 
 const CompanyDetails = () => {
     const { data, isLoading, isError } = useFetchSelectedCompanyQuery();

@@ -22,7 +22,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Optimize build with parallel processing
+# Optimize build with parallel processing and production optimizations
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -42,8 +42,9 @@ COPY --from=builder /app/public ./public
 # Copy the built application
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 
-# Copy node_modules for production dependencies
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+# Install only production dependencies for smaller image size
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production && npm cache clean --force
 
 # Copy package.json for next start command
 COPY --from=builder /app/package.json ./package.json

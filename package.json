@@ -5,11 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
-    "start:prod": "NODE_ENV=production next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -1,4 +1,4 @@
-import attendanceCreateApiSlice from "./attendanceCreateApiSlice";
+import attendanceCreateApiSlice from "./attendanceCreateSlice";
 
 interface User {
   id: number;

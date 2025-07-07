@@ -6,6 +6,9 @@ const withPWAFunc = withPWA({
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
+  // Optimize PWA for faster builds
+  buildExcludes: [/middleware-manifest\.json$/],
+  maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
 });
 
 const nextConfig = {
@@ -18,6 +21,23 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
+    // Add build optimizations
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+
+  // Optimize build performance
+  swcMinify: true,
+  
+  // Reduce bundle size
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 
   images: {
@@ -69,10 +89,28 @@ const nextConfig = {
   // Power by header
   poweredByHeader: false,
 
-  webpack: (config: any) => {
+  webpack: (config: any, { dev, isServer }: any) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    
+    // Optimize webpack for production builds
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+          },
+        },
+      };
+    }
+    
     return config;
   },
 };

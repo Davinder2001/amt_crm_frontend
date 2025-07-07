@@ -272,7 +272,7 @@
         gap: 5px;
 
         &:hover {
-          background: darken(#384B70, 5%);
+          background: var(--primary-light);
         }
       }
     }

@@ -1,6 +1,6 @@
 'use client';
 import LoadingState from '@/components/common/LoadingState';
-import { useFetchVariationsQuery } from '@/slices/store/storeApi';
+import { useFetchVariationsQuery } from '@/slices';
 import React, { useEffect, useState, useMemo } from 'react';
 import { FaPlus } from 'react-icons/fa';
 

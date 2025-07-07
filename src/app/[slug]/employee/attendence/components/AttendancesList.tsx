@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchAttenancesQuery, Attendance as APIAttendance } from '@/slices/attendance/attendance';
+import { useFetchAttenancesQuery, Attendance as APIAttendance } from '@/slices';
 import Image from 'next/image';
 import React from 'react';
 

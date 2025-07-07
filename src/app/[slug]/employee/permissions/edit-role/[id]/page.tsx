@@ -4,8 +4,7 @@ import React, { useEffect, useState, FormEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useGetRolesQuery, useUpdateRoleMutation } from '@/slices/roles/rolesApi';
-import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
+import { useGetRolesQuery, useUpdateRoleMutation, useFetchPermissionsQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 
 interface Permission {

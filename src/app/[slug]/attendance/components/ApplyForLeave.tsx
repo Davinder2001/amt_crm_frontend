@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
-import { useApplyForLeaveMutation } from '@/slices/attendance/attendance';
+import { useApplyForLeaveMutation } from '@/slices';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "next/image";
@@ -8,7 +8,7 @@ import { FaFileUpload } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format, isSameDay, isSunday } from 'date-fns';
-import { useFetchLeavesQuery } from '@/slices/company/companyApi';
+import { useFetchLeavesQuery } from '@/slices';
 
 interface ApplyLeaveFormProps {
     onSuccess: () => void;

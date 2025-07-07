@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchEmployesQuery } from '@/slices/employe/employe';
+import { useFetchEmployesQuery } from '@/slices';
 import HrNavigation from '../../../components/hrNavigation';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';

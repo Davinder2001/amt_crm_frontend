@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useGetCardPaymentHistoryQuery } from '@/slices/invoices/invoice';
+import { useGetCardPaymentHistoryQuery } from '@/slices';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';

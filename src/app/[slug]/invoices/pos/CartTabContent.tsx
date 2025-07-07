@@ -1,7 +1,6 @@
 'use client';
 
-import { useFetchCompanyAccountsQuery } from '@/slices/company/companyApi';
-import { useFetchAllCustomersQuery } from '@/slices/customers/customer';
+import { useFetchCompanyAccountsQuery, useFetchAllCustomersQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import React, { useState } from 'react';
 import { FiTrash2, FiList, FiUser, FiFileText } from 'react-icons/fi';

@@ -1,5 +1,5 @@
 'use client';
-import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';

@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
+import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices";
 import { FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
-import ResponsiveTable from "@/components/common/ResponsiveTable";
 import RoleForm from "./RoleForm";
 import Modal from "@/components/common/Modal";
 import ViewRole from "./ViewRole";
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import ResponsiveTable from "@/components/common/ResponsiveTable";
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);

@@ -1,15 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useGetWorkingTasksQuery } from '@/slices/tasks/taskApi';
+import { useGetWorkingTasksQuery, useFetchSelectedCompanyQuery } from '@/slices';
 import { useRouter } from 'next/navigation';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaArrowLeft, FaPaperPlane } from 'react-icons/fa';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import SubmitTaskComponent from '../submit-task/SubmitTaskComponent';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 // Define the Task type based on your API response
 type Task = {
@@ -78,7 +77,7 @@ const Page = () => {
     },
   ];
 
-  if (isLoading) return <LoadingState/>;
+  if (isLoading) return <LoadingState />;
   if (error) {
     return (
       <EmptyState

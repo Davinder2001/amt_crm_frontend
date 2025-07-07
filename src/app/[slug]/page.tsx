@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useFetchProfileQuery, useLoginMutation } from "@/slices/auth/authApi";
+import { useFetchProfileQuery, useLoginMutation } from "@/slices";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "@/components/common/Loader";

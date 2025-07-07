@@ -6,7 +6,7 @@ export type SubmitTaskResponse = {
   message: string;
 };
 
-export const tasksApi = apiSlice.injectEndpoints({
+export const taskApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
     // ⬇ Existing task endpoints
@@ -195,4 +195,4 @@ export const {
   useViewReminderQuery,
   useUpdateReminderMutation,
 
-} = tasksApi;
+} = taskApi;

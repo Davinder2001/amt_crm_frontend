@@ -7,13 +7,12 @@ import {
   useEndTaskMutation,
   useSetReminderMutation,
   useUpdateReminderMutation,
-  useViewReminderQuery,
-} from '@/slices/tasks/taskApi';
+  useViewReminderQuery, useFetchProfileQuery
+} from '@/slices';
 import { MdAccessTime } from 'react-icons/md';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton from 'react-loading-skeleton';
 import Image from 'next/image';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
 import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import ConfirmDialog from '@/components/common/ConfirmDialog';

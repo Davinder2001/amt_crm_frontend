@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useCreateVendorMutation, useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
+import { useCreateVendorMutation, useFetchVendorsQuery } from '@/slices';
 import { toast } from 'react-toastify';
 
 interface CreateVendorProps {

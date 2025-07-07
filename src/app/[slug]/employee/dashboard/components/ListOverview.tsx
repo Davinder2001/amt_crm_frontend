@@ -13,7 +13,7 @@ import {
   FaUserFriends,
   FaSpinner,
 } from "react-icons/fa";
-import { useFetchEmployesQuery } from "@/slices/employe/employe";
+import { useFetchEmployesQuery } from "@/slices";
 
 const ListOverview = () => {
   const { data, error, isLoading } = useFetchEmployesQuery();

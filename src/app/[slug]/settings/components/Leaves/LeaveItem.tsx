@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useDeleteLeaveMutation, useUpdateLeaveMutation } from '@/slices/company/companyApi';
+import { useDeleteLeaveMutation, useUpdateLeaveMutation } from '@/slices';
 import LeaveForm from './LeaveForm';
 
 type Props = {

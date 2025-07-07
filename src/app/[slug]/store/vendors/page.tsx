@@ -2,15 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaPlus, FaUserTie } from 'react-icons/fa';
-import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
+import { useFetchVendorsQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import Link from 'next/link';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import CreateVendor from './components/CreateVendor';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading, refetch } = useFetchVendorsQuery() as {

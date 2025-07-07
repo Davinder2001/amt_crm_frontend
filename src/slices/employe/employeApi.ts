@@ -1,7 +1,7 @@
 import employeCreateApiSlice from "./employeeCreateSlice";
 
 
-const employeCreateApi = employeCreateApiSlice.injectEndpoints({
+const employeApi = employeCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({
 
@@ -99,6 +99,6 @@ export const {
   useFetchEmployeesSalaryQuery,
   useFetchEmployeesSalaryByIdQuery,
   useLazyDownloadPaySlipPdfQuery,
-} = employeCreateApi;
+} = employeApi;
 
-export default employeCreateApi;
+export default employeApi;

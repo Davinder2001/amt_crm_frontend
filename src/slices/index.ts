@@ -1,3 +1,4 @@
+// src/slices/index.ts
 export * from '@/slices/attendance/attendanceApi';
 export * from '@/slices/auth/authApi';
 export * from '@/slices/catalog/catalogApi';

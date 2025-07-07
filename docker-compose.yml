@@ -1,0 +1,79 @@
+services:
+  # Nginx Reverse Proxy with SSL
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./infra/certs:/etc/nginx/certs:ro
+      - ./infra/vhost.d:/etc/nginx/vhost.d
+      - ./infra/html:/usr/share/nginx/html
+      - ./infra/nginx/default.conf:/etc/nginx/vhost.d/himmanav.com
+    environment:
+      - ENABLE_IPV6=true
+      - DEFAULT_HOST=himmanav.com
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Let's Encrypt SSL
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: nginx-proxy-le
+    restart: unless-stopped
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL:-himmanav11@gmail.com}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./infra/certs:/etc/nginx/certs:rw
+      - ./infra/vhost.d:/etc/nginx/vhost.d
+      - ./infra/html:/usr/share/nginx/html
+    depends_on:
+      - nginx-proxy
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amt_crm_frontend
+    restart: unless-stopped
+    env_file:
+      - env.docker
+    environment:
+      - VIRTUAL_HOST=himmanav.com
+      - LETSENCRYPT_HOST=himmanav.com
+      - LETSENCRYPT_EMAIL=himmanav11@gmail.com
+    expose:
+      - "3000"
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - nginx-proxy
+
+networks:
+  frontend:
+    driver: bridge 

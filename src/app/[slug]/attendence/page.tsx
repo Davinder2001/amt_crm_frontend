@@ -8,7 +8,7 @@ import { useCompany } from '@/utils/Company';
 import Modal from '@/components/common/Modal';
 import ApplyForLeave from './components/ApplyForLeave';
 import TableToolbar from '@/components/common/TableToolbar';
-
+ 
 const AttendancePage = () => {
 
   // Modal states

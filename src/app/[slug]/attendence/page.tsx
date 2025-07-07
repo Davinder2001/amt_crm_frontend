@@ -8,8 +8,8 @@ import { useCompany } from '@/utils/Company';
 import Modal from '@/components/common/Modal';
 import ApplyForLeave from './components/ApplyForLeave';
 import TableToolbar from '@/components/common/TableToolbar';
-
-function Page() {
+ 
+const AttendancePage = () => {
 
   // Modal states
   const [isAttandanceOpen, setIsAttandanceOpen] = useState(false);
@@ -61,4 +61,4 @@ function Page() {
   )
 }
 
-export default Page
+export default AttendancePage;

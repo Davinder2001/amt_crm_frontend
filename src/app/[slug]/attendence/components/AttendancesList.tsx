@@ -20,7 +20,10 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
   const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance)
     ? attendanceData.attendance
     : [];
+       
 
+
+    
   let content;
 
   if (isLoading) {

@@ -6,7 +6,7 @@ import {
     useCreateInvoiceMutation,
     usePrintInvoiceMutation,
     useWhatsappInvoiceMutation,
-} from '@/slices/invoices/invoice';
+} from '@/slices';
 import CartTabContent from './CartTabContent';
 import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';

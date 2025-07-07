@@ -44,7 +44,7 @@
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts",
     "types"
-  ],
+, "src/slices/company/companyApi.ts"  ],
   "exclude": [
     "node_modules"
   ]

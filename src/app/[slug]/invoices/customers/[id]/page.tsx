@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchCustomerByIdQuery } from '@/slices/customers/customer';
-import { useLazyDownloadInvoicePdfQuery } from "@/slices/invoices/invoice";
+import { useFetchCustomerByIdQuery, useLazyDownloadInvoicePdfQuery } from '@/slices';
 import { FaArrowLeft } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
@@ -65,23 +64,23 @@ const CustomerView: React.FC = () => {
     key?: keyof Invoice;
     render?: (invoice: Invoice) => React.ReactNode;
   }[] = [
-    { label: 'Invoice ID', key: 'invoice_id' },
-    { label: 'Invoice No', key: 'invoice_no' },
-    {
-      label: 'Subtotal (₹)',
-      render: (invoice: Invoice) => `₹${invoice.subtotal}`,
-    },
-    {
-      label: 'Actions',
-      render: (invoice: Invoice) => (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button className="buttons" onClick={() => handleDownloadPdf(invoice.id)}>
-            Download
-          </button>
-        </div>
-      ),
-    },
-  ];
+      { label: 'Invoice ID', key: 'invoice_id' },
+      { label: 'Invoice No', key: 'invoice_no' },
+      {
+        label: 'Subtotal (₹)',
+        render: (invoice: Invoice) => `₹${invoice.subtotal}`,
+      },
+      {
+        label: 'Actions',
+        render: (invoice: Invoice) => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button className="buttons" onClick={() => handleDownloadPdf(invoice.id)}>
+              Download
+            </button>
+          </div>
+        ),
+      },
+    ];
 
   return (
     <div className="customer-view-container">

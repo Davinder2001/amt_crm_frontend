@@ -2,7 +2,7 @@
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import React, { useEffect } from 'react'
 import AllInvoices from './components/allInvoices';
-import { useFetchInvoicesQuery } from '@/slices/invoices/invoice';
+import { useFetchInvoicesQuery } from '@/slices';
 
 function Page() {
   const { setTitle } = useBreadcrumb();

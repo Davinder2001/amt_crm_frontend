@@ -51,7 +51,7 @@ export interface AttendanceRequest {
   // Add any fields that may be updated
 }
 
-const attendanceCreateApi = attendanceCreateApiSlice.injectEndpoints({
+const attendanceApi = attendanceCreateApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchAttenances: builder.query<AttendanceResponse, void>({
       query: () => "attendances",
@@ -127,6 +127,6 @@ export const {
   useApproveAttendanceMutation,
   useRejectAttendanceMutation,
   useApplyForLeaveMutation,
-} = attendanceCreateApi;
+} = attendanceApi;
 
-export default attendanceCreateApi;
+export default attendanceApi;

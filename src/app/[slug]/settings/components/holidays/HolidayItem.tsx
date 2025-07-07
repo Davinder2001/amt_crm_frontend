@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
     useDeleteHolidayMutation,
     useUpdateHolidayMutation,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import HolidayForm from './HolidayForm';
 
 type Props = {

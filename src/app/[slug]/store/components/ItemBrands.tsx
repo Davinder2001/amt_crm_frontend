@@ -5,7 +5,7 @@ import {
     useDeleteBrandMutation,
     useFetchBrandsQuery,
     useUpdateBrandMutation,
-} from '@/slices/store/storeApi';
+} from '@/slices';
 import {
     Box,
     Button,

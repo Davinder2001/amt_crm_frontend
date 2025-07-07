@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useFetchEmployesQuery } from '@/slices/employe/employe';
+import { useFetchEmployesQuery } from '@/slices';
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';

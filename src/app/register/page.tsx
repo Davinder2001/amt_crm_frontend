@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useSendOtpMutation, useAdminRegisterMutation } from "@/slices/auth/authApi";
+import { useSendOtpMutation, useAdminRegisterMutation } from "@/slices";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";

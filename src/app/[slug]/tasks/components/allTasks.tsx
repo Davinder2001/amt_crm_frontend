@@ -3,16 +3,15 @@
 import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useGetTasksQuery, useDeleteTaskMutation } from '@/slices/tasks/taskApi';
+import { useGetTasksQuery, useDeleteTaskMutation, useFetchNotificationsQuery } from '@/slices';
 import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
-import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import TaskForm from './TaskForm';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 interface AllTasksProps {
   isAddModalOpen: boolean;

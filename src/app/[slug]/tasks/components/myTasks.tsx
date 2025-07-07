@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
 import { FaCheckCircle, FaRegClock, FaCalendarAlt } from 'react-icons/fa';
-import { useGetPendingTasksQuery, useMarkTaskAsWorkingMutation } from '@/slices/tasks/taskApi';
+import { useGetPendingTasksQuery, useMarkTaskAsWorkingMutation, useFetchNotificationsQuery } from '@/slices';
 import Loader from '@/components/common/Loader';
-import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 import EmptyState from '@/components/common/EmptyState';
 
 const MyTasks = () => {
@@ -24,13 +23,13 @@ const MyTasks = () => {
 
   if (isLoading) return <Loader />;
   if (error)
-        return (
-            <EmptyState
-                icon="alert"
-                title="Failed to fetching task data."
-                message="Something went wrong while fetching task data."
-            />
-        );
+    return (
+      <EmptyState
+        icon="alert"
+        title="Failed to fetching task data."
+        message="Something went wrong while fetching task data."
+      />
+    );
 
   return (
     <div className="tasks-grid">

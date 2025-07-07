@@ -5,10 +5,9 @@ import { toast } from 'react-toastify';
 import {
     useCreateTaskMutation,
     useUpdateTaskMutation,
-    useGetTasksQuery,
-} from '@/slices/tasks/taskApi';
+    useGetTasksQuery, useFetchNotificationsQuery
+} from '@/slices';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
-import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
 import DatePickerField from '@/components/common/DatePickerField';
 
 interface TaskFormProps {

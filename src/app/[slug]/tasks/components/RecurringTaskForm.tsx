@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useCreatePredefinedTaskMutation, useUpdatePredefinedTaskMutation, useGetSinglePredefinedTaskQuery } from '@/slices/tasks/taskApi';
+import { useCreatePredefinedTaskMutation, useUpdatePredefinedTaskMutation, useGetSinglePredefinedTaskQuery } from '@/slices';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';

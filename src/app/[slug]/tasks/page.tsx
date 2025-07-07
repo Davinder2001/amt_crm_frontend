@@ -8,7 +8,7 @@ import { FaPlus, FaRegCalendarAlt, FaUserCheck, FaRedo } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import { Tabs, Tab, Box } from '@mui/material';
-import { useGetPendingTasksQuery } from '@/slices/tasks/taskApi';
+import { useGetPendingTasksQuery } from '@/slices';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();

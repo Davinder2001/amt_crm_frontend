@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices/vendor/vendorApi';
+import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';

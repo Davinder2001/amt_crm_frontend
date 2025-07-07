@@ -6,7 +6,7 @@ import { useCompany } from '@/utils/Company';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
-import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
+import { useFetchNotificationsQuery } from '@/slices/notifications/notificationApi';
 import SearchBar from '@/app/[slug]/_common/search/SearchBar';
 import Profile from '@/app/[slug]/_common/header/components/profile';
 

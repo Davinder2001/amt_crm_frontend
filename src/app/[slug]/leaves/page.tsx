@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { FaArrowLeft, FaCalendarTimes } from 'react-icons/fa';
-import { useFetchBalanceLeaveQuery } from '@/slices/attendance/attendance';
+import { useFetchBalanceLeaveQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';

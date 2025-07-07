@@ -9,7 +9,7 @@ import { useCompany } from '@/utils/Company';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { useRouter } from 'next/navigation';
-import { useFetchNotificationsQuery } from '@/slices/notifications/notifications';
+import { useFetchNotificationsQuery } from '@/slices';
 // import GoogleTranslate from "@/components/common/GoogleTranslate";
 
 

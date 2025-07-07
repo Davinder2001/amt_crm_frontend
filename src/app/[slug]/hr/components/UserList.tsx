@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employe';
+import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';

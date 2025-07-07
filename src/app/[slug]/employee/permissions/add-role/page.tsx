@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { toast } from "react-toastify";
-import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
-import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
+import { useCreateRoleMutation, useFetchPermissionsQuery } from "@/slices";
 import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";

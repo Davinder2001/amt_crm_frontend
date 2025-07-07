@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useAddNewCompanyMutation } from '@/slices/company/companyApi';
+import { useAddNewCompanyMutation } from '@/slices';
 
 const ConfirmPage = () => {
   const [addCompany] = useAddNewCompanyMutation();

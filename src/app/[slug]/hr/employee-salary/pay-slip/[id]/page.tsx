@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import {
   useFetchPaySlipByIdQuery,
   useLazyDownloadPaySlipPdfQuery,
-} from '@/slices/employe/employe';
+} from '@/slices';
 
 export default function Page() {
   const params = useParams() as { id?: string };

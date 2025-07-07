@@ -3,8 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
-import { useGetCreditInvoiceByIdQuery } from '@/slices/invoices/invoice';
-
+import { useGetCreditInvoiceByIdQuery } from '@/slices';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';

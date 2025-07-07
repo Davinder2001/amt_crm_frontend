@@ -34,7 +34,7 @@ interface Attendance {
   user: User;
 }
 
-function ViewAttendance() {
+function ViewAttendence() {
   const { data: attendancesResponse, refetch } = useFetchAttenancesQuery();
   const [approveAttendance] = useApproveAttendanceMutation();
   const [rejectAttendance] = useRejectAttendanceMutation();
@@ -62,7 +62,7 @@ function ViewAttendance() {
   };
 
   return (
-    <div className='hr-attendance-table'>
+    <div className='hr-attendence-table'>
       {attendanceList.length > 0 ? (
         <table border={1} cellPadding="10" cellSpacing="0">
           <thead>
@@ -172,4 +172,4 @@ function ViewAttendance() {
   );
 }
 
-export default ViewAttendance;
+export default ViewAttendence;

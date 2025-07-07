@@ -22,8 +22,8 @@ type CartTabContentProps = {
     isSaving: boolean;
     handlePrint: () => void;
     isPrinting: boolean;
-    handleSendWhatsapp: () => void;
-    isSendWhatsapp: boolean;
+    handleShareInvoice: () => void;
+    isSharing: boolean;
     clientName: string;
     setClientName: React.Dispatch<React.SetStateAction<string>>;
     email: string;
@@ -70,7 +70,7 @@ export default function CartTabContent({
     onRemoveItem, onClearCart,
     handleSave, isSaving,
     handlePrint, isPrinting,
-    handleSendWhatsapp, isSendWhatsapp,
+    handleShareInvoice, isSharing,
     clientName, setClientName,
     email, setEmail,
     number, setNumber,
@@ -354,8 +354,8 @@ export default function CartTabContent({
                     isSaving={isSaving}
                     handlePrint={handlePrint}
                     isPrinting={isPrinting}
-                    handleSendWhatsapp={handleSendWhatsapp}
-                    isSendWhatsapp={isSendWhatsapp}
+                    handleShareInvoice={handleShareInvoice}
+                    isSharing={isSharing}
                 />
             </div>
         </div>

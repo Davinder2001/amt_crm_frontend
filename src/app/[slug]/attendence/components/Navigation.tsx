@@ -4,11 +4,11 @@ import React from 'react';
 import { FaCalendarPlus, FaUserCheck, FaClipboardList } from 'react-icons/fa';
 
 interface NavigationProps {
-    setIsAttendanceOpen: (open: boolean) => void;
+    setIsAttandanceOpen: (open: boolean) => void;
     setIsApplyForLeaveOpen: (open: boolean) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ setIsAttendanceOpen, setIsApplyForLeaveOpen }) => {
+const Navigation: React.FC<NavigationProps> = ({ setIsAttandanceOpen, setIsApplyForLeaveOpen }) => {
     const { companySlug } = useCompany();
     const router = useRouter();
 
@@ -20,7 +20,7 @@ const Navigation: React.FC<NavigationProps> = ({ setIsAttendanceOpen, setIsApply
                     <span>Apply for Leave</span>
                 </button>
 
-                <button className="buttons" onClick={() => setIsAttendanceOpen(true)} type='button' >
+                <button className="buttons" onClick={() => setIsAttandanceOpen(true)} type='button' >
                     <FaUserCheck />
                     <span>Add Attendance</span>
                 </button>

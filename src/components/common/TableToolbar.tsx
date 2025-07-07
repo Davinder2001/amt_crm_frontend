@@ -49,9 +49,9 @@ interface TableToolbarProps {
     onResetColumns?: () => void;
     showBulkActions?: boolean;
     onToggleBulkActions?: (enabled: boolean) => void;
+    hasBulkActions?: boolean;
     introKey?: string;
 }
-
 
 const TableToolbar: React.FC<TableToolbarProps> = ({
     filters,
@@ -65,6 +65,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     onResetColumns,
     showBulkActions,
     onToggleBulkActions,
+    hasBulkActions,
     introKey,
 }) => {
     const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
@@ -296,15 +297,16 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div>
             )}
             <div className="toolbar">
-               
-                    {filters && filters.length > 0 && (
-                        <div className="left-group">
-                            <div className="dropdown dropdown-left hover-group">
-                                <button className="toolbar-btn">
-                                    <FiFilter />
-                                    <span className='hide-mobile'>Filter</span>
-                                </button>
-                                <div className="dropdown-content">
+
+                {filters && filters.length > 0 && (
+                    <div className="left-group">
+                        <div className="dropdown dropdown-left hover-group">
+                            <button className="toolbar-btn">
+                                <FiFilter />
+                                <span className='hide-mobile'>Filter</span>
+                            </button>
+                            <div className="dropdown-content">
+                                {hasBulkActions && (
                                     <div
                                         className={`bulk-toggle-btn ${showBulkActions ? 'active' : ''}`}
                                         onClick={() => onToggleBulkActions?.(!showBulkActions)}
@@ -316,43 +318,44 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                         )}
                                         <span className="label">{showBulkActions ? 'Exit Bulk Mode' : 'Bulk Actions'}</span>
                                     </div>
-                                    {filters.map((filter) => (
-                                        <div key={filter.key} className="section">
-                                            <label className="filter-type-option">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={activeFilterTypes.includes(filter.key)}
-                                                    onChange={() => handleFilterTypeSelect(filter.key)}
-                                                />
-                                                {filter.label}
-                                            </label>
+                                )}
+                                {filters.map((filter) => (
+                                    <div key={filter.key} className="section">
+                                        <label className="filter-type-option">
+                                            <input
+                                                type="checkbox"
+                                                checked={activeFilterTypes.includes(filter.key)}
+                                                onChange={() => handleFilterTypeSelect(filter.key)}
+                                            />
+                                            {filter.label}
+                                        </label>
 
-                                            {activeFilterTypes.includes(filter.key) && filter.type === 'multi-select' && (
-                                                <div className="filter-options-list">
-                                                    {filter.options?.map((opt) => (
-                                                        <label key={opt} className="option">
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={selectedFilters[filter.key]?.includes(opt) || false}
-                                                                onChange={(e) =>
-                                                                    handleMultiSelectChange(filter.key, opt, e.target.checked)
-                                                                }
-                                                            />
-                                                            {opt}
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className='desktop-render-table-searchbar filter-search-table'>
-                                {renderActiveFilterInputs()}
+                                        {activeFilterTypes.includes(filter.key) && filter.type === 'multi-select' && (
+                                            <div className="filter-options-list">
+                                                {filter.options?.map((opt) => (
+                                                    <label key={opt} className="option">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedFilters[filter.key]?.includes(opt) || false}
+                                                            onChange={(e) =>
+                                                                handleMultiSelectChange(filter.key, opt, e.target.checked)
+                                                            }
+                                                        />
+                                                        {opt}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    )}
-                
+                        <div className='desktop-render-table-searchbar filter-search-table'>
+                            {renderActiveFilterInputs()}
+                        </div>
+                    </div>
+                )}
+
 
                 <div className="right-group">
                     {columns && columns.length > 0 && (

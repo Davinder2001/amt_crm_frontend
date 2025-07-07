@@ -1,5 +1,4 @@
 // common styles for the application
-@use "sass:color";
 @use './variables' as *;
 @use './fonts.scss' as *;
 // @use './themes/base.scss' as *;
@@ -34,7 +33,7 @@
 @use './Hr/employees_sallery.scss' as *;
 @use './Hr/edituser.scss' as *;
 @use './Hr/employee_profile.scss' as *;
-@use './Hr/view-attendance.scss' as *;
+@use './Hr/view-attendence.scss' as *;
 @use './Hr/employee_form_.scss' as *;
 
 
@@ -238,7 +237,7 @@ textarea {
     }
 }
 
-.hr-attendance-table {
+.hr-attendence-table {
     .user-status {
         .status {
             text-transform: capitalize;
@@ -272,7 +271,7 @@ textarea {
 
 
 
-.employee-attendance-view {
+.employee-attendence-view {
     .user-status {
         .status {
             text-transform: capitalize;

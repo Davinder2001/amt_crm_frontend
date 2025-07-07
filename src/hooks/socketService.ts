@@ -7,7 +7,7 @@ class SocketService {
         this.socket = io('https://amt.sparkweb.sbs', {
             transports: ['websocket'],
             withCredentials: true,
-        } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+        });
     }
 
     public connect() {

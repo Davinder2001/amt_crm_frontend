@@ -159,7 +159,7 @@ const TimeSection = React.memo(() => {
         {dateTime.toLocaleString('default', { month: 'long' })}{' '}
         {dateTime.getFullYear()}
       </p>
-      <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendance`}>
+      <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendence`}>
         View Attendance
       </Link>
     </div>

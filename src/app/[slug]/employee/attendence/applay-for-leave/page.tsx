@@ -63,7 +63,7 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/employee/attendance`} className='back-button'>
+      <Link href={`/${companySlug}/employee/attendence`} className='back-button'>
         <FaArrowLeft size={20} color='#fff' />
       </Link>
 

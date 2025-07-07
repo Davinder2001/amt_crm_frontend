@@ -54,7 +54,7 @@ const LeavesPage = () => {
   return (
     <div className="p-6 max-w-5xl mx-auto bg-white shadow rounded">
       <Link
-        href={`/${companySlug}/attendance`}
+        href={`/${companySlug}/attendence`}
         className="back-button inline-flex items-center gap-2 text-white bg-blue-600 px-3 py-1 rounded"
       >
         <FaArrowLeft size={16} />

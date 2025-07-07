@@ -13,11 +13,11 @@ import Modal from '@/components/common/Modal';
 import AddAttendanceForm from './AddAttendanceForm';
 
 interface AttendanceProps {
-  isAttendanceOpen: boolean;
-  setIsAttendanceOpen: (open: boolean) => void;
+  isAttandanceOpen: boolean;
+  setIsAttandanceOpen: (open: boolean) => void;
 }
 
-const AttendancesList: React.FC<AttendanceProps> = ({ isAttendanceOpen, setIsAttendanceOpen }) => {
+const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAttandanceOpen }) => {
   const { data: attendanceData, error, isLoading, refetch } = useFetchMyAttenancesQuery();
 
   const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance)
@@ -132,14 +132,14 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttendanceOpen, setIsAtt
     <>
       {content}
       <Modal
-        isOpen={isAttendanceOpen}
-        onClose={() => setIsAttendanceOpen(false)}
+        isOpen={isAttandanceOpen}
+        onClose={() => setIsAttandanceOpen(false)}
         title="Add Attendance"
         width="800px"
       >
         <AddAttendanceForm
           onSuccess={() => {
-            setIsAttendanceOpen(false);
+            setIsAttandanceOpen(false);
             refetch();
           }}
         />

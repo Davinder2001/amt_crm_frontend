@@ -312,6 +312,7 @@ const Items: React.FC = () => {
         }}
         showBulkActions={showBulkActions}
         onToggleBulkActions={setShowBulkActions}
+        hasBulkActions={true}
         columns={allColumns}
         visibleColumns={visibleColumns}
         onResetColumns={onResetColumns}

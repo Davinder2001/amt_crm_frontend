@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 import { FaCamera, FaUpload, FaCheckCircle } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
-interface AttendanceFormProps {
+interface AttandanceFormProps {
     onSuccess: () => void;
 }
 
-const AddAttendanceForm: React.FC<AttendanceFormProps> = ({ onSuccess }) => {
+const AddAttendanceForm: React.FC<AttandanceFormProps> = ({ onSuccess }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showWebcam, setShowWebcam] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

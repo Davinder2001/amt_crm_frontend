@@ -1,29 +1,3 @@
-// // File: app/dashboard/components/StoreStats.tsx
-// import React from 'react';
-
-// const StoreStats = () => {
-//   return (
-//     <div className="card store-stats">
-//       <div className="card-header">
-//         <h3>Store Statics</h3>
-//         <div className="dropdown">Monthly <span>▼</span></div>
-//       </div>
-//       <div className="chart-placeholder">[Line Chart]</div>
-//     </div>
-//   );
-// };
-
-// export default StoreStats;
-
-
-
-
-
-
-
-
-
-
 // File: app/dashboard/components/StoreStats.tsx
 "use client";
 
@@ -79,13 +53,20 @@ const StoreStats = () => {
       </div>
       <div className="chart-placeholder">
         <ResponsiveContainer width="100%" height='100%'>
-          <LineChart data={data}>
+          <LineChart data={data}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 5,
+            }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis 
-              dataKey="name" 
+            <XAxis
+              dataKey="name"
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#888', fontSize: 12 }}
+              padding={{ left: 10, right: 10 }}
             />
             <YAxis
               domain={[0, 100]}
@@ -93,8 +74,9 @@ const StoreStats = () => {
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#888', fontSize: 12 }}
+              width={30}
             />
-            <Tooltip 
+            <Tooltip
               contentStyle={{
                 background: '#fff',
                 border: '1px solid #e2e8f0',

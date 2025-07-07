@@ -14,7 +14,7 @@ function Page() {
   const { setTitle } = useBreadcrumb();
 
   // Modal states
-  const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
+  const [isAttandanceOpen, setIsAttandanceOpen] = useState(false);
   const [isApplyForLeaveOpen, setIsApplyForLeaveOpen] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -34,7 +34,7 @@ function Page() {
           {
             label: 'Add Attendance',
             icon: <FaUserCheck />,
-            onClick: () => setIsAttendanceOpen(true)
+            onClick: () => setIsAttandanceOpen(true)
           },
           {
             label: 'Leaves',
@@ -42,11 +42,11 @@ function Page() {
             onClick: () => router.push(`/${companySlug}/leaves`)
           },
         ]}
-        introKey='attendance_into'
+        introKey='attendence_into'
       />
       <AttendancesList
-        isAttendanceOpen={isAttendanceOpen}
-        setIsAttendanceOpen={setIsAttendanceOpen}
+        isAttandanceOpen={isAttandanceOpen}
+        setIsAttandanceOpen={setIsAttandanceOpen}
       />
 
       <Modal

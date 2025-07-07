@@ -50,7 +50,7 @@ const Page = () => {
           {
             label: 'Attendance',
             icon: <FaUserCheck />,
-            onClick: () => router.push(`/${companySlug}/attendance`),
+            onClick: () => router.push(`/${companySlug}/attendence`),
           },
           {
             label: 'Recurring Tasks',

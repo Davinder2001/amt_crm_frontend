@@ -12,6 +12,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import Link from 'next/link'
 import TableToolbar from '@/components/common/TableToolbar';
+import LoadingState from '@/components/common/LoadingState';
 
 const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
@@ -60,7 +61,7 @@ const ViewUserPage: React.FC = () => {
     if (usersError) toast.error('Failed to fetch user data');
   }, [usersError]);
 
-  if (usersLoading) return <div className="loading-spinner">Loading...</div>;
+  if (usersLoading) return <LoadingState />;
   if (!employee) return <div className="not-found">User not found</div>;
 
   const firstLetter = employee?.name?.[0]?.toUpperCase();

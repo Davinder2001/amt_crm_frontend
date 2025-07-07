@@ -1,4 +1,3 @@
-@use "sass:color";
 @use '../variables' as *;
 
 
@@ -183,7 +182,7 @@
                     color: $white;
 
                     &:hover:not(:disabled) {
-                        background-color: color.adjust($danger-color, $lightness: -5%);
+                        background-color: darken($danger-color, 5%);
                     }
                 }
             }

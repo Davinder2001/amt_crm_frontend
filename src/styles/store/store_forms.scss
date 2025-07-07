@@ -315,7 +315,7 @@
   .save-cancel-button {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: end;
     gap: 15px;
   }
 
@@ -537,7 +537,7 @@
     cursor: pointer;
 
     .c-s-buttons-outers {
-      justify-content: flex-end;
+      justify-content: end;
     }
 
     label.file-upload-button {
@@ -600,7 +600,7 @@
 
   .c-s-buttons-outers {
     display: flex;
-    justify-content: flex-end !important;
+    justify-content: end !important;
   }
 }
 

@@ -23,7 +23,7 @@ function AttendancesList() {
   );
 
   return (
-    <div className='employee-attendance-view'>
+    <div className='employee-attendence-view'>
       {attendanceList.length > 0 ? (
         <table border={1} cellPadding="10" cellSpacing="0">
           <thead>

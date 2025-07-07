@@ -15,15 +15,6 @@
     border-radius: $border-radius;
     padding: 30px 20px;
 
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-      font-size: $font-size-large;
-      color: var(--primary-color);
-    }
-
     .not-found {
       text-align: center;
       padding: 40px;
@@ -156,11 +147,6 @@
         padding: 10px;
         border: 1px solid $border-color;
         transition: $transition;
-
-        &:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.049);
-        }
 
         .card-title {
           display: flex;

@@ -125,11 +125,11 @@ const UserList: React.FC = () => {
     {
       label: 'Actions',
       render: (emp: Employee) => (
-        <>
+        <div style={{display: 'flex', gap: 10, alignItems: 'center'}}>
           <FaEye onClick={() => router.push(`/${companySlug}/hr/status-view/view-employee/${emp.id}`)} />
           <FaEdit onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${emp.id}`)} />
           <FaTrash onClick={() => promptDelete(emp.id, emp.name)} />
-        </>
+        </div>
       ),
     }
   ];

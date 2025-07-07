@@ -330,7 +330,16 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               </div>
             )}
 
-            <div className="card-body" onClick={() => onView && onView(item.id)}>
+            <div className="card-body"
+              onClick={(e) => {
+                if (wasDraggedRef.current ||
+                  (e.target as HTMLElement).closest('button, svg, .action-icon, select, .select-checkbox')) {
+                  wasDraggedRef.current = false;
+                  return;
+                }
+                if (onView) onView(item.id);
+              }}
+            >
               {cardView && cardView(item)}
             </div>
 

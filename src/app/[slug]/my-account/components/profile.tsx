@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux'
 import RecheckModal from '@/components/common/RecheckModal'
 import LoadingState from '@/components/common/LoadingState'
 import EmptyState from '@/components/common/EmptyState'
+import { FaEdit, FaPlus } from 'react-icons/fa'
+import { EditUserModal } from './EditUserModal'
 
 const Profile = () => {
   const { data, isLoading, error } = useFetchProfileQuery()
@@ -20,6 +22,8 @@ const Profile = () => {
   const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null)
   const [isRecheckModal, setIsRecheckModal] = useState(false)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+  const [editUserModal, setEditUserModal] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
 
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
@@ -78,6 +82,11 @@ const Profile = () => {
     }
   }
 
+  const handleEditOpen = (id: number) => {
+    setEditUserModal(true);
+    setUserId(id);
+  }
+
   if (isLoading) return <LoadingState />
   if (error)
     return (
@@ -87,6 +96,7 @@ const Profile = () => {
         message="Something went wrong while fetching profile data."
       />
     );
+
   return (
     <div className="radical-profile">
       {/* Header */}
@@ -110,6 +120,11 @@ const Profile = () => {
         <div className="panel personal-panel">
           <div className="panel-header">
             <h2>🧑 USER PROFLE</h2>
+            <FaEdit
+              onClick={() => { if (user?.id !== undefined) handleEditOpen(user.id) }}
+              className="edit-icon"
+              aria-label="Edit profile"
+            />
           </div>
           <div className="info-stack">
             <div className="info-line"><span>📧</span><span>{user?.email}</span></div>
@@ -139,7 +154,7 @@ const Profile = () => {
         <div className="panel companies-panel">
           <div className="panel-header">
             <h2>🏢 COMPANIES ({companies.length})</h2>
-            <Link href="/add-company" className="add-btn">+ NEW</Link>
+            <Link href="/add-company" className="add-btn"><FaPlus /> NEW</Link>
           </div>
 
           <div className="company-stack">
@@ -188,6 +203,13 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <EditUserModal
+        userId={userId}
+        userData={user ?? null}
+        isOpen={editUserModal}
+        onClose={() => setEditUserModal(false)}
+      />
 
       {/* Recheck Modal */}
       {isRecheckModal && selectedCompany && (

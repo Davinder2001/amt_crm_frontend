@@ -1,31 +1,3 @@
-// // app/dashboard/components/TotalEarnings.tsx
-// import React from 'react';
-
-// const TotalEarnings = () => {
-//     return (
-//         <div className="card total-earnings">
-//             <div className="card-header">
-//                 <h3>Earnings</h3>
-//                 <div className="dropdown">Today <span>▼</span></div>
-//             </div>
-//             <div className="chart-placeholder">[Line Chart: Paid vs Unpaid]</div>
-//             <div className="legend">
-//                 <span className="dot paid"></span> Paid
-//                 <span className="dot unpaid"></span> Unpaid
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default TotalEarnings;
-
-
-
-
-
-
-
-
 // app/dashboard/components/TotalEarnings.tsx
 "use client";
 
@@ -65,24 +37,32 @@ const TotalEarnings = () => {
           )}
         </div>
       </div>
-      
-      <div className="chart-placeholder" style={{height: 200}}>
+
+      <div className="chart-placeholder" style={{ height: 200 }}>
         <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={earningsData}>
+          <LineChart data={earningsData}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 5,
+            }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis 
-              dataKey="date" 
+            <XAxis
+              dataKey="date"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize:'12px' }}
+              tick={{ fill: '#888', fontSize: '12px' }}
+              padding={{ left: 10, right: 10 }}
             />
-            <YAxis 
+            <YAxis
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#888', fontSize: '12px' }}
               tickFormatter={(value) => `₹${value}`}
+              width={50}
             />
-            <Tooltip 
+            <Tooltip
               formatter={(value, name) => [`₹${value}`, name === 'paid' ? 'Paid' : 'Unpaid']}
               labelFormatter={(label) => label}
               contentStyle={{
@@ -92,18 +72,18 @@ const TotalEarnings = () => {
                 padding: '8px'
               }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="paid" 
-              stroke="var(--primary-color)" 
+            <Line
+              type="monotone"
+              dataKey="paid"
+              stroke="var(--primary-color)"
               strokeWidth={3}
               dot={false}
               activeDot={{ r: 6, stroke: 'var(--primary-color)', strokeWidth: 2, fill: '#fff' }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="unpaid" 
-              stroke="var(--primary-light)" 
+            <Line
+              type="monotone"
+              dataKey="unpaid"
+              stroke="var(--primary-light)"
               strokeWidth={3}
               dot={false}
               activeDot={{ r: 6, stroke: 'var(--primary-light)', strokeWidth: 2, fill: '#fff' }}
@@ -111,7 +91,7 @@ const TotalEarnings = () => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      
+
       <div className="legend">
         <span className="dot paid"></span> Paid
         <span className="dot unpaid"></span> Unpaid

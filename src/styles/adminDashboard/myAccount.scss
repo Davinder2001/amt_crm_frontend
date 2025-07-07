@@ -267,6 +267,9 @@
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
 
         &:hover {
           background: darken(#384B70, 5%);
@@ -609,14 +612,22 @@
       }
     }
 
-    .company-stack .company-item .company-status .switch-badge {
-      display: flex;
-      opacity: 1;
-      visibility: visible;
-      position: relative;
-      top: 0;
-      left: 0;
-      transform: none;
+    .company-stack .company-item {
+      .company-status .switch-badge {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+      }
+
+      &:hover {
+        .company-status .switch-badge {
+          transform: none;
+        }
+      }
     }
 
     .personal-panel {

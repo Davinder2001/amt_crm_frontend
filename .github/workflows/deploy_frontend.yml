@@ -86,11 +86,12 @@ jobs:
             cd /srv/amt-crm-frontend
             tar -xzf deployment.tar.gz
             docker compose down --remove-orphans || true
-            docker compose up --build -d
+            docker compose up --build -d --quiet-pull
             sleep 30
             if ! docker compose ps frontend | grep -q "Up"; then
               echo "❌ Frontend container is not running. Checking logs..."
               docker compose logs frontend
               exit 1
             fi
-            echo "Deployment completed successfully!" 
+            echo "✅ Deployment completed successfully!"
+            echo "🌐 Your application is available at: https://himmanav.com" 

@@ -464,7 +464,8 @@ const Items: React.FC = () => {
                   alignItems: 'center',
                   gap: '20px',
                   cursor: 'pointer',
-                  color: '#384B70'
+                  color: '#384B70',
+                  textDecoration: 'none'
                 }}
                   href={`/${companySlug}/store/add-stock/${item.id}`}
                   onClick={() => {

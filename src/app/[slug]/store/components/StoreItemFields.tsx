@@ -1,8 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import { Tooltip, IconButton } from '@mui/material';
-import { FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
 import AddVendor from './AddVendor';
 import ImageUpload from './ImageUpload';
 import { FormInput } from '@/components/common/FormInput';
@@ -111,9 +109,6 @@ const StoreItemFields = <T extends StoreItemFormData>({
                 <div className="store-add-item">
                     {/* Header + Tabs */}
                     <div className="add-item-header store_column" ref={headerRef}>
-                        <Link href={`/${companySlug}/store`} className="back-button">
-                            <FaArrowLeft size={16} color="#fff" />
-                        </Link>
                         <h4 className='store_page_heading'>
                             {pageTitle}
                         </h4>

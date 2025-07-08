@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useFetchMeasuringUnitsQuery, useFetchStoreItemQuery, useFetchTaxesQuery, useUpdateStoreItemMutation } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
 import { IconButton, Tooltip } from '@mui/material';
 import useStickyWithOffset from '@/utils/StickyWithOffset';
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
@@ -232,9 +230,6 @@ const EditItem: React.FC = () => {
       <div className="store-add-item">
         {/* Header + Tabs */}
         <div className="add-item-header store_column" ref={headerRef}>
-          <Link href={`/${companySlug}/store`} className="back-button">
-            <FaArrowLeft size={16} color="#fff" />
-          </Link>
           <h4 className='store_page_heading'>
             Update Product : {formData.name}
           </h4>

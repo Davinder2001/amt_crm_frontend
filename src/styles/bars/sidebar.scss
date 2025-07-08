@@ -16,6 +16,23 @@
     z-index: 999999;
     height: 100vh;
 
+    .sidebar-toggle-btn {
+        position: absolute;
+        right: -28px;
+        bottom: 0;
+        width: 28px;
+        height: 28px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $white;
+        border-radius: 0px $border-radius $border-radius 0px;
+        svg{
+            color: var(--primary-color);
+        }
+    }
+
     .sidebar-header {
         display: flex;
         align-items: center;

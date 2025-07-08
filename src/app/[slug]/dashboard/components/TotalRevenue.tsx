@@ -27,10 +27,10 @@ const TotalRevenue = () => {
                 </span>
             </div>
             <div className="chart-placeholder">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={revenueData}
                         margin={{
-                            top: 10,
+                            top: 20,
                             right: 0,
                             left: 0, 
                             bottom: 5,

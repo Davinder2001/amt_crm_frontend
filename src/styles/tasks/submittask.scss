@@ -68,10 +68,12 @@
     .image-preview-grid {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 10px;
 
         .image-preview-item {
             position: relative;
+            box-shadow: $box-shadow;
 
             img {
                 border-radius: $border-radius;

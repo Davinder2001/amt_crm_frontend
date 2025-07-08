@@ -33,7 +33,7 @@
 @use './Hr/employees_sallery.scss' as *;
 @use './Hr/edituser.scss' as *;
 @use './Hr/employee_profile.scss' as *;
-@use './Hr/view-attendence.scss' as *;
+@use './Hr/view-attendance.scss' as *;
 @use './Hr/employee_form_.scss' as *;
 
 
@@ -237,7 +237,7 @@ textarea {
     }
 }
 
-.hr-attendence-table {
+.hr-attendance-table {
     .user-status {
         .status {
             text-transform: capitalize;
@@ -271,7 +271,7 @@ textarea {
 
 
 
-.employee-attendence-view {
+.employee-attendance-view {
     .user-status {
         .status {
             text-transform: capitalize;

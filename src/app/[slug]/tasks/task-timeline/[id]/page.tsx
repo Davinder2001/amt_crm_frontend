@@ -21,6 +21,7 @@ import SubmitTaskComponent from '../../components/SubmitTaskComponent';
 import Modal from '@/components/common/Modal';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { FaBell, FaDownload, FaEdit, FaReply } from 'react-icons/fa';
 const ViewTimeline = () => {
   const params = useParams();
   const id = params?.id as string;
@@ -74,8 +75,6 @@ const ViewTimeline = () => {
       toast.info("No attachments found.");
       return;
     }
-
-    toast.info("Zipping all attachments...");
 
     await Promise.all(
       allAttachments.map(async (url, index) => {
@@ -240,25 +239,15 @@ const ViewTimeline = () => {
               </div>
             )}
 
-
             {openImage && (
-              <Modal isOpen={true} onClose={() => setOpenImage(null)} title="Image Preview">
-                <div style={{ textAlign: 'center' }} className='timeline-modal-wrapper'>
+              <Modal isOpen={true} onClose={() => setOpenImage(null)} title={<>Image Preview <FaDownload size={14} onClick={() => handleDownload(openImage)} /></>} width='800px'>
+                <div className='attachment-images-popup'>
                   <Image
                     src={openImage}
                     alt="Full Preview"
-                    width={600}
-                    height={400}
-                    style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                    width={1000}
+                    height={1000}
                   />
-                  <div className='timeline-dawnload-imaeg-btn-outer'>
-                    <button
-                      onClick={() => handleDownload(openImage)}
-                      className='buttons'
-                    >
-                      Download Image
-                    </button>
-                  </div>
                 </div>
               </Modal>
             )}
@@ -278,50 +267,59 @@ const ViewTimeline = () => {
             className="buttons"
             onClick={() => setShowSubmitTask(prev => !prev)}
           >
-            Follow Up
+            <FaReply /> Follow Up
           </button>
-          <button onClick={() => setShowReminderForm((prev) => !prev)}>
-            {reminderData?.reminder ? '✏️ Edit Reminder' : '⏰ Set Reminder'}
+          <button onClick={() => setShowReminderForm((prev) => !prev)} className="buttons">
+            {reminderData?.reminder ? (
+              <>
+                <FaEdit /> Edit Reminder
+              </>
+            ) : (
+              <>
+                <FaBell /> Set Reminder
+              </>
+            )}
           </button>
         </div>
       </div>
 
       {showReminderForm && (
-        <div className="reminder-form" onClick={() => setShowReminderForm(false)}>
-          <div className="reminder-content" onClick={(e) => e.stopPropagation()}>
-            <h4>{reminderData?.reminder ? 'Update Reminder' : 'Set Reminder'}</h4>
+        <Modal
+          isOpen={showReminderForm}
+          onClose={() => setShowReminderForm(false)}
+          title={reminderData?.reminder ? 'Update Reminder' : 'Set Reminder'}
+          width="400px"
+        >
+          <label
+            onClick={() => reminderInputRef.current?.focus()}
+            style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
+          >
+            Reminder At:
+            <input
+              type="datetime-local"
+              value={reminderAt}
+              onChange={(e) => setReminderAt(e.target.value)}
+              ref={reminderInputRef}
+              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
+            />
+          </label>
 
-            <label
-              onClick={() => reminderInputRef.current?.focus()}
-              style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
-            >
-              Reminder At:
-              <input
-                type="datetime-local"
-                value={reminderAt}
-                onChange={(e) => setReminderAt(e.target.value)}
-                ref={reminderInputRef}
-                style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-              />
-            </label>
+          <label
+            onClick={() => endDateInputRef.current?.focus()}
+            style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
+          >
+            End Date:
+            <input
+              type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              ref={endDateInputRef}
+              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
+            />
+          </label>
 
-            <label
-              onClick={() => endDateInputRef.current?.focus()}
-              style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
-            >
-              End Date:
-              <input
-                type="datetime-local"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                ref={endDateInputRef}
-                style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-              />
-            </label>
-
-            <button type="button" onClick={handleReminderSubmit}>Submit</button>
-          </div>
-        </div>
+          <button type="button" onClick={handleReminderSubmit} className='buttons'>Submit</button>
+        </Modal>
       )}
 
       {isLoading ? (
@@ -348,7 +346,7 @@ const ViewTimeline = () => {
       ) : histories.length > 0 ? (
         histories.map(renderTimelineItem)
       ) : (
-        <div className="submit-new-task" style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <div className="submit-new-task" style={{ textAlign: 'center', margin: '30px auto' }}>
           <p style={{ color: '#999' }}>🚫 No timeline history available yet.</p>
         </div>
       )}
@@ -357,8 +355,8 @@ const ViewTimeline = () => {
         <Modal
           isOpen={showSubmitTask}
           onClose={() => setShowSubmitTask(false)}
-          title={`Submit Task ${id}`}
-          width="800px"
+          title={`Follow up ${id}`}
+          width="600px"
         >
           <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
         </Modal>

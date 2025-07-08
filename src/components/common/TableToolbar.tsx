@@ -403,16 +403,13 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                     {actions && actions?.length > 0 ? (
                         <div className="action-icons-horizontal">
                             {actions.map((action, i) => (
-                                <div key={i} className="action-tooltip">
-                                    <button
-                                        onClick={action.onClick}
-                                        className="toolbar-btn"
-                                    >
-                                        <i>{action.icon}</i>
-                                        <span>{action.label}</span>
-                                    </button>
-                                    <span className="tooltip-text">{action.label}</span>
-                                </div>
+                                <button key={i}
+                                    onClick={action.onClick}
+                                    className="toolbar-btn"
+                                >
+                                    <i>{action.icon}</i>
+                                    <span>{action.label}</span>
+                                </button>
                             ))}
                         </div>
                     ) : null}

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify'
-import { encodeStorage } from '@/utils/Company'
+import { encodeStorage, useCompany } from '@/utils/Company'
 import { useEffect, useState } from 'react'
 import { invalidateAllCompanyApis } from '@/utils/ApiDispatch'
 import { AppDispatch } from '@/store/store'
@@ -24,11 +24,10 @@ const Profile = () => {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [editUserModal, setEditUserModal] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
-
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
-
   const user = data?.user
+  const { companySlug } = useCompany();
 
   useEffect(() => {
     if (user?.companies) {
@@ -102,10 +101,7 @@ const Profile = () => {
       {/* Header */}
       <div className="radical-header">
         <div className="header-content">
-          <h1>
-            <span className="name-highlight">{user?.name}</span>
-            <span className="id-badge">ID: {user?.id}</span>
-          </h1>
+          <h2 className="name-highlight">{user?.name}</h2>
           <div className="header-actions">
             <Link href="my-account/change-password" className="action-btn">
               <span>🔒 Password</span>
@@ -158,48 +154,53 @@ const Profile = () => {
           </div>
 
           <div className="company-stack">
-            {companies.map((company) => (
-              <div
-                key={company.id}
-                className={`company-item ${company.verification_status}`}
-                onClick={(e) => handleCardClick(company, e)}
-              >
+            {companies.map((company) => {
+              const isCurrentCompany = company.company_slug === companySlug;
+              return (
+                <div
+                  key={company.id}
+                  className={`company-item ${company.verification_status}`}
+                  onClick={(e) => handleCardClick(company, e)}
+                >
 
-                <div className="company-main">
-                  <h3>{company.company_name}</h3>
-                  <div className="company-id">#{company.company_id}</div>
-                </div>
-
-                <div className="company-status">
-                  <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
-                  <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
-                  <div className="switch-badge">
-                    <div className="badge-text">Switch</div>
+                  <div className="company-main">
+                    <h3>{company.company_name}</h3>
+                    <div className="company-id">#{company.company_id}</div>
                   </div>
-                </div>
 
-                {company.payment_status === 'pending' ? (
-                  <button
-                    className="view-btn"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setSelectedCompany(company)
-                      setIsRecheckModal(true)
-                    }}
-                  >
-                    Check Status
-                  </button>
-                ) : (
-                  <button
-                    className="view-btn"
-                    onClick={(e) => handleViewDetailsClick(company, e)}
-                    disabled={loadingCompanyId === company.id}
-                  >
-                    {loadingCompanyId === company.id ? '↻' : 'View Details'}
-                  </button>
-                )}
-              </div>
-            ))}
+                  <div className="company-status">
+                    <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
+                    <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
+                    {!isCurrentCompany && (
+                      <div className="switch-badge">
+                        <div className="badge-text">Switch</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {company.payment_status === 'pending' ? (
+                    <button
+                      className="view-btn"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedCompany(company)
+                        setIsRecheckModal(true)
+                      }}
+                    >
+                      Check Status
+                    </button>
+                  ) : (
+                    <button
+                      className="view-btn"
+                      onClick={(e) => handleViewDetailsClick(company, e)}
+                      disabled={loadingCompanyId === company.id}
+                    >
+                      {loadingCompanyId === company.id ? 'Loading...' : 'View Details'}
+                    </button>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

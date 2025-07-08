@@ -184,24 +184,9 @@
       justify-content: space-between;
       align-items: flex-end;
 
-      h1 {
+      .name-highlight {
         margin: 0;
-        display: flex;
-        align-items: flex-end;
-        gap: 1rem;
-
-        .name-highlight {
-          font-size: 25px;
-          font-weight: 700;
-          line-height: 1;
-        }
-
-        .id-badge {
-          font-size: 14px;
-          background: rgba(255, 255, 255, 0.2);
-          padding: 2px 8px;
-          border-radius: $border-radius;
-        }
+        font-size: 25px;
       }
     }
 
@@ -561,21 +546,8 @@
         white-space: nowrap;
         gap: 8px;
 
-        h1 {
-          .name-highlight {
-            font-size: 20px;
-
-            span.name-highlight {
-              width: 100%;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              overflow: hidden;
-            }
-          }
-
-          .id-badge {
-            font-size: 12px;
-          }
+        .name-highlight {
+          font-size: 18px;
         }
       }
 

@@ -120,10 +120,55 @@ const Page = () => {
           message="You're all caught up! No pending tasks at the moment."
         />
       ) : (
-        <ResponsiveTable<Task>
+        <ResponsiveTable
           data={tasks}
           columns={columns}
           onView={(id) => router.push(`/${companySlug}/tasks/task-timeline/${id}`)}
+          cardView={(task: Task) => (
+            <>
+              <div className="card-row">
+                <h5>{task.name}</h5>
+                <p>Status: <span className="text-green-700 capitalize">{task.status}</span></p>
+              </div>
+              <div className="card-row">
+                <p>{task.description || 'No description'}</p>
+              </div>
+              <div className="card-row">
+                <p>Dates: {task.start_date || '—'} to {task.end_date || '—'}</p>
+              </div>
+              <div className="card-row actions">
+                {task.status === 'pending' ? (
+                  <button
+                    type='button'
+                    onClick={() => handleCheckTask(task.id)}
+                    disabled={isMarking}
+                    className="task-button"
+                  >
+                    <FaCheckCircle />
+                    {isMarking ? 'Updating...' : 'Start'}
+                  </button>
+                ) : task.status === 'submitted' ? (
+                  <button
+                    type='button'
+                    className="task-button"
+                    style={{ cursor: 'not-allowed', backgroundColor: 'gray' }}
+                    disabled={true}
+                  >
+                    Submitted
+                  </button>
+                ) : (
+                  <button
+                    type='button'
+                    onClick={() => handleSubmitTask(task.id)}
+                    className="task-button"
+                  >
+                    <FaReply />
+                    Follow Up
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         />
       )}
 
@@ -132,8 +177,8 @@ const Page = () => {
       <Modal
         isOpen={isSubmitTaskOpen}
         onClose={() => setIsSubmitTaskOpen(false)}
-        title={`Submit Task ${currentTaskId}`}
-        width="800px"
+        title={`Follow up ${currentTaskId}`}
+        width="600px"
       >
         <SubmitTaskComponent
           taskId={currentTaskId!}

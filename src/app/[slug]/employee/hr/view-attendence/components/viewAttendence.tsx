@@ -62,7 +62,7 @@ function ViewAttendence() {
   };
 
   return (
-    <div className='hr-attendence-table'>
+    <div className='hr-attendance-table'>
       {attendanceList.length > 0 ? (
         <table border={1} cellPadding="10" cellSpacing="0">
           <thead>

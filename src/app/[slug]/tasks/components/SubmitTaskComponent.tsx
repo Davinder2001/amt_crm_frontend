@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useGetTasksQuery, useSubmitTaskMutation } from '@/slices';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useSubmitTaskMutation } from '@/slices';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';
-import LoadingState from '@/components/common/LoadingState';
+import { FiUpload } from 'react-icons/fi';
 
 export interface SubmitTaskProps {
     onTaskSubmit?: () => void;
@@ -15,33 +14,14 @@ export interface SubmitTaskProps {
 }
 
 export default function SubmitTaskComponent({ onTaskSubmit, onSuccess, taskId }: SubmitTaskProps) {
-
-    const { setTitle } = useBreadcrumb();
-    const { data: tasksData, isLoading } = useGetTasksQuery();
-    const task = tasksData?.data.find((t) => t.id === taskId);
-
-
     const [submitTask, { isLoading: submitting }] = useSubmitTaskMutation();
     const [description, setDescription] = useState('');
     const [files, setFiles] = useState<File[]>([]);
-    const [previews, setPreviews] = useState<string[]>([]);
-    const [selectedPreview, setSelectedPreview] = useState<string | null>(null);
-
-    useEffect(() => {
-        setTitle('Submit Task');
-    }, [setTitle]);
-
-    useEffect(() => {
-        const urls = files.map((f) => URL.createObjectURL(f));
-        setPreviews(urls);
-        return () => urls.forEach((u) => URL.revokeObjectURL(u));
-    }, [files]);
-
-    if (isLoading) return <LoadingState/>;
-    if (!task) return (<p>No task found with ID: {taskId}</p>);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setFiles(e.target.files ? Array.from(e.target.files) : []);
+        if (e.target.files) {
+            setFiles(prevFiles => [...prevFiles, ...Array.from(e.target.files!)]);
+        }
     };
 
     const handleRemoveImage = (index: number) => {
@@ -57,39 +37,35 @@ export default function SubmitTaskComponent({ onTaskSubmit, onSuccess, taskId }:
 
         const formData = new FormData();
         formData.append('id', String(taskId));
-
         formData.append('description', description);
         files.forEach((file) => formData.append('attachments[]', file));
 
         try {
-            const result = await submitTask({ id: task.id, formData }).unwrap();
+            const result = await submitTask({ id: taskId!, formData }).unwrap();
             toast.success(result.message);
             if (onTaskSubmit) onTaskSubmit();
             if (onSuccess) onSuccess();
-
         } catch (err) {
             console.error(err);
         }
     };
 
     return (
-        <div className="submit-task-wrapper">
+        <>
             <form onSubmit={handleSubmit} className="submit-task-form">
                 <div className="form-group">
-                    <label htmlFor="description"><strong>Description</strong></label>
+                    <label htmlFor="description">Description</label>
                     <textarea
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        rows={4}
+                        rows={3}
                         placeholder="Describe your work..."
                     />
                 </div>
 
-                <div className="form-group fancy-upload">
-                    <label htmlFor="attachments" className="upload-label">
-                        <strong>Upload Attachments</strong>
-                    </label>
+                <div className="form-group">
+                    <label htmlFor="attachments">Upload Attachments</label>
                     <div className="upload-card">
                         <input
                             id="attachments"
@@ -99,46 +75,40 @@ export default function SubmitTaskComponent({ onTaskSubmit, onSuccess, taskId }:
                             onChange={handleFileChange}
                             className="upload-input"
                         />
-                        <div className="upload-inner">
-                            <div className="upload-icon">📤</div>
-                            <p className="upload-text">Show us your progress! Upload an image</p>
-                        </div>
+                        <FiUpload size={18} className="upload-icon" />
+                        <p className="upload-text">Click here to upload or drag & drop</p>
+                        <small className="upload-note">SVG, JPG, PNG up to 10MB</small>
                     </div>
                 </div>
 
+                {/* Preview uploaded images */}
+                {files.length > 0 && (
 
-                {previews.length > 0 && (
-                    <div className="preview-container">
-                        {previews.map((src, idx) => (
-                            <div className="preview-box" key={idx}>
+                    <div className="image-preview-grid">
+                        {files.map((file, index) => (
+                            <div key={index} className="image-preview-item">
                                 <Image
-                                    src={src}
-                                    alt={`Preview ${idx + 1}`}
-                                    className="preview-image"
-                                    width={100}
-                                    height={100}
-                                    onClick={() => setSelectedPreview(src)}
+                                    src={URL.createObjectURL(file)}
+                                    alt={`Preview ${index + 1}`}
+                                    width={50}
+                                    height={50}
                                 />
-                                <button type="button" className="remove-image" onClick={() => handleRemoveImage(idx)}>
+                                <span
+                                    className="remove-image-btn"
+                                    onClick={() => handleRemoveImage(index)}
+                                >
                                     <FaTimes />
-                                </button>
+                                </span>
                             </div>
                         ))}
                     </div>
                 )}
                 <div className='task-timeline-btn-wrapper'>
-                    <button type="submit" className="submit-button" disabled={submitting}>
-                        {submitting ? 'Submitting…' : 'Submit Task'}
+                    <button type="submit" className="buttons" disabled={submitting}>
+                        {submitting ? 'Submitting…' : 'Submit'}
                     </button>
                 </div>
             </form>
-
-            {/* Image Viewer Modal */}
-            {selectedPreview && (
-                <div className="media-modal" onClick={() => setSelectedPreview(null)}>
-                    <Image src={selectedPreview} alt="Preview Fullscreen" width={500} height={500} />
-                </div>
-            )}
-        </div>
+        </>
     );
 }

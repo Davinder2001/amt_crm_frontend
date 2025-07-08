@@ -34,7 +34,7 @@ interface Attendance {
   user: User;
 }
 
-function ViewAttendence() {
+function ViewAttendance() {
   const { data: attendancesResponse, refetch } = useFetchAttenancesQuery();
   const [approveAttendance] = useApproveAttendanceMutation();
   const [rejectAttendance] = useRejectAttendanceMutation();
@@ -210,4 +210,4 @@ function ViewAttendence() {
   );
 }
 
-export default ViewAttendence;
+export default ViewAttendance;

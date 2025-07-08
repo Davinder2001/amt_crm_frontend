@@ -41,7 +41,7 @@ const UserList: React.FC = () => {
       toast.error('Company slug not found for employee');
       return;
     }
-    router.push(`/${employee.company_slug}/employee/hr/update/${employee.id}`);
+    router.push(`/${employee.company_slug}/hr/update/${employee.id}`);
   };
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -68,7 +68,6 @@ const UserList: React.FC = () => {
       <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr>
-            <th style={{ border: '1px solid black', padding: '4px' }}>Sr. No</th>
             <th style={{ border: '1px solid black', padding: '4px' }}>Name</th>
             <th style={{ border: '1px solid black', padding: '4px' }}>Email</th>
             <th style={{ border: '1px solid black', padding: '4px' }}>Roles</th>
@@ -79,11 +78,8 @@ const UserList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee, index) => (
+          {employees.map((employee) => (
             <tr key={employee.id}>
-              <td style={{ border: '1px solid black', padding: '4px' }}>
-                {index + 1}
-              </td>
               <td style={{ border: '1px solid black', padding: '4px' }}>{employee.name}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>{employee.email}</td>
               <td style={{ border: '1px solid black', padding: '4px' }}>

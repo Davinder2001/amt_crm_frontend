@@ -17,7 +17,7 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/employee/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
+      <Link href={`/${companySlug}/hr`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       <SalaryView />
     </>
   )

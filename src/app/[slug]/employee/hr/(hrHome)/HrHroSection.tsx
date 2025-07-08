@@ -4,12 +4,13 @@ import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
+import { useFetchdashboardSummaryQuery } from '@/slices/hr/hrApi';
 
 const HrHeroSection = () => {
   const { data: employeesData } = useFetchEmployesQuery();
   const employees = employeesData?.employees || [];
-  const totalEmployees = employeesData?.total || 0;
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
+  const { data: dashSummary } = useFetchdashboardSummaryQuery();
 
   return (
     <div className="hr-hero-wrapper">
@@ -19,29 +20,32 @@ const HrHeroSection = () => {
 
         {/* Middle Section - Stats */}
         <div className="stats-grid">
-          <StatCard icon={<FaUsers />} value={totalEmployees} label="Total Employees" note="+ 2 new employees added!" />
-          <StatCard icon={<FaCheckCircle />} value="360" label="On Time" note="-10% Less than yesterday" />
-          <StatCard icon={<FaTimesCircle />} value="30" label="Absent" note="+3% Increase than yesterday" />
-          <StatCard icon={<FaClock />} value="62" label="Late Arrival" note="+3% Increase than yesterday" />
-          <StatCard icon={<FaSignOutAlt />} value="06" label="Early Departures" note="-10% Less than yesterday" />
-          <StatCard icon={<FaCalendarAlt />} value="42" label="Time Off" note="+2% Increase than yesterday" />
+          <StatCard icon={<FaUsers />} value={dashSummary?.summary?.total_employees ?? 0} label="Total Employees" note={`+ ${dashSummary?.summary.total_employees ?? 0} new employees added!`} />
+          <StatCard icon={<FaCheckCircle />} value={dashSummary?.summary?.present_today?.length ?? 0} label="Present" note="-10% Less than yesterday" />
+          <StatCard icon={<FaTimesCircle />} value={dashSummary?.summary?.absent_today ?? 0} label="Absent" note="+3% Increase than yesterday" />
+          <StatCard icon={<FaClock />} value={dashSummary?.lateArrival?.length ?? 0} label="Late Arrival" note="+3% Increase than yesterday" />
+          <StatCard icon={<FaSignOutAlt />} value={dashSummary?.early_departures?.length ?? 0} label="Early Departures" note="-10% Less than yesterday" />
+          <StatCard icon={<FaCalendarAlt />} value={dashSummary?.monthly_leaves?.length ?? 0} label="Time Off" note="+2% Increase than yesterday" />
         </div>
       </div>
       {/* Right Section - Active Employees */}
-      <div className="active-employee-box">
-        <h3>Recent Active Employee</h3>
-        <ul>
-          {activeEmployees.slice(0, 5).map((emp) => (
-            <li key={emp.id} className="employee-item">
-              <div className="emp-avatar">{emp.name.charAt(0).toUpperCase()}</div>
-              <div className="emp-info">
-                <p>{emp.name}</p>
-                <span className="emp-status active">Active</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {activeEmployees.length > 0 ?
+        <div className="active-employee-box">
+          <h3>Recent Active Employee</h3>
+          <ul>
+            {activeEmployees.slice(0, 5).map((emp) => (
+              <li key={emp.id} className="employee-item">
+                <div className="emp-avatar">{emp.name.charAt(0).toUpperCase()}</div>
+                <div className="emp-info">
+                  <p>{emp.name}</p>
+                  <span className="emp-status active">Active</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        : ''
+      }
     </div>
   );
 };
@@ -155,7 +159,7 @@ const TimeSection = React.memo(() => {
         {dateTime.toLocaleString('default', { month: 'long' })}{' '}
         {dateTime.getFullYear()}
       </p>
-      <Link className="attendance-btn" href={`/${companySlug}/employee/hr/view-attendance`}>
+      <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendance`}>
         View Attendance
       </Link>
     </div>

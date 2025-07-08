@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useGetInvoiceByIdQuery } from '@/slices';
+import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoiceApi';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';

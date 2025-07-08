@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaArrowLeft, FaPlus, FaUsers } from 'react-icons/fa';
-import { useFetchAllCustomersQuery } from '@/slices';
+import { useFetchAllCustomersQuery } from '@/slices/customers/customerApi';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';

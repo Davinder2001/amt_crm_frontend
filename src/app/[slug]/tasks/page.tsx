@@ -1,51 +1,49 @@
+
 'use client';
 import React, { useEffect, useState } from 'react';
 import AllTasks from './components/allTasks';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import MyTasks from './components/myTasks';
 import TableToolbar from '@/components/common/TableToolbar';
-import { FaPlus, FaRegCalendarAlt, FaUserCheck, FaRedo } from 'react-icons/fa';
+import { FaPlus, FaUserCheck, FaRedo, FaList, FaUser } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import { Tabs, Tab, Box } from '@mui/material';
-import { useGetPendingTasksQuery } from '@/slices';
+import { Box } from '@mui/material';
+import { useGetMyTasksQuery } from '@/slices';
 
 const Page = () => {
   const { setTitle } = useBreadcrumb();
   const router = useRouter();
   const { companySlug } = useCompany();
-  const { data } = useGetPendingTasksQuery();
-  const [activeTab, setActiveTab] = useState(0);
+  const { data } = useGetMyTasksQuery();
+  const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
 
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
+  const handleTabChange = (tab: 'all' | 'my') => {
+    setActiveTab(tab);
   };
 
   useEffect(() => {
     setTitle('Tasks Details of Employees');
   }, [setTitle]);
 
-  // Conditionally show tabs based on data length
-  const showTabs = (data?.data?.length ?? 0) > 0;
-
   return (
     <>
       <TableToolbar
         actions={[
           {
-            label: 'Task Timeline',
-            icon: <FaRegCalendarAlt />,
-            onClick: () => router.push(`/${companySlug}/tasks/task-timeline`),
+            label: 'All Tasks',
+            icon: <FaList />,
+            onClick: () => handleTabChange('all'),
           },
           {
-            label: 'Add Task',
-            icon: <FaPlus />,
-            onClick: () => setIsAddModalOpen(true),
+            label: `My Tasks (${data?.data?.length || 0})`,
+            icon: <FaUser />,
+            onClick: () => handleTabChange('my'),
           },
           {
             label: 'Attendance',
@@ -57,52 +55,17 @@ const Page = () => {
             icon: <FaRedo />,
             onClick: () => router.push(`/${companySlug}/tasks/recurring-tasks`),
           },
+          {
+            label: 'Add Task',
+            icon: <FaPlus />,
+            onClick: () => setIsAddModalOpen(true),
+          },
         ]}
         introKey='tasks_intro'
       />
 
-      {/* Conditionally render the Tabs component */}
-      {showTabs && (
-        <Box>
-          <Tabs value={activeTab} onChange={handleTabChange} aria-label="task tabs"
-            variant="scrollable"
-            scrollButtons="auto"
-            style={{ backgroundColor: '#fff' }}
-            sx={{
-              '& .MuiTab-root': {
-                color: 'var(--primary-color)',
-                '&.Mui-disabled': {
-                  color: '#ccc',
-                },
-                '&.Mui-selected': {
-                  color: 'var(--primary-color)',
-                },
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: 'var(--primary-color)',
-              },
-            }}
-          >
-            <Tab label="All Tasks" />
-            <Tab label={`My Tasks (${data?.data?.length || 0})`} />
-          </Tabs>
-        </Box>
-      )}
-
       <Box>
-        {/* Conditionally render AllTasks or MyTasks based on the selected tab */}
-        {showTabs ? (
-          activeTab === 0 ?
-            <AllTasks
-              isAddModalOpen={isAddModalOpen}
-              isEditModalOpen={isEditModalOpen}
-              currentTaskId={currentTaskId}
-              setIsAddModalOpen={setIsAddModalOpen}
-              setIsEditModalOpen={setIsEditModalOpen}
-              setCurrentTaskId={setCurrentTaskId}
-            /> : <MyTasks />
-        ) : (
-          // If no data, just render AllTasks by default
+        {activeTab === 'all' ? (
           <AllTasks
             isAddModalOpen={isAddModalOpen}
             isEditModalOpen={isEditModalOpen}
@@ -111,6 +74,8 @@ const Page = () => {
             setIsEditModalOpen={setIsEditModalOpen}
             setCurrentTaskId={setCurrentTaskId}
           />
+        ) : (
+          <MyTasks />
         )}
       </Box>
     </>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import {
   useFetchAdminBillingQuery,
   useCreateRefundMutation,
-} from '@/slices';
+} from '@/slices/paymentsAndBillings/payBillApi';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';

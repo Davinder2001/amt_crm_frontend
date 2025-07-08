@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useFetchPaySlipByIdQuery } from '@/slices';
+import { useFetchPaySlipByIdQuery } from '@/slices/employe/employeApi';
 import Loader from '@/components/common/Loader';
 
 function Page() {

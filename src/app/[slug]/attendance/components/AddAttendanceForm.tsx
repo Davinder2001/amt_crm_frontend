@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
-import { useRecordAttendanceMutation } from "@/slices";
+import { useRecordAttendanceMutation } from "@/slices/attendance/attendanceApi";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { FaCamera, FaUpload, FaCheckCircle } from "react-icons/fa";

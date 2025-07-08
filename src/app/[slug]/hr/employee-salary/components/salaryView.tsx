@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
-} from "@/slices";
+} from "@/slices/employe/employeApi";
+import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
 import { FaEnvelope } from "react-icons/fa";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
-import ResponsiveTable from "@/components/common/ResponsiveTable";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();

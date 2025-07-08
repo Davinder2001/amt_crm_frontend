@@ -6,7 +6,7 @@ import {
   useCreateLeaveMutation,
   useUpdateLeaveMutation,
   useDeleteLeaveMutation,
-} from '@/slices';
+} from '@/slices/company/companyApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';

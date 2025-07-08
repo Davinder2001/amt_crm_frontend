@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useGetCashPaymentHistoryQuery } from '@/slices';
+import { useGetCashPaymentHistoryQuery } from '@/slices/invoices/invoiceApi';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import { FaMoneyBillWave } from 'react-icons/fa';

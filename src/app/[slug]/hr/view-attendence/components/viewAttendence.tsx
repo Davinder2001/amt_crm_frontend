@@ -1,5 +1,5 @@
 'use client';
-import { useFetchAttenancesQuery, useApproveAttendanceMutation, useRejectAttendanceMutation } from '@/slices';
+import { useFetchAttenancesQuery, useApproveAttendanceMutation, useRejectAttendanceMutation } from '@/slices/attendance/attendanceApi';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';

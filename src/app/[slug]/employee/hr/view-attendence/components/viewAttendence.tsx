@@ -1,8 +1,9 @@
 'use client';
-import { useFetchAttenancesQuery, useApproveAttendanceMutation, useRejectAttendanceMutation } from '@/slices';
+import { useFetchAttenancesQuery } from '@/slices/attendance/attendanceApi';
 import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useApproveAttendanceMutation, useRejectAttendanceMutation } from '@/slices/attendance/attendanceApi';
 import Image from 'next/image';
 
 interface User {

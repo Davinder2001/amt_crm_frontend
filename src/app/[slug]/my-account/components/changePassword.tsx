@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useChangePasswordMutation } from '@/slices';
+import { useChangePasswordMutation } from '@/slices/auth/authApi';
 import { FaEye, FaEyeSlash, FaKey, FaLock } from 'react-icons/fa';
 import { FaCircleCheck } from 'react-icons/fa6';
 

@@ -1,5 +1,5 @@
 'use client'
-import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices'
+import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'

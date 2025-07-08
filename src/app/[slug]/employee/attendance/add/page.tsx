@@ -1,7 +1,7 @@
 "use client"; // If you're in Next.js 13 with app router
 import React, { useState, useRef } from "react";
 import ReactWebcam from "react-webcam";
-import { useRecordAttendanceMutation } from "@/slices";
+import { useRecordAttendanceMutation } from "@/slices/attendance/attendanceApi";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import Link from "next/link";

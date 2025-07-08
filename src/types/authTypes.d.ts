@@ -132,26 +132,20 @@ interface PlanLimits {
   items_number: number;
   daily_tasks_number: number;
   invoices_number: number;
-  task: boolean;
-  chat: boolean;
-  hr: boolean;
 }
 
-interface Limit {
-  variant_type: 'monthly' | 'annual' | 'three_years';
+type Limit = {
+  id: number;
+  variant_type: string;
   employee_numbers: number;
   items_number: number;
   daily_tasks_number: number;
   invoices_number: number;
-  Task: boolean;  // Capitalized
-  Chat: boolean;  // Capitalized
-  Hr: boolean;    // Capitalized
-}
+};
 
 interface PackagePlan {
+  id?: number;
   name: string;
-  package_type: string;
-  user_id: number | null;
   monthly_price: number;
   annual_price: number;
   three_years_price: number;
@@ -159,8 +153,9 @@ interface PackagePlan {
   annual_limits: PlanLimits;
   three_years_limits: PlanLimits;
   business_categories: BusinessCategory[];
-  limits?: Limit[]; // Add this optional property to match the API response
+  limits?: Limit[];
 }
+
 interface PackagePlanResponse {
   data: PackagePlan[];
 }

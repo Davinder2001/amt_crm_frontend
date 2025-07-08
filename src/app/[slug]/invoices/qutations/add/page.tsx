@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useCreateQuotationMutation } from '@/slices';
+import { useCreateQuotationMutation } from '@/slices/quotation/quotationApi';
 import { FaArrowLeft, FaPlus } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';

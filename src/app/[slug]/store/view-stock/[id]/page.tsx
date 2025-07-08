@@ -2,7 +2,10 @@
 
 import React from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useFetchStoreItemQuery, useFetchItemBatchByIdQuery} from '@/slices';
+import {
+    useFetchStoreItemQuery,
+    useFetchItemBatchByIdQuery,
+} from '@/slices';
 import LoadingState from '@/components/common/LoadingState';
 import Image from 'next/image';
 

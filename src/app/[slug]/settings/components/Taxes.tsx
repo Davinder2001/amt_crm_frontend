@@ -6,7 +6,7 @@ import {
     useCreateTaxMutation,
     useUpdateTaxMutation,
     useDeleteTaxMutation,
-} from '@/slices';
+} from '@/slices/company/companyApi';
 import {
     Box,
     IconButton,
@@ -15,9 +15,9 @@ import { FaPlus, FaTrash, FaEdit, FaTasks } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 // Types
 type Tax = {

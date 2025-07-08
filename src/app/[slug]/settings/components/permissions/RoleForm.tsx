@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useEffect, useState, FormEvent } from 'react';
-import { useFetchPermissionsQuery, useCreateRoleMutation, useUpdateRoleMutation, useGetRoleQuery, } from '@/slices';
+import { useFetchPermissionsQuery } from '@/slices/permissions/permissionApi';
+import {
+    useCreateRoleMutation,
+    useUpdateRoleMutation,
+    useGetRoleQuery,
+} from '@/slices/roles/rolesApi';
 import { toast } from 'react-toastify';
 import { Tabs, Tab, Box } from '@mui/material';
 

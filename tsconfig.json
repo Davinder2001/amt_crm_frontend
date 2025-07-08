@@ -17,18 +17,18 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@types/*": ["./src/types/*"],
-      "@/slices/*": ["./src/slices/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/slices": ["./src/slices/index"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ]
     }
   },
   "include": [
@@ -37,8 +37,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts",
-    "types",
-    "src/slices/**/*.ts"
+    "types"
   ],
   "exclude": [
     "node_modules"

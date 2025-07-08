@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { useGetQuotationByIdQuery } from '@/slices';
+import { useGetQuotationByIdQuery } from '@/slices/quotation/quotationApi';
 import { FaClipboardList, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';

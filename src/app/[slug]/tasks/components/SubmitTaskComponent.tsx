@@ -74,7 +74,6 @@ export default function SubmitTaskComponent({ onTaskSubmit, onSuccess, taskId }:
 
     return (
         <div className="submit-task-wrapper">
-            <h2 className="task-title">Task: {task.name}</h2>
             <form onSubmit={handleSubmit} className="submit-task-form">
                 <div className="form-group">
                     <label htmlFor="description"><strong>Description</strong></label>

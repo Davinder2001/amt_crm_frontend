@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
-} from "@/slices";
+} from "@/slices/employe/employeApi";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEdit, FaEnvelope, FaEye, FaTrash } from "react-icons/fa";
 

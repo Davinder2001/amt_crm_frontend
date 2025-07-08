@@ -7,7 +7,7 @@ export * from '@/slices/customers/customerApi';
 export * from '@/slices/employe/employeApi';
 export * from '@/slices/hr/hrApi';
 export * from '@/slices/invoices/invoiceApi';
-export * from '@/slices/notifications/notificationApi';
+export * from '@/slices/notifications/notificationsApi';
 export * from '@/slices/paymentsAndBillings/payBillApi';
 export * from '@/slices/permissions/permissionApi';
 export * from '@/slices/quotation/quotationApi';

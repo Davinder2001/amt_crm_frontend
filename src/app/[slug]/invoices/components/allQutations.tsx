@@ -1,12 +1,16 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useGetAllQuotationsQuery, useGenerateQuotationPdfMutation, Quotation } from '@/slices';
+import {
+  useGetAllQuotationsQuery,
+  useGenerateQuotationPdfMutation,
+} from '@/slices/quotation/quotationApi';
 import { FaArrowLeft, FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
+import { Quotation } from '@/slices/quotation/quotationApi';
 import EmptyState from '@/components/common/EmptyState';
 import Link from 'next/link';
 import TableToolbar from '@/components/common/TableToolbar';

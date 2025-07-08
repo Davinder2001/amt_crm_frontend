@@ -7,8 +7,8 @@ import {
   useImportStoreItemsMutation,
   useLazyExportStoreItemsQuery,
   useBulkDeleteStoreItemsMutation,
-  useFetchSelectedCompanyQuery,
-} from '@/slices';
+} from '@/slices/store/storeApi';
+import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
 import { FaEdit, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';

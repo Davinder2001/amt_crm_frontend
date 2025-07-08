@@ -6,7 +6,7 @@ export type SubmitTaskResponse = {
   message: string;
 };
 
-export const taskApi = apiSlice.injectEndpoints({
+export const tasksApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
     // ⬇ Existing task endpoints
@@ -59,7 +59,7 @@ export const taskApi = apiSlice.injectEndpoints({
 
 
 
-    approveHistory: builder.mutation< TasksResponse, { message: string }, number>({
+    approveHistory: builder.mutation<TasksResponse, { message: string }, number>({
       query: (historyId) => ({
         url: `tasks/${historyId}/approve`,
         method: 'POST',
@@ -83,6 +83,11 @@ export const taskApi = apiSlice.injectEndpoints({
 
     getWorkingTasks: builder.query<TasksResponse, void>({
       query: () => 'tasks/working',
+      providesTags: ['Task'],
+    }),
+
+    getMyTasks: builder.query<TasksResponse, void>({
+      query: () => 'tasks/my-tasks',
       providesTags: ['Task'],
     }),
 
@@ -180,6 +185,7 @@ export const {
   useRejectHistoryMutation,
   useGetPendingTasksQuery,
   useGetWorkingTasksQuery,
+  useGetMyTasksQuery,
   useMarkTaskAsWorkingMutation,
 
   // Predefined task hooks
@@ -195,4 +201,4 @@ export const {
   useViewReminderQuery,
   useUpdateReminderMutation,
 
-} = taskApi;
+} = tasksApi;

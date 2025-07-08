@@ -6,8 +6,9 @@ import {
     useUpdateHolidayMutation,
     useDeleteHolidayMutation,
     useDeleteHolidaysBulkMutation,
-} from '@/slices';
+} from '@/slices/company/companyApi';
 import HolidayForm from './HolidayForm';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import EmptyState from '@/components/common/EmptyState';
 import { FaPlus, FaCalendar, FaEdit, FaTrash } from 'react-icons/fa';
@@ -15,7 +16,6 @@ import { toast } from 'react-toastify';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const HolidayList = () => {
     const { data, isLoading, error, refetch } = useFetchHolidaysQuery();

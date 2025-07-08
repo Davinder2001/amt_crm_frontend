@@ -1,13 +1,16 @@
 'use client';
 import React from 'react';
-import { useFetchMyAttenancesQuery, Attendance } from '@/slices';
+import {
+  useFetchMyAttenancesQuery,
+  Attendance,
+} from '@/slices/attendance/attendanceApi';
 import 'react-toastify/dist/ReactToastify.css';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
-import { FaClipboardList } from 'react-icons/fa';
+import { FaClipboardList} from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import AddAttendanceForm from './AddAttendanceForm';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 interface AttendanceProps {
   isAttandanceOpen: boolean;
@@ -20,10 +23,7 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
   const attendanceList: Attendance[] = Array.isArray(attendanceData?.attendance)
     ? attendanceData.attendance
     : [];
-       
 
-
-    
   let content;
 
   if (isLoading) {
@@ -121,8 +121,8 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
 
     content =
       <>
-
-        <ResponsiveTable data={attendanceList} columns={columns} />
+      
+        <ResponsiveTable data={attendanceList} columns={columns}/>
       </>
 
       ;

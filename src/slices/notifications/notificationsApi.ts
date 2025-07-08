@@ -1,6 +1,6 @@
 import invoiceCreateApiSlice from "./notificationsCreateSlice";
 
-const notificationApi = invoiceCreateApiSlice.injectEndpoints({
+const notificationsApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
     fetchNotifications: builder.query<NotificationResponse, void>({
@@ -31,6 +31,6 @@ export const {
   useFetchNotificationsQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
-} = notificationApi;
+} = notificationsApi;
 
-export default notificationApi;
+export default notificationsApi;

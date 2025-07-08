@@ -1,9 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useFetchEmployesQuery, useFetchdashboardSummaryQuery } from '@/slices';
+import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
 import { FaUsers, FaCheckCircle, FaTimesCircle, FaClock, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
+import { useFetchdashboardSummaryQuery } from '@/slices/hr/hrApi';
 
 const HrHeroSection = () => {
   const { data: employeesData } = useFetchEmployesQuery();

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { usePayCreditInvoiceMutation, useGetCreditInvoiceByIdQuery } from '@/slices';
+import { usePayCreditInvoiceMutation, useGetCreditInvoiceByIdQuery } from '@/slices/invoices/invoiceApi';
 import { toast } from 'react-toastify';
 
 const PayCreditForm: React.FC = () => {

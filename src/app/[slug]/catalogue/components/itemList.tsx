@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFetchCatalogItemsQuery } from '@/slices';
+import { useFetchCatalogItemsQuery } from '@/slices/catalog/catalogApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 

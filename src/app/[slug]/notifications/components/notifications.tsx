@@ -4,7 +4,7 @@ import {
   useFetchNotificationsQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
-} from '@/slices';
+} from '@/slices/notifications/notificationsApi';
 
 type NotificationData = {
   title?: string;

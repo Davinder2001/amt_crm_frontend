@@ -17,7 +17,7 @@ import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
-import SubmitTaskComponent from '../../submit-task/SubmitTaskComponent';
+import SubmitTaskComponent from '../../components/SubmitTaskComponent';
 import Modal from '@/components/common/Modal';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -278,7 +278,7 @@ const ViewTimeline = () => {
             className="buttons"
             onClick={() => setShowSubmitTask(prev => !prev)}
           >
-            {showSubmitTask ? 'Cancel' : 'Create'}
+            Follow Up
           </button>
           <button onClick={() => setShowReminderForm((prev) => !prev)}>
             {reminderData?.reminder ? '✏️ Edit Reminder' : '⏰ Set Reminder'}
@@ -323,6 +323,7 @@ const ViewTimeline = () => {
           </div>
         </div>
       )}
+
       {isLoading ? (
         <div className="timeline-loading">
           {[...Array(3)].map((_, idx) => (
@@ -353,15 +354,18 @@ const ViewTimeline = () => {
       )}
 
       {showSubmitTask &&
-        <div className='timeline-submit-task-wrapper' onClick={() => setShowSubmitTask(false)}>
-          <div className="timeline-submit-task-inner" onClick={(e) => e.stopPropagation()}>
-            <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
-          </div>
-        </div>
+        <Modal
+          isOpen={showSubmitTask}
+          onClose={() => setShowSubmitTask(false)}
+          title={`Submit Task ${id}`}
+          width="800px"
+        >
+          <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
+        </Modal>
       }
 
       <div className="action-buttons">
-        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
+        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/tasks`)}>Cancel</button>
         <ConfirmDialog
           isOpen={showConfirm}
           message="Are you sure you want to end this Task?"
@@ -375,7 +379,7 @@ const ViewTimeline = () => {
           onClick={() => setShowConfirm(true)}
           disabled={isEnding}
         >
-          {isEnding ? 'Ending Task...' : 'End Task'}
+          {isEnding ? 'Submiting Task...' : 'Submit Task'}
         </button>
       </div>
     </div>

@@ -14,7 +14,7 @@ import {
   FaUserFriends,
   FaSpinner,
 } from "react-icons/fa";
-import { useFetchEmployesQuery } from "@/slices";
+import { useFetchEmployesQuery } from "@/slices/employe/employeApi";
 import { useCompany } from "@/utils/Company";
 
 const ListOverview = () => {

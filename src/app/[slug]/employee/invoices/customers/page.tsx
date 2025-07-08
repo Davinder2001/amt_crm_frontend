@@ -1,5 +1,5 @@
 'use client';
-import { useFetchAllCustomersQuery } from '@/slices';
+import { useFetchAllCustomersQuery } from '@/slices/customers/customerApi';
 import { useCompany } from '@/utils/Company';
 import { useRouter } from 'next/navigation';
 import React from 'react';

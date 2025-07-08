@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices';
+import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices/employe/employeApi';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';

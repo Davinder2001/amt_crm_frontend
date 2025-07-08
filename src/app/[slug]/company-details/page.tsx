@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFetchCompanyDetailsQuery } from '@/slices';
+import { useFetchCompanyDetailsQuery } from '@/slices/company/companyApi';
 import { useUpgradeCompanyPackageMutation } from '@/slices/superadminSlices/packages/packagesApi';
 import Modal from '@/components/common/Modal';
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices';
+import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices/employe/employeApi';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 

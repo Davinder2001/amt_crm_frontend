@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import {
     useCreateEmployeMutation,
     useUpdateEmployeMutation,
-    useFetchEmployeByIdQuery, useGetRolesQuery, useFetchCompanyShiftsQuery
-} from "@/slices";
+    useFetchEmployeByIdQuery
+} from "@/slices/employe/employeApi";
+import { useGetRolesQuery } from "@/slices/roles/rolesApi";
+import { useFetchCompanyShiftsQuery } from "@/slices/company/companyApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
@@ -90,11 +92,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
         personal: true,
         job: true,
         bank: true,
-        profilePicture: true,
-        addressProof: true,
     });
 
-    const toggleSection = (section: 'personal' | 'job' | 'bank' | 'profilePicture' | 'addressProof') => {
+    const toggleSection = (section: 'personal' | 'job' | 'bank') => {
         setExpandedSections((prev) => ({
             ...prev,
             [section]: !prev[section],
@@ -108,8 +108,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
             personal: newState,
             job: newState,
             bank: newState,
-            profilePicture: newState,
-            addressProof: newState,
         });
     };
 
@@ -549,7 +547,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                         </div>
                         <div className="form-card">
                             <div className="form-card-title flex justify-between items-center">
-                                <h3 className="flex items-center gap-2 basic_label">
+                                <h3 className="flex items-center gap-2">
                                     Personal Information
                                 </h3>
                                 <button
@@ -621,30 +619,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             {errors.maritalStatus && <div className="error-message">{errors.maritalStatus}</div>}
                                         </div>
 
-
-
-                                        {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", undefined, 10, 10)}
-
-                                        <div className="employee-field">
-                                            <RequiredLabel htmlFor="emergencyContactRelation" className="flex items-center gap-2">
-                                                Emergency Contact Relation
-                                            </RequiredLabel>
-                                            <select
-                                                name="emergencyContactRelation"
-                                                value={formData.emergencyContactRelation}
-                                                onChange={handleChange}
-                                            >
-                                                <option value="">Select Relation</option>
-                                                <option value="mother">Father</option>
-                                                <option value="father">Mother</option>
-                                                <option value="brother">Brother</option>
-                                                <option value="sister">Sister</option>
-                                                <option value="other">Other</option>
-                                            </select>
-                                            {errors.emergencyContactRelation && (
-                                                <div className="error-message">{errors.emergencyContactRelation}</div>
-                                            )}
-                                        </div>
                                         <div className="employee-field">
                                             <RequiredLabel htmlFor="idProofType" className="flex items-center gap-2">
                                                 ID Proof Type
@@ -676,39 +650,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             </select>
                                             {errors.idProofType && <div className="error-message">{errors.idProofType}</div>}
                                         </div>
-                                        {formData.idProofType === "bill" && (
-                                            <div className="employee-field">
-                                                <RequiredLabel className="flex items-center gap-2">
-                                                    Utility Bill Image
-                                                </RequiredLabel>
-                                                <div className="utility-bill-upload">
-                                                    <input
-                                                        type="file"
-                                                        id="utility_bill_image"
-                                                        name="utility_bill_image"
-                                                        accept="image/*"
-                                                        onChange={(e) => handleFileChange(e, 'utility_bill_image')}
-                                                        className="file-input"
-                                                    />
-                                                    <label htmlFor="utility_bill_image" className="upload-button">
-                                                        <FaUpload /> Choose File
-                                                    </label>
-                                                    {utilityBillImagePreview && (
-                                                        <div className="image-preview-small">
-                                                            <Image
-                                                                src={utilityBillImagePreview}
-                                                                alt="Utility Bill Preview"
-                                                                width={60}
-                                                                height={60}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                {errors.utility_bill_image && (
-                                                    <div className="error-message">{errors.utility_bill_image}</div>
-                                                )}
-                                            </div>
-                                        )}
+
                                         {formData.idProofType && formData.idProofType !== "bill" && (
                                             <div className="employee-field">
                                                 <RequiredLabel className="flex items-center gap-2">
@@ -742,6 +684,29 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                 {errors.idProofValue && <div className="error-message">{errors.idProofValue}</div>}
                                             </div>
                                         )}
+
+                                        {renderField("Emergency Contact", "emergencyContact", "text", "Enter emergency contact number", undefined, 10, 10)}
+
+                                        <div className="employee-field">
+                                            <RequiredLabel htmlFor="emergencyContactRelation" className="flex items-center gap-2">
+                                                Emergency Contact Relation
+                                            </RequiredLabel>
+                                            <select
+                                                name="emergencyContactRelation"
+                                                value={formData.emergencyContactRelation}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">Select Relation</option>
+                                                <option value="mother">Father</option>
+                                                <option value="father">Mother</option>
+                                                <option value="brother">Brother</option>
+                                                <option value="sister">Sister</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            {errors.emergencyContactRelation && (
+                                                <div className="error-message">{errors.emergencyContactRelation}</div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -749,7 +714,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
                         <div className="form-card">
                             <div className="form-card-title flex justify-between items-center">
-                                <h3 className="flex items-center gap-2 basic_label">
+                                <h3 className="flex items-center gap-2">
                                     Job Information
                                 </h3>
                                 <button
@@ -862,7 +827,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
                         <div className="form-card">
                             <div className="form-card-title flex justify-between items-center">
-                                <h3 className="flex items-center gap-2 basic_label">
+                                <h3 className="flex items-center gap-2">
                                     Bank Information
                                 </h3>
                                 <button
@@ -897,118 +862,113 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                     {/* Sidebar for image uploads */}
                     <div className="form-sidebar-outer">
                         <div className="form-sidebar">
+                            <div className="image-upload-card">
+                                <h3>Profile Picture</h3>
+                                <div className="image-preview">
+                                    {profileImagePreview ? (
+                                        typeof profileImagePreview === 'string' && profileImagePreview.startsWith('http') ? (
+                                            <Image
+                                                src={profileImagePreview}
+                                                alt="Profile Preview"
+                                                width={100}
+                                                height={100}
+                                                unoptimized // Add this if you're having issues with external URLs
+                                            />
+                                        ) : (
+                                            // For base64 or local files
+                                            <Image
+                                                src={profileImagePreview}
+                                                alt="Profile Preview"
+                                                width={100}
+                                                height={100}
+                                            />
+                                        )
+                                    ) : (
+                                        <div className="placeholder">
+                                            <FaImage size={48} />
+                                            <span>No image selected</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="upload-controls">
+                                    <input
+                                        type="file"
+                                        id="profilePicture"
+                                        name="profilePicture"
+                                        accept="image/*"
+                                        onChange={(e) => handleFileChange(e, 'profilePicture')}
+                                        className="file-input"
+                                    />
+                                    <label htmlFor="profilePicture" className="upload-button">
+                                        <FaUpload /> Choose File
+                                    </label>
+                                    {errors.profilePicture && (
+                                        <div className="error-message">{errors.profilePicture}</div>
+                                    )}
+                                </div>
+                            </div>
 
                             <div className="image-upload-card">
-                                <div className="image-upload-card-header">
-                                    <h3 className="basic_label">Profile Picture</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => toggleSection('profilePicture')}
-                                        className="toggle-icon-btn"
-                                    >
-                                        {expandedSections.profilePicture ? (
-                                            <FaMinus className="text-gray-600 text-xs" />
-                                        ) : (
-                                            <FaPlus className="text-gray-600 text-xs" />
-                                        )}
-                                    </button>
+                                <h3>Address Proof</h3>
+                                <div className="image-preview">
+                                    {addressProofImagePreview ? (
+                                        <Image src={addressProofImagePreview} alt="Address Proof Preview" width={100} height={100} />
+                                    ) : (
+                                        <div className="placeholder">
+                                            <FaImage size={48} />
+                                            <span>No image selected</span>
+                                        </div>
+                                    )}
                                 </div>
-                                {expandedSections.profilePicture && (
-                                    <div>
-                                        <div className="image-preview">
-                                            {profileImagePreview ? (
-                                                typeof profileImagePreview === 'string' && profileImagePreview.startsWith('http') ? (
-                                                    <Image
-                                                        src={profileImagePreview}
-                                                        alt="Profile Preview"
-                                                        width={100}
-                                                        height={100}
-                                                        unoptimized // Add this if you're having issues with external URLs
-                                                    />
-                                                ) : (
-                                                    // For base64 or local files
-                                                    <Image
-                                                        src={profileImagePreview}
-                                                        alt="Profile Preview"
-                                                        width={100}
-                                                        height={100}
-                                                    />
-                                                )
-                                            ) : (
-                                                <div className="placeholder">
-                                                    <FaImage size={48} />
-                                                    <span>No image selected</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="upload-controls">
-                                            <input
-                                                type="file"
-                                                id="profilePicture"
-                                                name="profilePicture"
-                                                accept="image/*"
-                                                onChange={(e) => handleFileChange(e, 'profilePicture')}
-                                                className="file-input"
-                                            />
-                                            <label htmlFor="profilePicture" className="upload-button">
-                                                <FaUpload /> Choose File
-                                            </label>
-                                            {errors.profilePicture && (
-                                                <div className="error-message">{errors.profilePicture}</div>
-                                            )}
-                                        </div>
+                                <div className="upload-controls">
+                                    <input
+                                        type="file"
+                                        id="addressProof_image"
+                                        name="addressProof_image"
+                                        accept="image/*"
+                                        onChange={(e) => handleFileChange(e, 'addressProof_image')}
+                                        className="file-input"
+                                    />
+                                    <label htmlFor="addressProof_image" className="upload-button">
+                                        <FaUpload /> Choose File
+                                    </label>
+                                    {errors.addressProof_image && (
+                                        <div className="error-message">{errors.addressProof_image}</div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {formData.idProofType === "bill" && (
+                                <div className="image-upload-card">
+                                    <h3>Utility Bill</h3>
+                                    <div className="image-preview">
+                                        {utilityBillImagePreview ? (
+                                            <Image src={utilityBillImagePreview} alt="Utility Bill Preview" width={100} height={100} />
+                                        ) : (
+                                            <div className="placeholder">
+                                                <FaImage size={48} />
+                                                <span>No image selected</span>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-
-                            <div className="image-upload-card">
-                                <div className="image-upload-card-header">
-                                    <h3 className="basic_label">Address Proof</h3>
-                                    <button
-                                        type="button"
-                                        onClick={() => toggleSection('addressProof')}
-                                        className="toggle-icon-btn"
-                                    >
-                                        {expandedSections.addressProof ? (
-                                            <FaMinus className="text-gray-600 text-xs" />
-                                        ) : (
-                                            <FaPlus className="text-gray-600 text-xs" />
+                                    <div className="upload-controls">
+                                        <input
+                                            type="file"
+                                            id="utility_bill_image"
+                                            name="utility_bill_image"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileChange(e, 'utility_bill_image')}
+                                            className="file-input"
+                                        />
+                                        <label htmlFor="utility_bill_image" className="upload-button">
+                                            <FaUpload /> Choose File
+                                        </label>
+                                        {errors.utility_bill_image && (
+                                            <div className="error-message">{errors.utility_bill_image}</div>
                                         )}
-                                    </button>
+                                    </div>
                                 </div>
-                                {expandedSections.addressProof && (
-                                    <>
-                                        <div className="image-preview">
-                                            {addressProofImagePreview ? (
-                                                <Image src={addressProofImagePreview} alt="Address Proof Preview" width={100} height={100} />
-                                            ) : (
-                                                <div className="placeholder">
-                                                    <FaImage size={48} />
-                                                    <span>No image selected</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="upload-controls">
-                                            <input
-                                                type="file"
-                                                id="addressProof_image"
-                                                name="addressProof_image"
-                                                accept="image/*"
-                                                onChange={(e) => handleFileChange(e, 'addressProof_image')}
-                                                className="file-input"
-                                            />
-                                            <label htmlFor="addressProof_image" className="upload-button">
-                                                <FaUpload /> Choose File
-                                            </label>
-                                            {errors.addressProof_image && (
-                                                <div className="error-message">{errors.addressProof_image}</div>
-                                            )}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-
-
+                            )}
                         </div>
 
                         <div className="form-actions">

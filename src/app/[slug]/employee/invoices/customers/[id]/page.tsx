@@ -1,6 +1,6 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchCustomerByIdQuery } from '@/slices';
+import { useFetchCustomerByIdQuery } from '@/slices/customers/customerApi';
 import React from 'react';
 import { useCompany } from '@/utils/Company';
 

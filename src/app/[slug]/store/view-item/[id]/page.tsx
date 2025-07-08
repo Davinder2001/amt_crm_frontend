@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices';
+import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
 import { useCompany } from '@/utils/Company';
 import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';

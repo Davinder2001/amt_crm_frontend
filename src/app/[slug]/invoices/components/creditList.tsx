@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useGetCreditUsersQuery } from '@/slices';
+import { useGetCreditUsersQuery } from '@/slices/invoices/invoiceApi';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
 import { FaUsers } from 'react-icons/fa';

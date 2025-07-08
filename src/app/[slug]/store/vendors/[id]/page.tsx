@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices';
+import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices/vendor/vendorApi';
 import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';

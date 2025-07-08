@@ -4,8 +4,10 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import {
   useFetchStoreItemQuery,
   useFetchItemBatchByIdQuery,
-  useUpdateItemBatchMutation, useFetchMeasuringUnitsQuery, useFetchTaxesQuery, useFetchVendorsQuery
+  useUpdateItemBatchMutation
 } from '@/slices';
+import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
+import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';

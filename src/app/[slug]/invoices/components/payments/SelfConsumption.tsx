@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { useGetSelfConsumptionHistoryQuery } from '@/slices';
+import { useGetSelfConsumptionHistoryQuery } from '@/slices/invoices/invoiceApi';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
-import { FaLeaf } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { FaLeaf } from 'react-icons/fa';
 
 type SelfConsumptionTransaction = {
   invoice_number: string;

@@ -13,7 +13,7 @@ import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
 import customerCreateApiSlice from '@/slices/customers/customerCreateSlice';
 import companyCreateSlice from '@/slices/company/companyCreateSlice';
 import adminManageApi from '@/slices/superadminSlices/adminManagement/adminManageApi';
-import notificationApi from '@/slices/notifications/notificationsCreateSlice';
+import notificationsApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
@@ -45,7 +45,7 @@ const store = configureStore({
     [customerCreateApiSlice.reducerPath]: customerCreateApiSlice.reducer,
     [companyCreateSlice.reducerPath]: companyCreateSlice.reducer,
     [adminManageApi.reducerPath]: adminManageApi.reducer,
-    [notificationApi.reducerPath]: notificationApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
     [chatApi.reducerPath]: chatApi.reducer,
     [quotationApi.reducerPath]: quotationApi.reducer,
     [hrApi.reducerPath]: hrApi.reducer,
@@ -72,7 +72,7 @@ const store = configureStore({
       .concat(customerCreateApiSlice.middleware)
       .concat(companyCreateSlice.middleware)
       .concat(adminManageApi.middleware)
-      .concat(notificationApi.middleware)
+      .concat(notificationsApi.middleware)
       .concat(chatApi.middleware)
       .concat(quotationApi.middleware)
       .concat(hrApi.middleware)

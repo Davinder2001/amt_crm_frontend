@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useFetchEmployesQuery, useDeleteEmployeMutation, useUpdateEmployeeStatusMutation } from '@/slices';
+import { useFetchEmployesQuery, useDeleteEmployeMutation, useUpdateEmployeeStatusMutation } from '@/slices/employe/employeApi';
 import 'react-toastify/dist/ReactToastify.css';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const UserList: React.FC = () => {
   const router = useRouter();

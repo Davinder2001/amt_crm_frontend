@@ -280,7 +280,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                         }),
                                     }}
                                 >
-                                    Create New Brand
+                                    Add New Brand
                                 </Button>
                             </Box>
                         </div>
@@ -290,7 +290,7 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                 <>
                     <div className="basic_label_header">
                         <h2 className="basic_label">
-                            {editingBrand ? 'Edit Brand' : 'Create New Brand'}:
+                            {editingBrand ? 'Edit Brand' : 'Add New Brand'}:
                         </h2>
                         <span
                             onClick={() => toggleSection('brands')}
@@ -379,8 +379,8 @@ const ItemBrands: React.FC<Props> = ({ selectedBrand, onBrandSelect, collapsedSe
                                     }}
                                 >
                                     {isCreating || isUpdating
-                                        ? (editingBrand ? 'Updating...' : 'Creating...')
-                                        : (editingBrand ? 'Update' : 'Create')}
+                                        ? (editingBrand ? 'Updating...' : 'Adding...')
+                                        : (editingBrand ? 'Update' : 'Add')}
                                 </Button>
                             </Box>
                         </div>

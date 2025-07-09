@@ -523,7 +523,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                     }),
                   }}
                 >
-                  Create New
+                  Add New
                 </Button>
               </Box>
             </div>
@@ -533,7 +533,7 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
         <>
           <div className="basic_label_header">
             <h2 className="basic_label">
-              {editingCategory ? 'Edit Category' : 'Create New Category'}:
+              {editingCategory ? 'Edit Category' : 'Add New Category'}:
             </h2>
             {toggleSection && collapsedSections && (
               <span
@@ -641,8 +641,8 @@ const ItemCategories: React.FC<Props> = ({ setSelectedCategories, selectedCatego
                   }}
                 >
                   {isCreating || isUpdating
-                    ? (editingCategory ? 'Updating...' : 'Creating...')
-                    : (editingCategory ? 'Update' : 'Create')}
+                    ? (editingCategory ? 'Updating...' : 'Adding...')
+                    : (editingCategory ? 'Update' : 'Add')}
                 </Button>
               </Box>
 

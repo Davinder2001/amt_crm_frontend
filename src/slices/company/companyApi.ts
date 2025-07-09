@@ -144,6 +144,15 @@ const companyApi = companyCreateSlice.injectEndpoints({
       providesTags: ["Company"],
     }),
 
+    companyScore: builder.query<CompanyScoreResponse, void>({
+      query: () => ({
+        url: 'companies/profile-score',
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
+
     // 🔽 Fetch all company bank accounts
     fetchCompanyAccounts: builder.query<FetchCompanyAccountsResponse, void>({
       query: () => ({
@@ -302,6 +311,7 @@ export const {
   useAddNewCompanyMutation,
   useFetchCompanyDetailsQuery,
   useCompanyStatusDetailsQuery,
+  useCompanyScoreQuery,
 
   // 🔽 New bank account endpoints
   useFetchCompanyAccountsQuery,

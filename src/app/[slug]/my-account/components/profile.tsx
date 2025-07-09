@@ -1,5 +1,5 @@
 'use client'
-import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi'
+import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery } from '@/slices'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux'
 import RecheckModal from '@/components/common/RecheckModal'
 import LoadingState from '@/components/common/LoadingState'
 import EmptyState from '@/components/common/EmptyState'
-import { FaEdit, FaPlus } from 'react-icons/fa'
+import { FaEdit, FaLock, FaPlus, FaUniversity, FaUser } from 'react-icons/fa'
 import { EditUserModal } from './EditUserModal'
 
 const Profile = () => {
@@ -28,6 +28,9 @@ const Profile = () => {
   const dispatch = useDispatch<AppDispatch>()
   const user = data?.user
   const { companySlug } = useCompany();
+  const { data: companyScore } = useCompanyScoreQuery();
+  console.log('werwerwer', companyScore);
+
 
   useEffect(() => {
     if (user?.companies) {
@@ -97,30 +100,21 @@ const Profile = () => {
     );
 
   return (
-    <div className="radical-profile">
-      {/* Header */}
-      <div className="radical-header">
-        <div className="header-content">
-          <h2 className="name-highlight">{user?.name}</h2>
-          <div className="header-actions">
-            <Link href="my-account/change-password" className="action-btn">
-              <span>🔒 Password</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
+    <>
       {/* Layout */}
-      <div className="radical-layout">
+      <div className="my-acc-layout">
         {/* Left Panel */}
         <div className="panel personal-panel">
           <div className="panel-header">
-            <h2>🧑 USER PROFLE</h2>
-            <FaEdit
-              onClick={() => { if (user?.id !== undefined) handleEditOpen(user.id) }}
-              className="edit-icon"
-              aria-label="Edit profile"
-            />
+            <h2><FaUser /> {user?.name}</h2>
+            <div className='pannel-header-actions'>
+              <Link href="my-account/change-password" className="action-btn">
+                <FaLock /> Change Password
+              </Link>
+              <span onClick={() => { if (user?.id !== undefined) handleEditOpen(user.id) }}>
+                <FaEdit /> Edit Profile
+              </span>
+            </div>
           </div>
           <div className="info-stack">
             <div className="info-line"><span>📧</span><span>{user?.email}</span></div>
@@ -128,29 +122,15 @@ const Profile = () => {
             <div className="info-line"><span>🆔</span><span>{user?.uid}</span></div>
             <div className="info-line"><span>👔</span><span className="role-badge">{user?.user_type}</span></div>
           </div>
-
-          {user?.meta && Array.isArray(user.meta) && user.meta.length > 0 && (
-            <>
-              <div className="panel-header">
-                <h2>📝 ADDITIONAL</h2>
-              </div>
-              <div className="meta-grid">
-                {Object.entries(user.meta).map(([key, value]) => (
-                  <div key={key} className="meta-item">
-                    <div>{key.replace('_', ' ')}</div>
-                    <div>{String(value)}</div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
         </div>
 
         {/* Right Panel */}
         <div className="panel companies-panel">
           <div className="panel-header">
-            <h2>🏢 COMPANIES ({companies.length})</h2>
-            <Link href="/add-company" className="add-btn"><FaPlus /> NEW</Link>
+            <h2><FaUniversity /> Companies ({companies.length})</h2>
+            <div className='pannel-header-actions'>
+              <Link href="/add-company" className="add-btn"><FaPlus /> Add New Company</Link>
+            </div>
           </div>
 
           <div className="company-stack">
@@ -168,9 +148,37 @@ const Profile = () => {
                     <div className="company-id">#{company.company_id}</div>
                   </div>
 
+                  {isCurrentCompany && companyScore && (
+                    <div className="company-score">
+                      <div className="score-bar-container">
+                        <div className="score-bar">
+                          <div
+                            className="score-fill"
+                            style={{ width: `${companyScore.profile_score}%` }}
+                          >
+                            <div className="score-indicator">
+                              <div className="indicator-tooltip">
+                                {companyScore.profile_score}% Complete
+                              </div>
+                            </div>
+                            {/* Pointer moved here - at the end of score-fill */}
+                            <div className="indicator-pointer"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="score-warning">{companyScore.message}</div>
+                    </div>
+                  )}
+
                   <div className="company-status">
-                    <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
-                    <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
+                    <label htmlFor="payment-status">
+                      <span>Payment Status</span>
+                      <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
+                    </label>
+                    <label htmlFor="verification-status">
+                      <span>Verification Status</span>
+                      <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
+                    </label>
                     {!isCurrentCompany && (
                       <div className="switch-badge">
                         <div className="badge-text">Switch</div>
@@ -221,7 +229,7 @@ const Profile = () => {
           companyId={selectedCompany?.id}
         />
       )}
-    </div>
+    </>
   )
 }
 

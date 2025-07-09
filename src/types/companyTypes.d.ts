@@ -59,6 +59,13 @@ interface CompanyDetailsResponse {
   related_packages: PackagePlan[];
 }
 
+interface CompanyScoreResponse {
+  profile_score: number;
+  total_fields: number;
+  filled_fields: number;
+  message: string;
+}
+
 type Shift = {
   id: number;
   company_id: number;

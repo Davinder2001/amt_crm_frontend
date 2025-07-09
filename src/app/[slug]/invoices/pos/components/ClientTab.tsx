@@ -1,7 +1,7 @@
 'use client';
 
 import { useFetchEmployesQuery } from '@/slices';
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 type ClientTabProps = {
     activeTab: string;
@@ -21,9 +21,7 @@ type ClientTabProps = {
     setDeliveryBoyId: React.Dispatch<React.SetStateAction<number | null>>;
     customers?: { customers: Customer[] };
     companySlug: string;
-    handleNumberBlur: () => void;
-
-}; 
+};
 
 export default function ClientTab({
     activeTab,
@@ -41,29 +39,102 @@ export default function ClientTab({
     setDeliveryCharge,
     deliveryBoyId,
     setDeliveryBoyId,
-    handleNumberBlur
+    customers,
 }: ClientTabProps) {
     const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployesQuery();
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Filter customers based on input
+    useEffect(() => {
+        if (number && customers?.customers) {
+            const filtered = customers.customers.filter(customer =>
+                customer.number.includes(number)
+            );
+            setFilteredCustomers(filtered);
+            setShowDropdown(filtered.length > 0);
+        } else {
+            setFilteredCustomers([]);
+            setShowDropdown(false);
+        }
+    }, [number, customers]);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleCustomerSelect = (customer: Customer) => {
+        setNumber(customer.number);
+        setClientName(customer.name);
+        setEmail(customer.email || '');
+        setAddress(customer.address || '');
+        setShowDropdown(false);
+
+        // Focus back on the input
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const digitsOnly = e.target.value.replace(/\D/g, '');
+        if (digitsOnly.length <= 10) {
+            setNumber(digitsOnly);
+        }
+    };
+
+    const handleInputFocus = () => {
+        if (number.length > 0) {
+            setShowDropdown(true);
+        }
+    };
 
     return (
         <div className="client-form">
             <div className="form-group">
                 <label>Phone Number</label>
-                <input
-                    type="tel"
-                    value={number}
-                    onChange={(e) => {
-                        const digitsOnly = e.target.value.replace(/\D/g, '');
-                        if (digitsOnly.length <= 10) {
-                            setNumber(digitsOnly);
-                        }
-                    }}
-                    onBlur={handleNumberBlur}
-                    placeholder="Enter 10-digit phone number"
-                    required
-                    maxLength={10}
-                    pattern="\d{10}"
-                />
+                <div className="dropdown-container" ref={dropdownRef}>
+                    <input
+                        ref={inputRef}
+                        type="tel"
+                        value={number}
+                        onChange={handleInputChange}
+                        onFocus={handleInputFocus}
+                        placeholder="Enter 10-digit phone number"
+                        required
+                        maxLength={10}
+                        pattern="\d{10}"
+                    />
+                    {showDropdown && (
+                        <div className="dropdown-menu">
+                            {filteredCustomers.map(customer => (
+                                <div
+                                    key={customer.id}
+                                    className="dropdown-item"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleCustomerSelect(customer);
+                                    }}
+                                >
+                                    <div className="customer-number">{customer.number}</div>
+                                    <div className="customer-name">{customer.name}</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="form-group">
@@ -145,6 +216,45 @@ export default function ClientTab({
                     </div>
                 </>
             )}
+
+            <style jsx>{`
+                .dropdown-container {
+                    position: relative;
+                }
+                
+                .dropdown-menu {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    z-index: 1000;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .dropdown-item {
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                }
+                
+                .dropdown-item:hover {
+                    background-color: #f5f5f5;
+                }
+                
+                .customer-number {
+                    font-weight: 600;
+                }
+                
+                .customer-name {
+                    color: #666;
+                }
+            `}</style>
         </div>
     );
 }

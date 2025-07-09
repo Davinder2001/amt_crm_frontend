@@ -385,9 +385,11 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 ))}
                             </div>
                         </div>
-                        <div className='desktop-render-filter-table filter-search-table'>
-                            {activeFilterTypes.length > 0 && renderActiveFilters()}
-                        </div>
+                        {activeFilterTypes.length > 0 &&
+                            <div className='desktop-render-filter-table filter-search-table'>
+                                {renderActiveFilters()}
+                            </div>
+                        }
                     </div>
                 )}
 
@@ -480,9 +482,11 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div>
             </div>
 
-            <div className='mobile-render-filter-table filter-search-table'>
-                {activeFilterTypes.length > 0 && renderActiveFilters()}
-            </div>
+            {activeFilterTypes.length > 0 &&
+                <div className='mobile-render-filter-table filter-search-table'>
+                    {renderActiveFilters()}
+                </div>
+            }
         </>
     );
 };

@@ -139,10 +139,10 @@ const CreateVendor: React.FC<CreateVendorProps> = ({ onSuccess, onClose }) => {
                                 {isLoading ? (
                                     <>
                                         <span className="spinner"></span>
-                                        Creating Vendor...
+                                        Adding...
                                     </>
                                 ) : (
-                                    'Create Vendor'
+                                    'Add Vendor'
                                 )}
                             </button>
                         </div>

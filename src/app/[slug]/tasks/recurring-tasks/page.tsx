@@ -106,7 +106,7 @@ const Page = () => {
           <EmptyState
             icon={<FaTasks className="empty-state-icon" />}
             title="No recurring tasks found"
-            message="You haven't created any recurring tasks yet. Start by adding your first recurring task."
+            message="You haven't Added any recurring tasks yet. Start by adding your first recurring task."
             action={
               <button
                 type='button'

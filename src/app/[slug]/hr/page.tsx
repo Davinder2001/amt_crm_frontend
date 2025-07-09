@@ -29,11 +29,6 @@ const Page: React.FC = () => {
         <TableToolbar
           actions={[
             {
-              label: 'Add Employee',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
-            },
-            {
               label: 'Status View',
               icon: <FaUserCheck />,
               onClick: () => router.push(`/${companySlug}/hr/status-view`),
@@ -48,6 +43,11 @@ const Page: React.FC = () => {
             //   icon: <FaUserPlus />,
             //   onClick: () => setInviteModalOpen(true),
             // },
+            {
+              label: 'Add Employee',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+            },
           ]}
           introKey='hr_intro'
         />

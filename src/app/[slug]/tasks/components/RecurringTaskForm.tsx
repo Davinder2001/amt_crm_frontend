@@ -186,10 +186,10 @@ const RecurringTaskForm: React.FC<RecurringTaskFormProps> = ({ mode, taskId, onS
                     <button className="form-button" type="submit" disabled={isCreating || isUpdating}>
                         {isCreating || isUpdating
                             ? mode === 'add'
-                                ? 'Creating...'
+                                ? 'Adding...'
                                 : 'Updating...'
                             : mode === 'add'
-                                ? 'Create Task'
+                                ? 'Add Task'
                                 : 'Update Task'}
                     </button>
                 </div>

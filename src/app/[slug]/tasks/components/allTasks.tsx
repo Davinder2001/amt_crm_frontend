@@ -157,7 +157,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
         <EmptyState
           icon={<FaTasks className="empty-state-icon" />}
           title="No tasks found"
-          message="You haven't created any tasks yet. Start by assigning your first task."
+          message="You haven't Added any tasks yet. Start by assigning your first task."
           action={
             <button
               type='button'

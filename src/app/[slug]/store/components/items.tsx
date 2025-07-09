@@ -315,11 +315,6 @@ const Items: React.FC = () => {
           { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
           { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
         ]}
-        actions={[
-          ...(storeItems.length > 0
-            ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => setShowCreateItemModal(true) }]
-            : []),
-        ]}
         extraLinks={[
           {
             label: 'Add Purchase Bill',
@@ -327,6 +322,11 @@ const Items: React.FC = () => {
             onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
           },
           { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
+        ]}
+        actions={[
+          ...(storeItems.length > 0
+            ? [{ label: 'Add item', icon: <FaPlus />, onClick: () => setShowCreateItemModal(true) }]
+            : []),
         ]}
       />
       {storeItems.length > 0 ?
@@ -483,7 +483,7 @@ const Items: React.FC = () => {
               onClick={() => router.push(`/${companySlug}/store/add-item`)}
               className='buttons'
             >
-              <FaPlus /> Create New Item
+              <FaPlus /> Add New Item
             </button>
           </div>
         </div>

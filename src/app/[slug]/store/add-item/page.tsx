@@ -296,7 +296,7 @@ const AddItem: React.FC = () => {
             Cancel
           </button>
           <button type="submit" className="buttons" disabled={isCreating} style={{ cursor: isCreating ? 'not-allowed' : 'pointer' }}>
-            {isCreating ? 'Creating...' : 'Create Item'}
+            {isCreating ? 'Adding...' : 'Add Item'}
           </button>
         </div>
 

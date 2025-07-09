@@ -1,43 +1,153 @@
 @use '../variables' as *;
 
 
-.mobile-render-table-searchbar {
+.mobile-render-filter-table {
     display: none;
 }
 
-.filter-search-table .search-filter-container {
-    input {
-        height: 41px;
-        padding: 10px 12px;
-        border-radius: 5px;
-        border: 1px solid $border-color;
-        width: 300px;
+.filter-search-table {
 
-        &:focus {
-            border-color: var(--primary-light);
-            background: transparent;
+    .filter-outer {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .active-filters-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .search-filter-container {
+            padding: 8px 16px;
+            border-radius: $border-radius;
+            border: 1px solid $border-color;
+            background-color: $white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            .search-icon {
+                color: var(--primary-color);
+            }
+
+            input {
+                background-color: transparent;
+                border: none;
+
+                &:focus {
+                    outline: none;
+                }
+
+                &::placeholder {
+                    color: var(--primary-color);
+                    font-size: 14px;
+                    font-weight: 400;
+                    letter-spacing: 0.3px;
+                }
+            }
         }
 
-        &::placeholder {
-            color: #ccc;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            background-color: transparent;
+        .multi-select-filter-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+
+            .multi-select-trigger {
+                border-radius: $border-radius;
+                border: 1px solid $border-color;
+                background-color: $white;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 5px;
+                font-size: 14px;
+                font-weight: 400;
+                letter-spacing: 0.3px;
+                color: var(--primary-color);
+
+                .dropdown-placeholder {
+                    padding: 8px 16px;
+                }
+
+                .dropdown-arrow {
+                    padding: 8px;
+                    border-left: 1px solid $border-color;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+            }
+
+            .multi-select-dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 200px;
+                max-height: 300px;
+                overflow-y: auto;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+                margin-top: 5px;
+                font-size: 14px;
+                font-weight: 400;
+                letter-spacing: 0.3px;
+
+                .multi-select-options {
+                    .option {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 8px 16px;
+                        cursor: pointer;
+                        white-space: nowrap;
+                        width: 100%;
+                        overflow: hidden;
+                        border-bottom: 1px solid $border-color;
+
+                        span {
+                            white-space: nowrap;
+                            width: 100%;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+
+                        &:hover {
+                            background: #f5f5f5;
+                        }
+                    }
+                }
+
+            }
+
         }
     }
 
-    button.clear-search-btn {
-        height: 41px;
-        padding: 10px 12px;
-        background: transparent;
-        border: 1px solid var(--primary-light);
-        margin-left: 10px;
+
+    .clear-filter-btn {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background-color: var(--primary-color);
+        color: $white;
+        border: none;
         border-radius: $border-radius;
-        color: var(--primary-color);
+        width: 14px;
+        height: 14px;
+        font-size: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
-
 }
+
 
 .toolbar {
     display: flex;
@@ -156,12 +266,6 @@
             gap: 10px;
             align-items: center;
             cursor: pointer;
-        }
-
-        .filter-options-list {
-            font-size: 14px;
-            background-color: #f5faff;
-            color: var(--primary-color);
         }
     }
 
@@ -951,20 +1055,40 @@ table {
 
 @media (max-width: 768px) {
 
-    .filter-search-table .search-filter-container {
-        margin-bottom: 12px;
+    .filter-search-table {
+        margin-bottom: 20px;
 
-        input {
-            width: 100%;
+        .active-filters-container {
+            gap: 10px;
+            flex-wrap: wrap;
+
+            .multi-select-filter-wrapper {
+                .multi-select-dropdown {
+                    left: auto;
+                    right: auto;
+                    width: 100%;
+
+                    .multi-select-options .option {
+                        padding: 6px 12px;
+                    }
+
+                }
+            }
+        }
+
+        .search-filter-container {
+            input {
+                width: 100%;
+            }
         }
     }
 
-    .desktop-render-table-searchbar {
+    .desktop-render-filter-table {
         display: none;
     }
 
-    .mobile-render-table-searchbar {
-        display: none;
+    .mobile-render-filter-table {
+        display: block;
     }
 
 

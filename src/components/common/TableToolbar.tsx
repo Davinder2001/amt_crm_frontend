@@ -1,7 +1,7 @@
-import React from 'react';
-import { FaCheckSquare, FaQuestion, FaRegSquare, FaTimes } from 'react-icons/fa';
+'use client';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { FaCheckSquare, FaChevronDown, FaChevronUp, FaQuestion, FaRegSquare, FaSearch, FaTimes } from 'react-icons/fa';
 import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
-
 
 // Helper functions for managing the intro keys
 const getIntroKeys = (): Record<string, boolean> => {
@@ -68,18 +68,18 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     hasBulkActions,
     introKey,
 }) => {
-    const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
-    const [searchValues, setSearchValues] = React.useState<Record<string, string>>({});
-    const [activeFilterTypes, setActiveFilterTypes] = React.useState<string[]>([]);
-    const [isMobile, setIsMobile] = React.useState(false);
-
+    const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+    const [searchValues, setSearchValues] = useState<Record<string, string>>({});
+    const [activeFilterTypes, setActiveFilterTypes] = useState<string[]>([]);
+    const [isMobile, setIsMobile] = useState(false);
     // Intro popup state
-    const [showIntro, setShowIntro] = React.useState(false);
-    const [hasSeenIntro, setHasSeenIntro] = React.useState(true);
-    const introPopupRef = React.useRef<HTMLDivElement>(null);
+    const [showIntro, setShowIntro] = useState(false);
+    const [hasSeenIntro, setHasSeenIntro] = useState(true);
+    const introPopupRef = useRef<HTMLDivElement>(null);
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     // Check screen size and localStorage after mount with delay
-    React.useEffect(() => {
+    useEffect(() => {
         const checkScreenSize = () => {
             setIsMobile(window.innerWidth < 769);
         };
@@ -108,7 +108,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         };
     }, [introKey, isMobile]);
 
-    const handleDismissIntro = React.useCallback(() => {
+    const handleDismissIntro = useCallback(() => {
         if (introKey) {
             setIntroKey(introKey, true);
             setHasSeenIntro(true);
@@ -120,8 +120,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         setShowIntro(true);
     };
 
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (!showIntro) return;
 
         const handleClickOutside = (event: MouseEvent) => {
@@ -137,7 +136,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
     }, [showIntro, handleDismissIntro]);
 
     // Get all unique icons from toolbar actions
-    const allToolbarIcons = React.useMemo(() => {
+    const allToolbarIcons = useMemo(() => {
         const icons: { icon: React.ReactElement; label: string; description: string }[] = [];
 
         // Add filter icon if filters exist
@@ -222,22 +221,32 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
         }
     };
 
-    const clearSearch = (filterKey: string) => {
-        setSearchValues(prev => {
-            const newValues = { ...prev };
-            delete newValues[filterKey];
-            return newValues;
-        });
-        setActiveFilterTypes(prev => prev.filter(key => key !== filterKey));
+    // Add this useEffect hook right after your other useEffect hooks
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            // Close dropdown if click is outside any multi-select filter
+            const multiSelectElements = document.querySelectorAll('.multi-select-filter-wrapper');
+            let clickedOutsideAll = true;
 
-        if (onFilterChange) {
-            onFilterChange(filterKey, '', 'search');
-        }
-    };
+            multiSelectElements.forEach(el => {
+                if (el.contains(event.target as Node)) {
+                    clickedOutsideAll = false;
+                }
+            });
 
-    const renderActiveFilterInputs = () => {
-        if (activeFilterTypes.length === 0) return null;
+            if (clickedOutsideAll) {
+                setOpenDropdown(null);
+            }
+        };
 
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Render active filters in a horizontal row
+    const renderActiveFilters = () => {
         return (
             <div className="active-filters-container">
                 {activeFilterTypes.map(filterKey => {
@@ -246,17 +255,60 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
 
                     if (filterConfig.type === 'search') {
                         return (
-                            <div key={filterKey} className="search-filter-container">
+                            <div key={filterKey} className="search-filter-container filter-outer">
+                                <FaSearch className="search-icon" size={14} />
                                 <input
                                     type="text"
-                                    placeholder={`Search ${filterConfig.label}...`}
+                                    placeholder='Search...'
                                     value={searchValues[filterKey] || ''}
                                     onChange={(e) => handleSearchChange(filterKey, e.target.value)}
                                     className="search-filter-input"
                                 />
                                 <button
-                                    onClick={() => clearSearch(filterKey)}
-                                    className="clear-search-btn"
+                                    onClick={() => handleFilterTypeSelect(filterKey)}
+                                    className="clear-filter-btn"
+                                >
+                                    <FaTimes />
+                                </button>
+                            </div>
+                        );
+                    }
+
+                    if (filterConfig.type === 'multi-select') {
+                        return (
+                            <div key={filterKey} className="multi-select-filter-wrapper filter-outer">
+                                <div
+                                    className="multi-select-trigger"
+                                    onClick={() => setOpenDropdown(openDropdown === filterKey ? null : filterKey)}
+                                >
+                                    <span className='dropdown-placeholder'>{filterConfig.label}</span>
+                                    <span className="dropdown-arrow">
+                                        {openDropdown === filterKey ? <FaChevronUp /> : <FaChevronDown />}
+                                    </span>
+                                </div>
+
+                                {openDropdown === filterKey && (
+                                    <div className="multi-select-dropdown">
+                                        <div className="multi-select-options">
+                                            {filterConfig.options?.map(opt => (
+                                                <label key={opt} className="option">
+                                                    <span>{opt}</span>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedFilters[filterKey]?.includes(opt) || false}
+                                                        onChange={(e) =>
+                                                            handleMultiSelectChange(filterKey, opt, e.target.checked)
+                                                        }
+                                                    />
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={() => handleFilterTypeSelect(filterKey)}
+                                    className="clear-filter-btn"
                                 >
                                     <FaTimes />
                                 </button>
@@ -329,29 +381,12 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                             />
                                             {filter.label}
                                         </label>
-
-                                        {activeFilterTypes.includes(filter.key) && filter.type === 'multi-select' && (
-                                            <div className="filter-options-list">
-                                                {filter.options?.map((opt) => (
-                                                    <label key={opt} className="option">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedFilters[filter.key]?.includes(opt) || false}
-                                                            onChange={(e) =>
-                                                                handleMultiSelectChange(filter.key, opt, e.target.checked)
-                                                            }
-                                                        />
-                                                        {opt}
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <div className='desktop-render-table-searchbar filter-search-table'>
-                            {renderActiveFilterInputs()}
+                        <div className='desktop-render-filter-table filter-search-table'>
+                            {activeFilterTypes.length > 0 && renderActiveFilters()}
                         </div>
                     </div>
                 )}
@@ -400,20 +435,6 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                         </div>
                     )}
 
-                    {actions && actions?.length > 0 ? (
-                        <div className="action-icons-horizontal">
-                            {actions.map((action, i) => (
-                                <button key={i}
-                                    onClick={action.onClick}
-                                    className="toolbar-btn"
-                                >
-                                    <i>{action.icon}</i>
-                                    <span>{action.label}</span>
-                                </button>
-                            ))}
-                        </div>
-                    ) : null}
-
                     {extraLinks && extraLinks.length > 0 && (
                         <div className="dropdown dropdown-right hover-group extra-links">
                             <button className="toolbar-btn">
@@ -431,6 +452,21 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                             </div>
                         </div>
                     )}
+                    
+                    {actions && actions?.length > 0 ? (
+                        <div className="action-icons-horizontal">
+                            {actions.map((action, i) => (
+                                <button key={i}
+                                    onClick={action.onClick}
+                                    className="toolbar-btn"
+                                >
+                                    <i>{action.icon}</i>
+                                    <span>{action.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    ) : null}
+
                     {hasSeenIntro && introKey && isMobile && (
                         <button
                             className="toolbar-btn help-btn"
@@ -444,8 +480,8 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                 </div>
             </div>
 
-            <div className='mobile-render-table-searchbar filter-search-table'>
-                {renderActiveFilterInputs()}
+            <div className='mobile-render-filter-table filter-search-table'>
+                {activeFilterTypes.length > 0 && renderActiveFilters()}
             </div>
         </>
     );

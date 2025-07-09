@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AttendancesList from './components/AttendancesList'
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useRouter } from 'next/navigation';
-import { FaCalendarPlus, FaClipboardList, FaUserCheck } from 'react-icons/fa';
+import { FaCalendarPlus, FaClipboardList, FaPlus } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import Modal from '@/components/common/Modal';
 import ApplyForLeave from './components/ApplyForLeave';
@@ -30,14 +30,14 @@ function Page() {
             onClick: () => setIsApplyForLeaveOpen(true)
           },
           {
-            label: 'Add Attendance',
-            icon: <FaUserCheck />,
-            onClick: () => setIsAttandanceOpen(true)
-          },
-          {
             label: 'Leaves',
             icon: <FaClipboardList />,
             onClick: () => router.push(`/${companySlug}/leaves`)
+          },
+          {
+            label: 'Add Attendance',
+            icon: <FaPlus />,
+            onClick: () => setIsAttandanceOpen(true)
           },
         ]}
         introKey='attendance_into'

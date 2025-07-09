@@ -23,7 +23,7 @@ type ClientTabProps = {
     companySlug: string;
     handleNumberBlur: () => void;
 
-};
+}; 
 
 export default function ClientTab({
     activeTab,

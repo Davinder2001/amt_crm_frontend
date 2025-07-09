@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { FaCheckSquare, FaChevronDown, FaChevronUp, FaQuestion, FaRegSquare, FaSearch, FaTimes } from 'react-icons/fa';
+import {  FaChevronDown, FaChevronUp, FaQuestion, FaSearch, FaTimes } from 'react-icons/fa';
 import { FiFilter, FiColumns, FiDownloadCloud, FiSliders } from 'react-icons/fi';
 
 // Helper functions for managing the intro keys
@@ -363,11 +363,11 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                         className={`bulk-toggle-btn ${showBulkActions ? 'active' : ''}`}
                                         onClick={() => onToggleBulkActions?.(!showBulkActions)}
                                     >
-                                        {showBulkActions ? (
-                                            <FaCheckSquare className="icon-checked" />
-                                        ) : (
-                                            <FaRegSquare className="icon-unchecked" />
-                                        )}
+                                        <input
+                                            type="checkbox"
+                                            checked={showBulkActions || false}
+                                            onChange={() => onToggleBulkActions?.(!showBulkActions)}
+                                        />
                                         <span className="label">{showBulkActions ? 'Exit Bulk Mode' : 'Bulk Actions'}</span>
                                     </div>
                                 )}

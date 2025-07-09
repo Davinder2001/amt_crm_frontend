@@ -2,15 +2,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { useGetCreditUsersQuery } from '@/slices/invoices/invoiceApi';
+import { useGetCreditUsersQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
 import { FaUsers } from 'react-icons/fa';
-
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
-import { FaMoneyBill, FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
+import { FaMoneyBill } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
 
 interface CreditUser {
@@ -148,10 +146,6 @@ const CreditList: React.FC = () => {
 
   return (
     <div>
-      <Link href={`/${companySlug}/invoices`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="credit-users-page">
         {filteredData.length === 0 ? (
           <EmptyState

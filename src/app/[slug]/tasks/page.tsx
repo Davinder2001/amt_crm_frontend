@@ -1,8 +1,7 @@
 
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AllTasks from './components/allTasks';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import MyTasks from './components/myTasks';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaPlus, FaUserCheck, FaRedo, FaList, FaUser } from 'react-icons/fa';
@@ -12,7 +11,6 @@ import { Box } from '@mui/material';
 import { useGetMyTasksQuery } from '@/slices';
 
 const Page = () => {
-  const { setTitle } = useBreadcrumb();
   const router = useRouter();
   const { companySlug } = useCompany();
   const { data } = useGetMyTasksQuery();
@@ -26,10 +24,6 @@ const Page = () => {
   const handleTabChange = (tab: 'all' | 'my') => {
     setActiveTab(tab);
   };
-
-  useEffect(() => {
-    setTitle('Tasks Details of Employees');
-  }, [setTitle]);
 
   return (
     <>

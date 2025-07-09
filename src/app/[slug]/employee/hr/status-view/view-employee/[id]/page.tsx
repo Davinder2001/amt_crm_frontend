@@ -9,8 +9,7 @@ import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
-import Link from 'next/link'
+import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 
@@ -82,9 +81,6 @@ const ViewUserPage: React.FC = () => {
   return (
     <div className="employee-profile-container">
       <div className='employee-profile-nav'>
-        <Link href={`/${companySlug}/hr/status-view`} className='back-button'>
-          <FaArrowLeft size={20} color='#fff' />
-        </Link>
         <TableToolbar
           actions={[
             {

@@ -1,26 +1,21 @@
 'use client';
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'next/navigation';
 import { useGetInvoiceByIdQuery } from '@/slices/invoices/invoiceApi';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+
+
 const InvoiceViewPage = () => {
   const params = useParams();
   const id = params?.id;
 
-  const { setTitle } = useBreadcrumb(); // ✅ Move this hook to the top
   const router = useRouter();
   const { data, isLoading, error } = useGetInvoiceByIdQuery(id as string, {
     skip: !id,
   });
-
-  useEffect(() => {
-    setTitle('Invoice');
-  }, [setTitle]);
 
   if (isLoading) return <LoadingState />;
   if (error || !data?.invoice) return (

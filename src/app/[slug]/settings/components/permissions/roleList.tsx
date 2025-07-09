@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices/roles/rolesApi";
+import { useGetRolesQuery, useDeleteRoleMutation } from "@/slices";
 import { FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import RoleForm from "./RoleForm";

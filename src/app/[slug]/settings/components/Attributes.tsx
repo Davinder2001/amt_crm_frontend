@@ -7,7 +7,7 @@ import {
     useDeleteAttributeMutation,
     useToggleAttributeStatusMutation,
     useUpdateAttributeMutation,
-} from '@/slices/store/storeApi';
+} from '@/slices';
 import { FaPlus, FaTrash, FaTimes, FaTasks, FaEdit } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';

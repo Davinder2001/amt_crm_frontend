@@ -6,7 +6,7 @@ import {
     useUpdateHolidayMutation,
     useDeleteHolidayMutation,
     useDeleteHolidaysBulkMutation,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import HolidayForm from './HolidayForm';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';

@@ -2,10 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useFetchAdminsQuery,
-  useUpdateAdminStatusMutation,
-} from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import Loader from '@/components/common/Loader';
 import TableToolbar from '@/components/common/TableToolbar';
 import EmptyState from '@/components/common/EmptyState';

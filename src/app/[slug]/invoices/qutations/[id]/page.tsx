@@ -1,34 +1,24 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { useGetQuotationByIdQuery } from '@/slices/quotation/quotationApi';
-import { FaClipboardList, FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
+import { useGetQuotationByIdQuery } from '@/slices';
+import { FaClipboardList } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
 
 const QuotationPage = () => {
   const params = useParams();
   const rawId = params?.id;
   const id = rawId ? Number(rawId) : undefined;
-  const { companySlug } = useCompany();
-
   const { data: quotation, isLoading, error } = useGetQuotationByIdQuery(id!, {
     skip: !id || isNaN(id),
   });
 
-  if (isLoading) return <LoadingState/>;
-  if (error || !quotation) return 
-  ;
+  if (isLoading) return <LoadingState />;
+  if (error || !quotation) return
+    ;
 
   return (
     <div className="quotation-container">
-      <div>
-        <Link href={`/${companySlug}/invoices/qutations`} className="back-button">
-          <FaArrowLeft size={20} color="#fff" />
-        </Link>
-      </div>
-
       <div className="quotation-card">
         <div className="quotation-header">
           <h1>

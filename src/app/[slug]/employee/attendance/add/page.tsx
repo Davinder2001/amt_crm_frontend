@@ -4,15 +4,12 @@ import ReactWebcam from "react-webcam";
 import { useRecordAttendanceMutation } from "@/slices/attendance/attendanceApi";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa";
-import { useCompany } from "@/utils/Company";
+
 
 function AddAttendancePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const webcamRef = useRef<ReactWebcam | null>(null);
-  const { companySlug } = useCompany();
 
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +63,6 @@ function AddAttendancePage() {
 
   return (
     <>
-      <Link href={`/${companySlug}/employee/attendence`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
       <div style={{ padding: "1rem" }}>
         <h1>Add Attendance</h1>
 

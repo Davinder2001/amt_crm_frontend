@@ -2,11 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useFetchPendingCompaniesQuery,
-  useVerifyCompanyPaymentMutation,
-  useVerifyCompanyStatusMutation,
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchPendingCompaniesQuery, useVerifyCompanyPaymentMutation, useVerifyCompanyStatusMutation, } from '@/slices/superadminSlices/company/companyApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';

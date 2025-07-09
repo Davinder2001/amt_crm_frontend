@@ -7,7 +7,7 @@ import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
 } from "@/slices/employe/employeApi";
-import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
+import ResponsiveTable from "@/components/common/ResponsiveTable";
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
 import { FaEnvelope } from "react-icons/fa";
@@ -67,7 +67,7 @@ const SalaryView: React.FC = () => {
     {
       label: "Salary Slip",
       render: (employee: Employee) => (
-        <button onClick={() => viewSlip(employee)} className="salary-slip" style={{background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1}}>
+        <button onClick={() => viewSlip(employee)} className="salary-slip" style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1 }}>
           <FaEnvelope /> Slip
         </button>
       ),

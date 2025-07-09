@@ -4,16 +4,10 @@ import React, { useEffect, useState, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useCreateRoleMutation } from "@/slices/roles/rolesApi";
 import { useFetchPermissionsQuery } from "@/slices/permissions/permissionApi";
-import { useBreadcrumb } from "@/provider/BreadcrumbContext";
 import { useRouter } from "next/navigation";
 import { useCompany } from "@/utils/Company";
 
 const Page: React.FC = () => {
-  const { setTitle } = useBreadcrumb();
-  useEffect(() => {
-    setTitle('Add Role'); // Update breadcrumb title
-  }, [setTitle]);
-
   const { data } = useFetchPermissionsQuery();
 
   // Memoize permissionsData to avoid recalculating on each render

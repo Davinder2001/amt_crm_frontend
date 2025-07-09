@@ -1,11 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-    useGetBusinessCategoriesQuery,
-    useCreateBusinessCategoryMutation,
-    useUpdateBusinessCategoryMutation,
-    useDeleteBusinessCategoryMutation,
-} from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
+import { useGetBusinessCategoriesQuery, useCreateBusinessCategoryMutation, useUpdateBusinessCategoryMutation, useDeleteBusinessCategoryMutation } from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
 import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
 import LoadingState from "@/components/common/LoadingState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";

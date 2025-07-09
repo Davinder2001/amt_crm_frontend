@@ -1,18 +1,13 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import {
-  useGetAllQuotationsQuery,
-  useGenerateQuotationPdfMutation,
-} from '@/slices/quotation/quotationApi';
-import { FaArrowLeft, FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
+import { useGetAllQuotationsQuery, useGenerateQuotationPdfMutation, Quotation } from '@/slices';
+import { FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
-import { Quotation } from '@/slices/quotation/quotationApi';
 import EmptyState from '@/components/common/EmptyState';
-import Link from 'next/link';
 import TableToolbar from '@/components/common/TableToolbar';
 
 const AllQuotations = () => {
@@ -102,9 +97,6 @@ const AllQuotations = () => {
 
   return (
     <div className="all-quotations-page">
-      <Link href={`/${companySlug}/invoices`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
       <TableToolbar
         actions={[
           ...(quotations.length > 0

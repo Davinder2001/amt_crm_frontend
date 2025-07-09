@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useGetSelfConsumptionHistoryQuery } from '@/slices/invoices/invoiceApi';
+import { useGetSelfConsumptionHistoryQuery } from '@/slices';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';

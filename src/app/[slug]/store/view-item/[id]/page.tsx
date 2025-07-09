@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
+import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
 import { FiImage, FiX } from 'react-icons/fi';
@@ -67,9 +67,6 @@ const ViewItem = () => {
 
   return (
     <div className="item-view">
-      <Link href={`/${companySlug}/store`} className="back-button">
-        <FaArrowLeft size={16} color="#fff" />
-      </Link>
       <TableToolbar
       
         actions={[

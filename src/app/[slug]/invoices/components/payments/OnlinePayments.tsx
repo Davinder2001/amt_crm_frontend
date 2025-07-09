@@ -1,9 +1,9 @@
 import React from 'react';
-import { useGetOnlinePaymentHistoryQuery } from '@/slices/invoices/invoiceApi';
+import { useGetOnlinePaymentHistoryQuery } from '@/slices';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import { FaGlobe } from 'react-icons/fa';
-import ResponsiveTable from '@/components/common/ResponsiveTable';// adjust path if needed
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 type TransactionWithGroup = Transaction & {
   bank_name: string;

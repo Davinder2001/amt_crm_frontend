@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
-import {
-  useFetchSingleCompanyQuery,
-  useUpdateCompanyMutation,
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchSingleCompanyQuery, useUpdateCompanyMutation, } from '@/slices/superadminSlices/company/companyApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 

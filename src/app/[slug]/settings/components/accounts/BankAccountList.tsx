@@ -5,7 +5,7 @@ import {
     useAddCompanyAccountsMutation,
     useUpdateCompanyAccountMutation,
     useDeleteCompanyAccountMutation,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import BankAccountForm from './BankAccountForm';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
@@ -161,7 +161,7 @@ const BankAccountList = () => {
                     onCancel={closeModal}
                 />
             </Modal>
-            
+
             <ConfirmDialog
                 isOpen={deleteState.showDialog}
                 message="Are you sure you want to delete this account?"
@@ -174,7 +174,7 @@ const BankAccountList = () => {
                 }}
                 type="delete"
             />
-            
+
             {isLoading && <LoadingState />}
 
             {error && (

@@ -3,10 +3,8 @@ import React, { useEffect } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useParams } from 'next/navigation';
 import { useFetchSingleCompanyQuery } from '@/slices/superadminSlices/company/companyApi';
-// import { useRouter } from 'next/navigation';
-import { FaArrowLeft, FaFileAlt } from 'react-icons/fa';
+import { FaFileAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import Link from 'next/link';
 import { adminlogo } from "@/assets/useImage";
 import Loader from '@/components/common/Loader';
 import EmptyState from '@/components/common/EmptyState';
@@ -54,12 +52,7 @@ const ViewCompanyPage = () => {
     />);
 
   return (
-    <div>
-      <div className='vC-back-btn'>
-        <Link href="/superadmin/companies" className='back-button'>
-          <FaArrowLeft size={16} color='#fff' />
-        </Link>
-      </div>
+    <>
       <div className="vc-modern-container">
         {/* Header Section */}
         <div className="vc-modern-header">
@@ -147,7 +140,7 @@ const ViewCompanyPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

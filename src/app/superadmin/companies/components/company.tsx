@@ -2,11 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useFetchCompaniesQuery,
-  useVerifyCompanyPaymentMutation,
-  useVerifyCompanyStatusMutation
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchCompaniesQuery, useVerifyCompanyPaymentMutation, useVerifyCompanyStatusMutation } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';

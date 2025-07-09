@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-    useFetchRefundsQuery,
-    useApproveRefundMutation,
-    useCompleteRefundMutation,
-    useDeclineRefundMutation,
-} from '@/slices/superadminSlices/payments/paymentApi';
+import { useFetchRefundsQuery, useApproveRefundMutation, useCompleteRefundMutation, useDeclineRefundMutation, } from '@/slices/superadminSlices/payments/paymentApi';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';

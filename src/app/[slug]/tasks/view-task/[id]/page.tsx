@@ -3,15 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useGetTasksQuery,
-  useApproveHistoryMutation,
-  useRejectHistoryMutation,
-} from '@/slices';
+import { useGetTasksQuery, useApproveHistoryMutation, useRejectHistoryMutation, } from '@/slices';
 import { toast } from 'react-toastify';
-import { FaArrowLeft, FaCheck, FaTimes } from 'react-icons/fa';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
@@ -21,7 +15,6 @@ import { saveAs } from 'file-saver';
 function TaskViewPage() {
   const { id } = useParams();
   const { setTitle } = useBreadcrumb();
-  const { companySlug } = useCompany();
 
   const { data: tasks, isLoading: isTasksLoading } = useGetTasksQuery();
   const [approveHistory, { isLoading: isApproving }] = useApproveHistoryMutation();
@@ -133,10 +126,6 @@ function TaskViewPage() {
   return (
     <div className={`task-view-outer ${attachments.length === 0 ? 'single-column' : ''}`}>
       <div className="task-view-wrapper">
-        <Link href={`/${companySlug}/tasks`} className="back-button">
-          <FaArrowLeft />
-        </Link>
-
         <div className="task-card">
           <div className="Status-wrapper">
             <strong>Status:</strong>

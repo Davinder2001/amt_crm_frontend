@@ -1,12 +1,8 @@
 'use client';
-
 import React, { useState } from 'react';
 import { useGetPredefinedTasksQuery, useDeletePredefinedTaskMutation } from '@/slices';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { FaEdit, FaPlus, FaTrash, FaTasks } from 'react-icons/fa';
-import { useCompany } from '@/utils/Company';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa6';
+import { FaEdit, FaPlus, FaTrash, FaTasks } from 'react-icons/fa';;
 import Modal from '@/components/common/Modal';
 import RecurringTaskForm from '../components/RecurringTaskForm';
 import EmptyState from '@/components/common/EmptyState';
@@ -32,7 +28,6 @@ const Page = () => {
     refetch: () => void;
   };
   const [deleteTask] = useDeletePredefinedTaskMutation();
-  const { companySlug } = useCompany();
 
   const [isAddRecurringModalOpen, setIsAddRecurringModalOpen] = useState(false);
   const [isEditRecurringModalOpen, setIsEditRecurringModalOpen] = useState(false);
@@ -69,7 +64,6 @@ const Page = () => {
       <ToastContainer />
       <div className="recurring-wrapper">
         <div className='recurring-task-header'>
-          <Link href={`/${companySlug}/tasks`} className='back-button'><FaArrowLeft size={20} color='#fff' /></Link>
           {/* Only show header Add button when there are tasks */}
           {data && data.length > 0 && (
             <button type='button' className="add-btn buttons" onClick={() => setIsAddRecurringModalOpen(true)}>
@@ -115,7 +109,7 @@ const Page = () => {
             message="You haven't created any recurring tasks yet. Start by adding your first recurring task."
             action={
               <button
-              type='button'
+                type='button'
                 className="buttons"
                 onClick={() => setIsAddRecurringModalOpen(true)}
               >

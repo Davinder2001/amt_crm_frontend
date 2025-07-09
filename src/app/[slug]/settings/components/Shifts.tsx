@@ -6,7 +6,7 @@ import {
   useDeleteShiftMutation,
   useUpdateShiftMutation,
   useFetchCompanyShiftsQuery,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import { toast } from 'react-toastify';
 import {
   Box,

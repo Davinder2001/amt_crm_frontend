@@ -1,14 +1,7 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  useFetchStoreQuery,
-  useDeleteStoreItemMutation,
-  useImportStoreItemsMutation,
-  useLazyExportStoreItemsQuery,
-  useBulkDeleteStoreItemsMutation,
-} from '@/slices/store/storeApi';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
+import { useFetchStoreQuery, useDeleteStoreItemMutation, useImportStoreItemsMutation, useLazyExportStoreItemsQuery, useBulkDeleteStoreItemsMutation, useFetchSelectedCompanyQuery } from '@/slices';
 import { FaEdit, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';

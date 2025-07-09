@@ -5,7 +5,7 @@ import {
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
   useFetchCategoriesQuery,
-} from '@/slices/store/storeApi';
+} from '@/slices';
 import {
   Box,
   Button,

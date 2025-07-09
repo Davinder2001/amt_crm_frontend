@@ -1,11 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useBulkCreateStoreItemMutation, useOcrProcessMutation } from '@/slices/store/storeApi';
-import { useFetchTaxesQuery } from '@/slices/company/companyApi';
+import { useBulkCreateStoreItemMutation, useOcrProcessMutation, useFetchTaxesQuery } from '@/slices';
 import { toast } from 'react-toastify';
-import Link from 'next/link';
-import { FaArrowLeft,  FaPlus, } from 'react-icons/fa';
-import { useCompany } from '@/utils/Company';
+import { FaPlus, } from 'react-icons/fa';
 import { FaRegImage } from 'react-icons/fa6';
 
 const Page = () => {
@@ -16,8 +13,6 @@ const Page = () => {
   const [paymentMethod, setPaymentMethod] = useState(''); // '' | 'credit'
   const [creditPaymentType, setCreditPaymentType] = useState('full'); // 'full' | 'partial'
   const [partialAmount, setPartialAmount] = useState(0);
-
-
   const [vendorNo, setVendorNo] = useState('');
   const [items, setItems] = useState<{ name: string; price: string; quantity: string; subTotal: string; }[]>([]);
   const [newItem, setNewItem] = useState({ name: '', price: '', quantity: '', subTotal: '' });
@@ -26,8 +21,6 @@ const Page = () => {
   const [selectedTaxId, setSelectedTaxId] = useState<number | null>(null);
   const [taxMode, setTaxMode] = useState('overall');
   const [itemTaxes, setItemTaxes] = useState<(number | null)[]>([]);
-
-  const { companySlug } = useCompany();
   const [bulkCreateStoreItem, { isLoading }] = useBulkCreateStoreItemMutation();
   const [ocrProcess] = useOcrProcessMutation();
   const { data: taxData, isLoading: taxLoading } = useFetchTaxesQuery();
@@ -120,10 +113,6 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/store`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
-
       <div className='add-as-a-v-container'>
         <div className='add-as-a-v-inputs'>
           <div className="input-with-label">
@@ -176,7 +165,7 @@ const Page = () => {
 
         <div className='add-as-a-v-button'>
           <label htmlFor="file-upload" className="file-upload-button">
-          <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
+            <FaRegImage size={20} style={{ marginRight: '8px' }} /> Upload Bill Photo
           </label>
           <input style={{ display: 'none' }} id="file-upload" type="file" onChange={handleImageUpload} />
           <button className='buttons' onClick={() => setShowItemFields(true)} type='button'><FaPlus /> Add Items</button>
@@ -270,7 +259,7 @@ const Page = () => {
 
         <div className='add-as-vendor-select-tex-outer'>
           {items.length > 0 && (
-            <div className="tax-box"style={{ marginTop: '20px' }}>
+            <div className="tax-box" style={{ marginTop: '20px' }}>
               <label><strong>Tax Type:</strong></label><br />
               <label className='tax-radio'>
                 <input type="radio" value="individual" checked={taxMode === 'individual'} onChange={() => setTaxMode('individual')} /> <p> Individual Tax</p>
@@ -282,13 +271,13 @@ const Page = () => {
           )}
 
           {taxMode === 'overall' && items.length > 0 && (
-            <div className="overall-tax"style={{ marginTop: '20px' }}>
+            <div className="overall-tax" style={{ marginTop: '20px' }}>
               <label htmlFor="tax-select"><strong>Select Overall Tax</strong></label><br />
               <select
                 id="tax-select"
                 value={selectedTaxId ?? ''}
                 onChange={(e) => setSelectedTaxId(Number(e.target.value))}
-                style={{ padding: '8px', marginTop: '6px', borderRadius: '4px', border: '1px solid #ccc'}}
+                style={{ padding: '8px', marginTop: '6px', borderRadius: '4px', border: '1px solid #ccc' }}
               >
                 <option value=''>-- Select Tax --</option>
                 {taxLoading ? (
@@ -329,14 +318,14 @@ const Page = () => {
                 <label className="sub-title">Credit Type</label>
                 <div className="credit-options">
                   <button
-                  type='button'
+                    type='button'
                     className={`credit-button ${creditPaymentType === 'full' ? 'active' : ''}`}
                     onClick={() => setCreditPaymentType('full')}
                   >
                     Full Payment
                   </button>
                   <button
-                  type='button'
+                    type='button'
                     className={`credit-button ${creditPaymentType === 'partial' ? 'active' : ''}`}
                     onClick={() => setCreditPaymentType('partial')}
                   >

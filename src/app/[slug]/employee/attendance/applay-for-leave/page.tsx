@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useApplyForLeaveMutation } from '@/slices/attendance/attendanceApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
-import { useCompany } from '@/utils/Company';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
@@ -13,7 +10,6 @@ import { format } from 'date-fns';
 const Page = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [applyForLeave, { isLoading, isSuccess, isError }] = useApplyForLeaveMutation();
-  const { companySlug } = useCompany();
 
   useEffect(() => {
     if (isSuccess) {
@@ -63,10 +59,6 @@ const Page = () => {
 
   return (
     <>
-      <Link href={`/${companySlug}/employee/attendence`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
-
       <div style={{ padding: '20px' }}>
         <h1>Apply for Leave</h1>
 

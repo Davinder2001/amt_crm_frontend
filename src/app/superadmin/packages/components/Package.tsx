@@ -1,20 +1,8 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-    FiChevronDown,
-    FiCheck,
-    FiX,
-    FiUsers,
-    FiBox,
-    FiCheckCircle,
-    FiFileText,
-} from 'react-icons/fi';
+import { FiChevronDown, FiCheck, FiX, FiUsers, FiBox, FiCheckCircle, FiFileText, } from 'react-icons/fi';
 import { FaArrowLeft } from 'react-icons/fa';
-import {
-    useCreatePackageMutation,
-    useFetchSinglePackageQuery,
-    useUpdatePackageMutation
-} from '@/slices/superadminSlices/packages/packagesApi';
+import { useCreatePackageMutation, useFetchSinglePackageQuery, useUpdatePackageMutation } from '@/slices/superadminSlices/packages/packagesApi';
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useRouter } from 'next/navigation';
 import { useClickOutside } from '@/components/common/useClickOutside';
@@ -218,7 +206,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         }
     };
 
-    if (mode === 'edit' && isPackageLoading) return <LoadingState/>;
+    if (mode === 'edit' && isPackageLoading) return <LoadingState />;
 
     return (
         <div>

@@ -2,11 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import {
-    useCreateTaskMutation,
-    useUpdateTaskMutation,
-    useGetTasksQuery, useFetchNotificationsQuery
-} from '@/slices';
+import { useCreateTaskMutation, useUpdateTaskMutation, useGetTasksQuery, useFetchNotificationsQuery } from '@/slices';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import DatePickerField from '@/components/common/DatePickerField';
 

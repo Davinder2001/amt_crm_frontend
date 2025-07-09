@@ -15,14 +15,12 @@ import { useCallback } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
-    FaArrowLeft,
     FaImage,
     FaMinus,
     FaPlus,
     FaUpload,
 
 } from "react-icons/fa";
-import Link from "next/link";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import LoadingState from "@/components/common/LoadingState";
 import Image from "next/image";
@@ -527,10 +525,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
 
                     <div className="form-main-content">
                         <div className="add-item-header form-header">
-
-                            <Link href={`/${companySlug}/hr`} className='back-button'>
-                                <FaArrowLeft size={16} color='#fff' />
-                            </Link>
                             <h4>{mode === "add" ? "Add New Employee" : "Edit Employee"}</h4>
                             <button
                                 type="button"

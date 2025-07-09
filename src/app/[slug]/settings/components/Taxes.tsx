@@ -6,7 +6,7 @@ import {
     useCreateTaxMutation,
     useUpdateTaxMutation,
     useDeleteTaxMutation,
-} from '@/slices/company/companyApi';
+} from '@/slices';
 import {
     Box,
     IconButton,

@@ -1,9 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { useCreateQuotationMutation } from '@/slices/quotation/quotationApi';
-import { FaArrowLeft, FaPlus } from 'react-icons/fa';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
+import { useCreateQuotationMutation } from '@/slices';
+import { FaPlus } from 'react-icons/fa';
 
 const Page = () => {
   const [customerName, setCustomerName] = useState('');
@@ -12,7 +10,6 @@ const Page = () => {
   const [taxPercent, setTaxPercent] = useState(0);
   const [serviceCharges, setServiceCharges] = useState(0);
   const [items, setItems] = useState<{ name: string; quantity: number; price: number }[]>([{ name: '', quantity: 1, price: 0 }]);
-  const { companySlug } = useCompany();
 
   const [createQuotation, { isLoading, isSuccess }] = useCreateQuotationMutation();
 
@@ -62,10 +59,7 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <Link href={`/${companySlug}/invoices/qutations`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
+    <>
       <div className="quotation-form">
         <h3 className="form-title">Add Quotation</h3>
         <form onSubmit={handleSubmit} className="form-body">
@@ -180,7 +174,7 @@ const Page = () => {
           {isSuccess && <p className="success-msg">Quotation saved successfully!</p>}
         </form>
       </div>
-    </div>
+    </>
 
   );
 };

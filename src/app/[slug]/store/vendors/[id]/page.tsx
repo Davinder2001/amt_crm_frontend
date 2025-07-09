@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices/vendor/vendorApi';
-import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
-import Link from 'next/link';
+import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from '@/components/common/LoadingState';
@@ -45,10 +44,6 @@ const Page = () => {
 
   return (
     <div className="vendor-details-outer">
-      <Link href={`/${companySlug}/store/vendors`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="vendor-details-page">
         <div className="vendor-card">
           <div className="vendor-header">

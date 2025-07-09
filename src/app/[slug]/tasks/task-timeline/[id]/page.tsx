@@ -2,13 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  useViewTaskTimelineQuery,
-  useEndTaskMutation,
-  useSetReminderMutation,
-  useUpdateReminderMutation,
-  useViewReminderQuery, useFetchProfileQuery
-} from '@/slices';
+import { useViewTaskTimelineQuery, useEndTaskMutation, useSetReminderMutation, useUpdateReminderMutation, useViewReminderQuery, useFetchProfileQuery } from '@/slices';
 import { MdAccessTime } from 'react-icons/md';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton from 'react-loading-skeleton';

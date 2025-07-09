@@ -1,13 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import {
-  useFetchStoreItemQuery,
-  useFetchItemBatchByIdQuery,
-  useUpdateItemBatchMutation
-} from '@/slices';
-import { useFetchMeasuringUnitsQuery, useFetchTaxesQuery } from '@/slices';
-import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
+import { useFetchStoreItemQuery, useFetchItemBatchByIdQuery, useUpdateItemBatchMutation, useFetchMeasuringUnitsQuery, useFetchTaxesQuery, useFetchVendorsQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
 import StoreItemFields from '../../components/StoreItemFields';

@@ -193,7 +193,7 @@ body {
 }
 
 .buttons {
-    padding: 9px 22px;
+    padding: 6px 12px;
     border-radius: $border-radius;
     border: unset;
     background-color: var(--primary-color);
@@ -525,7 +525,7 @@ textarea::placeholder {
 }
 @media (max-width:468px) {
     .buttons {
-        padding: 5px 15px;
+        padding: 5px 10px;
 
     }
 

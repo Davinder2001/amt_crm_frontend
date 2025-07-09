@@ -164,12 +164,23 @@
     .employee-field {
         input {
             &::placeholder {
-                color: gray;
+                color: #ccc;
                 font-size: 14px;
-                text-transform: unset;
+                letter-spacing: 0.3px;
+                background-color: transparent;
 
             }
         }
+
+        .common-placeholder {
+            color: #ccc;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            background-color: transparent;
+        }
+
+
+
     }
 
     .employee-field input,
@@ -251,10 +262,8 @@
         justify-content: center;
         transition: background 0.3s;
         fill: none;
+        background: #f0f0f0;
 
-        &:hover {
-            background: #f0f0f0;
-        }
 
         svg {
             font-size: 12px;

@@ -373,33 +373,14 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                                 )}
                                 {filters.map((filter) => (
                                     <div key={filter.key} className="section">
-                                        <label className="custom-check-wrapper">
+                                        <label className="filter-type-option">
                                             <input
                                                 type="checkbox"
                                                 checked={activeFilterTypes.includes(filter.key)}
                                                 onChange={() => handleFilterTypeSelect(filter.key)}
-                                                className="custom-check-input"
                                             />
-                                            <span className="custom-check-box"></span>
                                             {filter.label}
                                         </label>
-
-                                        {activeFilterTypes.includes(filter.key) && filter.type === 'multi-select' && (
-                                            <div className="filter-options-list">
-                                                {filter.options?.map((opt) => (
-                                                    <label key={opt} className="option">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedFilters[filter.key]?.includes(opt) || false}
-                                                            onChange={(e) =>
-                                                                handleMultiSelectChange(filter.key, opt, e.target.checked)
-                                                            }
-                                                        />
-                                                        {opt}
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -471,7 +452,7 @@ const TableToolbar: React.FC<TableToolbarProps> = ({
                             </div>
                         </div>
                     )}
-                    
+
                     {actions && actions?.length > 0 ? (
                         <div className="action-icons-horizontal">
                             {actions.map((action, i) => (

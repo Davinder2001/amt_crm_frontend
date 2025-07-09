@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
-import ThemeSwitcher from "./ThemeSwitcher";
+// import ThemeSwitcher from "./ThemeSwitcher";
 import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
@@ -155,7 +155,7 @@ const Profile: React.FC = () => {
                     <FaFileInvoiceDollar className="menu-icon" />
                     <span>Billing</span>
                   </Link>
-                  <ThemeSwitcher />
+                  {/* <ThemeSwitcher /> */}
 
                   <button
                     className="menu-item logout"

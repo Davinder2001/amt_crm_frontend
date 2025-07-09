@@ -145,7 +145,7 @@ export const tasksApi = apiSlice.injectEndpoints({
     }),
 
     // POST: Set reminder
-    setReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+    setReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string }>({
       query: ({ taskId, ...reminder }) => ({
         url: `tasks/${taskId}/set-reminder`,
         method: 'POST',
@@ -161,7 +161,7 @@ export const tasksApi = apiSlice.injectEndpoints({
     }),
 
     // PUT: Update reminder
-    updateReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+    updateReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string }>({
       query: ({ taskId, ...reminder }) => ({
         url: `tasks/${taskId}/update-reminder`,
         method: 'PUT',

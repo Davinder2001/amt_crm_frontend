@@ -32,12 +32,11 @@ const ViewTimeline = () => {
   const user = userData?.user;
 
   const [reminderAt, setReminderAt] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [openImage, setOpenImage] = useState<string | null>(null);
   // inside your component
   const reminderInputRef = useRef<HTMLInputElement | null>(null);
-  const endDateInputRef = useRef<HTMLInputElement | null>(null);
+
   const handleDownload = (url: string) => {
     const link = document.createElement('a');
     link.href = url;
@@ -97,12 +96,11 @@ const ViewTimeline = () => {
   useEffect(() => {
     if (reminderData?.reminder) {
       setReminderAt(reminderData.reminder.reminder_at?.slice(0, 16) || '');
-      setEndDate(reminderData.reminder.end_date?.slice(0, 16) || '');
     }
   }, [reminderData]);
 
   const handleReminderSubmit = async () => {
-    if (!reminderAt || !endDate) {
+    if (!reminderAt) {
       toast.error('Please provide both dates.');
       return;
     }
@@ -112,14 +110,12 @@ const ViewTimeline = () => {
         await updateReminder({
           taskId: Number(id),
           reminder_at: reminderAt,
-          end_date: endDate,
         }).unwrap();
         toast.success('Reminder updated.');
       } else {
         await setReminder({
           taskId: Number(id),
           reminder_at: reminderAt,
-          end_date: endDate,
         }).unwrap();
         toast.success('Reminder set.');
       }
@@ -294,20 +290,6 @@ const ViewTimeline = () => {
               value={reminderAt}
               onChange={(e) => setReminderAt(e.target.value)}
               ref={reminderInputRef}
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
-          </label>
-
-          <label
-            onClick={() => endDateInputRef.current?.focus()}
-            style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
-          >
-            End Date:
-            <input
-              type="datetime-local"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              ref={endDateInputRef}
               style={{ width: '100%', padding: '8px', marginTop: '4px' }}
             />
           </label>

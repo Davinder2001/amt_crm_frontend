@@ -131,16 +131,6 @@ export default function CartTabContent({
 
     const innerTabs: InnerTabType[] = ['Client', 'Items', 'Bill'];
 
-    const handleNumberBlur = () => {
-        if (!number || !customers?.customers) return;
-        const matchedCustomer = customers.customers.find((cust: Customer) => cust.number === number);
-        if (matchedCustomer) {
-            setClientName(matchedCustomer.name);
-            setEmail(matchedCustomer.email || '');
-            toast.success(`Customer "${matchedCustomer.name}" found and autofilled!`);
-        }
-    };
-
     const validateFields = (): boolean => {
         if (cart.length === 0) {
             setActiveInnerTab('Items');
@@ -291,7 +281,6 @@ export default function CartTabContent({
                         setDeliveryCharge={setDeliveryCharge}
                         customers={customers}
                         companySlug={companySlug}
-                        handleNumberBlur={handleNumberBlur}
                         deliveryBoyId={deliveryBoyId}
                         setDeliveryBoyId={setDeliveryBoyId}
                     />

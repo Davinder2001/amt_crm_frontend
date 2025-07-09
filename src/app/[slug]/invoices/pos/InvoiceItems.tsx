@@ -82,14 +82,13 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                     key={batch.id}
                     className={`variant-bubble${selectedBatch?.id === batch.id ? ' selected' : ''}`}
                     style={{
-                      maxWidth: 200,
-                      width: '100%',
-                      minHeight: 80,
+                      flex: 1,
                       border: '1px solid #e0e0e0',
-                      borderRadius: 12,
+                      borderRadius: 5,
                       background: '#fff',
+                      whiteSpace: 'nowrap',
                       margin: 4,
-                      padding: 10,
+                      padding: '5px 10px',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
@@ -117,14 +116,13 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
                     }}
                   >
                     <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}><b>Batch:</b> {('batch_number' in batch ? batch.batch_number : '') || batch.id}</div>
-                    <div style={{ fontSize: 13, color: '#384B70', marginBottom: 2 }}>
+                    <div style={{ fontSize: 15, color: '#384B70', marginBottom: 2, fontWeight: 600, }}>
                       {isVariable
                         ? (priceRange ? `₹${priceRange.min} - ₹${priceRange.max}` : 'No variants')
                         : isStoreItemBatch(batch) ? `₹${batch.sale_price}` : ''}
                     </div>
                     {isStoreItemBatch(batch) && (
                       <div style={{ fontSize: 12, color: '#888', marginBottom: 2 }}>
-                        <b>Product Type:</b> {batch.product_type}
                         {hasUnits && <span> (Unit: ₹{batch.price_per_unit})</span>}
                       </div>
                     )}
@@ -217,28 +215,32 @@ const InvoiceItems: React.FC<InvoiceItemsProps> = ({ items, onAddToCart, cart, o
         width="400px"
       >
         <div className="variant-modal-content">
-          <div className="variant-radial-selector">
-            {(batch.variants ?? []).map((variant: variations) => {
-              const firstLetters = variant.attributes
-                .map((attr: AttributeItem) => attr.value.substring(0, 1).toUpperCase())
-                .join('');
-              return (
-                <div
-                  key={variant.id}
-                  className={`variant-bubble ${selectedVariant?.id === variant.id ? 'selected' : ''}`}
-                  onClick={() => { setSelectedVariant(variant); setUseUnitPrice(false); setUnitQuantity(1); }}
-                >
-                  <div className="bubble-label">{firstLetters}</div>
-                </div>
-              );
-            })}
-          </div>
+
           <div className="variant-details">
+            <div className="variant-selector">
+              {(batch.variants ?? [])
+                .filter((variant: variations) => {
+                  return variant.attributes?.some((attr: AttributeItem) => attr.value.trim() !== "");
+                })
+                .map((variant: variations) => (
+                  <div
+                    key={variant.id}
+                    className={`variant-name ${selectedVariant?.id === variant.id ? 'selected' : ''}`}
+                    onClick={() => {
+                      setSelectedVariant(variant);
+                      setUseUnitPrice(false);
+                      setUnitQuantity(1);
+                    }}
+                  >
+                    {variant.attributes
+                      .filter((attr: AttributeItem) => attr.value.trim() !== "")
+                      .map((attr: AttributeItem) => attr.value)
+                      .join(' • ')}
+                  </div>
+                ))}
+            </div>
             {selectedVariant ? (
               <>
-                <div className="variant-name">
-                  {selectedVariant.attributes.map((attr: AttributeItem) => attr.value).join(' • ')}
-                </div>
                 <div className="variant-price">
                   ₹{selectedVariant.variant_sale_price}
                 </div>

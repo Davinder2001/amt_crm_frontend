@@ -68,14 +68,9 @@ const ViewItem = () => {
   return (
     <div className="item-view">
       <TableToolbar
-      
+
         actions={[
-          
-          {
-            label: 'Add Stock',
-            icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
-          },
+
           {
             label: 'Edit Item',
             icon: <FaEdit />,
@@ -85,6 +80,11 @@ const ViewItem = () => {
             label: 'Delete Item',
             icon: <FaTrash />,
             onClick: () => setShowConfirm(true),
+          },
+          {
+            label: 'Add Stock',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
           },
         ]}
         introKey="view-item-toolbar" // optional for mobile guide popup

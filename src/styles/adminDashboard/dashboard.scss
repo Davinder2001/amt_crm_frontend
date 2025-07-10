@@ -359,7 +359,7 @@
 
 .overview-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
 
     .card {
@@ -374,6 +374,7 @@
         position: relative;
         overflow: hidden;
         cursor: pointer;
+        text-decoration: none;
 
         &:hover {
             transform: translateY(-5px);
@@ -696,10 +697,12 @@
         border: none;
         border-bottom: 1px solid rgb(223, 240, 240);
         padding: 0px 0px 10px 0px;
+
         .avatar {
             font-size: 14px;
         }
-        .review-content .desc{
+
+        .review-content .desc {
             font-size: 12px;
         }
     }

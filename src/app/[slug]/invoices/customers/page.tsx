@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FaArrowLeft, FaPlus, FaUsers } from 'react-icons/fa';
+import { FaPlus, FaUsers } from 'react-icons/fa';
 import { useFetchAllCustomersQuery } from '@/slices/customers/customerApi';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
@@ -23,12 +23,8 @@ const CustomerList = () => {
   ];
 
   return (
-    <div>
-      <button onClick={() => router.back()} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </button>
-
-      {isLoading && <LoadingState/>}
+    <>
+      {isLoading && <LoadingState />}
 
       {error && (
         <EmptyState
@@ -61,7 +57,7 @@ const CustomerList = () => {
           onView={(id) => router.push(`/${companySlug}/invoices/customers/${id}`)}
         />
       )}
-    </div>
+    </>
   );
 };
 

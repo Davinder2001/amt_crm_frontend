@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { FaBars, FaHome, FaFileInvoice, FaUserTie, FaStore } from 'react-icons/fa';
+import { FaBars, FaHome, FaFileInvoice, FaUserTie, FaStore, FaBuilding, FaCube } from 'react-icons/fa';
 import Link from 'next/link';
 import { useCompany } from '@/utils/Company';
 
@@ -13,12 +13,19 @@ const FooterBarMenu: React.FC<FooterBarMenuProps> = ({ openMenu }) => {
     const asPath = usePathname();
     const { companySlug, userType } = useCompany();
 
-    const items = [
+    // Common items for all user types
+    const commonItems = [
         {
             name: 'Home',
-            href: `/${companySlug}${userType === 'employee' ? '/employee/dashboard' : '/dashboard'}`,
+            href: userType === 'super-admin' 
+                ? '/superadmin/dashboard' 
+                : `/${companySlug}${userType === 'employee' ? '/employee/dashboard' : '/dashboard'}`,
             icon: <FaHome size={20} />,
-        },
+        }
+    ];
+
+    // Items for regular users/employees
+    const regularUserItems = [
         {
             name: 'Store',
             href: `/${companySlug}${userType === 'employee' ? '/employee/store' : '/store'}`,
@@ -35,6 +42,30 @@ const FooterBarMenu: React.FC<FooterBarMenuProps> = ({ openMenu }) => {
             icon: <FaFileInvoice size={20} />,
         },
     ];
+
+    // Items for super admin
+    const superAdminItems = [
+        {
+            name: 'Business Users',
+            href: '/superadmin/admins',
+            icon: <FaUserTie size={20} />,
+        },
+        {
+            name: 'Companies',
+            href: '/superadmin/companies',
+            icon: <FaBuilding size={20} />,
+        },
+        {
+            name: 'Packages',
+            href: '/superadmin/packages',
+            icon: <FaCube size={20} />,
+        }
+    ];
+
+    // Determine which items to show based on user type
+    const items = userType === 'super-admin'
+        ? [...commonItems, ...superAdminItems]
+        : [...commonItems, ...regularUserItems];
 
     const isActive = (href: string) =>
         asPath === href || asPath.startsWith(`${href}/`);

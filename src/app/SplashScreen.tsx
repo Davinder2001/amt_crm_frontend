@@ -181,37 +181,25 @@ export default function SplashScreen() {
     useEffect(() => {
         if (!isPWA) return;
 
+        // Hide body initially to prevent flash
+        document.body.style.overflow = 'hidden';
+
         // Animation sequence
         const timer1 = setTimeout(() => setAnimationStage(1), 200);
         const timer2 = setTimeout(() => setAnimationStage(2), 500);
         const timer3 = setTimeout(() => setAnimationStage(3), 900);
-        const timer4 = setTimeout(() => setAnimationStage(4), 1500);
-
-        // Create particle network
-        const particleContainer = document.createElement('div');
-        particleContainer.className = 'particle-network';
-
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.style.position = 'absolute';
-            particle.style.width = `${Math.random() * 5 + 1}px`;
-            particle.style.height = particle.style.width;
-            particle.style.backgroundColor = `rgba(255,255,255,${Math.random() * 0.3 + 0.1})`;
-            particle.style.borderRadius = '50%';
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            particle.style.animation = `particle-move ${Math.random() * 5 + 3}s infinite alternate ease-in-out`;
-            particleContainer.appendChild(particle);
-        }
-
-        document.querySelector('.splash-screen')?.appendChild(particleContainer);
+        const timer4 = setTimeout(() => {
+            setAnimationStage(4);
+            // Restore scrolling when done
+            document.body.style.overflow = '';
+        }, 1500);
 
         return () => {
             clearTimeout(timer1);
             clearTimeout(timer2);
             clearTimeout(timer3);
             clearTimeout(timer4);
-            particleContainer.remove();
+            document.body.style.overflow = '';
         };
     }, [isPWA]);
 

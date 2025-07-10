@@ -197,11 +197,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   <div className="select-all-container">
                     <span onClick={toggleSelectAll} title="Select current page">
                       {selectedItems.all ? (
-                        <FaSquare className="select-icon" />
+                        <FaSquare className="select-icon" size={18}/>
                       ) : selectedItems.ids.length === currentData.length ? (
-                        <FaCheckSquare className="select-icon" />
+                        <FaCheckSquare className="select-icon" size={18}/>
                       ) : (
-                        <FaSquare className="select-icon" />
+                        <FaSquare className="select-icon" size={18}/>
                       )}
                     </span>
                     {totalPages > 1 && (
@@ -211,9 +211,9 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                         title="Select all items across all pages"
                       >
                         {selectedItems.all ? (
-                          <FaCheckSquare className="select-icon" />
+                          <FaCheckSquare className="select-icon" size={18}/>
                         ) : (
-                          <FaSquare className="select-icon" />
+                          <FaSquare className="select-icon" size={18}/>
                         )}
                       </span>
                     )}
@@ -249,9 +249,9 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                       }}
                     >
                       {isItemSelected(item.id) ? (
-                        <FaCheckSquare className="select-icon" />
+                        <FaCheckSquare className="select-icon" size={18}/>
                       ) : (
-                        <FaSquare className="select-icon" />
+                        <FaSquare className="select-icon" size={18}/>
                       )}
                     </span>
                   </td>
@@ -275,7 +275,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       </div>
 
       {/* Card View - Always expanded with bulk selection */}
-      <div className="card-view">
+      <div className="card-view-section">
         {showBulkActions && (
           <div className="card-bulk-header">
             <div className="select-all-container">
@@ -307,71 +307,73 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
             </div>
           </div>
         )}
-        {currentData.map((item, index) => (
-          <div key={index} className="t-card">
-            {/* Overlay for bulk selection */}
-            {showBulkActions && showIndividualCheckboxes && (
-              <div className="card-bulk-overlay">
-                <div className="card-bulk-checkbox">
-                  <span
-                    className="select-checkbox"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleSelectItem(item.id);
-                    }}
-                  >
-                    {isItemSelected(item.id) ? (
-                      <FaCheckSquare className="select-icon" />
-                    ) : (
-                      <FaSquare className="select-icon" />
-                    )}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div className="card-body"
-              onClick={(e) => {
-                if (wasDraggedRef.current ||
-                  (e.target as HTMLElement).closest('button, svg, .action-icon, select, .select-checkbox')) {
-                  wasDraggedRef.current = false;
-                  return;
-                }
-                if (onView) onView(item.id);
-              }}
-            >
-              {cardView && cardView(item)}
-            </div>
-
-            {
-              (onEdit || onDelete) && (
-                <div className="card-footer">
-                  <div className="card-actions">
-                    {onEdit && (
-                      <FaEdit
-                        className="action-icon edit"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEdit(item.id);
-                        }}
-                      />
-                    )}
-                    {onDelete && (
-                      <FaTrash
-                        className="action-icon delete"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setDeleteTargetId(item.id);
-                          setShowConfirmDialog(true);
-                        }}
-                      />
-                    )}
+        <div className="card-view">
+          {currentData.map((item, index) => (
+            <div key={index} className="t-card">
+              {/* Overlay for bulk selection */}
+              {showBulkActions && showIndividualCheckboxes && (
+                <div className="card-bulk-overlay">
+                  <div className="card-bulk-checkbox">
+                    <span
+                      className="select-checkbox"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSelectItem(item.id);
+                      }}
+                    >
+                      {isItemSelected(item.id) ? (
+                        <FaCheckSquare className="select-icon" />
+                      ) : (
+                        <FaSquare className="select-icon" />
+                      )}
+                    </span>
                   </div>
                 </div>
-              )
-            }
-          </div>
-        ))}
+              )}
+
+              <div className="card-body"
+                onClick={(e) => {
+                  if (wasDraggedRef.current ||
+                    (e.target as HTMLElement).closest('button, svg, .action-icon, select, .select-checkbox')) {
+                    wasDraggedRef.current = false;
+                    return;
+                  }
+                  if (onView) onView(item.id);
+                }}
+              >
+                {cardView && cardView(item)}
+              </div>
+
+              {
+                (onEdit || onDelete) && (
+                  <div className="card-footer">
+                    <div className="card-actions">
+                      {onEdit && (
+                        <FaEdit
+                          className="action-icon edit"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(item.id);
+                          }}
+                        />
+                      )}
+                      {onDelete && (
+                        <FaTrash
+                          className="action-icon delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteTargetId(item.id);
+                            setShowConfirmDialog(true);
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )
+              }
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Pagination */}

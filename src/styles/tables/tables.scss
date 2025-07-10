@@ -157,6 +157,12 @@
     border-radius: 5px 5px 0px 0px;
     position: relative;
 
+    input[type="checkbox"] {
+        accent-color: var(--primary-color);
+        width: 16px;
+        height: 16px;
+    }
+
     .right-group {
         flex: 1;
         justify-content: flex-end;
@@ -245,9 +251,7 @@
 
     .dropdown-left {
         .dropdown-content {
-            padding: 15px;
-            line-height: 30px;
-            gap: 20px;
+            padding: 6px 8px;
             background-color: $white;
             border-radius: 5px;
             border: 1px solid $border-color;
@@ -258,6 +262,22 @@
                 display: flex;
                 gap: 10px;
                 align-items: center;
+                cursor: pointer;
+                padding: 5px 8px;
+                border-radius: $border-radius;
+
+                &:hover {
+                    background: $light_blue;
+                }
+            }
+
+            .section {
+                padding: 4px 8px;
+                border-radius: $border-radius;
+
+                &:hover {
+                    background: $light_blue;
+                }
             }
         }
 
@@ -282,6 +302,14 @@
         transform: translateY(0);
     }
 
+    .reset-columns {
+        padding: 5px 8px;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+
     .dropdown-content {
         position: absolute;
         top: calc(100% + 2px);
@@ -297,7 +325,7 @@
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         z-index: 99999;
         border: 1px solid rgba(0, 150, 147, 0.1);
-        padding: 8px;
+        padding: 6px 8px;
 
         &.show {
             opacity: 1;
@@ -306,8 +334,6 @@
         }
 
         .section {
-
-
             &:last-child {
                 margin-bottom: 0;
                 border-bottom: none;
@@ -348,11 +374,7 @@
                 background: $light_blue;
             }
 
-            input[type="checkbox"] {
-                accent-color: var(--primary-color);
-                width: 16px;
-                height: 16px;
-            }
+
         }
 
         // Action list styles
@@ -598,7 +620,7 @@
             color: #64748b;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 18px;
+            font-size: 20px;
 
             &:hover {
                 color: var(--primary-color);
@@ -610,7 +632,7 @@
                 transition: all 0.2s ease;
 
                 &.select-icon {
-                    font-size: 18px;
+                    font-size: 20px;
                 }
 
                 &:hover .select-icon {
@@ -756,54 +778,14 @@ table {
     }
 }
 
-.card-view {
+.card-view-section {
     display: none;
-    margin-bottom: 20px;
-
-    .card-bulk-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #4261da1c;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        z-index: 2;
-        border-radius: $border-radius;
-
-        .card-bulk-checkbox {
-            z-index: 1;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: $white;
-            border-radius: $border-radius 0px 0px 0px;
-            padding: 5px;
-
-            .select-checkbox {
-                cursor: pointer;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                .select-icon {
-                    color: var(--primary-color);
-                    border: 1px solid $white;
-                    border-radius: $border-radius;
-                    font-size: 20px;
-                }
-            }
-
-        }
-    }
 
     .card-bulk-header {
         padding: 10px 5px;
         background: #f5f5f5;
         border-radius: $border-radius;
+        margin-bottom: 10px;
 
         .select-all-container {
             display: flex;
@@ -823,7 +805,7 @@ table {
             }
 
             .select-icon {
-                font-size: 18px;
+                font-size: 20px;
                 color: var(--primary-color);
             }
 
@@ -834,13 +816,60 @@ table {
         }
     }
 
-    .t-card {
-        position: relative;
+    .card-view {
+        margin-bottom: 20px;
+
+        .card-bulk-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #4261da1c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+            border-radius: $border-radius;
+
+            .card-bulk-checkbox {
+                z-index: 1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: $white;
+                border-radius: $border-radius 0px 0px 0px;
+                padding: 5px;
+
+                .select-checkbox {
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .select-icon {
+                        color: var(--primary-color);
+                        border: 1px solid $white;
+                        border-radius: $border-radius;
+                        font-size: 20px;
+                    }
+                }
+
+            }
+        }
+
+
+
+        .t-card {
+            position: relative;
+        }
+
+
+
     }
-
-
-
 }
+
 
 /* ============ PAGINATION ============ */
 .pagination-controls {
@@ -1056,7 +1085,7 @@ table {
 @media (max-width: 768px) {
 
     .filter-search-table {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
 
         .active-filters-container {
             gap: 10px;
@@ -1150,10 +1179,14 @@ table {
         font-weight: 600;
     }
 
-    .card-view {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 10px;
+    .card-view-section {
+        display: block;
+
+        .card-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+        }
     }
 
     .t-card {

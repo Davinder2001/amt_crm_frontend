@@ -3,24 +3,22 @@
 .item-view {
   min-height: 100vh;
 
-  .back-button {
-    margin: 0;
+  .action-icons-horizontal {
+    display: flex;
+    gap: 10px;
   }
 
   .item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 20px;
     padding: 10px;
     background: $white;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-
-
-
   }
 
   .item-details {

@@ -1225,7 +1225,7 @@
     .section-group {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0rem;
     }
 
     .section-title {
@@ -1675,7 +1675,11 @@
             box-shadow: $box-shadow;
             z-index: 9999999;
             cursor: pointer;
-
+            background-color: $primary-color;
+            color: $white;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            margin-top: 5px;
         }
     }
 
@@ -1764,7 +1768,36 @@
         }
     }
 
-    .invoice-items-wrapper {
+    .inner-tabs {
+        .danger {
+    font-size: 0px;
+
+    svg {
+    font-size: 20px;
+    width: 50%;
+     }
+     }
+    }
+
+
+    .checkout-panel {
+         
+        .cart-item-row {
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    transition: all .3s;
+    display: grid !important;
+    position: relative;
+    box-shadow: 0 2px 4px #0000000d;
+    grid-template-columns: 2fr 1fr 1fr;
+      }
+    }
+ 
+
+    .checkout-panel .cart-labels {
+        font-size: 12px;
 
         .searchbar-desktop {
             display: none;
@@ -1859,7 +1892,7 @@
 @media (max-width: 480px) {
 
     .checkout-panel .payment-section {
-        padding: 8px;
+        padding: 15px 10px;
     }
 
     .checkout-panel .tax-section h4 {

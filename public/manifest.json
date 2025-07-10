@@ -1,4 +1,23 @@
 {
+  "name": "AMT",
+  "short_name": "AMT",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
   "background_color": "#384b70",
-  "theme_color": "#384b70"
+  "theme_color": "#384b70",
+  "icons": [
+    {
+      "src": "/icons/transparent.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/download.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait-primary"
 }

@@ -683,6 +683,10 @@
       }
     }
   }
+
+  .header .m-toggle {
+    display: none;
+  }
 }
 
 .profile-container {
@@ -756,10 +760,6 @@
 @media (max-width:468px) {
   .header {
     gap: 0;
-
-    .m-toggle {
-      display: none;
-    }
 
     .nav-container {
       max-width: 100%;

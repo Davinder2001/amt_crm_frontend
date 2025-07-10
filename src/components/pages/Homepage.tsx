@@ -245,6 +245,9 @@ export default function Homepage() {
           </div>
           
         </div>
+
+
+         <Pricing />
         
        {/* Why CRM */}
        <div className='why-crm-section'>
@@ -287,6 +290,9 @@ export default function Homepage() {
 
         </div>
        </div>
+
+
+         
 
 
         {/* Manage Everything Section */}
@@ -363,7 +369,7 @@ export default function Homepage() {
           </div>
         </div>
 
-        <Pricing />
+     
 
       </div>
     </div>

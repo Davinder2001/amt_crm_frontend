@@ -13,11 +13,11 @@ import SplashScreen from "./SplashScreen";
 export const metadata: Metadata = {
   title: "AMT CRM",
   description: "By Spark Web Solutions",
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/icons/download.png",
-    apple: "/icons/download.png",
-  },
+  // manifest: "/manifest.json",
+  // icons: {
+  //   icon: "/icons/download.png",
+  //   apple: "/icons/download.png",
+  // },
 };
 
 export default function RootLayout({

@@ -8,7 +8,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeProvider from '@/provider/themeContext';
 import NetworkStatusBanner from "@/components/common/NetworkStatusBanner";
-import SplashScreen from "./SplashScreen";
 
 export const metadata: Metadata = {
   title: "AMT CRM",
@@ -28,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SplashScreen />
         <ToastContainer autoClose={1500} style={{ zIndex: '999999999999999' }} />
         <Provider>
           <ThemeProvider>

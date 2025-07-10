@@ -178,7 +178,7 @@ interface AttributeOption {
 
 interface variations {
   attribute_value_id: number;
-  id?: number;
+  id?: number ;
   variant_regular_price: number;
   variant_sale_price: number;
   stock: number;

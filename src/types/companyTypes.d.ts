@@ -1,5 +1,6 @@
 // Define types for your Company and responses (adjust these interfaces as needed)
 interface Company {
+  subscription_status: ReactNode;
   id: number;
   name: string;
   company_slug: string;
@@ -8,6 +9,12 @@ interface Company {
   description?: string;
   company_id: string;
   location?: string;
+  admin_id: number;
+  subscription_status: string;
+  subscription_type: string;
+  payment_status: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface CompaniesResponse {

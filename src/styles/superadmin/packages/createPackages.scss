@@ -34,8 +34,8 @@
             }
 
             .bc-group-span {
-                grid-column: span 2;
                 justify-content: center;
+                align-items: center;
 
                 .selected-items {
                     display: flex;
@@ -204,52 +204,7 @@
                             background: #f7fafc;
                         }
 
-                        .checkbox-container {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
 
-                            .checkbox.checked {
-
-                                width: 18px;
-                                height: 18px;
-                                background-color: var(--primary-color);
-                                border: 2px solid var(--primary-color);
-                                border-radius: $border-radius;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                transition: background-color 0.3s ease, border-color 0.3s ease;
-                                color: white;
-                                // Optional animation
-                                animation: checkPulse 0.3s ease;
-
-                                svg {
-                                    color: white;
-                                    font-size: 12px;
-                                }
-                            }
-
-                            .checkbox.unchecked {
-                                width: 18px;
-                                height: 18px;
-                                border: 2px solid var(--primary-color);
-                                border-radius: $border-radius;
-                                background-color: transparent;
-                            }
-
-                            @keyframes checkPulse {
-                                0% {
-                                    transform: scale(0.8);
-                                    opacity: 0;
-                                }
-
-                                100% {
-                                    transform: scale(1);
-                                    opacity: 1;
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -261,6 +216,8 @@
             display: flex;
             justify-content: flex-end;
         }
+
+
     }
 }
 
@@ -337,6 +294,18 @@
     }
 }
 
+.limit-checkbox-group {
+    display: flex;
+    flex-direction: column;
+
+    .package-checkbox-label {
+        display: flex;
+        gap: 8px;
+    }
+
+
+}
+
 .price-input-group {
     input {
         font-weight: bold;
@@ -379,10 +348,11 @@
         margin: 0px;
     }
 
-    .account-packages-header{
+    .account-packages-header {
         margin-top: 20px;
         justify-content: flex-end;
-    } 
+    }
+
     .add-packages-conatiner {
         .form-section {
             padding: 1rem;

@@ -1,5 +1,3 @@
-
-
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -10,9 +8,6 @@ import {
     FiBox,
     FiCheckCircle,
     FiFileText,
-    FiMessageSquare,
-    FiClipboard,
-    FiUser,
 } from 'react-icons/fi';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
@@ -25,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import { useClickOutside } from '@/components/common/useClickOutside';
 import LoadingState from '@/components/common/LoadingState';
 import { useFetchAdminsQuery } from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import { BusinessCategory, Limit, PackagePlan, PlanLimits } from '@/types/authTypes';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -259,6 +255,55 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     required
                                 />
                             </div>
+                                    <div className="form-group">
+                                        <label className="form-label">
+                                            Package Type <span className="required">*</span>
+                                        </label>
+                                        <select
+                                            className="form-input"
+                                            name="package_type"
+                                            value={formData.package_type}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    package_type: e.target.value,
+                                                    user_id: e.target.value === 'general' ? null : prev.user_id,
+                                                }))
+                                            }
+                                            required
+                                        >
+                                            <option value="">Select type</option>
+                                            <option value="general">General</option>
+                                            <option value="specific">Specific</option>
+                                        </select>
+                                    </div>
+    
+                                    {formData.package_type === 'specific' && (
+                                        <div className="form-group">
+                                            <label className="form-label">
+                                                Select Admin <span className="required">*</span>
+                                            </label>
+                                            <select
+                                                className="form-input"
+                                                name="user_id"
+                                                value={formData.user_id || ''}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        user_id: Number(e.target.value),
+                                                    }))
+                                                }
+                                                required
+                                            >
+                                                <option value="">Choose an admin</option>
+                                                {admins?.map((admin) => (
+                                                    <option key={admin.id} value={admin.id}>
+                                                        {admin.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
                             <div className="form-group">
                                 <label className="form-label">Applicable Categories</label>
                                 <div className="multi-select" ref={dropdownRef}>
@@ -310,55 +355,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     ))}
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <label className="form-label">
-                                    Package Type <span className="required">*</span>
-                                </label>
-                                <select
-                                    className="form-input"
-                                    name="package_type"
-                                    value={formData.package_type}
-                                    onChange={(e) =>
-                                        setFormData((prev) => ({
-                                            ...prev,
-                                            package_type: e.target.value,
-                                            user_id: e.target.value === 'general' ? null : prev.user_id,
-                                        }))
-                                    }
-                                    required
-                                >
-                                    <option value="">Select type</option>
-                                    <option value="general">General</option>
-                                    <option value="specific">Specific</option>
-                                </select>
-                            </div>
-
-                            {formData.package_type === 'specific' && (
-                                <div className="form-group">
-                                    <label className="form-label">
-                                        Select Admin <span className="required">*</span>
-                                    </label>
-                                    <select
-                                        className="form-input"
-                                        name="user_id"
-                                        value={formData.user_id || ''}
-                                        onChange={(e) =>
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                user_id: Number(e.target.value),
-                                            }))
-                                        }
-                                        required
-                                    >
-                                        <option value="">Choose an admin</option>
-                                        {admins?.map((admin) => (
-                                            <option key={admin.id} value={admin.id}>
-                                                {admin.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            )}
                         </div>
                     </div>
 
@@ -445,32 +441,32 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     </div>
 
                                     <div className="limit-checkbox-group">
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="monthly_limits.task"
                                                 checked={formData.monthly_limits.task || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiClipboard className="icon" /> Task Module
+                                             Task Module
                                         </label>
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="monthly_limits.chat"
                                                 checked={formData.monthly_limits.chat || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiMessageSquare className="icon" /> Chat Module
+                                             Chat Module
                                         </label>
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="monthly_limits.hr"
                                                 checked={formData.monthly_limits.hr || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiUser className="icon" /> HR Module
+                                             HR Module
                                         </label>
                                     </div>
                                 </div>
@@ -556,32 +552,32 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     </div>
 
                                     <div className="limit-checkbox-group">
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="annual_limits.task"
                                                 checked={formData.annual_limits.task || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiClipboard className="icon" /> Task Module
+                                             Task Module
                                         </label>
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="annual_limits.chat"
                                                 checked={formData.annual_limits.chat || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiMessageSquare className="icon" /> Chat Module
+                                             Chat Module
                                         </label>
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="annual_limits.hr"
                                                 checked={formData.annual_limits.hr || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiUser className="icon" /> HR Module
+                                             HR Module
                                         </label>
                                     </div>
                                 </div>
@@ -667,32 +663,32 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     </div>
 
                                     <div className="limit-checkbox-group">
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="three_years_limits.task"
                                                 checked={formData.three_years_limits.task || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiClipboard className="icon" /> Task Module
+                                             Task Module
                                         </label>
-                                        <label>
+                                        <label className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="three_years_limits.chat"
                                                 checked={formData.three_years_limits.chat || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiMessageSquare className="icon" /> Chat Module
+                                             Chat Module
                                         </label>
-                                        <label>
+                                        <label  className='package-checkbox-label'>
                                             <input
                                                 type="checkbox"
                                                 name="three_years_limits.hr"
                                                 checked={formData.three_years_limits.hr || false}
                                                 onChange={handleInputChange}
                                             />
-                                            <FiUser className="icon" /> HR Module
+                                             HR Module
                                         </label>
                                     </div>
                                 </div>

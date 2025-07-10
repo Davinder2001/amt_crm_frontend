@@ -1,13 +1,14 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useState, useMemo } from 'react';
 import {
     useCreateExpenseMutation,
     useUpdateExpenseMutation,
     useFetchInvoicesQuery,
     useFetchStoreQuery,
+    useFetchItemBatchByIdQuery,
 } from '@/slices';
-import { FaTimes } from 'react-icons/fa';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 
@@ -17,12 +18,84 @@ interface ExpenseFormProps {
     onCancel?: () => void;
 }
 
+interface BatchSelection {
+    itemId: number;
+    batchIds: number[];
+}
+
+interface FormDataState {
+    heading: string;
+    description: string;
+    price: string;
+    file: File | null;
+    tags: Tag[];
+    status: 'pending' | 'paid';
+}
+
+
+
+interface OptionProps {
+    id: string;
+    label: string;
+    checked: boolean;
+    onChange: () => void;
+}
+
+export const RelationOption = ({ id, label, checked, onChange }: OptionProps) => (
+    <label htmlFor={id} className="relation-option">
+        <input type="checkbox" id={id} checked={checked} onChange={onChange} />
+        <span>{label}</span>
+    </label>
+);
+
+interface Props {
+    label: string;
+    active: boolean;
+    onToggle: () => void;
+    searchValue: string;
+    onSearch: (val: string) => void;
+    children: React.ReactNode;
+}
+
+export const RelationCard = ({ label, active, onToggle, searchValue, onSearch, children }: Props) => (
+    <div className={`relation-card ${active ? 'active' : ''}`}>
+        <div className="card-header">
+            <label className="toggle">
+                <input type="checkbox" checked={active} onChange={onToggle} />
+                <span>{label}</span>
+            </label>
+        </div>
+
+        {active && (
+            <>
+                <div className="card-search">
+                    <div className="search-input-wrapper">
+                        <span className="search-icon">
+                            <FaSearch />
+                        </span>
+                        <input
+                            type="text"
+                            placeholder={`Search ${label.toLowerCase()}s...`}
+                            value={searchValue}
+                            onChange={(e) => onSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="card-body">{children}</div>
+            </>
+        )}
+    </div>
+);
+
 export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: ExpenseFormProps) {
     const [createExpense] = useCreateExpenseMutation();
     const [updateExpense] = useUpdateExpenseMutation();
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [expandedItemId, setExpandedItemId] = useState<number | null>(null);
+    const [selectedBatches, setSelectedBatches] = useState<BatchSelection[]>([]);
 
     const { data: invoicesData } = useFetchInvoicesQuery();
     const storeData = useFetchStoreQuery();
@@ -44,7 +117,44 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         users: [] as number[]
     });
 
-    const [formData, setFormData] = useState<ExpenseCreateRequest | ExpenseUpdateRequest>({
+    const [searchTerm, setSearchTerm] = useState({
+        invoice: '',
+        item: '',
+        user: ''
+    });
+
+    const filteredInvoices = useMemo(() => {
+        if (!searchTerm.invoice) return invoices;
+        return invoices.filter(invoice =>
+            invoice.invoice_number.toLowerCase().includes(searchTerm.invoice.toLowerCase()) ||
+            invoice.amount.toString().includes(searchTerm.invoice)
+        );
+    }, [invoices, searchTerm.invoice]);
+
+    const filteredItems = useMemo(() => {
+        if (!searchTerm.item) return items;
+        return items.filter(item =>
+            item.name?.toLowerCase().includes(searchTerm.item.toLowerCase()) ||
+            String(item.price ?? '').includes(searchTerm.item)
+        );
+    }, [items, searchTerm.item]);
+
+    const filteredUsers = useMemo(() => {
+        if (!searchTerm.user) return users;
+        return users.filter(user =>
+            user.name.toLowerCase().includes(searchTerm.user.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchTerm.user.toLowerCase())
+        );
+    }, [users, searchTerm.user]);
+
+    const handleSearchChange = (type: keyof typeof searchTerm, value: string) => {
+        setSearchTerm(prev => ({
+            ...prev,
+            [type]: value
+        }));
+    };
+
+    const [formData, setFormData] = useState<FormDataState>({
         heading: expense?.heading || '',
         description: expense?.description || '',
         price: expense?.price?.toString() || '',
@@ -56,24 +166,55 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-            handleChange('file', file);
+            setFormData(prev => ({ ...prev, file }));
             setImagePreview(URL.createObjectURL(file));
         }
     };
 
     const handleRemoveImage = () => {
-        handleChange('file', null);
+        setFormData(prev => ({ ...prev, file: null }));
         setImagePreview(null);
     };
 
-    const handleChange = (
-        field: keyof typeof formData,
-        value: string | number | File | null
-    ) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
+    const handleBatchSelection = (itemId: number, batchId: number) => {
+        setSelectedBatches(prev => {
+            const existingIndex = prev.findIndex(b => b.itemId === itemId);
+
+            if (existingIndex > -1) {
+                const updated = [...prev];
+                const batchIds = [...updated[existingIndex].batchIds];
+                const batchIndex = batchIds.indexOf(batchId);
+
+                if (batchIndex > -1) {
+                    batchIds.splice(batchIndex, 1);
+                } else {
+                    batchIds.push(batchId);
+                }
+
+                updated[existingIndex] = { itemId, batchIds };
+                return updated;
+            }
+
+            return [...prev, { itemId, batchIds: [batchId] }];
+        });
+    };
+
+    const handleSelectAllBatches = (itemId: number, allBatchIds: number[]) => {
+        setSelectedBatches(prev => {
+            const existingIndex = prev.findIndex(b => b.itemId === itemId);
+
+            if (existingIndex > -1) {
+                const updated = [...prev];
+                if (updated[existingIndex].batchIds.length === allBatchIds.length) {
+                    updated[existingIndex] = { itemId, batchIds: [] };
+                } else {
+                    updated[existingIndex] = { itemId, batchIds: [...allBatchIds] };
+                }
+                return updated;
+            }
+
+            return [...prev, { itemId, batchIds: [...allBatchIds] }];
+        });
     };
 
     const handleTypeChange = (type: keyof typeof selectedTypes) => {
@@ -84,6 +225,17 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
     };
 
     const handleOptionChange = (type: keyof typeof selectedOptions, id: number) => {
+        if (type === 'items') {
+            const isSelected = selectedOptions.items.includes(id);
+
+            if (!isSelected) {
+                setExpandedItemId(id);
+            } else {
+                setSelectedBatches(prev => prev.filter(b => b.itemId !== id));
+                setExpandedItemId(null);
+            }
+        }
+
         setSelectedOptions(prev => {
             const currentSelection = [...prev[type]];
             const index = currentSelection.indexOf(id);
@@ -119,33 +271,31 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         try {
             const formDataPayload = new FormData();
             formDataPayload.append('heading', formData.heading);
-            formDataPayload.append('description', formData.description || '');
-            formDataPayload.append('price', Number(formData.price).toString());
+            formDataPayload.append('description', formData.description);
+            formDataPayload.append('price', formData.price);
             formDataPayload.append('status', formData.status);
 
-            selectedOptions.invoices.forEach(id => {
-                formDataPayload.append('invoice_ids[]', id.toString());
-            });
-            selectedOptions.items.forEach(id => {
-                formDataPayload.append('item_ids[]', id.toString());
-            });
-            selectedOptions.users.forEach(id => {
-                formDataPayload.append('user_ids[]', id.toString());
+            selectedOptions.invoices.forEach(id => formDataPayload.append('invoice_ids[]', id.toString()));
+            selectedOptions.items.forEach(id => formDataPayload.append('item_ids[]', id.toString()));
+            selectedOptions.users.forEach(id => formDataPayload.append('user_ids[]', id.toString()));
+
+            selectedBatches.forEach(batch => {
+                batch.batchIds.forEach(batchId => {
+                    formDataPayload.append('batch_ids[]', batchId.toString());
+                });
             });
 
-            if (formData.file) formDataPayload.append('file', formData.file);
+            if (formData.file) {
+                formDataPayload.append('file', formData.file);
+            }
 
             if (expense) {
                 await updateExpense({
                     id: expense.id,
-                    formdata: formDataPayload as unknown as ExpenseUpdateRequest
+                    formdata: formDataPayload as any
                 }).unwrap();
             } else {
-                if (!formData.file) {
-                    setErrors({ ...errors, file: 'File is required' });
-                    return;
-                }
-                await createExpense({ formdata: formDataPayload as unknown as ExpenseCreateRequest }).unwrap();
+                await createExpense({ formdata: formDataPayload as any }).unwrap();
             }
 
             onSuccess();
@@ -155,18 +305,54 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         }
     };
 
+    const ItemBatches = ({ itemId }: { itemId: number }) => {
+        const { data: batchesData, isLoading, isError } = useFetchItemBatchByIdQuery(itemId);
+        const selectedBatchIds = selectedBatches.find(b => b.itemId === itemId)?.batchIds || [];
+        const allBatchIds = (batchesData?.batch?.variants?.map(v => v.id).filter((id): id is number => id !== undefined)) || [];
+
+        if (isLoading) return <div className="loading-batches">Loading batches...</div>;
+        if (isError) return <div className="error-batches">Error loading batches</div>;
+        if (!batchesData?.batch?.variants?.length) return <div className="no-batches">No batches available</div>;
+
+        return (
+            <div className="batch-options">
+                <div className="select-all-batches">
+                    <input
+                        type="checkbox"
+                        id={`select-all-${itemId}`}
+                        checked={selectedBatchIds.length === allBatchIds.length && allBatchIds.length > 0}
+                        onChange={() => handleSelectAllBatches(itemId, allBatchIds)}
+                    />
+                    <label htmlFor={`select-all-${itemId}`}>Select All</label>
+                </div>
+                {batchesData.batch.variants.filter(b => b.id !== undefined).map((batch) => (
+                    <div key={batch.id} className="batch-option">
+                        <input
+                            type="checkbox"
+                            id={`batch-${itemId}-${batch.id}`}
+                            checked={selectedBatchIds.includes(batch.id)}
+                            onChange={() => handleBatchSelection(itemId, batch.id)}
+                        />
+                        <label htmlFor={`batch-${itemId}-${batch.id}`}>
+                            Purchased: {batchesData.batch.purchase_date || 'N/A'}
+                        </label>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <form className="expense-form" onSubmit={handleSubmit}>
             {errors.form && <p className="error-message">{errors.form}</p>}
-            <div className='expense-form-header'>
 
+            <div className='expense-form-header'>
                 <div className="form-group heading-group">
                     <label>Heading</label>
                     <input
-                        className="input heading-input"
                         type="text"
                         value={formData.heading}
-                        onChange={e => handleChange('heading', e.target.value)}
+                        onChange={e => setFormData(prev => ({ ...prev, heading: e.target.value }))}
                         placeholder='Heading'
                     />
                     {errors.heading && <p className="error-message">{errors.heading}</p>}
@@ -175,10 +361,9 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 <div className="form-group price-group">
                     <label>Price</label>
                     <input
-                        className="input price-input"
                         type="number"
                         value={formData.price}
-                        onChange={e => handleChange('price', e.target.value)}
+                        onChange={e => setFormData(prev => ({ ...prev, price: e.target.value }))}
                         placeholder="123"
                         onWheel={e => e.currentTarget.blur()}
                     />
@@ -188,9 +373,8 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 <div className="form-group status-group">
                     <label>Status</label>
                     <select
-                        className="select status-select"
                         value={formData.status}
-                        onChange={e => handleChange('status', e.target.value)}
+                        onChange={e => setFormData(prev => ({ ...prev, status: e.target.value as 'pending' | 'paid' }))}
                     >
                         <option value="pending">Pending</option>
                         <option value="paid">Paid</option>
@@ -199,162 +383,104 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
 
                 <div className="form-group file-group">
                     <label>Upload File</label>
-                    <input
-                        className="file-input"
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-
+                    <input type="file" onChange={handleFileChange} />
                     {errors.file && <p className="error-message">{errors.file}</p>}
 
                     {expense?.file_path && !formData.file && (
                         <p className="current-file">Current file: {expense.file_path}</p>
                     )}
 
-                    {imagePreview && (
-                        <div className="image-preview-wrapper">
-                            <Image
-                                src={imagePreview}
-                                alt="Preview"
-                                className="image-preview"
-                                onClick={openImageModal}
-                                width={100}
-                                height={100}
-                            />
-
-                            <button
-                                type="button"
-                                className="remove-image-btn"
-                                onClick={handleRemoveImage}
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-                    )}
-
                     {isImageModalOpen && (
                         <div className="image-modal-overlay" onClick={closeImageModal}>
                             <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-                                <button className="image-modal-close-btn" onClick={closeImageModal}>
-                                    &times;
-                                </button>
+                                <button onClick={closeImageModal}>&times;</button>
                                 <Image width={500} height={500} src={imagePreview!} alt="Full Preview" />
                             </div>
                         </div>
                     )}
                 </div>
             </div>
+
             <div className="form-group description-group">
                 <label>Description</label>
                 <textarea
-                    className="textarea description-input"
-                    value={formData.description ?? ''}
-                    onChange={e => handleChange('description', e.target.value)}
+                    value={formData.description}
+                    onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder='Description'
                 />
             </div>
+            <div className="relation-section">
+                <h3 className="section-heading">Tags</h3>
 
+                <div className="relation-card-grid">
+                    {/* Invoice Card */}
+                    <RelationCard
+                        label="Invoice"
+                        active={selectedTypes.invoice}
+                        onToggle={() => handleTypeChange('invoice')}
+                        searchValue={searchTerm.invoice}
+                        onSearch={(val) => handleSearchChange('invoice', val)}
+                    >
+                        {filteredInvoices.map((invoice) => (
+                            <RelationOption
+                                key={invoice.id}
+                                id={`invoice-${invoice.id}`}
+                                label={`${invoice.invoice_number} - ₹${invoice.sub_total}`}
+                                checked={selectedOptions.invoices.includes(invoice.id)}
+                                onChange={() => handleOptionChange('invoices', invoice.id)}
+                            />
+                        ))}
+                    </RelationCard>
 
-            <div className="relation-group">
-                <label>Add Relations</label>
-
-                <div className="relation-group">
-                    <label>Add Relations</label>
-
-                    <div className='relation-dropdowns-outer'>
-                        <div className="relation-dropdown">
-                            <label className="dropdown-toggle">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedTypes.invoice}
-                                    onChange={() => handleTypeChange('invoice')}
+                    {/* Item Card */}
+                    <RelationCard
+                        label="Item"
+                        active={selectedTypes.item}
+                        onToggle={() => handleTypeChange('item')}
+                        searchValue={searchTerm.item}
+                        onSearch={(val) => handleSearchChange('item', val)}
+                    >
+                        {filteredItems.map((item) => (
+                            <div key={item.id} className="relation-item-with-batch">
+                                <RelationOption
+                                    id={`item-${item.id}`}
+                                    label={`${item.name} `}
+                                    checked={selectedOptions.items.includes(item.id)}
+                                    onChange={() => handleOptionChange('items', item.id)}
                                 />
-                                <span>Invoice</span>
-                            </label>
-
-                            {selectedTypes.invoice && (
-                                <div className="dropdown-content">
-                                    <div className="options-list">
-                                        {invoices.map((invoice) => (
-                                            <div key={invoice.id} className="option-item">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`invoice-${invoice.id}`}
-                                                    checked={selectedOptions.invoices.includes(invoice.id)}
-                                                    onChange={() => handleOptionChange('invoices', invoice.id)}
-                                                />
-                                                <label htmlFor={`invoice-${invoice.id}`}>
-                                                    {invoice.invoice_number} - ${invoice.amount}
-                                                </label>
-                                            </div>
-                                        ))}
+                                {selectedOptions.items.includes(item.id) && (
+                                    <div className="batch-section">
+                                        <button
+                                            className="toggle-batch-btn"
+                                            onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                                        >
+                                            {expandedItemId === item.id ? 'Hide Batches' : 'Show Batches'}
+                                        </button>
+                                        {expandedItemId === item.id && <ItemBatches itemId={item.id} />}
                                     </div>
-                                </div>
-                            )}
-                        </div>
+                                )}
+                            </div>
+                        ))}
+                    </RelationCard>
 
-                        <div className="relation-dropdown">
-                            <label className="dropdown-toggle">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedTypes.item}
-                                    onChange={() => handleTypeChange('item')}
-                                />
-                                <span>Item</span>
-                            </label>
-
-                            {selectedTypes.item && (
-                                <div className="dropdown-content">
-                                    <div className="options-list">
-                                        {items.map((item) => (
-                                            <div key={item.id} className="option-item">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`item-${item.id}`}
-                                                    checked={selectedOptions.items.includes(item.id)}
-                                                    onChange={() => handleOptionChange('items', item.id)}
-                                                />
-                                                <label htmlFor={`item-${item.id}`}>
-                                                    {item.name} - ${item.price}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="relation-dropdown">
-                            <label className="dropdown-toggle">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedTypes.user}
-                                    onChange={() => handleTypeChange('user')}
-                                />
-                                <span>User</span>
-                            </label>
-
-                            {selectedTypes.user && (
-                                <div className="dropdown-content">
-                                    <div className="options-list">
-                                        {users.map((user) => (
-                                            <div key={user.id} className="option-item">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`user-${user.id}`}
-                                                    checked={selectedOptions.users.includes(user.id)}
-                                                    onChange={() => handleOptionChange('users', user.id)}
-                                                />
-                                                <label htmlFor={`user-${user.id}`}>
-                                                    {user.name} - {user.email}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    {/* User Card */}
+                    <RelationCard
+                        label="User"
+                        active={selectedTypes.user}
+                        onToggle={() => handleTypeChange('user')}
+                        searchValue={searchTerm.user}
+                        onSearch={(val) => handleSearchChange('user', val)}
+                    >
+                        {filteredUsers.map((user) => (
+                            <RelationOption
+                                key={user.id}
+                                id={`user-${user.id}`}
+                                label={`${user.name} (${user.email})`}
+                                checked={selectedOptions.users.includes(user.id)}
+                                onChange={() => handleOptionChange('users', user.id)}
+                            />
+                        ))}
+                    </RelationCard>
                 </div>
             </div>
 
@@ -363,7 +489,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 {onCancel && (
                     <button
                         type="button"
-                        className="btn buttons cancel-btn"
+                        className="cancel-btn buttons"
                         onClick={() => {
                             setFormData({
                                 heading: '',
@@ -383,6 +509,8 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                                 item: false,
                                 user: false
                             });
+                            setSelectedBatches([]);
+                            setExpandedItemId(null);
                             setErrors({});
                             onCancel();
                         }}
@@ -390,10 +518,10 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                         Cancel
                     </button>
                 )}
-                <button type="submit" className="button submit-btn">
+                <button type="submit" className="submit-btn">
                     {expense ? 'Update Expense' : 'Add Expense'}
                 </button>
             </div>
         </form>
-    );
+    )
 });

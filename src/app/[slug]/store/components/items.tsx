@@ -432,9 +432,9 @@ const Items: React.FC = () => {
         width="600px"
       >
         <div className="create-item-modal">
-          <div className="create-item-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: '1rem', }}>
-            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #efefef', padding: '0.5rem', borderRadius: '5px', width: '100%', }}>
-              <FaSearch style={{ marginRight: '0.5rem' }} />
+          <div className="" style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: '1rem', }}>
+            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #efefef', padding: '8px 12px', borderRadius: '5px', width: '100%', }}>
+              <FaSearch className='search-bar-icon' />
               <input
                 type="text"
                 placeholder="Search existing items..."

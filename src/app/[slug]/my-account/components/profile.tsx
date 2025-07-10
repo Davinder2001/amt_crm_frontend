@@ -1,5 +1,5 @@
 'use client'
-import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery } from '@/slices'
+import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery, useFetchLoginSessionsQuery } from '@/slices'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -29,13 +29,16 @@ const Profile = () => {
   const user = data?.user
   const { companySlug } = useCompany();
   const { data: companyScore } = useCompanyScoreQuery();
-
+  const { data: sessionsData } = useFetchLoginSessionsQuery();
+  const totalLogins = sessionsData?.total_logins || 0;
 
   useEffect(() => {
     if (user?.companies) {
       setCompanies(user.companies)
     }
   }, [user])
+
+
 
   const selectCompany = async (company: Company) => {
     const { id, company_slug, verification_status, payment_status } = company
@@ -168,8 +171,12 @@ const Profile = () => {
                       <div className="score-warning">{companyScore.message}</div>
                     </div>
                   )}
-
                   <div className="company-status">
+
+                    <label htmlFor="sessions-status">
+                      <span>Login Sessions</span>
+                      <span className='status-tag'>{totalLogins}</span>
+                    </label>
                     <label htmlFor="payment-status">
                       <span>Payment Status</span>
                       <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>

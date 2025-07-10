@@ -97,6 +97,16 @@ const authApi = userCreateApiSlice.injectEndpoints({
       }),
     }),
 
+    fetchLoginSessions: builder.query<LoginSessionsResponse, void>({
+      query: () => ({
+        url: "auth/sessions",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Auth"],
+    }),
+
+
   }),
 });
 
@@ -110,7 +120,8 @@ export const {
   useSelectedCompanyMutation,
   useFetchSelectedCompanyQuery,
   useAdminRegisterMutation,
-  useSendOtpMutation
+  useSendOtpMutation,
+  useFetchLoginSessionsQuery,
 } = authApi;
 
 export default authApi;

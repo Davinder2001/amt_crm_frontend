@@ -16,7 +16,6 @@ interface Company {
   [key: string]: string | number; // Allow for additional fields
 }
 
-
 interface TransactionDetails {
   merchantOrderId: string;
   orderId: string;
@@ -177,6 +176,20 @@ interface SelectedPackage {
   variantType: string;
 }
 
+interface LoginSession {
+  token_id: number;
+  token_name: string;
+  created_at: string;
+  last_used_at: string | null;
+}
+
+interface LoginSessionsResponse {
+  total_logins: number;
+  sessions: LoginSession[];
+}
+
+
+
 // Upgrade payload sent to backend
 interface UpgradePackagePayload {
   companyId: number;
@@ -189,3 +202,4 @@ interface UpgradePackagePayload {
   package_type: 'monthly' | 'annual';
 
 }
+

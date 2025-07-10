@@ -25,7 +25,11 @@
     margin: 0;
   }
 }
-
+.create-item-modal{
+  .search-bar-icon{
+  color: var(--primary-light);
+  }
+}
 .store_outer_row {
   border-radius: $border-radius;
   display: grid;

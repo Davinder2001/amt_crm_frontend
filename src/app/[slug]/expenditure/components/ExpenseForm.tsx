@@ -261,97 +261,99 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 <div className="relation-group">
                     <label>Add Relations</label>
 
-                    <div className="relation-dropdown">
-                        <label className="dropdown-toggle">
-                            <input
-                                type="checkbox"
-                                checked={selectedTypes.invoice}
-                                onChange={() => handleTypeChange('invoice')}
-                            />
-                            <span>Invoice</span>
-                        </label>
+                    <div className='relation-dropdowns-outer'>
+                        <div className="relation-dropdown">
+                            <label className="dropdown-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedTypes.invoice}
+                                    onChange={() => handleTypeChange('invoice')}
+                                />
+                                <span>Invoice</span>
+                            </label>
 
-                        {selectedTypes.invoice && (
-                            <div className="dropdown-content">
-                                <div className="options-list">
-                                    {invoices.map((invoice) => (
-                                        <div key={invoice.id} className="option-item">
-                                            <input
-                                                type="checkbox"
-                                                id={`invoice-${invoice.id}`}
-                                                checked={selectedOptions.invoices.includes(invoice.id)}
-                                                onChange={() => handleOptionChange('invoices', invoice.id)}
-                                            />
-                                            <label htmlFor={`invoice-${invoice.id}`}>
-                                                {invoice.invoice_number} - ${invoice.amount}
-                                            </label>
-                                        </div>
-                                    ))}
+                            {selectedTypes.invoice && (
+                                <div className="dropdown-content">
+                                    <div className="options-list">
+                                        {invoices.map((invoice) => (
+                                            <div key={invoice.id} className="option-item">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`invoice-${invoice.id}`}
+                                                    checked={selectedOptions.invoices.includes(invoice.id)}
+                                                    onChange={() => handleOptionChange('invoices', invoice.id)}
+                                                />
+                                                <label htmlFor={`invoice-${invoice.id}`}>
+                                                    {invoice.invoice_number} - ${invoice.amount}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
 
-                    <div className="relation-dropdown">
-                        <label className="dropdown-toggle">
-                            <input
-                                type="checkbox"
-                                checked={selectedTypes.item}
-                                onChange={() => handleTypeChange('item')}
-                            />
-                            <span>Item</span>
-                        </label>
+                        <div className="relation-dropdown">
+                            <label className="dropdown-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedTypes.item}
+                                    onChange={() => handleTypeChange('item')}
+                                />
+                                <span>Item</span>
+                            </label>
 
-                        {selectedTypes.item && (
-                            <div className="dropdown-content">
-                                <div className="options-list">
-                                    {items.map((item) => (
-                                        <div key={item.id} className="option-item">
-                                            <input
-                                                type="checkbox"
-                                                id={`item-${item.id}`}
-                                                checked={selectedOptions.items.includes(item.id)}
-                                                onChange={() => handleOptionChange('items', item.id)}
-                                            />
-                                            <label htmlFor={`item-${item.id}`}>
-                                                {item.name} - ${item.price}
-                                            </label>
-                                        </div>
-                                    ))}
+                            {selectedTypes.item && (
+                                <div className="dropdown-content">
+                                    <div className="options-list">
+                                        {items.map((item) => (
+                                            <div key={item.id} className="option-item">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`item-${item.id}`}
+                                                    checked={selectedOptions.items.includes(item.id)}
+                                                    onChange={() => handleOptionChange('items', item.id)}
+                                                />
+                                                <label htmlFor={`item-${item.id}`}>
+                                                    {item.name} - ${item.price}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
 
-                    <div className="relation-dropdown">
-                        <label className="dropdown-toggle">
-                            <input
-                                type="checkbox"
-                                checked={selectedTypes.user}
-                                onChange={() => handleTypeChange('user')}
-                            />
-                            <span>User</span>
-                        </label>
+                        <div className="relation-dropdown">
+                            <label className="dropdown-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedTypes.user}
+                                    onChange={() => handleTypeChange('user')}
+                                />
+                                <span>User</span>
+                            </label>
 
-                        {selectedTypes.user && (
-                            <div className="dropdown-content">
-                                <div className="options-list">
-                                    {users.map((user) => (
-                                        <div key={user.id} className="option-item">
-                                            <input
-                                                type="checkbox"
-                                                id={`user-${user.id}`}
-                                                checked={selectedOptions.users.includes(user.id)}
-                                                onChange={() => handleOptionChange('users', user.id)}
-                                            />
-                                            <label htmlFor={`user-${user.id}`}>
-                                                {user.name} - {user.email}
-                                            </label>
-                                        </div>
-                                    ))}
+                            {selectedTypes.user && (
+                                <div className="dropdown-content">
+                                    <div className="options-list">
+                                        {users.map((user) => (
+                                            <div key={user.id} className="option-item">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`user-${user.id}`}
+                                                    checked={selectedOptions.users.includes(user.id)}
+                                                    onChange={() => handleOptionChange('users', user.id)}
+                                                />
+                                                <label htmlFor={`user-${user.id}`}>
+                                                    {user.name} - {user.email}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

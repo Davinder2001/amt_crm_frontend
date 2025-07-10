@@ -7,7 +7,7 @@ import { useCompany } from '@/utils/Company';
 import { FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
-import { FiImage, FiX } from 'react-icons/fi';
+import { FiImage } from 'react-icons/fi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -20,7 +20,6 @@ const ViewItem = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showBatchConfirm, setShowBatchConfirm] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState<number | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const router = useRouter();
   const { companySlug } = useCompany();
 
@@ -121,55 +120,34 @@ const ViewItem = () => {
 
             <div className="item-media">
               {item.featured_image && (
-                <div className="featured-image">
+                <div className='featured-image'>
                   <Image
                     src={item.featured_image}
                     alt="Featured"
-                    width={280}
-                    height={180}
-                    onClick={() => setSelectedImage(item.featured_image)}
+                    width={1000}
+                    height={1000}
                   />
                   <span className="image-label">Featured</span>
                 </div>
               )}
 
               {item.images?.length > 0 && (
-                <div className="image-gallery">
+                <>
                   {item.images.map((img, index) => {
                     const imgSrc = typeof img === 'string' ? img : URL.createObjectURL(img);
                     return (
-                      <div key={index} className="gallery-thumbnail">
-                        <Image
-                          src={imgSrc}
-                          alt={`Gallery ${index + 1}`}
-                          width={120}
-                          height={120}
-                          onClick={() => setSelectedImage(imgSrc)}
-                          unoptimized={typeof img !== 'string'}
-                        />
-                      </div>
+                      <Image
+                        key={index}
+                        src={imgSrc}
+                        alt={`Gallery ${index + 1}`}
+                        width={1000}
+                        height={1000}
+                      />
                     );
                   })}
-                </div>
+                </>
               )}
             </div>
-
-            {selectedImage && (
-              <div className="image-preview-modal" onClick={() => setSelectedImage(null)}>
-                <button className="close-modal" onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedImage(null);
-                }}>
-                  <FiX />
-                </button>
-                <Image
-                  src={selectedImage}
-                  alt="Preview"
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            )}
           </div>
         </div>
 

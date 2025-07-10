@@ -1,5 +1,9 @@
 @use '../variables' as *;
 
+.action-icons-horizontal {
+    display: flex;
+    gap: 10px;
+}
 
 .mobile-render-filter-table {
     display: none;

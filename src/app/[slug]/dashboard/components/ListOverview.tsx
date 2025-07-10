@@ -22,7 +22,7 @@ interface CardSummary {
 
 interface CardItem {
   label: string;
-  icon: React.ComponentType;
+  icon: React.ComponentType<{ size?: number }>;
   type: string;
   link: string;
   name: string;

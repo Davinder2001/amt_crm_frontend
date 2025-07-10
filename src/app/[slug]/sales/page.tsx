@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useMemo } from 'react'
 import { useFetchSalesReportQuery } from '@/slices/reports/reportsApi';
+import { SalesReportResponse, SalesReportMonth, SalesReportItem } from '@/types/reportsTypes';
 
 const getCurrentYear = () => new Date().getFullYear();
 const getCurrentMonthName = () =>
@@ -11,26 +12,22 @@ const Page = () => {
     const [selectedYear, setSelectedYear] = useState<number>(getCurrentYear());
     const [selectedMonth, setSelectedMonth] = useState<string>(getCurrentMonthName());
 
-    // Get available years from data (if API supports multiple years in future)
     const availableYears = useMemo(() => {
         if (!data) return [getCurrentYear()];
-        return [data.year]; // If API returns only one year, just use that
+        return [data.year];
     }, [data]);
 
-    // Get available months from data for the selected year
     const availableMonths = useMemo(() => {
         if (!data) return [];
-        return data.data.map((monthObj: any) => monthObj.month);
+        return data.data.map((monthObj: SalesReportMonth) => monthObj.month);
     }, [data]);
 
-    // Find the month object for the selected month
     const selectedMonthObj = useMemo(() => {
         if (!data) return null;
-        return data.data.find((monthObj: any) => monthObj.month === selectedMonth);
+        return data.data.find((monthObj: SalesReportMonth) => monthObj.month === selectedMonth) || null;
     }, [data, selectedMonth]);
 
     React.useEffect(() => {
-        // If the selected month is not in available months (e.g., after year change), reset to first available
         if (availableMonths.length && !availableMonths.includes(selectedMonth)) {
             setSelectedMonth(availableMonths[0]);
         }
@@ -81,7 +78,7 @@ const Page = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedMonthObj.items.map((item: any, idx: number) => (
+                        {selectedMonthObj.items.map((item: SalesReportItem, idx: number) => (
                             <tr key={item.item_name + '-' + idx}>
                                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{idx + 1}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.item_name}</td>

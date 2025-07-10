@@ -4,7 +4,7 @@ import { SalesReportResponse, RevenueReportResponse } from "@/types/reportsTypes
 const reportsApi = reportsCreateApiSlice.injectEndpoints({
     endpoints: (builder) => ({
         // Example endpoint, replace or extend as needed
-        fetchReportSummary: builder.query<any, void>({
+        fetchReportSummary: builder.query<unknown, void>({
             query: () => ({
                 url: "reports/summary",
                 method: "GET",

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useMemo } from 'react'
 import { useFetchRevenueReportQuery } from '@/slices/reports/reportsApi';
+import { RevenueReportResponse, RevenueReportMonth, RevenueReportItem } from '@/types/reportsTypes';
 
 const getCurrentYear = () => new Date().getFullYear();
 const getCurrentMonthName = () =>
@@ -18,12 +19,12 @@ const Page = () => {
 
     const availableMonths = useMemo(() => {
         if (!data) return [];
-        return data.data.map((monthObj: any) => monthObj.month);
+        return data.data.map((monthObj: RevenueReportMonth) => monthObj.month);
     }, [data]);
 
     const selectedMonthObj = useMemo(() => {
         if (!data) return null;
-        return data.data.find((monthObj: any) => monthObj.month === selectedMonth);
+        return data.data.find((monthObj: RevenueReportMonth) => monthObj.month === selectedMonth) || null;
     }, [data, selectedMonth]);
 
     React.useEffect(() => {
@@ -76,7 +77,7 @@ const Page = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {selectedMonthObj.items.map((item: any, idx: number) => (
+                        {selectedMonthObj.items.map((item: RevenueReportItem, idx: number) => (
                             <tr key={item.item_name + '-' + idx}>
                                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{idx + 1}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '8px' }}>{item.item_name}</td>

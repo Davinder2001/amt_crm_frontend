@@ -55,6 +55,7 @@
         .modern-calendar {
           .react-datepicker__header {
             padding: 0px;
+
             .react-datepicker__current-month {
               border-bottom: 1px solid #efefef;
 
@@ -114,13 +115,14 @@
 
         .input-group {
           margin-bottom: 1.5rem;
+
           label {
-              letter-spacing: .4px;
-              color: #333;
-              margin-bottom: 5px;
-              font-size: 13px;
-              font-weight: 400;
-              display: block;
+            letter-spacing: .4px;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 13px;
+            font-weight: 400;
+            display: block;
           }
 
           .type-chips {
@@ -151,7 +153,7 @@
             font-size: 16px;
 
             &:focus {
-             border-color: var(--primary-light) ;
+              border-color: var(--primary-light);
               outline: none;
             }
           }
@@ -167,7 +169,7 @@
             font-size: 16px;
 
             &:focus {
-             border-color: var(--primary-light);
+              border-color: var(--primary-light);
               outline: none;
             }
           }
@@ -310,7 +312,7 @@
       display: inline-block;
       position: relative;
       width: 100%;
-   
+
     }
 
     .react-datepicker__week {
@@ -320,7 +322,7 @@
       justify-content: space-between;
     }
 
- 
+
 
 
 
@@ -566,8 +568,8 @@
           }
 
           .cancel-button {
-              background-color: var(--primary-light);
-               color: $white;
+            background-color: var(--primary-light);
+            color: $white;
 
             &:hover {
               background-color: $light-color;
@@ -715,17 +717,15 @@
     .aply-for-leave-form-outer {
       flex-direction: column;
 
+      .input-group input,
+      .input-group textarea {
+        font-size: 14px;
+        padding: 9px 14px;
+        height: auto;
+      }
     }
 
-    .input-group input,
-    .input-group textarea {
-      font-size: 14px;
-      padding: 9px 14px !important;
-    }
 
-    .input-group textarea {
-      min-height: unset !important;
-    }
 
     .apply-button {
       font-size: 15px;

@@ -29,7 +29,6 @@ const Profile = () => {
   const user = data?.user
   const { companySlug } = useCompany();
   const { data: companyScore } = useCompanyScoreQuery();
-  console.log('werwerwer', companyScore);
 
 
   useEffect(() => {

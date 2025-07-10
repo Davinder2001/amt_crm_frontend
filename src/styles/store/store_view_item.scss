@@ -1,12 +1,13 @@
 @use '../variables' as *;
 
+.action-icons-horizontal {
+  display: flex;
+  gap: 10px;
+}
+
 .item-view {
   min-height: 100vh;
 
-  .action-icons-horizontal {
-    display: flex;
-    gap: 10px;
-  }
 
   .item-header {
     display: flex;

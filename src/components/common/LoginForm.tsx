@@ -99,7 +99,7 @@ const LoginForm = () => {
                     <MdSmartphone size={18} className="input-icon" />
                     <input
                       type="text"
-                      placeholder="Enter your mobile number..."
+                      placeholder="0123456789"
                       value={number}
                       onChange={(e) => setNumber(e.target.value)}
                       className="login-input"
@@ -114,7 +114,7 @@ const LoginForm = () => {
                     <FiLock size={18} className="input-icon" />
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter your password..."
+                      placeholder="mySecurePass123"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="password-input"
@@ -128,9 +128,6 @@ const LoginForm = () => {
                     </span>
                   </div>
                 </div>
-
-
-
 
                 <div className="remember-forgot ">
                   <label className="custom-checkbox">

@@ -132,7 +132,11 @@ interface PlanLimits {
   items_number: number;
   daily_tasks_number: number;
   invoices_number: number;
+  task?: boolean; // ✅ Add this
+  chat?: boolean; // ✅ Add this
+  hr?: boolean;   // ✅ Add this
 }
+
 
 type Limit = {
   id: number;
@@ -141,11 +145,17 @@ type Limit = {
   items_number: number;
   daily_tasks_number: number;
   invoices_number: number;
+  Task?: boolean; // ✅ For backend capital-case keys
+  Chat?: boolean;
+  Hr?: boolean;
 };
+
 
 interface PackagePlan {
   id?: number;
   name: string;
+  package_type: string;
+  user_id: number | null; // ✅ Add this
   monthly_price: number;
   annual_price: number;
   three_years_price: number;

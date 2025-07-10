@@ -607,7 +607,7 @@
                 color: $lable-color;
                 margin-bottom: 6px;
                 font-weight: $font-weight-medium;
-                padding: 4px 12px;
+                padding: 10px 20px;
                 border: 1px solid $border-color;
                 cursor: pointer;
                 border-radius: $border-radius;
@@ -718,64 +718,65 @@
         }
     }
 
-    .add-button {
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-        color: $white;
-        border: none;
-        padding: 10px;
-        border-radius: $border-radius;
-        font-weight: $font-weight-semi-bold;
-        cursor: pointer;
-        transition: all $transition;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        position: relative;
-        overflow: hidden;
-        font-size: $font-size-small;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+}
+
+.add-to-cart-button {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: $white;
+    border: none;
+    padding: 10px;
+    border-radius: $border-radius;
+    font-weight: $font-weight-semi-bold;
+    cursor: pointer;
+    transition: all $transition;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    font-size: $font-size-small;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(135deg, rgba($white, 0.3), transparent);
+        transform: rotate(30deg);
+        transition: all 0.5s;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $secondary-shadow;
+        background: linear-gradient(135deg, rgba(50, 67, 101, 1), rgba(156, 185, 208, 1));
 
         &::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(135deg, rgba($white, 0.3), transparent);
-            transform: rotate(30deg);
-            transition: all 0.5s;
+            left: 100%;
         }
+    }
 
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: $secondary-shadow;
-            background: linear-gradient(135deg, rgba(50, 67, 101, 1), rgba(156, 185, 208, 1));
+    &:active {
+        transform: translateY(0);
+    }
 
-            &::before {
-                left: 100%;
-            }
-        }
+    &:disabled {
+        background: $tertiary-color;
+        color: $gray-color;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 
-        &:active {
-            transform: translateY(0);
-        }
-
-        &:disabled {
-            background: $tertiary-color;
-            color: $gray-color;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        svg {
-            width: $input-icon-size;
-            height: $input-icon-size;
-            stroke-width: 2.5px;
-        }
+    svg {
+        width: $input-icon-size;
+        height: $input-icon-size;
+        stroke-width: 2.5px;
     }
 }
 

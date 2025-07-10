@@ -19,7 +19,6 @@ export const UserNavbar = () => {
                 alt="Logo"
                 width={40}
                 height={40}
-                objectFit='cover'
               />
 
               <span>Himmanav Asset Management Technology </span>
@@ -390,7 +389,6 @@ export const UserFooter = () => {
                   alt="Logo"
                   width={40}
                   height={40}
-                  objectFit='cover'
                 />
               </Link>
             </div>

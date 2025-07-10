@@ -1,18 +1,24 @@
 @use '../variables' as *;
 
 .login-container2.register-contianer {
- 
 
   .login-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px 20px;
+
+    .input-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 10fr 1fr;
+      gap: 2px;
+      padding: 8px 10px;
+    }
   }
 }
 
 .login-container2 {
   display: grid;
-  height: calc(100vh - 58px - 55px);
+  height: 100vh;
   grid-template-columns: 50% 50%;
   position: relative;
   overflow: hidden;
@@ -21,8 +27,7 @@
   .left-panel {
     padding: 60px 80px 60px 100px;
     background-color: $white;
-    margin-top: -50px;
-    height: 100%;
+    height: 100vh;
     display: flex;
     align-items: center;
 
@@ -278,39 +283,34 @@
 
 
 
-
+@media (max-width: 1440px) {
+  .login-container2 .left-panel {
+    padding: 50px;
+  }
+}
 
 @media (max-width: 1024px) {
-  .login-container2.register-contianer .left-panel {
-    margin-top: 0px;
-  }
-
-  .login-container2.register-contianer .left-panel {
-    padding: 40px;
-  }
-
   .login-container2 {
     grid-template-columns: 100%;
 
-    .right-panel {
-      display: none; // Hide illustration on smaller screens
-    }
-
     .left-panel {
       padding: 40px;
+    }
+
+    .right-panel {
+      display: none;
     }
   }
 }
 
 @media (max-width: 768px) {
-  .login-container2.register-contianer .left-panel {
-    padding: 30px 20px;
-  }
 
   .login-container2 {
     .left-panel {
-      padding: 30px 20px;
+      padding: 50px 12px;
+    }
 
+    .left-panel {
       .title {
         font-size: 26px;
       }
@@ -324,7 +324,6 @@
       }
 
       .input-wrapper {
-        grid-template-columns: 10% 80% 10%;
         padding: 10px;
       }
 
@@ -334,29 +333,36 @@
       }
 
       .remember-forgot {
-        flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        margin: 20px auto;
+
+        .custom-checkbox {
+          font-size: 12px;
+        }
+
+        .forgot-password-link {
+          font-size: 12px;
+        }
+
       }
     }
   }
 }
 
 @media (max-width: 480px) {
-  .login-container2.register-contianer {
-    .left-panel {
-      padding: 20px 15px;
-    }
-
-    .login-form {
-      display: flex;
-      flex-direction: column;
-    }
+  .login-container2.register-contianer .login-form {
+    display: flex;
+    flex-direction: column;
   }
 
   .login-container2 {
+    align-items: flex-start;
+    height: auto;
+
     .left-panel {
-      padding: 20px 15px;
+      padding: 20px 12px;
+      height: auto;
 
       .title {
         font-size: 22px;
@@ -372,25 +378,27 @@
       }
 
       .input-wrapper {
-        grid-template-columns: 12% 76% 12%;
         padding: 8px;
+        margin-bottom: 10px;
+
+        input {
+          padding: 0;
+        }
       }
 
       .login-button {
         font-size: 14px;
-        padding: 0.6rem;
+        padding: 10px;
+        height: auto;
+        margin-top: 0;
       }
 
-      .custom-checkbox {
-        font-size: 12px;
-      }
+      .login-footer-links {
+        margin-top: 20px;
 
-      .forgot-password-link {
-        font-size: 12px !important;
-      }
-
-      .login-footer-links a {
-        font-size: 14px;
+        a {
+          font-size: 14px;
+        }
       }
     }
   }

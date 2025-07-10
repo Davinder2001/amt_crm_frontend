@@ -562,7 +562,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <RequiredLabel htmlFor="nationality" className="flex items-center gap-2">
                                                 Nationality
                                             </RequiredLabel>
-                                            <select name="nationality" value={formData.nationality} onChange={handleChange}>
+                                            <select name="nationality" value={formData.nationality} onChange={handleChange} className="common-placeholder">
                                                 <option value="">Select Nationality</option>
                                                 <option value="Indian">Indian</option>
                                                 <option value="Foreigner">Foreigner</option>
@@ -577,7 +577,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <RequiredLabel htmlFor="religion" className="flex items-center gap-2">
                                                 Religion
                                             </RequiredLabel>
-                                            <select name="religion" value={formData.religion} onChange={handleChange}>
+                                            <select name="religion" value={formData.religion} onChange={handleChange} className="common-placeholder">
                                                 <option value="">Select Religion</option>
                                                 <option value="Hinduism">Hinduism</option>
                                                 <option value="Islam">Islam</option>
@@ -595,7 +595,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <RequiredLabel htmlFor="maritalStatus" className="flex items-center gap-2">
                                                 Marital Status
                                             </RequiredLabel>
-                                            <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange}>
+                                            <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} className="common-placeholder">
                                                 <option value="">Select Marital Status</option>
                                                 <option value="Single">Single</option>
                                                 <option value="Married">Married</option>
@@ -629,6 +629,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     }));
                                                     setUtilityBillImagePreview(null);
                                                 }}
+                                                className="common-placeholder"
                                             >
                                                 <option value="">Select ID Proof</option>
                                                 <option value="aadhar">Aadhar Number</option>
@@ -682,7 +683,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <select
                                                 name="emergencyContactRelation"
                                                 value={formData.emergencyContactRelation}
-                                                onChange={handleChange}
+                                                onChange={handleChange} className="common-placeholder"
                                             >
                                                 <option value="">Select Relation</option>
                                                 <option value="mother">Father</option>
@@ -734,7 +735,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <select
                                                 name="shiftTimings"
                                                 value={formData.shiftTimings}
-                                                onChange={handleChange}
+                                                onChange={handleChange} className="common-placeholder"
                                             >
                                                 <option value="">Select Shift</option>
                                                 {shiftLoading ? (
@@ -763,8 +764,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     name="role"
                                                     value={formData.role}
                                                     onChange={handleChange}
-                                                    className={errors.role ? "error" : ""}
+                                                    className={`common-placeholder ${errors.role ? "error" : ""}`}
                                                     disabled={rolesLoading || !!rolesError}
+                                                    
                                                 >
                                                     <option value="">Select Role</option>
                                                     {rolesLoading ? (
@@ -794,7 +796,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     name="joiningType"
                                                     value={formData.joiningType}
                                                     onChange={handleChange}
-                                                    className={errors.joiningType ? "error" : ""}
+                                                    className={`common-placeholder ${errors.joiningType ? "error" : ""}`}
                                                 >
                                                     <option value="">Select Joining Type</option>
                                                     <option value="full-time">Full-time</option>

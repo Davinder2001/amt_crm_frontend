@@ -1,12 +1,30 @@
+
+
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { FiChevronDown, FiCheck, FiX, FiUsers, FiBox, FiCheckCircle, FiFileText, } from 'react-icons/fi';
+import {
+    FiChevronDown,
+    FiCheck,
+    FiX,
+    FiUsers,
+    FiBox,
+    FiCheckCircle,
+    FiFileText,
+    FiMessageSquare,
+    FiClipboard,
+    FiUser,
+} from 'react-icons/fi';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useCreatePackageMutation, useFetchSinglePackageQuery, useUpdatePackageMutation } from '@/slices/superadminSlices/packages/packagesApi';
+import {
+    useCreatePackageMutation,
+    useFetchSinglePackageQuery,
+    useUpdatePackageMutation
+} from '@/slices/superadminSlices/packages/packagesApi';
 import { useGetBusinessCategoriesQuery } from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import { useRouter } from 'next/navigation';
 import { useClickOutside } from '@/components/common/useClickOutside';
 import LoadingState from '@/components/common/LoadingState';
+import { useFetchAdminsQuery } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -19,10 +37,15 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         items_number: 0,
         daily_tasks_number: 0,
         invoices_number: 0,
+        task: false,
+        chat: false,
+        hr: false,
     }), []);
 
     const [formData, setFormData] = useState<PackagePlan>({
         name: '',
+        package_type: '',
+        user_id: null,
         monthly_price: 0,
         annual_price: 0,
         three_years_price: 0,
@@ -31,6 +54,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         three_years_limits: { ...initialLimits },
         business_categories: [],
     });
+    const { data: adminData } = useFetchAdminsQuery();
+    const admins = adminData?.admins || [];
 
     const router = useRouter();
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,7 +80,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
             };
 
             if (packageData.limits) {
-                packageData.limits.forEach(limit => {
+                packageData.limits.forEach((limit: Limit) => {
                     const { variant_type, ...rest } = limit;
                     if (limitsMap[variant_type as keyof typeof limitsMap]) {
                         limitsMap[variant_type as keyof typeof limitsMap] = {
@@ -63,6 +88,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             items_number: rest.items_number,
                             daily_tasks_number: rest.daily_tasks_number,
                             invoices_number: rest.invoices_number,
+                            task: rest?.Task || false,
+                            chat: rest?.Chat || false,
+                            hr: rest?.Hr || false,
                         };
                     }
                 });
@@ -70,6 +98,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
             setFormData({
                 name: packageData.name || '',
+                package_type: packageData.package_type || '',
+                user_id: packageData.user_id ?? null,
                 monthly_price: Number(packageData.monthly_price) || 0,
                 annual_price: Number(packageData.annual_price) || 0,
                 three_years_price: Number(packageData.three_years_price) || 0,
@@ -81,26 +111,18 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         }
     }, [packageData, mode, initialLimits]);
 
-
     const clearCardData = (planType: 'monthly' | 'annual' | 'three_years') => {
-        setFormData(prev => {
-            // Create a new limits object with all values set to 0
-            const clearedLimits = Object.fromEntries(
-                Object.keys(initialLimits).map(key => [key, 0])
-            ) as unknown as PlanLimits;
-
-            return {
-                ...prev,
-                [`${planType}_price`]: 0,
-                [`${planType}_limits`]: clearedLimits,
-            };
-        });
+        setFormData(prev => ({
+            ...prev,
+            [`${planType}_price`]: 0,
+            [`${planType}_limits`]: { ...initialLimits },
+        }));
     };
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
 
         if (name === 'monthly_price' || name === 'annual_price' || name === 'three_years_price') {
             const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
@@ -116,15 +138,17 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
         if (isLimitField) {
             const [limitType, fieldName] = name.split('.');
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
+            const inputValue = type === 'checkbox'
+                ? (e.target as HTMLInputElement).checked
+                : value.replace(/\D/g, '').slice(0, 8);
 
             setFormData(prev => ({
                 ...prev,
                 [limitType]: {
                     ...((typeof prev[limitType as keyof PackagePlan] === 'object' && prev[limitType as keyof PackagePlan] !== null)
-                        ? (prev[limitType as keyof PackagePlan] as object)
+                        ? prev[limitType as keyof PackagePlan] as object
                         : {}),
-                    [fieldName]: digitsOnly ? Number(digitsOnly) : 0,
+                    [fieldName]: type === 'checkbox' ? inputValue : (inputValue ? Number(inputValue) : 0),
                 },
             }));
         } else {
@@ -140,16 +164,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         setFormData(prev => {
             const updatedCategories = exists
                 ? prev.business_categories.filter(c => c.id !== category.id)
-                : [
-                    ...prev.business_categories,
-                    {
-                        ...category,
-                    },
-                ];
-            const normalizedCategories = updatedCategories.map(c => ({
-                ...c,
-            }));
-            return { ...prev, business_categories: normalizedCategories };
+                : [...prev.business_categories, category];
+            return { ...prev, business_categories: updatedCategories };
         });
     };
 
@@ -157,15 +173,22 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         e.preventDefault();
         const formDataToSubmit = new FormData();
 
-        Object.entries(formData).forEach(([key, value]) => {
+        const payloadData = {
+            ...formData,
+            user_id: formData.package_type === 'specific' ? formData.user_id : null
+        };
+
+        Object.entries(payloadData).forEach(([key, value]) => {
             if (key === 'business_categories') {
                 (value as BusinessCategory[]).forEach(category => {
                     formDataToSubmit.append('business_category_ids[]', category.id.toString());
                 });
             } else if (typeof value === 'object' && value !== null) {
                 Object.entries(value).forEach(([subKey, subValue]) => {
-                    formDataToSubmit.append(`${key}[${subKey}]`, String(subValue));
+                    const finalValue = typeof subValue === 'boolean' ? (subValue ? '1' : '0') : String(subValue);
+                    formDataToSubmit.append(`${key}[${subKey}]`, finalValue);
                 });
+
             } else if (value !== null && value !== undefined) {
                 formDataToSubmit.append(key, value.toString());
             } else {
@@ -175,13 +198,17 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
 
         try {
             if (mode === 'edit' && packageId) {
-                const { business_categories, ...rest } = formData;
+                const { business_categories, ...rest } = payloadData;
                 await updatePackage({
                     id: packageId,
                     fomdata: {
                         ...rest,
-                        business_category_ids: business_categories.map(c => c.id),
-                    } as unknown as PackagePlan
+                        business_categories: business_categories.map(c => ({
+                            ...c,
+                            created_at: '', // or a valid date string if required
+                            updated_at: '', // or a valid date string if required
+                        })),
+                    }
                 }).unwrap();
                 router.back();
             } else {
@@ -190,6 +217,8 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 if (mode === 'add') {
                     setFormData({
                         name: '',
+                        package_type: '',
+                        user_id: null,
                         monthly_price: 0,
                         annual_price: 0,
                         three_years_price: 0,
@@ -214,7 +243,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 <FaArrowLeft size={16} color="#fff" />
             </button>
             <div className="add-packages-conatiner">
-
                 <form onSubmit={handleSubmit} className="form">
                     <div className="form-section">
                         <h2 className="section-title">Basic Information</h2>
@@ -264,7 +292,6 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                             </div>
                                         )}
                                     </div>
-
                                 </div>
                             </div>
                             <div className='form-group bc-group-span'>
@@ -283,6 +310,55 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                     ))}
                                 </div>
                             </div>
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Package Type <span className="required">*</span>
+                                </label>
+                                <select
+                                    className="form-input"
+                                    name="package_type"
+                                    value={formData.package_type}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            package_type: e.target.value,
+                                            user_id: e.target.value === 'general' ? null : prev.user_id,
+                                        }))
+                                    }
+                                    required
+                                >
+                                    <option value="">Select type</option>
+                                    <option value="general">General</option>
+                                    <option value="specific">Specific</option>
+                                </select>
+                            </div>
+
+                            {formData.package_type === 'specific' && (
+                                <div className="form-group">
+                                    <label className="form-label">
+                                        Select Admin <span className="required">*</span>
+                                    </label>
+                                    <select
+                                        className="form-input"
+                                        name="user_id"
+                                        value={formData.user_id || ''}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                user_id: Number(e.target.value),
+                                            }))
+                                        }
+                                        required
+                                    >
+                                        <option value="">Choose an admin</option>
+                                        {admins?.map((admin) => (
+                                            <option key={admin.id} value={admin.id}>
+                                                {admin.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -293,7 +369,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <div className="pricing-card">
                                 <div className="card-header">
                                     <h3>Monthly Plan</h3>
-                                    {(formData.monthly_price > 0 || Object.values(formData.monthly_limits).some(val => val > 0)) && (
+                                    {(formData.monthly_price > 0 || Object.values(formData.monthly_limits).some(val => val !== 0 && val !== false)) && (
                                         <span
                                             className="clear-card-btn"
                                             onClick={() => clearCardData('monthly')}
@@ -367,6 +443,36 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                             required
                                         />
                                     </div>
+
+                                    <div className="limit-checkbox-group">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="monthly_limits.task"
+                                                checked={formData.monthly_limits.task || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiClipboard className="icon" /> Task Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="monthly_limits.chat"
+                                                checked={formData.monthly_limits.chat || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiMessageSquare className="icon" /> Chat Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="monthly_limits.hr"
+                                                checked={formData.monthly_limits.hr || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiUser className="icon" /> HR Module
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -374,7 +480,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <div className="pricing-card">
                                 <div className="card-header">
                                     <h3>Annual Plan</h3>
-                                    {(formData.annual_price > 0 || Object.values(formData.annual_limits).some(val => val > 0)) && (
+                                    {(formData.annual_price > 0 || Object.values(formData.annual_limits).some(val => val !== 0 && val !== false)) && (
                                         <span
                                             className="clear-card-btn"
                                             onClick={() => clearCardData('annual')}
@@ -448,6 +554,36 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                             required
                                         />
                                     </div>
+
+                                    <div className="limit-checkbox-group">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="annual_limits.task"
+                                                checked={formData.annual_limits.task || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiClipboard className="icon" /> Task Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="annual_limits.chat"
+                                                checked={formData.annual_limits.chat || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiMessageSquare className="icon" /> Chat Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="annual_limits.hr"
+                                                checked={formData.annual_limits.hr || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiUser className="icon" /> HR Module
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -455,7 +591,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <div className="pricing-card">
                                 <div className="card-header">
                                     <h3>3 Years Plan</h3>
-                                    {(formData.three_years_price > 0 || Object.values(formData.three_years_limits).some(val => val > 0)) && (
+                                    {(formData.three_years_price > 0 || Object.values(formData.three_years_limits).some(val => val !== 0 && val !== false)) && (
                                         <span
                                             className="clear-card-btn"
                                             onClick={() => clearCardData('three_years')}
@@ -528,6 +664,36 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                                             placeholder="Max invoices"
                                             required
                                         />
+                                    </div>
+
+                                    <div className="limit-checkbox-group">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="three_years_limits.task"
+                                                checked={formData.three_years_limits.task || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiClipboard className="icon" /> Task Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="three_years_limits.chat"
+                                                checked={formData.three_years_limits.chat || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiMessageSquare className="icon" /> Chat Module
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="three_years_limits.hr"
+                                                checked={formData.three_years_limits.hr || false}
+                                                onChange={handleInputChange}
+                                            />
+                                            <FiUser className="icon" /> HR Module
+                                        </label>
                                     </div>
                                 </div>
                             </div>

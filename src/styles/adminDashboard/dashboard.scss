@@ -8,7 +8,6 @@
     display: grid;
     grid-template-rows: auto auto;
     column-gap: 20px;
-    row-gap: 30px;
 
     .card {
         background-color: $white;
@@ -56,7 +55,6 @@
 .stat-revenue-container {
     // grid-template-columns: 1fr 1.3fr;
     grid-template: 1fr;
-    margin-top: 20px;
 
     .total-revenue {
         .revenue-value {
@@ -201,11 +199,13 @@
             margin-top: 20px;
 
             .sale-item {
-                display: flex;
+                display: grid;
+                grid-template-columns: 1fr 1fr .2fr;
                 align-items: center;
                 margin-bottom: 1rem;
 
                 .label {
+                    width: 100%;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -356,7 +356,7 @@
 }
 
 .dashboard-container {
-    padding: 20px 0;
+    padding: 0px 0px 20px 0px;
     max-width: 1800px;
     margin: 0 auto;
     width: 100%;

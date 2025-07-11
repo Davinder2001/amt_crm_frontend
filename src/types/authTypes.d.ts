@@ -338,9 +338,9 @@ interface PackagePlan {
   employee_limit: number;
   package_type: 'general' | 'specific';
   user_id: number | null;
-  task?: boolean | null;
-  chat?: boolean | null;
-  hr?: boolean | null;
+  task?: boolean;
+  chat?: boolean;
+  hr?: boolean;
   business_categories: BusinessCategory[];
 }
 

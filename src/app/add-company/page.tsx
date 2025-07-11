@@ -12,7 +12,7 @@ const Page = () => {
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
   const categories = categoriesData ?? [];
 
-  const [subscriptionType, setSubscriptionType] = useState<'monthly' | 'annual'>('monthly');
+  const [subscriptionType, setSubscriptionType] = useState<'annual' | 'three_years'>('annual');
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 

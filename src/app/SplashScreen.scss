@@ -39,17 +39,10 @@
         height: 120px;
         margin-bottom: 30px;
         position: relative;
-        opacity: 0;
-        transform: scale(0.5) rotateY(180deg);
-        filter: blur(5px);
-        transition: all 800ms cubic-bezier(0.68, -0.6, 0.32, 1.6);
-
-        &.scale-up {
-            opacity: 1;
-            transform: scale(1) rotateY(0deg);
-            filter: blur(0px);
-        }
-
+        opacity: 1;
+        transform: scale(1) rotateY(0deg);
+        filter: blur(0px);
+        
         .logo {
             width: 100%;
             height: 100%;
@@ -82,14 +75,8 @@
     .text-container {
         text-align: center;
         margin-bottom: 30px;
-        transform: translateY(30px) rotateX(45deg);
-        opacity: 0;
-        transition: all 700ms cubic-bezier(0.18, 0.89, 0.32, 1.28) 200ms;
-
-        &.slide-up {
-            transform: translateY(0px) rotateX(0deg);
-            opacity: 1;
-        }
+        transform: translateY(0px) rotateX(0deg);
+        opacity: 1;
 
         .app-name {
             color: white;
@@ -109,9 +96,7 @@
                 width: 100%;
                 height: 3px;
                 background: white;
-                transform: scaleX(0);
-                transform-origin: left;
-                transition: transform 500ms ease-out 800ms;
+                transform: scaleX(1);
             }
         }
 
@@ -121,14 +106,8 @@
             margin: 0px;
             font-weight: 500;
             letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 500ms ease-out 300ms;
-
-            &.show-tagline {
-                opacity: 1;
-                transform: translateY(0px);
-            }
+            opacity: 1;
+            transform: translateY(0px);
         }
     }
 
@@ -138,60 +117,33 @@
         background-color: rgba(255, 255, 255, 0.15);
         border-radius: 3px;
         overflow: hidden;
-        opacity: 0;
-        transform: scaleX(0.8);
-        transition: all 300ms cubic-bezier(0.18, 0.89, 0.32, 1.28) 400ms;
+        opacity: 1;
+        transform: scaleX(1);
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-
-        &.expand {
-            opacity: 1;
-            transform: scaleX(1);
-        }
 
         .progress {
             height: 100%;
-            width: 0px;
+            width: 100%;
             background: linear-gradient(90deg,
                     rgba(255, 255, 255, 0.8) 0%,
                     white 50%,
                     rgba(255, 255, 255, 0.8) 100%);
             border-radius: 3px;
-            animation: progress-animation 1800ms cubic-bezier(0.65, 0, 0.35, 1) forwards,
-                pulse 800ms infinite ease-in-out;
+            animation: pulse 800ms infinite ease-in-out;
         }
     }
 }
 
-/* Keyframes */
-@keyframes progress-animation {
-    0% {
-        width: 0px;
-    }
-
-    30% {
-        width: 30%;
-    }
-
-    70% {
-        width: 80%;
-    }
-
-    100% {
-        width: 100%;
-    }
-}
-
+/* Keyframes - Keep only the animations you want to maintain */
 @keyframes shine {
     0% {
         transform: translateX(-100%) skewX(-30deg);
         opacity: 0;
     }
-
     60% {
         transform: translateX(100%) skewX(-30deg);
         opacity: 0.8;
     }
-
     100% {
         transform: translateX(100%) skewX(-30deg);
         opacity: 0;
@@ -202,24 +154,19 @@
     0% {
         opacity: 0.9;
     }
-
     50% {
         opacity: 1;
     }
-
     100% {
         opacity: 0.9;
     }
 }
 
-// Fixed particle animation using math.random()
 @keyframes particle-move {
     0% {
         transform: translate(0px, 0px);
     }
-
     100% {
-        // Fixed version using math.random()
         transform: translate(#{(math.random(200) - 100)}px, #{(math.random(200) - 100)}px);
     }
 }

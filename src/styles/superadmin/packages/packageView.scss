@@ -51,15 +51,18 @@
                 font-size: 14px;
                 color: $para-color;
                 position: relative;
-                padding: 0px 0px 5px 20px;
+                padding: 0px 0px 10px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
 
-                &::before {
-                    content: '✓';
-                    position: absolute;
-                    left: -0px;
-                    color: #008001;
-                    font-weight: bold;
-                }
+                // &::before {
+                //     content: '✓';
+                //     position: absolute;
+                //     left: -0px;
+                //     color: #008001;
+                //     font-weight: bold;
+                // }
 
                 &:not(:last-child) {
                     border-bottom: 1px dashed #e2e8f0;
@@ -99,6 +102,16 @@
             color: var(--primary-color);
             background-color: #fff;
             border: 1px solid var(--primary-color);
+            text-decoration: none;
+            white-space: nowrap;
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 5px;
+            letter-spacing: .2px;
+            cursor: pointer;
+            text-align: center;
 
         }
 
@@ -351,7 +364,7 @@
     }
 
     @media (max-width: 768px) {
-     
+
         .price-limits-grid {
             grid-template-columns: 1fr;
 

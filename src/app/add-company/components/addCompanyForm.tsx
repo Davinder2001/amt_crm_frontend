@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
 interface AddCompany {
@@ -14,6 +14,7 @@ interface AddCompany {
   business_id: string;
   business_proof_front: File | null;
   business_proof_back: File | null;
+  company_signature: File | null;
 }
 
 interface AddCompanyFormProps {
@@ -21,28 +22,6 @@ interface AddCompanyFormProps {
   categoryId: number | null;
   subscriptionType: string | null;
 }
-
-const LOCAL_STORAGE_KEY = 'addCompany';
-
-const getStoredFormData = (): Partial<AddCompany> | null => {
-  if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  }
-  return null;
-};
-
-const saveFormData = (data: Partial<AddCompany>) => {
-  if (typeof window !== 'undefined') {
-    const dataToStore = { ...data };
-    Object.keys(dataToStore).forEach(key => {
-      if (dataToStore[key as keyof AddCompany] instanceof File) {
-        delete dataToStore[key as keyof AddCompany];
-      }
-    });
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToStore));
-  }
-};
 
 const getDefaultFormData = (packageId: number, categoryId: number | null, subscriptionType: string | null): AddCompany => ({
   company_name: '',
@@ -56,6 +35,7 @@ const getDefaultFormData = (packageId: number, categoryId: number | null, subscr
   business_id: '',
   business_proof_front: null,
   business_proof_back: null,
+  company_signature: null,
 });
 
 const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscriptionType }) => {
@@ -64,18 +44,9 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
   );
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
-  useEffect(() => {
-    const stored = getStoredFormData();
-    if (stored) {
-      setFormData(prev => ({ ...prev, ...stored }));
-    }
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };
-    setFormData(updatedFormData);
-    saveFormData(updatedFormData);
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,9 +76,9 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
       if (formData.company_logo) payload.append('company_logo', formData.company_logo);
       if (formData.business_proof_front) payload.append('business_proof_front', formData.business_proof_front);
       if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
+      if (formData.company_signature) payload.append('company_signature', formData.company_signature);
 
       const response = await orderNewCompany(payload).unwrap();
-
 
       if (response.payment.redirect_url) {
         window.location.href = response.payment.redirect_url;
@@ -214,6 +185,22 @@ const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscripti
               />
               <span className="file-label">
                 {formData.business_proof_back ? formData.business_proof_back.name : 'Choose file...'}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Company Signature</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                name="company_signature"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <span className="file-label">
+                {formData.company_signature ? formData.company_signature.name : 'Choose file...'}
               </span>
             </div>
           </div>

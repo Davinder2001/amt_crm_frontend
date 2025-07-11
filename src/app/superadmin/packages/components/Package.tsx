@@ -18,29 +18,7 @@ import { useRouter } from 'next/navigation';
 import { useClickOutside } from '@/components/common/useClickOutside';
 import LoadingState from '@/components/common/LoadingState';
 import { useFetchAdminsQuery } from '@/slices/superadminSlices/adminManagement/adminManageApi';
-
-interface PackagePlan {
-    id?: number;
-    name: string;
-    annual_price: number;
-    three_years_price: number;
-    employee_limit: number;
-    package_type: 'general' | 'specific';
-    user_id: number | null;
-    task?: boolean;
-    chat?: boolean;
-    hr?: boolean;
-    business_categories: BusinessCategory[];
-}
-
-interface BusinessCategory {
-    id: number;
-    name?: string;
-    description?: string | null;
-    created_at?: string;
-    updated_at?: string;
-}
-
+import { toast } from 'react-toastify';
 
 interface PackageProps {
     mode?: "add" | "edit";
@@ -148,9 +126,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         formDataToSubmit.append('package_type', formData.package_type);
 
         // Include module flags
-        formDataToSubmit.append('task', formData.task ? 'true' : 'false');
-        formDataToSubmit.append('chat', formData.chat ? 'true' : 'false');
-        formDataToSubmit.append('hr', formData.hr ? 'true' : 'false');
+        formDataToSubmit.append('task', formData.task ? '1' : '0');
+        formDataToSubmit.append('chat', formData.chat ? '1' : '0');
+        formDataToSubmit.append('hr', formData.hr ? '1' : '0');
 
         // Handle business categories
         formData.business_categories.forEach(category => {
@@ -179,9 +157,9 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                     employee_limit: formData.employee_limit,
                     package_type: formData.package_type,
                     user_id: formData.user_id,
-                    task: formData.task,
-                    chat: formData.chat,
-                    hr: formData.hr,
+                    task: Boolean(formData.task),
+                    chat: Boolean(formData.chat),
+                    hr: Boolean(formData.hr),
                     business_categories: formData.business_categories.map(c => ({ id: c.id })),
                 };
 
@@ -191,9 +169,10 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                 }).unwrap();
                 router.back();
             } else {
-                await createPackage(formDataToSubmit).unwrap();
-                alert('Package created successfully!');
+                const res = await createPackage(formDataToSubmit).unwrap();
+                toast.success(res.success);
                 setFormData(initialFormData);
+                router.back();
             }
         } catch (error) {
             alert(`Error ${mode === 'edit' ? 'updating' : 'creating'} package`);

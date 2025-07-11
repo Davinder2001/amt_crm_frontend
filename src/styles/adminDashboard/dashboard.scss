@@ -369,7 +369,7 @@
         border: 1px solid $border-color;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         position: relative;
         overflow: hidden;
@@ -383,13 +383,12 @@
 
             .icon-shell {
                 transform: scale(1.05);
-                background: linear-gradient(135deg, rgba(var(--primary-color), 0.1), rgba($orange-color, 0.1));
             }
         }
     }
 
     .icon-shell {
-        background-color: rgba(var(--primary-color), 0.08);
+        background-color: var(--primary-light-rgb);
         padding: 5px;
         border-radius: $border-radius;
         display: flex;
@@ -473,35 +472,6 @@
             transform: rotate(360deg);
         }
     }
-
-    .card {
-        .icon-shell {
-            background-color: rgba(var(--primary-color), 0.1);
-
-            svg {
-                color: var(--primary-color);
-            }
-        }
-
-        .value-count {
-            color: var(--primary-color);
-        }
-
-        &[data-card-type] {
-            .icon-shell {
-                background-color: rgba(var(--primary-color), 0.1);
-
-                svg {
-                    color: var(--primary-color);
-                }
-            }
-
-            .value-count {
-                color: var(--primary-color);
-            }
-        }
-    }
-
 }
 
 
@@ -593,7 +563,6 @@
                     height: 35px;
                     margin: 0;
                     padding: 0;
-                    background: var(--primary-light) !important;
                 }
 
                 .dash-card-content {

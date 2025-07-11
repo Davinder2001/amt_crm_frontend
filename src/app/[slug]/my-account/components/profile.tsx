@@ -1,5 +1,5 @@
 'use client'
-import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery, useFetchLoginSessionsQuery } from '@/slices'
+import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery } from '@/slices'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -29,8 +29,8 @@ const Profile = () => {
   const user = data?.user
   const { companySlug } = useCompany();
   const { data: companyScore } = useCompanyScoreQuery();
-  const { data: sessionsData } = useFetchLoginSessionsQuery();
-  const totalLogins = sessionsData?.total_logins || 0;
+  // const { data: sessionsData } = useFetchLoginSessionsQuery();
+  // const totalLogins = sessionsData?.total_logins || 0;
 
   useEffect(() => {
     if (user?.companies) {
@@ -70,6 +70,12 @@ const Profile = () => {
 
   const handleCardClick = async (company: Company, e: React.MouseEvent) => {
     e.preventDefault()
+
+    // Check if this is the currently active company
+    if (company.company_slug === companySlug) {
+      return // Exit early if it's the active company
+    }
+
     const success = await selectCompany(company)
     if (success) {
       router.push(`/${company.company_slug}/dashboard`)
@@ -123,6 +129,11 @@ const Profile = () => {
             <div className="info-line"><span>📱</span><span>{user?.number}</span></div>
             <div className="info-line"><span>🆔</span><span>{user?.uid}</span></div>
             <div className="info-line"><span>👔</span><span className="role-badge">{user?.user_type}</span></div>
+            {/* <div className="info-line">
+              <label htmlFor="sessions-status">
+                <span>Login Sessions</span>
+                <span className='status-tag'>{totalLogins}</span>
+              </label></div> */}
           </div>
         </div>
 
@@ -141,7 +152,8 @@ const Profile = () => {
               return (
                 <div
                   key={company.id}
-                  className={`company-item ${company.verification_status}`}
+                  className={`company-item ${company.verification_status} ${isCurrentCompany ? 'active-company' : ''
+                    }`}
                   onClick={(e) => handleCardClick(company, e)}
                 >
 
@@ -172,11 +184,6 @@ const Profile = () => {
                     </div>
                   )}
                   <div className="company-status">
-
-                    <label htmlFor="sessions-status">
-                      <span>Login Sessions</span>
-                      <span className='status-tag'>{totalLogins}</span>
-                    </label>
                     <label htmlFor="payment-status">
                       <span>Payment Status</span>
                       <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
@@ -185,33 +192,40 @@ const Profile = () => {
                       <span>Verification Status</span>
                       <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
                     </label>
-                    {!isCurrentCompany && (
+                  </div>
+
+                  <div className="c-actions">
+                    {!isCurrentCompany ? (
                       <div className="switch-badge">
                         <div className="badge-text">Switch</div>
                       </div>
+                    ) : (
+                      <div className="active-badge">
+                        <div className="badge-text">Active</div>
+                      </div>
+                    )}
+
+                    {company.payment_status === 'pending' ? (
+                      <button
+                        className="view-btn"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSelectedCompany(company)
+                          setIsRecheckModal(true)
+                        }}
+                      >
+                        Check Status
+                      </button>
+                    ) : (
+                      <button
+                        className="view-btn"
+                        onClick={(e) => handleViewDetailsClick(company, e)}
+                        disabled={loadingCompanyId === company.id}
+                      >
+                        {loadingCompanyId === company.id ? 'Loading...' : 'View Details'}
+                      </button>
                     )}
                   </div>
-
-                  {company.payment_status === 'pending' ? (
-                    <button
-                      className="view-btn"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedCompany(company)
-                        setIsRecheckModal(true)
-                      }}
-                    >
-                      Check Status
-                    </button>
-                  ) : (
-                    <button
-                      className="view-btn"
-                      onClick={(e) => handleViewDetailsClick(company, e)}
-                      disabled={loadingCompanyId === company.id}
-                    >
-                      {loadingCompanyId === company.id ? 'Loading...' : 'View Details'}
-                    </button>
-                  )}
                 </div>
               )
             })}

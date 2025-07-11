@@ -38,3 +38,24 @@ export interface MonthlySalesResponse {
   year: number;
   data: MonthlySales[];
 }
+
+export interface MonthlyRevenue {
+  month: string;
+  total_revenue: number;
+}
+
+export interface MonthlyRevenueResponse {
+  year: number;
+  data: MonthlyRevenue[];
+}
+
+export interface TopSellingItem {
+  item_name: string;
+  total_quantity: number;
+  total_sales: number;
+}
+
+export interface TopSellingItemsResponse {
+  year: number;
+  top_items: TopSellingItem[];
+}

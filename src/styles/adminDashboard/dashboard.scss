@@ -54,7 +54,8 @@
 
 /* ===== Revenue Container ===== */
 .stat-revenue-container {
-    grid-template-columns: 1fr 1.3fr;
+    // grid-template-columns: 1fr 1.3fr;
+    grid-template: 1fr;
     margin-top: 20px;
 
     .total-revenue {
@@ -96,7 +97,7 @@
     }
 
     .chart-placeholder {
-        height: 200px;
+        height: 250px;
         border-radius: $border-radius;
         display: flex;
         align-items: center;
@@ -109,7 +110,9 @@
 
 /* ===== Expenses & Sales Container ===== */
 .expenses-sale-container {
-    grid-template-columns: 1fr 0.6fr 0.6fr;
+    // grid-template-columns: 1fr 0.6fr 0.6fr;
+    grid-template-columns: 1fr 0.5fr;
+    margin-top: 20px;
 
     .income-expense {
         button {
@@ -203,7 +206,9 @@
                 margin-bottom: 1rem;
 
                 .label {
-                    width: 80px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     font-size: $font-size-small;
                     font-weight: $font-weight-medium;
                 }

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -19,6 +19,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   type
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const handleConfirm = async () => {
     try {
@@ -29,12 +30,28 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
+        onCancel();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onCancel]);
+
   if (!isOpen) return null;
 
   return (
     <>
       <div className="dialog-overlay">
-        <div className="dialog-box">
+        <div className="dialog-box" ref={dialogRef}>
           <h2 className="dialog-title">{title}</h2>
           <p className="dialog-message">{message}</p>
           <div className="dialog-actions">

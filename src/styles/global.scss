@@ -495,6 +495,9 @@ h2.react-datepicker__current-month,
 
 
 // datepicker-styling End...............................................................................
+//...............................................................................
+
+// ...............................................................................
 
 
 
@@ -518,16 +521,18 @@ textarea::placeholder {
         }
     }
 }
+
 @media screen and (max-width:767px) {
-      .main .main-content {
+    .main .main-content {
         padding-bottom: 80px;
     }
 }
+
 @media (max-width:468px) {
     .buttons {
         padding: 5px 10px;
 
     }
 
-  
+
 }

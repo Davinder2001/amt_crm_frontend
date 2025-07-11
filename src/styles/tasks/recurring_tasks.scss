@@ -76,32 +76,36 @@
   .employee-field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-
+    gap: 0px;
     label {
       letter-spacing: .4px;
-      color: $lable-color;
-      font-size: $lable-font;
-      font-weight: $font-weight-regular;
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: 400;
       display: block;
     }
 
     input,
     select,
     .date-input {
-      padding: 10px 12px;
-      font-size: $font-size-small;
-      border: 1px solid $feild_border;
+      padding: 8px 12px;
+      font-size: 16px;
       border-radius: $border-radius;
-      background-color: $light-bg;
-      color: $text-dark;
-      transition: border-color $transition;
+      border: 1px solid $border-color;
       width: 100%;
 
       &:focus {
-        outline: none;
-        border-color: $gray-color;
-        background-color: $white;
+        border-color: var(--primary-light);
+        background: transparent;
+      }
+
+      &::placeholder {
+        color: #ccc;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+        background-color: transparent;
       }
     }
   }
@@ -109,13 +113,15 @@
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 0px;
+
 
     label {
       letter-spacing: .4px;
-      color: $lable-color;
-      font-size: $lable-font;
-      font-weight: $font-weight-regular;
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 13px;
+      font-weight: 400;
       display: block;
     }
 
@@ -142,6 +148,27 @@
         background-color: var(--primary-light);
         color: $white;
       }
+    }
+  }
+
+  .select-field {
+    border-radius: 5px;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    background-color: transparent;
+    color: black;
+
+    &.common-placeholder {
+      color: #ccc;
+    }
+
+    option {
+      color: black;
+    }
+
+    option[value=""] {
+      color: #ccc;
     }
   }
 

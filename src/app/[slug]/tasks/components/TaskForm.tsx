@@ -173,14 +173,14 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                     </select>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group task-field-hide">
                     <label>Assign Task to Role</label>
                     <input type="text" value={formData.role} readOnly />
                 </div>
 
                 <div className="form-group">
                     <DatePickerField
-                        label="Start Timing"
+                        label="Start Date"
                         selectedDate={formData.startDate ? formData.startDate.toISOString() : null}
                         onChange={(date: string) =>
                             setFormData((prev) => ({
@@ -194,7 +194,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
                 </div>
                 <div className="form-group">
                     <DatePickerField
-                        label="End Timing"
+                        label="End Date"
                         selectedDate={formData.endDate ? formData.endDate.toISOString() : null}
                         onChange={(date: string) =>
                             setFormData((prev) => ({

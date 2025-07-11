@@ -562,8 +562,13 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <RequiredLabel htmlFor="nationality" className="flex items-center gap-2">
                                                 Nationality
                                             </RequiredLabel>
-                                            <select name="nationality" value={formData.nationality} onChange={handleChange} className="common-placeholder">
-                                                <option value="">Select Nationality</option>
+                                            <select
+                                                name="nationality"
+                                                value={formData.nationality}
+                                                onChange={handleChange}
+                                                className={`select-field ${formData.nationality === '' ? 'common-placeholder' : ''}`}
+                                            >
+                                                <option value="" >Select Nationality</option>
                                                 <option value="Indian">Indian</option>
                                                 <option value="Foreigner">Foreigner</option>
                                                 <option value="NRI">NRI</option>
@@ -571,14 +576,20 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             {errors.nationality && <div className="error-message">{errors.nationality}</div>}
                                         </div>
 
+
                                         {renderField("Date of Birth", "dob", "date", "Select date of birth",)}
 
                                         <div className="employee-field">
                                             <RequiredLabel htmlFor="religion" className="flex items-center gap-2">
                                                 Religion
                                             </RequiredLabel>
-                                            <select name="religion" value={formData.religion} onChange={handleChange} className="common-placeholder">
-                                                <option value="">Select Religion</option>
+                                            <select
+                                                name="religion"
+                                                value={formData.religion}
+                                                onChange={handleChange}
+                                                className={`select-field ${formData.religion === '' ? 'common-placeholder' : ''}`}
+                                            >
+                                                <option value="" >Select Religion</option>
                                                 <option value="Hinduism">Hinduism</option>
                                                 <option value="Islam">Islam</option>
                                                 <option value="Christianity">Christianity</option>
@@ -591,12 +602,18 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             {errors.religion && <div className="error-message">{errors.religion}</div>}
                                         </div>
 
+
                                         <div className="employee-field">
                                             <RequiredLabel htmlFor="maritalStatus" className="flex items-center gap-2">
                                                 Marital Status
                                             </RequiredLabel>
-                                            <select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} className="common-placeholder">
-                                                <option value="">Select Marital Status</option>
+                                            <select
+                                                name="maritalStatus"
+                                                value={formData.maritalStatus}
+                                                onChange={handleChange}
+                                                className={`select-field ${formData.maritalStatus === '' ? 'common-placeholder' : ''}`}
+                                            >
+                                                <option value="" >Select Marital Status</option>
                                                 <option value="Single">Single</option>
                                                 <option value="Married">Married</option>
                                                 <option value="Divorced">Divorced</option>
@@ -611,32 +628,36 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <RequiredLabel htmlFor="idProofType" className="flex items-center gap-2">
                                                 ID Proof Type
                                             </RequiredLabel>
+
                                             <select
                                                 name="idProofType"
                                                 value={formData.idProofType}
                                                 onChange={(e) => {
+                                                    const selected = e.target.value;
                                                     setFormData((prev) => ({
                                                         ...prev,
-                                                        idProofType: e.target.value,
+                                                        idProofType: selected,
                                                         idProofValue: "",
                                                         utility_bill_image: null,
                                                     }));
                                                     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
                                                         ...formData,
-                                                        idProofType: e.target.value,
+                                                        idProofType: selected,
                                                         idProofValue: "",
                                                         utility_bill_image: null,
                                                     }));
                                                     setUtilityBillImagePreview(null);
                                                 }}
-                                                className="common-placeholder"
+                                                className={`select-field ${formData.idProofType === '' ? 'common-placeholder' : ''}`}
                                             >
-                                                <option value="">Select ID Proof</option>
+                                                <option value="" >Select ID Proof</option>
                                                 <option value="aadhar">Aadhar Number</option>
                                                 <option value="license">License</option>
                                                 <option value="passport">Passport Number</option>
                                                 <option value="bill">Utility Bill</option>
                                             </select>
+
+
                                             {errors.idProofType && <div className="error-message">{errors.idProofType}</div>}
                                         </div>
 
@@ -683,11 +704,12 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <select
                                                 name="emergencyContactRelation"
                                                 value={formData.emergencyContactRelation}
-                                                onChange={handleChange} className="common-placeholder"
+                                                onChange={handleChange}
+                                                className={`select-field ${formData.emergencyContactRelation === '' ? 'common-placeholder' : ''}`}
                                             >
-                                                <option value="">Select Relation</option>
-                                                <option value="mother">Father</option>
-                                                <option value="father">Mother</option>
+                                                <option value="" >Select Relation</option>
+                                                <option value="father">Father</option>
+                                                <option value="mother">Mother</option>
                                                 <option value="brother">Brother</option>
                                                 <option value="sister">Sister</option>
                                                 <option value="other">Other</option>
@@ -696,6 +718,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                 <div className="error-message">{errors.emergencyContactRelation}</div>
                                             )}
                                         </div>
+
                                     </div>
                                 </div>
                             )}
@@ -735,9 +758,10 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             <select
                                                 name="shiftTimings"
                                                 value={formData.shiftTimings}
-                                                onChange={handleChange} className="common-placeholder"
+                                                onChange={handleChange}
+                                                className={`select-field ${formData.shiftTimings === '' ? 'common-placeholder' : ''}`}
                                             >
-                                                <option value="">Select Shift</option>
+                                                <option value="" disabled hidden>Select Shift</option>
                                                 {shiftLoading ? (
                                                     <option disabled>Loading shifts...</option>
                                                 ) : shiftError ? (
@@ -750,10 +774,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     ))
                                                 )}
                                             </select>
-                                            {errors.shiftTimings && (
-                                                <div className="error-message">{errors.shiftTimings}</div>
-                                            )}
+                                            {errors.shiftTimings && <div className="error-message">{errors.shiftTimings}</div>}
                                         </div>
+
 
                                         <div className="employee-field">
                                             <RequiredLabel htmlFor="role" className="flex items-center gap-2">
@@ -764,11 +787,10 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     name="role"
                                                     value={formData.role}
                                                     onChange={handleChange}
-                                                    className={`common-placeholder ${errors.role ? "error" : ""}`}
                                                     disabled={rolesLoading || !!rolesError}
-                                                    
+                                                    className={`select-field ${formData.role === '' ? 'common-placeholder' : ''} ${errors.role ? 'error' : ''}`}
                                                 >
-                                                    <option value="">Select Role</option>
+                                                    <option value="" >Select Role</option>
                                                     {rolesLoading ? (
                                                         <option disabled>Loading...</option>
                                                     ) : rolesError ? (
@@ -785,6 +807,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                             {errors.role && <div className="error-message">{errors.role}</div>}
                                         </div>
 
+
                                         {renderField("Department", "department", "text", "Enter department")}
 
                                         <div className="employee-field">
@@ -796,7 +819,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                                     name="joiningType"
                                                     value={formData.joiningType}
                                                     onChange={handleChange}
-                                                    className={`common-placeholder ${errors.joiningType ? "error" : ""}`}
+                                                    className={`select-field ${formData.joiningType === '' ? 'common-placeholder' : ''} ${errors.joiningType ? 'error' : ''}`}
                                                 >
                                                     <option value="">Select Joining Type</option>
                                                     <option value="full-time">Full-time</option>

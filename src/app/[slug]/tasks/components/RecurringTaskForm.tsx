@@ -115,14 +115,16 @@ const RecurringTaskForm: React.FC<RecurringTaskFormProps> = ({ mode, taskId, onS
                     name={name}
                     value={String(formData[name as keyof typeof formData])}
                     onChange={handleChange}
+                    className={`select-field ${formData[name as keyof typeof formData] === '' ? 'common-placeholder' : ''}`}
                 >
-                    <option value="">{placeholder || 'Select'}</option>
+                    <option value="" >{placeholder || 'Select'}</option>
                     {options.map(option => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
                     ))}
                 </select>
+
             ) : type === 'checkbox' ? (
                 <input
                     type="checkbox"

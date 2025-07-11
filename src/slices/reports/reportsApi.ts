@@ -3,7 +3,8 @@ import {
   SalesReportResponse,
   RevenueReportResponse,
   MonthlySalesResponse,
-  MonthlyRevenueResponse
+  MonthlyRevenueResponse,
+  TopSellingItemsResponse,
 } from "@/types/reportsTypes";
 
 const reportsApi = reportsCreateApiSlice.injectEndpoints({
@@ -52,6 +53,15 @@ const reportsApi = reportsCreateApiSlice.injectEndpoints({
       }),
       providesTags: ["Reports"],
     }),
+
+    fetchTopSellingItems: builder.query<TopSellingItemsResponse, void>({
+      query: () => ({
+        url: "reports/top-selling-items",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Reports"],
+    }),
   }),
 });
 
@@ -61,6 +71,7 @@ export const {
   useFetchRevenueReportQuery,
   useFetchMonthlySalesReportQuery,
   useFetchMonthlyRevenueReportQuery,
+  useFetchTopSellingItemsQuery, 
 } = reportsApi;
 
 export default reportsApi;

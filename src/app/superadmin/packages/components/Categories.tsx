@@ -129,11 +129,11 @@ const BusinessCategories = () => {
                         <div key={cat.id} className="category-item">
                             <span>{cat.name}</span>
                             <div className="item-actions">
-                                <button onClick={() => setForm({ id: cat.id, name: cat.name })}>
+                                <button onClick={() => setForm({ id: cat.id, name: cat.name || '' })}>
                                     <FiEdit2 />
                                 </button>
                                 <button
-                                    onClick={() => handleDeleteInit(cat.id, cat.name)}
+                                    onClick={() => handleDeleteInit(cat.id, cat.name || '')}
                                     className="danger"
                                 >
                                     <FiTrash2 />

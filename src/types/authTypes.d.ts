@@ -138,8 +138,21 @@ interface PackagePlanResponse {
 
 interface BusinessCategory {
   id: number;
-  name: string;
+  name?: string;
   description?: string | null;
   created_at?: string;
   updated_at?: string;
+}
+
+
+interface LoginSession {
+  token_id: number;
+  token_name: string;
+  created_at: string;
+  last_used_at: string | null;
+}
+
+interface LoginSessionsResponse {
+  total_logins: number;
+  sessions: LoginSession[];
 }

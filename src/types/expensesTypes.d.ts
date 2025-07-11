@@ -128,18 +128,24 @@ interface ExpenseData {
 
 
 interface User {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }
 
 
 interface ItemBatch {
-  item_id: number;
-  item_name: string;
-  batch_id: number;
+    item_id: number;
+    item_name: string;
+    batch_id: number;
 }
 
-
+interface DetailCardProps {
+    label: string;
+    value?: string | number;  // Add number type here
+    children?: React.ReactNode;
+    fullWidth?: boolean;
+    isAmount?: boolean;
+}
 interface Invoice {
-  id: number;
+    id: number;
 }

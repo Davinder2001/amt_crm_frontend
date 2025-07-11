@@ -4,10 +4,7 @@ class SocketService {
     private socket: Socket;
 
     constructor() {
-        this.socket = io('https://amt.sparkweb.sbs', {
-            transports: ['websocket'],
-            withCredentials: true,
-        });
+        this.socket = io('https://amt.sparkweb.sbs');
     }
 
     public connect() {

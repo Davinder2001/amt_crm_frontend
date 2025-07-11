@@ -28,3 +28,13 @@ export interface RevenueReportResponse {
     year: number;
     data: RevenueReportMonth[];
 } 
+
+export interface MonthlySales {
+  month: string;
+  total_sales: number;
+}
+
+export interface MonthlySalesResponse {
+  year: number;
+  data: MonthlySales[];
+}

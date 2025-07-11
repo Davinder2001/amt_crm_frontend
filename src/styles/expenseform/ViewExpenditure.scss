@@ -1,154 +1,637 @@
+// @use '../variables' as *;
+
+// .expense-page {
+
+//     .expense-header {
+//         display: flex;
+//         justify-content: space-between;
+//         align-items: flex-start;
+//         margin-bottom: 20px;
+//         padding: 10px 10px 20px;
+//         background: white;
+//         border-bottom: 1px solid var(--border-light);
+//         border-radius: $border-radius;
+//     }
+
+//     .expense-title {
+//         color: var(--primary-color);
+//         padding-bottom: 5px;
+//     }
+
+//     .expense-meta {
+//         display: flex;
+//         gap: 12px;
+//         align-items: center;
+//     }
+
+//     .expense-id,
+//     .status-badge {
+//         font-size: 14px;
+//         padding: 4px 12px;
+//         border-radius: 999px;
+//     }
+
+//     .status-badge {
+//         font-weight: 600;
+//         text-transform: uppercase;
+//         letter-spacing: 0.05em;
+
+//         &.approved {
+//             background: $success-color;
+//             color: $white;
+//         }
+
+//         &.pending {
+//             background: $warning-color;
+//             color: $white;
+//         }
+//     }
+
+
+//     .expense-content {
+//         display: flex;
+//         gap: 20px;
+//     }
+
+//     .no-sidebar .expense-content {
+//         flex-direction: column;
+//     }
+
+//     .details-section {
+//         flex: 1;
+//         min-width: 0;
+//     }
+
+//     .receipt-sidebar {
+//         width: 380px;
+//         position: sticky;
+//         top: 2rem;
+//         align-self: flex-start;
+
+//         .receipt-card {
+//             background: white;
+//             padding: 10px;
+//             border-radius: $border-radius;
+//             display: flex;
+//             flex-direction: column;
+//             gap: 10px;
+
+//             h3 {
+//                 font-size: 20px;
+//                 font-weight: 700;
+//                 color: var(--primary-color);
+//             }
+
+//             .receipt-image-container {
+//                 min-height: 300px;
+//                 display: flex;
+//                 justify-content: center;
+//                 align-items: center;
+//                 margin-bottom: 24px;
+//                 border-radius: 8px;
+
+//                 .receipt-image {
+//                     max-width: 100%;
+//                     max-height: 400px;
+//                     object-fit: contain;
+//                     border-radius: $border-radius;
+//                 }
+//             }
+//         }
+//     }
+
+//     .no-sidebar .receipt-sidebar {
+//         display: none;
+//     }
+
+//     .detail-cards {
+//         display: grid;
+//         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+//         gap: 20px;
+
+//         .detail-card {
+//             background: white;
+//             padding: 10px;
+//             border-radius: $border-radius;
+
+//             &.full-width {
+//                 grid-column: 1 / -1;
+//             }
+
+//             label {
+//                 font-size: 14px;
+//                 color: var(--text-medium);
+//                 font-weight: 600;
+//                 text-transform: uppercase;
+//                 letter-spacing: 0.05em;
+//                 margin-bottom: 8px;
+//                 display: block;
+//             }
+
+//             p {
+//                 font-size: 18px;
+//                 color: var(--text-dark);
+//                 font-weight: 500;
+//             }
+
+//         }
+//     }
+
+//     .description-box {
+//         white-space: pre-wrap;
+//         line-height: 1.6;
+//         max-height: 300px;
+//         overflow-y: auto;
+//         padding: 16px;
+//         margin-top: 8px;
+//         font-size: 14px;
+//         border-radius: $border-radius;
+//     }
+
+//     // Media Queries
+//     @media (max-width: 1200px) {
+//         .expense-content {
+//             flex-direction: column;
+//         }
+
+//         .receipt-sidebar {
+//             width: 100%;
+//             position: static;
+//         }
+//     }
+
+//     @media (max-width: 1024px) {
+//         .detail-cards {
+//             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+//         }
+//     }
+
+//     @media (max-width: 768px) {
+//         .expense-header {
+//             flex-direction: column;
+//             gap: 24px;
+//             padding: 16px;
+//             margin-bottom: 16px;
+//         }
+
+//         .expense-title {
+//             font-size: 28px;
+//         }
+
+//         .expense-id,
+//         .status-badge {
+//             font-size: 12px;
+//             padding: 4px 10px;
+//         }
+
+//         .detail-cards {
+//             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+//             gap: 16px;
+
+//             .detail-card {
+//                 padding: 12px;
+
+//                 label {
+//                     font-size: 12px;
+//                 }
+
+//                 p {
+//                     font-size: 16px;
+//                 }
+//             }
+//         }
+
+//         .description-box {
+//             padding: 12px;
+//             font-size: 13px;
+//         }
+
+//         .receipt-card {
+//             padding: 12px;
+
+//             h3 {
+//                 font-size: 18px;
+//             }
+
+//             .receipt-image-container {
+//                 margin-bottom: 20px;
+//                 min-height: 240px;
+//             }
+//         }
+//     }
+
+//     @media (max-width: 468px) {
+//         .expense-header {
+//             gap: 20px;
+//             padding: 12px;
+//             margin-bottom: 12px;
+//         }
+
+//         .expense-title {
+//             font-size: 24px;
+//         }
+
+//         .expense-id,
+//         .status-badge {
+//             font-size: 11px;
+//             padding: 4px 8px;
+//         }
+
+
+//         .detail-cards {
+//             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+//             gap: 12px;
+
+//             .detail-card {
+//                 padding: 10px;
+
+//                 label {
+//                     font-size: 11px;
+//                 }
+
+//                 p {
+//                     font-size: 14px;
+//                 }
+//             }
+//         }
+
+//         .description-box {
+//             padding: 10px;
+//             font-size: 12px;
+//         }
+
+//         .receipt-card {
+//             padding: 10px;
+
+//             h3 {
+//                 font-size: 16px;
+//             }
+
+//             .receipt-image-container {
+//                 min-height: 200px;
+//                 margin-bottom: 16px;
+//             }
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
 @use '../variables' as *;
 
 .expense-page {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
 
     .expense-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 20px;
-        padding: 10px 10px 20px;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
         background: white;
-        border-bottom: 1px solid var(--border-light);
         border-radius: $border-radius;
-    }
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 
-    .expense-title {
-        color: var(--primary-color);
-        padding-bottom: 5px;
-    }
-
-    .expense-meta {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-    }
-
-    .expense-id,
-    .status-badge {
-        font-size: 14px;
-        padding: 4px 12px;
-        border-radius: 999px;
-    }
-
-    .status-badge {
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-
-        &.approved {
-            background: $success-color;
-            color: $white;
+        .expense-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
-        &.pending {
-            background: $warning-color;
-            color: $white;
+        .expense-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .expense-id {
+            background: var(--background-light);
+            color: var(--text-medium);
+            padding: 0.4rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.4rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+
+            &.paid,
+            &.approved {
+                background: $success-color;
+                color: white;
+            }
+
+            &.pending {
+                background: $warning-color;
+                color: white;
+            }
         }
     }
-
 
     .expense-content {
         display: flex;
-        gap: 20px;
-    }
-
-    .no-sidebar .expense-content {
-        flex-direction: column;
+        gap: 2rem;
     }
 
     .details-section {
         flex: 1;
-        min-width: 0;
-    }
-
-    .receipt-sidebar {
-        width: 380px;
-        position: sticky;
-        top: 2rem;
-        align-self: flex-start;
-
-        .receipt-card {
-            background: white;
-            padding: 10px;
-            border-radius: $border-radius;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            h3 {
-                font-size: 20px;
-                font-weight: 700;
-                color: var(--primary-color);
-            }
-
-            .receipt-image-container {
-                min-height: 300px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 24px;
-                border-radius: 8px;
-
-                .receipt-image {
-                    max-width: 100%;
-                    max-height: 400px;
-                    object-fit: contain;
-                    border-radius: $border-radius;
-                }
-            }
-        }
-    }
-
-    .no-sidebar .receipt-sidebar {
-        display: none;
     }
 
     .detail-cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+        gap: 1.5rem;
 
         .detail-card {
             background: white;
-            padding: 10px;
+            padding: 1.5rem;
             border-radius: $border-radius;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
 
             &.full-width {
                 grid-column: 1 / -1;
             }
 
             label {
-                font-size: 14px;
+                font-size: 0.85rem;
                 color: var(--text-medium);
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                margin-bottom: 8px;
+                margin-bottom: 0.75rem;
                 display: block;
             }
 
             p {
-                font-size: 18px;
+                font-size: 1.1rem;
                 color: var(--text-dark);
-                font-weight: 500;
+                margin: 0;
             }
 
+            .amount {
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
         }
     }
 
+    /* Enhanced Users List */
+    .users-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+
+            &:hover {
+                background: var(--background-light);
+            }
+
+            .user-avatar {
+                width: 2rem;
+                height: 2rem;
+                background: var(--primary-color);
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+            }
+
+            .user-name {
+                font-size: 0.95rem;
+                color: var(--text-dark);
+            }
+        }
+    }
+
+    /* Enhanced Items Table */
+    .items-table-container {
+        margin-top: 1rem;
+        overflow-x: auto;
+        border-radius: $border-radius;
+        border: 1px solid var(--border-light);
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        th {
+            background: var(--background-light);
+            font-weight: 600;
+            color: var(--text-medium);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .batch-id {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--background-light);
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+
+        .view-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    /* Enhanced Invoices Grid */
+    .invoices-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .invoice-card {
+        background: white;
+        border: 1px solid var(--border-light);
+        border-radius: $border-radius;
+        padding: 1rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .invoice-number {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .invoice-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: $success-color;
+            color: white;
+            border-radius: 1rem;
+            text-transform: uppercase;
+        }
+
+        .invoice-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+
+            &.view {
+                background: var(--primary-light);
+                color: var(--primary-color);
+            }
+
+            &.download {
+                background: var(--background-light);
+                color: var(--text-dark);
+            }
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    /* Receipt Sidebar */
+    .receipt-sidebar {
+        width: 380px;
+        position: sticky;
+        top: 2rem;
+
+        .receipt-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: $border-radius;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .receipt-image-container {
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            background: var(--background-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .download-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.9;
+            }
+
+            .icon {
+                font-size: 1.1rem;
+            }
+        }
+    }
+
+    /* Description Box */
     .description-box {
         white-space: pre-wrap;
         line-height: 1.6;
+        padding: 1.25rem;
+        background: var(--background-light);
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-light);
+        margin-top: 0.5rem;
         max-height: 300px;
         overflow-y: auto;
-        padding: 16px;
-        margin-top: 8px;
-        font-size: 14px;
-        border-radius: $border-radius;
     }
 
-    // Media Queries
+    /* Responsive Design */
     @media (max-width: 1200px) {
         .expense-content {
             flex-direction: column;
@@ -157,120 +640,28 @@
         .receipt-sidebar {
             width: 100%;
             position: static;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        .detail-cards {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            margin-top: 2rem;
         }
     }
 
     @media (max-width: 768px) {
+        padding: 1rem;
+
         .expense-header {
-            flex-direction: column;
-            gap: 24px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
 
-        .expense-title {
-            font-size: 28px;
-        }
-
-        .expense-id,
-        .status-badge {
-            font-size: 12px;
-            padding: 4px 10px;
+            .expense-title {
+                font-size: 1.5rem;
+            }
         }
 
         .detail-cards {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
-
-            .detail-card {
-                padding: 12px;
-
-                label {
-                    font-size: 12px;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-            }
+            grid-template-columns: 1fr;
         }
 
-        .description-box {
-            padding: 12px;
-            font-size: 13px;
-        }
-
-        .receipt-card {
-            padding: 12px;
-
-            h3 {
-                font-size: 18px;
-            }
-
-            .receipt-image-container {
-                margin-bottom: 20px;
-                min-height: 240px;
-            }
-        }
-    }
-
-    @media (max-width: 468px) {
-        .expense-header {
-            gap: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .expense-title {
-            font-size: 24px;
-        }
-
-        .expense-id,
-        .status-badge {
-            font-size: 11px;
-            padding: 4px 8px;
-        }
-
-
-        .detail-cards {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-
-            .detail-card {
-                padding: 10px;
-
-                label {
-                    font-size: 11px;
-                }
-
-                p {
-                    font-size: 14px;
-                }
-            }
-        }
-
-        .description-box {
-            padding: 10px;
-            font-size: 12px;
-        }
-
-        .receipt-card {
-            padding: 10px;
-
-            h3 {
-                font-size: 16px;
-            }
-
-            .receipt-image-container {
-                min-height: 200px;
-                margin-bottom: 16px;
-            }
+        .invoices-grid {
+            grid-template-columns: 1fr;
         }
     }
 }

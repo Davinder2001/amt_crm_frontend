@@ -1,5 +1,5 @@
 'use client'
-import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery, useFetchLoginSessionsQuery } from '@/slices'
+import { useFetchProfileQuery, useSelectedCompanyMutation, useCompanyScoreQuery } from '@/slices'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -29,8 +29,8 @@ const Profile = () => {
   const user = data?.user
   const { companySlug } = useCompany();
   const { data: companyScore } = useCompanyScoreQuery();
-  const { data: sessionsData } = useFetchLoginSessionsQuery();
-  const totalLogins = sessionsData?.total_logins || 0;
+  // const { data: sessionsData } = useFetchLoginSessionsQuery();
+  // const totalLogins = sessionsData?.total_logins || 0;
 
   useEffect(() => {
     if (user?.companies) {
@@ -129,11 +129,11 @@ const Profile = () => {
             <div className="info-line"><span>📱</span><span>{user?.number}</span></div>
             <div className="info-line"><span>🆔</span><span>{user?.uid}</span></div>
             <div className="info-line"><span>👔</span><span className="role-badge">{user?.user_type}</span></div>
-            <div className="info-line">
+            {/* <div className="info-line">
               <label htmlFor="sessions-status">
                 <span>Login Sessions</span>
                 <span className='status-tag'>{totalLogins}</span>
-              </label></div>
+              </label></div> */}
           </div>
         </div>
 

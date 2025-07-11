@@ -9,6 +9,7 @@ interface Expense {
     status: 'pending' | 'paid';
     file_path: string | null;
     file_url: string;
+
     data: {
         id: number;
         company_id: number;
@@ -22,7 +23,7 @@ interface Expense {
     };
     created_at: string;
     updated_at: string;
-    
+
 }
 
 interface ExpenseResponse {
@@ -108,4 +109,37 @@ interface BatchData {
 interface BatchSelection {
     itemId: number;
     batchIds: number[];
+}
+
+interface ExpenseData {
+    id: number;
+    company_id: number;
+    heading: string;
+    description: string | null;
+    price: string;
+    status: 'pending' | 'paid';
+    file_url: string;
+    items_batches: ItemBatch[];
+    invoices: Invoice[];
+    users: User[];
+    created_at?: string;
+    updated_at?: string;
+}
+
+
+interface User {
+  id: number;
+  name: string;
+}
+
+
+interface ItemBatch {
+  item_id: number;
+  item_name: string;
+  batch_id: number;
+}
+
+
+interface Invoice {
+  id: number;
 }

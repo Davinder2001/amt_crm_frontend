@@ -943,6 +943,35 @@
                 padding: 8px 12px;
                 font-size: 16px;
             }
+
+            .select-field {
+                border-radius: 5px;
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 16px;
+                background-color: transparent;
+                color: black;
+
+                &.common-placeholder {
+                    color: #ccc;
+                }
+
+                option {
+                    color: black;
+                    border-radius: 5px;
+                    width: 100%;
+                    padding: 8px 12px;
+                    font-size: 16px;
+                }
+
+                option[value=""] {
+                    color: #ccc;
+                }
+            }
+
+
+
+
         }
 
         .client-form label {
@@ -952,6 +981,8 @@
             font-weight: 400;
 
         }
+
+
     }
 
     /* Total Section */
@@ -1771,31 +1802,31 @@
 
     .inner-tabs {
         .danger {
-    font-size: 0px;
+            font-size: 0px;
 
-    svg {
-    font-size: 20px;
-    width: 50%;
-     }
-     }
+            svg {
+                font-size: 20px;
+                width: 50%;
+            }
+        }
     }
 
 
     .checkout-panel {
-         
+
         .cart-item-row {
-    border-radius: 5px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    transition: all .3s;
-    display: grid !important;
-    position: relative;
-    box-shadow: 0 2px 4px #0000000d;
-    grid-template-columns: 2fr 1fr 1fr;
-      }
+            border-radius: 5px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            transition: all .3s;
+            display: grid !important;
+            position: relative;
+            box-shadow: 0 2px 4px #0000000d;
+            grid-template-columns: 2fr 1fr 1fr;
+        }
     }
- 
+
 
     .checkout-panel .cart-labels {
         font-size: 12px;

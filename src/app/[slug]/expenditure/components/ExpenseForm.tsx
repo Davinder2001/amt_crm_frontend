@@ -6,11 +6,12 @@ import {
     useUpdateExpenseMutation,
     useFetchInvoicesQuery,
     useFetchStoreQuery,
-    useFetchItemBatchByIdQuery,
 } from '@/slices';
 import { FaSearch } from 'react-icons/fa';
-import Image from 'next/image';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
+import ExpenseFormHeader from './ExpenseFormHeader';
+import ItemBatches from './ItemBatches';
+import ExpenseFormButtons from './ExpenseFormButtons';
 
 interface ExpenseFormProps {
     expense?: Expense | null;
@@ -31,8 +32,6 @@ interface FormDataState {
     tags: Tag[];
     status: 'pending' | 'paid';
 }
-
-
 
 interface OptionProps {
     id: string;
@@ -171,7 +170,6 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         }
     };
 
-
     const handleBatchSelection = (itemId: number, batchId: number) => {
         setSelectedBatches(prev => {
             const existingIndex = prev.findIndex(b => b.itemId === itemId);
@@ -251,6 +249,30 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
 
     const closeImageModal = () => setIsImageModalOpen(false);
 
+    const resetForm = () => {
+        setFormData({
+            heading: '',
+            description: '',
+            price: '',
+            file: null,
+            tags: [],
+            status: 'pending'
+        });
+        setSelectedOptions({
+            invoices: [],
+            items: [],
+            users: []
+        });
+        setSelectedTypes({
+            invoice: false,
+            item: false,
+            user: false
+        });
+        setSelectedBatches([]);
+        setExpandedItemId(null);
+        setErrors({});
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors: Record<string, string> = {};
@@ -270,13 +292,21 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
             formDataPayload.append('price', formData.price);
             formDataPayload.append('status', formData.status);
 
-            selectedOptions.invoices.forEach(id => formDataPayload.append('invoice_ids[]', id.toString()));
-            selectedOptions.items.forEach(id => formDataPayload.append('item_ids[]', id.toString()));
-            selectedOptions.users.forEach(id => formDataPayload.append('user_ids[]', id.toString()));
+            selectedOptions.invoices.forEach(id =>
+                formDataPayload.append('invoice_ids[]', id.toString())
+            );
 
+            selectedOptions.users.forEach(id =>
+                formDataPayload.append('user_ids[]', id.toString())
+            );
+
+            // Properly format items_batches as array of { item_id, batch_id }
+            let batchIndex = 0;
             selectedBatches.forEach(batch => {
                 batch.batchIds.forEach(batchId => {
-                    formDataPayload.append('batch_ids[]', batchId.toString());
+                    formDataPayload.append(`items_batches[${batchIndex}][item_id]`, batch.itemId.toString());
+                    formDataPayload.append(`items_batches[${batchIndex}][batch_id]`, batchId.toString());
+                    batchIndex++;
                 });
             });
 
@@ -287,7 +317,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
             if (expense) {
                 await updateExpense({
                     id: expense.id,
-                    formdata: formDataPayload // FormData is the correct type
+                    formdata: formDataPayload
                 }).unwrap();
             } else {
                 await createExpense({ formdata: formDataPayload }).unwrap();
@@ -298,105 +328,23 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
             console.error('Error saving expense:', error);
             setErrors({ form: 'An error occurred while saving the expense' });
         }
-    };
 
-    const ItemBatches = ({ itemId }: { itemId: number }) => {
-        const { data: batchesData, isLoading, isError } = useFetchItemBatchByIdQuery(itemId);
-        const selectedBatchIds = selectedBatches.find(b => b.itemId === itemId)?.batchIds || [];
-        const allBatchIds = (batchesData?.batch?.variants?.map(v => v.id).filter((id): id is number => id !== undefined)) || [];
-
-        if (isLoading) return <div className="loading-batches">Loading batches...</div>;
-        if (isError) return <div className="error-batches">Error loading batches</div>;
-        if (!batchesData?.batch?.variants?.length) return <div className="no-batches">No batches available</div>;
-
-        return (
-            <div className="batch-options">
-                <div className="select-all-batches">
-                    <input
-                        type="checkbox"
-                        id={`select-all-${itemId}`}
-                        checked={selectedBatchIds.length === allBatchIds.length && allBatchIds.length > 0}
-                        onChange={() => handleSelectAllBatches(itemId, allBatchIds)}
-                    />
-                    <label htmlFor={`select-all-${itemId}`}>Select All</label>
-                </div>
-                {batchesData.batch.variants
-                    .filter((b): b is typeof b & { id: number } => b.id !== undefined)
-                    .map((batch) => (
-                        <div key={batch.id} className="batch-option">
-                            <input
-                                type="checkbox"
-                                id={`batch-${itemId}-${batch.id}`}
-                                checked={selectedBatchIds.includes(batch.id)}
-                                onChange={() => handleBatchSelection(itemId, batch.id)}
-                            />
-                            <label htmlFor={`batch-${itemId}-${batch.id}`}>
-                                Purchased: {batchesData.batch.purchase_date || 'N/A'}
-                            </label>
-                        </div>
-                    ))}
-            </div>
-        );
     };
 
     return (
         <form className="expense-form" onSubmit={handleSubmit}>
             {errors.form && <p className="error-message">{errors.form}</p>}
 
-            <div className='expense-form-header'>
-                <div className="form-group heading-group">
-                    <label>Heading</label>
-                    <input
-                        type="text"
-                        value={formData.heading}
-                        onChange={e => setFormData(prev => ({ ...prev, heading: e.target.value }))}
-                        placeholder='Heading'
-                    />
-                    {errors.heading && <p className="error-message">{errors.heading}</p>}
-                </div>
-
-                <div className="form-group price-group">
-                    <label>Price</label>
-                    <input
-                        type="number"
-                        value={formData.price}
-                        onChange={e => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                        placeholder="123"
-                        onWheel={e => e.currentTarget.blur()}
-                    />
-                    {errors.price && <p className="error-message">{errors.price}</p>}
-                </div>
-
-                <div className="form-group status-group">
-                    <label>Status</label>
-                    <select
-                        value={formData.status}
-                        onChange={e => setFormData(prev => ({ ...prev, status: e.target.value as 'pending' | 'paid' }))}
-                    >
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                    </select>
-                </div>
-
-                <div className="form-group file-group">
-                    <label>Upload File</label>
-                    <input type="file" onChange={handleFileChange} />
-                    {errors.file && <p className="error-message">{errors.file}</p>}
-
-                    {expense?.file_path && !formData.file && (
-                        <p className="current-file">Current file: {expense.file_path}</p>
-                    )}
-
-                    {isImageModalOpen && (
-                        <div className="image-modal-overlay" onClick={closeImageModal}>
-                            <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-                                <button onClick={closeImageModal}>&times;</button>
-                                <Image width={500} height={500} src={imagePreview!} alt="Full Preview" />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
+            <ExpenseFormHeader
+                formData={formData}
+                setFormData={setFormData}
+                handleFileChange={handleFileChange}
+                errors={errors}
+                expense={expense}
+                imagePreview={imagePreview}
+                isImageModalOpen={isImageModalOpen}
+                closeImageModal={closeImageModal}
+            />
 
             <div className="form-group description-group">
                 <label>Description</label>
@@ -406,6 +354,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                     placeholder='Description'
                 />
             </div>
+
             <div className="relation-section">
                 <h3 className="section-heading">Tags</h3>
 
@@ -453,7 +402,14 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                                         >
                                             {expandedItemId === item.id ? 'Hide Batches' : 'Show Batches'}
                                         </button>
-                                        {expandedItemId === item.id && <ItemBatches itemId={item.id} />}
+                                        {expandedItemId === item.id && (
+                                            <ItemBatches
+                                                itemId={item.id}
+                                                selectedBatches={selectedBatches}
+                                                handleBatchSelection={handleBatchSelection}
+                                                handleSelectAllBatches={handleSelectAllBatches}
+                                            />
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -481,44 +437,11 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                 </div>
             </div>
 
-
-            <div className="form-group button-group">
-                {onCancel && (
-                    <button
-                        type="button"
-                        className="cancel-btn buttons"
-                        onClick={() => {
-                            setFormData({
-                                heading: '',
-                                description: '',
-                                price: '',
-                                file: null,
-                                tags: [],
-                                status: 'pending'
-                            });
-                            setSelectedOptions({
-                                invoices: [],
-                                items: [],
-                                users: []
-                            });
-                            setSelectedTypes({
-                                invoice: false,
-                                item: false,
-                                user: false
-                            });
-                            setSelectedBatches([]);
-                            setExpandedItemId(null);
-                            setErrors({});
-                            onCancel();
-                        }}
-                    >
-                        Cancel
-                    </button>
-                )}
-                <button type="submit" className="submit-btn">
-                    {expense ? 'Update Expense' : 'Add Expense'}
-                </button>
-            </div>
+            <ExpenseFormButtons
+                expense={expense}
+                onCancel={onCancel}
+                resetForm={resetForm}
+            />
         </form>
-    )
+    );
 });

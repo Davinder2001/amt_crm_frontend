@@ -205,8 +205,9 @@ export default function ClientTab({
                             value={deliveryBoyId ?? ''}
                             onChange={(e) => setDeliveryBoyId(e.target.value === '' ? null : Number(e.target.value))}
                             disabled={isEmployeeLoading}
+                            className={`select-field ${deliveryBoyId === null ? 'common-placeholder' : ''}`}
                         >
-                            <option value="">Select an employee</option>
+                            <option value="" >Select an employee</option>
                             {employeeData?.employees?.map((emp) => (
                                 <option key={emp.id} value={emp.id}>
                                     {emp.name}
@@ -214,6 +215,7 @@ export default function ClientTab({
                             ))}
                         </select>
                     </div>
+
                 </>
             )}
 

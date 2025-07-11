@@ -232,67 +232,30 @@
         transition: all 0.2s;
         cursor: pointer;
 
-        .switch-badge {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          height: fit-content;
-          transform: translate(-50%, -50%) scale(0.8);
-          background: var(--primary-color);
-          color: $white;
-          padding: 5px 10px;
-          border-radius: 20px;
-          font-size: 12px;
-          font-weight: 600;
-          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-          opacity: 0;
-          transition: all 0.3s ease;
-          z-index: 3;
+        .c-actions {
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          gap: 5px;
-          white-space: nowrap;
-          pointer-events: none;
+          gap: 10px;
 
-          &::before {
-            content: '↻';
+          .switch-badge {
+            background: var(--primary-color);
+            color: $white;
+            padding: 5px 10px;
+            border-radius: $border-radius;
             font-size: 12px;
-            display: inline-block;
-            animation:
-              spin 3s linear infinite,
-              pulse 2s ease infinite;
+          }
+
+          .active-badge {
+            background: $success-color;
+            color: $white;
+            padding: 5px 10px;
+            border-radius: $border-radius;
+            font-size: 12px;
+            font-weight: 500;
           }
         }
 
-        &:hover .switch-badge {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1);
-        }
-
-        // Keep your existing animations
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes pulse {
-          0% {
-            transform: scale(1);
-          }
-
-          50% {
-            transform: scale(1.2);
-          }
-
-          100% {
-            transform: scale(1);
-          }
-        }
 
         &:hover {
           background: $light-bg;
@@ -571,25 +534,6 @@
 
         .pannel-header-actions {
           font-size: 12px;
-        }
-      }
-    }
-
-    .company-stack .company-item {
-
-      .company-status .switch-badge {
-        display: flex;
-        opacity: 1;
-        visibility: visible;
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: none;
-      }
-
-      &:hover {
-        .company-status .switch-badge {
-          transform: none;
         }
       }
     }

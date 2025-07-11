@@ -57,10 +57,9 @@ const StoreStats = () => {
       </div>
 
       <div className="chart-placeholder">
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={225}>
           <LineChart
             data={chartData}
-            margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
             <XAxis
@@ -68,13 +67,11 @@ const StoreStats = () => {
               axisLine={false}
               tickLine={false}
               tick={{ fill: '#888', fontSize: 12 }}
-              padding={{ left: 10, right: 10 }}
             />
             <YAxis
               tick={{ fill: '#888', fontSize: 12 }}
               axisLine={false}
               tickLine={false}
-              width={40}
             />
             <Tooltip
               formatter={(value: number) => `₹${value.toLocaleString()}`}

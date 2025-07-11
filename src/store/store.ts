@@ -25,8 +25,7 @@ import paymentCreateApiSlice from '@/slices/superadminSlices/payments/paymentCre
 import expensesCreateApiSlice from '@/slices/expenditure/expensesCreateSlice';
 import attendanceCreateApiSlice from '@/slices/attendance/attendanceCreateSlice';
 import dashBoardCreateApiSlice from '@/slices/dashboard/dashBoardCreateSlice';
-
-
+import reportsCreateApiSlice from '@/slices/reports/reportsCreateSlice';
 
 
 const store = configureStore({
@@ -57,6 +56,7 @@ const store = configureStore({
     [expensesCreateApiSlice.reducerPath]: expensesCreateApiSlice.reducer,
     [attendanceCreateApiSlice.reducerPath]: attendanceCreateApiSlice.reducer,
     [dashBoardCreateApiSlice.reducerPath]: dashBoardCreateApiSlice.reducer,
+    [reportsCreateApiSlice.reducerPath]: reportsCreateApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -85,6 +85,7 @@ const store = configureStore({
       .concat(expensesCreateApiSlice.middleware)
       .concat(attendanceCreateApiSlice.middleware)
       .concat(dashBoardCreateApiSlice.middleware)
+      .concat(reportsCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

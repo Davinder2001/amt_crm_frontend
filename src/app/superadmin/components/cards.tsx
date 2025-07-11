@@ -72,7 +72,7 @@ const Cards = () => {
 
         {/* Verified Companies Card */}
         <Link
-          href="/companies?status=verified"
+          href="/superadmin/companies?status=verified"
           className="s-card clickable verified-card"
           title="View verified companies"
         >
@@ -94,7 +94,7 @@ const Cards = () => {
 
         {/* Pending Companies Card */}
         <Link
-          href="/superadmin/companies/pending"
+          href="/superadmin/companies?status=pending"
           className="s-card clickable pending-card"
           title="View pending companies"
         >

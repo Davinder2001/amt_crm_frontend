@@ -1,27 +1,28 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FaRegBell, FaBars } from 'react-icons/fa';
+import { FaRegBell, FaBars, FaArrowLeft } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import Image from 'next/image';
 import { logo } from '@/assets/useImage';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useFetchNotificationsQuery } from '@/slices';
 import SearchBar from '@/app/[slug]/_common/search/SearchBar';
 import Profile from '@/app/[slug]/_common/header/components/profile';
 
 interface headerProps {
-  handleToggleSidebar: () => void;
   openMenu: () => void;
   isMobile: boolean;
 }
 
-const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile }) => {
+const Header: React.FC<headerProps> = ({ openMenu, isMobile }) => {
   const { companySlug, userType } = useCompany();
+  const pathname = usePathname();
   const router = useRouter();
 
   // State to manage sticky class
   const [isSticky, setIsSticky] = useState(false);
+  const shouldShowBackButton = !isMobile && !pathname?.toLowerCase().includes('dashboard');
 
   // ✅ Fetch notifications
   const { data } = useFetchNotificationsQuery(undefined, {
@@ -70,7 +71,11 @@ const Header: React.FC<headerProps> = ({ handleToggleSidebar, openMenu, isMobile
           }
         />
       )}
-      {!isMobile && <FaBars size={20} style={{ cursor: 'pointer' }} onClick={handleToggleSidebar} />}
+      {shouldShowBackButton ? (
+        <span className='back-button' onClick={() => router.back()}>
+          <FaArrowLeft />
+        </span>
+      ) : <span></span>}
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
 

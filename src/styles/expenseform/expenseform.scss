@@ -232,6 +232,11 @@
         padding: 1rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease-in-out;
+
+        .card-body {
+            max-height: 255px;
+            overflow: scroll;
+        }
     }
 
     .relation-card.active {
@@ -357,6 +362,9 @@
     border-radius: 4px;
     margin-bottom: 8px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+
 }
 
 .select-all-batches input {

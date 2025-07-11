@@ -8,7 +8,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { FaUniversity, FaHourglassHalf, FaUndoAlt } from 'react-icons/fa';
+import { FaUndoAlt } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
 
 interface Company {
@@ -219,16 +219,16 @@ const CompanyComponent = () => {
         onColumnToggle={toggleColumn}
         onResetColumns={onResetColumns}
         actions={[
-          {
-            label: 'All Companies',
-            icon: <FaUniversity />,
-            onClick: () => router.push('/superadmin/companies'),
-          },
-          {
-            label: 'Pending Companies',
-            icon: <FaHourglassHalf />,
-            onClick: () => router.push('/superadmin/companies/pending'),
-          },
+          // {
+          //   label: 'All Companies',
+          //   icon: <FaUniversity />,
+          //   onClick: () => router.push('/superadmin/companies'),
+          // },
+          // {
+          //   label: 'Pending Companies',
+          //   icon: <FaHourglassHalf />,
+          //   onClick: () => router.push('/superadmin/companies/pending'),
+          // },
           {
             label: 'Refunds',
             icon: <FaUndoAlt />,

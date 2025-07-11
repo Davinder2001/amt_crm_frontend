@@ -1,13 +1,12 @@
 'use client';
-import React, { useState } from "react";
-import { useOrderNewCompanyMutation } from "@/slices";
+import React, { useEffect, useState } from "react";
+import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
 interface AddCompany {
   company_name: string;
   package_id: number;
-  limit_id: number;
-  variant_type: string;
   business_category_id: number | null;
+  subscription_type: string;
   company_logo: File | null;
   business_address: string;
   pin_code: string;
@@ -19,37 +18,64 @@ interface AddCompany {
 
 interface AddCompanyFormProps {
   packageId: number;
-  limitId: number;
-  variantType: string;
   categoryId: number | null;
+  subscriptionType: string | null;
 }
 
-const Page: React.FC<AddCompanyFormProps> = ({
-  packageId,
-  limitId,
-  variantType,
-  categoryId
-}) => {
-  const [formData, setFormData] = useState<AddCompany>({
-    company_name: '',
-    package_id: packageId,
-    limit_id: limitId,
-    variant_type: variantType,
-    business_category_id: categoryId,
-    company_logo: null,
-    business_address: '',
-    pin_code: '',
-    business_proof_type: '',
-    business_id: '',
-    business_proof_front: null,
-    business_proof_back: null,
-  });
+const LOCAL_STORAGE_KEY = 'addCompany';
 
+const getStoredFormData = (): Partial<AddCompany> | null => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  }
+  return null;
+};
+
+const saveFormData = (data: Partial<AddCompany>) => {
+  if (typeof window !== 'undefined') {
+    const dataToStore = { ...data };
+    Object.keys(dataToStore).forEach(key => {
+      if (dataToStore[key as keyof AddCompany] instanceof File) {
+        delete dataToStore[key as keyof AddCompany];
+      }
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToStore));
+  }
+};
+
+const getDefaultFormData = (packageId: number, categoryId: number | null, subscriptionType: string | null): AddCompany => ({
+  company_name: '',
+  package_id: packageId,
+  business_category_id: categoryId,
+  subscription_type: subscriptionType ?? '',
+  company_logo: null,
+  business_address: '',
+  pin_code: '',
+  business_proof_type: '',
+  business_id: '',
+  business_proof_front: null,
+  business_proof_back: null,
+});
+
+const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscriptionType }) => {
+  const [formData, setFormData] = useState<AddCompany>(
+    getDefaultFormData(packageId, categoryId, subscriptionType)
+  );
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
+
+  useEffect(() => {
+    const stored = getStoredFormData();
+    if (stored) {
+      setFormData(prev => ({ ...prev, ...stored }));
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+    saveFormData(updatedFormData);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +96,8 @@ const Page: React.FC<AddCompanyFormProps> = ({
       const payload = new FormData();
       payload.append('company_name', formData.company_name);
       payload.append('package_id', formData.package_id.toString());
-      payload.append('limit_id', formData.limit_id.toString());
-      payload.append('subscription_type', formData.variant_type);
       payload.append('business_category_id', formData.business_category_id.toString());
+      payload.append('subscription_type', formData.subscription_type);
       payload.append('business_address', formData.business_address);
       payload.append('pin_code', formData.pin_code);
       payload.append('business_proof_type', formData.business_proof_type);
@@ -82,6 +107,7 @@ const Page: React.FC<AddCompanyFormProps> = ({
       if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
 
       const response = await orderNewCompany(payload).unwrap();
+
 
       if (response.payment.redirect_url) {
         window.location.href = response.payment.redirect_url;

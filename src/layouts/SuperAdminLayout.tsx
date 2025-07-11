@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/app/superadmin/components/sideBar";
 import Header from "@/app/superadmin/components/header";
 import FooterBarMenu from "@/app/[slug]/_common/footer/FooterBarMenu";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export const SuperAdminLayout = ({
   children,
@@ -116,10 +117,16 @@ export const SuperAdminLayout = ({
             isMobile={isMobile}
             openMenu={openMenu}
           />
+          {!isMobile && (
+            <span onClick={handleToggleSidebar} className="sidebar-toggle-btn">
+              {isSidebarExpanded ?
+                <FaChevronLeft /> : < FaChevronRight />
+              }
+            </span>
+          )}
         </div>
         <div className="main-content">
           <Header
-            handleToggleSidebar={handleToggleSidebar}
             openMenu={openMenu}
             isMobile={isMobile}
           />

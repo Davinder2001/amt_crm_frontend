@@ -8,7 +8,7 @@ import {
     useFetchStoreQuery,
     useFetchItemBatchByIdQuery,
 } from '@/slices';
-import { FaSearch, FaTimes } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 
@@ -171,10 +171,6 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         }
     };
 
-    const handleRemoveImage = () => {
-        setFormData(prev => ({ ...prev, file: null }));
-        setImagePreview(null);
-    };
 
     const handleBatchSelection = (itemId: number, batchId: number) => {
         setSelectedBatches(prev => {
@@ -253,7 +249,6 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
         });
     };
 
-    const openImageModal = () => setIsImageModalOpen(true);
     const closeImageModal = () => setIsImageModalOpen(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -292,10 +287,10 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
             if (expense) {
                 await updateExpense({
                     id: expense.id,
-                    formdata: formDataPayload as any
+                    formdata: formDataPayload // FormData is the correct type
                 }).unwrap();
             } else {
-                await createExpense({ formdata: formDataPayload as any }).unwrap();
+                await createExpense({ formdata: formDataPayload }).unwrap();
             }
 
             onSuccess();
@@ -325,19 +320,21 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                     />
                     <label htmlFor={`select-all-${itemId}`}>Select All</label>
                 </div>
-                {batchesData.batch.variants.filter(b => b.id !== undefined).map((batch) => (
-                    <div key={batch.id} className="batch-option">
-                        <input
-                            type="checkbox"
-                            id={`batch-${itemId}-${batch.id}`}
-                            checked={selectedBatchIds.includes(batch.id)}
-                            onChange={() => handleBatchSelection(itemId, batch.id)}
-                        />
-                        <label htmlFor={`batch-${itemId}-${batch.id}`}>
-                            Purchased: {batchesData.batch.purchase_date || 'N/A'}
-                        </label>
-                    </div>
-                ))}
+                {batchesData.batch.variants
+                    .filter((b): b is typeof b & { id: number } => b.id !== undefined)
+                    .map((batch) => (
+                        <div key={batch.id} className="batch-option">
+                            <input
+                                type="checkbox"
+                                id={`batch-${itemId}-${batch.id}`}
+                                checked={selectedBatchIds.includes(batch.id)}
+                                onChange={() => handleBatchSelection(itemId, batch.id)}
+                            />
+                            <label htmlFor={`batch-${itemId}-${batch.id}`}>
+                                Purchased: {batchesData.batch.purchase_date || 'N/A'}
+                            </label>
+                        </div>
+                    ))}
             </div>
         );
     };

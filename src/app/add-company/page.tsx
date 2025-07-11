@@ -4,7 +4,6 @@ import { useFetchBusinessCategoriesQuery, useFetchPackagesPlansQuery } from '@/s
 import AddCompanyForm from './components/addCompanyForm';
 import Packages from './components/Packages';
 import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
 
 const Page = () => {
@@ -13,42 +12,41 @@ const Page = () => {
   const { data: categoriesData } = useFetchBusinessCategoriesQuery();
   const categories = categoriesData ?? [];
 
-  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
+  const [subscriptionType, setSubscriptionType] = useState<'monthly' | 'annual'>('monthly');
+  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-
-  const clearSelection = () => {
-    setSelectedPackage(null);
-    setSelectedCategoryId(null);
-  };
 
   if (isPlansLoading) return <LoadingState />;
   if (!plans || !categories) return <div>No plans or categories available.</div>;
 
-  const hasValidSelection = selectedPackage !== null && selectedCategoryId !== null;
+  const hasValidSelection = selectedPackageId !== null && selectedCategoryId !== null;
 
   return (
     <>
       {hasValidSelection ? (
         <>
-          <div className='add-company-form-nav'>
-            <Link href="/add-company" className="back-button" onClick={clearSelection}>
-              <FaArrowLeft />
-            </Link>
-          </div>
+          <Link href="/add-company" className="back-button" onClick={() => {
+            setSelectedPackageId(null);
+            setSelectedCategoryId(null);
+          }}>
+            ← Back
+          </Link>
           <AddCompanyForm
-            packageId={selectedPackage.packageId}
-            limitId={selectedPackage.limitId}
-            variantType={selectedPackage.variantType}
+            packageId={selectedPackageId}
             categoryId={selectedCategoryId}
+            subscriptionType={subscriptionType}
           />
         </>
       ) : (
         <Packages
           plans={plans}
-          setSelectedPackage={setSelectedPackage}
+          setSelectedPackageId={setSelectedPackageId}
+          selectedPackageId={selectedPackageId}
           categories={categories}
           selectedCategoryId={selectedCategoryId}
           setSelectedCategoryId={setSelectedCategoryId}
+          subscriptionType={subscriptionType}
+          setSubscriptionType={setSubscriptionType}
         />
       )}
     </>

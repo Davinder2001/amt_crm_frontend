@@ -1,65 +1,67 @@
-// File: app/dashboard/components/StoreStats.tsx
-"use client";
+'use client';
 
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const monthlyData = [
-  { name: 'Jan', value: 20 },
-  { name: 'Feb', value: 50 },
-  { name: 'Mar', value: 60 },
-  { name: 'Apr', value: 50 },
-  { name: 'May', value: 80 },
-  { name: 'Jun', value: 100 },
-  { name: 'Jul', value: 80 },
-  { name: 'Aug', value: 60 },
-  { name: 'Sep', value: 50 },
-];
-
-const yearlyData = [
-  { name: 'Jan', value: 20 },
-  { name: 'Feb', value: 40 },
-  { name: 'Mar', value: 60 },
-  { name: 'Apr', value: 50 },
-  { name: 'May', value: 80 },
-  { name: 'Jun', value: 60 },
-  { name: 'Jul', value: 70 },
-  { name: 'Aug', value: 90 },
-  { name: 'Sep', value: 50 },
-  { name: 'Oct', value: 30 },
-  { name: 'Nov', value: 20 },
-  { name: 'Dec', value: 40 },
-];
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+import { useFetchMonthlyRevenueReportQuery } from '@/slices/reports/reportsApi';
 
 const StoreStats = () => {
-  const [timeRange, setTimeRange] = useState<'Monthly' | 'Yearly'>('Monthly');
+  const [timeRange, setTimeRange] = useState<'Monthly'>('Monthly');
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const data = timeRange === 'Monthly' ? monthlyData : yearlyData;
+  const { data, isLoading, error } = useFetchMonthlyRevenueReportQuery();
+
+  const chartData =
+    data?.data.map((entry) => ({
+      name: entry.month,
+      value: entry.total_revenue,
+    })) || [];
 
   return (
     <div className="card store-stats">
       <div className="card-header">
-        <h3>Store Statics</h3>
+        <h3>Store Revenue</h3>
         <div className="dropdown" onClick={() => setShowDropdown(!showDropdown)}>
           {timeRange} <span>▼</span>
           {showDropdown && (
             <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={() => { setTimeRange('Monthly'); setShowDropdown(false); }}>Monthly</div>
-              <div className="dropdown-item" onClick={() => { setTimeRange('Yearly'); setShowDropdown(false); }}>Yearly</div>
+              <div
+                className="dropdown-item"
+                onClick={() => {
+                  setTimeRange('Monthly');
+                  setShowDropdown(false);
+                }}
+              >
+                Monthly
+              </div>
+              {/* Optional: Disable Yearly until backend supports it */}
+              {/* <div
+                className="dropdown-item"
+                onClick={() => {
+                  setTimeRange('Yearly');
+                  setShowDropdown(false);
+                }}
+              >
+                Yearly
+              </div> */}
             </div>
           )}
         </div>
       </div>
+
       <div className="chart-placeholder">
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart data={data}
-            margin={{
-              top: 20,
-              right: 0,
-              left: 0,
-              bottom: 5,
-            }}>
+          <LineChart
+            data={chartData}
+            margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
             <XAxis
               dataKey="name"
@@ -69,20 +71,19 @@ const StoreStats = () => {
               padding={{ left: 10, right: 10 }}
             />
             <YAxis
-              domain={[0, 100]}
-              ticks={[0, 20, 40, 60, 80, 100]}
+              tick={{ fill: '#888', fontSize: 12 }}
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
-              width={30}
+              width={40}
             />
             <Tooltip
+              formatter={(value: number) => `₹${value.toLocaleString()}`}
               contentStyle={{
                 background: '#fff',
                 border: '1px solid #e2e8f0',
                 borderRadius: '4px',
                 padding: '8px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
               }}
             />
             <Line
@@ -95,12 +96,16 @@ const StoreStats = () => {
                 r: 6,
                 stroke: 'var(--primary-color)',
                 strokeWidth: 2,
-                fill: '#fff'
+                fill: '#fff',
               }}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      {isLoading && <p className="text-sm mt-2 text-muted">Loading chart...</p>}
+      {error && <p className="text-sm mt-2 text-red-500">Failed to load revenue data.</p>}
+
       <style>{`
         .dropdown {
           position: relative;

@@ -2,7 +2,8 @@ import reportsCreateApiSlice from "./reportsCreateSlice";
 import {
   SalesReportResponse,
   RevenueReportResponse,
-  MonthlySalesResponse
+  MonthlySalesResponse,
+  MonthlyRevenueResponse
 } from "@/types/reportsTypes";
 
 const reportsApi = reportsCreateApiSlice.injectEndpoints({
@@ -42,6 +43,15 @@ const reportsApi = reportsCreateApiSlice.injectEndpoints({
       }),
       providesTags: ["Reports"],
     }),
+
+    fetchMonthlyRevenueReport: builder.query<MonthlyRevenueResponse, void>({
+      query: () => ({
+        url: "reports/revenue-summary",
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Reports"],
+    }),
   }),
 });
 
@@ -50,6 +60,7 @@ export const {
   useFetchSalesReportQuery,
   useFetchRevenueReportQuery,
   useFetchMonthlySalesReportQuery,
+  useFetchMonthlyRevenueReportQuery,
 } = reportsApi;
 
 export default reportsApi;

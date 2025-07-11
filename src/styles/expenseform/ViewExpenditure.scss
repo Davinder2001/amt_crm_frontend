@@ -1,0 +1,169 @@
+@use '../variables' as *;
+
+.expense-detail-page {
+    padding: 2rem;
+    background: linear-gradient(to bottom right, #f5f7fa, #e4ebf5);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+
+    .expense-container {
+        max-width: 920px;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 2.5rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .expense-header {
+        margin-bottom: 2.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 1.5rem;
+
+        .expense-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .expense-title {
+                font-size: 2.25rem;
+                font-weight: 700;
+                color: #1f2937;
+                margin: 0;
+            }
+
+            .expense-meta {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+
+                .expense-id {
+                    font-size: 0.9rem;
+                    color: #6b7280;
+                }
+
+                .expense-status {
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    padding: 0.4rem 0.9rem;
+                    border-radius: 50px;
+                    background: #e2e8f0;
+                    color: #374151;
+
+                    &.status-paid {
+                        background: #d1fae5;
+                        color: #065f46;
+                    }
+
+                    &.status-pending {
+                        background: #fef9c3;
+                        color: #92400e;
+                    }
+                }
+            }
+        }
+    }
+
+    .expense-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1.5rem;
+
+        .detail-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            transition: box-shadow 0.2s ease;
+
+            &:hover {
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            }
+
+            .detail-label {
+                font-size: 0.8rem;
+                color: #9ca3af;
+                margin-bottom: 0.4rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .detail-value {
+                font-size: 1.1rem;
+                color: #1f2937;
+                font-weight: 500;
+
+                &.price-value {
+                    color: #3b82f6;
+                }
+            }
+        }
+    }
+
+    .expense-attachment {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px dashed #cbd5e1;
+        padding: 1.5rem;
+
+        .attachment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+
+            .attachment-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #111827;
+            }
+
+
+        }
+
+        .attachment-image-container {
+            margin-top: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+
+            .attachment-image {
+                max-width: 100%;
+                border-radius: 12px;
+                object-fit: contain;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            }
+        }
+    }
+
+    .loading-state,
+    .error-state {
+        font-size: 1.2rem;
+        color: #6b7280;
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    @media (max-width: 768px) {
+        .expense-container {
+            padding: 1.5rem;
+        }
+
+        .expense-title {
+            font-size: 1.75rem;
+        }
+
+        .attachment-actions {
+            flex-direction: column;
+            align-items: flex-end;
+        }
+    }
+}

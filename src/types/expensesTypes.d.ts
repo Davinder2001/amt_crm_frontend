@@ -1,7 +1,5 @@
 // types/expense.ts
 interface Expense {
-    file_url: string | StaticImport;
-    file_url: React.JSX.Element;
     id: number;
     company_id: number;
     heading: string;
@@ -10,14 +8,29 @@ interface Expense {
     tags: Tag[];
     status: 'pending' | 'paid';
     file_path: string | null;
+    file_url: string;
+    data: {
+        id: number;
+        company_id: number;
+        heading: string;
+        description: string | null;
+        price: number | string;
+        tags: Tag[];
+        status: 'pending' | 'paid';
+        file_path: string | null;
+        file_url: string;
+    };
     created_at: string;
     updated_at: string;
+    
 }
 
 interface ExpenseResponse {
     data: Expense[];
     success?: boolean
 }
+
+
 
 interface Tag {
     name: string;

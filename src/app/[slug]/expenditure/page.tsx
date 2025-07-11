@@ -83,24 +83,6 @@ export default function ExpensesPage() {
     },
     { label: 'Heading', key: 'heading' },
     {
-      label: 'Description',
-      render: (row) => row.description || '-',
-      key: 'description'
-    },
-    {
-      label: 'Tags',
-      render: (row) =>
-        Array.isArray(row.tags) && row.tags.length > 0
-          ? row.tags
-            .map((tag: Tag) => {
-              const name = typeof tag === 'string' ? tag : tag.name;
-              return name.charAt(0).toUpperCase() + name.slice(1);
-            })
-            .join(', ')
-          : '-',
-      key: 'tags'
-    },
-    {
       label: 'Price',
       render: (row) => `${Number(row.price).toFixed(2)}`,
       key: 'price'
@@ -151,7 +133,7 @@ export default function ExpensesPage() {
         <ResponsiveTable
           data={expenses}
           columns={columns}
-          onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/expenditure/view/${id}`)}
           cardView={(expense: Expense) => (
             <>
               <div className="card-row">

@@ -1,353 +1,49 @@
-// @use '../variables' as *;
-
-// .expense-page {
-
-//     .expense-header {
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: flex-start;
-//         margin-bottom: 20px;
-//         padding: 10px 10px 20px;
-//         background: white;
-//         border-bottom: 1px solid var(--border-light);
-//         border-radius: $border-radius;
-//     }
-
-//     .expense-title {
-//         color: var(--primary-color);
-//         padding-bottom: 5px;
-//     }
-
-//     .expense-meta {
-//         display: flex;
-//         gap: 12px;
-//         align-items: center;
-//     }
-
-//     .expense-id,
-//     .status-badge {
-//         font-size: 14px;
-//         padding: 4px 12px;
-//         border-radius: 999px;
-//     }
-
-//     .status-badge {
-//         font-weight: 600;
-//         text-transform: uppercase;
-//         letter-spacing: 0.05em;
-
-//         &.approved {
-//             background: $success-color;
-//             color: $white;
-//         }
-
-//         &.pending {
-//             background: $warning-color;
-//             color: $white;
-//         }
-//     }
-
-
-//     .expense-content {
-//         display: flex;
-//         gap: 20px;
-//     }
-
-//     .no-sidebar .expense-content {
-//         flex-direction: column;
-//     }
-
-//     .details-section {
-//         flex: 1;
-//         min-width: 0;
-//     }
-
-//     .receipt-sidebar {
-//         width: 380px;
-//         position: sticky;
-//         top: 2rem;
-//         align-self: flex-start;
-
-//         .receipt-card {
-//             background: white;
-//             padding: 10px;
-//             border-radius: $border-radius;
-//             display: flex;
-//             flex-direction: column;
-//             gap: 10px;
-
-//             h3 {
-//                 font-size: 20px;
-//                 font-weight: 700;
-//                 color: var(--primary-color);
-//             }
-
-//             .receipt-image-container {
-//                 min-height: 300px;
-//                 display: flex;
-//                 justify-content: center;
-//                 align-items: center;
-//                 margin-bottom: 24px;
-//                 border-radius: 8px;
-
-//                 .receipt-image {
-//                     max-width: 100%;
-//                     max-height: 400px;
-//                     object-fit: contain;
-//                     border-radius: $border-radius;
-//                 }
-//             }
-//         }
-//     }
-
-//     .no-sidebar .receipt-sidebar {
-//         display: none;
-//     }
-
-//     .detail-cards {
-//         display: grid;
-//         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-//         gap: 20px;
-
-//         .detail-card {
-//             background: white;
-//             padding: 10px;
-//             border-radius: $border-radius;
-
-//             &.full-width {
-//                 grid-column: 1 / -1;
-//             }
-
-//             label {
-//                 font-size: 14px;
-//                 color: var(--text-medium);
-//                 font-weight: 600;
-//                 text-transform: uppercase;
-//                 letter-spacing: 0.05em;
-//                 margin-bottom: 8px;
-//                 display: block;
-//             }
-
-//             p {
-//                 font-size: 18px;
-//                 color: var(--text-dark);
-//                 font-weight: 500;
-//             }
-
-//         }
-//     }
-
-//     .description-box {
-//         white-space: pre-wrap;
-//         line-height: 1.6;
-//         max-height: 300px;
-//         overflow-y: auto;
-//         padding: 16px;
-//         margin-top: 8px;
-//         font-size: 14px;
-//         border-radius: $border-radius;
-//     }
-
-//     // Media Queries
-//     @media (max-width: 1200px) {
-//         .expense-content {
-//             flex-direction: column;
-//         }
-
-//         .receipt-sidebar {
-//             width: 100%;
-//             position: static;
-//         }
-//     }
-
-//     @media (max-width: 1024px) {
-//         .detail-cards {
-//             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-//         }
-//     }
-
-//     @media (max-width: 768px) {
-//         .expense-header {
-//             flex-direction: column;
-//             gap: 24px;
-//             padding: 16px;
-//             margin-bottom: 16px;
-//         }
-
-//         .expense-title {
-//             font-size: 28px;
-//         }
-
-//         .expense-id,
-//         .status-badge {
-//             font-size: 12px;
-//             padding: 4px 10px;
-//         }
-
-//         .detail-cards {
-//             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-//             gap: 16px;
-
-//             .detail-card {
-//                 padding: 12px;
-
-//                 label {
-//                     font-size: 12px;
-//                 }
-
-//                 p {
-//                     font-size: 16px;
-//                 }
-//             }
-//         }
-
-//         .description-box {
-//             padding: 12px;
-//             font-size: 13px;
-//         }
-
-//         .receipt-card {
-//             padding: 12px;
-
-//             h3 {
-//                 font-size: 18px;
-//             }
-
-//             .receipt-image-container {
-//                 margin-bottom: 20px;
-//                 min-height: 240px;
-//             }
-//         }
-//     }
-
-//     @media (max-width: 468px) {
-//         .expense-header {
-//             gap: 20px;
-//             padding: 12px;
-//             margin-bottom: 12px;
-//         }
-
-//         .expense-title {
-//             font-size: 24px;
-//         }
-
-//         .expense-id,
-//         .status-badge {
-//             font-size: 11px;
-//             padding: 4px 8px;
-//         }
-
-
-//         .detail-cards {
-//             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-//             gap: 12px;
-
-//             .detail-card {
-//                 padding: 10px;
-
-//                 label {
-//                     font-size: 11px;
-//                 }
-
-//                 p {
-//                     font-size: 14px;
-//                 }
-//             }
-//         }
-
-//         .description-box {
-//             padding: 10px;
-//             font-size: 12px;
-//         }
-
-//         .receipt-card {
-//             padding: 10px;
-
-//             h3 {
-//                 font-size: 16px;
-//             }
-
-//             .receipt-image-container {
-//                 min-height: 200px;
-//                 margin-bottom: 16px;
-//             }
-//         }
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
 @use '../variables' as *;
 
 .expense-page {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-
     .expense-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 2rem;
-        padding: 1.5rem;
         background: white;
-        border-radius: $border-radius;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-        .expense-title {
-            font-size: 1.8rem;
+        h1 {
+            font-size: 20px;
             color: var(--primary-color);
-            margin-bottom: 0.5rem;
-            font-weight: 700;
+            text-transform: capitalize;
+            margin-bottom: 10px;
         }
 
-        .expense-meta {
+        .meta {
             display: flex;
-            gap: 1rem;
+            gap: 10px;
             align-items: center;
-            flex-wrap: wrap;
-        }
 
-        .expense-id {
-            background: var(--background-light);
-            color: var(--text-medium);
-            padding: 0.4rem 0.8rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
-        }
+            .badge {
+                padding: 4px 10px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
 
-        .status-badge {
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.4rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.85rem;
+                &.paid,
+                &.approved {
+                    background: $success-color;
+                    color: $white;
+                }
 
-            &.paid,
-            &.approved {
-                background: $success-color;
-                color: white;
-            }
-
-            &.pending {
-                background: $warning-color;
-                color: white;
+                &.pending {
+                    background: $warning-color;
+                    color: $white
+                }
             }
         }
     }
 
     .expense-content {
         display: flex;
-        gap: 2rem;
+        gap: 15px;
     }
 
     .details-section {
@@ -356,71 +52,85 @@
 
     .detail-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
 
         .detail-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: $border-radius;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-
-            &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
             &.full-width {
                 grid-column: 1 / -1;
             }
 
             label {
-                font-size: 0.85rem;
-                color: var(--text-medium);
+                font-size: 12px;
+                color: #666;
                 font-weight: 600;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
-                margin-bottom: 0.75rem;
+                margin-bottom: 8px;
                 display: block;
             }
 
             p {
-                font-size: 1.1rem;
-                color: var(--text-dark);
+                font-size: 16px;
                 margin: 0;
+                color: #333;
+
+                &.amount {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #2196F3;
+                }
             }
 
-            .amount {
-                font-size: 1.4rem;
-                font-weight: 700;
-                color: var(--primary-color);
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+
+                th,
+                td {
+                    padding: 8px 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #eee;
+                }
+
+                th {
+                    font-size: 12px;
+                    color: $white;
+                }
+
+                .mono {
+                    font-family: monospace;
+                    background: #f5f5f5;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
             }
         }
     }
 
-    /* Enhanced Users List */
-    .users-list {
+    .users-grid {
         display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1rem;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
 
-        .user-item {
+        .user-pill {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            transition: background 0.2s;
+            gap: 6px;
+            background: #f5f5f5;
+            padding: 6px 10px;
+            border-radius: 16px;
+            font-size: 13px;
 
-            &:hover {
-                background: var(--background-light);
-            }
-
-            .user-avatar {
-                width: 2rem;
-                height: 2rem;
+            .avatar {
+                width: 20px;
+                height: 20px;
                 background: var(--primary-color);
                 color: white;
                 border-radius: 50%;
@@ -428,240 +138,100 @@
                 align-items: center;
                 justify-content: center;
                 font-weight: 600;
+                font-size: 11px;
             }
+        }
 
-            .user-name {
-                font-size: 0.95rem;
-                color: var(--text-dark);
-            }
+        .more-users {
+            font-size: 12px;
+            color: #666;
+            align-self: center;
         }
     }
 
-    /* Enhanced Items Table */
-    .items-table-container {
-        margin-top: 1rem;
+    .invoices-scroll {
+        display: flex;
+        gap: 8px;
         overflow-x: auto;
-        border-radius: $border-radius;
-        border: 1px solid var(--border-light);
-    }
+        padding-bottom: 5px;
+        margin-top: 10px;
 
-    .items-table {
-        width: 100%;
-        border-collapse: collapse;
-
-        th,
-        td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        th {
-            background: var(--background-light);
-            font-weight: 600;
-            color: var(--text-medium);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .item-name {
-            font-weight: 500;
-        }
-
-        .batch-id {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            background: var(--background-light);
-            border-radius: 0.25rem;
-            font-family: monospace;
-        }
-
-        .view-button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.4rem 0.8rem;
-            border-radius: 0.25rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: opacity 0.2s;
-
-            &:hover {
-                opacity: 0.9;
-            }
-        }
-    }
-
-    /* Enhanced Invoices Grid */
-    .invoices-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .invoice-card {
-        background: white;
-        border: 1px solid var(--border-light);
-        border-radius: $border-radius;
-        padding: 1rem;
-        transition: transform 0.2s, box-shadow 0.2s;
-
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
+        .invoice-pill {
             align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .invoice-number {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .invoice-status {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            background: $success-color;
-            color: white;
-            border-radius: 1rem;
-            text-transform: uppercase;
-        }
-
-        .invoice-actions {
+            font-size: 13px;
             display: flex;
-            gap: 0.5rem;
+            background: rgb(245, 245, 245);
+            border-radius: 16px;
+            gap: 6px;
+            padding: 6px 10px;
         }
 
-        .action-button {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 0.25rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: opacity 0.2s;
-
-            &.view {
-                background: var(--primary-light);
-                color: var(--primary-color);
-            }
-
-            &.download {
-                background: var(--background-light);
-                color: var(--text-dark);
-            }
-
-            &:hover {
-                opacity: 0.9;
-            }
-        }
     }
 
-    /* Receipt Sidebar */
-    .receipt-sidebar {
-        width: 380px;
-        position: sticky;
-        top: 2rem;
-
-        .receipt-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: $border-radius;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .receipt-image-container {
-            margin: 1.5rem 0;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            border: 1px solid var(--border-light);
-            background: var(--background-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 300px;
-        }
-
-        .download-button {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: opacity 0.2s;
-
-            &:hover {
-                opacity: 0.9;
-            }
-
-            .icon {
-                font-size: 1.1rem;
-            }
-        }
-    }
-
-    /* Description Box */
-    .description-box {
-        white-space: pre-wrap;
-        line-height: 1.6;
-        padding: 1.25rem;
-        background: var(--background-light);
-        border-radius: 0.5rem;
-        border: 1px solid var(--border-light);
-        margin-top: 0.5rem;
-        max-height: 300px;
+    .description {
+        background: #f9f9f9;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+        max-height: 200px;
         overflow-y: auto;
     }
 
-    /* Responsive Design */
-    @media (max-width: 1200px) {
+    .receipt-sidebar {
+        width: 350px;
+
+        .receipt-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+            h3 {
+                font-size: 16px;
+                margin-bottom: 10px;
+                color: var(--primary-color);
+            }
+
+            .image-container {
+                border: 1px solid #eee;
+                border-radius: 6px;
+                padding: 10px;
+                background: #f9f9f9;
+
+                img {
+                    max-height: 300px;
+                    object-fit: cover !important;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 900px) {
         .expense-content {
             flex-direction: column;
         }
 
-        .receipt-sidebar {
-            width: 100%;
-            position: static;
-            margin-top: 2rem;
-        }
-    }
+        .image-container {
+            img {
+                width: 100%;
+                object-fit: contain;
 
-    @media (max-width: 768px) {
-        padding: 1rem;
-
-        .expense-header {
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-
-            .expense-title {
-                font-size: 1.5rem;
             }
         }
 
-        .detail-cards {
-            grid-template-columns: 1fr;
+        .receipt-sidebar {
+            width: 100%;
+            margin-top: 15px;
         }
+    }
 
-        .invoices-grid {
-            grid-template-columns: 1fr;
+    @media (max-width: 468px) {
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     }
 }

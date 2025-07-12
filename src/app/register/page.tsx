@@ -55,6 +55,12 @@ const UserRegisterForm = () => {
     e.preventDefault();
 
     if (form.password !== form.password_confirmation) return toast.error("Passwords do not match");
+    if (!otpSent) {
+      return toast.error("Please request an OTP first");
+    }
+    if (!otp) {
+      return toast.error("Please enter the OTP");
+    }
 
     const formData = new FormData();
     formData.append("name", form.name);

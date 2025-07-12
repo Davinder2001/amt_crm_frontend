@@ -6,6 +6,7 @@ import Packages from './components/Packages';
 import Link from 'next/link';
 import LoadingState from '@/components/common/LoadingState';
 import { FaArrowLeft } from 'react-icons/fa';
+import Logout from '@/components/common/Logout';
 
 const Page = () => {
   const { data: plansData, isLoading: isPlansLoading } = useFetchPackagesPlansQuery();
@@ -34,6 +35,7 @@ const Page = () => {
               }}>
                 <FaArrowLeft />
               </Link>
+              <Logout />
             </div>
           </div>
           <AddCompanyForm

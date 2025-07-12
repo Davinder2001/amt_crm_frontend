@@ -25,19 +25,23 @@ const Page = () => {
   return (
     <>
       {hasValidSelection ? (
-        <>
-          <Link href="/add-company" className="back-to-packages" onClick={() => {
-            setSelectedPackageId(null);
-            setSelectedCategoryId(null);
-          }}>
-            <FaArrowLeft />
-          </Link>
+        <div className='add-c-form-outer'>
+          <div className="add-c-header">
+            <div className="add-c-header-inner">
+              <Link href="/add-company" className="back-to-pkgs" onClick={() => {
+                setSelectedPackageId(null);
+                setSelectedCategoryId(null);
+              }}>
+                <FaArrowLeft />
+              </Link>
+            </div>
+          </div>
           <AddCompanyForm
             packageId={selectedPackageId}
             categoryId={selectedCategoryId}
             subscriptionType={subscriptionType}
           />
-        </>
+        </div>
       ) : (
         <Packages
           plans={plans}

@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; // ✅ Added for optimized image rendering
-import { useForgotPasswordMutation, useVerifyOtpMutation } from '@/slices/auth/authApi';
+import Image from 'next/image';
+import { useForgotPasswordMutation, useVerifyOtpMutation } from '@/slices';
 import { toast, ToastContainer } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
-import { IoArrowBack } from 'react-icons/io5';
 import { MdCheckCircle, MdPassword, MdPhonelinkLock } from 'react-icons/md';
 import { IoMdCloseCircle } from 'react-icons/io';
 import 'react-toastify/dist/ReactToastify.css';
@@ -81,10 +80,6 @@ const ResetPasswordForm = () => {
         <div className="forgot-p-form-container">
           <div className="login-container2 Forgot-pass-login-container">
             <div className="left-panel">
-              <button type="button" onClick={() => router.back()} className="back-button">
-                <IoArrowBack size={18} />
-              </button>
-
               <div className="left-panel-inner">
                 {stage === 'email' && (
                   <form onSubmit={handleEmailSubmit}>

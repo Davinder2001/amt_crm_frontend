@@ -493,6 +493,16 @@ h2.react-datepicker__current-month,
     position: absolute;
 }
 
+.react-datepicker__year-dropdown-container--select,
+.react-datepicker__month-dropdown-container--select {
+    margin: 0px !important;
+}
+
+.react-datepicker__header__dropdown.react-datepicker__header__dropdown--select {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+}
 
 // datepicker-styling End...............................................................................
 //...............................................................................

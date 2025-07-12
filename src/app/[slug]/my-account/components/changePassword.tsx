@@ -83,7 +83,7 @@ const ChangePassword = () => {
               style={{
                 color:
                   confirmPassword.length === 0
-                    ? '#009693'
+                    ? '#384B70'
                     : confirmPassword === newPassword
                       ? '#01A601'
                       : '#EA1C20',

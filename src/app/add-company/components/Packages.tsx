@@ -1,4 +1,5 @@
 'use client';
+import Logout from '@/components/common/Logout';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaArrowLeft, FaCheck, FaTimes } from 'react-icons/fa';
@@ -96,6 +97,7 @@ const Packages: React.FC<PackagesProps> = ({
                                         ))}
                                     </select>
                                 </div>
+                                <Logout />
                             </div>
                         </div>
                     </div>
@@ -158,6 +160,7 @@ const Packages: React.FC<PackagesProps> = ({
                             >
                                 <FaArrowLeft size={16} color="#fff" />
                             </button>
+                            <Logout />
                         </div>
                     </div>
 

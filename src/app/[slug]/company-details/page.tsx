@@ -131,12 +131,14 @@ function CompanyDetails() {
                 <div key={pkg.id} className="available-packages-card">
                   <div className="available-packages-detail">
                     <h2>{pkg.name}</h2>
-                    <p><strong>Annual Price:</strong> ₹{pkg.annual_price.toLocaleString()}</p>
-                    <p><strong>Three Years Price:</strong> ₹{pkg.three_years_price.toLocaleString()}</p>
-                    <p><strong>Employee Limit:</strong> {pkg.employee_limit}</p>
-                    <p><strong>Task Module:</strong> {pkg.task ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
-                    <p><strong>Chat Module:</strong> {pkg.chat ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
-                    <p><strong>HR Module:</strong> {pkg.hr ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
+                    <div className='available-package-details-wrapper'>
+                      <p><strong>Annual Price:</strong> ₹{pkg.annual_price.toLocaleString()}</p>
+                      <p><strong>Three Years Price:</strong> ₹{pkg.three_years_price.toLocaleString()}</p>
+                      <p><strong>Employee Limit:</strong> {pkg.employee_limit}</p>
+                      <p><strong>Task Module:</strong> {pkg.task ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
+                      <p><strong>Chat Module:</strong> {pkg.chat ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
+                      <p><strong>HR Module:</strong> {pkg.hr ? <FaCheck color='#008001' /> : <FaTimes color='#ff0000' />}</p>
+                    </div>
                   </div>
                   <button
                     onClick={() => handleUpgradeClick(pkg)}

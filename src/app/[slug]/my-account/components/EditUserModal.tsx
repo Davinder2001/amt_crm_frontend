@@ -191,7 +191,7 @@ export const EditUserModal = ({
                 </div>
 
                 <div className="form-group">
-                    <label>New Password (leave blank to keep current)</label>
+                    <label>New Password</label>
                     <input
                         name="password"
                         value={formData.password}
@@ -202,14 +202,14 @@ export const EditUserModal = ({
                     {errors.password && <span className="error">{errors.password}</span>}
                 </div>
 
-                <div className="form-actions">
-                    <button type="button" onClick={onClose} className="cancel-btn">
+                <div className="form-actions" style={{ display: 'flex', gap: 20, justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="submit-btn"
+                        className="buttons"
                     >
                         {isLoading ? 'Updating...' : 'Update Profile'}
                     </button>

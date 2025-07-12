@@ -128,7 +128,7 @@ interface PackagePlan {
   task?: boolean;
   chat?: boolean;
   hr?: boolean;
-  details: string[];
+  details?: string[];
   business_categories: BusinessCategory[];
 }
 

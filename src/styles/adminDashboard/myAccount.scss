@@ -2,13 +2,34 @@
 
 
 .account-packages-header {
-  max-width: 80%;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  display: flex;
-  margin: auto;
+  width: 100%;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 99999;
+
+
+  .acc-pkg-header-inner {
+    max-width: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: auto;
+
+    .back-to-pkgs {
+      padding: 8px;
+      background-color: var(--primary-color);
+      color: $white;
+      border-radius: $border-radius;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 
 
   .category-filter {
@@ -29,7 +50,7 @@
     }
 
     select {
-      padding: 7px;
+      padding: 5px 8px;
       font-size: 14px;
       border-radius: $border-radius;
       border-color: $light-blue;
@@ -595,33 +616,8 @@
   }
 
   .account-packages-header {
-    max-width: 95%;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-top: 15px;
-
-    .category-filter {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-      gap: 8px;
-
-      .filter-group {
-        width: 100%;
-        gap: 8px;
-
-        label {
-          font-size: 13px;
-          min-width: 80px;
-        }
-
-        select {
-          font-size: 13px;
-          padding: 6px;
-          width: 100%;
-        }
-      }
+    .acc-pkg-header-inner {
+      max-width: 100%;
     }
   }
 

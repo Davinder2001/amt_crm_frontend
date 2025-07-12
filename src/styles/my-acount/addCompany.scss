@@ -144,10 +144,41 @@
 
 .account-pricing-container {
   .plan-details-view {
-    max-width: 80%;
-    margin: auto;
+    .plan-details-header {
+      width: 100%;
+      background-color: $white;
+      box-shadow: $box-shadow;
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 99999;
+
+      .plan-details-header-inner {
+        max-width: 80%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin: auto;
+
+        .back-to-pkgs {
+          padding: 8px;
+          background-color: var(--primary-color);
+          color: $white;
+          border-radius: $border-radius;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+        }
+      }
+    }
 
     .plan-details-content {
+      max-width: 80%;
+      width: 100%;
+      margin: auto;
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
@@ -289,7 +320,13 @@
 
   .account-pricing-container {
     .plan-details-view {
-      max-width: 90%;
+      .plan-details-header .plan-details-header-inner {
+        max-width: 90%;
+      }
+
+      .plan-details-content {
+        max-width: 90%;
+      }
     }
   }
 }
@@ -321,8 +358,14 @@
 
   .account-pricing-container {
     .plan-details-view {
-      max-width: 100%;
-      padding: 0px 10px;
+      .plan-details-header .plan-details-header-inner {
+        max-width: 100%;
+      }
+
+      .plan-details-content {
+        max-width: 100%;
+        margin: 10px;
+      }
     }
   }
 }

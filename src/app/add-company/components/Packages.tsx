@@ -75,25 +75,27 @@ const Packages: React.FC<PackagesProps> = ({
             {!showPlanDetails ? (
                 <>
                     <div className="account-packages-header">
-                        <Link href="/" className="back-button">
-                            <FaArrowLeft size={16} color="#fff" />
-                        </Link>
+                        <div className="acc-pkg-header-inner">
+                            <Link href="/" className="back-to-pkgs">
+                                <FaArrowLeft size={16} color="#fff" />
+                            </Link>
 
-                        <div className="filters">
-                            <div className="filter-group">
-                                <label htmlFor="category-select">Category:</label>
-                                <select
-                                    id="category-select"
-                                    value={selectedCategoryId ?? ''}
-                                    onChange={handleCategoryChange}
-                                >
-                                    <option value="">Select Category</option>
-                                    {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </select>
+                            <div className="category-filter">
+                                <div className="filter-group">
+                                    <label htmlFor="category-select">Category:</label>
+                                    <select
+                                        id="category-select"
+                                        value={selectedCategoryId ?? ''}
+                                        onChange={handleCategoryChange}
+                                    >
+                                        <option value="">Select Category</option>
+                                        {categories.map((category) => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -140,12 +142,14 @@ const Packages: React.FC<PackagesProps> = ({
             ) : (
                 <div className="plan-details-view">
                     <div className="plan-details-header">
+                    <div className="plan-details-header-inner">
                         <button
-                            className="back-button"
+                            className="back-to-pkgs"
                             onClick={() => setShowPlanDetails(false)}
                         >
                             <FaArrowLeft size={16} color="#fff" />
                         </button>
+                    </div>
                     </div>
 
                     <div className="plan-details-content">

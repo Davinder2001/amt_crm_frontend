@@ -169,6 +169,15 @@ const Packages: React.FC<PackagesProps> = ({
                                 <li>{selectedPlanDetails?.chat === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Chat</li>
                                 <li>{selectedPlanDetails?.task === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Task</li>
                                 <li>{selectedPlanDetails?.hr === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}HR</li>
+                                {selectedPlanDetails?.details && selectedPlanDetails?.details.length > 0 && (
+                                    <>
+                                        {selectedPlanDetails?.details.map((detail, index) => (
+                                            <li key={index}>
+                                                <FaCheck color='#008001' /> {detail}
+                                            </li>
+                                        ))}
+                                    </>
+                                )}
                             </ul>
                         </div>
 

@@ -8,12 +8,13 @@ import { FaPlus, FaUserCheck, FaRedo, FaList, FaUser } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import { Box } from '@mui/material';
-import { useGetMyTasksQuery } from '@/slices';
+import { useGetMyTasksQuery, useGetTasksQuery } from '@/slices';
 
 const Page = () => {
   const router = useRouter();
   const { companySlug } = useCompany();
   const { data } = useGetMyTasksQuery();
+  const { data: tasks } = useGetTasksQuery();
   const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
 
   // Modal states
@@ -49,11 +50,9 @@ const Page = () => {
             icon: <FaRedo />,
             onClick: () => router.push(`/${companySlug}/tasks/recurring-tasks`),
           },
-          {
-            label: 'Add Task',
-            icon: <FaPlus />,
-            onClick: () => setIsAddModalOpen(true),
-          },
+          ...(tasks && tasks?.data.length > 0
+            ? [{ label: 'Add Task', icon: <FaPlus />, onClick: () => setIsAddModalOpen(true) }]
+            : []),
         ]}
         introKey='tasks_intro'
       />

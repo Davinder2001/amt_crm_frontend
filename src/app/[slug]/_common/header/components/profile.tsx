@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaLanguage } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
 import Loader from "@/components/common/Loader";
+import GoogleTranslate from "@/components/common/GoogleTranslate";
 
 
 const Profile: React.FC = () => {
@@ -155,6 +156,15 @@ const Profile: React.FC = () => {
                     <FaFileInvoiceDollar className="menu-icon" />
                     <span>Billing</span>
                   </Link>
+                  <div className="g-t" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    padding: '8px 20px'
+                  }}>
+                    <FaLanguage className="menu-icon" />
+                    <GoogleTranslate />
+                  </div>
                   {/* <ThemeSwitcher /> */}
 
                   <button

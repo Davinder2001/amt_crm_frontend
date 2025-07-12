@@ -206,22 +206,13 @@ const GoogleTranslate: React.FC = () => {
         }
         
         #google_translate_element select {
-          background: #2b1a12;
-          color: #fff4e4;
+          color: #333333;
           border: none;
           font-weight: bold;
-          border-radius: 3px;
-          padding: 8px 12px;
           cursor: pointer;
-        }
-        
-        #google_translate_element select:hover {
-          background: #3a2a22;
-        }
-        
-        #google_translate_element select:focus {
-          outline: none;
-          box-shadow: 0 0 0 2px rgba(43, 26, 18, 0.3);
+          padding: 0px;
+          margin: 0px;
+          width: auto;
         }
         
         /* Hide duplicate dropdown if it appears */

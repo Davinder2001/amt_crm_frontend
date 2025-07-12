@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PackagesView from './components/packagesView';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import BusinessCategories from './components/Categories';
+import PackageDetails from './components/PackageDetails';
 import { Box, Tab, Tabs } from '@mui/material';
 
 const Page = () => {
@@ -51,6 +52,7 @@ const Page = () => {
         >
           <Tab label="Packages" id="tab-0" aria-controls="tabpanel-0" />
           <Tab label="Categories" id="tab-1" aria-controls="tabpanel-1" />
+          <Tab label="Package Details" id="tab-2" aria-controls="tabpanel-2" />
         </Tabs>
       </Box>
 
@@ -69,7 +71,14 @@ const Page = () => {
             </div>
           )}
         </div>
+      </div>
 
+      <div role="tabpanel" hidden={value !== 2} id="tabpanel-2" aria-labelledby="tab-2">
+        {value === 2 && (
+          <div className="form-section-three">
+            <PackageDetails />
+          </div>
+        )}
       </div>
     </div>
   );

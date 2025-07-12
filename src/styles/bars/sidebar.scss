@@ -48,6 +48,8 @@
             text-decoration: none;
             color: var(--primary-color);
             white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
     }
 

@@ -18,3 +18,4 @@ export * from '@/slices/theme/themeSlice';
 export * from '@/slices/vendor/vendorApi';
 export * from '@/slices/expenditure/expensesApi';
 export * from '@/slices/dashboard/dashBoardApi';
+export * from '@/slices/superadminSlices/package-details/packageDetailsApi';

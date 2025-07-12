@@ -18,6 +18,7 @@ import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
 import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
+import packageDetailsCreateApiSlice from '@/slices/superadminSlices/package-details/packageDetailsApi';
 import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import themeReducer from '@/slices/theme/themeSlice';
 import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
@@ -50,6 +51,7 @@ const store = configureStore({
     [quotationApi.reducerPath]: quotationApi.reducer,
     [hrApi.reducerPath]: hrApi.reducer,
     [packagesCreateApiSlice.reducerPath]: packagesCreateApiSlice.reducer,
+    [packageDetailsCreateApiSlice.reducerPath]: packageDetailsCreateApiSlice.reducer,
     [businesscategoryCreateApiSlice.reducerPath]: businesscategoryCreateApiSlice.reducer,
     [billingCreateApiSlice.reducerPath]: billingCreateApiSlice.reducer,
     [paymentCreateApiSlice.reducerPath]: paymentCreateApiSlice.reducer,
@@ -79,6 +81,7 @@ const store = configureStore({
       .concat(quotationApi.middleware)
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
+      .concat(packageDetailsCreateApiSlice.middleware)
       .concat(businesscategoryCreateApiSlice.middleware)
       .concat(billingCreateApiSlice.middleware)
       .concat(paymentCreateApiSlice.middleware)

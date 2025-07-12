@@ -113,6 +113,15 @@ const Packages: React.FC<PackagesProps> = ({
                                         <li>{plan.chat === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Chat</li>
                                         <li>{plan.task === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Task</li>
                                         <li>{plan.hr === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}HR</li>
+                                        {plan.details && plan.details.length > 0 && (
+                                            <>
+                                                {plan.details.map((detail, index) => (
+                                                    <li key={index}>
+                                                        <FaCheck color='#008001' /> {detail}
+                                                    </li>
+                                                ))}
+                                            </>
+                                        )}
                                     </ul>
                                     <div className="pricing-buttons">
                                         <button
@@ -142,14 +151,14 @@ const Packages: React.FC<PackagesProps> = ({
             ) : (
                 <div className="plan-details-view">
                     <div className="plan-details-header">
-                    <div className="plan-details-header-inner">
-                        <button
-                            className="back-to-pkgs"
-                            onClick={() => setShowPlanDetails(false)}
-                        >
-                            <FaArrowLeft size={16} color="#fff" />
-                        </button>
-                    </div>
+                        <div className="plan-details-header-inner">
+                            <button
+                                className="back-to-pkgs"
+                                onClick={() => setShowPlanDetails(false)}
+                            >
+                                <FaArrowLeft size={16} color="#fff" />
+                            </button>
+                        </div>
                     </div>
 
                     <div className="plan-details-content">
@@ -160,6 +169,15 @@ const Packages: React.FC<PackagesProps> = ({
                                 <li>{selectedPlanDetails?.chat === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Chat</li>
                                 <li>{selectedPlanDetails?.task === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}Task</li>
                                 <li>{selectedPlanDetails?.hr === false ? <FaTimes color='#ff0000' /> : <FaCheck color='#008001' />}HR</li>
+                                {selectedPlanDetails?.details && selectedPlanDetails?.details.length > 0 && (
+                                    <>
+                                        {selectedPlanDetails?.details.map((detail, index) => (
+                                            <li key={index}>
+                                                <FaCheck color='#008001' /> {detail}
+                                            </li>
+                                        ))}
+                                    </>
+                                )}
                             </ul>
                         </div>
 

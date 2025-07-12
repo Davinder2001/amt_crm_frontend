@@ -253,3 +253,297 @@
 }
 
 
+
+.package-details {
+    padding: 0;
+
+    .detail-section {
+        margin-bottom: 16px;
+
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+
+            .category-item {
+                background: #f8fafc;
+                padding: 4px 20px;
+                border-radius: 16px;
+                font-size: 12px;
+                font-weight: 500;
+                color: #4a5568;
+                border: 1px solid #e2e8f0;
+            }
+        }
+
+        .price-limits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+
+            .price-limit-card {
+                background: white;
+                border-radius: 8px;
+                border: 1px solid #edf2f7;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+                .card-header {
+                    background: #f0f4f8;
+                    padding: 8px 16px;
+                    border-bottom: 1px solid #e2e8f0;
+
+                    h4 {
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #2d3748;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                }
+
+                .card-body {
+                    padding: 16px;
+                    display: grid;
+                    gap: 12px;
+
+                    .price-section {
+                        padding: 12px;
+                        background: #f8fafc;
+                        border-radius: 6px;
+                        text-align: center;
+
+                        .price-row {
+                            display: flex;
+                            align-items: flex-end;
+                            justify-content: center;
+                            gap: 5px;
+                        }
+
+                        .price-label {
+                            font-size: 12px;
+                            color: #718096;
+                            margin-bottom: 4px;
+                        }
+
+                        .price-value {
+                            font-size: 18px;
+                            font-weight: 700;
+                            color: #2d3748;
+                        }
+                    }
+
+                    .limits-section {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 12px;
+
+                        .limit-row {
+                            display: flex;
+                            flex-direction: column;
+
+                            .limit-label {
+                                font-size: 12px;
+                                color: #718096;
+                                font-weight: 500;
+                            }
+
+                            .limit-value {
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: #2f855a;
+                                margin-top: 2px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .price-limits-grid {
+            grid-template-columns: 1fr;
+
+            .limits-section {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    }
+}
+
+// Package Details Styles
+.superadmin-package-details-container {
+    // Add new section styles
+    .add-new-section {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+
+        h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .add-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: end;
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .input-field {
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+                transition: border-color 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+                }
+            }
+
+            .btn-add {
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                &:hover:not(:disabled) {
+                    background-color: var(--primary-dark);
+                }
+
+                &:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    .package-detail-action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        .package-detail-edit-icon,
+        .package-detail-delete-icon,
+        .package-detail-save-icon,
+        .package-detail-cancel-icon {
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+        }
+
+        .package-detail-edit-icon {
+            color: var(--primary-color);
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+
+            &:hover {
+                background-color: rgba(var(--primary-color-rgb), 0.2);
+            }
+        }
+
+        .package-detail-delete-icon {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+
+            &:hover {
+                background-color: rgba(220, 53, 69, 0.2);
+            }
+        }
+
+        .package-detail-save-icon {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+
+            &:hover:not(.disabled) {
+                background-color: rgba(40, 167, 69, 0.2);
+            }
+        }
+
+        .package-detail-cancel-icon {
+            color: #6c757d;
+            background-color: rgba(108, 117, 125, 0.1);
+
+            &:hover {
+                background-color: rgba(108, 117, 125, 0.2);
+            }
+        }
+    }
+
+    .description-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // Inline editing styles
+    .edit-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+        }
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 40px 20px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-top: 20px;
+
+        p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 16px;
+            font-style: italic;
+        }
+    }
+}

@@ -1691,9 +1691,14 @@ nav.feature-card-nav-bar {
       gap: 8px;
       margin-bottom: 20px;
 
+      li:last-child a{
+        border: none;
+      }
+
       a {
         border-right: 1px solid $border-color;
         padding-right: 5px;
+
       }
     }
 

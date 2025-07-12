@@ -117,7 +117,6 @@ interface SelectedCompanyResponse {
   selected_company: Profile;
 }
 
-
 interface PackagePlan {
   id?: number;
   name: string;
@@ -129,6 +128,7 @@ interface PackagePlan {
   task?: boolean;
   chat?: boolean;
   hr?: boolean;
+  details?: string[];
   business_categories: BusinessCategory[];
 }
 

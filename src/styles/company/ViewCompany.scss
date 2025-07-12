@@ -155,11 +155,11 @@
             background: $white;
             border: 1px solid $border-color;
             border-radius: $border-radius;
-            padding: 20px;
             box-shadow: $box-shadow;
             overflow: hidden;
 
             .available-packages-detail {
+                padding: 10px;
                 h2 {
                     font-size: 18px;
                     text-transform: capitalize;
@@ -202,17 +202,123 @@
             }
         }
 
-        @media (max-width: 1200px) {
+    }
+
+    @media (max-width: 1024px) {
+        .available-packages {
             grid-template-columns: repeat(3, 1fr);
-        }
-
-        @media (max-width: 900px) {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @media (max-width: 600px) {
-            grid-template-columns: 1fr;
         }
     }
 
+    @media (max-width: 768px) {
+        gap: 20px;
+
+        .available-packages {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+
+            .available-packages-card {
+                padding: 10px;
+            }
+        }
+
+        .panel {
+
+            .panel-header {
+                padding: 10px;
+            }
+        }
+
+        .c-details-current-package {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            padding: 10px 0px;
+
+            .c-details-grid {
+                .info-line {
+                    justify-content: space-between;
+
+                    strong {
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            .subscribed-package-card {
+                padding: 10px;
+            }
+
+            .subscribed-package-card {
+                margin: 0px 10px;
+            }
+        }
+    }
+
+
+    @media (max-width: 480px) {
+        .available-packages {
+            grid-template-columns: 1fr;
+
+            .available-packages-card {
+
+                .available-packages-detail {
+                    h2 {
+                        font-size: 16px;
+                    }
+                }
+
+                .package-upgrade-btn {
+                    margin-top: 10px;
+                    font-size: 13px;
+                }
+
+            }
+
+
+        }
+
+        .panel {
+            .panel-header {
+                padding: 5px 10px;
+
+                h2 {
+                    font-size: 16px;
+                }
+            }
+
+        }
+
+        .c-details-current-package {
+            .subscribed-package-card {
+                h2 {
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                }
+
+                .package-upgrade-btn-outer {
+                    .package-upgrade-btn {
+                        padding: 6px 15px;
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .c-details-grid {
+
+                .info-line {
+                    padding: 5px 5px;
+
+                    p {
+                        font-size: 12px;
+                    }
+
+                    strong {
+                        font-size: 12px;
+                    }
+
+                }
+            }
+        }
+    }
 }

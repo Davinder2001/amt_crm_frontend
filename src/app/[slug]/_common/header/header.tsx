@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { logo } from '@/assets/useImage';
 import { usePathname, useRouter } from 'next/navigation';
 import { useFetchNotificationsQuery } from '@/slices/notifications/notificationsApi';
+import GoogleTranslate from '@/components/common/GoogleTranslate';
 
 
 interface headerProps {
@@ -79,6 +80,7 @@ const Header: React.FC<headerProps> = ({ openMenu, isMobile }) => {
       ) : <span></span>}
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
+        <GoogleTranslate/>
 
         {/* Notification Icon with Unread Count */}
         <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="notification-icon"

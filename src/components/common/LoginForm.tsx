@@ -55,19 +55,41 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const result = await login({ number, password }).unwrap();
-      toast.success(result.message);
 
-      // Set auth tokens
-      Cookies.set('access_token', result.access_token, { path: '/' });
-      Cookies.set('user_type', result.user.user_type, { path: '/' });
-      localStorage.setItem('access_token', encodeStorage(result.access_token));
-      localStorage.setItem('user_type', encodeStorage(result.user.user_type));
+      if (result.message) {
+        toast.success(result.message);
 
-      // Update context and redirect
-      setUser(result.user);
-      redirectUser(result.user);
+        // Set auth tokens
+        Cookies.set('access_token', result.access_token, { path: '/' });
+        Cookies.set('user_type', result.user.user_type, { path: '/' });
+        localStorage.setItem('access_token', encodeStorage(result.access_token));
+        localStorage.setItem('user_type', encodeStorage(result.user.user_type));
+
+        // Update context and redirect
+        setUser(result.user);
+        redirectUser(result.user);
+      } else {
+        toast.error('Login response was unexpected');
+      }
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Login failed');
+      if (typeof err === 'object' && err !== null && 'data' in err) {
+        // Type guard for RTK Query error
+        const error = err as { data?: { error?: string }, status?: string | number, originalStatus?: number };
+
+        if (error.data?.error) {
+          toast.error(error.data.error);
+        } else if (error.status === 'FETCH_ERROR') {
+          toast.error('Network error - please check your connection');
+        } else if (error.originalStatus === 401) {
+          toast.error('Invalid credentials - please check your number and password');
+        } else {
+          toast.error('Login failed - please try again');
+        }
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error('An unknown error occurred');
+      }
     }
   };
 

@@ -12,7 +12,7 @@ const authApi = userCreateApiSlice.injectEndpoints({
     }),
 
     login: builder.mutation<
-      { access_token: string; user: UserProfile; message: string },
+      { access_token: string; user: UserProfile; message: string, error: string },
       { number: string; password: string }
     >({
       query: (credentials) => ({

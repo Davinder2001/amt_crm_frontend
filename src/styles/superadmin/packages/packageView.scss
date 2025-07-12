@@ -375,3 +375,175 @@
         }
     }
 }
+
+// Package Details Styles
+.superadmin-package-details-container {
+    // Add new section styles
+    .add-new-section {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+
+        h3 {
+            margin: 0 0 15px 0;
+            color: #495057;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .add-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: end;
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .input-field {
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+                transition: border-color 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+                }
+            }
+
+            .btn-add {
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                &:hover:not(:disabled) {
+                    background-color: var(--primary-dark);
+                }
+
+                &:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    .package-detail-action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        .package-detail-edit-icon,
+        .package-detail-delete-icon,
+        .package-detail-save-icon,
+        .package-detail-cancel-icon {
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+        }
+
+        .package-detail-edit-icon {
+            color: var(--primary-color);
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+
+            &:hover {
+                background-color: rgba(var(--primary-color-rgb), 0.2);
+            }
+        }
+
+        .package-detail-delete-icon {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+
+            &:hover {
+                background-color: rgba(220, 53, 69, 0.2);
+            }
+        }
+
+        .package-detail-save-icon {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+
+            &:hover:not(.disabled) {
+                background-color: rgba(40, 167, 69, 0.2);
+            }
+        }
+
+        .package-detail-cancel-icon {
+            color: #6c757d;
+            background-color: rgba(108, 117, 125, 0.1);
+
+            &:hover {
+                background-color: rgba(108, 117, 125, 0.2);
+            }
+        }
+    }
+
+    .description-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // Inline editing styles
+    .edit-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+        }
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 40px 20px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-top: 20px;
+
+        p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 16px;
+            font-style: italic;
+        }
+    }
+}

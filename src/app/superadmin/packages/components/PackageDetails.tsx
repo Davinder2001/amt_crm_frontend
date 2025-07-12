@@ -19,19 +19,19 @@ const PackageDetails = () => {
   const [deletePackageDetail] = useDeletePackageDetailMutation();
 
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [newItem, setNewItem] = useState({ name: '', value: '' });
-  const [editingData, setEditingData] = useState({ name: '', value: '' });
+  const [newItem, setNewItem] = useState({ name: '' });
+  const [editingData, setEditingData] = useState({ name: '' });
 
   useEffect(() => {
     setTitle('Package Details');
   }, [setTitle]);
 
   const handleAddNew = () => {
-    if (newItem.name.trim() && newItem.value.trim()) {
+    if (newItem.name.trim()) {
       createPackageDetail(newItem)
         .unwrap()
         .then(() => {
-          setNewItem({ name: '', value: '' });
+          setNewItem({ name: '' });
           refetch();
         })
         .catch((error) => {
@@ -41,18 +41,18 @@ const PackageDetails = () => {
     }
   };
 
-  const handleEdit = (id: number, currentData: { name: string; value: string }) => {
+  const handleEdit = (id: number, currentData: { name: string }) => {
     setEditingId(id);
     setEditingData(currentData);
   };
 
   const handleSave = (id: number) => {
-    if (editingData.name.trim() && editingData.value.trim()) {
+    if (editingData.name.trim()) {
       updatePackageDetail({ id, ...editingData })
         .unwrap()
         .then(() => {
           setEditingId(null);
-          setEditingData({ name: '', value: '' });
+          setEditingData({ name: '' });
           refetch();
         })
         .catch((error) => {
@@ -64,7 +64,7 @@ const PackageDetails = () => {
 
   const handleCancel = () => {
     setEditingId(null);
-    setEditingData({ name: '', value: '' });
+    setEditingData({ name: '' });
   };
 
   const handleDelete = async (id: number) => {
@@ -105,22 +105,6 @@ const PackageDetails = () => {
       )
     },
     {
-      label: 'Value',
-      key: 'value' as keyof PackageDetail,
-      render: (detail: PackageDetail) => (
-        editingId === detail.id ? (
-          <input
-            type="text"
-            value={editingData.value}
-            onChange={(e) => setEditingData(prev => ({ ...prev, value: e.target.value }))}
-            className="edit-input"
-          />
-        ) : (
-          <span>{detail.value}</span>
-        )
-      )
-    },
-    {
       label: 'Actions',
       key: undefined,
       render: (detail: PackageDetail) => (
@@ -130,7 +114,7 @@ const PackageDetails = () => {
               <span 
                 onClick={() => handleSave(detail.id!)}
                 title="Save" 
-                className={`package-detail-save-icon ${!editingData.name.trim() || !editingData.value.trim() ? 'disabled' : ''}`}
+                className={`package-detail-save-icon ${!editingData.name.trim() ? 'disabled' : ''}`}
               >
                 <FaSave />
               </span>
@@ -145,7 +129,7 @@ const PackageDetails = () => {
           ) : (
             <>
               <span 
-                onClick={() => handleEdit(detail.id!, { name: detail.name, value: detail.value })} 
+                onClick={() => handleEdit(detail.id!, { name: detail.name })} 
                 title="Edit" 
                 className='package-detail-edit-icon'
               >
@@ -182,17 +166,9 @@ const PackageDetails = () => {
             onKeyPress={(e) => handleKeyPress(e, handleAddNew)}
             className="input-field"
           />
-          <input
-            type="text"
-            placeholder="Enter value"
-            value={newItem.value}
-            onChange={(e) => setNewItem(prev => ({ ...prev, value: e.target.value }))}
-            onKeyPress={(e) => handleKeyPress(e, handleAddNew)}
-            className="input-field"
-          />
           <button 
             onClick={handleAddNew}
-            disabled={!newItem.name.trim() || !newItem.value.trim()}
+            disabled={!newItem.name.trim()}
             className="btn-add"
           >
             <FaPlus /> Add
@@ -204,7 +180,7 @@ const PackageDetails = () => {
         <ResponsiveTable
           data={packageDetails.filter((detail): detail is PackageDetail & { id: number } => typeof detail.id === 'number')}
           columns={columns}
-          onEdit={(id) => handleEdit(id, { name: '', value: '' })}
+          onEdit={(id) => handleEdit(id, { name: '' })}
         />
       ) : (
         <div className="no-data-message">

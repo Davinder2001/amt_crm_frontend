@@ -6,6 +6,7 @@ import { useUpdateUserMutation } from '@/slices/users/userApi';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/provider/UserContext';
 import { clearStorage } from '@/utils/Company';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import from react-icons
 
 interface UserFormData {
     name: string
@@ -39,6 +40,7 @@ export const EditUserModal = ({
     const [errors, setErrors] = useState<Partial<UserFormData>>({})
     const { user: currentUser, setUser } = useUser()
     const router = useRouter()
+    const [showPassword, setShowPassword] = useState(false) 
 
     useEffect(() => {
         if (userData) {
@@ -190,15 +192,31 @@ export const EditUserModal = ({
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group" style={{ position: 'relative' }}>
                     <label>New Password</label>
                     <input
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Enter new password"
                     />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{
+                            position: 'absolute',
+                            right: '10px',
+                            top: '50%',
+                            transform: 'translateY(50%)',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: '#666'
+                        }}
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                     {errors.password && <span className="error">{errors.password}</span>}
                 </div>
 

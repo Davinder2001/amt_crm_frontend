@@ -57,6 +57,23 @@ jobs:
         username: ${{ secrets.HOSTINGER_USERNAME }}
         key: ${{ secrets.HOSTINGER_SSH_KEY }}
         script: |
+          # Stop any existing web servers that might be using port 80
+          echo "🛑 Stopping existing web servers..."
+          sudo systemctl stop apache2 2>/dev/null || true
+          sudo systemctl stop nginx 2>/dev/null || true
+          sudo pkill -f nginx 2>/dev/null || true
+          sudo pkill -f apache2 2>/dev/null || true
+          
+          # Wait a moment for ports to be released
+          sleep 5
+          
+          # Check if port 80 is still in use
+          if sudo netstat -tulpn | grep :80; then
+            echo "⚠️  Port 80 is still in use. Stopping all processes on port 80..."
+            sudo fuser -k 80/tcp 2>/dev/null || true
+            sleep 3
+          fi
+          
           # Create /srv directory if it doesn't exist
           sudo mkdir -p /srv/amt-crm-frontend
           sudo chown $USER:$USER /srv/amt-crm-frontend
@@ -64,6 +81,7 @@ jobs:
           # Stop existing containers
           cd /srv/amt-crm-frontend
           if [ -f docker-compose.http.yml ]; then
+            echo "🛑 Stopping existing containers..."
             docker-compose -f docker-compose.http.yml down
           fi
           
@@ -86,6 +104,7 @@ jobs:
           fi
           
           # Build and start containers
+          echo "🔨 Building and starting containers..."
           docker-compose -f docker-compose.http.yml build --no-cache
           docker-compose -f docker-compose.http.yml up -d
           
@@ -94,12 +113,14 @@ jobs:
           
           # Check deployment status
           sleep 10
+          echo "📊 Container status:"
           docker-compose -f docker-compose.http.yml ps
           
           # Test health endpoint
+          echo "🏥 Testing health endpoint..."
           curl -f http://localhost/health || echo "Health check failed"
           
-          echo "Deployment completed successfully!"
+          echo "✅ Deployment completed successfully!"
 
     - name: Notify deployment status
       if: always()

@@ -1,4 +1,5 @@
 import withPWA from 'next-pwa';
+import type { NextConfig } from 'next';
 
 const withPWAFunc = withPWA({
   dest: 'public',
@@ -7,9 +8,9 @@ const withPWAFunc = withPWA({
   disable: process.env.NODE_ENV === 'development',
 });
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  output: "standalone" as const,
   devIndicators: false as const,
 
   images: {

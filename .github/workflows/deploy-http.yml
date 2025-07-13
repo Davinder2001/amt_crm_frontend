@@ -57,19 +57,38 @@ jobs:
         username: ${{ secrets.HOSTINGER_USERNAME }}
         key: ${{ secrets.HOSTINGER_SSH_KEY }}
         script: |
-          # Stop any existing web servers that might be using port 80
-          echo "🛑 Stopping existing web servers..."
-          sudo systemctl stop apache2 2>/dev/null || true
-          sudo systemctl stop nginx 2>/dev/null || true
-          sudo pkill -f nginx 2>/dev/null || true
-          sudo pkill -f apache2 2>/dev/null || true
+          echo "🔍 Checking current port usage..."
+          sudo netstat -tulpn | grep :80 || echo "Port 80 is free"
+          sudo netstat -tulpn | grep :443 || echo "Port 443 is free"
+          
+          # Check for existing Docker containers
+          echo "🐳 Checking existing Docker containers..."
+          docker ps -a
+          
+          # Check for existing services
+          echo "🔧 Checking existing services..."
+          sudo systemctl status nginx 2>/dev/null || echo "Nginx not running as system service"
+          sudo systemctl status apache2 2>/dev/null || echo "Apache2 not running as system service"
+          
+          # Only stop services if they're not Docker-based
+          echo "🛑 Stopping non-Docker web services..."
+          if sudo systemctl is-active --quiet nginx && ! docker ps | grep -q nginx; then
+            echo "Stopping system nginx..."
+            sudo systemctl stop nginx
+          fi
+          if sudo systemctl is-active --quiet apache2 && ! docker ps | grep -q apache; then
+            echo "Stopping system apache2..."
+            sudo systemctl stop apache2
+          fi
           
           # Wait a moment for ports to be released
-          sleep 5
+          sleep 3
           
-          # Check if port 80 is still in use
-          if sudo netstat -tulpn | grep :80; then
-            echo "⚠️  Port 80 is still in use. Stopping all processes on port 80..."
+          # Check if port 80 is still in use by non-Docker processes
+          if sudo netstat -tulpn | grep :80 | grep -v docker; then
+            echo "⚠️  Port 80 is still in use by non-Docker processes. Checking..."
+            sudo netstat -tulpn | grep :80
+            echo "Force stopping non-Docker processes on port 80..."
             sudo fuser -k 80/tcp 2>/dev/null || true
             sleep 3
           fi
@@ -78,10 +97,10 @@ jobs:
           sudo mkdir -p /srv/amt-crm-frontend
           sudo chown $USER:$USER /srv/amt-crm-frontend
           
-          # Stop existing containers
+          # Stop only our frontend containers
           cd /srv/amt-crm-frontend
           if [ -f docker-compose.http.yml ]; then
-            echo "🛑 Stopping existing containers..."
+            echo "🛑 Stopping existing frontend containers..."
             docker-compose -f docker-compose.http.yml down
           fi
           
@@ -104,31 +123,40 @@ jobs:
           fi
           
           # Build and start containers
-          echo "🔨 Building and starting containers..."
+          echo "🔨 Building and starting frontend containers..."
           docker-compose -f docker-compose.http.yml build --no-cache
           docker-compose -f docker-compose.http.yml up -d
           
-          # Clean up old images
+          # Clean up old images (but be careful not to remove backend images)
+          echo "🧹 Cleaning up unused Docker images..."
           docker image prune -f
           
           # Check deployment status
           sleep 10
-          echo "📊 Container status:"
+          echo "📊 Frontend container status:"
           docker-compose -f docker-compose.http.yml ps
           
-          # Test health endpoint
-          echo "🏥 Testing health endpoint..."
-          curl -f http://localhost/health || echo "Health check failed"
+          echo "📊 All Docker containers:"
+          docker ps
           
-          echo "✅ Deployment completed successfully!"
+          # Test health endpoint
+          echo "🏥 Testing frontend health endpoint..."
+          curl -f http://localhost/health || echo "Frontend health check failed"
+          
+          # Test backend connectivity (if available)
+          echo "🔗 Testing backend connectivity..."
+          curl -f http://api.himmanav.com/health 2>/dev/null || echo "Backend health check failed (this is normal if backend is not deployed yet)"
+          
+          echo "✅ Frontend deployment completed successfully!"
 
     - name: Notify deployment status
       if: always()
       run: |
         if [ ${{ job.status }} == 'success' ]; then
-          echo "✅ Deployment to Hostinger VM completed successfully!"
+          echo "✅ Frontend deployment to Hostinger VM completed successfully!"
           echo "🌐 Frontend: http://himmanav.com"
-          echo "🔧 Health Check: http://himmanav.com/health"
+          echo "🔧 Frontend Health: http://himmanav.com/health"
+          echo "🔗 Backend API: http://api.himmanav.com"
         else
-          echo "❌ Deployment failed!"
+          echo "❌ Frontend deployment failed!"
         fi 

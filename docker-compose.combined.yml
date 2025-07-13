@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Frontend Application (Next.js)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amt_crm_frontend
+    restart: unless-stopped
+    env_file:
+      - env.docker
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    expose:
+      - "3000"
+    networks:
+      - amt_network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Backend Application (Laravel) - Placeholder
+  # You'll need to update this with your actual backend configuration
+  backend:
+    image: your-laravel-backend-image  # Replace with your backend image
+    container_name: amt_crm_backend
+    restart: unless-stopped
+    env_file:
+      - ../amt-crm-backend/.env  # Adjust path to your backend .env
+    expose:
+      - "8000"
+    networks:
+      - amt_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Main Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: amt_crm_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.combined.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/logs:/var/log/nginx
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - amt_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  amt_network:
+    driver: bridge 

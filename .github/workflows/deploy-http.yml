@@ -38,7 +38,7 @@ jobs:
           --exclude='.next' \
           --exclude='.env*' \
           --exclude='*.log' \
-          .
+          . || true
 
     - name: Deploy to Hostinger VM
       uses: appleboy/scp-action@v0.1.7

@@ -13,8 +13,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-    ports:
-      - "3000:3000"   # Expose 3000 on the host
+    expose:
+      - "3000"   # Only exposed to the Docker network
     networks:
       - amt_network
     healthcheck:
@@ -32,7 +32,7 @@ services:
     env_file:
       - ../amt-crm-backend/.env  # Adjust path to your backend .env
     expose:
-      - "8000"
+      - "8000"   # Only exposed to the Docker network
     networks:
       - amt_network
     healthcheck:
@@ -42,14 +42,13 @@ services:
       retries: 3
       start_period: 40s
 
-  # Main Nginx Reverse Proxy
+  # Main Nginx Reverse Proxy (single public-facing container)
   nginx:
     image: nginx:alpine
     container_name: amt_crm_nginx
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./docker/nginx/nginx.combined.conf:/etc/nginx/nginx.conf:ro
       - ./docker/nginx/logs:/var/log/nginx

@@ -1,0 +1,113 @@
+name: Deploy to Hostinger VM (HTTP)
+
+on:
+  push:
+    branches: [ main, production ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
+
+    - name: Create deployment package
+      run: |
+        tar -czf amt-crm-frontend.tar.gz \
+          --exclude='.git' \
+          --exclude='node_modules' \
+          --exclude='.next' \
+          --exclude='.env*' \
+          --exclude='*.log' \
+          .
+
+    - name: Deploy to Hostinger VM
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USERNAME }}
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        source: "amt-crm-frontend.tar.gz"
+        target: "/tmp/"
+        strip_components: 0
+
+    - name: Deploy and restart containers
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USERNAME }}
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        script: |
+          # Create /srv directory if it doesn't exist
+          sudo mkdir -p /srv/amt-crm-frontend
+          sudo chown $USER:$USER /srv/amt-crm-frontend
+          
+          # Stop existing containers
+          cd /srv/amt-crm-frontend
+          if [ -f docker-compose.http.yml ]; then
+            docker-compose -f docker-compose.http.yml down
+          fi
+          
+          # Extract new deployment
+          cd /srv/amt-crm-frontend
+          tar -xzf /tmp/amt-crm-frontend.tar.gz --strip-components=0
+          rm /tmp/amt-crm-frontend.tar.gz
+          
+          # Create logs directory for nginx
+          mkdir -p docker/nginx/logs
+          
+          # Create environment file if it doesn't exist
+          if [ ! -f env.docker ]; then
+            cat > env.docker << EOF
+          NODE_ENV=production
+          NEXT_PUBLIC_API_URL=http://api.himmanav.com
+          NEXT_PUBLIC_SOCKET_URL=ws://api.himmanav.com
+          NEXT_PUBLIC_APP_URL=http://himmanav.com
+          EOF
+          fi
+          
+          # Build and start containers
+          docker-compose -f docker-compose.http.yml build --no-cache
+          docker-compose -f docker-compose.http.yml up -d
+          
+          # Clean up old images
+          docker image prune -f
+          
+          # Check deployment status
+          sleep 10
+          docker-compose -f docker-compose.http.yml ps
+          
+          # Test health endpoint
+          curl -f http://localhost/health || echo "Health check failed"
+          
+          echo "Deployment completed successfully!"
+
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ ${{ job.status }} == 'success' ]; then
+          echo "✅ Deployment to Hostinger VM completed successfully!"
+          echo "🌐 Frontend: http://himmanav.com"
+          echo "🔧 Health Check: http://himmanav.com/health"
+        else
+          echo "❌ Deployment failed!"
+        fi 

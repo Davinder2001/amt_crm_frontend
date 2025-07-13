@@ -9,6 +9,7 @@ const withPWAFunc = withPWA({
 
 const nextConfig = {
   reactStrictMode: true,
+  output: "standalone",
   devIndicators: false as const,
 
   images: {

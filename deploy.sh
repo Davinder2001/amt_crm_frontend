@@ -1,105 +1,88 @@
 #!/bin/bash
 
-# Production Deployment Script for AMT CRM Frontend
-# Usage: ./deploy.sh
+# AMT CRM Frontend Deployment Script for Hostinger VM
+# Usage: ./deploy.sh [hostinger-ip] [username]
 
-set -e  # Exit on any error
+set -e
 
-echo "🚀 Starting AMT CRM Frontend deployment..."
+# Configuration
+HOSTINGER_IP=${1:-"31.97.186.147"}
+USERNAME=${2:-"root"}
+REMOTE_DIR="/srv/amt-crm-frontend"
+LOCAL_ARCHIVE="amt-crm-frontend.tar.gz"
 
-# Check if we're in the right directory
-if [ ! -f "docker-compose.yml" ]; then
-    echo "❌ Error: docker-compose.yml not found. Please run this script from the project root."
-    exit 1
-fi
+echo "🚀 Starting deployment to Hostinger VM..."
+echo "📍 Target: $USERNAME@$HOSTINGER_IP:$REMOTE_DIR"
 
-# Check if env file exists, if not create it
-if [ ! -f "env" ]; then
-    echo "📝 Creating env file..."
-    cat > env << EOF
-# Backend API Configuration
-NEXT_PUBLIC_API_BASE_URL=https://api.himmanav.com
+# Build the application
+echo "📦 Building application..."
+npm run build
+
+# Create deployment package
+echo "📦 Creating deployment package..."
+tar -czf $LOCAL_ARCHIVE \
+  --exclude='.git' \
+  --exclude='node_modules' \
+  --exclude='.next' \
+  --exclude='.env*' \
+  --exclude='*.log' \
+  .
+
+# Upload to server
+echo "📤 Uploading to server..."
+scp $LOCAL_ARCHIVE $USERNAME@$HOSTINGER_IP:/tmp/
+
+# Deploy on server
+echo "🔧 Deploying on server..."
+ssh $USERNAME@$HOSTINGER_IP << EOF
+  # Create directory if it doesn't exist
+  sudo mkdir -p $REMOTE_DIR
+  sudo chown $USERNAME:$USERNAME $REMOTE_DIR
+  
+  # Stop existing containers
+  cd $REMOTE_DIR
+  if [ -f docker-compose.http.yml ]; then
+    docker-compose -f docker-compose.http.yml down
+  fi
+  
+  # Extract new deployment
+  cd $REMOTE_DIR
+  tar -xzf /tmp/$LOCAL_ARCHIVE --strip-components=0
+  rm /tmp/$LOCAL_ARCHIVE
+  
+  # Create logs directory for nginx
+  mkdir -p docker/nginx/logs
+  
+  # Create environment file if it doesn't exist
+  if [ ! -f env.docker ]; then
+    cat > env.docker << 'ENVEOF'
+NODE_ENV=production
+NEXT_PUBLIC_API_URL=http://api.himmanav.com
+NEXT_PUBLIC_SOCKET_URL=ws://api.himmanav.com
+NEXT_PUBLIC_APP_URL=http://himmanav.com
+ENVEOF
+  fi
+  
+  # Build and start containers
+  docker-compose -f docker-compose.http.yml build --no-cache
+  docker-compose -f docker-compose.http.yml up -d
+  
+  # Clean up old images
+  docker image prune -f
+  
+  # Check deployment status
+  sleep 10
+  docker-compose -f docker-compose.http.yml ps
+  
+  # Test health endpoint
+  curl -f http://localhost/health || echo "Health check failed"
+  
+  echo "✅ Deployment completed successfully!"
 EOF
-    echo "⚠️  Please update env file with your backend API URLs if needed."
-    echo "   Key variable to update: NEXT_PUBLIC_API_BASE_URL"
-    echo "   For production: Use GitHub Secrets instead of local env files"
-    read -p "Press Enter after updating env file..."
-fi
 
-# Check if env.docker file exists, if not create it
-if [ ! -f "env.docker" ]; then
-    echo "📝 Creating env.docker file..."
-    cp env env.docker
-    echo "✅ env.docker file created from env file"
-fi
+# Clean up local archive
+rm $LOCAL_ARCHIVE
 
-# Load environment variables
-if [ -f "env" ]; then
-    export $(cat env | grep -v '^#' | xargs)
-fi
-
-# Create necessary directories
-echo "📁 Creating necessary directories..."
-mkdir -p infra/certs
-mkdir -p infra/vhost.d
-mkdir -p infra/html
-
-# Set proper permissions
-echo "🔐 Setting proper permissions..."
-chmod -R 755 infra
-
-# Stop existing containers
-echo "🛑 Stopping existing containers..."
-docker compose down --remove-orphans || true
-
-# Build and start containers
-echo "🔨 Building and starting containers..."
-docker compose up --build -d
-
-# Wait for frontend to be ready
-echo "⏳ Waiting for frontend to be ready..."
-sleep 30
-
-# Check if frontend container is running
-if ! docker compose ps frontend | grep -q "Up"; then
-    echo "❌ Frontend container is not running. Checking logs..."
-    docker compose logs frontend
-    exit 1
-fi
-
-# Health check
-echo "🏥 Performing health check..."
-for i in {1..10}; do
-    if curl -f http://localhost/api/health; then
-        echo "✅ Frontend is healthy"
-        break
-    fi
-    echo "Attempt $i: Frontend not ready yet, waiting..."
-    sleep 30
-done
-
-# Check backend connectivity
-echo "🔗 Checking backend connectivity..."
-if [ -n "$NEXT_PUBLIC_API_BASE_URL" ]; then
-    if curl -f "$NEXT_PUBLIC_API_BASE_URL/health"; then
-        echo "✅ Backend is accessible"
-    else
-        echo "⚠️  Warning: Backend is not accessible. Please check backend deployment."
-    fi
-fi
-
-echo "✅ Deployment completed successfully!"
-echo "🌐 Your frontend should be available at: https://himmanav.com"
-echo "🔗 Backend API: ${NEXT_PUBLIC_API_BASE_URL:-https://api.himmanav.com}"
-echo "📊 Check container status with: docker compose ps"
-echo "📝 View logs with: docker compose logs -f"
-
-# Optional: Show container status
-echo ""
-echo "📋 Container Status:"
-docker compose ps
-
-echo ""
-echo "🔒 Security Note:"
-echo "   For production deployments, use GitHub Secrets instead of local env files."
-echo "   The CI/CD pipeline will automatically create env files from secrets." 
+echo "🎉 Deployment completed!"
+echo "🌐 Frontend: http://himmanav.com"
+echo "🔧 Health Check: http://himmanav.com/health" 

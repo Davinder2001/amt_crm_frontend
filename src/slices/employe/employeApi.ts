@@ -7,13 +7,13 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
 
     fetchEmployes: builder.query<EmployeesResponse, void>({
       query: () => "employee",
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
 
     fetchEmployeById: builder.query<PaySlipResponse, number>({
       query: (id) => `employee/${id}`,
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
 
@@ -24,7 +24,7 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
         body: newEmploye,
         // Do not set Content-Type; browser will set it for FormData
       }),
-      invalidatesTags: ["Employe"],
+      invalidatesTags: ["Employee"],
     }),
 
 
@@ -34,7 +34,7 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
         method: "PUT",
         body: rest,
       }),
-      invalidatesTags: ["Employe"],
+      invalidatesTags: ["Employee"],
     }),
 
     updateEmployeeStatus: builder.mutation<void, { id: string; status: "active" | "inactive" | "blocked" }>({
@@ -43,7 +43,7 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
         method: "POST",
         body: { status },
       }),
-      invalidatesTags: ["Employe"],
+      invalidatesTags: ["Employee"],
     }),
 
 
@@ -53,36 +53,45 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
         url: `employee/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Employe"],
+      invalidatesTags: ["Employee"],
     }),
 
 
     fetchPaySlipById: builder.query<PaySlipResponse, number>({
       query: (id) => `employee/salarySlip/${id}`,
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
 
     downloadPaySlipById: builder.query<Employee, number>({
       query: (id) => `employee/salary-slip-pdf/${id}`,
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
 
     fetchEmployeesSalary: builder.query<EmployeesResponse, void>({
       query: () => "employees/salary",
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
     fetchEmployeesSalaryById: builder.query<Employee, number>({
       query: (id) => `employee/${id}/salary`,
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
     }),
 
 
     downloadPaySlipPdf: builder.query<Employee, number>({
       query: (id) => `employee/downloadSlip/${id}`,
-      providesTags: ["Employe"],
+      providesTags: ["Employee"],
+    }),
+
+    generateSalary: builder.mutation<GenerateSalaryResponse, { id: number; month?: string; year?: string }>({
+      query: ({ id, month, year }) => ({
+        url: `employee/generate-salary/${id}`,
+        method: 'POST',
+        body: { month, year },
+      }),
+      invalidatesTags: ['Employee'],
     }),
 
   }),
@@ -100,6 +109,7 @@ export const {
   useFetchEmployeesSalaryQuery,
   useFetchEmployeesSalaryByIdQuery,
   useLazyDownloadPaySlipPdfQuery,
+  useGenerateSalaryMutation,
 } = employeApi;
 
 export default employeApi;

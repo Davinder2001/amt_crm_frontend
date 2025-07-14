@@ -1,127 +1,83 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
-import {
-  useFetchPaySlipByIdQuery,
-  useLazyDownloadPaySlipPdfQuery,
-} from '@/slices/employe/employeApi';
+import { useFetchPaySlipByIdQuery, useGenerateSalaryMutation } from '@/slices';
+import LoadingState from '@/components/common/LoadingState';
 
 export default function Page() {
-  const params = useParams() as { id?: string };
-  const id = Number(params?.id || 0);
+  const { id } = useParams();
+  const { currentData } = useFetchPaySlipByIdQuery(Number(id));
+  const [generateSalary, { isLoading: isGenerating }] = useGenerateSalaryMutation();
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  // 1. Always call hooks in the same order:
-  const { currentData } = useFetchPaySlipByIdQuery(id, {
-    skip: isNaN(id) || id === 0,
-  });
-  const [triggerDownload, { isFetching }] =
-    useLazyDownloadPaySlipPdfQuery();
-
-  useEffect(() => {
-    document.title = 'Pay Slip';
-  }, []);
-
-  // 2. Only conditionally return _after_ all hooks have run:
   if (!currentData?.employee) {
-    return <p>Loading...</p>;
+    return <LoadingState />;
   }
 
   const employee = currentData.employee;
 
-  // 3. Safely coerce salary so toFixed() always works:
-  const rawSalary = employee.employee_salary?.current_salary;
-  const parsedSalary =
-    typeof rawSalary === 'string'
-      ? parseFloat(rawSalary)
-      : typeof rawSalary === 'number'
-      ? rawSalary
-      : NaN;
-  const currentSalary = isNaN(parsedSalary) ? 0 : parsedSalary;
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleDownload = async () => {
-    if (isNaN(id) || id === 0) {
-      alert('Invalid pay‑slip ID.');
-      return;
-    }
-
+  const handleGenerateSalary = async () => {
     try {
-      const result = await triggerDownload(id).unwrap();
-      const base64 = result.pdf_base64;
-      const fileName = result.file_name;
+      const response = await generateSalary({ id: Number(id) }).unwrap();
 
-      if (!base64) {
-        alert('PDF not available.');
-        return;
-      }
-
-      const byteCharacters = atob(base64);
-      const byteArrays: Uint8Array[] = [];
-
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
+      if (response.status) {
+        // Create a blob from the base64 PDF
+        const byteCharacters = atob(response.pdf_base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
-        byteArrays.push(new Uint8Array(byteNumbers));
-      }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
 
-      const blob = new Blob(byteArrays, { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-      alert('Failed to download PDF.');
+        // Create URL for the blob
+        const url = URL.createObjectURL(blob);
+        setPdfUrl(url);
+
+        // Automatically download it
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = response.file_name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('Error generating salary:', error);
+      // Handle error (show toast, etc.)
     }
   };
 
   return (
-    <div>
-      <h2>Pay Slip</h2>
-      <p><b>Company:</b> {employee.company_name || 'Unknown'}</p>
-      <p><b>Employee:</b> {employee.name}</p>
-      <p><b>Email:</b> {employee.email}</p>
-      <p><b>Phone:</b> {employee.number}</p>
-      <p><b>Current Salary:</b> ₹{currentSalary.toFixed(2)}</p>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Pay Slip</h2>
+      <div className="mb-6">
+        <p><b>Company:</b> {employee.company_name || 'Unknown'}</p>
+        <p><b>Employee:</b> {employee.name}</p>
+        <p><b>Email:</b> {employee.email}</p>
+        <p><b>Phone:</b> {employee.number}</p>
+        <p><b>Current Salary:</b> ₹{employee.employee_salary?.current_salary}</p>
+      </div>
 
-      <hr />
-
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Earnings</th>
-            <th>Total</th>
-            <th>Deductions</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Basic Salary</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <br />
-
-      <button onClick={handlePrint}>Print</button>
-      <button onClick={handleDownload} disabled={isFetching}>
-        {isFetching ? 'Preparing…' : 'Download PDF'}
+      <button
+        onClick={handleGenerateSalary}
+        disabled={isGenerating}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        {isGenerating ? 'Generating...' : 'Generate Salary Slip'}
       </button>
+
+      {pdfUrl && (
+        <div className="mt-6">
+          <iframe
+            src={pdfUrl}
+            width="100%"
+            height="500px"
+            className="border"
+            title="Salary Slip"
+          />
+        </div>
+      )}
     </div>
   );
 }

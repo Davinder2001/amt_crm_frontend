@@ -15,7 +15,6 @@ const userCreateApiSlice = createApi({
       const token = cookies['access_token'];
 
       headers.set('Accept', 'application/json');
-      headers.set('Content-Type', 'application/json');
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
@@ -24,7 +23,7 @@ const userCreateApiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Employe'],
+  tagTypes: ['Employee'],
   endpoints: () => ({}),
 });
 

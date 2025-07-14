@@ -493,7 +493,6 @@
   flex-direction: column;
 
   .form-container {
-
     .title {
       color: var(--primary-color);
       font-size: 24px;
@@ -636,19 +635,6 @@
   .change-pass-container {
     display: flex;
     flex-direction: column;
-
-    .image-container {
-
-      img {
-        display: none;
-
-        .form-container {
-
-          padding: 2rem;
-          margin-top: 0px;
-        }
-      }
-    }
   }
 
   .header .m-toggle {
@@ -766,10 +752,6 @@
       font-size: 2rem;
       margin-bottom: 0px !important;
 
-    }
-
-    .form-container {
-      padding: 1rem;
     }
 
     .input-group {

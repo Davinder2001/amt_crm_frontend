@@ -102,6 +102,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
     useEffect(() => {
         if (mode === "edit" && employeeId && employeeData) {
             const { employee } = employeeData;
+            // Only map allowed fields
             const formValues: ExtendedEmployeeFormData = {
                 ...getDefaultEmployeeForm(),
                 name: employee.name || '',
@@ -118,7 +119,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 dob: employee.employee_details?.dob ? new Date(employee.employee_details.dob) : '',
                 religion: employee.employee_details?.religion || '',
                 maritalStatus: employee.employee_details?.maritalStatus || '',
-                idProofType: employee.employee_details?.idProofType || '',
+                idProofType: employee.employee_details?.id_proof_type || '',
                 idProofValue: employee.employee_details?.idProofValue ? String(employee.employee_details.idProofValue) : '',
                 emergencyContact: employee.employee_details?.emergencyContact ? Number(employee.employee_details.emergencyContact) : 0,
                 emergencyContactRelation: employee.employee_details?.emergencyContactRelation || '',
@@ -133,10 +134,8 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 panNo: employee.employee_details?.panNo || '',
                 upiId: employee.employee_details?.upiId || '',
                 addressProof: employee.employee_details?.addressProof ? String(employee.employee_details.addressProof) : '',
-                medicalInfo: employee.employee_details?.medicalInfo || '',
                 profilePicture: employee.profilePicture as string | File | null,
-                addressProof_image: null,
-                utility_bill_image: null,
+                // Remove extra fields: medicalInfo, currentSalary, addressProof_image, utility_bill_image
             };
 
             setFormData(formValues);
@@ -306,23 +305,11 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                         originalData as unknown as Record<string, unknown>,
                         formData as unknown as Record<string, unknown>
                     );
-                    // Only include backend-required fields
+                    // Only include allowed fields
                     const updatePayloadObj: Record<string, unknown> = { id: employeeId };
                     requiredFields.forEach((key) => {
                         if (key in changedFields) {
-                            let value = changedFields[key];
-                            // Type conversions
-                            if ([
-                                'salary', 'currentSalary', 'shiftTimings', 'number', 'emergencyContact', 'accountNo', 'idProofValue', 'addressProof'
-                                ].includes(key) && typeof value === 'string') {
-                                value = value === '' ? 0 : Number(value);
-                                }
-                            if ([
-                                    'dob', 'dateOfHire', 'joiningDate'
-                                ].includes(key) && typeof value === 'string' && value) {
-                                value = value ? new Date(value) : '';
-                            }
-                            updatePayloadObj[key] = value;
+                            updatePayloadObj[key] = changedFields[key];
                         }
                     });
                     const updatePayload = updatePayloadObj as { id: number } & Partial<Employee>;
@@ -364,12 +351,9 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             // Use plain object for JSON
             const cleanPayloadObj: Record<string, unknown> = {};
             requiredFields.forEach((key) => {
-                if (key === "profilePicture") {
-                    cleanPayloadObj[key] = null; // or omit if not uploading
-                } else {
-                    const value = formData[key as keyof ExtendedEmployeeFormData];
-                    cleanPayloadObj[key] = value;
-                }
+                let payloadKey = key;
+                if (key === "idProofType") payloadKey = "id_proof_type";
+                cleanPayloadObj[payloadKey] = formData[key as keyof ExtendedEmployeeFormData];
             });
             await createEmployee(cleanPayloadObj).unwrap();
             toast.success("Employee created successfully!");
@@ -406,10 +390,10 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 min={type === "number" ? min : undefined}
                 max={type === "number" ? max : undefined}
                 value={
-  formData[name as keyof ExtendedEmployeeFormData] instanceof Date
-    ? (formData[name as keyof ExtendedEmployeeFormData] as Date).toISOString().split("T")[0]
-    : (formData[name as keyof ExtendedEmployeeFormData] as string) || ""
-}
+                    formData[name as keyof ExtendedEmployeeFormData] instanceof Date
+                        ? (formData[name as keyof ExtendedEmployeeFormData] as Date).toISOString().split("T")[0]
+                        : (formData[name as keyof ExtendedEmployeeFormData] as string) || ""
+                }
                 onChange={handleChange}
                 onDateChange={(date) => handleDateChange(name, date)}
                 error={errors[name]}

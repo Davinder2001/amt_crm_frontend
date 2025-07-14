@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useChangePasswordMutation } from '@/slices';
-import { FaEye, FaEyeSlash, FaKey, FaLock } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaKey, FaLock, FaTimesCircle } from 'react-icons/fa';
 import { FaCircleCheck } from 'react-icons/fa6';
 
 const ChangePassword = () => {
@@ -78,17 +78,11 @@ const ChangePassword = () => {
           </div>
 
           <div className="input-group">
-            <FaCircleCheck
-              className="icon"
-              style={{
-                color:
-                  confirmPassword.length === 0
-                    ? '#384B70'
-                    : confirmPassword === newPassword
-                      ? '#01A601'
-                      : '#EA1C20',
-              }}
-            />
+            {confirmPassword.length === 0 ?
+              <FaKey className="icon" />
+              : confirmPassword === newPassword
+                ? <FaCircleCheck className="icon" color='#01A601' /> : <FaTimesCircle className="icon" color='#EA1C20' />}
+
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Confirm New Password"

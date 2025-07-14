@@ -14,7 +14,7 @@ export interface ExtendedEmployeeFormData {
   religion: string;
   maritalStatus: string;
   idProofType: string;
-  idProofValue: number;
+  idProofValue: string;
   emergencyContact: number;
   emergencyContactRelation: string;
   workLocation: string;
@@ -27,7 +27,7 @@ export interface ExtendedEmployeeFormData {
   ifscCode: string;
   panNo: string;
   upiId: string;
-  addressProof: number;
+  addressProof: string;
   medicalInfo: string;
   profilePicture: string | File | null;
   addressProof_image: File | null;

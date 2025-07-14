@@ -119,7 +119,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 religion: employee.employee_details?.religion || '',
                 maritalStatus: employee.employee_details?.maritalStatus || '',
                 idProofType: employee.employee_details?.idProofType || '',
-                idProofValue: employee.employee_details?.idProofValue ? Number(employee.employee_details.idProofValue) : 0,
+                idProofValue: employee.employee_details?.idProofValue ? String(employee.employee_details.idProofValue) : "",
                 emergencyContact: employee.employee_details?.emergencyContact ? Number(employee.employee_details.emergencyContact) : 0,
                 emergencyContactRelation: employee.employee_details?.emergencyContactRelation || '',
                 workLocation: employee.employee_details?.workLocation || '',
@@ -132,7 +132,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 ifscCode: employee.employee_details?.ifscCode || '',
                 panNo: employee.employee_details?.panNo || '',
                 upiId: employee.employee_details?.upiId || '',
-                addressProof: employee.employee_details?.addressProof ? Number(employee.employee_details.addressProof) : 0,
+                addressProof: employee.employee_details?.addressProof ? String(employee.employee_details.addressProof) : "",
                 medicalInfo: employee.employee_details?.medicalInfo || '',
                 profilePicture: employee.profilePicture as string | File | null,
                 addressProof_image: null,
@@ -180,6 +180,11 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+
+        if (name === "shiftTimings" && (value === "0" || value === "")) {
+            return;
+        }
+
         let newValue: string | number | Date | File | null = value;
 
         // Convert to number for number fields

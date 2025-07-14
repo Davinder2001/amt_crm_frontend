@@ -3,6 +3,7 @@
 import React from "react";
 import { FormSectionProps, ExtendedEmployeeFormData } from "./types";
 import RequiredLabel from "./RequiredLabel";
+import { getDefaultEmployeeForm } from "./utils";
 
 const PersonalInformationSection: React.FC<FormSectionProps> = ({
     formData,
@@ -10,42 +11,8 @@ const PersonalInformationSection: React.FC<FormSectionProps> = ({
     onFieldChange,
     renderField
 }) => {
-    // Provide default values to prevent undefined errors
-    const safeFormData: ExtendedEmployeeFormData = formData || {
-        name: '',
-        number: '',
-        address: '',
-        nationality: '',
-        dob: '',
-        religion: '',
-        maritalStatus: '',
-        emergencyContact: '',
-        emergencyContactRelation: '',
-        email: '',
-        password: '',
-        salary: '',
-        role: '',
-        department: '',
-        currentSalary: '',
-        shiftTimings: '',
-        dateOfHire: '',
-        workLocation: '',
-        joiningDate: '',
-        joiningType: '',
-        previousEmployer: '',
-        medicalInfo: '',
-        bankName: '',
-        accountNo: '',
-        ifscCode: '',
-        panNo: '',
-        upiId: '',
-        addressProof: '',
-        profilePicture: null,
-        idProofType: '',
-        idProofValue: '',
-        utility_bill_image: null,
-        addressProof_image: null
-    };
+    const safeFormData: ExtendedEmployeeFormData = formData || getDefaultEmployeeForm();
+
     const safeErrors = errors || {};
 
     return (
@@ -53,7 +20,21 @@ const PersonalInformationSection: React.FC<FormSectionProps> = ({
             <div className="form-card-content">
                 <div className="form-grid">
                     {renderField("Name", "name", "text", "Enter full name")}
-                    {renderField("Phone Number", "number", "text", "Enter phone number")}
+                    <div className="employee-field">
+                        <RequiredLabel htmlFor="number">Phone Number</RequiredLabel>
+                        <input
+                            type="text"
+                            name="number"
+                            value={safeFormData.number}
+                            onChange={onFieldChange}
+                            minLength={10}
+                            maxLength={10}
+                            pattern="\d{10}"
+                            required
+                            placeholder="Enter phone number"
+                        />
+                        {safeErrors.number && <div className="error-message">{safeErrors.number}</div>}
+                    </div>
                     {renderField("Address", "address", "text", "Enter residential address")}
 
                     <div className="employee-field">
@@ -145,7 +126,7 @@ const PersonalInformationSection: React.FC<FormSectionProps> = ({
                                 Enter {safeFormData.idProofType.charAt(0).toUpperCase() + safeFormData.idProofType.slice(1)} Number
                             </RequiredLabel>
                             <input
-                                type="text"
+                                type="number"
                                 name="idProofValue"
                                 value={safeFormData.idProofValue}
                                 onChange={onFieldChange}

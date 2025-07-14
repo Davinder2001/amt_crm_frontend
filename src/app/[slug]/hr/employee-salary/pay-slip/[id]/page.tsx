@@ -110,7 +110,6 @@ export default function Page() {
           <tr>
             <td>1</td>
             <td>Basic Salary</td>
-            <td>₹{currentSalary.toFixed(2)}</td>
             <td>-</td>
             <td>-</td>
           </tr>

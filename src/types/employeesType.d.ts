@@ -51,7 +51,6 @@ interface Employee {
   employee_details?: {
     user_id?: number;
     salary?: string;
-    currentSalary?: string;
     dateOfHire?: string;
     joiningDate?: string;
     shiftTimings?: string;
@@ -76,9 +75,14 @@ interface Employee {
     addressProof?: string;
     profilePicture?: string;
     utility_bill_image?: string;
+
+    idProofType?: string;
+    idProofValue?: string;
+    acc_hol_name?: string;
+    id_proof_type?: string;
   };
-  message?: string;
-  error?: string;
+message ?: string;
+error ?: string;
 }
 
 
@@ -115,7 +119,6 @@ interface EmployeeFormData {
   salary: string;
   role: string;
   department: string;
-  currentSalary: string;
   shiftTimings: string;
   dateOfHire: string;
   workLocation: string;

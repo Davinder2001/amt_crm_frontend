@@ -39,13 +39,14 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
     const { data: rolesData, isLoading: rolesLoading, error: rolesError } = useGetRolesQuery({});
     const { data: shiftData, isLoading: shiftLoading, error: shiftError } = useFetchCompanyShiftsQuery();
     const { companySlug } = useCompany();
-    
+
     const [originalData, setOriginalData] = useState(getDefaultEmployeeForm());
     const [hasChanges, setHasChanges] = useState(false);
     const [formData, setFormData] = useState(getDefaultEmployeeForm());
     const [hasLoadedFromLS, setHasLoadedFromLS] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    // State declarations for image previews
     const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
     const [addressProofImagePreview, setAddressProofImagePreview] = useState<string | null>(null);
     const [utilityBillImagePreview, setUtilityBillImagePreview] = useState<string | null>(null);
@@ -75,7 +76,10 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
 
     useEffect(() => {
         if (mode === "edit") {
-            const changed = getChangedFields(originalData, formData);
+            const changed = getChangedFields(
+                originalData as unknown as Record<string, unknown>,
+                formData as unknown as Record<string, unknown>
+            );
             setHasChanges(Object.keys(changed).length > 0);
         }
     }, [formData, originalData, mode]);
@@ -98,26 +102,57 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
     useEffect(() => {
         if (mode === "edit" && employeeId && employeeData) {
             const { employee } = employeeData;
-            const formValues = {
+            const formValues: ExtendedEmployeeFormData = {
                 ...getDefaultEmployeeForm(),
-                name: employee.name,
-                email: employee.email,
-                number: employee.number,
-                profilePicture: employee.profilePicture,
-                ...employee.employee_details,
-                role: employee.roles?.[0]?.name || '',
+                name: employee.name || '',
+                email: employee.email || '',
+                password: '',
+                number: employee.number ? Number(employee.number) : 0,
+                role: (employee.roles?.[0]?.name || ''),
+                salary: employee.salary ? Number(employee.salary) : 0,
+                dateOfHire: employee.dateOfHire ? new Date(employee.dateOfHire) : '',
+                joiningDate: employee.joiningDate ? new Date(employee.joiningDate) : '',
+                shiftTimings: employee.shiftTimings ? Number(employee.shiftTimings) : 0,
+                address: employee.employee_details?.address || '',
+                nationality: employee.employee_details?.nationality || '',
+                dob: employee.employee_details?.dob ? new Date(employee.employee_details.dob) : '',
+                religion: employee.employee_details?.religion || '',
+                maritalStatus: employee.employee_details?.maritalStatus || '',
+                idProofType: employee.employee_details?.idProofType || '',
+                idProofValue: employee.employee_details?.idProofValue ? Number(employee.employee_details.idProofValue) : 0,
+                emergencyContact: employee.employee_details?.emergencyContact ? Number(employee.employee_details.emergencyContact) : 0,
+                emergencyContactRelation: employee.employee_details?.emergencyContactRelation || '',
+                workLocation: employee.employee_details?.workLocation || '',
+                joiningType: employee.employee_details?.joiningType || '',
+                department: employee.employee_details?.department || '',
+                previousEmployer: employee.employee_details?.previousEmployer || '',
+                acc_hol_name: employee.employee_details?.acc_hol_name || '',
+                bankName: employee.employee_details?.bankName || '',
+                accountNo: employee.employee_details?.accountNo ? Number(employee.employee_details.accountNo) : 0,
+                ifscCode: employee.employee_details?.ifscCode || '',
+                panNo: employee.employee_details?.panNo || '',
+                upiId: employee.employee_details?.upiId || '',
+                addressProof: employee.employee_details?.addressProof ? Number(employee.employee_details.addressProof) : 0,
+                medicalInfo: employee.employee_details?.medicalInfo || '',
+                profilePicture: employee.profilePicture as string | File | null,
+                addressProof_image: null,
                 utility_bill_image: null,
             };
 
             setFormData(formValues);
             setOriginalData(formValues);
 
+            // When setting preview from backend data
             if (employee.profilePicture) {
-                setProfileImagePreview(
-                    employee.profilePicture.startsWith('http')
-                        ? employee.profilePicture
-                        : `/api/images?path=${encodeURIComponent(employee.profilePicture)}`
-                );
+                if (typeof employee.profilePicture === 'string') {
+                    setProfileImagePreview(
+                        employee.profilePicture.startsWith('http')
+                            ? employee.profilePicture
+                            : `/api/images?path=${encodeURIComponent(employee.profilePicture)}`
+                    );
+                } else {
+                    setProfileImagePreview(null);
+                }
             }
             if (employee.employee_details?.addressProof) {
                 setAddressProofImagePreview(
@@ -145,6 +180,16 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+        let newValue: string | number | Date | File | null = value;
+
+        // Convert to number for number fields
+        if (["number", "salary", "idProofValue", "emergencyContact", "accountNo", "addressProof", "shiftTimings"].includes(name)) {
+            newValue = value === "" ? 0 : Number(value);
+        }
+        // Convert to Date for date fields
+        if (["dateOfHire", "joiningDate", "dob"].includes(name)) {
+            newValue = value ? new Date(value) : "";
+        }
 
         setErrors(prev => {
             const newErrors = { ...prev };
@@ -152,15 +197,15 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             return newErrors;
         });
 
-        const updated = { ...formData, [name]: value };
-        setFormData(updated);
-        const error = validateField(name, value, mode, formData.idProofType);
-        if (error) {
-            setErrors(prev => ({ ...prev, [name]: error }));
-        }
-
+        setFormData(prev => ({
+            ...prev,
+            [name]: newValue,
+        }));
         if (hasLoadedFromLS && mode === "add") {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+                ...formData,
+                [name]: newValue,
+            }));
         }
     };
 
@@ -168,8 +213,8 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
         const value = date ? date.toISOString().split("T")[0] : "";
         const error = validateField(name, value, mode);
 
-        setErrors(prev => ({ ...prev, [name]: error }));
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors((prev: Record<string, string>) => ({ ...prev, [name]: error }));
+        setFormData((prev: ExtendedEmployeeFormData) => ({ ...prev, [name]: value }));
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
@@ -180,15 +225,15 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             const previewUrl = URL.createObjectURL(file);
 
             if (fieldName === 'profilePicture') {
-                setProfileImagePreview(previewUrl);
+                setProfileImagePreview(previewUrl); // string only
             } else if (fieldName === 'addressProof_image') {
-                setAddressProofImagePreview(previewUrl);
+                setAddressProofImagePreview(previewUrl); // string only
             } else if (fieldName === 'utility_bill_image') {
-                setUtilityBillImagePreview(previewUrl);
+                setUtilityBillImagePreview(previewUrl); // string only
             }
         }
 
-        setFormData(prev => {
+        setFormData((prev: ExtendedEmployeeFormData) => {
             const updated = { ...prev, [fieldName]: file };
             // Don't save File objects to localStorage as they get serialized as empty objects
             if (hasLoadedFromLS && mode === "add") {
@@ -240,35 +285,43 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // List of backend-required fields
+        const requiredFields = [
+            'name', 'email', 'password', 'number', 'role', 'salary', 'dateOfHire', 'joiningDate', 'shiftTimings',
+            'address', 'nationality', 'dob', 'religion', 'maritalStatus', 'idProofType', 'idProofValue',
+            'emergencyContact', 'emergencyContactRelation', 'currentSalary', 'workLocation', 'joiningType',
+            'department', 'previousEmployer', 'medicalInfo', 'bankName', 'accountNo', 'ifscCode', 'panNo',
+            'upiId', 'addressProof', 'id_proof_type', 'profilePicture'
+        ];
+
         if (mode === "edit") {
             try {
                 if (employeeId) {
-                    const changedFields = getChangedFields(originalData, formData);
-                    const updatePayload = { id: employeeId, ...changedFields, role: formData.role };
-
-                    // Create clean JSON payload without file objects
-                    const cleanPayload: Record<string, string | number | boolean | Date> = {};
-                    
-                    Object.entries(updatePayload).forEach(([key, value]) => {
-                        if (key !== 'profilePicture' && key !== 'addressProof_image' && key !== 'utility_bill_image') {
-                            if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date) {
-                                // Convert numeric fields to numbers
-                                if (['salary', 'currentSalary', 'shiftTimings'].includes(key) && typeof value === 'string') {
-                                    cleanPayload[key] = parseInt(value, 10);
+                    const changedFields = getChangedFields(
+                        originalData as unknown as Record<string, unknown>,
+                        formData as unknown as Record<string, unknown>
+                    );
+                    // Only include backend-required fields
+                    const updatePayloadObj: Record<string, unknown> = { id: employeeId };
+                    requiredFields.forEach((key) => {
+                        if (key in changedFields) {
+                            let value = changedFields[key];
+                            // Type conversions
+                            if ([
+                                'salary', 'currentSalary', 'shiftTimings', 'number', 'emergencyContact', 'accountNo', 'idProofValue', 'addressProof'
+                                ].includes(key) && typeof value === 'string') {
+                                value = value === '' ? 0 : Number(value);
                                 }
-                                // Convert date fields to Date objects
-                                else if (['dob', 'dateOfHire', 'joiningDate'].includes(key) && typeof value === 'string') {
-                                    cleanPayload[key] = new Date(value);
-                                }
-                                else {
-                                    cleanPayload[key] = value;
-                                }
+                            if ([
+                                    'dob', 'dateOfHire', 'joiningDate'
+                                ].includes(key) && typeof value === 'string' && value) {
+                                value = value ? new Date(value) : '';
                             }
+                            updatePayloadObj[key] = value;
                         }
                     });
-
-                    await updateEmployee(cleanPayload as { id: number } & Record<string, string | number | boolean | Date>).unwrap();
-
+                    const updatePayload = updatePayloadObj as { id: number } & Partial<Employee>;
+                    await updateEmployee(updatePayload).unwrap();
                     toast.success("Employee updated successfully!");
                     setOriginalData(formData);
                     setHasChanges(false);
@@ -276,8 +329,6 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 router.push(`/${companySlug}/hr/status-view`);
             } catch (err: unknown) {
                 console.error("Error updating employee:", err);
-                
-                // Handle backend error responses
                 const error = err as { data?: { message?: string; error?: string } };
                 if (error?.data?.message) {
                     toast.error(error.data.message);
@@ -290,51 +341,43 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             return;
         }
 
+        // ADD MODE
         const newErrors: Record<string, string> = {};
-        Object.entries(formData).forEach(([name, value]) => {
-            const error = validateField(name, value, mode, formData.idProofType);
+        requiredFields.forEach((name) => {
+            const value = formData[name as keyof ExtendedEmployeeFormData];
+            const error = validateField(name, value as string | File | null, mode, formData.idProofType);
             if (error) {
                 newErrors[name] = error;
             }
         });
-
         setErrors(newErrors);
-
         if (Object.keys(newErrors).length > 0) {
             toast.error('Please fix all errors before submitting');
             return;
         }
-
         try {
-            // Create clean JSON payload without file objects
-            const cleanPayload: Record<string, string | number | boolean | Date> = {};
-            
-            Object.entries(formData).forEach(([key, value]) => {
-                if (key !== 'profilePicture' && key !== 'addressProof_image' && key !== 'utility_bill_image') {
-                    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date) {
-                        // Convert numeric fields to numbers
-                        if (['salary', 'currentSalary', 'shiftTimings'].includes(key) && typeof value === 'string') {
-                            cleanPayload[key] = parseInt(value, 10);
-                        }
-                        // Convert date fields to Date objects
-                        else if (['dob', 'dateOfHire', 'joiningDate'].includes(key) && typeof value === 'string') {
-                            cleanPayload[key] = new Date(value);
-                        }
-                        else {
-                            cleanPayload[key] = value;
-                        }
-                    }
+            const cleanPayloadObj: Record<string, unknown> = {};
+            requiredFields.forEach((key) => {
+                let value = formData[key as keyof ExtendedEmployeeFormData];
+                // Type conversions
+                if ([
+                    'salary', 'currentSalary', 'shiftTimings', 'number', 'emergencyContact', 'accountNo', 'idProofValue', 'addressProof'
+                ].includes(key) && typeof value === 'string') {
+                    value = value === '' ? 0 : Number(value);
                 }
+                if ([
+                    'dob', 'dateOfHire', 'joiningDate'
+                ].includes(key) && typeof value === 'string' && value) {
+                    value = value ? new Date(value) : '';
+                }
+                cleanPayloadObj[key] = value;
             });
-
+            const cleanPayload = cleanPayloadObj as Partial<Employee>;
             await createEmployee(cleanPayload).unwrap();
-            
             toast.success("Employee created successfully!");
             router.push(`/${companySlug}/hr/status-view`);
         } catch (err: unknown) {
             console.error("Error creating employee:", err);
-            
-            // Handle backend error responses
             const error = err as { data?: { message?: string; error?: string } };
             if (error?.data?.message) {
                 toast.error(error.data.message);
@@ -362,9 +405,13 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 type={type}
                 placeholder={placeholder}
                 Icon={Icon}
-                min={min}
-                max={max}
-                value={(formData[name as keyof ExtendedEmployeeFormData] as string) || ""}
+                min={type === "number" ? min : undefined}
+                max={type === "number" ? max : undefined}
+                value={
+  formData[name as keyof ExtendedEmployeeFormData] instanceof Date
+    ? (formData[name as keyof ExtendedEmployeeFormData] as Date).toISOString().split("T")[0]
+    : (formData[name as keyof ExtendedEmployeeFormData] as string) || ""
+}
                 onChange={handleChange}
                 onDateChange={(date) => handleDateChange(name, date)}
                 error={errors[name]}
@@ -378,7 +425,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
     }
 
     return (
-        <div className="employee-form-container">
+        <div className="employee-form-container add-employee-form">
             <div className="form-content-wrapper">
                 <form onSubmit={handleSubmit}>
                     <div className="form-main-content">
@@ -439,6 +486,9 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                             {expandedSections.bank && (
                                 <BankInformationSection
                                     renderField={renderField}
+                                    formData={formData}
+                                    errors={errors}
+                                    onFieldChange={handleChange}
                                 />
                             )}
                         </div>

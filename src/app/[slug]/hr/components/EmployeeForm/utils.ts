@@ -1,40 +1,42 @@
+import type { ExtendedEmployeeFormData } from "./types";
+
 export const LOCAL_STORAGE_KEY = "addEmpForm";
 
 // Using the existing EmployeeFormData interface from src/types/employeesType.d.ts
-const getDefaultEmployeeForm = () => ({
-    name: "",
-    number: "",
-    address: "",
-    nationality: "",
-    dob: "",
-    religion: "",
-    maritalStatus: "",
-    emergencyContact: "",
-    emergencyContactRelation: "",
-    email: "",
-    password: "",
-    salary: "",
-    role: "",
-    department: "",
-    currentSalary: "",
-    shiftTimings: "",
-    dateOfHire: "",
-    workLocation: "",
-    joiningDate: "",
-    joiningType: "",
-    previousEmployer: "",
-    medicalInfo: "",
-    bankName: "",
-    accountNo: "",
-    ifscCode: "",
-    panNo: "",
-    upiId: "",
-    addressProof: "",
-    profilePicture: "",
-    idProofType: "",
-    idProofValue: "",
-    utility_bill_image: null as File | null,
-    addressProof_image: null as File | null,
+const getDefaultEmployeeForm = (): ExtendedEmployeeFormData => ({
+  name: "",
+  email: "",
+  password: "",
+  number: 0,
+  role: "",
+  salary: 0,
+  dateOfHire: "",
+  joiningDate: "",
+  shiftTimings: 0,
+  address: "",
+  nationality: "",
+  dob: "",
+  religion: "",
+  maritalStatus: "",
+  idProofType: "",
+  idProofValue: 0,
+  emergencyContact: 0,
+  emergencyContactRelation: "",
+  workLocation: "",
+  joiningType: "",
+  department: "",
+  previousEmployer: "",
+  acc_hol_name: "",
+  bankName: "",
+  accountNo: 0,
+  ifscCode: "",
+  panNo: "",
+  upiId: "",
+  addressProof: 0,
+  medicalInfo: "",
+  profilePicture: null,
+  addressProof_image: null,
+  utility_bill_image: null,
 });
 
 export { getDefaultEmployeeForm };
@@ -104,7 +106,6 @@ export const validateField = (name: string, value: string | File | null, mode: "
             break;
 
         case 'salary':
-        case 'currentSalary':
             if (mode === 'add' && !value) return 'Salary is required';
             if (typeof value === 'string' && !/^\d+$/.test(value))
                 return 'Salary must be a number';

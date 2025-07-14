@@ -246,6 +246,7 @@
         padding: 10px;
         display: flex;
         flex-direction: row;
+        align-items: flex-end;
         justify-content: space-between;
         position: relative;
         overflow: hidden;
@@ -301,6 +302,7 @@
         &.verified {
           border-left: 3px solid #2e7d32;
           flex-direction: column;
+          align-items: normal;
           padding: 30px 10px 10px;
         }
 
@@ -589,9 +591,10 @@
           gap: 10px;
           padding: 8px;
 
-          &.verified{
+          &.verified {
             padding: 10px;
           }
+
           .company-score {
             margin-top: 25px;
           }

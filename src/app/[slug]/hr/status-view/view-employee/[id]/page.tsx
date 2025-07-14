@@ -197,7 +197,6 @@ const ViewUserPage: React.FC = () => {
               <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Joining Date</span><span className="info-value">{formatDate(details?.joiningDate)}</span></div>
               <div className="info-item"><span className="info-label">Joining Type</span><span className="info-value">{details?.joiningType || 'N/A'}</span></div>
-              <div className="info-item"><span className="info-label">Current Salary</span><span className="info-value">₹{details?.currentSalary || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Salary</span><span className="info-value">₹{details?.salary || 'N/A'}</span></div>
               {details?.shiftTimings && (
                 <div className="info-item"><span className="info-label">Shift Timings</span><span className="info-value">{details.shiftTimings}</span></div>

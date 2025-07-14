@@ -119,7 +119,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 religion: employee.employee_details?.religion || '',
                 maritalStatus: employee.employee_details?.maritalStatus || '',
                 idProofType: employee.employee_details?.idProofType || '',
-                idProofValue: employee.employee_details?.idProofValue ? String(employee.employee_details.idProofValue) : "",
+                idProofValue: employee.employee_details?.idProofValue ? String(employee.employee_details.idProofValue) : '',
                 emergencyContact: employee.employee_details?.emergencyContact ? Number(employee.employee_details.emergencyContact) : 0,
                 emergencyContactRelation: employee.employee_details?.emergencyContactRelation || '',
                 workLocation: employee.employee_details?.workLocation || '',
@@ -132,7 +132,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                 ifscCode: employee.employee_details?.ifscCode || '',
                 panNo: employee.employee_details?.panNo || '',
                 upiId: employee.employee_details?.upiId || '',
-                addressProof: employee.employee_details?.addressProof ? String(employee.employee_details.addressProof) : "",
+                addressProof: employee.employee_details?.addressProof ? String(employee.employee_details.addressProof) : '',
                 medicalInfo: employee.employee_details?.medicalInfo || '',
                 profilePicture: employee.profilePicture as string | File | null,
                 addressProof_image: null,
@@ -294,9 +294,9 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
         const requiredFields = [
             'name', 'email', 'password', 'number', 'role', 'salary', 'dateOfHire', 'joiningDate', 'shiftTimings',
             'address', 'nationality', 'dob', 'religion', 'maritalStatus', 'idProofType', 'idProofValue',
-            'emergencyContact', 'emergencyContactRelation', 'currentSalary', 'workLocation', 'joiningType',
-            'department', 'previousEmployer', 'medicalInfo', 'bankName', 'accountNo', 'ifscCode', 'panNo',
-            'upiId', 'addressProof', 'id_proof_type', 'profilePicture'
+            'emergencyContact', 'emergencyContactRelation', 'workLocation', 'joiningType', 'department',
+            'previousEmployer', 'acc_hol_name', 'bankName', 'accountNo', 'ifscCode', 'panNo', 'upiId',
+            'addressProof', 'id_proof_type', 'profilePicture'
         ];
 
         if (mode === "edit") {
@@ -361,24 +361,17 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             return;
         }
         try {
+            // Use plain object for JSON
             const cleanPayloadObj: Record<string, unknown> = {};
             requiredFields.forEach((key) => {
-                let value = formData[key as keyof ExtendedEmployeeFormData];
-                // Type conversions
-                if ([
-                    'salary', 'currentSalary', 'shiftTimings', 'number', 'emergencyContact', 'accountNo', 'idProofValue', 'addressProof'
-                ].includes(key) && typeof value === 'string') {
-                    value = value === '' ? 0 : Number(value);
+                if (key === "profilePicture") {
+                    cleanPayloadObj[key] = null; // or omit if not uploading
+                } else {
+                    const value = formData[key as keyof ExtendedEmployeeFormData];
+                    cleanPayloadObj[key] = value;
                 }
-                if ([
-                    'dob', 'dateOfHire', 'joiningDate'
-                ].includes(key) && typeof value === 'string' && value) {
-                    value = value ? new Date(value) : '';
-                }
-                cleanPayloadObj[key] = value;
             });
-            const cleanPayload = cleanPayloadObj as Partial<Employee>;
-            await createEmployee(cleanPayload).unwrap();
+            await createEmployee(cleanPayloadObj).unwrap();
             toast.success("Employee created successfully!");
             router.push(`/${companySlug}/hr/status-view`);
         } catch (err: unknown) {

@@ -17,11 +17,12 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
     }),
 
 
-    createEmploye: builder.mutation<Employee, Partial<Employee>>({
+    createEmploye: builder.mutation<Employee, FormData | Record<string, unknown>>({
       query: (newEmploye) => ({
         url: "employee",
         method: "POST",
         body: newEmploye,
+        // Do not set Content-Type; browser will set it for FormData
       }),
       invalidatesTags: ["Employe"],
     }),

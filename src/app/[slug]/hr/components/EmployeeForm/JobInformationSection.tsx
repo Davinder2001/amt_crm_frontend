@@ -3,6 +3,7 @@
 import React from "react";
 import { FormSectionProps, ExtendedEmployeeFormData } from "./types";
 import RequiredLabel from "./RequiredLabel";
+import LoadingState from "@/components/common/LoadingState";
 
 const JobInformationSection: React.FC<FormSectionProps> = ({
     formData,
@@ -20,39 +21,41 @@ const JobInformationSection: React.FC<FormSectionProps> = ({
     // Provide default values to prevent undefined errors
     const safeFormData: ExtendedEmployeeFormData = formData || {
         name: '',
-        number: '',
-        address: '',
-        nationality: '',
-        dob: '',
-        religion: '',
-        maritalStatus: '',
-        emergencyContact: '',
-        emergencyContactRelation: '',
         email: '',
         password: '',
-        salary: '',
+        number: 0,
         role: '',
-        department: '',
-        currentSalary: '',
-        shiftTimings: '',
-        dateOfHire: '',
+        salary: 0,
+        dateOfHire: new Date(),
+        joiningDate: new Date(),
+        shiftTimings: 0,
+        address: '',
+        nationality: '',
+        dob: new Date(),
+        religion: '',
+        maritalStatus: '',
+        idProofType: '',
+        idProofValue: "",
+        emergencyContact: 0,
+        emergencyContactRelation: '',
         workLocation: '',
-        joiningDate: '',
         joiningType: '',
+        department: '',
         previousEmployer: '',
-        medicalInfo: '',
+        acc_hol_name: '',
         bankName: '',
-        accountNo: '',
+        accountNo: 0,
         ifscCode: '',
         panNo: '',
         upiId: '',
-        addressProof: '',
+        addressProof: "",
+        medicalInfo: '',
         profilePicture: null,
-        idProofType: '',
-        idProofValue: '',
-        utility_bill_image: null,
-        addressProof_image: null
+        addressProof_image: null, 
+        utility_bill_image: null  
     };
+
+
     const safeErrors = errors || {};
 
     return (
@@ -61,11 +64,10 @@ const JobInformationSection: React.FC<FormSectionProps> = ({
                 <div className="form-grid">
                     {renderField("Email", "email", "email", "Enter email address")}
                     {mode === "add" && renderField("Password", "password", "password", "Create a password")}
-                    {renderField("Salary", "salary", "text", "Enter expected salary")}
-                    {renderField("Current Salary", "currentSalary", "text", "Enter current salary")}
                     {renderField("Date of Hiring", "dateOfHire", "date", "Select hiring date")}
                     {renderField("Work Location", "workLocation", "text", "Enter work location")}
                     {renderField("Joining Date", "joiningDate", "date", "Select joining date")}
+                    {renderField("Salary", "salary", "number", "Enter salary", undefined, 0)}
 
                     <div className="employee-field">
                         <RequiredLabel htmlFor="shiftTimings">Shift Timings</RequiredLabel>
@@ -73,11 +75,11 @@ const JobInformationSection: React.FC<FormSectionProps> = ({
                             name="shiftTimings"
                             value={safeFormData.shiftTimings}
                             onChange={onFieldChange}
-                            className={`select-field ${safeFormData.shiftTimings === '' ? 'common-placeholder' : ''}`}
+                            className={`select-field ${safeFormData.shiftTimings === 0 ? 'common-placeholder' : ''}`}
                         >
-                            <option value="" disabled hidden>Select Shift</option>
+                            <option value={0} disabled hidden>Select Shift</option>
                             {shiftLoading ? (
-                                <option disabled>Loading shifts...</option>
+                                <option disabled><LoadingState /></option>
                             ) : shiftError ? (
                                 <option disabled>Error loading shifts</option>
                             ) : (

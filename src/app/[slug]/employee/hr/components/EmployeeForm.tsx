@@ -42,7 +42,6 @@ const getDefaultEmployeeForm = () => ({
     salary: "",
     role: "",
     department: "",
-    currentSalary: "",
     shiftTimings: "",
     dateOfHire: "",
     workLocation: "",
@@ -240,7 +239,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                 break;
 
             case 'salary':
-            case 'currentSalary':
                 if (mode === 'add' && !value) return 'Salary is required';
                 if (typeof value === 'string' && !/^\d+$/.test(value))
                     return 'Salary must be a number';
@@ -519,7 +517,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
     }
 
     return (
-        <div className="employee-form-container">
+        <div className="employee-form-container add-employee-form">
             <div className="form-content-wrapper">
                 <form onSubmit={handleSubmit}>
 
@@ -730,7 +728,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ mode = "add", employeeId })
                                         {renderField("Email", "email", "email", "Enter email address",)}
                                         {mode === "add" && renderField("Password", "password", "password", "Create a password")}
                                         {renderField("Salary", "salary", "text", "Enter expected salary")}
-                                        {renderField("Current Salary", "currentSalary", "text", "Enter current salary")}
                                         {renderField("Date of Hiring", "dateOfHire", "date", "Select hiring date")}
                                         {renderField("Work Location", "workLocation", "text", "Enter work location")}
                                         {renderField("Joining Date", "joiningDate", "date", "Select joining date")}

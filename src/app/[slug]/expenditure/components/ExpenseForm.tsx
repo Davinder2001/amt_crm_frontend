@@ -397,6 +397,7 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
                                 {selectedOptions.items.includes(item.id) && (
                                     <div className="batch-section">
                                         <button
+                                            type='button'
                                             className="toggle-batch-btn"
                                             onClick={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
                                         >

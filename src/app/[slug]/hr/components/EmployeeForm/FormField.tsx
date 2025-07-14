@@ -54,11 +54,15 @@ const FormField: React.FC<FormFieldProps> = ({
 
             {type === "date" ? (
                 <DatePicker
-                    selected={value ? new Date(value) : null}
+                    selected={
+                        value
+                            ? typeof value === "string"
+                                ? new Date(value)
+                                : value
+                            : null
+                    }
                     onChange={(date: Date | null) => {
-                        if (onDateChange) {
-                            onDateChange(date);
-                        }
+                        if (onDateChange) onDateChange(date);
                     }}
                     dateFormat="yyyy-MM-dd"
                     placeholderText={placeholder}
@@ -93,6 +97,7 @@ const FormField: React.FC<FormFieldProps> = ({
                     className={className}
                 />
             )}
+
 
             {isInvalid && (
                 <div className="error-message">

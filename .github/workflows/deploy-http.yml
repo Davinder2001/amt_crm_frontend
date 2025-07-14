@@ -50,7 +50,7 @@ jobs:
         target: "/tmp/"
         strip_components: 0
 
-    - name: Deploy and restart containers
+    - name: Deploy frontend files and restart containers
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOSTINGER_HOST }}
@@ -59,50 +59,14 @@ jobs:
         script: |
           echo "🔍 Checking current port usage..."
           sudo netstat -tulpn | grep :80 || echo "Port 80 is free"
-          sudo netstat -tulpn | grep :443 || echo "Port 443 is free"
           
           # Check for existing Docker containers
           echo "🐳 Checking existing Docker containers..."
           docker ps -a
           
-          # Check for existing services
-          echo "🔧 Checking existing services..."
-          sudo systemctl status nginx 2>/dev/null || echo "Nginx not running as system service"
-          sudo systemctl status apache2 2>/dev/null || echo "Apache2 not running as system service"
-          
-          # Only stop services if they're not Docker-based
-          echo "🛑 Stopping non-Docker web services..."
-          if sudo systemctl is-active --quiet nginx && ! docker ps | grep -q nginx; then
-            echo "Stopping system nginx..."
-            sudo systemctl stop nginx
-          fi
-          if sudo systemctl is-active --quiet apache2 && ! docker ps | grep -q apache; then
-            echo "Stopping system apache2..."
-            sudo systemctl stop apache2
-          fi
-          
-          # Wait a moment for ports to be released
-          sleep 3
-          
-          # Check if port 80 is still in use by non-Docker processes
-          if sudo netstat -tulpn | grep :80 | grep -v docker; then
-            echo "⚠️  Port 80 is still in use by non-Docker processes. Checking..."
-            sudo netstat -tulpn | grep :80
-            echo "Force stopping non-Docker processes on port 80..."
-            sudo fuser -k 80/tcp 2>/dev/null || true
-            sleep 3
-          fi
-          
-          # Create /srv directory if it doesn't exist
+          # Create frontend directory if it doesn't exist
           sudo mkdir -p /srv/amt-crm-frontend
           sudo chown $USER:$USER /srv/amt-crm-frontend
-          
-          # Stop only our frontend containers
-          cd /srv/amt-crm-frontend
-          if [ -f docker-compose.http.yml ]; then
-            echo "🛑 Stopping existing frontend containers..."
-            docker-compose -f docker-compose.http.yml down
-          fi
           
           # Extract new deployment
           cd /srv/amt-crm-frontend
@@ -122,30 +86,31 @@ jobs:
           EOF
           fi
           
-          # Build and start containers
-          echo "🔨 Building and starting frontend containers..."
-          docker-compose -f docker-compose.http.yml build --no-cache
-          docker-compose -f docker-compose.http.yml up -d
+          # Check if combined setup exists in backend directory
+          if [ -f /srv/amt-crm-backend/docker-compose.yml ]; then
+            echo "🔄 Restarting combined containers from backend directory..."
+            cd /srv/amt-crm-backend
+            docker-compose down
+            docker-compose up -d --build
+          else
+            echo "⚠️  Combined setup not found. Using standalone frontend setup..."
+            cd /srv/amt-crm-frontend
+            docker-compose -f docker-compose.http.yml down
+            docker-compose -f docker-compose.http.yml up -d --build
+          fi
           
-          # Clean up old images (but be careful not to remove backend images)
+          # Clean up old images
           echo "🧹 Cleaning up unused Docker images..."
           docker image prune -f
           
           # Check deployment status
-          sleep 10
-          echo "📊 Frontend container status:"
-          docker-compose -f docker-compose.http.yml ps
-          
-          echo "📊 All Docker containers:"
+          sleep 15
+          echo "📊 Container status:"
           docker ps
           
           # Test health endpoint
           echo "🏥 Testing frontend health endpoint..."
           curl -f http://localhost/health || echo "Frontend health check failed"
-          
-          # Test backend connectivity (if available)
-          echo "🔗 Testing backend connectivity..."
-          curl -f http://api.himmanav.com/health 2>/dev/null || echo "Backend health check failed (this is normal if backend is not deployed yet)"
           
           echo "✅ Frontend deployment completed successfully!"
 

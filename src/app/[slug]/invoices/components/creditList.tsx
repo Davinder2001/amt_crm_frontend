@@ -175,7 +175,6 @@ const CreditList: React.FC = () => {
               visibleColumns={visibleColumns}
               onColumnToggle={toggleColumn}
               onResetColumns={onResetColumns}
-              actions={[]}
               introKey='credit_list_intro'
             />
 
@@ -188,6 +187,18 @@ const CreditList: React.FC = () => {
                   handleView(id);
                 }
               }}
+              cardView={(users: CreditUser) => (
+                <>
+                  <div className="card-row">
+                    <h5>{users.name}</h5>
+                    <p>{users.number}</p>
+                  </div>
+                  <div className="card-row">
+                    <p>Invoices: {users.total_invoices}</p>
+                    <p>Amount Paid: {users.amount_paid}</p>
+                  </div>
+                </>
+              )}
             />
           </>
         )}

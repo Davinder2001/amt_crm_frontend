@@ -83,11 +83,19 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
         const checked = (e.target as HTMLInputElement).checked;
 
         if (name === 'annual_price' || name === 'three_years_price' || name === 'employee_limit') {
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
-            setFormData(prev => ({
-                ...prev,
-                [name]: digitsOnly ? Number(digitsOnly) : 0,
-            }));
+            // Allow empty string (for backspace/delete) or numeric values including 0
+            if (value === '') {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: '',
+                }));
+            } else {
+                const digitsOnly = value.replace(/\D/g, '').slice(0, 8);
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: digitsOnly ? Number(digitsOnly) : '',
+                }));
+            }
             return;
         }
 
@@ -296,7 +304,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <input
                                 type="text"
                                 name="annual_price"
-                                value={formData.annual_price || ''}
+                                value={formData.annual_price === 0 ? 0 : formData.annual_price || ''}
                                 onChange={handleInputChange}
                                 placeholder="Enter annual price"
                                 className="form-input"
@@ -311,7 +319,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <input
                                 type="text"
                                 name="three_years_price"
-                                value={formData.three_years_price || ''}
+                                value={formData.three_years_price === 0 ? 0 : formData.three_years_price || ''}
                                 onChange={handleInputChange}
                                 placeholder="Enter three years price"
                                 className="form-input"
@@ -326,7 +334,7 @@ const Package: React.FC<PackageProps> = ({ mode = 'add', packageId }) => {
                             <input
                                 type="text"
                                 name="employee_limit"
-                                value={formData.employee_limit || ''}
+                                value={formData.employee_limit === 0 ? 0 : formData.employee_limit || ''}
                                 onChange={handleInputChange}
                                 placeholder="Enter employee limit"
                                 className="form-input"

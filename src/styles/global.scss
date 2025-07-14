@@ -188,6 +188,48 @@ body {
     position: relative !important;
 }
 
+//  google translator css start ******************* **********************
+body>.skiptranslate,
+.goog-logo-link,
+.gskiptranslate,
+.goog-te-gadget span,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+div#goog-gt- {
+    display: none !important;
+}
+
+.goog-te-gadget {
+    color: transparent !important;
+    font-size: 0px;
+     width: 0;
+    height: 0;
+    display: none;
+}
+
+.goog-text-highlight {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+#google_translate_element select {
+    background: transparent;
+    color: #333333;
+    border: none;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+
+//  google translator css end ******************* **********************
+
+
 ::-webkit-scrollbar {
     display: none;
 }

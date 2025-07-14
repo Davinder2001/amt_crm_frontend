@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useFetchNotificationsQuery } from '@/slices';
 import SearchBar from '@/app/[slug]/_common/search/SearchBar';
 import Profile from '@/app/[slug]/_common/header/components/profile';
+import GoogleTranslate from '@/components/common/GoogleTranslate';
 
 interface headerProps {
   openMenu: () => void;
@@ -78,6 +79,7 @@ const Header: React.FC<headerProps> = ({ openMenu, isMobile }) => {
       ) : <span></span>}
       <div className="nav-container relative flex items-center gap-4">
         <SearchBar />
+        <GoogleTranslate />
 
         {/* Notification Icon with Unread Count */}
         <Link href={`/${companySlug}${userType === 'employee' ? '/employee' : ''}/notifications`} className="relative">

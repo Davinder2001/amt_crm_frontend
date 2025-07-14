@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import OnlinePayments from '../components/payments/OnlinePayments';
 import CashPayments from '../components/payments/CashPayments';
 import CardPayments from '../components/payments/CardPayments';
-import CreditPayments from '../components/payments/CreditPayments';
 import SelfConsumption from '../components/payments/SelfConsumption';
 import {
   FaGlobe,
@@ -13,6 +12,7 @@ import {
   FaHandHoldingUsd,
   FaLeaf
 } from 'react-icons/fa';
+import CreditList from '../components/creditList';
 const TABS = [
   {
     key: 'online',
@@ -35,7 +35,7 @@ const TABS = [
   {
     key: 'credit',
     label: 'Credit Payments',
-    component: CreditPayments,
+    component: CreditList,
     icon: <FaHandHoldingUsd />,
   },
   {
@@ -87,9 +87,8 @@ export default function CashFlow() {
               className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
               aria-label={tab.label}
             >
-              <span className="tab-icon">{tab.icon}</span>
+              {tab.icon}
               <span className="tab-label">{tab.label}</span>
-              <span className="active-indicator"></span>
             </button>
           ))}
         </div>

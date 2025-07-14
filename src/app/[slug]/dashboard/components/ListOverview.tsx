@@ -49,7 +49,7 @@ const ListOverview = () => {
     { label: "Employees", icon: FaUsers, type: "employees", link: "hr/status-view", name: "Employees" },
     { label: "Vendor", icon: FaStore, type: "vendors", link: "store/vendors", name: "Vendor" },
     { label: "Customers", icon: FaUserFriends, type: "customers", link: "invoices/customers", name: "Customers" },
-    { label: "Receiveable", icon: FaUserFriends, type: "receivables", link: "credits", name: "Receiveable" },
+    { label: "Receiveable", icon: FaUserFriends, type: "receivables", link: "invoices/cash-flow#credit", name: "Receiveable" },
     { label: "Payable", icon: FaUserFriends, type: "payables", link: "payables", name: "Payable" },
   ];
 

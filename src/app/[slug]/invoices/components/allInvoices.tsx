@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaFileInvoice, FaPlus, FaUsers, FaCreditCard, FaMoneyBill } from "react-icons/fa";
+import { FaFileInvoice, FaPlus, FaUsers, FaMoneyBill } from "react-icons/fa";
 import { useLazyDownloadInvoicePdfQuery } from "@/slices";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { useCompany } from "@/utils/Company";
@@ -192,11 +192,11 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
             icon: <FaUsers />,
             onClick: () => router.push(`/${companySlug}/invoices/customers`),
           },
-          {
-            label: 'Credits',
-            icon: <FaCreditCard />,
-            onClick: () => router.push(`/${companySlug}/invoices/credits`),
-          },
+          // {
+          //   label: 'Credits',
+          //   icon: <FaCreditCard />,
+          //   onClick: () => router.push(`/${companySlug}/invoices/credits`),
+          // },
           {
             label: 'Quotations',
             icon: <FaFileInvoice />,

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -32,7 +32,15 @@ declare global {
 const languageOptions = [
   { code: "en", name: "English", flag: "https://flagcdn.com/w20/gb.png" },
   { code: "hi", name: "Hindi", flag: "https://flagcdn.com/w20/in.png" },
-  { code: "bn", name: "Bengali", flag: "https://flagcdn.com/w20/bd.png" },
+  { code: "bn", name: "Bengali", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "te", name: "Telugu", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "mr", name: "Marathi", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "ta", name: "Tamil", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "ur", name: "Urdu", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "gu", name: "Gujarati", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "kn", name: "Kannada", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "pa", name: "Punjabi", flag: "https://flagcdn.com/w20/in.png" },
+  { code: "ml", name: "Malayalam", flag: "https://flagcdn.com/w20/in.png" },
   { code: "ar", name: "Arabic", flag: "https://flagcdn.com/w20/sa.png" },
   { code: "ja", name: "Japanese", flag: "https://flagcdn.com/w20/jp.png" },
   { code: "iw", name: "Hebrew", flag: "https://flagcdn.com/w20/il.png" },
@@ -41,6 +49,7 @@ const languageOptions = [
 const GoogleTranslate = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState(languageOptions[0]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Check if we've already initialized
@@ -129,8 +138,24 @@ const GoogleTranslate = () => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="google-translate-wrapper">
+    <div className="google-translate-wrapper" ref={dropdownRef}>
       {/* Remove display: 'none' to make the widget functional */}
       <div id="google_translate_element"></div>
 
@@ -230,9 +255,12 @@ body {
     border-radius: 4px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     min-width: 150px;
-    overflow: hidden;
+    max-height: 300px;
+    overflow: auto;
     z-index: 1001;
     margin-top: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #384B70 #DEE9F2;
 }
 
 .language-option {

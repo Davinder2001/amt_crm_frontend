@@ -491,15 +491,8 @@
 .change-pass-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
-  border-radius: $border-radius;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: $white;
-  overflow: hidden;
 
   .form-container {
-    padding: 20px;
 
     .title {
       color: var(--primary-color);
@@ -516,7 +509,7 @@
 
     .form {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 12px;
 
       .input-group {
@@ -524,7 +517,7 @@
         align-items: center;
         white-space: nowrap;
         gap: 8px;
-        padding: 10px;
+        padding: 12px;
         border: 1px solid #eee;
         border-radius: $border-radius;
         background: $white;
@@ -541,6 +534,7 @@
           outline: none;
           font-size: 14px;
           background: transparent;
+          padding: 0;
 
           &::placeholder {
             color: #999;

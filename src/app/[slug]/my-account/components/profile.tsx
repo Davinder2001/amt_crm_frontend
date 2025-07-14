@@ -14,19 +14,22 @@ import LoadingState from '@/components/common/LoadingState'
 import EmptyState from '@/components/common/EmptyState'
 import { FaEdit, FaLock, FaPlus, FaUniversity, FaUser } from 'react-icons/fa'
 import { EditUserModal } from './EditUserModal'
+import Modal from '@/components/common/Modal'
+import ChangePassword from './changePassword'
 
 const Profile = () => {
   const { data, isLoading, error } = useFetchProfileQuery()
-  const [sendCompanyId] = useSelectedCompanyMutation()
-  const [companies, setCompanies] = useState<Company[]>([])
-  const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null)
-  const [isRecheckModal, setIsRecheckModal] = useState(false)
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+  const [sendCompanyId] = useSelectedCompanyMutation();
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loadingCompanyId, setLoadingCompanyId] = useState<number | null>(null);
+  const [isRecheckModal, setIsRecheckModal] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [editUserModal, setEditUserModal] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
-  const router = useRouter()
-  const dispatch = useDispatch<AppDispatch>()
-  const user = data?.user
+  const [changePasswordModal, setChangePasswordModal] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const user = data?.user;
   const { companySlug } = useCompany();
   const { data: companyScore } = useCompanyScoreQuery();
   const { data: sessionsData } = useFetchLoginSessionsQuery();
@@ -41,7 +44,7 @@ const Profile = () => {
 
 
   const selectCompany = async (company: Company) => {
-    const { id, company_slug, verification_status, payment_status } = company
+    const { id, company_slug, verification_status, payment_status } = company;
 
     if (payment_status === 'pending') {
       setSelectedCompany(company)
@@ -116,9 +119,9 @@ const Profile = () => {
           <div className="panel-header">
             <h2><FaUser /> {user?.name}</h2>
             <div className='pannel-header-actions'>
-              <Link href="my-account/change-password" className="action-btn">
+              <span onClick={() => setChangePasswordModal(true)} className="action-btn">
                 <FaLock /> Change Password
-              </Link>
+              </span>
               <span onClick={() => { if (user?.id !== undefined) handleEditOpen(user.id) }}>
                 <FaEdit /> Edit Profile
               </span>
@@ -152,6 +155,7 @@ const Profile = () => {
                   onClick={(e) => handleCardClick(company, e)}
                 >
 
+                  <div className="c-basic">
                   <div className="company-main">
                     <h3>{company.company_name}</h3>
                     <div className="company-id">#{company.company_id}</div>
@@ -188,6 +192,7 @@ const Profile = () => {
                       <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
                     </label>
                   </div>
+                  </div>
 
                   <div className="c-actions">
                     {!isCurrentCompany ? (
@@ -199,6 +204,8 @@ const Profile = () => {
                         <div className="badge-text">Active</div>
                       </div>
                     )}
+
+                    <button className='edit-c-profile'>Edit Company Profile</button>
 
                     {company.payment_status === 'pending' ? (
                       <button
@@ -227,6 +234,10 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <Modal isOpen={changePasswordModal} onClose={() => setChangePasswordModal(false)} title="Change Password" width="500px">
+        <ChangePassword />
+      </Modal>
 
       <EditUserModal
         userId={userId}

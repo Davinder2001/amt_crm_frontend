@@ -243,9 +243,11 @@
   .companies-panel {
     .company-stack {
       .company-item {
-        padding: 20px 10px 10px;
+        padding: 10px;
         display: flex;
+        flex-direction: row;
         align-items: flex-end;
+        justify-content: space-between;
         position: relative;
         overflow: hidden;
         gap: 20px;
@@ -253,16 +255,31 @@
         transition: all 0.2s;
         cursor: pointer;
 
+        .c-basic {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 20px;
+          flex: 1;
+        }
+
         .c-actions {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
           gap: 10px;
+
+          button {
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 500;
+          }
 
           .switch-badge {
             background: var(--primary-color);
             color: $white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: $border-radius;
             font-size: 12px;
           }
@@ -270,7 +287,7 @@
           .active-badge {
             background: $success-color;
             color: $white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: $border-radius;
             font-size: 12px;
             font-weight: 500;
@@ -284,6 +301,9 @@
 
         &.verified {
           border-left: 3px solid #2e7d32;
+          flex-direction: column;
+          align-items: normal;
+          padding: 30px 10px 10px;
         }
 
         &.pending {
@@ -295,8 +315,6 @@
         }
 
         .company-main {
-          flex: 1;
-
           h3 {
             margin: 0 0 0.3rem;
             font-size: 1.1rem;
@@ -313,7 +331,6 @@
           display: flex;
           flex-direction: column;
           gap: 5px;
-          margin-top: 10px;
 
           .score-bar-container {
             width: 100%;
@@ -323,14 +340,14 @@
           .score-bar {
             height: 8px;
             background: #f0f0f0;
-            border-radius: 4px;
+            border-radius: $border-radius;
             overflow: visible;
             position: relative;
 
             .score-fill {
               height: 100%;
               background: linear-gradient(90deg, #4CAF50, #8BC34A);
-              border-radius: 4px;
+              border-radius: $border-radius;
               position: relative;
 
               .score-indicator {
@@ -342,9 +359,9 @@
                 .indicator-tooltip {
                   position: relative;
                   background: #333;
-                  color: white;
+                  color: $white;
                   padding: 4px 8px;
-                  border-radius: 4px;
+                  border-radius: $border-radius;
                   font-size: 10px;
                   white-space: nowrap;
                   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -425,11 +442,10 @@
           }
         }
 
-        .view-btn {
-          width: fit-content;
+        .view-btn,
+        .edit-c-profile {
           border-radius: $border-radius;
           background: transparent;
-          padding: 5px 10px;
           border: 1px solid var(--primary-color);
           color: var(--primary-color);
           cursor: pointer;
@@ -533,7 +549,7 @@
         padding: 8px 12px;
 
         h2 {
-          font-size: 16px;
+          font-size: 18px;
         }
 
         .add-btn {
@@ -554,7 +570,7 @@
         gap: 10px;
 
         .pannel-header-actions {
-          font-size: 12px;
+          font-size: 14px;
         }
       }
     }
@@ -572,9 +588,12 @@
       .company-stack {
         .company-item {
           flex-direction: column;
-          align-items: flex-start;
           gap: 10px;
           padding: 8px;
+
+          &.verified {
+            padding: 10px;
+          }
 
           .company-score {
             margin-top: 25px;
@@ -583,8 +602,6 @@
       }
 
       .company-item {
-
-
         .company-main {
           h3 {
             font-size: 14px;

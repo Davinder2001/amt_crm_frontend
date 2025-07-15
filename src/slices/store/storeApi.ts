@@ -5,8 +5,14 @@ import storeApiSlice from "./storeCreateSlice";
 const storeApi = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch all store items
-    fetchStore: builder.query<StoreResponse, void>({
-      query: () => "store/items",
+    fetchStore: builder.query<StoreResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "store/items",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
       providesTags: ["Store"],
     }),
 

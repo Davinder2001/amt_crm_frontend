@@ -14,10 +14,18 @@ type CreditUser = {
 const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    fetchInvoices: builder.query<InvoicesResponse, void>({
-      query: () => "invoices",
+
+    fetchInvoices: builder.query<InvoicesResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "invoices",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
       providesTags: ["Invoice"],
     }),
+
     createInvoice: builder.mutation<{ status?: boolean, message?: string, error?: string }, FormData>({
       query: (formData) => ({
         url: "invoices",

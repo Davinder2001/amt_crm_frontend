@@ -20,12 +20,13 @@ type Column<T> = {
 type Props<T extends { id: number; name?: string }> = {
   data: T[];
   columns: Column<T>[];
-  itemsPerPage?: number;
+  pagination?: Pagination;
+  onPageChange?: (page: number) => void;
+  onPerPageChange?: (perPage: number) => void;
   onDelete?: (id: number) => void;
   onBulkDelete?: (ids: number[]) => void;
   onEdit?: (id: number) => void;
   onView?: (id: number) => void;
-  storageKey?: string;
   showBulkActions?: boolean;
   cardView?: (item: T) => React.ReactNode;
 };
@@ -33,16 +34,16 @@ type Props<T extends { id: number; name?: string }> = {
 function ResponsiveTable<T extends { id: number; name?: string }>({
   data,
   columns,
-  itemsPerPage = 10,
+  pagination,
   onDelete,
   onBulkDelete,
   onEdit,
   onView,
-  storageKey,
   showBulkActions = false,
   cardView,
+  onPageChange,
+  onPerPageChange,
 }: Props<T>) {
-  const [currentPage, setCurrentPage] = useState(1);
   const { ref, handleMouseDown, wasDraggedRef } = useDragScroll();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
@@ -51,52 +52,33 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const [selectedItems, setSelectedItems] = useState<{
     all: boolean;
     ids: number[];
-    page: number;
-  }>({ all: false, ids: [], page: 1 });
+  }>({ all: false, ids: [] });
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = data.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const shouldShowPagination = totalPages > 1 && data.length > itemsPerPage;
-
-  useEffect(() => {
-    if (storageKey) {
-      const savedPage = localStorage.getItem(storageKey);
-      if (savedPage) {
-        const parsed = parseInt(savedPage, 10);
-        if (!isNaN(parsed)) {
-          setCurrentPage(parsed);
-          setSelectedItems(prev => ({ ...prev, page: parsed }));
-        }
-      }
-    }
-  }, [storageKey]);
+  const currentPage = pagination?.current_page || 1;
+  const perPage = pagination?.per_page || 10;
+  const totalItems = pagination?.total || data.length;
+  const totalPages = Math.ceil(totalItems / perPage);
+  const shouldShowPagination = totalPages > 1;
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-    setCurrentPage(newPage);
-    setSelectedItems(prev => ({ ...prev, page: newPage }));
-    if (storageKey) localStorage.setItem(storageKey, String(newPage));
+    if (onPageChange) onPageChange(newPage);
   };
 
-  useEffect(() => {
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-      setSelectedItems(prev => ({ ...prev, page: totalPages }));
-    }
-  }, [data, currentPage, itemsPerPage]);
+  const handlePerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPerPage = parseInt(e.target.value, 10);
+    if (onPerPageChange) onPerPageChange(newPerPage);
+  };
 
   const toggleSelectAll = () => {
     setSelectedItems(prev => {
       if (prev.all) {
-        return { all: false, ids: [], page: currentPage };
-      } else if (prev.ids.length === currentData.length) {
-        return { all: false, ids: [], page: currentPage };
+        return { all: false, ids: [] };
+      } else if (prev.ids.length === data.length) {
+        return { all: false, ids: [] };
       } else {
-        const pageIds = currentData.map(item => item.id);
-        return { all: false, ids: pageIds, page: currentPage };
+        const pageIds = data.map(item => item.id);
+        return { all: false, ids: pageIds };
       }
     });
     setShowIndividualCheckboxes(true);
@@ -105,8 +87,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const toggleSelectAllPages = () => {
     setSelectedItems(prev => ({
       all: !prev.all,
-      ids: [],
-      page: currentPage
+      ids: []
     }));
     setShowIndividualCheckboxes(true);
   };
@@ -114,17 +95,15 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   const toggleSelectItem = (id: number) => {
     setSelectedItems(prev => {
       if (prev.all) {
-        // When "all" is selected, unselecting an item means we're excluding it
         const newIds = prev.ids.includes(id)
           ? prev.ids.filter(itemId => itemId !== id)
           : [...prev.ids, id];
         return { ...prev, ids: newIds };
       } else {
-        // When "all" is not selected, normal selection behavior
         const newIds = prev.ids.includes(id)
           ? prev.ids.filter(itemId => itemId !== id)
           : [...prev.ids, id];
-        return { all: false, ids: newIds, page: currentPage };
+        return { all: false, ids: newIds };
       }
     });
     setShowIndividualCheckboxes(true);
@@ -136,18 +115,18 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
         ? data.filter(item => !selectedItems.ids.includes(item.id)).map(item => item.id)
         : selectedItems.ids;
       await onBulkDelete(idsToDelete);
-      setSelectedItems({ all: false, ids: [], page: currentPage });
+      setSelectedItems({ all: false, ids: [] });
       setShowBulkConfirmDialog(false);
     }
   };
 
   const getSelectedCount = React.useCallback(() => {
     if (selectedItems.all) {
-      return data.length - selectedItems.ids.length;
+      return pagination?.total ? pagination.total - selectedItems.ids.length : 0;
     } else {
       return selectedItems.ids.length;
     }
-  }, [selectedItems, data.length]);
+  }, [selectedItems, pagination?.total]);
 
   const isItemSelected = (id: number) => {
     if (selectedItems.all) {
@@ -197,11 +176,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                   <div className="select-all-container">
                     <span onClick={toggleSelectAll} title="Select current page">
                       {selectedItems.all ? (
-                        <FaSquare className="select-icon" size={18}/>
-                      ) : selectedItems.ids.length === currentData.length ? (
-                        <FaCheckSquare className="select-icon" size={18}/>
+                        <FaSquare className="select-icon" size={18} />
+                      ) : selectedItems.ids.length === data.length ? (
+                        <FaCheckSquare className="select-icon" size={18} />
                       ) : (
-                        <FaSquare className="select-icon" size={18}/>
+                        <FaSquare className="select-icon" size={18} />
                       )}
                     </span>
                     {totalPages > 1 && (
@@ -211,9 +190,9 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                         title="Select all items across all pages"
                       >
                         {selectedItems.all ? (
-                          <FaCheckSquare className="select-icon" size={18}/>
+                          <FaCheckSquare className="select-icon" size={18} />
                         ) : (
-                          <FaSquare className="select-icon" size={18}/>
+                          <FaSquare className="select-icon" size={18} />
                         )}
                       </span>
                     )}
@@ -227,7 +206,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
             </tr>
           </thead>
           <tbody>
-            {currentData.map((item, index) => (
+            {data.map((item, index) => (
               <tr
                 key={index}
                 onClick={(e) => {
@@ -249,14 +228,14 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
                       }}
                     >
                       {isItemSelected(item.id) ? (
-                        <FaCheckSquare className="select-icon" size={18}/>
+                        <FaCheckSquare className="select-icon" size={18} />
                       ) : (
-                        <FaSquare className="select-icon" size={18}/>
+                        <FaSquare className="select-icon" size={18} />
                       )}
                     </span>
                   </td>
                 )}
-                <td>{startIndex + index + 1}</td>
+                <td>{(currentPage - 1) * perPage + index + 1}</td>
                 {columns.map((col, i) => (
                   <td key={i}>
                     {col.render
@@ -282,7 +261,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               <span onClick={toggleSelectAll} title="Select current page">
                 {selectedItems.all ? (
                   <FaSquare className="select-icon" />
-                ) : selectedItems.ids.length === currentData.length ? (
+                ) : selectedItems.ids.length === data.length ? (
                   <FaCheckSquare className="select-icon" />
                 ) : (
                   <FaSquare className="select-icon" />
@@ -308,7 +287,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </div>
         )}
         <div className="card-view">
-          {currentData.map((item, index) => (
+          {data.map((item, index) => (
             <div key={index} className="t-card">
               {/* Overlay for bulk selection */}
               {showBulkActions && showIndividualCheckboxes && (
@@ -413,6 +392,19 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
           </div>
         </div>
       )}
+      {/* Per Page Selector */}
+      <div className="per-page-selector">
+        <select
+          value={perPage}
+          onChange={handlePerPageChange}
+          className="per-page-select"
+        >
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+        </select>
+      </div>
 
       {/* Single Delete Confirmation */}
       <ConfirmDialog

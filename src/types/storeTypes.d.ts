@@ -178,7 +178,7 @@ interface AttributeOption {
 
 interface variations {
   attribute_value_id: number;
-  id?: number ;
+  id?: number;
   variant_regular_price: number;
   variant_sale_price: number;
   stock: number;
@@ -252,7 +252,10 @@ interface StoreItemBatchRequest extends BaseStoreItemRequest<number[]> {
 
 type StoreItemFormData = StoreItemBatchRequest;
 
-type StoreResponse = StoreItem[];
+interface StoreResponse {
+  items: StoreItem[];
+  pagination: Pagination;
+}
 
 interface OcrResponse {
   result: string;
@@ -329,12 +332,12 @@ interface Brand {
 interface ItemBatch {
   id: number;
   item_id: number;
-  stock:number;
+  stock: number;
   batch_number: string | null;
   cost_price: number;
   regular_price?: number | null;
   sale_price?: number | null;
-  price_per_unit?: number | null; 
+  price_per_unit?: number | null;
   quantity_count: number;
   company_id: number;
   created_at: string;

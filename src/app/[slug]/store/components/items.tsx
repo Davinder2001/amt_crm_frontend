@@ -33,8 +33,25 @@ const Items: React.FC = () => {
   const [showCreateItemModal, setShowCreateItemModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { setItemId } = useSelectedItem();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const { data, error, isLoading, refetch } = useFetchStoreQuery({
+    page: currentPage,
+    per_page: itemsPerPage,
+  });
+  const items = data?.items ?? [];
+  const pagination = data?.pagination;
 
-  const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
+  // Add these handler functions
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setItemsPerPage(newPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
       ...item,
@@ -332,12 +349,14 @@ const Items: React.FC = () => {
       {storeItems.length > 0 ?
         <ResponsiveTable
           data={filteredItems}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onPerPageChange={handlePerPageChange}
           columns={columns}
           onDelete={(id) => handleDelete(id)}
           onBulkDelete={handleBulkDelete}
           onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
-          storageKey="store_table_page"
           showBulkActions={showBulkActions}
           cardView={(item) => (
             <>
@@ -478,7 +497,7 @@ const Items: React.FC = () => {
           </div>
 
           <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p>Total Items: <strong>{storeItems.length}</strong></p>
+            <p>Total Items: <strong>{data?.items.length}</strong></p>
             <button
               onClick={() => router.push(`/${companySlug}/store/add-item`)}
               className='buttons'

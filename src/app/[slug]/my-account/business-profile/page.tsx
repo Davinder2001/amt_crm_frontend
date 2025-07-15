@@ -232,17 +232,18 @@ function Page() {
 
                     <div className="form-group full-width">
                         <label>Terms & Conditions</label>
-                        
-                        <QuillEditor
-                            value={formData.term_and_conditions}
-                            onChange={(value) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    term_and_conditions: value,
-                                }))
-                            }
-                            placeholder="Enter terms here..."
-                        />
+                        <div>
+                            <QuillEditor
+                                value={formData.term_and_conditions}
+                                onChange={(value) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        term_and_conditions: value,
+                                    }))
+                                }
+                                placeholder="Enter terms here..."
+                            />
+                        </div>
                     </div>
 
                 </div>

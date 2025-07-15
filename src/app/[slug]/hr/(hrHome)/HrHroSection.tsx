@@ -20,6 +20,8 @@ const HrHeroSection = () => {
   const { data: dashSummary } = useFetchdashboardSummaryQuery();
   const { companySlug } = useCompany();
 
+  console.log("Dashboard Summary:", dashSummary);
+
   const statCards = [
     {
       icon: <FaUsers />,
@@ -30,7 +32,7 @@ const HrHeroSection = () => {
     },
     {
       icon: <FaCheckCircle />,
-      value: dashSummary?.summary?.present_today?.length ?? 0,
+      value: dashSummary?.summary?.present_today ?? 0,
       label: "Present",
       note: "vs. yesterday's presence",
       link: "attendance?status=present"
@@ -44,21 +46,21 @@ const HrHeroSection = () => {
     },
     {
       icon: <FaClock />,
-      value: dashSummary?.summary?.late_arrival?.length ?? 0,
+      value: dashSummary?.summary?.late_arrival ?? 0,
       label: "Late Arrival",
       note: "vs. yesterday late",
       link: "attendance?status=late-arrival"
     },
     {
       icon: <FaSignOutAlt />,
-      value: dashSummary?.summary?.early_departures?.length ?? 0,
+      value: dashSummary?.summary?.early_departures ?? 0,
       label: "Early Departures",
       note: "vs. yesterday early outs",
       link: "attendance?status=early-departures"
     },
     {
       icon: <FaCalendarAlt />,
-      value: dashSummary?.summary?.time_off_today?.length ?? 0,
+      value: dashSummary?.summary?.time_off_today ?? 0,
       label: "Time Off",
       note: "Today's Leave / Time Off",
       link: "attendance?status=time-off"
@@ -81,7 +83,7 @@ const HrHeroSection = () => {
             >
               <StatCard
                 icon={card.icon}
-                value={card.value}
+                value={Array.isArray(card.value) ? card.value.length : card.value}
                 label={card.label}
                 note={card.note}
               />

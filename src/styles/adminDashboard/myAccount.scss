@@ -270,10 +270,12 @@
           align-items: center;
           gap: 10px;
 
-          button {
+          button,
+          .edit-c-profile {
             padding: 5px 10px;
             font-size: 12px;
             font-weight: 500;
+            text-decoration: none;
           }
 
           .switch-badge {

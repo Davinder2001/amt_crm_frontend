@@ -156,42 +156,42 @@ const Profile = () => {
                 >
 
                   <div className="c-basic">
-                  <div className="company-main">
-                    <h3>{company.company_name}</h3>
-                    <div className="company-id">#{company.company_id}</div>
-                  </div>
+                    <div className="company-main">
+                      <h3>{company.company_name}</h3>
+                      <div className="company-id">#{company.company_id}</div>
+                    </div>
 
-                  {isCurrentCompany && companyScore && (
-                    <div className="company-score">
-                      <div className="score-bar-container">
-                        <div className="score-bar">
-                          <div
-                            className="score-fill"
-                            style={{ width: `${companyScore.profile_score}%` }}
-                          >
-                            <div className="score-indicator">
-                              <div className="indicator-tooltip">
-                                {companyScore.profile_score}% Complete
+                    {isCurrentCompany && companyScore && (
+                      <div className="company-score">
+                        <div className="score-bar-container">
+                          <div className="score-bar">
+                            <div
+                              className="score-fill"
+                              style={{ width: `${companyScore.profile_score}%` }}
+                            >
+                              <div className="score-indicator">
+                                <div className="indicator-tooltip">
+                                  {companyScore.profile_score}% Complete
+                                </div>
                               </div>
+                              {/* Pointer moved here - at the end of score-fill */}
+                              <div className="indicator-pointer"></div>
                             </div>
-                            {/* Pointer moved here - at the end of score-fill */}
-                            <div className="indicator-pointer"></div>
                           </div>
                         </div>
+                        <div className="score-warning">{companyScore.message}</div>
                       </div>
-                      <div className="score-warning">{companyScore.message}</div>
+                    )}
+                    <div className="company-status">
+                      <label htmlFor="payment-status">
+                        <span>Payment Status</span>
+                        <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
+                      </label>
+                      <label htmlFor="verification-status">
+                        <span>Verification Status</span>
+                        <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
+                      </label>
                     </div>
-                  )}
-                  <div className="company-status">
-                    <label htmlFor="payment-status">
-                      <span>Payment Status</span>
-                      <span className={`status-tag ${company.payment_status}`}>{company.payment_status}</span>
-                    </label>
-                    <label htmlFor="verification-status">
-                      <span>Verification Status</span>
-                      <span className={`status-tag ${company.verification_status}`}>{company.verification_status}</span>
-                    </label>
-                  </div>
                   </div>
 
                   <div className="c-actions">
@@ -205,7 +205,15 @@ const Profile = () => {
                       </div>
                     )}
 
-                    <button className='edit-c-profile'>Edit Company Profile</button>
+                    {isCurrentCompany &&
+                      <Link
+                        href={`/${company.company_slug}/my-account/business-profile?companyId=${company.id}`}
+                        className='edit-c-profile'
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Edit Company Profile
+                      </Link>
+                    }
 
                     {company.payment_status === 'pending' ? (
                       <button

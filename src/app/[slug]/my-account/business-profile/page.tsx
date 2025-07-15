@@ -22,7 +22,7 @@ interface UpdateCompanyFormData {
     business_proof_front: File | null;
     business_proof_back: File | null;
     company_signature: File | null;
-    term_and_conditions?: string | null;
+    term_and_conditions: string;
 }
 
 function Page() {
@@ -41,7 +41,8 @@ function Page() {
         business_id: '',
         business_proof_front: null,
         business_proof_back: null,
-        company_signature: null
+        company_signature: null,
+        term_and_conditions: ''
     });
 
     // Initialize form data when company details are loaded
@@ -56,7 +57,8 @@ function Page() {
                 business_id: String(companyDetails.business_id || ''),
                 business_proof_front: null,
                 business_proof_back: null,
-                company_signature: null
+                company_signature: null,
+                term_and_conditions: String(companyDetails.term_and_conditions || ''),
             });
         }
     }, [companyDetails]);
@@ -86,9 +88,13 @@ function Page() {
             payload.append('pin_code', formData.pin_code);
             payload.append('business_proof_type', formData.business_proof_type);
             payload.append('business_id', formData.business_id);
+            payload.append('method', '_PUT');
             if (formData.business_proof_front) payload.append('business_proof_front', formData.business_proof_front);
             if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
             if (formData.company_signature) payload.append('company_signature', formData.company_signature);
+            if (formData.term_and_conditions) {
+                payload.append('term_and_conditions', formData.term_and_conditions);
+            }
 
             const res = await updateCompany({
                 id: Number(companyId),

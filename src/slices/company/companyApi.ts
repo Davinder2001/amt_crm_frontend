@@ -138,7 +138,7 @@ const companyApi = companyCreateSlice.injectEndpoints({
     updateCompany: builder.mutation<{ status: boolean; message: string; error: string }, { id: number, formdata: FormData }>({
       query: ({ id, formdata }) => ({
         url: `company-details/${id}`,
-        method: "PUT",
+        method: "POST",
         body: formdata,
         credentials: "include",
       }),

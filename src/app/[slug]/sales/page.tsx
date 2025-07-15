@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useMemo } from 'react'
 import { useFetchSalesReportQuery } from '@/slices/reports/reportsApi';
+import LoadingState from '@/components/common/LoadingState';
 
 const getCurrentYear = () => new Date().getFullYear();
 const getCurrentMonthName = () =>
@@ -32,7 +33,7 @@ const Page = () => {
         }
     }, [availableMonths, selectedMonth]);
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <LoadingState/>;
     if (error) return <div>Error loading sales report.</div>;
     if (!data) return <div>No data found.</div>;
 

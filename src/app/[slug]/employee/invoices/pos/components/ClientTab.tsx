@@ -21,6 +21,9 @@ type ClientTabProps = {
     setDeliveryBoyId: React.Dispatch<React.SetStateAction<number | null>>;
     customers?: { customers: Customer[] };
     companySlug: string;
+    hasSignature?: boolean;
+    signatureRequired: boolean;
+    setSignatureRequired: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ClientTab({
@@ -40,6 +43,9 @@ export default function ClientTab({
     deliveryBoyId,
     setDeliveryBoyId,
     customers,
+    hasSignature,
+    signatureRequired,
+    setSignatureRequired,
 }: ClientTabProps) {
     const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployesQuery();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -216,6 +222,18 @@ export default function ClientTab({
                         </select>
                     </div>
 
+                    {hasSignature && (
+                        <div className="form-group">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={signatureRequired}
+                                    onChange={(e) => setSignatureRequired(e.target.checked)}
+                                />
+                                Attach Signature on Invoice
+                            </label>
+                        </div>
+                    )}
                 </>
             )}
 

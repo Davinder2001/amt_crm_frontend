@@ -372,7 +372,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               >
                 ←
               </button>
-              <div className="pagination-btns-counts">
+              <div className="pagination-btns-counts" ref={ref} onMouseDown={handleMouseDown}>
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
                     key={i}

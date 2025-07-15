@@ -60,3 +60,7 @@ export const clearStorage = () => {
         });
     }
 };
+
+
+export const STORE_ITEM_COUNT = 10;
+export const INVOICES_COUNT = 10;

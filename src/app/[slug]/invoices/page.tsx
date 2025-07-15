@@ -2,10 +2,11 @@
 import React, { useState } from 'react'
 import AllInvoices from './components/allInvoices';
 import { useFetchInvoicesQuery } from '@/slices';
+import { INVOICES_COUNT } from '@/utils/Company';
 
 function Page() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(INVOICES_COUNT);
   const { data, isLoading, isError } = useFetchInvoicesQuery({
     page: currentPage,
     per_page: itemsPerPage,
@@ -27,7 +28,7 @@ function Page() {
     <>
       <AllInvoices invoices={invoices} isLoadingInvoices={isLoading} isError={isError} pagination={pagination}
         onPageChange={handlePageChange}
-        onPerPageChange={handlePerPageChange} />
+        onPerPageChange={handlePerPageChange} counts={INVOICES_COUNT} />
     </>
   )
 }

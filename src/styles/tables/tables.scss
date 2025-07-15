@@ -877,32 +877,32 @@ table {
 
 /* ============ PAGINATION ============ */
 .pagination-controls {
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: $white;
-    padding: 18px 0;
-    border-radius: 0 0 5px 5px;
+    padding: 18px 16px;
+    border-radius: 0 0 $border-radius $border-radius;
     position: relative;
     overflow: hidden;
+    gap: 12px;
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg,
-                transparent,
-                rgba(var(--primary-color), 0.84),
-                rgba(var(--primary-color), 0.77),
-                rgba(var(--primary-color), 0.82),
-                transparent);
-        animation: borderFlow 4s linear infinite;
-        background-size: 200% 100%;
-        opacity: 0.7;
-        transition: opacity 0.3s ease;
+    @media (max-width: 600px) {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+
+        .pagination-track {
+            order: 1;
+            width: 100%;
+        }
+
+        .per-page-selector-wrapper {
+            order: 2;
+            width: 100%;
+            justify-content: flex-end;
+        }
     }
 
     .pagination-track {
@@ -910,15 +910,25 @@ table {
         align-items: center;
         justify-content: center;
         flex-wrap: nowrap;
-        gap: 6px;
-        padding: 10px;
-        background: white;
-        border-radius: $border-radius;
-        box-shadow: 0 4px 12px #efefef82;
-        border: 1px solid $border-color;
+        gap: 8px;
         position: relative;
         z-index: 2;
         overflow: hidden;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            gap: 12px;
+
+            .nav-arrow-wrapper {
+                width: 100%;
+            }
+
+            .pagination-info {
+                &::before {
+                    display: none;
+                }
+            }
+        }
 
         .nav-arrow-wrapper {
             display: flex;
@@ -930,9 +940,10 @@ table {
             .pagination-btns-counts {
                 display: flex;
                 flex-wrap: nowrap;
-                gap: 6px;
-                padding: 0 5px;
+                gap: 4px;
+                padding: 0 4px;
                 overflow-x: auto;
+                overflow-y: hidden;
                 max-width: 100%;
                 scrollbar-width: none;
                 -ms-overflow-style: none;
@@ -942,15 +953,15 @@ table {
                 }
 
                 button {
-                    flex: 0 0 auto;
+                    min-width: 30px;
                 }
             }
         }
     }
 
     button {
-        min-width: 30px;
-        height: 30px;
+        min-width: 32px;
+        height: 32px;
         padding: 0 8px;
         border: none;
         background: transparent;
@@ -962,24 +973,7 @@ table {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
-        position: relative;
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border: 2px solid transparent;
-            border-radius: $border-radius;
-            transition: all 0.4s ease;
-        }
-
-        &:hover:not(:disabled) {
-            transform: translateY(-2px);
-        }
+        transition: all 0.2s ease;
 
         &:disabled {
             color: #cccccc;
@@ -990,11 +984,10 @@ table {
         &.active {
             background-color: var(--primary-color);
             color: $white;
+        }
 
-            &::after {
-                border-color: rgba(255, 255, 255, 0.4);
-                animation: pulse 1.5s infinite;
-            }
+        &:hover:not(:disabled, .active) {
+            background-color: var(--primary-light);
         }
     }
 
@@ -1015,37 +1008,59 @@ table {
         background: var(--primary-light);
         color: $white;
         border-radius: $border-radius;
+        min-width: 32px;
+        height: 32px;
+        padding: 0;
 
         &:hover:not(:disabled) {
             background: var(--primary-color);
         }
     }
-}
 
-@keyframes borderFlow {
-    0% {
-        background-position: 100% 0;
-    }
+    .per-page-selector-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
 
-    100% {
-        background-position: -100% 0;
-    }
-}
+        @media (max-width: 600px) {
+            justify-content: flex-end;
+            width: 100%;
+        }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.7;
-    }
+        .per-page-label {
+            font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+        }
 
-    50% {
-        transform: scale(1.05);
-        opacity: 1;
-    }
+        .per-page-selector {
+            position: relative;
 
-    100% {
-        transform: scale(1);
-        opacity: 0.7;
+            .per-page-select {
+                appearance: none;
+                padding: 8px 30px 8px 12px;
+                border: 1px solid $border-color;
+                border-radius: $border-radius;
+                background-color: $white;
+                color: #333;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 8px center;
+                background-size: 16px;
+
+                &:hover {
+                    border-color: var(--primary-color);
+                }
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                }
+            }
+        }
     }
 }
 

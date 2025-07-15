@@ -18,11 +18,12 @@ interface allInvoicesProps {
   pagination?: Pagination;
   onPageChange?: (page: number) => void;
   onPerPageChange?: (perPage: number) => void;
+  counts: number;
 }
 
 const COLUMN_STORAGE_KEY = 'visible_columns_invoice';
 
-const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError, pagination, onPageChange, onPerPageChange }) => {
+const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError, pagination, onPageChange, onPerPageChange, counts }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
@@ -251,6 +252,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           pagination={pagination}
           onPageChange={onPageChange}
           onPerPageChange={onPerPageChange}
+          counts={counts}
           // onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
           onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
           cardView={(invoice) => (

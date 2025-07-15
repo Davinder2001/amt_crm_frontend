@@ -23,6 +23,7 @@ type Props<T extends { id: number; name?: string }> = {
   pagination?: Pagination;
   onPageChange?: (page: number) => void;
   onPerPageChange?: (perPage: number) => void;
+  counts?: number;
   onDelete?: (id: number) => void;
   onBulkDelete?: (ids: number[]) => void;
   onEdit?: (id: number) => void;
@@ -35,14 +36,15 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   data,
   columns,
   pagination,
+  onPageChange,
+  onPerPageChange,
+  counts,
   onDelete,
   onBulkDelete,
   onEdit,
   onView,
   showBulkActions = false,
   cardView,
-  onPageChange,
-  onPerPageChange,
 }: Props<T>) {
   const { ref, handleMouseDown, wasDraggedRef } = useDragScroll();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -55,7 +57,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   }>({ all: false, ids: [] });
 
   const currentPage = pagination?.current_page || 1;
-  const perPage = pagination?.per_page || 10;
+  const perPage = pagination?.per_page || counts || 10;
   const totalItems = pagination?.total || data.length;
   const totalPages = Math.ceil(totalItems / perPage);
   const shouldShowPagination = totalPages > 1;
@@ -66,7 +68,7 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
   };
 
   const handlePerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPerPage = parseInt(e.target.value, 10);
+    const newPerPage = parseInt(e.target.value, counts);
     if (onPerPageChange) onPerPageChange(newPerPage);
   };
 
@@ -356,8 +358,11 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       </div>
 
       {/* Pagination */}
-      {shouldShowPagination && (
-        <div className="pagination-controls">
+      <div className="pagination-controls">
+        {/* Empty div for left alignment */}
+        <div />
+
+        {shouldShowPagination && (
           <div className="pagination-track">
             <div className="nav-arrow-wrapper">
               <button
@@ -390,20 +395,24 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
               Page {currentPage} of {totalPages}
             </span>
           </div>
+        )}
+
+        {/* Per Page Selector - Right aligned */}
+        <div className="per-page-selector-wrapper">
+          <span className="per-page-label">Items per page:</span>
+          <div className="per-page-selector">
+            <select
+              value={perPage}
+              onChange={handlePerPageChange}
+              className="per-page-select"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
         </div>
-      )}
-      {/* Per Page Selector */}
-      <div className="per-page-selector">
-        <select
-          value={perPage}
-          onChange={handlePerPageChange}
-          className="per-page-select"
-        >
-          <option value={10}>10</option>
-          <option value={25}>25</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
       </div>
 
       {/* Single Delete Confirmation */}

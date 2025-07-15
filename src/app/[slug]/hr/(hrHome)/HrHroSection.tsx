@@ -18,6 +18,52 @@ const HrHeroSection = () => {
   const employees = employeesData?.employees || [];
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
   const { data: dashSummary } = useFetchdashboardSummaryQuery();
+  const { companySlug } = useCompany();
+
+  const statCards = [
+    {
+      icon: <FaUsers />,
+      value: dashSummary?.summary?.total_employees ?? 0,
+      label: "Total Employees",
+      note: `+${dashSummary?.summary?.new_employees_this_month ?? 0} new this month`,
+      link: "status-view"
+    },
+    {
+      icon: <FaCheckCircle />,
+      value: dashSummary?.summary?.present_today?.length ?? 0,
+      label: "Present",
+      note: "vs. yesterday's presence",
+      link: "attendance?status=present"
+    },
+    {
+      icon: <FaTimesCircle />,
+      value: dashSummary?.summary?.absent_today ?? 0,
+      label: "Absent",
+      note: "vs. yesterday's absence",
+      link: "attendance?status=absent"
+    },
+    {
+      icon: <FaClock />,
+      value: dashSummary?.summary?.late_arrival?.length ?? 0,
+      label: "Late Arrival",
+      note: "vs. yesterday late",
+      link: "attendance?status=late-arrival"
+    },
+    {
+      icon: <FaSignOutAlt />,
+      value: dashSummary?.summary?.early_departures?.length ?? 0,
+      label: "Early Departures",
+      note: "vs. yesterday early outs",
+      link: "attendance?status=early-departures"
+    },
+    {
+      icon: <FaCalendarAlt />,
+      value: dashSummary?.summary?.time_off_today?.length ?? 0,
+      label: "Time Off",
+      note: "Today's Leave / Time Off",
+      link: "attendance?status=time-off"
+    }
+  ];
 
   return (
     <div className="hr-hero-wrapper">
@@ -27,42 +73,20 @@ const HrHeroSection = () => {
 
         {/* Middle Section - Stats */}
         <div className="stats-grid">
-          <StatCard
-            icon={<FaUsers />}
-            value={dashSummary?.summary?.total_employees ?? 0}
-            label="Total Employees"
-            note={`+${dashSummary?.summary?.new_employees_this_month ?? 0} new this month`}
-          />
-          <StatCard
-            icon={<FaCheckCircle />}
-            value={dashSummary?.summary?.present_today?.length ?? 0}
-            label="Present"
-            note="vs. yesterday's presence"
-          />
-          <StatCard
-            icon={<FaTimesCircle />}
-            value={dashSummary?.summary?.absent_today ?? 0}
-            label="Absent"
-            note="vs. yesterday's absence"
-          />
-          <StatCard
-            icon={<FaClock />}
-            value={dashSummary?.summary?.late_arrival?.length ?? 0}
-            label="Late Arrival"
-            note="vs. yesterday late"
-          />
-          <StatCard
-            icon={<FaSignOutAlt />}
-            value={dashSummary?.summary?.early_departures?.length ?? 0}
-            label="Early Departures"
-            note="vs. yesterday early outs"
-          />
-          <StatCard
-            icon={<FaCalendarAlt />}
-            value={dashSummary?.summary?.time_off_today?.length ?? 0}
-            label="Time Off"
-            note="Today's Leave / Time Off"
-          />
+          {statCards.map((card, index) => (
+            <Link
+              href={`/${companySlug}/hr/${card.link}`}
+              key={index}
+              className="stat-card-link"
+            >
+              <StatCard
+                icon={card.icon}
+                value={card.value}
+                label={card.label}
+                note={card.note}
+              />
+            </Link>
+          ))}
         </div>
 
         {/* Optional Summary Message */}
@@ -113,10 +137,10 @@ const TimeSection = React.memo(() => {
       day % 10 === 1 && day !== 11
         ? 'st'
         : day % 10 === 2 && day !== 12
-        ? 'nd'
-        : day % 10 === 3 && day !== 13
-        ? 'rd'
-        : 'th';
+          ? 'nd'
+          : day % 10 === 3 && day !== 13
+            ? 'rd'
+            : 'th';
     return `${day}${suffix}`;
   };
 

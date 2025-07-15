@@ -135,6 +135,16 @@ const companyApi = companyCreateSlice.injectEndpoints({
       providesTags: ["Company"],
     }),
 
+    updateCompany: builder.mutation<{ status: boolean; message: string; error: string }, { id: number, formdata: FormData }>({
+      query: ({ id, formdata }) => ({
+        url: `company-details/${id}`,
+        method: "PUT",
+        body: formdata,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
     companyStatusDetails: builder.query<CompanyStatusResponse, number>({
       query: (id) => ({
         url: `company-status/${id}`,
@@ -310,6 +320,7 @@ export const {
   useOrderNewCompanyMutation,
   useAddNewCompanyMutation,
   useFetchCompanyDetailsQuery,
+  useUpdateCompanyMutation,
   useCompanyStatusDetailsQuery,
   useCompanyScoreQuery,
 

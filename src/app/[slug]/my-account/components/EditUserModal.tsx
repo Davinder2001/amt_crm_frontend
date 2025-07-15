@@ -6,7 +6,7 @@ import { useUpdateUserMutation } from '@/slices/users/userApi';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/provider/UserContext';
 import { clearStorage } from '@/utils/Company';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import from react-icons
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface UserFormData {
     name: string

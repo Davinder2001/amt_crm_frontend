@@ -270,10 +270,12 @@
           align-items: center;
           gap: 10px;
 
-          button {
+          button,
+          .edit-c-profile {
             padding: 5px 10px;
             font-size: 12px;
             font-weight: 500;
+            text-decoration: none;
           }
 
           .switch-badge {
@@ -299,11 +301,14 @@
           background: $light-bg;
         }
 
-        &.verified {
-          border-left: 3px solid #2e7d32;
+        &.active-company {
           flex-direction: column;
           align-items: normal;
           padding: 30px 10px 10px;
+        }
+
+        &.verified {
+          border-left: 3px solid #2e7d32;
         }
 
         &.pending {
@@ -591,7 +596,7 @@
           gap: 10px;
           padding: 8px;
 
-          &.verified {
+          &.active-company {
             padding: 10px;
           }
 

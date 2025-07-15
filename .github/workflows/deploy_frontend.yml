@@ -2,7 +2,7 @@ name: Build and Deploy - AMT CRM Frontend
 
 on:
   push:
-    branches: [ production, main ]
+    branches: [ production ]
 
 jobs:
   build-and-deploy:
@@ -52,8 +52,6 @@ jobs:
           mkdir -p deployment
           cp -r src deployment/
           cp -r public deployment/
-          cp -r infra deployment/
-          cp -r docker deployment/
           cp package.json deployment/
           cp package-lock.json deployment/
           cp Dockerfile deployment/
@@ -61,10 +59,8 @@ jobs:
           cp next.config.ts deployment/
           cp tsconfig.json deployment/
           cp .dockerignore deployment/
-          cp README-PRODUCTION.md deployment/
           cp env deployment/
           cp env.docker deployment/
-          cp deploy.sh deployment/
           tar -czf deployment.tar.gz -C deployment .
 
       - name: Copy files to server via SCP
@@ -75,7 +71,7 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           port: ${{ secrets.PROD_PORT || 22 }}
           source: "deployment.tar.gz"
-          target: "/srv/amt-crm-frontend"
+          target: "/srv/amt_crm_frontend"
           overwrite: true
 
       - name: Deploy with SSH and Docker Compose
@@ -86,8 +82,10 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           port: ${{ secrets.PROD_PORT || 22 }}
           script: |
-            cd /srv/amt-crm-frontend
+            cd /srv/amt_crm_frontend
             tar -xzf deployment.tar.gz
+            chown -R ubuntu:ubuntu /srv/amt_crm_frontend
+            chmod -R 755 /srv/amt_crm_frontend
             docker compose down --remove-orphans || true
             docker compose up --build -d --quiet-pull
             sleep 30
@@ -96,5 +94,5 @@ jobs:
               docker compose logs frontend
               exit 1
             fi
-            echo "✅ Deployment completed successfully!"
-            echo "🌐 Your application is available at: https://himmanav.com" 
+            echo "✅ Frontend deployment completed successfully!"
+            echo "🌐 Your frontend is available at: http://himmanav.com:3000"

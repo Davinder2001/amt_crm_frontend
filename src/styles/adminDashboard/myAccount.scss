@@ -197,6 +197,19 @@
         gap: 20px;
         align-items: center;
 
+        .add-btn {
+          padding: 5px 10px;
+          border: 1px solid var(--primary-color);
+          border-radius: $border-radius;
+          color: var(--primary-color);
+          font-size: 14px;
+
+          &:hover {
+            text-decoration: none;
+
+          }
+        }
+
         a,
         span {
           display: flex;

@@ -11,6 +11,7 @@ import ClientTab from './components/ClientTab';
 import BillTab from './components/BillTab';
 import PaymentSection from './components/PaymentSection';
 import ActionsSection from './components/ActionsSection';
+import { useFetchSelectedCompanyQuery } from '@/slices';
 
 type CartTabContentProps = {
     activeTab: TabType;
@@ -100,6 +101,11 @@ export default function CartTabContent({
     const { data } = useFetchCompanyAccountsQuery();
     const BankAccountList = data?.accounts;
     const { companySlug } = useCompany();
+    const { data: selectedCompanyData } = useFetchSelectedCompanyQuery();
+    const company = selectedCompanyData?.selected_company;
+    const [signatureRequired, setSignatureRequired] = useState(false);
+    // Check for company_signature field (adjust if your API uses a different name)
+    const hasSignature = !!company?.company_signature && company.company_signature !== '';
 
 
     // Calculate base total (sum of all items)
@@ -283,6 +289,9 @@ export default function CartTabContent({
                         companySlug={companySlug}
                         deliveryBoyId={deliveryBoyId}
                         setDeliveryBoyId={setDeliveryBoyId}
+                        hasSignature={hasSignature}
+                        signatureRequired={signatureRequired}
+                        setSignatureRequired={setSignatureRequired}
                     />
                 )}
 

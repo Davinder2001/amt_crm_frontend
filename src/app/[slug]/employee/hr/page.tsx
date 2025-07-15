@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import HrHroSection from './(hrHome)/HrHroSection';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
-
-// Icons
 import { FaPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
 import InviteEmployeeForm from './components/InviteEmployeeForm';
 import Modal from '@/components/common/Modal';
@@ -15,7 +13,6 @@ const Page: React.FC = () => {
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
   const { companySlug } = useCompany();
 
-
   return (
     <>
       <div className='hr_navigation'>
@@ -23,25 +20,25 @@ const Page: React.FC = () => {
         <TableToolbar
           actions={[
             {
-              label: 'Add Employee',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
-            },
-            {
               label: 'Status View',
               icon: <FaUserCheck />,
-              onClick: () => router.push(`/${companySlug}/hr/status-view`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
             },
             {
               label: 'Employee Salary',
               icon: <FaMoneyBillWave />,
-              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
             },
             // {
             //   label: 'Invite Employee',
             //   icon: <FaUserPlus />,
             //   onClick: () => setInviteModalOpen(true),
             // },
+            {
+              label: 'Add Employee',
+              icon: <FaPlus />,
+              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
+            },
           ]}
           introKey='hr_intro'
         />

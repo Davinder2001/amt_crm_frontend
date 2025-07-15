@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCog, FaComments, FaFileInvoice, FaStore, FaTachometerAlt, FaTasks, FaUserShield, FaUserTie } from "react-icons/fa";
+import { FaCog, FaComments, FaFileInvoice, FaStore, FaTachometerAlt, FaTasks, FaUserTie } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCompany } from "@/utils/Company";
@@ -24,7 +24,7 @@ const EmployeeNavs: React.FC<empNavProps> = ({ isSidebarExpanded, openMenu }) =>
         // { name: "Vehicle", path: "vehicle", icon: <FaCar /> },
         // { name: "Quality Control", path: "quality-control", icon: <FaCheck /> },
         { name: "Chat", path: "chat", icon: <FaComments /> },
-        { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
+        // { name: "Permissions", path: "permissions", icon: <FaUserShield /> },
         // { name: "Orders", path: "orders", icon: <FaBox /> },
         { name: "Settings", path: "settings", icon: <FaCog /> },
     ];
@@ -51,7 +51,7 @@ const EmployeeNavs: React.FC<empNavProps> = ({ isSidebarExpanded, openMenu }) =>
                                 <div className="tooltip"> {name}</div>
                             )}
                             {isActive && (
-                                <span className="active-indicator"/>
+                                <span className="active-indicator" />
                             )}
                         </li>
                     );

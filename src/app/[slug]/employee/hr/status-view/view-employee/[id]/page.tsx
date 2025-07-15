@@ -69,7 +69,7 @@ const ViewUserPage: React.FC = () => {
     try {
       await deleteEmployee(Number(id)).unwrap();
       setShowConfirm(false);
-      router.push(`/${companySlug}/hr`);
+      router.push(`/${companySlug}/employee/hr`);
     } catch (err) {
       console.error('Error deleting item:', err);
     }
@@ -86,17 +86,17 @@ const ViewUserPage: React.FC = () => {
             {
               label: 'Add Employee',
               icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
             },
             {
               label: 'Status View',
               icon: <FaUserCheck />,
-              onClick: () => router.push(`/${companySlug}/hr/status-view`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
             },
             {
               label: 'Employee Salary',
               icon: <FaMoneyBillWave />,
-              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
             }
           ]}
           introKey='view_emp_intro'
@@ -131,7 +131,7 @@ const ViewUserPage: React.FC = () => {
               {/* Desktop Buttons */}
               <div className="action-buttons desktop-only">
                 <button
-                  onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
+                  onClick={() => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`)}
                   className="btn primary" type='button'
                 >
                   <FaEdit />Edit Profile
@@ -151,7 +151,7 @@ const ViewUserPage: React.FC = () => {
                     <button
                       onClick={() => {
                         setMenuOpen(false);
-                        router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`);
+                        router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`);
                       }}
                       className='dropdown-edit-btn' type='button'
                     >
@@ -197,7 +197,6 @@ const ViewUserPage: React.FC = () => {
               <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Joining Date</span><span className="info-value">{formatDate(details?.joiningDate)}</span></div>
               <div className="info-item"><span className="info-label">Joining Type</span><span className="info-value">{details?.joiningType || 'N/A'}</span></div>
-              <div className="info-item"><span className="info-label">Current Salary</span><span className="info-value">₹{details?.currentSalary || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Salary</span><span className="info-value">₹{details?.salary || 'N/A'}</span></div>
               {details?.shiftTimings && (
                 <div className="info-item"><span className="info-label">Shift Timings</span><span className="info-value">{details.shiftTimings}</span></div>

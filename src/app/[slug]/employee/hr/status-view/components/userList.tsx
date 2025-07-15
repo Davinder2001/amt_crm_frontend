@@ -126,8 +126,8 @@ const UserList: React.FC = () => {
       label: 'Actions',
       render: (emp: Employee) => (
         <div style={{display: 'flex', gap: 10, alignItems: 'center'}}>
-          <FaEye onClick={() => router.push(`/${companySlug}/hr/status-view/view-employee/${emp.id}`)} />
-          <FaEdit onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${emp.id}`)} />
+          <FaEye onClick={() => router.push(`/${companySlug}/employee/hr/status-view/view-employee/${emp.id}`)} />
+          <FaEdit onClick={() => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${emp.id}`)} />
           <FaTrash onClick={() => promptDelete(emp.id, emp.name)} />
         </div>
       ),
@@ -140,8 +140,8 @@ const UserList: React.FC = () => {
         data={employees}
         columns={columns}
         onDelete={handleDelete}
-        onEdit={(id) => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
-        onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+        onEdit={(id) => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/employee/hr/status-view/view-employee/${id}`)}
         cardView={(employee: Employee) => (
           <>
             <div className="card-row">

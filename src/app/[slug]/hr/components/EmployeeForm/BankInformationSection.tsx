@@ -16,7 +16,7 @@ const BankInformationSection: React.FC<FormSectionProps> = ({
                     {renderField("IFSC Code", "ifscCode", "text", "Enter IFSC code", undefined, 11, 11)}
                     {renderField("PAN Number", "panNo", "text", "Enter PAN number", undefined, 10, 10)}
                     {renderField("UPI ID", "upiId", "text", "Enter UPI ID", undefined, 8, 40)}
-                    {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "string", "Enter Aadhar or other ID number", undefined, 5, 12)}
+                    {renderField("Address Proof (e.g. Aadhar Number)", "addressProof", "string", "Enter Aadhar or other ID number")}
                 </div>
             </div>
         </div>

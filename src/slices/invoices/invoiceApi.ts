@@ -27,6 +27,19 @@ const invoiceApi = invoiceCreateApiSlice.injectEndpoints({
       invalidatesTags: ["Invoice"],
     }),
 
+    saveAndShare: builder.mutation<{
+      status: boolean;
+      message: string;
+      invoice: Invoice;
+    }, FormData>({
+      query: (formData) => ({
+        url: "invoices/save-share",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Invoice"],
+    }),
+
     printInvoice: builder.mutation<Blob, FormData>({
       query: (formData) => ({
         url: "invoices/print",
@@ -127,6 +140,7 @@ export const {
   useGetInvoiceByIdQuery,
   useLazyDownloadInvoicePdfQuery,
   useSendInvoiceToWhatsappMutation,
+  useSaveAndShareMutation,
   useGetCreditUsersQuery,
   usePayCreditInvoiceMutation,
   useGetCreditInvoiceByIdQuery,

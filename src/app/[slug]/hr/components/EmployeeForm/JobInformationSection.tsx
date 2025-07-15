@@ -48,7 +48,7 @@ const JobInformationSection: React.FC<FormSectionProps> = ({
         ifscCode: '',
         panNo: '',
         upiId: '',
-        addressProof: "",
+        addressProof: '',
         medicalInfo: '',
         profilePicture: null,
         addressProof_image: null, 

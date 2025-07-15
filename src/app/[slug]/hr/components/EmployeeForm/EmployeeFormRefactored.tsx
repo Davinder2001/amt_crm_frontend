@@ -187,7 +187,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
         let newValue: string | number | Date | File | null = value;
 
         // Convert to number for number fields
-        if (["number", "salary", "idProofValue", "emergencyContact", "accountNo", "addressProof", "shiftTimings"].includes(name)) {
+        if (["number", "salary", "idProofValue", "emergencyContact", "accountNo", "shiftTimings"].includes(name)) {
             newValue = value === "" ? 0 : Number(value);
         }
         // Convert to Date for date fields

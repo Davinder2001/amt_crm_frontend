@@ -38,9 +38,10 @@ const Page = () => {
 
     return (
         <div>
-            <h2>Sales Report</h2>
-            <div style={{ marginBottom: 24, display: 'flex', gap: 16 }}>
-                <div>
+            <div className="filter-controls">
+            <h2 className="sales-report">Sales Report</h2>
+                <div className="filter-group-inner">
+                <div className="filter-group">
                     <label htmlFor="year-select">Year: </label>
                     <select
                         id="year-select"
@@ -52,7 +53,7 @@ const Page = () => {
                         ))}
                     </select>
                 </div>
-                <div>
+                <div className="filter-group">
                     <label htmlFor="month-select">Month: </label>
                     <select
                         id="month-select"
@@ -64,8 +65,8 @@ const Page = () => {
                         ))}
                     </select>
                 </div>
+                </div>
             </div>
-            <h3>{selectedMonth}</h3>
             {selectedMonthObj && (
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>

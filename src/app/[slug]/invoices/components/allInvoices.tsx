@@ -119,6 +119,32 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
       toast.error("Failed to download invoice PDF.");
     }
   };
+  const handleShareInvoice = async (invoice: Invoice) => {
+    try {
+      const result = await triggerDownload(invoice.id).unwrap();
+
+      const file = new File([result], `invoice_${invoice.invoice_number}.pdf`, {
+        type: "application/pdf",
+      });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          title: `Invoice #${invoice.invoice_number}`,
+          text: `Invoice for ${invoice.client_name}\nTotal: ₹${invoice.final_amount}`,
+          files: [file],
+        });
+      } else {
+        console.warn("Share not supported, falling back to download.");
+        handleDownloadPdf(invoice.id);
+      }
+    } catch (err: unknown | DOMException) {
+      if (!(err instanceof DOMException && err.name === "AbortError")) {
+        console.error("Share failed:", err);
+        handleDownloadPdf(invoice.id);
+      }
+    }
+  };
+
 
   const columns = [
     ...allColumns
@@ -142,10 +168,14 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           <button className="buttons" onClick={() => handleDownloadPdf(invoice.id)}>
             Download
           </button>
+          <button className="buttons" onClick={() => handleShareInvoice(invoice)}>
+            Share
+          </button>
         </div>
       ),
     },
   ];
+
 
   if (isLoadingInvoices) return <LoadingState />;
   if (isError) return <EmptyState

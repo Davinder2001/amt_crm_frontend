@@ -53,7 +53,7 @@ const Page = () => {
   if (isLoading) return <LoadingState />;
   if (error) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Failed to load recurring tasks"
       message="We encountered an error while loading recurring tasks. Please try again later."
     />

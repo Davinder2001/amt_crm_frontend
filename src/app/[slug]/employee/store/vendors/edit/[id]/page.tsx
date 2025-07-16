@@ -7,6 +7,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const EditVendorPage: React.FC = () => {
     const { companySlug } = useCompany();
@@ -69,7 +70,7 @@ const EditVendorPage: React.FC = () => {
     if (error)
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching vendor details."
                 message="Something went wrong while fetching vendor details."
             />

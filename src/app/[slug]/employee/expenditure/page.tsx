@@ -14,6 +14,7 @@ import EmptyState from '@/components/common/EmptyState';
 import Image from 'next/image';
 import LoadingState from '@/components/common/LoadingState';
 import { useRouter } from 'next/navigation';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 export default function ExpensesPage() {
 
@@ -125,7 +126,7 @@ export default function ExpensesPage() {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching expenses."
         message="Something went wrong while fetching expenses."
       />

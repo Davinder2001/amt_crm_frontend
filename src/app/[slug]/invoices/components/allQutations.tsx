@@ -69,7 +69,7 @@ const AllQuotations = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load quotations"
         message="Something went wrong while fetching quotations."
       />

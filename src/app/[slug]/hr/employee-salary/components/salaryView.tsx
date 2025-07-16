@@ -39,7 +39,7 @@ const SalaryView: React.FC = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching employees."
         message="Something went wrong while fetching employees."
       />

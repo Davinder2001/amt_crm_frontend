@@ -5,6 +5,7 @@ import { useGetRolesQuery } from '@/slices';
 import { toast } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface ViewRoleProps {
     roleId: number;
@@ -23,7 +24,7 @@ const ViewRole: React.FC<ViewRoleProps> = ({ roleId }) => {
         toast.error('Error fetching role details.');
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching roles details."
                 message="Something went wrong while fetching roles details."
             />

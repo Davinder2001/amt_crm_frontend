@@ -179,7 +179,7 @@ const BankAccountList = () => {
 
             {error && (
                 <EmptyState
-                    icon="alert"
+                    icon={<FaTriangleExclamation className='empty-state-icon' />}
                     title="Failed to load bank accounts"
                     message="Something went wrong while fetching bank account data. Please try again later."
                 />

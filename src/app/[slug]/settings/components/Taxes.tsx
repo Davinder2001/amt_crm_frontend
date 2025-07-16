@@ -156,7 +156,7 @@ const CreateTax = () => {
     if (isError) {
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to load taxes"
                 message="We encountered an error while loading taxes. Please try again later."
             />

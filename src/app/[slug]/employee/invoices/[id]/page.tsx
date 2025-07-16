@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const InvoiceViewPage = () => {
@@ -20,7 +21,7 @@ const InvoiceViewPage = () => {
   if (isLoading) return <LoadingState />;
   if (error || !data?.invoice) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Failed to fetching employees."
       message="Something went wrong while fetching employees."
     />

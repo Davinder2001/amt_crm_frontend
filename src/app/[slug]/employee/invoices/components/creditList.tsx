@@ -10,6 +10,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaMoneyBill } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface CreditUser {
   customer_id: number;
@@ -139,7 +140,7 @@ const CreditList: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (error) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching Data."
     message="Something went wrong while fetching Data."
   />;

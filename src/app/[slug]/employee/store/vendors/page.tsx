@@ -10,6 +10,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import CreateVendor from './components/CreateVendor';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading, refetch } = useFetchVendorsQuery() as {
@@ -56,7 +57,7 @@ const Page: React.FC = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load vendors"
         message="We encountered an error while loading your vendors. Please try again later."
       />

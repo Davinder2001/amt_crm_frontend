@@ -117,8 +117,8 @@ function TaskViewPage() {
   const statusClass =
     status === 'pending'
       ? 'status-badge pending'
-      : status === 'ended'
-        ? 'status-badge ended'
+      : status === 'submitted'
+        ? 'status-badge submitted'
         : 'status-badge default';
 
   const attachments = Array.isArray(task.attachments) ? task.attachments : [];
@@ -164,8 +164,8 @@ function TaskViewPage() {
               <p>{task.description}</p>
             </div>
           </div>
-
-          <div className="action-buttons">
+          {status === 'submitted'?
+        <div className="action-buttons">
             <button
               className="reject"
               onClick={handleReject}
@@ -184,7 +184,9 @@ function TaskViewPage() {
                 <FaCheck /> Approve
               </>}
             </button>
-          </div>
+          </div>:'' 
+        }
+          
         </div>
       </div>
 

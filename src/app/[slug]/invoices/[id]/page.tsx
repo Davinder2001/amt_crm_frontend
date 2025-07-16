@@ -20,7 +20,7 @@ const InvoiceViewPage = () => {
   if (isLoading) return <LoadingState />;
   if (error || !data?.invoice) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Failed to fetching employees."
       message="Something went wrong while fetching employees."
     />

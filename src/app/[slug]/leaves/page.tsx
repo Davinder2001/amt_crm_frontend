@@ -26,7 +26,7 @@ const LeavesPage = () => {
   if (isError || !data) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load leave balances"
         message="Something went wrong while fetching leave data. Please try again later."
       />

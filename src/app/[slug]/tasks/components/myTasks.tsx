@@ -103,7 +103,7 @@ const Page = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to Load Tasks"
         message="Something went wrong while fetching your working tasks."
       />

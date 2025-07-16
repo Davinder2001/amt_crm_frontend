@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();
@@ -69,7 +70,7 @@ const AllQuotations = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load quotations"
         message="Something went wrong while fetching quotations."
       />

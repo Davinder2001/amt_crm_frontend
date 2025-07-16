@@ -102,7 +102,7 @@ const EditCompanyPage = () => {
   if (isLoading) return <LoadingState />;
   if (error || !companyResponse?.data) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Error loading companies."
       message="Something went wrong while loading companies."
     />);

@@ -46,7 +46,7 @@ const Refunds = () => {
     if (isLoading) return <LoadingState />;
     if (error) return (
         <EmptyState
-            icon="alert"
+            icon={<FaTriangleExclamation className='empty-state-icon' />}
             title="Error loading companies."
             message="Something went wrong while loading companies."
         />);

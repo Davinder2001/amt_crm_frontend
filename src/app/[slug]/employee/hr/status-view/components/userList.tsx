@@ -10,6 +10,7 @@ import EmptyState from '@/components/common/EmptyState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { FaEdit, FaTrash, FaEye, FaPlus, FaUserPlus } from 'react-icons/fa';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_employees';
 
@@ -245,7 +246,7 @@ const UserList: React.FC = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetch employees"
         message="Something went wrong while fetching employees."
       />

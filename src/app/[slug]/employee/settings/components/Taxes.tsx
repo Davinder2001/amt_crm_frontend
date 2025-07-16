@@ -18,6 +18,7 @@ import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 // Types
 type Tax = {
@@ -156,7 +157,7 @@ const CreateTax = () => {
     if (isError) {
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to load taxes"
                 message="We encountered an error while loading taxes. Please try again later."
             />

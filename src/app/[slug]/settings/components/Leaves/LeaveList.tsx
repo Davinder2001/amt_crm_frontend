@@ -173,7 +173,7 @@ const LeaveList = () => {
 
       {error && (
         <EmptyState
-          icon="alert"
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
           title="Failed to load leaves"
           message="Something went wrong while fetching leaves."
         />

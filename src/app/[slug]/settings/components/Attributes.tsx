@@ -133,7 +133,7 @@ const Attributes = () => {
     if (error)
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching attributes data."
                 message="Something went wrong while fetching attributes data."
             />

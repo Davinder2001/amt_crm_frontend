@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { adminlogo } from "@/assets/useImage";
 import Loader from '@/components/common/Loader';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const ViewCompanyPage = () => {
   const { setTitle } = useBreadcrumb();
@@ -46,7 +47,7 @@ const ViewCompanyPage = () => {
   if (isLoading) return <Loader />;
   if (error) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Error loading companies."
       message="Something went wrong while loading  details."
     />);

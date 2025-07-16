@@ -5,6 +5,7 @@ import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
 import LoadingState from "@/components/common/LoadingState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const BusinessCategories = () => {
     // API hooks
@@ -119,7 +120,7 @@ const BusinessCategories = () => {
                     <LoadingState />
                 ) : isError ? (
                     <EmptyState
-                        icon="alert"
+                        icon={<FaTriangleExclamation className='empty-state-icon' />}
                         title="Error loading categories."
                         message="Something went wrong while loading categories ."
                     />

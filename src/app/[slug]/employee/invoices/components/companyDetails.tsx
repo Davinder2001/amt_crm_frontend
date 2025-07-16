@@ -3,6 +3,7 @@ import React from "react";
 import { useFetchSelectedCompanyQuery } from "@/slices";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const CompanyDetails = () => {
     const { data, isLoading, error } = useFetchSelectedCompanyQuery();
@@ -10,7 +11,7 @@ const CompanyDetails = () => {
     if (isLoading) return <LoadingState />;
     if (error || !data) return
     <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching company details."
         message="Something went wrong while fetching company details."
     />

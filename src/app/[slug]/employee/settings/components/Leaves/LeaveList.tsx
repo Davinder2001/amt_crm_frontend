@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { FaPlus, FaEdit, FaTrash, FaUmbrellaBeach } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const LeaveList = () => {
   const { data, isLoading, error, refetch } = useFetchLeavesQuery();
@@ -173,7 +174,7 @@ const LeaveList = () => {
 
       {error && (
         <EmptyState
-          icon="alert"
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
           title="Failed to load leaves"
           message="Something went wrong while fetching leaves."
         />

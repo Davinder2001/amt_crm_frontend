@@ -125,7 +125,7 @@ export default function ExpensesPage() {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching expenses."
         message="Something went wrong while fetching expenses."
       />

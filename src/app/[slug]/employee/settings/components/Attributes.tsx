@@ -18,6 +18,7 @@ import {
     Typography,
 } from '@mui/material';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Attributes = () => {
     const { data: response, isLoading, error } = useFetchAttributesQuery();
@@ -133,7 +134,7 @@ const Attributes = () => {
     if (error)
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching attributes data."
                 message="Something went wrong while fetching attributes data."
             />

@@ -28,7 +28,7 @@ const CustomerList = () => {
 
       {error && (
         <EmptyState
-          icon="alert"
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
           title="Failed to load customers"
           message="Something went wrong while fetching customer data."
         />

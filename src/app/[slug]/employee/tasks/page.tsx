@@ -49,7 +49,7 @@ const Page = () => {
   if (tasksLoading) return <LoadingState />;
   if (tasksError) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Failed to load tasks"
       message="We encountered an error while loading tasks. Please try again later."
     />

@@ -139,7 +139,7 @@ const CreditList: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (error) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching Data."
     message="Something went wrong while fetching Data."
   />;

@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic'
 const QuillEditor = dynamic(
     () => import('../components/QuillEditor'),
     {
-        ssr: false, // This will prevent the Editor component from being server-side rendered
+        ssr: false, 
     }
 )
 

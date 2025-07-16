@@ -51,7 +51,7 @@ const Page = () => {
 
     if (isLoading) return <LoadingState />;
     if (error) return <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Error loading sales report"
         message="We encountered an error while loading the sales report. Please try again later."
     />;

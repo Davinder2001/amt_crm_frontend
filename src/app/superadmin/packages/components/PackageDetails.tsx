@@ -14,6 +14,7 @@ import {
   useUpdatePackageDetailMutation,
   useDeletePackageDetailMutation
 } from '@/slices/superadminSlices/package-details/packageDetailsApi';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 type PackageDetail = {
   id?: number;
@@ -243,7 +244,7 @@ const PackageDetails = () => {
 
       {error && (
         <EmptyState
-          icon="alert"
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
           title="Failed to load package details"
           message="Something went wrong while fetching package details. Please try again later."
         />

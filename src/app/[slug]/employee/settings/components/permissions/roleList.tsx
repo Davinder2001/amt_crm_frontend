@@ -10,6 +10,7 @@ import ViewRole from "./ViewRole";
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);
@@ -43,7 +44,7 @@ const RoleList: React.FC = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching roles data."
         message="Something went wrong while fetching roles data."
       />

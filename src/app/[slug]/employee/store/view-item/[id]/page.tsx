@@ -55,7 +55,7 @@ const ViewItem = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching item."
         message="Something went wrong while fetching item."
       />

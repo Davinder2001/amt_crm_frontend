@@ -24,7 +24,7 @@ const ViewAdminPage = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Error loading admin."
         message="Something went wrong while loading admin."
       />

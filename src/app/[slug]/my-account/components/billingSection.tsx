@@ -42,7 +42,7 @@ const BillingSection = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching billing data."
         message="Something went wrong while fetching billing data."
       />

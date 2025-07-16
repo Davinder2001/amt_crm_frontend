@@ -23,7 +23,7 @@ const ViewRole: React.FC<ViewRoleProps> = ({ roleId }) => {
         toast.error('Error fetching role details.');
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching roles details."
                 message="Something went wrong while fetching roles details."
             />

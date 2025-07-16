@@ -87,7 +87,7 @@ const ViewCredits: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (isError || !data?.customer) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching credit data."
     message="Something went wrong while fetching credit data."
   />;

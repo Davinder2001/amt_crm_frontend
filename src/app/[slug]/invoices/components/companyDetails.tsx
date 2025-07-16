@@ -10,7 +10,7 @@ const CompanyDetails = () => {
     if (isLoading) return <LoadingState />;
     if (error || !data) return
     <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching company details."
         message="Something went wrong while fetching company details."
     />

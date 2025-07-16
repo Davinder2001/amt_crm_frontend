@@ -43,7 +43,7 @@ const RoleList: React.FC = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching roles data."
         message="Something went wrong while fetching roles data."
       />

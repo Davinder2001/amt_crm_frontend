@@ -124,9 +124,9 @@
                 width: fit-content;
             }
 
-            &.ended {
-                background-color: rgba($danger-color, 0.2);
-                color: $danger-color;
+            &.submitted {
+                background-color: $success-color;
+                color: $white;
             }
 
             &.default {
@@ -191,7 +191,6 @@
     }
 
     .task-attachment-outer {
-        margin-top: 65px;
         padding-top: 20px;
 
         .task-attachment-header {
@@ -282,7 +281,6 @@
         }
 
         .task-attachment-outer {
-            margin-top: 0px;
             padding-top: 0PX;
 
             .task-images-outer {

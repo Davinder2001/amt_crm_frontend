@@ -269,7 +269,7 @@ const HolidayList = () => {
 
             {error && (
                 <EmptyState
-                    icon="alert"
+                    icon={<FaTriangleExclamation className='empty-state-icon' />}
                     title="Failed to load holidays"
                     message="Something went wrong while fetching holidays."
                 />

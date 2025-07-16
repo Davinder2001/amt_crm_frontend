@@ -8,6 +8,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 type CreditItem = {
   credit_id: number;
@@ -87,7 +88,7 @@ const ViewCredits: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (isError || !data?.customer) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching credit data."
     message="Something went wrong while fetching credit data."
   />;

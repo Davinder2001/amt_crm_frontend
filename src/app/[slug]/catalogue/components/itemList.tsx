@@ -2,15 +2,16 @@ import React from 'react';
 import { useFetchCatalogItemsQuery } from '@/slices/catalog/catalogApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const ItemList = () => {
   const { data: items = [], isLoading, error } = useFetchCatalogItemsQuery();
 
-  if (isLoading) return <LoadingState/>;
- if (error) {
+  if (isLoading) return <LoadingState />;
+  if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load catalog items."
         message="Something went wrong while fetching your working catalog items."
       />

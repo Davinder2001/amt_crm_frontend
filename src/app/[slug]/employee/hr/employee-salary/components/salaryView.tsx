@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const SalaryView: React.FC = () => {
   const router = useRouter();
@@ -39,7 +40,7 @@ const SalaryView: React.FC = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching employees."
         message="Something went wrong while fetching employees."
       />

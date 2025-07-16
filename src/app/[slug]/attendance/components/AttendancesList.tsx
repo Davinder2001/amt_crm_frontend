@@ -8,9 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
-import { FaClipboardList} from 'react-icons/fa';
+import { FaClipboardList } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import AddAttendanceForm from './AddAttendanceForm';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface AttendanceProps {
   isAttandanceOpen: boolean;
@@ -31,7 +32,7 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
   } else if (error) {
     content = (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load attendance"
         message="We encountered an error while loading your attendance records. Please try again later."
       />
@@ -121,8 +122,8 @@ const AttendancesList: React.FC<AttendanceProps> = ({ isAttandanceOpen, setIsAtt
 
     content =
       <>
-      
-        <ResponsiveTable data={attendanceList} columns={columns}/>
+
+        <ResponsiveTable data={attendanceList} columns={columns} />
       </>
 
       ;

@@ -102,8 +102,8 @@ const CustomerView: React.FC = () => {
           <ResponsiveTable<Invoice>
             data={invoices}
             columns={columns}
-            onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
-            onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
+            onView={(id) => router.push(`/${companySlug}/employee/invoices/${id}`)}
+            onEdit={(id) => router.push(`/${companySlug}/employee/invoices/edit-invoice/${id}`)}
             onDelete={(id) => console.log('Delete invoice', id)}
           />
         ) : (

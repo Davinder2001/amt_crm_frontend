@@ -42,7 +42,7 @@ const CustomerList = () => {
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/invoices/customers/add`)}
+              onClick={() => router.push(`/${companySlug}/employee/invoices/customers/add`)}
             >
               <FaPlus /> Add Customer
             </button>
@@ -54,7 +54,7 @@ const CustomerList = () => {
         <ResponsiveTable
           data={customers}
           columns={columns}
-          onView={(id) => router.push(`/${companySlug}/invoices/customers/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/employee/invoices/customers/${id}`)}
         />
       )}
     </>

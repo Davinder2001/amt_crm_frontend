@@ -154,7 +154,7 @@ export default function ExpensesPage() {
           onPageChange={handlePageChange}
           onPerPageChange={handlePerPageChange}
           counts={EXPENSES_COUNT}
-          onView={(id) => router.push(`/${companySlug}/expenditure/view/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/employee/expenditure/view/${id}`)}
           cardView={(expense: Expense) => (
             <>
               <div className="card-row">

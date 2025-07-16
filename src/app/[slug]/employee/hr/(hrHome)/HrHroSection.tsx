@@ -77,7 +77,7 @@ const HrHeroSection = () => {
         <div className="stats-grid">
           {statCards.map((card, index) => (
             <Link
-              href={`/${companySlug}/hr/${card.link}`}
+              href={`/${companySlug}/employee/hr/${card.link}`}
               key={index}
               className="stat-card-link"
             >

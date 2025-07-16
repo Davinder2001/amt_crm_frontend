@@ -30,7 +30,7 @@ const AttendancePage = () => {
     // Handle tab change
     const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
         setActiveTab(newValue);
-        router.push(`/${companySlug}/hr/attendance?status=${newValue}`);
+        router.push(`/${companySlug}/employee/hr/attendance?status=${newValue}`);
     };
 
     // Render content based on active tab

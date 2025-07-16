@@ -373,7 +373,7 @@ const EditItem: React.FC = () => {
 
         {(isFormModified?.()) && (
           <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-            <button type="button" className="buttons cancel-btn" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
+            <button type="button" className="buttons cancel-btn" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/employee/store`)}>
               Cancel
             </button>
             <button type="submit" className="buttons" disabled={isUpdating} style={{ cursor: isUpdating ? 'not-allowed' : 'pointer' }}>

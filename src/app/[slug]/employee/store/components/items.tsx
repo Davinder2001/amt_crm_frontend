@@ -284,7 +284,7 @@ const Items: React.FC = () => {
       render: (item: StoreItem) =>
         companySlug && (
           <div className="table-actions-wrapper">
-            <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
+            <Link href={`/${companySlug}/employee/store/edit-item/${item.id}`}>
               <FaEdit color="var(--primary-color)" />
             </Link>
             <span onClick={() => handleDeleteClick(item.id, item.name)}>
@@ -337,9 +337,9 @@ const Items: React.FC = () => {
           {
             label: 'Add Purchase Bill',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
+            onClick: () => router.push(`/${companySlug}/employee/store/vendors/add-as-vendor`),
           },
-          { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
+          { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/employee/store/vendors`) },
         ]}
         actions={[
           ...(storeItems.length > 0
@@ -357,8 +357,8 @@ const Items: React.FC = () => {
           columns={columns}
           onDelete={(id) => handleDelete(id)}
           onBulkDelete={handleBulkDelete}
-          onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
-          onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
+          onEdit={(id) => router.push(`/${companySlug}/employee/store/edit-item/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/employee/store/view-item/${id}`)}
           showBulkActions={showBulkActions}
           cardView={(item) => (
             <>
@@ -391,7 +391,7 @@ const Items: React.FC = () => {
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/store/add-item`)}
+              onClick={() => router.push(`/${companySlug}/employee/store/add-item`)}
             >
               <FaPlus size={18} /> Add New Item
             </button>
@@ -481,7 +481,7 @@ const Items: React.FC = () => {
                   color: '#384B70',
                   textDecoration: 'none'
                 }}
-                  href={`/${companySlug}/store/add-stock/${item.id}`}
+                  href={`/${companySlug}/employee/store/add-stock/${item.id}`}
                   onClick={() => {
                     setItemId(item.id);
                   }}
@@ -501,7 +501,7 @@ const Items: React.FC = () => {
           <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <p>Total Items: <strong>{data?.items.length}</strong></p>
             <button
-              onClick={() => router.push(`/${companySlug}/store/add-item`)}
+              onClick={() => router.push(`/${companySlug}/employee/store/add-item`)}
               className='buttons'
             >
               <FaPlus /> Add New Item

@@ -204,7 +204,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageC
             ? [{
               label: 'Add Invoice',
               icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
+              onClick: () => router.push(`/${companySlug}/employee/invoices/new-invoice`),
             }]
             : []),
         ]}
@@ -212,22 +212,22 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageC
           {
             label: 'All Customers',
             icon: <FaUsers />,
-            onClick: () => router.push(`/${companySlug}/invoices/customers`),
+            onClick: () => router.push(`/${companySlug}/employee/invoices/customers`),
           },
           // {
           //   label: 'Credits',
           //   icon: <FaCreditCard />,
-          //   onClick: () => router.push(`/${companySlug}/invoices/credits`),
+          //   onClick: () => router.push(`/${companySlug}/employee/invoices/credits`),
           // },
           {
             label: 'Quotations',
             icon: <FaFileInvoice />,
-            onClick: () => router.push(`/${companySlug}/invoices/qutations`),
+            onClick: () => router.push(`/${companySlug}/employee/invoices/qutations`),
           },
           {
             label: 'Cash Flow',
             icon: <FaMoneyBill />,
-            onClick: () => router.push(`/${companySlug}/invoices/cash-flow`),
+            onClick: () => router.push(`/${companySlug}/employee/invoices/cash-flow`),
           },
 
         ]}
@@ -241,8 +241,8 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageC
           onPageChange={onPageChange}
           onPerPageChange={onPerPageChange}
           counts={counts}
-          // onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
-          onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
+          // onEdit={(id) => router.push(`/${companySlug}/employee/invoices/edit-invoice/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/employee/invoices/${id}`)}
           cardView={(invoice) => (
             <>
               <div className="card-row">
@@ -264,7 +264,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageC
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/invoices/new-invoice`)}
+              onClick={() => router.push(`/${companySlug}/employee/invoices/new-invoice`)}
             >
               <FaPlus size={18} /> Add New Invoice
             </button>

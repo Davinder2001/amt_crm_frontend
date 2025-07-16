@@ -1,21 +1,36 @@
+import { useCompany } from '@/utils/Company';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import Link from 'next/link';
-import { useFetchSelectedCompanyQuery } from '@/slices/auth/authApi';
-import { FaPlus } from 'react-icons/fa';
+import { FaCalendarPlus, FaUserCheck, FaClipboardList } from 'react-icons/fa';
 
-const Navigation = () => {
-    // Fetch company slug
-    const { data: selectedCompany } = useFetchSelectedCompanyQuery();
-    const companySlug = selectedCompany?.selected_company?.company_slug;
+interface NavigationProps {
+    setIsAttandanceOpen: (open: boolean) => void;
+    setIsApplyForLeaveOpen: (open: boolean) => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ setIsAttandanceOpen, setIsApplyForLeaveOpen }) => {
+    const { companySlug } = useCompany();
+    const router = useRouter();
 
     return (
         <>
             <div className="navigation-buttons">
-                <Link className="navigation-button" href={`/${companySlug}/employee/attendance/applay-for-leave`}><FaPlus /><span>Applay for Leave</span></Link>
-                <Link className="navigation-button" href={`/${companySlug}/employee/attendance/add`}><FaPlus /><span>Add Attendance</span></Link>
+                <button className="buttons" onClick={() => setIsApplyForLeaveOpen(true)} type='button'>
+                    <FaCalendarPlus />
+                    <span>Apply for Leave</span>
+                </button>
+
+                <button className="buttons" onClick={() => setIsAttandanceOpen(true)} type='button' >
+                    <FaUserCheck />
+                    <span>Add Attendance</span>
+                </button>
+
+                <button className="buttons" onClick={() => router.push(`/${companySlug}/employee/leaves`)} type='button'>
+                    <FaClipboardList />
+                    <span>Leaves</span>
+                </button>
             </div>
         </>
     );
 };
-
 export default Navigation;

@@ -85,7 +85,7 @@ const AllQuotations = () => {
         action={
           <button
             className="buttons"
-            onClick={() => router.push(`/${companySlug}/invoices/qutations/create`)}
+            onClick={() => router.push(`/${companySlug}/employee/invoices/qutations/create`)}
           >
             <FaDownload className="mr-2" />
             Create Quotation
@@ -100,7 +100,7 @@ const AllQuotations = () => {
       <TableToolbar
         actions={[
           ...(quotations.length > 0
-            ? [{ label: 'Generate Quotation', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/invoices/qutations/add`) }]
+            ? [{ label: 'Generate Quotation', icon: <FaPlus />, onClick: () => router.push(`/${companySlug}/employee/invoices/qutations/add`) }]
             : []),
         ]}
         introKey='quotation_intro'
@@ -108,7 +108,7 @@ const AllQuotations = () => {
       <ResponsiveTable
         data={quotations}
         columns={columns}
-        onView={(id) => router.push(`/${companySlug}/invoices/qutations/${id}`)}
+        onView={(id) => router.push(`/${companySlug}/employee/invoices/qutations/${id}`)}
       />
     </div>
   );

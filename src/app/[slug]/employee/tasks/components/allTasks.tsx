@@ -187,7 +187,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
                 const task = tasks.tasks.find(t => t.id === id);
                 if (task) promptDelete(id, task.name);
               }}
-              onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
+              onView={(id) => window.location.href = `/${companySlug}/employee/tasks/view-task/${id}`}
               cardView={(task: Task) => (
                 <>
                   <div className="card-row">

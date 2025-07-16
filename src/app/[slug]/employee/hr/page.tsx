@@ -22,12 +22,12 @@ const Page: React.FC = () => {
             {
               label: 'Status View',
               icon: <FaUserCheck />,
-              onClick: () => router.push(`/${companySlug}/hr/status-view`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
             },
             {
               label: 'Employee Salary',
               icon: <FaMoneyBillWave />,
-              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
             },
             // {
             //   label: 'Invite Employee',
@@ -37,7 +37,7 @@ const Page: React.FC = () => {
             {
               label: 'Add Employee',
               icon: <FaUserPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
             },
           ]}
           introKey='hr_intro'

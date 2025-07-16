@@ -271,13 +271,32 @@ interface Vendors {
   address: string;
 }
 
+interface VendorItem {
+  batch_id: number;
+  item_name: string;
+  quantity: string;
+  stock: string;
+  regular_price: string;
+  sale_price: string;
+  cost_price: string;
+  purchase_date: string | null;
+}
+
+interface VendorItemsGroup {
+  [vendorName: string]: VendorItem[];
+}
+
+interface ItemsByDate {
+  [date: string]: VendorItemsGroup;
+}
+
 interface Vendor {
   id: number;
   name: string;
   number: string;
   email: string;
   address: string;
-  items_by_date?: Array[];
+  items_by_date?: ItemsByDate;
   vendor_address: string;
   vendor_email: string;
   vendor_number: number | string;

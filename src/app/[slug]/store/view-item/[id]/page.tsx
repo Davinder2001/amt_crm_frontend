@@ -11,6 +11,7 @@ import { FiImage } from 'react-icons/fi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -55,7 +56,7 @@ const ViewItem = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching item."
         message="Something went wrong while fetching item."
       />

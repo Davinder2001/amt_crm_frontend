@@ -233,8 +233,8 @@ const UserList: React.FC = () => {
       label: 'Actions',
       render: (emp: Employee) => (
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <FaEye onClick={() => router.push(`/${companySlug}/hr/status-view/view-employee/${emp.id}`)} />
-          <FaEdit onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${emp.id}`)} />
+          <FaEye onClick={() => router.push(`/${companySlug}/employee/hr/status-view/view-employee/${emp.id}`)} />
+          <FaEdit onClick={() => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${emp.id}`)} />
           <FaTrash onClick={() => promptDelete(emp.id, emp.name)} />
         </div>
       ),
@@ -279,7 +279,7 @@ const UserList: React.FC = () => {
             ? [{
               label: 'Add Employee',
               icon: <FaUserPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
             }]
             : []),
         ]}
@@ -297,8 +297,8 @@ const UserList: React.FC = () => {
             const employee = employees.find(e => e.id === id);
             if (employee) promptDelete(id, employee.name);
           }}
-          onEdit={(id) => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
-          onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+          onEdit={(id) => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/employee/hr/status-view/view-employee/${id}`)}
           cardView={(employee: Employee) => (
             <>
               <div className="card-row">
@@ -323,7 +323,7 @@ const UserList: React.FC = () => {
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/hr/add-employee`)}
+              onClick={() => router.push(`/${companySlug}/employee/hr/add-employee`)}
             >
               <FaPlus size={18} /> Add New Employee
             </button>

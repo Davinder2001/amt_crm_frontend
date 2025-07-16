@@ -74,12 +74,12 @@ const Page = () => {
           {
             label: 'Attendance',
             icon: <FaUserCheck />,
-            onClick: () => router.push(`/${companySlug}/attendance`),
+            onClick: () => router.push(`/${companySlug}/employee/attendance`),
           },
           {
             label: 'Recurring Tasks',
             icon: <FaRedo />,
-            onClick: () => router.push(`/${companySlug}/tasks/recurring-tasks`),
+            onClick: () => router.push(`/${companySlug}/employee/tasks/recurring-tasks`),
           },
           ...(data && data?.tasks.length > 0
             ? [{ label: 'Add Task', icon: <FaPlus />, onClick: () => setIsAddModalOpen(true) }]

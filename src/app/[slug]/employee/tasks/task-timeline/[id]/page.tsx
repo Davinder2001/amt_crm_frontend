@@ -134,7 +134,7 @@ const ViewTimeline = () => {
       await endTask(Number(id)).unwrap();
       refetch();
       setShowConfirm(false);
-      router.push(`/${companySlug}/tasks`);
+      router.push(`/${companySlug}/employee/tasks`);
     } catch (err) {
       toast.error('Error ending task');
       console.error(err);
@@ -165,7 +165,7 @@ const ViewTimeline = () => {
         <div className="avatar-wrapper">
           <div className="avatar">
             <h3>{user?.name?.charAt(0)}</h3>
-            <Link href={`/${companySlug}/my-account`} className="av-tooltip">
+            <Link href={`/${companySlug}/employee/my-account`} className="av-tooltip">
               <p><strong>Name:</strong> {user?.name}</p>
               <p><strong>Email:</strong> {user?.email}</p>
               <p><strong>Phone:</strong> {user?.number}</p>
@@ -339,7 +339,7 @@ const ViewTimeline = () => {
       }
 
       <div className="action-buttons">
-        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/tasks`)}>Cancel</button>
+        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/employee/tasks`)}>Cancel</button>
         <ConfirmDialog
           isOpen={showConfirm}
           message="Are you sure you want to end this Task?"

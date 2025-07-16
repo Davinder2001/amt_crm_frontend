@@ -125,7 +125,7 @@ const ViewCredits: React.FC = () => {
         onView={(id) => {
           const credit = processedCredits.find((c) => c.id === id);
           if (credit?.invoice_id) {
-            router.push(`/${companySlug}/invoices/${credit.invoice_id}`);
+            router.push(`/${companySlug}/employee/invoices/${credit.invoice_id}`);
           }
         }}
 

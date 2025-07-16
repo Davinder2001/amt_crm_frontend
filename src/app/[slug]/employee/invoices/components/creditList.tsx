@@ -65,10 +65,10 @@ const CreditList: React.FC = () => {
   );
 
   const handleView = (userId: number) =>
-    router.push(`/${companySlug}/invoices/credits/view/${userId}`);
+    router.push(`/${companySlug}/employee/invoices/credits/view/${userId}`);
 
   const handlePay = (userId: number) =>
-    router.push(`/${companySlug}/invoices/credits/pay/${userId}`);
+    router.push(`/${companySlug}/employee/invoices/credits/pay/${userId}`);
 
   const toggleColumn = (key: string) => {
     const columnKey = key as ColumnKey;

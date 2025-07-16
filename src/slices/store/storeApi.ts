@@ -64,7 +64,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     // Bulk create store items
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
-        url: "store/bulk-items",
+        url: "add-as-vendor/save-items",
         method: "POST",
         body: formData,
       }),

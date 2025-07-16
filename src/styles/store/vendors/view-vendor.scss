@@ -1,125 +1,104 @@
 @use '../../variables' as *;
 
 .vendor-details-page {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  font-family: $font-family;
-  color: $para-color;
 
   .vendor-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    border-bottom: 1px solid $border-color;
+    padding: 10px 20px;
 
     .view-vendor-action-button-outter {
       display: flex;
       gap: 10px;
     }
 
-    .edit-button,
-    .delete-button {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: $border-radius;
-      cursor: pointer;
-      border: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
     .edit-button {
-      background-color: var(--primary-color); // your var(--primary-color)
-      color: #fff;
-
-      &:hover {
-        background-color: var(--primary-light);
-      }
-
-      &:active {
-        background-color: var(--primary-color);
-      }
+      color: var(--primary-color);
     }
 
     .delete-button {
-      background-color: $danger-color; // red color for delete
-      color: #fff;
-
-      &:hover {
-       background-color: rgba(179, 48, 48, 0.57);
-      }
-
-      &:active {
-       background-color: rgba(176, 54, 46, 1);
-      }
-
-      &:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-        color: #666;
-      }
+      color: $danger-color;
     }
   }
-
 
   .vendor-card {
     background: $white;
     border-radius: $border-radius;
-    padding: 2rem;
     border: 1px solid $border-color;
- 
+  }
 
-    h2.vendor-title {
-      color: var(--primary-color);
-      font-size: $font-size-extra-large;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      font-weight: $font-weight-semi-bold;
-    }
+  .vendor-title {
+    color: var(--primary-color);
+    font-size: 22px;
+    margin: 0;
   }
 
   .vendor-info {
-    display: flex;
-    flex-direction: column;
-    gap:5px;
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0px 20px;
 
     p {
+      margin: 0;
+      font-size: 14px;
       display: flex;
-      align-items: center;
-      margin: 0.5rem 0;
-      font-size: $font-size-small;
+      flex: 1;
       gap: 5px;
+
+      strong {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
     }
-    strong {
+  }
+
+  .vendor-items-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 20px;
+
+    .toggle-items-btn {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
       color: var(--primary-color);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 0;
+      font-size: 14px;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
+  }
+
+  .vendor-items-summary {
+    margin-top: 10px;
   }
 }
 
-// Responsive adjustments
 @media (max-width: 768px) {
   .vendor-details-page {
-    padding: 0 0.5rem;
+    .vendor-header {
+      padding: 8px 10px;
 
-    .vendor-card {
-      padding: 1.5rem;
+      h1 {
+        font-size: 18px;
+      }
     }
 
-    .vendor-info {
-      p {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
-
-        strong {
-          flex: none;
-        }
-      }
+    .vendor-info,
+    .vendor-items-section {
+      padding: 0px 10px;
     }
   }
 }

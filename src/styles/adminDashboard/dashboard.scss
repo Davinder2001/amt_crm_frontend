@@ -480,58 +480,71 @@
 }
 
 // slaes styling start ...........................................................
-/* Sales Report Container */
+
+.sales-report-page {
+
+    /* Filter Controls */
+    .s-r-filter-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        padding: 10px 0px;
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 200px;
+
+
+            label {
+                font-weight: 600;
+                color: var(--primary-color);
+                width: 100%;
+            }
+
+            select {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                gap: 20px;
+                padding: 5px;
+                border: 1px solid var(--primary-light);
+                border-radius: $border-radius;
+                background-color: $white;
+                width: 300px;
+                max-width: 100%;
+            }
+        }
+    }
+
+    .sales-report-content {
+        h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    .sales-report-page {
+        .s-r-filter-controls .filter-group {
+            max-width: 100%;
+            width: 100%;
+
+            select {
+                width: 100%;
+            }
+        }
+    }
+}
 
 /* Header */
-.sales-report {
-    color: var(--primary-color);
-}
-
-/* Filter Controls */
-.filter-controls {
-    border-bottom: 1px solid $border-color;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 10px;
-
-    .filter-group-inner {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .filter-group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .filter-group label {
-        font-weight: 600;
-        color: #555;
-    }
-
-    .filter-group select {
-        padding: 6px 12px;
-        border: 1px solid $border-color;
-        border-radius: 4px;
-        background-color: white;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .filter-group select:hover {
-        border-color: var(--primary-light);
-    }
-
-    .filter-group select:focus {
-        outline: none;
-        border-color: var(--primary-light);
-        box-shadow: $box-shadow;
-    }
-}
 
 // slaes styling end ...........................................................
 

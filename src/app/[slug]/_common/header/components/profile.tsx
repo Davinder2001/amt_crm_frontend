@@ -130,7 +130,7 @@ const Profile: React.FC = () => {
             {isOpen && (
               <div className="profile-menu">
 
-                <Link href={`${basePath}/my-account`} className="menu-header">
+                <Link href={`${basePath}/my-account`} className="menu-header" onClick={() => setIsOpen(false)}>
                   <div className="menu-avatar">
                     {user?.name?.[0]?.toUpperCase() || 'U'}
                   </div>

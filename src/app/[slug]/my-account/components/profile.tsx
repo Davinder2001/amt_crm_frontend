@@ -7,6 +7,7 @@ import { FaEdit, FaLock, FaUser } from 'react-icons/fa'
 import { EditUserModal } from './EditUserModal'
 import Modal from '@/components/common/Modal'
 import ChangePassword from './changePassword'
+import { FaTriangleExclamation } from 'react-icons/fa6'
 
 const Profile = () => {
   const { data, isLoading, error } = useFetchProfileQuery()
@@ -28,7 +29,7 @@ const Profile = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching profile data."
         message="Something went wrong while fetching profile data."
       />

@@ -13,6 +13,7 @@ import RecheckModal from '@/components/common/RecheckModal'
 import LoadingState from '@/components/common/LoadingState'
 import EmptyState from '@/components/common/EmptyState'
 import { FaPlus, FaUniversity } from 'react-icons/fa'
+import { FaTriangleExclamation } from 'react-icons/fa6'
 
 const BusinessAccount = () => {
     const { data, isLoading, error } = useFetchProfileQuery()
@@ -92,7 +93,7 @@ const BusinessAccount = () => {
     if (error)
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon'/>}
                 title="Failed to fetching profile data."
                 message="Something went wrong while fetching profile data."
             />

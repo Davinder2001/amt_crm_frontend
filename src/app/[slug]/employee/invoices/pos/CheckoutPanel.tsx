@@ -5,7 +5,7 @@ import { FiShoppingCart, FiTruck, FiUser } from 'react-icons/fi';
 import {
     useCreateInvoiceMutation,
     usePrintInvoiceMutation,
-    useWhatsappInvoiceMutation,
+    useSaveAndShareMutation,
 } from '@/slices/invoices/invoiceApi';
 import CartTabContent from './CartTabContent';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -40,7 +40,7 @@ export default function CheckoutPanel({
     // RTK Query hooks
     const [createInvoice, { isLoading: isSaving }] = useCreateInvoiceMutation();
     const [printInvoice, { isLoading: isPrinting }] = usePrintInvoiceMutation();
-    const [whatsappInvoice] = useWhatsappInvoiceMutation();
+    const [shareInvoice] = useSaveAndShareMutation();
     const [isSharing, setIsSharing] = useState(false);
     const [clientName, setClientName] = useState('');
     const [number, setNumber] = useState('');
@@ -195,7 +195,7 @@ export default function CheckoutPanel({
             const invoice = await createInvoice(formData).unwrap();
             if (invoice.status === true) {
                 toast.success(invoice.message || 'Invoice created successfully.');
-                router.push(`/${companySlug}/employee/invoices`);
+                router.push(`/${companySlug}/invoices`);
             } else {
                 toast.error(invoice.message || invoice.error || 'Failed to create invoice.');
             }
@@ -229,7 +229,7 @@ export default function CheckoutPanel({
             appendToFormData(formData, payload);
 
             // Call WhatsApp API first
-            const whatsappResponse = await whatsappInvoice(formData).unwrap();
+            const whatsappResponse = await shareInvoice(formData).unwrap();
             if (!whatsappResponse.status) {
                 throw new Error(whatsappResponse.message || 'Failed to generate invoice');
             }

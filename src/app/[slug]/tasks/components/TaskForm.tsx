@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { useCreateTaskMutation, useUpdateTaskMutation, useGetTasksQuery, useFetchNotificationsQuery } from '@/slices';
+import { useCreateTaskMutation, useUpdateTaskMutation, useFetchNotificationsQuery } from '@/slices';
 import { useFetchUsersQuery } from '@/slices/users/userApi';
 import DatePickerField from '@/components/common/DatePickerField';
 
@@ -10,6 +10,7 @@ interface TaskFormProps {
     mode: 'add' | 'edit';
     taskId?: number;
     onSuccess: () => void;
+    tasksData?: TasksResponse;
 }
 
 interface FormState {
@@ -23,9 +24,8 @@ interface FormState {
     attachments: File[];
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess, tasksData }) => {
     const { data: usersData } = useFetchUsersQuery();
-    const { data: tasksData } = useGetTasksQuery();
     const { refetch: refetchNotifications } = useFetchNotificationsQuery();
     const [createTask, { isLoading: isCreating }] = useCreateTaskMutation();
     const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation();
@@ -45,8 +45,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ mode, taskId, onSuccess }) => {
         date ? date.toISOString() : '';
 
     useEffect(() => {
-        if (mode === 'edit' && taskId && tasksData?.data) {
-            const taskToEdit = tasksData.data.find((t) => t.id === Number(taskId));
+        if (mode === 'edit' && taskId && tasksData?.tasks) {
+            const taskToEdit = tasksData.tasks.find((t) => t.id === Number(taskId));
             if (taskToEdit) {
                 setFormData({
                     name: taskToEdit.name || '',

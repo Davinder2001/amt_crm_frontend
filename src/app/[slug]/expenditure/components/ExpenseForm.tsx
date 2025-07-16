@@ -95,14 +95,14 @@ export default memo(function ExpenseForm({ expense, onSuccess, onCancel }: Expen
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [expandedItemId, setExpandedItemId] = useState<number | null>(null);
     const [selectedBatches, setSelectedBatches] = useState<BatchSelection[]>([]);
-
-    const { data: invoicesData } = useFetchInvoicesQuery();
-    const storeData = useFetchStoreQuery();
+    const { data: invoicesData } = useFetchInvoicesQuery({});
+    const { data: storeData } = useFetchStoreQuery({});
     const { data: usersData } = useFetchUsersQuery();
 
-    const invoices = invoicesData?.invoices ?? [];
-    const items = storeData.data ?? [];
-    const users = usersData?.users ?? [];
+    // Use useMemo for each derived value
+    const invoices = useMemo(() => invoicesData?.invoices ?? [], [invoicesData]);
+    const items = useMemo(() => storeData?.items ?? [], [storeData]);
+    const users = useMemo(() => usersData?.users ?? [], [usersData]);
 
     const [selectedTypes, setSelectedTypes] = useState({
         invoice: false,

@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useGetTasksQuery, useDeleteTaskMutation, useFetchNotificationsQuery } from '@/slices';
+import { useDeleteTaskMutation, useFetchNotificationsQuery } from '@/slices';
 import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
-import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import TaskForm from './TaskForm';
@@ -20,6 +19,13 @@ interface AllTasksProps {
   setIsAddModalOpen: (open: boolean) => void;
   setIsEditModalOpen: (open: boolean) => void;
   setCurrentTaskId: (id: number | null) => void;
+  noTasks: boolean;
+  refetch: () => void;
+  tasks?: TasksResponse;
+  pagination?: Pagination;
+  onPageChange?: (page: number) => void;
+  onPerPageChange?: (perPage: number) => void;
+  counts: number;
 }
 
 const AllTasks: React.FC<AllTasksProps> = ({
@@ -29,8 +35,15 @@ const AllTasks: React.FC<AllTasksProps> = ({
   setIsAddModalOpen,
   setIsEditModalOpen,
   setCurrentTaskId,
+  noTasks,
+  refetch,
+  tasks,
+  pagination,
+  onPageChange,
+  onPerPageChange,
+  counts
 }) => {
-  const { data: tasks, error: tasksError, isLoading: tasksLoading, refetch } = useGetTasksQuery();
+
   const [deleteTask] = useDeleteTaskMutation();
   const { companySlug } = useCompany();
   const { refetch: refetchNotifications } = useFetchNotificationsQuery();
@@ -77,16 +90,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
     setIsEditModalOpen(true);
   };
 
-  if (tasksLoading) return <LoadingState />;
-  if (tasksError) return (
-    <EmptyState
-      icon="alert"
-      title="Failed to load tasks"
-      message="We encountered an error while loading tasks. Please try again later."
-    />
-  );
 
-  const noTasks = !tasksLoading && !tasksError && (!tasks?.data || tasks.data.length === 0);
 
   // Define columns for the responsive table
   const columns = [
@@ -170,16 +174,20 @@ const AllTasks: React.FC<AllTasksProps> = ({
         />
       ) : (
         <div className='tasks_list'>
-          {tasks?.data && (
+          {tasks?.tasks && (
             <ResponsiveTable
-              data={tasks.data}
+              data={tasks.tasks}
               columns={columns}
+              pagination={pagination}
+              onPageChange={onPageChange}
+              onPerPageChange={onPerPageChange}
+              counts={counts}
               onEdit={(id) => handleEditClick(id)}
               onDelete={(id) => {
-                const task = tasks.data.find(t => t.id === id);
+                const task = tasks.tasks.find(t => t.id === id);
                 if (task) promptDelete(id, task.name);
               }}
-              onView={(id) => window.location.href = `/${companySlug}/employee/tasks/view-task/${id}`}
+              onView={(id) => window.location.href = `/${companySlug}/tasks/view-task/${id}`}
               cardView={(task: Task) => (
                 <>
                   <div className="card-row">
@@ -231,6 +239,7 @@ const AllTasks: React.FC<AllTasksProps> = ({
           <TaskForm
             mode="edit"
             taskId={currentTaskId}
+            tasksData={tasks}
             onSuccess={() => {
               setIsEditModalOpen(false);
               refetch();

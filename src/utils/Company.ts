@@ -60,3 +60,10 @@ export const clearStorage = () => {
         });
     }
 };
+
+
+export const STORE_ITEM_COUNT = 10;
+export const INVOICES_COUNT = 10;
+export const TASKS_COUNT = 10;
+export const EMPLOYEES_COUNT = 10;
+export const EXPENSES_COUNT = 10;

@@ -10,11 +10,16 @@ export const tasksApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
     // ⬇ Existing task endpoints
-    getTasks: builder.query<TasksResponse, void>({
-      query: () => 'tasks',
-      providesTags: ['Task'],
+    getTasks: builder.query<TasksResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "tasks",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
+      providesTags: ["Task"],
     }),
-
 
     createTask: builder.mutation<Task, FormData>({
       query: (newTask) => ({

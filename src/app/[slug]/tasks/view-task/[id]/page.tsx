@@ -16,7 +16,7 @@ function TaskViewPage() {
   const { id } = useParams();
   const { setTitle } = useBreadcrumb();
 
-  const { data: tasks, isLoading: isTasksLoading } = useGetTasksQuery();
+  const { data, isLoading: isTasksLoading } = useGetTasksQuery({});
   const [approveHistory, { isLoading: isApproving }] = useApproveHistoryMutation();
   const [rejectHistory, { isLoading: isRejecting }] = useRejectHistoryMutation();
   const [openImage, setOpenImage] = useState<string | null>(null);
@@ -33,7 +33,7 @@ function TaskViewPage() {
     );
   }
 
-  const task = tasks?.data.find((task) => task.id.toString() === id);
+  const task = data?.tasks.find((task) => task.id.toString() === id);
 
   if (!task) {
     return <p className="no-task-message">No task found with ID: {id}</p>;

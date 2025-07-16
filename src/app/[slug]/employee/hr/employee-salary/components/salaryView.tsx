@@ -78,7 +78,7 @@ const SalaryView: React.FC = () => {
       data={employeesData.data}
       columns={columns}
       onDelete={(id) => handleDelete(id)}
-      onView={(id) => router.push(`/${companySlug}/employee/hr/employee-salary/pay-slip/${id}`)}
+      onView={(id) => router.push(`/${companySlug}/hr/employee-salary/pay-slip/${id}`)}
       cardView={(employee: Employee) => (
         <div className="employee-card">
           <div className="card-row">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useFetchEmployesQuery } from '@/slices';
+import { useFetchEmployeesQuery } from '@/slices';
 import React, { useState, useEffect, useRef } from 'react';
 
 type ClientTabProps = {
@@ -41,7 +41,7 @@ export default function ClientTab({
     setDeliveryBoyId,
     customers,
 }: ClientTabProps) {
-    const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployesQuery();
+    const { data: employeeData, isLoading: isEmployeeLoading } = useFetchEmployeesQuery({});
     const [showDropdown, setShowDropdown] = useState(false);
     const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);

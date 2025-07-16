@@ -27,7 +27,8 @@ interface Expense {
 }
 
 interface ExpenseResponse {
-    data: Expense[];
+    expenses: Expense[];
+    pagination: Pagination;
     success?: boolean
 }
 

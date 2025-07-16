@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
+import { useFetchEmployeesQuery } from '@/slices/employe/employeApi';
 import {
   FaUsers,
   FaCheckCircle,
@@ -14,11 +14,13 @@ import { useCompany } from '@/utils/Company';
 import { useFetchdashboardSummaryQuery } from '@/slices/hr/hrApi';
 
 const HrHeroSection = () => {
-  const { data: employeesData } = useFetchEmployesQuery();
+  const { data: employeesData } = useFetchEmployeesQuery({});
   const employees = employeesData?.employees || [];
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
   const { data: dashSummary } = useFetchdashboardSummaryQuery();
   const { companySlug } = useCompany();
+
+  console.log("Dashboard Summary:", dashSummary);
 
   const statCards = [
     {
@@ -30,7 +32,7 @@ const HrHeroSection = () => {
     },
     {
       icon: <FaCheckCircle />,
-      value: dashSummary?.summary?.present_today?.length ?? 0,
+      value: dashSummary?.summary?.present_today ?? 0,
       label: "Present",
       note: "vs. yesterday's presence",
       link: "attendance?status=present"
@@ -44,21 +46,21 @@ const HrHeroSection = () => {
     },
     {
       icon: <FaClock />,
-      value: dashSummary?.summary?.late_arrival?.length ?? 0,
+      value: dashSummary?.summary?.late_arrival ?? 0,
       label: "Late Arrival",
       note: "vs. yesterday late",
       link: "attendance?status=late-arrival"
     },
     {
       icon: <FaSignOutAlt />,
-      value: dashSummary?.summary?.early_departures?.length ?? 0,
+      value: dashSummary?.summary?.early_departures ?? 0,
       label: "Early Departures",
       note: "vs. yesterday early outs",
       link: "attendance?status=early-departures"
     },
     {
       icon: <FaCalendarAlt />,
-      value: dashSummary?.summary?.time_off_today?.length ?? 0,
+      value: dashSummary?.summary?.time_off_today ?? 0,
       label: "Time Off",
       note: "Today's Leave / Time Off",
       link: "attendance?status=time-off"
@@ -75,13 +77,13 @@ const HrHeroSection = () => {
         <div className="stats-grid">
           {statCards.map((card, index) => (
             <Link
-              href={`/${companySlug}/employee/hr/${card.link}`}
+              href={`/${companySlug}/hr/${card.link}`}
               key={index}
               className="stat-card-link"
             >
               <StatCard
                 icon={card.icon}
-                value={card.value}
+                value={Array.isArray(card.value) ? card.value.length : card.value}
                 label={card.label}
                 note={card.note}
               />
@@ -189,7 +191,7 @@ const TimeSection = React.memo(() => {
         Today: {formatDay(dateTime)} {dateTime.toLocaleString('default', { month: 'long' })}{' '}
         {dateTime.getFullYear()}
       </p>
-      <Link className="attendance-btn" href={`/${companySlug}/employee/hr/view-attendance`}>
+      <Link className="attendance-btn" href={`/${companySlug}/hr/view-attendance`}>
         View Attendance
       </Link>
     </div>

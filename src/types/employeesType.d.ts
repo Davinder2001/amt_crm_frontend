@@ -114,6 +114,7 @@ interface PaySlipResponse {
 interface EmployeesResponse {
   employees: Employee[];
   data: Employee[];
+  pagination: Pagination;
   total: number;
 }
 

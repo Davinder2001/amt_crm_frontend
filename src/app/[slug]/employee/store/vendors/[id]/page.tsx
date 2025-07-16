@@ -24,7 +24,7 @@ const Page = () => {
   const handleDelete = async () => {
     try {
       await deleteVendor(vendorId).unwrap();
-      router.push(`/${companySlug}/employee/store/vendors`);
+      router.push(`/${companySlug}/store/vendors`);
     } catch (err) {
       alert('Failed to delete vendor.');
       console.error(err);
@@ -51,7 +51,7 @@ const Page = () => {
             <div className='view-vendor-action-button-outter'>
               <button
                 className="edit-button"
-                onClick={() => router.push(`/${companySlug}/employee/store/vendors/edit/${vendor.id}`)}
+                onClick={() => router.push(`/${companySlug}/store/vendors/edit/${vendor.id}`)}
                 style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <FaEdit />

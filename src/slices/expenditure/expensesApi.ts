@@ -5,8 +5,14 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
     overrideExisting: false,
     endpoints: (builder) => ({
         // Fetch all expenses
-        fetchExpenses: builder.query<ExpenseResponse, void>({
-            query: () => "expenses",
+        fetchExpenses: builder.query<ExpenseResponse, { page?: number; per_page?: number }>({
+            query: (params) => ({
+                url: "expenses",
+                params: {
+                    page: params.page,
+                    per_page: params.per_page
+                }
+            }),
             providesTags: ["Expenses"],
         }),
 

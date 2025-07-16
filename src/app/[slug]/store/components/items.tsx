@@ -15,6 +15,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
 import { useSelectedItem } from '@/provider/SelectedItemContext';
+import { STORE_ITEM_COUNT } from '@/utils/Company';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -34,7 +35,7 @@ const Items: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { setItemId } = useSelectedItem();
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(STORE_ITEM_COUNT);
   const { data, error, isLoading, refetch } = useFetchStoreQuery({
     page: currentPage,
     per_page: itemsPerPage,
@@ -352,6 +353,7 @@ const Items: React.FC = () => {
           pagination={pagination}
           onPageChange={handlePageChange}
           onPerPageChange={handlePerPageChange}
+          counts={STORE_ITEM_COUNT}
           columns={columns}
           onDelete={(id) => handleDelete(id)}
           onBulkDelete={handleBulkDelete}

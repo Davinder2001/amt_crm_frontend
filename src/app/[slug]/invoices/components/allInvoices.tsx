@@ -6,23 +6,20 @@ import { useLazyDownloadInvoicePdfQuery } from "@/slices";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { useCompany } from "@/utils/Company";
 import EmptyState from "@/components/common/EmptyState";
-import LoadingState from "@/components/common/LoadingState";
 import TableToolbar from "@/components/common/TableToolbar";
 import { toast } from 'react-toastify';
-import { FaTriangleExclamation } from "react-icons/fa6";
 
 interface allInvoicesProps {
   invoices: Invoice[];
-  isLoadingInvoices: boolean;
-  isError: boolean;
   pagination?: Pagination;
   onPageChange?: (page: number) => void;
   onPerPageChange?: (perPage: number) => void;
+  counts: number;
 }
 
 const COLUMN_STORAGE_KEY = 'visible_columns_invoice';
 
-const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError, pagination, onPageChange, onPerPageChange }) => {
+const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageChange, onPerPageChange, counts }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
@@ -179,14 +176,6 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
     },
   ];
 
-
-  if (isLoadingInvoices) return <LoadingState />;
-  if (isError) return <EmptyState
-    icon={<FaTriangleExclamation className="empty-state-icon" />}
-    title="Failed to load invoices"
-    message="We encountered an error while loading your invoices. Please try again later."
-  />;
-
   return (
     <>
       <TableToolbar
@@ -251,6 +240,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           pagination={pagination}
           onPageChange={onPageChange}
           onPerPageChange={onPerPageChange}
+          counts={counts}
           // onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
           onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
           cardView={(invoice) => (

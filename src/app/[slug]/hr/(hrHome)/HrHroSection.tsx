@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
+import { useFetchEmployeesQuery } from '@/slices/employe/employeApi';
 import {
   FaUsers,
   FaCheckCircle,
@@ -14,7 +14,7 @@ import { useCompany } from '@/utils/Company';
 import { useFetchdashboardSummaryQuery } from '@/slices/hr/hrApi';
 
 const HrHeroSection = () => {
-  const { data: employeesData } = useFetchEmployesQuery();
+  const { data: employeesData } = useFetchEmployeesQuery({});
   const employees = employeesData?.employees || [];
   const activeEmployees = employees.filter((emp) => emp.user_status === 'active');
   const { data: dashSummary } = useFetchdashboardSummaryQuery();

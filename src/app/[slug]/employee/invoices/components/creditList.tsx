@@ -30,7 +30,7 @@ const allColumns: { label: string; key: ColumnKey }[] = [
   { label: 'Name', key: 'name' },
   { label: 'Number', key: 'number' },
   { label: 'Total Invoices', key: 'total_invoices' },
-  { label: 'Total Due', key: 'total_due' },
+  { label: 'Total Payment', key: 'total_due' },
   { label: 'Amount Paid', key: 'amount_paid' },
   { label: 'Outstanding', key: 'outstanding' },
   { label: 'Action', key: 'action' }
@@ -65,10 +65,10 @@ const CreditList: React.FC = () => {
   );
 
   const handleView = (userId: number) =>
-    router.push(`/${companySlug}/employee/invoices/credits/view/${userId}`);
+    router.push(`/${companySlug}/invoices/credits/view/${userId}`);
 
   const handlePay = (userId: number) =>
-    router.push(`/${companySlug}/employee/invoices/credits/pay/${userId}`);
+    router.push(`/${companySlug}/invoices/credits/pay/${userId}`);
 
   const toggleColumn = (key: string) => {
     const columnKey = key as ColumnKey;

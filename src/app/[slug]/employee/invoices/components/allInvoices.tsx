@@ -6,20 +6,20 @@ import { useLazyDownloadInvoicePdfQuery } from "@/slices";
 import ResponsiveTable from "@/components/common/ResponsiveTable";
 import { useCompany } from "@/utils/Company";
 import EmptyState from "@/components/common/EmptyState";
-import LoadingState from "@/components/common/LoadingState";
 import TableToolbar from "@/components/common/TableToolbar";
 import { toast } from 'react-toastify';
-import { FaTriangleExclamation } from "react-icons/fa6";
 
 interface allInvoicesProps {
   invoices: Invoice[];
-  isLoadingInvoices: boolean;
-  isError: boolean;
+  pagination?: Pagination;
+  onPageChange?: (page: number) => void;
+  onPerPageChange?: (perPage: number) => void;
+  counts: number;
 }
 
 const COLUMN_STORAGE_KEY = 'visible_columns_invoice';
 
-const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, isError }) => {
+const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, pagination, onPageChange, onPerPageChange, counts }) => {
   const [triggerDownload] = useLazyDownloadInvoicePdfQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
@@ -119,6 +119,32 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
       toast.error("Failed to download invoice PDF.");
     }
   };
+  const handleShareInvoice = async (invoice: Invoice) => {
+    try {
+      const result = await triggerDownload(invoice.id).unwrap();
+
+      const file = new File([result], `invoice_${invoice.invoice_number}.pdf`, {
+        type: "application/pdf",
+      });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          title: `Invoice #${invoice.invoice_number}`,
+          text: `Invoice for ${invoice.client_name}\nTotal: ₹${invoice.final_amount}`,
+          files: [file],
+        });
+      } else {
+        console.warn("Share not supported, falling back to download.");
+        handleDownloadPdf(invoice.id);
+      }
+    } catch (err: unknown | DOMException) {
+      if (!(err instanceof DOMException && err.name === "AbortError")) {
+        console.error("Share failed:", err);
+        handleDownloadPdf(invoice.id);
+      }
+    }
+  };
+
 
   const columns = [
     ...allColumns
@@ -142,17 +168,13 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           <button className="buttons" onClick={() => handleDownloadPdf(invoice.id)}>
             Download
           </button>
+          <button className="buttons" onClick={() => handleShareInvoice(invoice)}>
+            Share
+          </button>
         </div>
       ),
     },
   ];
-
-  if (isLoadingInvoices) return <LoadingState />;
-  if (isError) return <EmptyState
-    icon={<FaTriangleExclamation className="empty-state-icon" />}
-    title="Failed to load invoices"
-    message="We encountered an error while loading your invoices. Please try again later."
-  />;
 
   return (
     <>
@@ -182,7 +204,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
             ? [{
               label: 'Add Invoice',
               icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/employee/invoices/new-invoice`),
+              onClick: () => router.push(`/${companySlug}/invoices/new-invoice`),
             }]
             : []),
         ]}
@@ -190,22 +212,22 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           {
             label: 'All Customers',
             icon: <FaUsers />,
-            onClick: () => router.push(`/${companySlug}/employee/invoices/customers`),
+            onClick: () => router.push(`/${companySlug}/invoices/customers`),
           },
           // {
           //   label: 'Credits',
           //   icon: <FaCreditCard />,
-          //   onClick: () => router.push(`/${companySlug}/employee/invoices/credits`),
+          //   onClick: () => router.push(`/${companySlug}/invoices/credits`),
           // },
           {
             label: 'Quotations',
             icon: <FaFileInvoice />,
-            onClick: () => router.push(`/${companySlug}/employee/invoices/qutations`),
+            onClick: () => router.push(`/${companySlug}/invoices/qutations`),
           },
           {
             label: 'Cash Flow',
             icon: <FaMoneyBill />,
-            onClick: () => router.push(`/${companySlug}/employee/invoices/cash-flow`),
+            onClick: () => router.push(`/${companySlug}/invoices/cash-flow`),
           },
 
         ]}
@@ -215,9 +237,12 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
         <ResponsiveTable
           data={filteredInvoices}
           columns={columns}
-          storageKey="invoice_table_page"
-          // onEdit={(id) => router.push(`/${companySlug}/employee/invoices/edit-invoice/${id}`)}
-          onView={(id) => router.push(`/${companySlug}/employee/invoices/${id}`)}
+          pagination={pagination}
+          onPageChange={onPageChange}
+          onPerPageChange={onPerPageChange}
+          counts={counts}
+          // onEdit={(id) => router.push(`/${companySlug}/invoices/edit-invoice/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/invoices/${id}`)}
           cardView={(invoice) => (
             <>
               <div className="card-row">
@@ -239,7 +264,7 @@ const AllInvoices: React.FC<allInvoicesProps> = ({ invoices, isLoadingInvoices, 
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/employee/invoices/new-invoice`)}
+              onClick={() => router.push(`/${companySlug}/invoices/new-invoice`)}
             >
               <FaPlus size={18} /> Add New Invoice
             </button>

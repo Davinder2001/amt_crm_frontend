@@ -20,7 +20,7 @@ const Page = () => {
   const [isSubmitTaskOpen, setIsSubmitTaskOpen] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
 
-  const tasks = data?.data || [];
+  const tasks = data?.tasks || [];
 
   const handleSubmitTask = (taskId: number) => {
     setCurrentTaskId(taskId);

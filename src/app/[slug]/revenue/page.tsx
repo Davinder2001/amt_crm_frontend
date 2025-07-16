@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useMemo } from 'react'
 import { useFetchRevenueReportQuery } from '@/slices/reports/reportsApi';
-import { RevenueReportMonth, RevenueReportItem } from '@/types/reportsTypes';
 
 const getCurrentYear = () => new Date().getFullYear();
 const getCurrentMonthName = () =>

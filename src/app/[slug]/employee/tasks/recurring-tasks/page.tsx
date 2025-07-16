@@ -9,6 +9,7 @@ import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface PredefinedTask {
   id: number;

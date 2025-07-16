@@ -18,6 +18,7 @@ import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 // Types
 type Tax = {

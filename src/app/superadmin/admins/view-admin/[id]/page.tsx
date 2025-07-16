@@ -9,6 +9,7 @@ import { adminlogo } from "@/assets/useImage";
 import { FaBuilding, FaCalendarAlt, FaCheckCircle, FaEnvelope, FaFingerprint, FaPhoneAlt, FaUserShield } from "react-icons/fa";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const ViewAdminPage = () => {
   const { setTitle } = useBreadcrumb();

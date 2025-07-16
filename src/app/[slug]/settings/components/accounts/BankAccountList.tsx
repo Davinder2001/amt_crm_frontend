@@ -14,6 +14,7 @@ import { FaUniversity, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const BankAccountList = () => {
     const { data, isLoading, error, refetch } = useFetchCompanyAccountsQuery();

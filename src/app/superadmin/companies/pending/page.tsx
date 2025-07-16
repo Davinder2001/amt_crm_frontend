@@ -6,6 +6,7 @@ import { useFetchPendingCompaniesQuery, useVerifyCompanyPaymentMutation, useVeri
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const PendingCompaniesPage = () => {

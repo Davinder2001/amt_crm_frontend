@@ -10,6 +10,7 @@ import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { FaUndoAlt } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface Company {
   id: number;

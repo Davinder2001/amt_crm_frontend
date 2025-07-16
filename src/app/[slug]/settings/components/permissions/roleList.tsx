@@ -10,6 +10,7 @@ import ViewRole from "./ViewRole";
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const RoleList: React.FC = () => {
   const { data: rolesData, isLoading, error } = useGetRolesQuery(undefined);

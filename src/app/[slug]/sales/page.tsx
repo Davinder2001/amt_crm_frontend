@@ -4,6 +4,7 @@ import { useFetchSalesReportQuery } from '@/slices/reports/reportsApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 type TableSalesReportItem = SalesReportItem & {
     id: number;

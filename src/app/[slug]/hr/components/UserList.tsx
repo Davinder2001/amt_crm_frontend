@@ -7,6 +7,7 @@ import { useFetchEmployeesQuery, useDeleteEmployeMutation } from '@/slices/emplo
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const UserList: React.FC = () => {

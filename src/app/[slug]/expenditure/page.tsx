@@ -14,6 +14,7 @@ import EmptyState from '@/components/common/EmptyState';
 import Image from 'next/image';
 import LoadingState from '@/components/common/LoadingState';
 import { useRouter } from 'next/navigation';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 export default function ExpensesPage() {
 

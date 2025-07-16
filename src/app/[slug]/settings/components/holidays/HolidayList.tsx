@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const HolidayList = () => {
     const { data, isLoading, error, refetch } = useFetchHolidaysQuery();

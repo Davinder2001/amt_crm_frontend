@@ -3,6 +3,7 @@ import React from "react";
 import { useFetchSelectedCompanyQuery } from "@/slices";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const CompanyDetails = () => {
     const { data, isLoading, error } = useFetchSelectedCompanyQuery();

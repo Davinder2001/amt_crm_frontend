@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();

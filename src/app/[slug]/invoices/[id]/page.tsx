@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const InvoiceViewPage = () => {

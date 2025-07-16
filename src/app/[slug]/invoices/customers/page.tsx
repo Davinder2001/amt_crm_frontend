@@ -7,6 +7,7 @@ import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const CustomerList = () => {
   const { data, isLoading, error } = useFetchAllCustomersQuery();

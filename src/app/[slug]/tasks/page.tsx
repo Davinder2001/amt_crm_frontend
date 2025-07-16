@@ -11,6 +11,7 @@ import { Box } from '@mui/material';
 import { useGetMyTasksQuery, useGetTasksQuery } from '@/slices';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Page = () => {
   const router = useRouter();

@@ -5,6 +5,7 @@ import { useGetRolesQuery } from '@/slices';
 import { toast } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface ViewRoleProps {
     roleId: number;

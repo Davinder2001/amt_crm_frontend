@@ -18,6 +18,7 @@ import {
     Typography,
 } from '@mui/material';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Attributes = () => {
     const { data: response, isLoading, error } = useFetchAttributesQuery();

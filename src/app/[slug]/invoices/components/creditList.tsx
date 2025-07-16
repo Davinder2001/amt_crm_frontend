@@ -10,6 +10,7 @@ import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import { FaMoneyBill } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface CreditUser {
   customer_id: number;

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useFetchSingleCompanyQuery, useUpdateCompanyMutation, } from '@/slices/superadminSlices/company/companyApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface Company {
   id: number;

@@ -15,6 +15,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
 import { useSelectedItem } from '@/provider/SelectedItemContext';
+import { STORE_ITEM_COUNT } from '@/utils/Company';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -33,8 +34,25 @@ const Items: React.FC = () => {
   const [showCreateItemModal, setShowCreateItemModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { setItemId } = useSelectedItem();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(STORE_ITEM_COUNT);
+  const { data, error, isLoading, refetch } = useFetchStoreQuery({
+    page: currentPage,
+    per_page: itemsPerPage,
+  });
+  const items = data?.items ?? [];
+  const pagination = data?.pagination;
 
-  const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
+  // Add these handler functions
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setItemsPerPage(newPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
       ...item,
@@ -266,7 +284,7 @@ const Items: React.FC = () => {
       render: (item: StoreItem) =>
         companySlug && (
           <div className="table-actions-wrapper">
-            <Link href={`/${companySlug}/employee/store/edit-item/${item.id}`}>
+            <Link href={`/${companySlug}/store/edit-item/${item.id}`}>
               <FaEdit color="var(--primary-color)" />
             </Link>
             <span onClick={() => handleDeleteClick(item.id, item.name)}>
@@ -319,9 +337,9 @@ const Items: React.FC = () => {
           {
             label: 'Add Purchase Bill',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/employee/store/vendors/add-as-vendor`),
+            onClick: () => router.push(`/${companySlug}/store/vendors/add-as-vendor`),
           },
-          { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/employee/store/vendors`) },
+          { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
         actions={[
           ...(storeItems.length > 0
@@ -332,12 +350,15 @@ const Items: React.FC = () => {
       {storeItems.length > 0 ?
         <ResponsiveTable
           data={filteredItems}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onPerPageChange={handlePerPageChange}
+          counts={STORE_ITEM_COUNT}
           columns={columns}
           onDelete={(id) => handleDelete(id)}
           onBulkDelete={handleBulkDelete}
-          onEdit={(id) => router.push(`/${companySlug}/employee/store/edit-item/${id}`)}
-          onView={(id) => router.push(`/${companySlug}/employee/store/view-item/${id}`)}
-          storageKey="store_table_page"
+          onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
           showBulkActions={showBulkActions}
           cardView={(item) => (
             <>
@@ -370,7 +391,7 @@ const Items: React.FC = () => {
           action={
             <button
               className="buttons"
-              onClick={() => router.push(`/${companySlug}/employee/store/add-item`)}
+              onClick={() => router.push(`/${companySlug}/store/add-item`)}
             >
               <FaPlus size={18} /> Add New Item
             </button>
@@ -460,7 +481,7 @@ const Items: React.FC = () => {
                   color: '#384B70',
                   textDecoration: 'none'
                 }}
-                  href={`/${companySlug}/employee/store/add-stock/${item.id}`}
+                  href={`/${companySlug}/store/add-stock/${item.id}`}
                   onClick={() => {
                     setItemId(item.id);
                   }}
@@ -478,9 +499,9 @@ const Items: React.FC = () => {
           </div>
 
           <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p>Total Items: <strong>{storeItems.length}</strong></p>
+            <p>Total Items: <strong>{data?.items.length}</strong></p>
             <button
-              onClick={() => router.push(`/${companySlug}/employee/store/add-item`)}
+              onClick={() => router.push(`/${companySlug}/store/add-item`)}
               className='buttons'
             >
               <FaPlus /> Add New Item

@@ -131,7 +131,7 @@ const AddItem: React.FC = () => {
         toast.success(response.message || 'Item created successfully.');
         setFormData(getDefaultFormData());
         setHasUnsavedChanges(false);
-        router.push(`/${companySlug}/employee/store/add-stock/${response.item.id}`);
+        router.push(`/${companySlug}/store/add-stock/${response.item.id}`);
       } else {
         toast.error(response.message || response.error || 'Failed to create item.');
       }
@@ -292,7 +292,7 @@ const AddItem: React.FC = () => {
 
 
         <div className="save-cancel-button" style={{ flex: '1 1 100%', marginTop: '1rem' }}>
-          <button type="button" className="buttons cancel-btn" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/employee/store`)}>
+          <button type="button" className="buttons cancel-btn" style={{ marginLeft: '1rem' }} onClick={() => router.push(`/${companySlug}/store`)}>
             Cancel
           </button>
           <button type="submit" className="buttons" disabled={isCreating} style={{ cursor: isCreating ? 'not-allowed' : 'pointer' }}>

@@ -53,7 +53,7 @@ const EditVendorPage: React.FC = () => {
             }).unwrap();
 
             toast.success('Vendor updated successfully!');
-            router.push(`/${companySlug}/employee/store/vendors`);
+            router.push(`/${companySlug}/store/vendors`);
         } catch (err: unknown) {
             console.error('Error updating vendor:', err);
             if (err && typeof err === 'object' && 'data' in err && err.data && typeof err.data === 'object' && 'message' in err.data) {

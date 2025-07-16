@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import HrHroSection from './(hrHome)/HrHroSection';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
-import { FaPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
+import { FaUserPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
 import InviteEmployeeForm from './components/InviteEmployeeForm';
 import Modal from '@/components/common/Modal';
 import { useCompany } from '@/utils/Company';
@@ -22,12 +22,12 @@ const Page: React.FC = () => {
             {
               label: 'Status View',
               icon: <FaUserCheck />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
+              onClick: () => router.push(`/${companySlug}/hr/status-view`),
             },
             {
               label: 'Employee Salary',
               icon: <FaMoneyBillWave />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
+              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
             },
             // {
             //   label: 'Invite Employee',
@@ -36,8 +36,8 @@ const Page: React.FC = () => {
             // },
             {
               label: 'Add Employee',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
+              icon: <FaUserPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
             },
           ]}
           introKey='hr_intro'

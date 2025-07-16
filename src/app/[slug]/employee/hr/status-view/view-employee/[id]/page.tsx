@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
+import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaUserPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 
@@ -69,7 +69,7 @@ const ViewUserPage: React.FC = () => {
     try {
       await deleteEmployee(Number(id)).unwrap();
       setShowConfirm(false);
-      router.push(`/${companySlug}/employee/hr`);
+      router.push(`/${companySlug}/hr`);
     } catch (err) {
       console.error('Error deleting item:', err);
     }
@@ -85,18 +85,18 @@ const ViewUserPage: React.FC = () => {
           actions={[
             {
               label: 'Add Employee',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
+              icon: <FaUserPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
             },
             {
               label: 'Status View',
               icon: <FaUserCheck />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
+              onClick: () => router.push(`/${companySlug}/hr/status-view`),
             },
             {
               label: 'Employee Salary',
               icon: <FaMoneyBillWave />,
-              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
+              onClick: () => router.push(`/${companySlug}/hr/employee-salary`),
             }
           ]}
           introKey='view_emp_intro'
@@ -131,7 +131,7 @@ const ViewUserPage: React.FC = () => {
               {/* Desktop Buttons */}
               <div className="action-buttons desktop-only">
                 <button
-                  onClick={() => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`)}
+                  onClick={() => router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`)}
                   className="btn primary" type='button'
                 >
                   <FaEdit />Edit Profile
@@ -151,7 +151,7 @@ const ViewUserPage: React.FC = () => {
                     <button
                       onClick={() => {
                         setMenuOpen(false);
-                        router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`);
+                        router.push(`/${companySlug}/hr/status-view/edit-employee/${id}`);
                       }}
                       className='dropdown-edit-btn' type='button'
                     >

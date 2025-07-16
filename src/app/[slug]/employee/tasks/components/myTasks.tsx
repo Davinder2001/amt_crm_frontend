@@ -20,7 +20,7 @@ const Page = () => {
   const [isSubmitTaskOpen, setIsSubmitTaskOpen] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
 
-  const tasks = data?.data || [];
+  const tasks = data?.tasks || [];
 
   const handleSubmitTask = (taskId: number) => {
     setCurrentTaskId(taskId);
@@ -123,7 +123,7 @@ const Page = () => {
         <ResponsiveTable
           data={tasks}
           columns={columns}
-          onView={(id) => router.push(`/${companySlug}/employee/tasks/task-timeline/${id}`)}
+          onView={(id) => router.push(`/${companySlug}/tasks/task-timeline/${id}`)}
           cardView={(task: Task) => (
             <>
               <div className="card-row">

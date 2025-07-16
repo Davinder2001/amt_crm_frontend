@@ -1,12 +1,12 @@
 'use client';
-import { useFetchEmployesQuery } from '@/slices/employe/employeApi';
+import { useFetchEmployeesQuery } from '@/slices/employe/employeApi';
 import { useCompany } from '@/utils/Company';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
 
 const Employees = () => {
-    const { data: employeesData } = useFetchEmployesQuery();
+    const { data: employeesData } = useFetchEmployeesQuery({});
     const router = useRouter();
     const { companySlug } = useCompany();
 

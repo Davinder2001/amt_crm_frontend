@@ -5,8 +5,14 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
 
   endpoints: (builder) => ({
 
-    fetchEmployes: builder.query<EmployeesResponse, void>({
-      query: () => "employee",
+    fetchEmployees: builder.query<EmployeesResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "employee",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
       providesTags: ["Employee"],
     }),
 
@@ -98,7 +104,7 @@ const employeApi = employeCreateApiSlice.injectEndpoints({
 });
 
 export const {
-  useFetchEmployesQuery,
+  useFetchEmployeesQuery,
   useFetchEmployeByIdQuery,
   useCreateEmployeMutation,
   useUpdateEmployeeStatusMutation,

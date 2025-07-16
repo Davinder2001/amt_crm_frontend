@@ -27,7 +27,7 @@ const ViewItem = () => {
     try {
       await deleteStoreItem(Number(id)).unwrap();
       setShowConfirm(false);
-      router.push(`/${companySlug}/employee/store`);
+      router.push(`/${companySlug}/store`);
     } catch (err) {
       console.error('Error deleting item:', err);
     }
@@ -73,7 +73,7 @@ const ViewItem = () => {
           {
             label: 'Edit Item',
             icon: <FaEdit />,
-            onClick: () => router.push(`/${companySlug}/employee/store/edit-item/${item.id}`),
+            onClick: () => router.push(`/${companySlug}/store/edit-item/${item.id}`),
           },
           {
             label: 'Delete Item',
@@ -83,7 +83,7 @@ const ViewItem = () => {
           {
             label: 'Add Stock',
             icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/employee/store/add-stock/${item.id}`),
+            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
           },
         ]}
         introKey="view-item-toolbar" // optional for mobile guide popup

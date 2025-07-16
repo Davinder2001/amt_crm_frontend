@@ -117,7 +117,7 @@ const Page: React.FC = () => {
           <ResponsiveTable
             data={filteredVendors}
             columns={columns}
-            onView={(id: number) => router.push(`/${companySlug}/employee/store/vendors/${id}`)}
+            onView={(id: number) => router.push(`/${companySlug}/store/vendors/${id}`)}
           />
 
           <Modal

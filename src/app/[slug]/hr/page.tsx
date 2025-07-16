@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import HrHroSection from './(hrHome)/HrHroSection';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
-import { FaPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
+import { FaUserPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
 import InviteEmployeeForm from './components/InviteEmployeeForm';
 import Modal from '@/components/common/Modal';
 import { useCompany } from '@/utils/Company';
@@ -36,7 +36,7 @@ const Page: React.FC = () => {
             // },
             {
               label: 'Add Employee',
-              icon: <FaPlus />,
+              icon: <FaUserPlus />,
               onClick: () => router.push(`/${companySlug}/hr/add-employee`),
             },
           ]}

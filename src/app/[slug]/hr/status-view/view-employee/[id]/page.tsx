@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
+import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaUserPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 
@@ -85,7 +85,7 @@ const ViewUserPage: React.FC = () => {
           actions={[
             {
               label: 'Add Employee',
-              icon: <FaPlus />,
+              icon: <FaUserPlus />,
               onClick: () => router.push(`/${companySlug}/hr/add-employee`),
             },
             {

@@ -358,62 +358,64 @@ function ResponsiveTable<T extends { id: number; name?: string }>({
       </div>
 
       {/* Pagination */}
-      <div className="pagination-controls">
-        {/* Empty div for left alignment */}
-        <div />
+      {counts && (
+        <div className="pagination-controls">
+          {/* Empty div for left alignment */}
+          <div />
 
-        {shouldShowPagination && (
-          <div className="pagination-track">
-            <div className="nav-arrow-wrapper">
-              <button
-                className="nav-arrow"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                ←
-              </button>
-              <div className="pagination-btns-counts" ref={ref} onMouseDown={handleMouseDown}>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handlePageChange(i + 1)}
-                    className={currentPage === i + 1 ? 'active' : ''}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
+          {shouldShowPagination && (
+            <div className="pagination-track">
+              <div className="nav-arrow-wrapper">
+                <button
+                  className="nav-arrow"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  ←
+                </button>
+                <div className="pagination-btns-counts" ref={ref} onMouseDown={handleMouseDown}>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={currentPage === i + 1 ? 'active' : ''}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  className="nav-arrow"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  →
+                </button>
               </div>
-              <button
-                className="nav-arrow"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                →
-              </button>
+              <span className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </span>
             </div>
-            <span className="pagination-info">
-              Page {currentPage} of {totalPages}
-            </span>
-          </div>
-        )}
+          )}
 
-        {/* Per Page Selector - Right aligned */}
-        <div className="per-page-selector-wrapper">
-          <span className="per-page-label">Items per page:</span>
-          <div className="per-page-selector">
-            <select
-              value={perPage}
-              onChange={handlePerPageChange}
-              className="per-page-select"
-            >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>
+          {/* Per Page Selector - Right aligned */}
+          <div className="per-page-selector-wrapper">
+            <span className="per-page-label">Items per page:</span>
+            <div className="per-page-selector">
+              <select
+                value={perPage}
+                onChange={handlePerPageChange}
+                className="per-page-select"
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Single Delete Confirmation */}
       <ConfirmDialog

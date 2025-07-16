@@ -2,15 +2,13 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Box,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { useFetchExpensesQuery, useDeleteExpenseMutation } from '@/slices';
 import ExpenseForm from './components/ExpenseForm';
 import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { useCompany } from '@/utils/Company';
+import { EXPENSES_COUNT, useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import Image from 'next/image';
@@ -18,8 +16,27 @@ import LoadingState from '@/components/common/LoadingState';
 import { useRouter } from 'next/navigation';
 
 export default function ExpensesPage() {
-  const { data, isLoading, error } = useFetchExpensesQuery();
-  const expenses = data?.data || [];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(EXPENSES_COUNT);
+  const { data, isLoading, error } = useFetchExpensesQuery({
+    page: currentPage,
+    per_page: itemsPerPage,
+  });
+  const expenses = data?.expenses || [];
+  const pagination = data?.pagination;
+
+  // Add these handler functions
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setItemsPerPage(newPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+
   const [deleteExpense] = useDeleteExpenseMutation();
   const [openForm, setOpenForm] = useState(false);
   const [currentExpense, setCurrentExpense] = useState<Expense | null>(null);
@@ -133,6 +150,10 @@ export default function ExpensesPage() {
         <ResponsiveTable
           data={expenses}
           columns={columns}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onPerPageChange={handlePerPageChange}
+          counts={EXPENSES_COUNT}
           onView={(id) => router.push(`/${companySlug}/expenditure/view/${id}`)}
           cardView={(expense: Expense) => (
             <>

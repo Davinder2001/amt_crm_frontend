@@ -187,7 +187,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
         let newValue: string | number | Date | File | null = value;
 
         // Convert to number for number fields
-        if (["number", "salary", "idProofValue", "emergencyContact", "accountNo", "addressProof", "shiftTimings"].includes(name)) {
+        if (["number", "salary", "idProofValue", "emergencyContact", "accountNo", "shiftTimings"].includes(name)) {
             newValue = value === "" ? 0 : Number(value);
         }
         // Convert to Date for date fields
@@ -318,7 +318,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
                     setOriginalData(formData);
                     setHasChanges(false);
                 }
-                router.push(`/${companySlug}/employee/hr/status-view`);
+                router.push(`/${companySlug}/hr/status-view`);
             } catch (err: unknown) {
                 console.error("Error updating employee:", err);
                 const error = err as { data?: { message?: string; error?: string } };
@@ -357,7 +357,7 @@ const EmployeeFormRefactored: React.FC<EmployeeFormProps> = ({ mode = "add", emp
             });
             await createEmployee(cleanPayloadObj).unwrap();
             toast.success("Employee created successfully!");
-            router.push(`/${companySlug}/employee/hr/status-view`);
+            router.push(`/${companySlug}/hr/status-view`);
         } catch (err: unknown) {
             console.error("Error creating employee:", err);
             const error = err as { data?: { message?: string; error?: string } };

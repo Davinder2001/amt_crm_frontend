@@ -148,8 +148,11 @@ interface BusinessCategory {
 interface LoginSession {
   token_id: number;
   token_name: string;
+  ip_address: string;
+  location: string;
   created_at: string;
-  last_used_at: string | null;
+  last_used_at: string;
+  expires_at: string;
 }
 
 interface LoginSessionsResponse {

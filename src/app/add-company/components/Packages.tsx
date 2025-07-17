@@ -199,9 +199,7 @@ const Packages: React.FC<PackagesProps> = ({
 
                             <div className="price-display">
                                 <h3>
-                                    ₹ {subscriptionType === 'annual'
-                                        ? selectedPlanDetails?.annual_price ?? 0
-                                        : selectedPlanDetails?.three_years_price ?? 0}
+                                    ₹ {subscriptionType === 'annual' ? selectedPlanDetails?.annual_price ?? 0 : selectedPlanDetails?.three_years_price ?? 0}
                                 </h3>
                                 <p>Billed every {subscriptionType === 'annual' ? 'year' : '3 years'}</p>
                             </div>

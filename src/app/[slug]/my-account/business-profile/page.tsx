@@ -405,7 +405,7 @@ function Page() {
                         />
                     </div>
 
-                    <div className="form-group full-width">
+                    <div className="form-group full-width term-conditions-editor">
                         <label>Terms & Conditions</label>
                         <div>
                             <QuillEditor

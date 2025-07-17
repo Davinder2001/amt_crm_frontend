@@ -126,24 +126,13 @@
         grid-column: 1 / -1;
     }
 
+    .term-conditions-editor {
+        min-height: 250px;
+    }
+
     .form-actions {
         display: flex;
         justify-content: flex-end;
-
-        .buttons {
-            padding: 10px;
-            background-color: var(--primary-color);
-            color: $white;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--primary-light);
-            }
-        }
     }
 
 }

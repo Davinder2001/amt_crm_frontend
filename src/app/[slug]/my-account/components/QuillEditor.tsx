@@ -47,7 +47,7 @@ const QuillEditor: React.FC<EditorProps> = ({
 
     if (typeof window === 'undefined') return null;
 
-    return <div ref={editorRef} className="text-editor-ql" style={{ minHeight: '200px' }} />;
+    return <div ref={editorRef} className="text-editor-ql" style={{ height: '200px' }} />;
 };
 
 export default QuillEditor;

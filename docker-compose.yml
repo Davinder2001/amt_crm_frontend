@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      no_cache: true
+      pull: true
     container_name: amt_crm_frontend
     restart: unless-stopped
     ports:

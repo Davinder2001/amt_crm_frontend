@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useFetchProfileQuery } from '@/slices/auth/authApi';
+import { useFetchProfileQuery } from '@/slices';
 import { clearStorage, useCompany } from '@/utils/Company';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';

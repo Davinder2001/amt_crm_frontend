@@ -3,7 +3,7 @@ import React from 'react';
 import {
   useFetchMyAttenancesQuery,
   Attendance,
-} from '@/slices/attendance/attendance';
+} from '@/slices/attendance/attendanceApi';
 import 'react-toastify/dist/ReactToastify.css';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';

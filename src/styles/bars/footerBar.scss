@@ -17,6 +17,7 @@
         justify-content: space-around;
         align-items: center;
         list-style: none;
+        gap: 5px;
 
         .footer-bar-item {
             display: flex;
@@ -38,7 +39,7 @@
             &.active {
                 color: var(--primary-color) !important;
 
-                 .icon-text {
+                .icon-text {
                     margin-top: 4px;
                     color: var(--primary-color) !important;
                     font-weight: 400 !important;
@@ -81,5 +82,11 @@
 @media (max-width: 768px) {
     .footer-bar {
         display: block;
+    }
+}
+
+@media (max-width: 320px) {
+    .footer-bar .footer-bar-items .footer-bar-item .icon-text-outer span{
+        font-size: 10.5px;
     }
 }

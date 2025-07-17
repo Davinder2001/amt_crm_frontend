@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaCog } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar } from "react-icons/fa";
 import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
-import ThemeSwitcher from "./ThemeSwitcher";
+// import ThemeSwitcher from "./ThemeSwitcher";
 import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
@@ -152,18 +152,10 @@ const Profile: React.FC = () => {
                     onClick={() => setIsOpen(false)}
                     className="menu-item"
                   >
-                    <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
+                    <FaFileInvoiceDollar className="menu-icon" />
                     <span>Billing</span>
                   </Link>
-                  <Link
-                    href={`${basePath}/my-account/settings`}
-                    onClick={() => setIsOpen(false)}
-                    className="menu-item"
-                  >
-                    <FaCog className="menu-icon" />
-                    <span>Settings</span>
-                  </Link>
-                  <ThemeSwitcher />
+                  {/* <ThemeSwitcher /> */}
 
                   <button
                     className="menu-item logout"

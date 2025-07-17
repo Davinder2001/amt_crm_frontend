@@ -1,11 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-    useGetBusinessCategoriesQuery,
-    useCreateBusinessCategoryMutation,
-    useUpdateBusinessCategoryMutation,
-    useDeleteBusinessCategoryMutation,
-} from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
+import { useGetBusinessCategoriesQuery, useCreateBusinessCategoryMutation, useUpdateBusinessCategoryMutation, useDeleteBusinessCategoryMutation } from "@/slices/superadminSlices/businessCategory/businesscategoryApi";
 import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
 import LoadingState from "@/components/common/LoadingState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
@@ -134,11 +129,11 @@ const BusinessCategories = () => {
                         <div key={cat.id} className="category-item">
                             <span>{cat.name}</span>
                             <div className="item-actions">
-                                <button onClick={() => setForm({ id: cat.id, name: cat.name })}>
+                                <button onClick={() => setForm({ id: cat.id, name: cat.name || '' })}>
                                     <FiEdit2 />
                                 </button>
                                 <button
-                                    onClick={() => handleDeleteInit(cat.id, cat.name)}
+                                    onClick={() => handleDeleteInit(cat.id, cat.name || '')}
                                     className="danger"
                                 >
                                     <FiTrash2 />

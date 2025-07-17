@@ -51,7 +51,6 @@ interface Employee {
   employee_details?: {
     user_id?: number;
     salary?: string;
-    currentSalary?: string;
     dateOfHire?: string;
     joiningDate?: string;
     shiftTimings?: string;
@@ -76,13 +75,32 @@ interface Employee {
     addressProof?: string;
     profilePicture?: string;
     utility_bill_image?: string;
+
+    idProofType?: string;
+    idProofValue?: string;
+    acc_hol_name?: string;
+    id_proof_type?: string;
   };
   message?: string;
   error?: string;
 }
 
 
+interface SalaryData {
+  present_days: number;
+  absent_days: number;
+  working_days: number;
+  monthly_salary: number;
+  final_salary: number;
+  month: string;
+}
 
+interface GenerateSalaryResponse {
+  status: boolean;
+  message: string;
+  pdf_base64: string;
+  file_name: string;
+}
 
 interface PaySlipResponse {
   message: string;
@@ -96,6 +114,7 @@ interface PaySlipResponse {
 interface EmployeesResponse {
   employees: Employee[];
   data: Employee[];
+  pagination: Pagination;
   total: number;
 }
 
@@ -115,7 +134,6 @@ interface EmployeeFormData {
   salary: string;
   role: string;
   department: string;
-  currentSalary: string;
   shiftTimings: string;
   dateOfHire: string;
   workLocation: string;

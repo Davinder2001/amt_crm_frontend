@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useFetchChatListQuery, useFetchChatUsersQuery } from '@/slices/chat/chatApi';
+import { useFetchChatListQuery, useFetchChatUsersQuery } from '@/slices';
 import ChatSidebar from './ChatSidebar';
 import ChatArea from './ChatArea';
 import { toast } from 'react-toastify';

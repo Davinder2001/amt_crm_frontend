@@ -5,8 +5,14 @@ import storeApiSlice from "./storeCreateSlice";
 const storeApi = storeApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch all store items
-    fetchStore: builder.query<StoreResponse, void>({
-      query: () => "store/items",
+    fetchStore: builder.query<StoreResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "store/items",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
       providesTags: ["Store"],
     }),
 
@@ -58,7 +64,7 @@ const storeApi = storeApiSlice.injectEndpoints({
     // Bulk create store items
     bulkCreateStoreItem: builder.mutation<CreateStoreItemRequest, FormData>({
       query: (formData) => ({
-        url: "store/bulk-items",
+        url: "add-as-vendor/save-items",
         method: "POST",
         body: formData,
       }),

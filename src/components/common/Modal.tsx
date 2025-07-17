@@ -8,7 +8,7 @@ import { FaTimes } from 'react-icons/fa';
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
+  title?: ReactNode;
   children: ReactNode;
   width?: string;
   height?: string;

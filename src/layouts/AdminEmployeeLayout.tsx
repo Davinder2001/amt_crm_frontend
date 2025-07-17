@@ -6,6 +6,7 @@ import Header from "@/app/[slug]/_common/header/header";
 import { usePathname } from "next/navigation";
 import FooterBarMenu from "@/app/[slug]/_common/footer/FooterBarMenu";
 import { companyAndPaymentRoutes } from "@/routes";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export const AdminEmployeeLayout = ({
   children,
@@ -118,10 +119,16 @@ export const AdminEmployeeLayout = ({
           isMobile={isMobile}
           openMenu={openMenu}
         />
+        {!isMobile && (
+          <span onClick={handleToggleSidebar} className="sidebar-toggle-btn">
+            {isSidebarExpanded ?
+              <FaChevronLeft /> : < FaChevronRight />
+            }
+          </span>
+        )}
       </div>
       <div className="main-content">
         <Header
-          handleToggleSidebar={handleToggleSidebar}
           openMenu={openMenu}
           isMobile={isMobile}
         />

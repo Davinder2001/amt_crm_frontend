@@ -3,10 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
-import { useGetCreditInvoiceByIdQuery } from '@/slices/invoices/invoice';
-
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { useGetCreditInvoiceByIdQuery } from '@/slices/invoices/invoiceApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
@@ -99,10 +96,6 @@ const ViewCredits: React.FC = () => {
 
   return (
     <div className="credit-users-page">
-      <Link href={`/${companySlug}/invoices/credits`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="customer-summary">
         <h2>{customer.name}</h2>
         <p><strong>Email:</strong> {customer.email}</p>

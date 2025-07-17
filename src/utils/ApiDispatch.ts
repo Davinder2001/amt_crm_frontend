@@ -10,7 +10,7 @@ import vendorApiSlice from '@/slices/vendor/vendorCreateSlice';
 import roleApiSlice from '@/slices/roles/rolesCreateSlice';
 import permissionApiSlice from '@/slices/permissions/permissionCreateSlice';
 import tasksApi from '@/slices/tasks/taskApiCreateSlice';
-import attendanceApiSlice from '@/slices/attendance/attendance';
+import attendanceApiSlice from '@/slices/attendance/attendanceApi';
 import companyApiSlice from '@/slices/superadminSlices/company/companyCreateSlice';
 import catalogCreateApiSlice from '@/slices/catalog/catalogCreateSlice';
 import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
@@ -27,7 +27,7 @@ import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCa
 export const invalidateAllCompanyApis = (dispatch: AppDispatch) => {
     dispatch(authApiSlice.util.invalidateTags(['Auth']));
     dispatch(userApiSlice.util.invalidateTags(['Auth']));
-    dispatch(employeCreateApiSlice.util.invalidateTags(['Employe']));
+    dispatch(employeCreateApiSlice.util.invalidateTags(['Employee']));
     dispatch(storeApiSlice.util.invalidateTags(['Store']));
     dispatch(vendorApiSlice.util.invalidateTags(['Vendor']));
     dispatch(roleApiSlice.util.invalidateTags(['Auth']));

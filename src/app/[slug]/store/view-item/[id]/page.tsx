@@ -2,15 +2,16 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices/store/storeApi';
+import { useDeleteItemBatchMutation, useDeleteStoreItemMutation, useFetchStoreItemQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPen, FaTimes, FaPlus, FaEye } from 'react-icons/fa';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Image from 'next/image';
-import { FiImage, FiX } from 'react-icons/fi';
+import { FiImage } from 'react-icons/fi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const ViewItem = () => {
   const { id } = useParams();
@@ -20,7 +21,6 @@ const ViewItem = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showBatchConfirm, setShowBatchConfirm] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState<number | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const router = useRouter();
   const { companySlug } = useCompany();
 
@@ -56,7 +56,7 @@ const ViewItem = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching item."
         message="Something went wrong while fetching item."
       />
@@ -67,18 +67,10 @@ const ViewItem = () => {
 
   return (
     <div className="item-view">
-      <Link href={`/${companySlug}/store`} className="back-button">
-        <FaArrowLeft size={16} color="#fff" />
-      </Link>
       <TableToolbar
-      
+
         actions={[
-          
-          {
-            label: 'Add Stock',
-            icon: <FaPlus />,
-            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
-          },
+
           {
             label: 'Edit Item',
             icon: <FaEdit />,
@@ -88,6 +80,11 @@ const ViewItem = () => {
             label: 'Delete Item',
             icon: <FaTrash />,
             onClick: () => setShowConfirm(true),
+          },
+          {
+            label: 'Add Stock',
+            icon: <FaPlus />,
+            onClick: () => router.push(`/${companySlug}/store/add-stock/${item.id}`),
           },
         ]}
         introKey="view-item-toolbar" // optional for mobile guide popup
@@ -124,55 +121,34 @@ const ViewItem = () => {
 
             <div className="item-media">
               {item.featured_image && (
-                <div className="featured-image">
+                <div className='featured-image'>
                   <Image
                     src={item.featured_image}
                     alt="Featured"
-                    width={280}
-                    height={180}
-                    onClick={() => setSelectedImage(item.featured_image)}
+                    width={1000}
+                    height={1000}
                   />
                   <span className="image-label">Featured</span>
                 </div>
               )}
 
               {item.images?.length > 0 && (
-                <div className="image-gallery">
+                <>
                   {item.images.map((img, index) => {
                     const imgSrc = typeof img === 'string' ? img : URL.createObjectURL(img);
                     return (
-                      <div key={index} className="gallery-thumbnail">
-                        <Image
-                          src={imgSrc}
-                          alt={`Gallery ${index + 1}`}
-                          width={120}
-                          height={120}
-                          onClick={() => setSelectedImage(imgSrc)}
-                          unoptimized={typeof img !== 'string'}
-                        />
-                      </div>
+                      <Image
+                        key={index}
+                        src={imgSrc}
+                        alt={`Gallery ${index + 1}`}
+                        width={1000}
+                        height={1000}
+                      />
                     );
                   })}
-                </div>
+                </>
               )}
             </div>
-
-            {selectedImage && (
-              <div className="image-preview-modal" onClick={() => setSelectedImage(null)}>
-                <button className="close-modal" onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedImage(null);
-                }}>
-                  <FiX />
-                </button>
-                <Image
-                  src={selectedImage}
-                  alt="Preview"
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            )}
           </div>
         </div>
 

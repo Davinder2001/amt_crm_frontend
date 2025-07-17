@@ -1,16 +1,16 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaArrowLeft, FaPlus, FaUserTie } from 'react-icons/fa';
-import { useFetchVendorsQuery } from '@/slices/vendor/vendorApi';
+import { FaPlus, FaUserTie } from 'react-icons/fa';
+import { useFetchVendorsQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
-import Link from 'next/link';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import Modal from '@/components/common/Modal';
 import CreateVendor from './components/CreateVendor';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Page: React.FC = () => {
   const { data: vendors, error, isLoading, refetch } = useFetchVendorsQuery() as {
@@ -57,7 +57,7 @@ const Page: React.FC = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load vendors"
         message="We encountered an error while loading your vendors. Please try again later."
       />
@@ -86,9 +86,6 @@ const Page: React.FC = () => {
 
   return (
     <div className="vendors-page-outer">
-      <Link href={`/${companySlug}/store`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
       <div className="vendors-page">
         <div className="vendors-page-outer">
           <TableToolbar

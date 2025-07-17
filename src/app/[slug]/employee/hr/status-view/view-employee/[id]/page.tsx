@@ -1,173 +1,246 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchEmployesQuery } from '@/slices/employe/employe';
-import HrNavigation from '../../../components/hrNavigation';
+import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices/employe/employeApi';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import { useCompany } from '@/utils/Company';
+import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaUserPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
+import TableToolbar from '@/components/common/TableToolbar';
+import LoadingState from '@/components/common/LoadingState';
 
 const ViewUserPage: React.FC = () => {
   const { setTitle } = useBreadcrumb();
+  const [deleteEmployee] = useDeleteEmployeMutation();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const { companySlug } = useCompany();
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
 
   useEffect(() => {
-    setTitle('Employee Profile'); // Update breadcrumb title
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    setTitle('Employee Profile');
   }, [setTitle]);
 
   const { id } = useParams() as { id: string };
-  const { data: usersData, error: usersError, isLoading: usersLoading } = useFetchEmployesQuery();
+  const {
+    data,
+    error: usersError,
+    isLoading: usersLoading,
+  } = useFetchEmployeByIdQuery(Number(id));
+
+  const user = data;
+  const employee = user?.employee;
+  const details = user?.employee.employee_details;
 
   useEffect(() => {
-    if (usersError) {
-      toast.error('Failed to fetch user data');
-    }
+    if (usersError) toast.error('Failed to fetch user data');
   }, [usersError]);
 
-  if (usersLoading) return <p>Loading user data...</p>;
+  if (usersLoading) return <LoadingState />;
+  if (!employee) return <div className="not-found">User not found</div>;
 
-  const user = usersData?.employees.find((user: Employee) => user.id.toString() === id);
-  const firstLetter = user?.name[0].toUpperCase();
+  const firstLetter = employee?.name?.[0]?.toUpperCase();
 
-  if (!user) {
-    return <p>User not found</p>;
-  }
+  const handleDelete = async () => {
+    try {
+      await deleteEmployee(Number(id)).unwrap();
+      setShowConfirm(false);
+      router.push(`/${companySlug}/employee/hr`);
+    } catch (err) {
+      console.error('Error deleting item:', err);
+    }
+  };
+
+  const formatDate = (date: string | null | undefined) =>
+    date ? new Date(date).toLocaleDateString('en-IN') : 'N/A';
 
   return (
-    <div className="container">
-      <HrNavigation />
-      {/* Profile Section */}
-      <div className="profile-card">
-        <div className="profile-mage-wrapper">
-          {firstLetter ?
-            <h1>{firstLetter}</h1>
-            :
-            <Image
-              src={user.profilePicture || 'https://via.placeholder.com/100'}
-              alt={user.name}
-              className="profile-image"
-              width={100}
-              height={100}
-            />
-          }
-        </div>
-        <div className="profile-info">
-          <h2 style={{ textTransform: 'capitalize' }}>{user.name}</h2>
-          <p className="employee-meta">Manager | Employee ID: <strong>{user.id}</strong></p>
-          <p className="bio">Lorem Ipsum is a dummy text used in design and publishing.</p>
-          <div className="info-row">
-            <span><strong>Mobile:</strong> {user.number || 'N/A'}</span>
-            <span><strong>Email:</strong> {user.email}</span>
-            <span><strong>Birth Date:</strong> {user.meta?.dateOfHire || 'N/A'}</span>
-            <span><strong>City:</strong> {user.meta?.city || 'N/A'}</span>
-            <span><strong>Current Salary:</strong> ₹{user.salary || 'N/A'}</span>
-            <span><strong>Joining Date:</strong> {user.meta?.joiningDate || 'N/A'}</span>
+    <div className="employee-profile-container">
+      <div className='employee-profile-nav'>
+        <TableToolbar
+          actions={[
+            {
+              label: 'Add Employee',
+              icon: <FaUserPlus />,
+              onClick: () => router.push(`/${companySlug}/employee/hr/add-employee`),
+            },
+            {
+              label: 'Status View',
+              icon: <FaUserCheck />,
+              onClick: () => router.push(`/${companySlug}/employee/hr/status-view`),
+            },
+            {
+              label: 'Employee Salary',
+              icon: <FaMoneyBillWave />,
+              onClick: () => router.push(`/${companySlug}/employee/hr/employee-salary`),
+            }
+          ]}
+          introKey='view_emp_intro'
+        />
+      </div>
+      <div className="employee-profile-inner-container">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {employee.profilePicture ? (
+              <Image
+                src={employee.profilePicture}
+                alt={employee.name}
+                className="avatar-image"
+                width={120}
+                height={120}
+                priority
+              />
+            ) : (
+              <div className="avatar-initial">{firstLetter}</div>
+            )}
+          </div>
+
+          <div className="profile-header-content">
+            <div className="profile-title">
+              <h1>{employee.name}</h1>
+              <div className="profile-meta">
+                <span className="badge role employ-view-role">{employee.roles?.[0]?.name || 'N/A'}</span>
+                <span className="badge status">{employee.user_status}</span>
+              </div>
+            </div>
+            <div className="profile-actions">
+              {/* Desktop Buttons */}
+              <div className="action-buttons desktop-only">
+                <button
+                  onClick={() => router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`)}
+                  className="btn primary" type='button'
+                >
+                  <FaEdit />Edit Profile
+                </button>
+                <button onClick={() => setShowConfirm(true)} className="btn danger" type='button'>
+                  <FaTrash /> Delete Profile
+                </button>
+              </div>
+
+              {/* Mobile Menu */}
+              <div className="mobile-menu mobile-only" ref={menuRef}>
+                <button className="dots-button" onClick={() => setMenuOpen(!menuOpen)} type='button'>
+                  ⋮
+                </button>
+                {menuOpen && (
+                  <div className="dropdown-menu">
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        router.push(`/${companySlug}/employee/hr/status-view/edit-employee/${id}`);
+                      }}
+                      className='dropdown-edit-btn' type='button'
+                    >
+                      <FaEdit /> Edit Profile
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setShowConfirm(true);
+                      }}
+                      className='dropdown-delete-btn' type='button'
+                    >
+                      <FaTrash /> Delete Profile
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
           </div>
         </div>
-      </div>
 
-      {/* Personal & Bank Information Sections */}
-      <div className="info-sections">
-        {/* Personal Info */}
-        <div className="info-card">
-          <h3>Personal Information</h3>
-          <p><strong>Nationality:</strong> {user.meta?.nationality || 'N/A'}</p>
-          <p><strong>Religion:</strong> {user.meta?.religion || 'N/A'}</p>
-          <p><strong>Marital Status:</strong> {user.meta?.maritalStatus || 'N/A'}</p>
-          <p><strong>Passport No:</strong> {user.meta?.passportNumber || 'N/A'}</p>
-          <p><strong>Emergency Contact:</strong> {user.meta?.emergencyContact || 'N/A'}</p>
-          <p><strong>Join Date & Time:</strong> {user.meta?.joiningDate || 'N/A'}</p>
+        <div className="profile-grid">
+          {/* Basic Info */}
+          <div className="profile-card basic-info">
+            <span className="card-title"><i className="icon-user"><FaUser className="card-title-icon" /></i> <h4>Basic Information</h4> </span>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Employee ID</span><span className="info-value">{employee.id}</span></div>
+              <div className="info-item"><span className="info-label">Company</span><span className="info-value">{employee.company_name || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Mobile</span><span className="info-value">{employee.number || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Email</span><span className="info-value">{employee.email}</span></div>
+              <div className="info-item"><span className="info-label">Birth Date</span><span className="info-value">{formatDate(details?.dob)}</span></div>
+              <div className="info-item"><span className="info-label">Cispanty</span><span className="info-value">{details?.address || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          {/* Employment Info */}
+          <div className="profile-card employment-info">
+            <span className="card-title"><i className="icon-briefcase"><FaBriefcase className="card-title-icon" /></i> <h4>Employment Details</h4></span>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Department</span><span className="info-value">{details?.department || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Joining Date</span><span className="info-value">{formatDate(details?.joiningDate)}</span></div>
+              <div className="info-item"><span className="info-label">Joining Type</span><span className="info-value">{details?.joiningType || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Salary</span><span className="info-value">₹{details?.salary || 'N/A'}</span></div>
+              {details?.shiftTimings && (
+                <div className="info-item"><span className="info-label">Shift Timings</span><span className="info-value">{details.shiftTimings}</span></div>
+              )}
+              {details?.previousEmployer && (
+                <div className="info-item"><span className="info-label">Previous Employer</span><span className="info-value">{details.previousEmployer}</span></div>
+              )}
+            </div>
+          </div>
+
+          {/* Personal Info */}
+          <div className="profile-card personal-info">
+            <span className="card-title"><i className="icon-id-card"><FaIdCard className="card-title-icon" /></i>  <h4>Personal Information</h4></span>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Nationality</span><span className="info-value">{details?.nationality || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Religion</span><span className="info-value">{details?.religion || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Marital Status</span><span className="info-value">{details?.maritalStatus || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Emergency Contact</span><span className="info-value">{details?.emergencyContact || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Emergency Relation</span><span className="info-value">{details?.emergencyContactRelation || 'N/A'}</span></div>
+            </div>
+          </div>
+
+          {/* Financial Info */}
+          <div className="profile-card financial-info">
+            <span className="card-title"><i className="icon-credit-card"><FaCreditCard className="card-title-icon" /></i> <h4>Financial Information</h4></span>
+            <div className="info-grid">
+              <div className="info-item"><span className="info-label">Bank Name</span><span className="info-value">{details?.bankName || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Account No</span><span className="info-value">{details?.accountNo || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">IFSC Code</span><span className="info-value">{details?.ifscCode || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Pan No</span><span className="info-value">{details?.panNo || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">UPI Id</span><span className="info-value">{details?.upiId || 'N/A'}</span></div>
+              <div className="info-item"><span className="info-label">Address Proof</span><span className="info-value">{details?.addressProof || 'N/A'}</span></div>
+            </div>
+          </div>
         </div>
 
-        {/* Bank Info */}
-        <div className="info-card">
-          <h3>Bank Information</h3>
-          <p><strong>Bank Name:</strong> {user.meta?.bankName || 'N/A'}</p>
-          <p><strong>Account No:</strong> {user.meta?.accountNumber || 'N/A'}</p>
-          <p><strong>IFSC Code:</strong> {user.meta?.ifscCode || 'N/A'}</p>
-          <p><strong>Pan No:</strong> {user.meta?.panNumber || 'N/A'}</p>
-          <p><strong>UPI Id:</strong> {user.meta?.upiId || 'N/A'}</p>
-          <p><strong>Current Salary:</strong> ₹{user.salary || 'N/A'}</p>
-        </div>
+        <ConfirmDialog
+          isOpen={showConfirm}
+          message="Are you sure you want to delete this employee profile? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setShowConfirm(false)}
+          type="delete"
+        />
       </div>
-
-      <style jsx>{`
-        .container {
-          padding: 20px;
-          margin: auto;
-        }
-        .profile-card {
-          display: flex;
-          background: #f9fbfc;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
-        }
-        .profile-mage-wrapper{
-        max-width: 100px;
-        width: 100%;
-        height: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color:rgba(0, 150, 147, 0.06);
-        border-radius: 50%;
-        margin-right: 20px;
-        }
-        .profile-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .profile-info {
-          flex-grow: 1;
-        }
-        .employee-meta {
-          font-size: 14px;
-          color: #777;
-        }
-        .bio {
-          font-size: 14px;
-          color: #555;
-          margin-top: 5px;
-        }
-        .info-row {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-          gap: 20px;
-          font-size: 14px;
-          color: #333;
-          margin-top: 8px;
-        }
-        .info-row span{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        background-color:rgba(0, 150, 147, 0.06);
-        padding: 5px;
-        }
-        .info-sections {
-          display: flex;
-          gap: 20px;
-        }
-        .info-card {
-          background: #fff;
-          padding: 15px;
-          border-radius: 8px;
-          flex: 1;
-          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .info-card h3 {
-          margin-bottom: 10px;
-          font-size: 16px;
-        }
-        .info-card p {
-          font-size: 14px;
-          margin: 5px 0;
-        }
-      `}</style>
     </div>
   );
 };

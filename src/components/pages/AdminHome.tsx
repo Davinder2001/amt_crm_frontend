@@ -1,5 +1,5 @@
 'use client';
-import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices/auth/authApi';
+import { useFetchProfileQuery, useSelectedCompanyMutation } from '@/slices';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
@@ -105,7 +105,7 @@ const AdminHome = () => {
                             <div className="companies-list">
                                 <div className="list-header">
                                     <span className="header-item name">Company Name</span>
-                                    <span className="header-item id">ID</span>
+                                    <span className="header-item id">Company ID</span>
                                     <span className="header-item payment">Payment Status</span>
                                     <span className="header-item status">Verification Status</span>
                                     <span className="header-item action">Action</span>
@@ -156,7 +156,7 @@ const AdminHome = () => {
                                             <span className="card-value">{company.company_name}</span>
                                         </div>
                                         <div className="card-row">
-                                            <span className="card-label">ID:</span>
+                                            <span className="card-label">Company ID:</span>
                                             <span className="card-value">{company.company_id}</span>
                                         </div>
                                         <div className="card-row">

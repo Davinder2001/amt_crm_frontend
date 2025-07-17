@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices/vendor/vendorApi';
-import { FaArrowLeft, FaEdit, FaTrash } from 'react-icons/fa';
-import Link from 'next/link';
+import { useFetchVendorByIdQuery, useDeleteVendorMutation } from '@/slices';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Page = () => {
   const params = useParams();
@@ -36,7 +36,7 @@ const Page = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching vendor details."
         message="Something went wrong while fetching vendor details."
       />
@@ -45,10 +45,6 @@ const Page = () => {
 
   return (
     <div className="vendor-details-outer">
-      <Link href={`/${companySlug}/store/vendors`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="vendor-details-page">
         <div className="vendor-card">
           <div className="vendor-header">
@@ -81,6 +77,33 @@ const Page = () => {
             <p><strong>Address:</strong>  {vendor.address}</p>
             <p><strong>Number:</strong>  {vendor.number}</p>
           </div>
+
+          {vendor.items_by_date && (
+            <div className="vendor-items-summary">
+              <p><strong>Items Summary:</strong></p>
+              <div className="items-details">
+                {Object.entries(vendor.items_by_date).map(([date, vendorItems]) => (
+                  <div key={date} className="date-group">
+                    <p><strong>Date:</strong> {date}</p>
+                    {Object.entries(vendorItems).map(([vendorName, items]) => (
+                      <div key={`${date}-${vendorName}`}>
+                        <p><strong>Vendor:</strong> {vendorName}</p>
+                        <ul className="items-list">
+                          {items.map(item => (
+                            <li key={item.batch_id} className="item-detail">
+                              <span>Item: {item.item_name}</span>
+                              <span>Qty: {item.quantity}</span>
+                              <span>Price: {item.regular_price}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

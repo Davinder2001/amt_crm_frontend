@@ -5,51 +5,84 @@ import {
   FaShoppingCart,
   FaWallet,
   FaTasks,
-  FaClipboardList,
-  FaHandHoldingUsd,
-  FaUserPlus,
+  FaFileInvoice,
   FaUsers,
   FaStore,
   FaUserFriends,
   FaSpinner,
 } from "react-icons/fa";
-import { useFetchEmployesQuery } from "@/slices/employe/employe";
+import { useDashboardCardSummaryQuery } from "@/slices";
+import { useCompany } from "@/utils/Company";
+import Link from "next/link";
+
+interface CardSummary {
+  name: string;
+  count: number;
+}
+
+interface CardItem {
+  label: string;
+  icon: React.ComponentType<{ size?: number }>;
+  type: string;
+  link: string;
+  name: string;
+}
 
 const ListOverview = () => {
-  const { data, error, isLoading } = useFetchEmployesQuery();
-  const EmployeeCount = data ? data.employees.length : 0;
+  const { data: cardsSummary, error, isLoading } = useDashboardCardSummaryQuery();
+  const { companySlug } = useCompany();
+
+  // Create a typed map of card names to their counts
+  const cardCounts: Record<string, number> = {};
+  if (cardsSummary) {
+    cardsSummary.forEach((card: CardSummary) => {
+      cardCounts[card.name] = card.count;
+    });
+  }
+
+  const cards: CardItem[] = [
+    { label: "Monthly Sales", icon: FaShoppingCart, type: "sales", link: "sales", name: "Monthly Sales" },
+    { label: "Expenses", icon: FaWallet, type: "expenses", link: "expenditure", name: "Expenses" },
+    { label: "Revenue", icon: FaMoneyBillWave, type: "revenue", link: "revenue", name: "Revenue" },
+    { label: "Task", icon: FaTasks, type: "tasks", link: "tasks", name: "Task" },
+    { label: "Invoices", icon: FaFileInvoice, type: "invoices", link: "invoices", name: "Invoices" },
+    { label: "Employees", icon: FaUsers, type: "employees", link: "hr/status-view", name: "Employees" },
+    { label: "Vendor", icon: FaStore, type: "vendors", link: "store/vendors", name: "Vendor" },
+    { label: "Customers", icon: FaUserFriends, type: "customers", link: "invoices/customers", name: "Customers" },
+    { label: "Receiveable", icon: FaUserFriends, type: "receivables", link: "invoices/cash-flow#credit", name: "Receiveable" },
+    { label: "Payable", icon: FaUserFriends, type: "payables", link: "payables", name: "Payable" },
+  ];
 
   return (
     <div className="dashboard-container">
       {error ? (
         <div className="error-box">
-          <p>Error fetching users.</p>
+          <p>Error fetching dashboard data.</p>
         </div>
       ) : (
         <div className="overview-grid-container">
-          {[
-            { label: "Total Revenue", value: "₹350.4", icon: FaMoneyBillWave },
-            { label: "Total Sales", value: "₹574.34", extra: "+23% since last month", icon: FaShoppingCart },
-            { label: "Total Expenses", value: "₹874.34", extra: "+40% since last month", icon: FaWallet, className: "expenses" },
-            { label: "Total Task", value: "642.39", icon: FaTasks },
-            { label: "Total Order", value: "154", icon: FaClipboardList },
-            { label: "Total Earning", value: "₹10,000", icon: FaHandHoldingUsd },
-            { label: "New Customer", value: "950", icon: FaUserPlus },
-            { label: "Total Employees", value: isLoading ? <FaSpinner className="item-loader" /> : EmployeeCount, icon: FaUsers },
-            { label: "Total Vendor", value: "600", icon: FaStore },
-            { label: "Total Customer", value: "2935", icon: FaUserFriends },
-          ].map((item, index) => (
-            <div key={index} className="card">
-              <span className="icon-shell">
-                <item.icon color="#009693" size={20} />
-              </span>
-              <div>
-                <p>{item.label}</p>
-                <h3 className={`value-count ${item.className || ""}`}>{item.value}</h3>
-                {item.extra && <span className="green">{item.extra}</span>}
-              </div>
-            </div>
-          ))}
+          {cards.map((item, index) => {
+            const Icon = item.icon;
+            const isClickable = !!item.link;
+            const count = isLoading ? <FaSpinner className="item-loader" /> : (cardCounts[item.name] || 0);
+
+            return (
+              <Link
+                href={isClickable ? `/${companySlug}/employee/${item.link}` : "#"}
+                key={index}
+                className="card"
+                data-card-type={item.type}
+                style={{ cursor: isClickable ? "pointer" : "default" }}
+                onClick={!isClickable ? (e) => e.preventDefault() : undefined}
+              >
+                <span className="icon-shell">{<Icon size={20} />}</span>
+                <div className="dash-card-content">
+                  <p>{item.label}</p>
+                  <h3 className="value-count">{count}</h3>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

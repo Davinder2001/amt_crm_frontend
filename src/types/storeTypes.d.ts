@@ -252,7 +252,10 @@ interface StoreItemBatchRequest extends BaseStoreItemRequest<number[]> {
 
 type StoreItemFormData = StoreItemBatchRequest;
 
-type StoreResponse = StoreItem[];
+interface StoreResponse {
+  items: StoreItem[];
+  pagination: Pagination;
+}
 
 interface OcrResponse {
   result: string;
@@ -268,13 +271,32 @@ interface Vendors {
   address: string;
 }
 
+interface VendorItem {
+  batch_id: number;
+  item_name: string;
+  quantity: string;
+  stock: string;
+  regular_price: string;
+  sale_price: string;
+  cost_price: string;
+  purchase_date: string | null;
+}
+
+interface VendorItemsGroup {
+  [vendorName: string]: VendorItem[];
+}
+
+interface ItemsByDate {
+  [date: string]: VendorItemsGroup;
+}
+
 interface Vendor {
   id: number;
   name: string;
   number: string;
   email: string;
   address: string;
-  items_by_date?: Array[];
+  items_by_date?: ItemsByDate;
   vendor_address: string;
   vendor_email: string;
   vendor_number: number | string;
@@ -329,12 +351,12 @@ interface Brand {
 interface ItemBatch {
   id: number;
   item_id: number;
-  stock:number;
+  stock: number;
   batch_number: string | null;
   cost_price: number;
   regular_price?: number | null;
   sale_price?: number | null;
-  price_per_unit?: number | null; 
+  price_per_unit?: number | null;
   quantity_count: number;
   company_id: number;
   created_at: string;

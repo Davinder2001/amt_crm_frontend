@@ -2,28 +2,48 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Box,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { useFetchExpensesQuery, useDeleteExpenseMutation } from '@/slices';
 import ExpenseForm from './components/ExpenseForm';
 import { FaEdit, FaPlus, FaTasks, FaTrash } from 'react-icons/fa';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { EXPENSES_COUNT, useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import Image from 'next/image';
 import LoadingState from '@/components/common/LoadingState';
+import { useRouter } from 'next/navigation';
 
 export default function ExpensesPage() {
-  const { data, isLoading, error } = useFetchExpensesQuery();
-  const expenses = data?.data || [];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(EXPENSES_COUNT);
+  const { data, isLoading, error } = useFetchExpensesQuery({
+    page: currentPage,
+    per_page: itemsPerPage,
+  });
+  const expenses = data?.expenses || [];
+  const pagination = data?.pagination;
+
+  // Add these handler functions
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setItemsPerPage(newPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
+
   const [deleteExpense] = useDeleteExpenseMutation();
   const [openForm, setOpenForm] = useState(false);
   const [currentExpense, setCurrentExpense] = useState<Expense | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
-
+  const router = useRouter();
+  const { companySlug } = useCompany();
   const handleEdit = (expense: Expense) => {
     setCurrentExpense(expense);
     setOpenForm(true);
@@ -80,24 +100,6 @@ export default function ExpensesPage() {
     },
     { label: 'Heading', key: 'heading' },
     {
-      label: 'Description',
-      render: (row) => row.description || '-',
-      key: 'description'
-    },
-    {
-      label: 'Tags',
-      render: (row) =>
-        Array.isArray(row.tags) && row.tags.length > 0
-          ? row.tags
-            .map((tag: Tag) => {
-              const name = typeof tag === 'string' ? tag : tag.name;
-              return name.charAt(0).toUpperCase() + name.slice(1);
-            })
-            .join(', ')
-          : '-',
-      key: 'tags'
-    },
-    {
       label: 'Price',
       render: (row) => `${Number(row.price).toFixed(2)}`,
       key: 'price'
@@ -112,7 +114,7 @@ export default function ExpensesPage() {
       render: (expense: Expense) => (
         <div className="table-actions ">
           <FaEdit onClick={() => handleEdit(expense)} style={{ marginRight: 10, color: '#384B70' }} />
-          <FaTrash onClick={() => handleDelete(expense.id)}  style={{  color: '#384B70' }} />
+          <FaTrash onClick={() => handleDelete(expense.id)} style={{ color: '#384B70' }} />
         </div>
       ),
     },
@@ -120,7 +122,7 @@ export default function ExpensesPage() {
   ];
 
   if (isLoading) return <LoadingState />;
-if (error) {
+  if (error) {
     return (
       <EmptyState
         icon="alert"
@@ -148,6 +150,25 @@ if (error) {
         <ResponsiveTable
           data={expenses}
           columns={columns}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onPerPageChange={handlePerPageChange}
+          counts={EXPENSES_COUNT}
+          onView={(id) => router.push(`/${companySlug}/expenditure/view/${id}`)}
+          cardView={(expense: Expense) => (
+            <>
+              <div className="card-row">
+                <h5>{expense.heading}</h5>
+                {expense.description && (
+                  <p className="account-type">Description: {expense.description}</p>
+                )}
+              </div>
+              <div className="card-row">
+                <p> Price: {expense.price}</p>
+                <p>{expense.status && `Status: ${expense.status}`}</p>
+              </div>
+            </>
+          )}
         />
       ) : (
         <EmptyState
@@ -169,7 +190,7 @@ if (error) {
           handleCancelForm();
         }}
         title={currentExpense ? "Edit Expense" : "Add New Expense"}
-        width="600px"
+        width="1200px"
       >
         <ExpenseForm
           expense={currentExpense}

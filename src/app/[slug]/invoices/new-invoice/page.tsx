@@ -1,14 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
-import { FaArrowLeft, FaExpand, FaCompress } from 'react-icons/fa';
+import { FaExpand, FaCompress } from 'react-icons/fa';
 import POSPage from '../pos/POSPage';
 
 const Page = () => {
-  const { setTitle } = useBreadcrumb();
-  const { companySlug } = useCompany();
 
   // ✅ Initialize from localStorage immediately (server-safe)
   const [isFullView, setIsFullView] = useState(() => {
@@ -18,10 +13,6 @@ const Page = () => {
     }
     return false;
   });
-
-  useEffect(() => {
-    setTitle('Add Invoices');
-  }, [setTitle]);
 
   // ✅ Save to localStorage on change
   useEffect(() => {
@@ -34,9 +25,6 @@ const Page = () => {
       <div className={`creat-inv-page ${isFullView ? 'fullView' : 'autoView'}`}>
         <div className="fullView-content">
           <div className='invoice-header-top'>
-            <Link href={`/${companySlug}/invoices`} className="back-button" style={{ margin: 0, padding: 5 }} >
-              <FaArrowLeft size={16} color="#fff" />
-            </Link>
             <span style={{ display: 'flex' }}>
               {isFullView ? (
                 <FaCompress size={20} onClick={() => setIsFullView(false)} />

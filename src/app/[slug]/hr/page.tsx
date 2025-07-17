@@ -1,26 +1,17 @@
 'use client';
-
-import React, { useEffect, useState } from 'react';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
+import React, { useState } from 'react';
 import HrHroSection from './(hrHome)/HrHroSection';
 import TableToolbar from '@/components/common/TableToolbar';
 import { useRouter } from 'next/navigation';
-
-// Icons
-import { FaPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
+import { FaUserPlus, FaUserCheck, FaMoneyBillWave } from 'react-icons/fa';
 import InviteEmployeeForm from './components/InviteEmployeeForm';
 import Modal from '@/components/common/Modal';
 import { useCompany } from '@/utils/Company';
 
 const Page: React.FC = () => {
-  const { setTitle } = useBreadcrumb();
   const router = useRouter();
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
   const { companySlug } = useCompany();
-
-  useEffect(() => {
-    setTitle('H.R Details of Employees');
-  }, [setTitle]);
 
   return (
     <>
@@ -28,11 +19,6 @@ const Page: React.FC = () => {
 
         <TableToolbar
           actions={[
-            {
-              label: 'Add Employee',
-              icon: <FaPlus />,
-              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
-            },
             {
               label: 'Status View',
               icon: <FaUserCheck />,
@@ -48,6 +34,11 @@ const Page: React.FC = () => {
             //   icon: <FaUserPlus />,
             //   onClick: () => setInviteModalOpen(true),
             // },
+            {
+              label: 'Add Employee',
+              icon: <FaUserPlus />,
+              onClick: () => router.push(`/${companySlug}/hr/add-employee`),
+            },
           ]}
           introKey='hr_intro'
         />

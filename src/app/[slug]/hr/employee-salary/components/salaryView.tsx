@@ -6,11 +6,10 @@ import { toast } from "react-toastify";
 import {
   useDeleteEmployeMutation,
   useFetchEmployeesSalaryQuery,
-} from "@/slices/employe/employe";
-import ResponsiveTable from "@/components/common/ResponsiveTable"; // ✅ Import
+} from "@/slices/employe/employeApi";
+import ResponsiveTable from "@/components/common/ResponsiveTable";
 import "react-toastify/dist/ReactToastify.css";
 import { useCompany } from "@/utils/Company";
-import { FaEnvelope } from "react-icons/fa";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
 
@@ -36,14 +35,6 @@ const SalaryView: React.FC = () => {
     }
   };
 
-  const viewSlip = (employee: Employee) => {
-    if (!employee.company_slug) {
-      toast.error("Company slug not found for employee");
-      return;
-    }
-    router.push(`/${employee.company_slug}/hr/employee-salary/pay-slip/${employee.id}`);
-  };
-
   if (isLoading) return <LoadingState />;
   if (error) {
     return (
@@ -63,14 +54,6 @@ const SalaryView: React.FC = () => {
     {
       label: "Current Salary",
       render: (employee: Employee) => employee.employee_salary?.current_salary ?? "N/A",
-    },
-    {
-      label: "Salary Slip",
-      render: (employee: Employee) => (
-        <button onClick={() => viewSlip(employee)} className="salary-slip" style={{background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1}}>
-          <FaEnvelope /> Slip
-        </button>
-      ),
     },
     {
       label: "Monthly Salary",
@@ -95,7 +78,7 @@ const SalaryView: React.FC = () => {
       data={employeesData.data}
       columns={columns}
       onDelete={(id) => handleDelete(id)}
-      onView={(id) => router.push(`/${companySlug}/hr/status-view/view-employee/${id}`)}
+      onView={(id) => router.push(`/${companySlug}/hr/employee-salary/pay-slip/${id}`)}
       cardView={(employee: Employee) => (
         <div className="employee-card">
           <div className="card-row">
@@ -107,24 +90,6 @@ const SalaryView: React.FC = () => {
             <p>Status: {employee.user_status}</p>
           </div>
           <div className="card-row">
-            <button
-              onClick={() => viewSlip(employee)}
-              className="btn-slip"
-              style={{
-                backgroundColor: 'var(--primary-color)',
-                color: 'white',
-                padding: '5px 10px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 5,
-                borderRadius: 5,
-                border: 'none',
-                fontSize: 12
-              }}
-            >
-              <FaEnvelope /> View Slip
-            </button>
             <button
               onClick={() => router.push(`/${employee.company_slug}/hr/employee-salary/monthly/${employee.id}`)}
               className="btn-monthly"

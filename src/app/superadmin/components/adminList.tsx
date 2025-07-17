@@ -2,14 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useFetchAdminsQuery,
-  useUpdateAdminStatusMutation,
-} from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import Loader from '@/components/common/Loader';
-import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import EmptyState from '@/components/common/EmptyState';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
 
 const statusOptions = ['active', 'blocked'];
 const COLUMN_STORAGE_KEY = 'visible_columns_admins';

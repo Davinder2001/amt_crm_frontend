@@ -85,6 +85,10 @@
       gap: 10px;
       flex: 1;
 
+      .stat-card-link {
+        text-decoration: none;
+      }
+
       .stat-card-box {
         background: $white;
         border-radius: $border-radius;
@@ -224,6 +228,15 @@
   }
 }
 
+.hr-attandance-status {
+  .hr-at-st-tabs {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    border-bottom: 1px solid $border-color;
+  }
+}
+
 /* Media Queries */
 @media (max-width: 1200px) {
   .hr-hero-wrapper {
@@ -239,6 +252,7 @@
 @media (max-width: 992px) {
   .hr-hero-wrapper {
     margin-top: 10px;
+
     .active-employee-box {
       padding: 10px;
     }

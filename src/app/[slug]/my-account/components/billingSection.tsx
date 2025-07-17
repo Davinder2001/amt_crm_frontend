@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  useFetchAdminBillingQuery,
-  useCreateRefundMutation,
-} from '@/slices/paymentsAndBillings/payBillApi';
+import { useFetchAdminBillingQuery, useCreateRefundMutation } from '@/slices';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
@@ -38,17 +35,17 @@ const BillingSection = () => {
 
   if (isLoading) {
     return (
-      <LoadingState/>
+      <LoadingState />
     );
   }
 
   if (error) {
     return (
       <EmptyState
-              icon="alert"
-              title="Failed to fetching billing data."
-              message="Something went wrong while fetching billing data."
-          />
+        icon="alert"
+        title="Failed to fetching billing data."
+        message="Something went wrong while fetching billing data."
+      />
     );
   }
 
@@ -80,7 +77,7 @@ const BillingSection = () => {
                   <td className="p-2 border">{payment.payment_status}</td>
                   <td className="p-2 border">{payment.payment_date}</td>
                   <td className="p-2 border">{payment.payment_time}</td>
-                  <td className="p-2 border" style={{textTransform: 'capitalize'}}>
+                  <td className="p-2 border" style={{ textTransform: 'capitalize' }}>
                     {payment.refund !== null ? payment.refund :
 
                       <button

@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaSmile, FaEllipsisV, FaPaperclip, FaArrowLeft, FaArrowDown } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import { useDeleteSingleMessageMutation, useFetchMessagesQuery, useSendMessageMutation } from '@/slices/chat/chatApi';
+import { useDeleteSingleMessageMutation, useFetchMessagesQuery, useSendMessageMutation } from '@/slices';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 

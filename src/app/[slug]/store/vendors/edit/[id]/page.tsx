@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices/vendor/vendorApi';
+import { useFetchVendorByIdQuery, useUpdateVendorMutation } from '@/slices';
 import { useCompany } from '@/utils/Company';
-import { FaArrowLeft } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const EditVendorPage: React.FC = () => {
     const { companySlug } = useCompany();
@@ -69,16 +69,13 @@ const EditVendorPage: React.FC = () => {
     if (error)
         return (
             <EmptyState
-                icon="alert"
+                icon={<FaTriangleExclamation className='empty-state-icon' />}
                 title="Failed to fetching vendor details."
                 message="Something went wrong while fetching vendor details."
             />
         );
     return (
         <div className="vendor-creation-page-outer">
-            <button onClick={() => router.back()} className="back-button">
-                <FaArrowLeft size={20} color="#fff" />
-            </button>
             <div className='vendor-creation-page'>
                 <div className="creation-header">
                     <h1>Edit Vendor</h1>

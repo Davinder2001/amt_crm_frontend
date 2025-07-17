@@ -3,7 +3,7 @@
   "short_name": "AMT",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#384b70",
   "theme_color": "#384b70",
   "icons": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "src": "/icons/download.png",
-      "sizes": "512x512",
+      "sizes": "300x300",
       "type": "image/png"
     }
   ]

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useUser } from '@/provider/UserContext';
 import { useRouter } from 'next/navigation';
 import { clearStorage, useCompany } from '@/utils/Company';
-import { setTheme } from '@/slices/theme/themeSlice';
+import { setTheme } from '@/slices';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
 import Loader from './Loader';

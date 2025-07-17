@@ -11,6 +11,9 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useFetchMonthlyRevenueReportQuery } from '@/slices/reports/reportsApi';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const StoreStats = () => {
   const [timeRange, setTimeRange] = useState<'Monthly'>('Monthly');
@@ -57,51 +60,56 @@ const StoreStats = () => {
       </div>
 
       <div className="chart-placeholder">
-        <ResponsiveContainer width="100%" height={225}>
-          <LineChart
-            data={chartData}
-          >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
-            />
-            <YAxis
-              tick={{ fill: '#888', fontSize: 12 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              formatter={(value: number) => `₹${value.toLocaleString()}`}
-              contentStyle={{
-                background: '#fff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '4px',
-                padding: '8px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              }}
-            />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke="var(--primary-color)"
-              strokeWidth={3}
-              dot={false}
-              activeDot={{
-                r: 6,
-                stroke: 'var(--primary-color)',
-                strokeWidth: 2,
-                fill: '#fff',
-              }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {isLoading ? <LoadingState /> :
+          error ? <EmptyState
+            icon={<FaTriangleExclamation className='empty-state-icon' />}
+            title="Failed to fetching Revenue data."
+            message="Something went wrong while fetching Revenue data."
+          />
+            :
+            <ResponsiveContainer width="100%" height={225}>
+              <LineChart
+                data={chartData}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#888', fontSize: 12 }}
+                />
+                <YAxis
+                  tick={{ fill: '#888', fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  formatter={(value: number) => `₹${value.toLocaleString()}`}
+                  contentStyle={{
+                    background: '#fff',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '4px',
+                    padding: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="var(--primary-color)"
+                  strokeWidth={3}
+                  dot={false}
+                  activeDot={{
+                    r: 6,
+                    stroke: 'var(--primary-color)',
+                    strokeWidth: 2,
+                    fill: '#fff',
+                  }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+        }
       </div>
-
-      {isLoading && <p className="text-sm mt-2 text-muted">Loading chart...</p>}
-      {error && <p className="text-sm mt-2 text-red-500">Failed to load revenue data.</p>}
 
       <style>{`
         .dropdown {

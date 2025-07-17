@@ -11,6 +11,9 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useFetchMonthlySalesReportQuery } from '@/slices/reports/reportsApi';
+import LoadingState from '@/components/common/LoadingState';
+import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const MonthlySalesChart = () => {
   const { data, isLoading, error } = useFetchMonthlySalesReportQuery();
@@ -31,33 +34,38 @@ const MonthlySalesChart = () => {
       </div>
 
       <div className="chart-placeholder">
-        <ResponsiveContainer width="100%" height={225}>
-          <BarChart
-            data={salesData}
-          >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis
-              dataKey="name"
-              style={{ fontSize: '12px', fill: '#384B70' }}
-              padding={{ left: 10, right: 10 }}
-            />
-            <YAxis
-              style={{ fontSize: '12px', fill: '#384B70' }}
-              width={50}
-            />
-            <Tooltip formatter={(value: number) => `₹${value}`} />
-            <Bar
-              dataKey="sales"
-              fill="var(--primary-color)"
-              radius={[4, 4, 0, 0]}
-              maxBarSize={40}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        {isLoading ? <LoadingState /> :
+          error ? <EmptyState
+            icon={<FaTriangleExclamation className='empty-state-icon' />}
+            title="Failed to fetching Sales."
+            message="Something went wrong while fetching Sales."
+          />
+            :
+            <ResponsiveContainer width="100%" height={225}>
+              <BarChart
+                data={salesData}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="name"
+                  style={{ fontSize: '12px', fill: '#384B70' }}
+                  padding={{ left: 10, right: 10 }}
+                />
+                <YAxis
+                  style={{ fontSize: '12px', fill: '#384B70' }}
+                  width={50}
+                />
+                <Tooltip formatter={(value: number) => `₹${value}`} />
+                <Bar
+                  dataKey="sales"
+                  fill="var(--primary-color)"
+                  radius={[4, 4, 0, 0]}
+                  maxBarSize={40}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+        }
       </div>
-
-      {isLoading && <p className="text-sm mt-2 text-muted">Loading sales chart...</p>}
-      {error && <p className="text-sm mt-2 text-red-500">Failed to load chart.</p>}
     </div>
   );
 };

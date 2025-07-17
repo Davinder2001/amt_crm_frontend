@@ -5,6 +5,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaTriangleExclamation } from 'react-icons/fa6';
+import { FaFileAlt } from 'react-icons/fa';
 
 type TableSalesReportItem = SalesReportItem & {
     id: number;
@@ -57,7 +58,7 @@ const Page = () => {
         message="We encountered an error while loading the sales report. Please try again later."
     />;
     if (!data) return <EmptyState
-        icon="search"
+        icon={<FaFileAlt className='empty-state-icon' />}
         title="No data found"
         message="No sales report data available for the selected period."
     />;
@@ -120,7 +121,7 @@ const Page = () => {
                 </div>
             ) : (
                 <EmptyState
-                    icon="search"
+                    icon={<FaFileAlt className='empty-state-icon' />}
                     title="No data available"
                     message="No sales data found for the selected month."
                 />

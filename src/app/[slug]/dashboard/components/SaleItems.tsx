@@ -2,35 +2,42 @@
 
 import React from 'react';
 import { useFetchTopSellingItemsQuery } from '@/slices/reports/reportsApi';
+import LoadingState from '@/components/common/LoadingState';
+import { FaBoxOpen } from 'react-icons/fa';
 
 const SaleItems = () => {
-  const { data, isLoading, error } = useFetchTopSellingItemsQuery();
+  const { data, isLoading } = useFetchTopSellingItemsQuery();
 
   // Normalize percentages based on top-selling item
   const items = data?.top_items || [];
   const maxQuantity = Math.max(...items.map(i => i.total_quantity || 0), 1); // avoid divide by zero
 
+
   return (
     <div className="card sale-items">
       <h3>Top Selling Items</h3>
 
-      {isLoading && <p className="text-sm text-muted">Loading...</p>}
-      {error && <p className="text-sm text-red-500">Failed to load top items</p>}
-
-      <ul className="sale-list">
-        {items.map((item, i) => {
-          const percent = Math.round((item.total_quantity / maxQuantity) * 100);
-          return (
-            <li key={i} className="sale-item">
-              <div className="label">{item.item_name}</div>
-              <div className="progress">
-                <div className="bar" style={{ width: `${percent}%` }}></div>
-              </div>
-              <div className="percent">{percent}%</div>
-            </li>
-          );
-        })}
-      </ul>
+      {isLoading ? <LoadingState /> :
+        !data || items.length === 0 ?
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <FaBoxOpen color='gray' size={80} className='empty-state-icon' />
+          </div>
+          :
+          <ul className="sale-list">
+            {items.map((item, i) => {
+              const percent = Math.round((item.total_quantity / maxQuantity) * 100);
+              return (
+                <li key={i} className="sale-item">
+                  <div className="label">{item.item_name}</div>
+                  <div className="progress">
+                    <div className="bar" style={{ width: `${percent}%` }}></div>
+                  </div>
+                  <div className="percent">{percent}%</div>
+                </li>
+              );
+            })}
+          </ul>
+      }
 
       <style>{`
         .sale-list {

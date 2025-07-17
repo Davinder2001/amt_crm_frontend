@@ -1,12 +1,13 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FaArrowLeft, FaPlus, FaUsers } from 'react-icons/fa';
-import { useFetchAllCustomersQuery } from '@/slices';
+import { FaPlus, FaUsers } from 'react-icons/fa';
+import { useFetchAllCustomersQuery } from '@/slices/customers/customerApi';
 import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const CustomerList = () => {
   const { data, isLoading, error } = useFetchAllCustomersQuery();
@@ -23,16 +24,12 @@ const CustomerList = () => {
   ];
 
   return (
-    <div>
-      <button onClick={() => router.back()} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </button>
-
-      {isLoading && <LoadingState/>}
+    <>
+      {isLoading && <LoadingState />}
 
       {error && (
         <EmptyState
-          icon="alert"
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
           title="Failed to load customers"
           message="Something went wrong while fetching customer data."
         />
@@ -61,7 +58,7 @@ const CustomerList = () => {
           onView={(id) => router.push(`/${companySlug}/invoices/customers/${id}`)}
         />
       )}
-    </div>
+    </>
   );
 };
 

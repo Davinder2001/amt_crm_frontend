@@ -15,14 +15,32 @@
 
   }
 
-
-
   .employee-fields-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding-bottom: 10px;
 
+    .select-field {
+      border-radius: 5px;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 16px;
+      background-color: transparent;
+      color: #3c3939;
+
+      &.common-placeholder {
+        color: #ccc;
+      }
+
+      option {
+        color: black;
+      }
+
+      option[value=""] {
+        color: #ccc;
+      }
+    }
 
 
 
@@ -48,6 +66,11 @@
       }
     }
 
+
+  }
+
+  .react-datepicker-wrapper {
+    width: 100%;
   }
 
   input,

@@ -6,15 +6,20 @@ export type SubmitTaskResponse = {
   message: string;
 };
 
-export const taskApi = apiSlice.injectEndpoints({
+export const tasksApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
     // ⬇ Existing task endpoints
-    getTasks: builder.query<TasksResponse, void>({
-      query: () => 'tasks',
-      providesTags: ['Task'],
+    getTasks: builder.query<TasksResponse, { page?: number; per_page?: number }>({
+      query: (params) => ({
+        url: "tasks",
+        params: {
+          page: params.page,
+          per_page: params.per_page
+        }
+      }),
+      providesTags: ["Task"],
     }),
-
 
     createTask: builder.mutation<Task, FormData>({
       query: (newTask) => ({
@@ -59,7 +64,7 @@ export const taskApi = apiSlice.injectEndpoints({
 
 
 
-    approveHistory: builder.mutation< TasksResponse, { message: string }, number>({
+    approveHistory: builder.mutation<TasksResponse, { message: string }, number>({
       query: (historyId) => ({
         url: `tasks/${historyId}/approve`,
         method: 'POST',
@@ -83,6 +88,11 @@ export const taskApi = apiSlice.injectEndpoints({
 
     getWorkingTasks: builder.query<TasksResponse, void>({
       query: () => 'tasks/working',
+      providesTags: ['Task'],
+    }),
+
+    getMyTasks: builder.query<TasksResponse, void>({
+      query: () => 'tasks/my-tasks',
       providesTags: ['Task'],
     }),
 
@@ -140,7 +150,7 @@ export const taskApi = apiSlice.injectEndpoints({
     }),
 
     // POST: Set reminder
-    setReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+    setReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string }>({
       query: ({ taskId, ...reminder }) => ({
         url: `tasks/${taskId}/set-reminder`,
         method: 'POST',
@@ -156,7 +166,7 @@ export const taskApi = apiSlice.injectEndpoints({
     }),
 
     // PUT: Update reminder
-    updateReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string, end_date: string }>({
+    updateReminder: builder.mutation<ReminderResponse, { taskId: number, reminder_at: string }>({
       query: ({ taskId, ...reminder }) => ({
         url: `tasks/${taskId}/update-reminder`,
         method: 'PUT',
@@ -180,6 +190,7 @@ export const {
   useRejectHistoryMutation,
   useGetPendingTasksQuery,
   useGetWorkingTasksQuery,
+  useGetMyTasksQuery,
   useMarkTaskAsWorkingMutation,
 
   // Predefined task hooks
@@ -195,4 +206,4 @@ export const {
   useViewReminderQuery,
   useUpdateReminderMutation,
 
-} = taskApi;
+} = tasksApi;

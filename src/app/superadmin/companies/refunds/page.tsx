@@ -1,15 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-    useFetchRefundsQuery,
-    useApproveRefundMutation,
-    useCompleteRefundMutation,
-    useDeclineRefundMutation,
-} from '@/slices/superadminSlices/payments/paymentApi';
+import { useFetchRefundsQuery, useApproveRefundMutation, useCompleteRefundMutation, useDeclineRefundMutation, } from '@/slices/superadminSlices/payments/paymentApi';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const Refunds = () => {
     const { data, isLoading, error } = useFetchRefundsQuery();
@@ -51,7 +47,7 @@ const Refunds = () => {
     if (isLoading) return <LoadingState />;
     if (error) return (
         <EmptyState
-            icon="alert"
+            icon={<FaTriangleExclamation className='empty-state-icon' />}
             title="Error loading companies."
             message="Something went wrong while loading companies."
         />);

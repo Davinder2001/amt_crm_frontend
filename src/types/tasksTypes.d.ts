@@ -19,7 +19,7 @@ interface Task {
     recurrence_type: string;
     recurrence_start_date: string;
     recurrence_end_date: string
-    attachment_urls?: string[]; 
+    attachment_urls?: string[];
     attachments: Attachment[];
     created_at: string;
     updated_at: string;
@@ -57,7 +57,8 @@ interface ReminderResponse {
 }
 
 interface TasksResponse {
-    data: Task[];
+    tasks: Task[];
+    pagination: Pagination;
     histories: TaskHistory[];
 }
 

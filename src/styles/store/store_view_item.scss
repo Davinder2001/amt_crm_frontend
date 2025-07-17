@@ -3,24 +3,18 @@
 .item-view {
   min-height: 100vh;
 
-  .back-button {
-    margin: 0;
-  }
 
   .item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 20px;
     padding: 10px;
     background: $white;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-
-
-
   }
 
   .item-details {
@@ -28,7 +22,6 @@
 
     .item-main {
       background: $white;
-      backdrop-filter: blur(10px);
       border-radius: 5px;
       padding: 10px 20px;
       box-shadow: $box-shadow;
@@ -37,7 +30,6 @@
       display: flex;
       justify-content: space-between;
       gap: 20px;
-      flex-wrap: wrap;
 
       h1 {
         font-size: 2.25rem;
@@ -124,113 +116,35 @@
 
         .item-media {
           display: flex;
-          align-items: center;
-          gap: 20px;
-          max-height: 320px;
+          gap: 10px;
+          flex-wrap: wrap;
 
           .featured-image {
             position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: $border-radius;
             overflow: hidden;
-            max-width: 320px;
-            width: 100%;
-            height: 320px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-
-            img {
-              width: 100%;
-              height: 100%;
-              display: block;
-              cursor: pointer;
-              object-fit: contain;
-            }
+            border-radius: $border-radius;
 
             .image-label {
               position: absolute;
+              width: 100%;
+              text-align: center;
               bottom: 0;
               left: 0;
-              background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
-              color: white;
-              padding: 5px 8px;
-              font-size: 0.8rem;
+              background: linear-gradient(135deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .6));
+              color: #fff;
+              padding: 2px 6px;
+              font-size: 12px;
               font-weight: 500;
-              backdrop-filter: blur(10px);
             }
           }
 
-          .image-gallery {
-            gap: 10px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-
-            .gallery-thumbnail {
-              border-radius: $border-radius;
-              overflow: hidden;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-              height: 150px;
-              max-width: 150px;
-              width: 100%;
-
-              img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-              }
-            }
-          }
-        }
-
-        .image-preview-modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.95);
-          backdrop-filter: blur(10px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999999999;
-          cursor: pointer;
-          animation: fadeIn 0.3s ease;
-
-          >div {
-            position: relative;
-            width: 90%;
-            height: 90%;
-            max-width: 900px;
+          img {
+            max-width: 100%;
+            width: 100px;
+            height: 100px;
             border-radius: $border-radius;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-          }
-
-          .close-modal {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            border: none;
-            color: white;
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 99999999999;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-            transition: all 0.3s ease;
-
-            &:hover {
-              transform: scale(1.1);
-              box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-            }
+            object-fit: cover;
+            box-shadow: $box-shadow;
           }
         }
       }
@@ -253,17 +167,6 @@
         padding-bottom: 1rem;
         border-bottom: 2px solid rgba(59, 130, 246, 0.1);
         position: relative;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          width: 60px;
-          height: 2px;
-          background: var(--primary-color);
-          border-radius: $border-radius;
-        }
       }
 
       .batch-grid {
@@ -427,6 +330,7 @@
   @media (max-width: 1440px) {
     .item-details {
       .item-main {
+        flex-direction: column;
         .item-media-section {
           width: 100%;
 
@@ -434,13 +338,6 @@
             padding-top: 20px;
 
             border-top: 2px solid var(--primary-color);
-          }
-
-          .item-media {
-            .image-gallery {
-              display: flex;
-              flex-wrap: wrap;
-            }
           }
         }
 
@@ -452,29 +349,6 @@
     }
   }
 
-  @media (max-width: 1210px) {
-    .item-details {
-      .item-main {
-        .item-media-section {
-          .item-media {
-            display: flex;
-            max-height: 100%;
-            padding-bottom: 20px;
-
-            .featured-image {
-              max-width: 400px;
-              height: 400px;
-            }
-
-            .image-gallery {
-              display: flex;
-              flex-wrap: wrap;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 @media (max-width: 768px) {
@@ -548,26 +422,6 @@
               font-size: 14px;
             }
           }
-
-          .item-media {
-            gap: 15px;
-            max-height: none;
-
-            .featured-image {
-              max-width: 100%;
-              height: 200px;
-            }
-
-            .image-gallery {
-              grid-template-columns: repeat(3, 1fr);
-              gap: 8px;
-
-              .gallery-thumbnail {
-                height: 80px;
-                max-width: 80px;
-              }
-            }
-          }
         }
       }
 
@@ -628,21 +482,9 @@
     .item-details {
       .item-main {
         .item-media-section {
-          .item-media {
-            .featured-image {
-              max-width: 150px;
-              width: 100%;
-              height: 150px;
-            }
-
-            .image-gallery {
-              grid-template-columns: repeat(2, 1fr);
-
-              .gallery-thumbnail {
-                height: 50px;
-                max-width: 50px;
-              }
-            }
+          .item-media img{
+            width: 80px;
+            height: 80px;
           }
         }
       }

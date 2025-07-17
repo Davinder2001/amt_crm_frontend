@@ -3,13 +3,13 @@
 import React from 'react';
 import TotalRevenue from './components/TotalRevenue';
 import StoreStats from './components/StoreStats';
-import IncomeExpense from './components/IncomeExpense';
-import Employees from './components/Employees';
+// import IncomeExpense from './components/IncomeExpense';
+// import Employees from './components/Employees';
 import SaleItems from './components/SaleItems';
 import ListOverview from './components/ListOverview';
-import UserActivity from './components/UserActivity';
-import CustomerReview from './components/CustomerReview';
-import TotalEarnings from './components/TotalEarnings';
+// import UserActivity from './components/UserActivity';
+// import CustomerReview from './components/CustomerReview';
+// import TotalEarnings from './components/TotalEarnings';
 
 function Page() {
   return (
@@ -18,18 +18,18 @@ function Page() {
         <ListOverview />
         <div className="stat-revenue-container">
           <TotalRevenue />
-          <StoreStats />
         </div>
         <div className="expenses-sale-container">
-          <IncomeExpense />
-          <Employees />
+          {/* <IncomeExpense /> */}
+          {/* <Employees /> */}
+          <StoreStats />
           <SaleItems />
         </div>
-        <div className='earning-review-container'>
+        {/* <div className='earning-review-container'>
           <UserActivity />
           <CustomerReview />
           <TotalEarnings />
-        </div>
+        </div> */}
       </div>
     </>
   );

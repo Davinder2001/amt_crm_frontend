@@ -33,13 +33,14 @@
 @use './Hr/employees_sallery.scss' as *;
 @use './Hr/edituser.scss' as *;
 @use './Hr/employee_profile.scss' as *;
-@use './Hr/view-attendence.scss' as *;
+@use './Hr/view-attendance.scss' as *;
 @use './Hr/employee_form_.scss' as *;
 
 
 
 // expenseform styling..........
 @use './expenseform/expenseform.scss' as*;
+@use './expenseform/ViewExpenditure.scss' as*;
 
 
 // tables section
@@ -131,6 +132,7 @@
 
 // My Acount Section
 @use './my-acount/addCompany.scss' as *;
+@use './my-acount/editCompany.scss' as *;
 
 
 // company styling
@@ -138,7 +140,6 @@
 
 // modal styling.............
 @use '../styles/common/modal.scss' as*;
-@use '../styles/common/tolbar.scss' as*;
 
 // emptystate section...................................................................................
 @use './emptystate/empatystate.scss' as *;
@@ -188,12 +189,57 @@ body {
     position: relative !important;
 }
 
+//  google translator css start ******************* **********************
+body>.skiptranslate,
+.goog-logo-link,
+.gskiptranslate,
+.goog-te-gadget span,
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+div#goog-gt- {
+    display: none !important;
+}
+
+.goog-te-gadget {
+    color: transparent !important;
+    font-size: 0px;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.goog-text-highlight {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+#google_translate_element select {
+    background: transparent;
+    color: #333333;
+    border: none;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc {
+    display: none !important;
+}
+
+//  google translator css end ******************* **********************
+
+
 ::-webkit-scrollbar {
     display: none;
 }
 
 .buttons {
-    padding: 9px 22px;
+    padding: 6px 12px;
     border-radius: $border-radius;
     border: unset;
     background-color: var(--primary-color);
@@ -237,7 +283,7 @@ textarea {
     }
 }
 
-.hr-attendence-table {
+.hr-attendance-table {
     .user-status {
         .status {
             text-transform: capitalize;
@@ -271,7 +317,7 @@ textarea {
 
 
 
-.employee-attendence-view {
+.employee-attendance-view {
     .user-status {
         .status {
             text-transform: capitalize;
@@ -314,7 +360,7 @@ textarea {
         margin: 0px 50px;
 
         .page-content {
-            padding: 30px 0px;
+            padding: 20px 0px;
         }
     }
 }
@@ -493,8 +539,21 @@ h2.react-datepicker__current-month,
     position: absolute;
 }
 
+.react-datepicker__year-dropdown-container--select,
+.react-datepicker__month-dropdown-container--select {
+    margin: 0px !important;
+}
+
+.react-datepicker__header__dropdown.react-datepicker__header__dropdown--select {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+}
 
 // datepicker-styling End...............................................................................
+//...............................................................................
+
+// ...............................................................................
 
 
 
@@ -518,16 +577,18 @@ textarea::placeholder {
         }
     }
 }
+
 @media screen and (max-width:767px) {
-      .main .main-content {
+    .main .main-content {
         padding-bottom: 80px;
     }
 }
+
 @media (max-width:468px) {
     .buttons {
-        padding: 5px 15px;
+        padding: 5px 10px;
 
     }
 
-  
+
 }

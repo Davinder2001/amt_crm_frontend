@@ -6,12 +6,11 @@ import { useGetCreditUsersQuery } from '@/slices';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
 import { FaUsers } from 'react-icons/fa';
-
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
-import { FaMoneyBill, FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
+import { FaMoneyBill } from 'react-icons/fa';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface CreditUser {
   customer_id: number;
@@ -32,7 +31,7 @@ const allColumns: { label: string; key: ColumnKey }[] = [
   { label: 'Name', key: 'name' },
   { label: 'Number', key: 'number' },
   { label: 'Total Invoices', key: 'total_invoices' },
-  { label: 'Total Due', key: 'total_due' },
+  { label: 'Total Payment', key: 'total_due' },
   { label: 'Amount Paid', key: 'amount_paid' },
   { label: 'Outstanding', key: 'outstanding' },
   { label: 'Action', key: 'action' }
@@ -141,17 +140,13 @@ const CreditList: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (error) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching Data."
     message="Something went wrong while fetching Data."
   />;
 
   return (
     <div>
-      <Link href={`/${companySlug}/invoices`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="credit-users-page">
         {filteredData.length === 0 ? (
           <EmptyState
@@ -181,7 +176,6 @@ const CreditList: React.FC = () => {
               visibleColumns={visibleColumns}
               onColumnToggle={toggleColumn}
               onResetColumns={onResetColumns}
-              actions={[]}
               introKey='credit_list_intro'
             />
 
@@ -194,6 +188,18 @@ const CreditList: React.FC = () => {
                   handleView(id);
                 }
               }}
+              cardView={(users: CreditUser) => (
+                <>
+                  <div className="card-row">
+                    <h5>{users.name}</h5>
+                    <p>{users.number}</p>
+                  </div>
+                  <div className="card-row">
+                    <p>Invoices: {users.total_invoices}</p>
+                    <p>Amount Paid: {users.amount_paid}</p>
+                  </div>
+                </>
+              )}
             />
           </>
         )}

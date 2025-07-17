@@ -1,5 +1,4 @@
 'use client';
-// import { useDeleteAllMessagesMutation } from '@/slices/chat/chatApi';
 import React from 'react';
 import { FaPlus, FaSearch, FaTimes } from 'react-icons/fa';
 import Skeleton from 'react-loading-skeleton';

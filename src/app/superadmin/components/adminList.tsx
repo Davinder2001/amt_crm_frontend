@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useFetchAdminsQuery,
-  useUpdateAdminStatusMutation,
-} from '@/slices/superadminSlices/adminManagement/adminManageApi';
+import { useFetchAdminsQuery, useUpdateAdminStatusMutation } from '@/slices/superadminSlices/adminManagement/adminManageApi';
 import Loader from '@/components/common/Loader';
 import TableToolbar from '@/components/common/TableToolbar';
 import EmptyState from '@/components/common/EmptyState';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const statusOptions = ['active', 'blocked'];
 const COLUMN_STORAGE_KEY = 'visible_columns_admins';
@@ -154,7 +152,7 @@ const AdminList = () => {
   if (isLoading) return <Loader />;
   if (error) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Failed to fetch admins."
       message="Something went wrong while fetch admins."
     />);

@@ -1,11 +1,11 @@
 import React from 'react'
 
 function Page() {
-    return (
-        <>
-            user profile setting
-        </>
-    )
+  return (
+    <>
+    My Settings
+    </>
+  )
 }
 
 export default Page

@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
 import { THEMES, type Theme } from '@/slices/theme/themeConfig';
-import { setTheme } from '@/slices';
+import { setTheme } from '@/slices/theme/themeSlice';
 import { FaPalette } from 'react-icons/fa';
 
 const ThemeSwitcher = () => {

@@ -1,5 +1,6 @@
 // Define types for your Company and responses (adjust these interfaces as needed)
 interface Company {
+  subscription_status: ReactNode;
   id: number;
   name: string;
   company_slug: string;
@@ -8,6 +9,12 @@ interface Company {
   description?: string;
   company_id: string;
   location?: string;
+  admin_id: number;
+  subscription_status: string;
+  subscription_type: string;
+  payment_status: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface CompaniesResponse {
@@ -57,6 +64,13 @@ interface CompanyDetailsResponse {
   company: Company;
   subscribed_package: PackagePlan;
   related_packages: PackagePlan[];
+}
+
+interface CompanyScoreResponse {
+  profile_score: number;
+  total_fields: number;
+  filled_fields: number;
+  message: string;
 }
 
 type Shift = {

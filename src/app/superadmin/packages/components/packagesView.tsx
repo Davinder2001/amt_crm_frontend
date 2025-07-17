@@ -1,73 +1,20 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import type { JSX } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDeletePackageMutation, useFetchPackagesQuery } from '@/slices/superadminSlices/packages/packagesApi';
 import { useRouter } from 'next/navigation';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { FaChevronDown, FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import LoadingState from '@/components/common/LoadingState';
-import ConfirmDialog from '@/components/common/ConfirmDialog';
-import Modal from '@/components/common/Modal';
-import EmptyState from '@/components/common/EmptyState';
-import { toast } from 'react-toastify';
 
 const PackagesView = () => {
+  const { setTitle } = useBreadcrumb();
   const { data, error, isLoading } = useFetchPackagesQuery();
-  const [deletePackage] = useDeletePackageMutation();
+  const [deletepackage] = useDeletePackageMutation();
   const router = useRouter();
   const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
-  const [selectedPackage, setSelectedPackage] = useState<PackagePlan | null>(null);
-  const [isPackageDetailOpen, setIsPackageDetailOpen] = useState(false);
   const categoriesCellRef = useRef<HTMLDivElement | null>(null);
-
-  const [deleteState, setDeleteState] = useState<{
-    id: number | null;
-    name: string;
-    showDialog: boolean;
-  }>({
-    id: null,
-    name: "",
-    showDialog: false
-  });
-
-  const handleDeleteInit = (id: number, name: string) => {
-    setDeleteState({
-      id,
-      name,
-      showDialog: true
-    });
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await deletePackage(String(id)).unwrap();
-      toast.success(response.message || "Package deleted successfully");
-    } catch (err) {
-      console.error('Error deleting package:', err);
-      toast.error('Failed to delete package');
-    }
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!deleteState.id) return;
-
-    await handleDelete(deleteState.id);
-    setDeleteState({
-      id: null,
-      name: "",
-      showDialog: false
-    });
-  };
-
-  const handleDeleteCancel = () => {
-    setDeleteState({
-      id: null,
-      name: "",
-      showDialog: false
-    });
-  };
-
-
+  // Updated toggle handler with ref capture
   const handleToggle = (event: React.MouseEvent, planId: number) => {
     const newId = openCategoryId === planId ? null : planId;
     setOpenCategoryId(newId);
@@ -75,12 +22,43 @@ const PackagesView = () => {
       categoriesCellRef.current = (event.currentTarget as HTMLElement).closest('.categories-cell');
     }
   };
-
-  const handleViewDetails = (pkg: PackagePlan) => {
-    setSelectedPackage(pkg);
-    setIsPackageDetailOpen(true);
+  const handleDelete = async (id: number) => {
+    if (confirm('Are you sure you want to delete this package?')) {
+      try {
+        await deletepackage(String(id)).unwrap();
+      } catch (err) {
+        console.error('Failed to delete the package:', err);
+        alert('Failed to delete package. Please try again.');
+      }
+    }
   };
 
+  useEffect(() => {
+    setTitle('All packages Plan');
+  }, [setTitle]);
+
+
+  // Add this effect right after your other useEffect hooks
+  // Example state for form data (adjust fields as needed)
+  const [formData, setFormData] = useState<{ name: string; package_type: string }>({ name: '', package_type: 'yearly' });
+
+  useEffect(() => {
+    // Only modify name if package type changes and name exists
+    if (formData.name.trim()) {
+      const typeText = formData.package_type === 'monthly' ? 'Monthly' : 'Yearly';
+      const suffix = `(${typeText})`;
+
+      // Check if name already has a type suffix
+      const hasExistingSuffix = /\(\s*(Monthly|Yearly)\s*\)$/.test(formData.name);
+
+      setFormData(prev => ({
+        ...prev,
+        name: hasExistingSuffix
+          ? prev.name.replace(/\(\s*(Monthly|Yearly)\s*\)$/, suffix)
+          : `${prev.name} ${suffix}`
+      }));
+    }
+  }, [formData.package_type, formData.name]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -97,268 +75,102 @@ const PackagesView = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openCategoryId]);
+  const columns = [
+    {
+      label: 'Package Name',
+      key: 'name' as keyof PackagePlan,
+      render: (plan: PackagePlan) => <span className='package-name'>{plan.name}</span>
+    },
+    {
+      label: 'Annual Price',
+      key: 'annual_price' as keyof PackagePlan,
+      render: (plan: PackagePlan) => (
+        <span className="">{plan.annual_price}</span>
+      )
+    },
+    {
+      label: 'Employees',
+      key: 'employee_limit' as keyof PackagePlan,
+      render: (plan: PackagePlan) => <span>{plan.employee_limit}</span>
+    },
+    {
+      label: 'Package Type',
+      key: 'package_type' as keyof PackagePlan,
+      render: (plan: PackagePlan) => <span>{plan.package_type}</span>
+    },
+    {
+      label: 'Applicable Categories',
+      key: 'business_categories' as keyof PackagePlan,
+      render: (plan: PackagePlan) => (
+        <div className="categories-cell">
+          <div
+            className="categories-toggle"
+            onClick={(e) => plan.id !== undefined && handleToggle(e, plan.id)}
+          >
+            <span className='categories-show'>
+              <span>{plan.business_categories.length}</span>
+              Categor{plan.business_categories.length === 1 ? 'y' : 'ies'}
+            </span>
+            <FaChevronDown className={`toggle-icon ${openCategoryId === plan.id ? 'open' : ''}`} />
+          </div>
 
-  const columns: {
-    label: string;
-    key: keyof PackagePlan | undefined;
-    render: (plan: PackagePlan) => JSX.Element;
-  }[] = [
-      {
-        label: 'Package Name',
-        key: 'name',
-        render: (plan: PackagePlan) => (
-          <div
-            className="clickable-cell"
-            onClick={() => handleViewDetails(plan)}
-          >
-            {plan.name}
-          </div>
-        )
-      },
-      {
-        label: 'Monthly Price',
-        key: 'monthly_price',
-        render: (plan: PackagePlan) => (
-          <div
-            className="clickable-cell"
-            onClick={() => handleViewDetails(plan)}
-          >
-            {Math.floor(Number(plan.monthly_price))}
-          </div>
-        )
-      },
-      {
-        label: 'Annual Price',
-        key: 'annual_price',
-        render: (plan: PackagePlan) => (
-          <div
-            className="clickable-cell"
-            onClick={() => handleViewDetails(plan)}
-          >
-            {plan.annual_price}
-          </div>
-        )
-      },
-      {
-        label: 'Three years Price',
-        key: 'three_years_price',
-        render: (plan: PackagePlan) => (
-          <div
-            className="clickable-cell"
-            onClick={() => handleViewDetails(plan)}
-          >
-            {plan.three_years_price}
-          </div>
-        )
-      },
-      {
-        label: 'Applicable Categories',
-        key: 'business_categories',
-        render: (plan: PackagePlan) => (
-          <div className="categories-cell">
-            <div
-              className="categories-toggle"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (plan.id !== undefined) handleToggle(e, plan.id);
-              }}
-            >
-              <span className='categories-show'>
-                <span>{plan.business_categories.length}</span>
-                Categor{plan.business_categories.length === 1 ? 'y' : 'ies'}
-              </span>
-              <FaChevronDown className={`toggle-icon ${openCategoryId === plan.id ? 'open' : ''}`} />
+          {openCategoryId === plan.id && (
+            <div className="category-dropdown">
+              {plan.business_categories.map((category) => (
+                <div key={category.id} className="category-item">
+                  <label>
+                    {category.name}
+                  </label>
+                </div>
+              ))}
             </div>
+          )}
+        </div>
+      )
+    },
+    {
+      label: 'Actions',
+      key: undefined,
+      render: (plan: PackagePlan) => (
+        <div className="package-action-buttons">
+          <span onClick={() => router.push(`/superadmin/packages/edit/${plan.id}`)} title="Edit" className='package-edit-icon' >
+            <FaEdit />
+          </span>
+          <span
+            title="Delete"
+            className="package-delete-icon"
+            onClick={() => { if (typeof plan.id === 'number') handleDelete(plan.id); }}
+          >
+            <FaTrash />
+          </span>
 
-            {openCategoryId === plan.id && (
-              <div className="category-dropdown">
-                {plan.business_categories.map((category) => (
-                  <div key={category.id} className="category-item">
-                    <label>
-                      {category.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )
-      },
-      {
-        label: 'Actions',
-        key: undefined,
-        render: (plan: PackagePlan) => (
-          <div className="package-action-buttons">
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`/superadmin/packages/edit/${plan.id}`);
-              }}
-              title="Edit"
-              className='package-edit-icon'
-            >
-              <FaEdit />
-            </span>
-            <span
-              title="Delete"
-              className="package-delete-icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (typeof plan.id === 'number') handleDeleteInit(plan.id, plan.name);
-              }}
-            >
-              <FaTrash />
-            </span>
-          </div>
-        )
-      }
-    ];
+        </div>
+      )
+    }
+  ];
 
 
   if (isLoading) return <LoadingState />;
-  if (error)
-    return (
-      <EmptyState
-        icon="alert"
-        title="Error loading packages."
-        message="Something went wrong while loading packages."
-      />
-    );
+  if (error) return <div className="error-message">Error loading packages.</div>;
+
   return (
-    <>
-      <div className="superadmin-packages-container">
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <button
-            onClick={() => router.push('/superadmin/packages/create')}
-            className='buttons'
-          >
-            <FaPlus /> Create New Package
-          </button>
-        </div>
-
-        <ResponsiveTable
-          data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
-          columns={columns}
-          onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
-          onDelete={(id) => handleDelete(id)}
-          onView={(id) => {
-            const pkg = data?.find(p => p.id === id);
-            if (pkg) handleViewDetails(pkg);
-          }}
-          cardView={(plan) => (
-            <>
-              <div className="card-row">
-                <h5>{plan.name}</h5>
-                <p>Monthly: ₹{Math.floor(Number(plan.monthly_price))}</p>
-              </div>
-              <div className="card-row">
-                <p>Annual: ₹{plan.annual_price}</p>
-                {plan.three_years_price && (
-                  <p>3 Years: ₹{plan.three_years_price}</p>
-                )}
-              </div>
-            </>
-          )}
-        />
-
-        <Modal
-          isOpen={isPackageDetailOpen}
-          onClose={() => setIsPackageDetailOpen(false)}
-          title={`Package Details - ${selectedPackage?.name || ''}`}
-          width="900px"
+    <div className="superadmin-packages-container">
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <button
+          onClick={() => router.push('/superadmin/packages/create')}
+          className='buttons'
         >
-          {selectedPackage && (
-            <div className="package-details">
-              {/* Categories Section */}
-              <div className="detail-section">
-                <h3>Applicable Business Categories</h3>
-                <div className="categories-grid">
-                  {selectedPackage.business_categories.map((category: BusinessCategory) => (
-                    <div key={category.id} className="category-item">
-                      {category.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price and Limits Cards */}
-              <div className="detail-section">
-                <h3>Pricing & Limits</h3>
-                <div className="price-limits-grid">
-                  {selectedPackage.limits?.map((limit: Limit) => {
-                    // Determine which price to show based on variant type
-                    let priceLabel = '';
-                    let priceValue = '';
-
-                    switch (limit.variant_type) {
-                      case 'monthly':
-                        priceLabel = 'Monthly Price';
-                        priceValue = `₹${Number(selectedPackage.monthly_price).toFixed(2)}`;
-                        break;
-                      case 'annual':
-                        priceLabel = 'Annual Price';
-                        priceValue = `₹${Number(selectedPackage.annual_price).toFixed(2)}`;
-                        break;
-                      case 'three_years':
-                        priceLabel = 'Three Years Price';
-                        priceValue = `₹${Number(selectedPackage.three_years_price).toFixed(2)}`;
-                        break;
-                      default:
-                        priceLabel = 'Price';
-                        priceValue = 'N/A';
-                    }
-
-                    return (
-                      <div key={limit.id} className="price-limit-card">
-                        <div className="card-header">
-                          <h4>{limit.variant_type.replace('_', ' ').toUpperCase()}</h4>
-                        </div>
-                        <div className="card-body">
-                          <div className="price-section">
-                            <div className="price-row">
-                              <span className="price-label">{priceLabel}:</span>
-                              <span className="price-value">{priceValue}</span>
-                            </div>
-                          </div>
-                          <div className="limits-section">
-                            <div className="limit-row">
-                              <span className="limit-label">Employees:</span>
-                              <span className="limit-value">{limit.employee_numbers}</span>
-                            </div>
-                            <div className="limit-row">
-                              <span className="limit-label">Items:</span>
-                              <span className="limit-value">{limit.items_number}</span>
-                            </div>
-                            <div className="limit-row">
-                              <span className="limit-label">Daily Tasks:</span>
-                              <span className="limit-value">{limit.daily_tasks_number}</span>
-                            </div>
-                            <div className="limit-row">
-                              <span className="limit-label">Invoices:</span>
-                              <span className="limit-value">{limit.invoices_number}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-        </Modal>
+          <FaPlus /> Create New Package
+        </button>
       </div>
 
-      <ConfirmDialog
-        isOpen={deleteState.showDialog}
-        title="Delete Package"
-        message={`Are you sure you want to delete "${deleteState.name}"?`}
-        onConfirm={handleDeleteConfirm}
-        onCancel={handleDeleteCancel}
-        type="delete"
+      <ResponsiveTable
+        data={Array.isArray(data) ? data.filter((plan): plan is PackagePlan & { id: number } => typeof plan.id === 'number') : []}
+        columns={columns}
+        onEdit={(id) => router.push(`/superadmin/packages/edit/${id}`)}
       />
-    </>
+    </div>
   );
 };
 
-export default PackagesView;  
+export default PackagesView;

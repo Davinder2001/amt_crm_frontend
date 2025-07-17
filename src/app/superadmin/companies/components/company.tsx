@@ -2,18 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useFetchCompaniesQuery,
-  useVerifyCompanyPaymentMutation,
-  useVerifyCompanyStatusMutation
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchCompaniesQuery, useVerifyCompanyPaymentMutation, useVerifyCompanyStatusMutation } from '@/slices/superadminSlices/company/companyApi';
 import { toast } from 'react-toastify';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import Loader from '@/components/common/Loader';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import { FaUniversity, FaHourglassHalf, FaUndoAlt } from 'react-icons/fa';
+import { FaUndoAlt } from 'react-icons/fa';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface Company {
   id: number;
@@ -196,7 +193,7 @@ const CompanyComponent = () => {
   if (error)
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Error loading companies."
         message="Something went wrong while loading companies."
       />
@@ -223,16 +220,16 @@ const CompanyComponent = () => {
         onColumnToggle={toggleColumn}
         onResetColumns={onResetColumns}
         actions={[
-          {
-            label: 'All Companies',
-            icon: <FaUniversity />,
-            onClick: () => router.push('/superadmin/companies'),
-          },
-          {
-            label: 'Pending Companies',
-            icon: <FaHourglassHalf />,
-            onClick: () => router.push('/superadmin/companies/pending'),
-          },
+          // {
+          //   label: 'All Companies',
+          //   icon: <FaUniversity />,
+          //   onClick: () => router.push('/superadmin/companies'),
+          // },
+          // {
+          //   label: 'Pending Companies',
+          //   icon: <FaHourglassHalf />,
+          //   onClick: () => router.push('/superadmin/companies/pending'),
+          // },
           {
             label: 'Refunds',
             icon: <FaUndoAlt />,

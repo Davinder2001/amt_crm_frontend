@@ -13,19 +13,20 @@ import invoiceCreateApiSlice from '@/slices/invoices/invoiceCreateSlice';
 import customerCreateApiSlice from '@/slices/customers/customerCreateSlice';
 import companyCreateSlice from '@/slices/company/companyCreateSlice';
 import adminManageApi from '@/slices/superadminSlices/adminManagement/adminManageApi';
-import notificationApi from '@/slices/notifications/notificationsCreateSlice';
+import notificationsApi from '@/slices/notifications/notificationsCreateSlice';
 import chatApi from '@/slices/chat/chatCreateSlice';
 import quotationApi from '@/slices/quotation/quotationCreateSlice';
 import hrApi from '@/slices/hr/hrCreateSlice';
 import packagesCreateApiSlice from '@/slices/superadminSlices/packages/packagesApi';
+import packageDetailsCreateApiSlice from '@/slices/superadminSlices/package-details/packageDetailsApi';
 import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCategory/businesscategoryApi';
 import themeReducer from '@/slices/theme/themeSlice';
 import billingCreateApiSlice from '@/slices/paymentsAndBillings/payBillCreate';
 import paymentCreateApiSlice from '@/slices/superadminSlices/payments/paymentCreateSlice';
 import expensesCreateApiSlice from '@/slices/expenditure/expensesCreateSlice';
 import attendanceCreateApiSlice from '@/slices/attendance/attendanceCreateSlice';
-
-
+import dashBoardCreateApiSlice from '@/slices/dashboard/dashBoardCreateSlice';
+import reportsCreateApiSlice from '@/slices/reports/reportsCreateSlice';
 
 
 const store = configureStore({
@@ -45,18 +46,21 @@ const store = configureStore({
     [customerCreateApiSlice.reducerPath]: customerCreateApiSlice.reducer,
     [companyCreateSlice.reducerPath]: companyCreateSlice.reducer,
     [adminManageApi.reducerPath]: adminManageApi.reducer,
-    [notificationApi.reducerPath]: notificationApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
     [chatApi.reducerPath]: chatApi.reducer,
     [quotationApi.reducerPath]: quotationApi.reducer,
     [hrApi.reducerPath]: hrApi.reducer,
     [packagesCreateApiSlice.reducerPath]: packagesCreateApiSlice.reducer,
+    [packageDetailsCreateApiSlice.reducerPath]: packageDetailsCreateApiSlice.reducer,
     [businesscategoryCreateApiSlice.reducerPath]: businesscategoryCreateApiSlice.reducer,
     [billingCreateApiSlice.reducerPath]: billingCreateApiSlice.reducer,
     [paymentCreateApiSlice.reducerPath]: paymentCreateApiSlice.reducer,
     [expensesCreateApiSlice.reducerPath]: expensesCreateApiSlice.reducer,
     [attendanceCreateApiSlice.reducerPath]: attendanceCreateApiSlice.reducer,
+    [dashBoardCreateApiSlice.reducerPath]: dashBoardCreateApiSlice.reducer,
+    [reportsCreateApiSlice.reducerPath]: reportsCreateApiSlice.reducer,
   },
-  middleware:  (getDefaultMiddleware)=>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(authApiSlice.middleware)
       .concat(userApiSlice.middleware)
@@ -72,16 +76,19 @@ const store = configureStore({
       .concat(customerCreateApiSlice.middleware)
       .concat(companyCreateSlice.middleware)
       .concat(adminManageApi.middleware)
-      .concat(notificationApi.middleware)
+      .concat(notificationsApi.middleware)
       .concat(chatApi.middleware)
       .concat(quotationApi.middleware)
       .concat(hrApi.middleware)
       .concat(packagesCreateApiSlice.middleware)
+      .concat(packageDetailsCreateApiSlice.middleware)
       .concat(businesscategoryCreateApiSlice.middleware)
       .concat(billingCreateApiSlice.middleware)
       .concat(paymentCreateApiSlice.middleware)
       .concat(expensesCreateApiSlice.middleware)
       .concat(attendanceCreateApiSlice.middleware)
+      .concat(dashBoardCreateApiSlice.middleware)
+      .concat(reportsCreateApiSlice.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

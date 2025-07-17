@@ -1,12 +1,11 @@
 'use client';
 import React from 'react';
-import Link from 'next/link';
-import { FaArrowLeft, FaCalendarTimes } from 'react-icons/fa';
+import { FaCalendarTimes } from 'react-icons/fa';
 import { useFetchBalanceLeaveQuery } from '@/slices';
-import { useCompany } from '@/utils/Company';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 type Leave = {
   id: number;
@@ -20,7 +19,6 @@ type Leave = {
 
 const LeavesPage = () => {
   const { data, isLoading, isError } = useFetchBalanceLeaveQuery();
-  const { companySlug } = useCompany();
 
   if (isLoading) {
     return <LoadingState />;
@@ -29,7 +27,7 @@ const LeavesPage = () => {
   if (isError || !data) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load leave balances"
         message="Something went wrong while fetching leave data. Please try again later."
       />
@@ -53,12 +51,6 @@ const LeavesPage = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto bg-white shadow rounded">
-      <Link
-        href={`/${companySlug}/attendence`}
-        className="back-button inline-flex items-center gap-2 text-white bg-blue-600 px-3 py-1 rounded"
-      >
-        <FaArrowLeft size={16} />
-      </Link>
 
       {noLeaves ? (
         <EmptyState

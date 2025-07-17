@@ -1,200 +1,111 @@
 @use '../variables' as *;
 
-.submit-task-wrapper {
-
-
-    .task-title {
-        font-size: $font-size-large;
-        margin-bottom: 24px;
-        color: $heading;
-    }
-
-    .submit-task-form {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-
-        .fancy-upload {
-            margin-top: 24px;
-
-            .upload-label {
-                display: block;
-                font-size: 16px;
-                color: var(--primary-color);
-                margin-bottom: 10px;
-                font-family: $font-family;
-            }
-
-            .upload-card {
-                position: relative;
-                border-radius: 20px;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(12px);
-                border: 2px dashed var(--primary-color);
-                padding: 20px;
-                text-align: center;
-                transition: all 0.3s ease;
-                cursor: pointer;
-                overflow: hidden;
-
-                &:hover {
-                    border-color: var(--primary-color);
-                    background: rgba(0, 150, 147, 0.05);
-                }
-
-                .upload-input {
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    opacity: 0;
-                    cursor: pointer;
-                    z-index: 2;
-                }
-
-                .upload-inner {
-                    position: relative;
-                    z-index: 1;
-                }
-
-                .upload-icon {
-                    font-size: 40px;
-                    color: var(--primary-color);
-                    margin-bottom: 10px;
-                }
-
-                .upload-text {
-                    color: #444;
-                    font-size: 14px;
-                    font-family: $font-family;
-                }
-            }
-        }
-
-    }
+.submit-task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 
     .form-group {
         display: flex;
         flex-direction: column;
 
+        label {
+            margin-bottom: 5px;
+            font-weight: 400;
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            color: $para-color;
+        }
 
         textarea {
             padding: 10px;
             border-radius: $border-radius;
-            border: 1px solid $feild_border;
+            border: 1px solid $border-color;
             font-size: $font-size;
             resize: vertical;
-            font-family: $font-family;
-            transition: border-color $transition;
-
-
-            &:focus {
-                outline: none;
-                border-color: $gray-color;
-            }
         }
 
-        input[type="file"] {
-            margin-top: 6px;
-            font-size: $font-size-small;
+        .upload-card {
+            position: relative;
+            border-radius: $border-radius;
+            background: $white;
+            backdrop-filter: blur(12px);
+            border: 2px dashed var(--primary-light);
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+
+            &:hover {
+                border-color: var(--primary-color);
+                background: rgba(0, 150, 147, 0.05);
+            }
+
+            .upload-input {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+                z-index: 2;
+            }
+
+            .upload-text {
+                font-size: 14px;
+                color: #4a4a4a;
+            }
+
+            .upload-note {
+                font-size: 12px;
+                color: #888;
+            }
         }
     }
 
-    .preview-container {
-        position: relative;
+    .image-preview-grid {
         display: flex;
-        gap: 10px;
+        align-items: center;
         flex-wrap: wrap;
+        gap: 10px;
 
-        .preview-box {
+        .image-preview-item {
             position: relative;
+            box-shadow: $box-shadow;
 
-            .preview-image {
-                width: 100px;
-                height: 100px;
-                cursor: pointer;
-                object-fit: cover;
-
+            img {
+                border-radius: $border-radius;
             }
 
-            .remove-image {
+            .remove-image-btn {
                 position: absolute;
                 top: -6px;
                 right: -6px;
-                width: 20px;
-                height: 20px;
-                color: $danger-color;
+                background-color: #ff4d4d;
+                color: $white;
                 border: none;
-                padding: 5px;
-                border-radius: 50%;
-                font-size: 14px;
+                border-radius: $border-radius;
+                width: 18px;
+                height: 18px;
+                font-size: 12px;
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-                z-index: 2;
-                transition: background-color $transition;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                transition: background 0.3s;
 
                 &:hover {
-                    background-color: rgba(224, 67, 71, 1);
-                    color: $white;
+                    background-color: #e60000;
                 }
             }
         }
     }
 
-    .media-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #00000080;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-
-        img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-    }
-
-
-
-
-
     .task-timeline-btn-wrapper {
         display: flex;
         justify-content: flex-end;
-
-        .submit-button {
-            align-self: flex-start;
-            padding: 10px 12px;
-            background-color: var(--primary-color);
-            color: $white;
-            border: none;
-            border-radius: 6px;
-            font-size: $font-size-one;
-            font-weight: $font-weight-medium;
-            cursor: pointer;
-            transition: background-color $transition;
-            margin: 0px;
-
-            &:hover {
-                background-color: rgba(42, 55, 83, 1);
-            }
-
-            &:disabled {
-                background-color: $gray-color;
-                cursor: not-allowed;
-                opacity: 0.7;
-            }
-        }
-
     }
 }

@@ -135,9 +135,28 @@ const companyApi = companyCreateSlice.injectEndpoints({
       providesTags: ["Company"],
     }),
 
+    updateCompany: builder.mutation<{ status: boolean; message: string; error: string }, { id: number, formdata: FormData }>({
+      query: ({ id, formdata }) => ({
+        url: `company-details/${id}`,
+        method: "POST",
+        body: formdata,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
     companyStatusDetails: builder.query<CompanyStatusResponse, number>({
       query: (id) => ({
         url: `company-status/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Company"],
+    }),
+
+    companyScore: builder.query<CompanyScoreResponse, void>({
+      query: () => ({
+        url: 'companies/profile-score',
         method: "GET",
         credentials: "include",
       }),
@@ -301,7 +320,9 @@ export const {
   useOrderNewCompanyMutation,
   useAddNewCompanyMutation,
   useFetchCompanyDetailsQuery,
+  useUpdateCompanyMutation,
   useCompanyStatusDetailsQuery,
+  useCompanyScoreQuery,
 
   // 🔽 New bank account endpoints
   useFetchCompanyAccountsQuery,

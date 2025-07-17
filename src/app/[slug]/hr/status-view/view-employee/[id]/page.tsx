@@ -4,13 +4,12 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices';
+import { useFetchEmployeByIdQuery, useDeleteEmployeMutation } from '@/slices/employe/employeApi';
 import Image from 'next/image';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
-import { FaArrowLeft, FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
-import Link from 'next/link'
+import { FaBriefcase, FaCreditCard, FaEdit, FaIdCard, FaMoneyBillWave, FaUserPlus, FaTrash, FaUser, FaUserCheck } from 'react-icons/fa';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 
@@ -82,14 +81,11 @@ const ViewUserPage: React.FC = () => {
   return (
     <div className="employee-profile-container">
       <div className='employee-profile-nav'>
-        <Link href={`/${companySlug}/hr/status-view`} className='back-button'>
-          <FaArrowLeft size={20} color='#fff' />
-        </Link>
         <TableToolbar
           actions={[
             {
               label: 'Add Employee',
-              icon: <FaPlus />,
+              icon: <FaUserPlus />,
               onClick: () => router.push(`/${companySlug}/hr/add-employee`),
             },
             {
@@ -201,7 +197,6 @@ const ViewUserPage: React.FC = () => {
               <div className="info-item"><span className="info-label">Work Location</span><span className="info-value">{details?.workLocation || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Joining Date</span><span className="info-value">{formatDate(details?.joiningDate)}</span></div>
               <div className="info-item"><span className="info-label">Joining Type</span><span className="info-value">{details?.joiningType || 'N/A'}</span></div>
-              <div className="info-item"><span className="info-label">Current Salary</span><span className="info-value">₹{details?.currentSalary || 'N/A'}</span></div>
               <div className="info-item"><span className="info-label">Salary</span><span className="info-value">₹{details?.salary || 'N/A'}</span></div>
               {details?.shiftTimings && (
                 <div className="info-item"><span className="info-label">Shift Timings</span><span className="info-value">{details.shiftTimings}</span></div>

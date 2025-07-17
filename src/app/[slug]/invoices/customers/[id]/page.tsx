@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useFetchCustomerByIdQuery, useLazyDownloadInvoicePdfQuery } from '@/slices';
-import { FaArrowLeft } from 'react-icons/fa';
+import { useFetchCustomerByIdQuery } from '@/slices/customers/customerApi';
+import { useLazyDownloadInvoicePdfQuery } from "@/slices/invoices/invoiceApi";
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import { useCompany } from '@/utils/Company';
 import { toast } from "react-toastify";
@@ -84,10 +84,6 @@ const CustomerView: React.FC = () => {
 
   return (
     <div className="customer-view-container">
-      <button onClick={() => router.back()} className="back-button">
-        <FaArrowLeft size={18} />
-      </button>
-
       <div className="customer-card">
         <h2>Customer Details</h2>
         <div className="info">

@@ -1,12 +1,21 @@
 'use client'
 import React from "react";
 import { useFetchSelectedCompanyQuery } from "@/slices";
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
+import { FaTriangleExclamation } from "react-icons/fa6";
 
 const CompanyDetails = () => {
-    const { data, isLoading, isError } = useFetchSelectedCompanyQuery();
+    const { data, isLoading, error } = useFetchSelectedCompanyQuery();
 
-    if (isLoading) return <p>Loading company details...</p>;
-    if (isError || !data) return <p>Failed to load company details.</p>;
+    if (isLoading) return <LoadingState />;
+    if (error || !data) return
+    <EmptyState
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
+        title="Failed to fetching company details."
+        message="Something went wrong while fetching company details."
+    />
+        ;
 
     const company = data.selected_company;
 

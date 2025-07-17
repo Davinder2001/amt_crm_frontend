@@ -3,32 +3,26 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useFetchEmployesQuery, useDeleteEmployeMutation } from '@/slices';
+import { useFetchEmployeesQuery, useDeleteEmployeMutation } from '@/slices/employe/employeApi';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const UserList: React.FC = () => {
   const router = useRouter();
-  const { data: employeesData, error, isLoading } = useFetchEmployesQuery();
+  const { data: employeesData, error, isLoading } = useFetchEmployeesQuery({});
   const [deleteEmployee] = useDeleteEmployeMutation();
 
   // Use type assertion for employeesData
-  const employees: Employee[] = employeesData?.employees.map((emp) => ({
-    ...emp,
-    company_id: emp.company_id || 'Unknown',
-    company_slug: emp.company_slug || 'unknown-slug',
-    roles: emp.roles || [],
-    number: emp.number || 'N/A',
-    company_name: emp.company_name || 'Unknown',
-  })) ?? [];
+  const employees: Employee[] = employeesData?.employees ?? [];
 
   if (isLoading) return <LoadingState />;
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to fetching employees."
         message="Something went wrong while fetching employees."
       />

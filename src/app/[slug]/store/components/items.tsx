@@ -1,14 +1,7 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  useFetchStoreQuery,
-  useDeleteStoreItemMutation,
-  useImportStoreItemsMutation,
-  useLazyExportStoreItemsQuery,
-  useBulkDeleteStoreItemsMutation,
-  useFetchSelectedCompanyQuery,
-} from '@/slices';
+import { useFetchStoreQuery, useDeleteStoreItemMutation, useImportStoreItemsMutation, useLazyExportStoreItemsQuery, useBulkDeleteStoreItemsMutation, useFetchSelectedCompanyQuery } from '@/slices';
 import { FaEdit, FaTrash, FaPlus, FaUsers, FaDownload, FaUpload, FaBoxOpen, FaSearch } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
@@ -22,6 +15,7 @@ import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
 import { FaTriangleExclamation } from 'react-icons/fa6';
 import { useSelectedItem } from '@/provider/SelectedItemContext';
+import { STORE_ITEM_COUNT } from '@/utils/Company';
 
 const COLUMN_STORAGE_KEY = 'visible_columns_store';
 
@@ -40,8 +34,25 @@ const Items: React.FC = () => {
   const [showCreateItemModal, setShowCreateItemModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const { setItemId } = useSelectedItem();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(STORE_ITEM_COUNT);
+  const { data, error, isLoading, refetch } = useFetchStoreQuery({
+    page: currentPage,
+    per_page: itemsPerPage,
+  });
+  const items = data?.items ?? [];
+  const pagination = data?.pagination;
 
-  const { data: items, error, isLoading, refetch } = useFetchStoreQuery();
+  // Add these handler functions
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setItemsPerPage(newPerPage);
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+
   const storeItems: StoreItem[] = Array.isArray(items)
     ? items.map((item) => ({
       ...item,
@@ -322,11 +333,6 @@ const Items: React.FC = () => {
           { label: 'Download Excel', icon: <FaDownload />, onClick: handleExportDownload },
           { label: 'Import Excel', icon: <FaUpload />, onClick: () => setImportModalVisible(true) },
         ]}
-        actions={[
-          ...(storeItems.length > 0
-            ? [{ label: 'Create item', icon: <FaPlus />, onClick: () => setShowCreateItemModal(true) }]
-            : []),
-        ]}
         extraLinks={[
           {
             label: 'Add Purchase Bill',
@@ -335,16 +341,24 @@ const Items: React.FC = () => {
           },
           { label: 'Vendors', icon: <FaUsers />, onClick: () => router.push(`/${companySlug}/store/vendors`) },
         ]}
+        actions={[
+          ...(storeItems.length > 0
+            ? [{ label: 'Add item', icon: <FaPlus />, onClick: () => setShowCreateItemModal(true) }]
+            : []),
+        ]}
       />
       {storeItems.length > 0 ?
         <ResponsiveTable
           data={filteredItems}
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onPerPageChange={handlePerPageChange}
+          counts={STORE_ITEM_COUNT}
           columns={columns}
           onDelete={(id) => handleDelete(id)}
           onBulkDelete={handleBulkDelete}
           onEdit={(id) => router.push(`/${companySlug}/store/edit-item/${id}`)}
           onView={(id) => router.push(`/${companySlug}/store/view-item/${id}`)}
-          storageKey="store_table_page"
           showBulkActions={showBulkActions}
           cardView={(item) => (
             <>
@@ -439,9 +453,9 @@ const Items: React.FC = () => {
         width="600px"
       >
         <div className="create-item-modal">
-          <div className="create-item-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: '1rem', }}>
-            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #efefef', padding: '0.5rem', borderRadius: '5px', width: '100%', }}>
-              <FaSearch style={{ marginRight: '0.5rem' }} />
+          <div className="" style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: '1rem', }}>
+            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #efefef', padding: '8px 12px', borderRadius: '5px', width: '100%', }}>
+              <FaSearch className='search-bar-icon' />
               <input
                 type="text"
                 placeholder="Search existing items..."
@@ -464,7 +478,8 @@ const Items: React.FC = () => {
                   alignItems: 'center',
                   gap: '20px',
                   cursor: 'pointer',
-                  color: '#384B70'
+                  color: '#384B70',
+                  textDecoration: 'none'
                 }}
                   href={`/${companySlug}/store/add-stock/${item.id}`}
                   onClick={() => {
@@ -484,12 +499,12 @@ const Items: React.FC = () => {
           </div>
 
           <div className="modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p>Total Items: <strong>{storeItems.length}</strong></p>
+            <p>Total Items: <strong>{data?.items.length}</strong></p>
             <button
               onClick={() => router.push(`/${companySlug}/store/add-item`)}
               className='buttons'
             >
-              <FaPlus /> Create New Item
+              <FaPlus /> Add New Item
             </button>
           </div>
         </div>

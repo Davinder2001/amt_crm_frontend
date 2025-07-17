@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { FaUser, FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaCog } from "react-icons/fa";
-import { useLogoutMutation } from "@/slices";
+import { FaSignOutAlt, FaChevronDown, FaFileInvoiceDollar, FaUserTie } from "react-icons/fa";
+import { useLogoutMutation } from "@/slices/auth/authApi";
 import { useRouter } from 'next/navigation'
 import { toast } from "react-toastify";
 import { useUser } from "@/provider/UserContext";
 import { clearStorage, useCompany } from "@/utils/Company";
-import ThemeSwitcher from "./ThemeSwitcher";
+// import ThemeSwitcher from "./ThemeSwitcher";
 import { setTheme } from '@/slices/theme/themeSlice';
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '@/store/store';
 import Loader from "@/components/common/Loader";
+import { FaGear } from "react-icons/fa6";
 
 
 const Profile: React.FC = () => {
@@ -128,7 +129,8 @@ const Profile: React.FC = () => {
           <>
             {isOpen && (
               <div className="profile-menu">
-                <div className="menu-header">
+
+                <Link href={`${basePath}/my-account`} className="menu-header" onClick={() => setIsOpen(false)}>
                   <div className="menu-avatar">
                     {user?.name?.[0]?.toUpperCase() || 'U'}
                   </div>
@@ -136,34 +138,34 @@ const Profile: React.FC = () => {
                     <div className="menu-username">{user?.name || 'User'}</div>
                     <div className="menu-email">{user?.email || ''}</div>
                   </div>
-                </div>
+                </Link>
 
                 <nav className="menu-items">
                   <Link
-                    href={`${basePath}/my-account`}
+                    href={`${basePath}/business-account`}
                     onClick={() => setIsOpen(false)}
                     className="menu-item"
                   >
-                    <FaUser className="menu-icon" />
-                    <span>My Account</span>
-                  </Link>
-                  <Link
-                    href={`${basePath}/my-account/billings`}
-                    onClick={() => setIsOpen(false)}
-                    className="menu-item"
-                  >
-                    <FaFileInvoiceDollar className="menu-icon" /> {/* Updated icon */}
-                    <span>Billing</span>
+                    <FaUserTie className="menu-icon" />
+                    <span>Business Account</span>
                   </Link>
                   <Link
                     href={`${basePath}/my-account/settings`}
                     onClick={() => setIsOpen(false)}
                     className="menu-item"
                   >
-                    <FaCog className="menu-icon" />
-                    <span>Settings</span>
+                    <FaGear className="menu-icon" />
+                    <span>My Settings</span>
                   </Link>
-                  <ThemeSwitcher />
+                  <Link
+                    href={`${basePath}/my-account/billings`}
+                    onClick={() => setIsOpen(false)}
+                    className="menu-item"
+                  >
+                    <FaFileInvoiceDollar className="menu-icon" />
+                    <span>Billing</span>
+                  </Link>
+                  {/* <ThemeSwitcher /> */}
 
                   <button
                     className="menu-item logout"

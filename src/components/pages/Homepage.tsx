@@ -19,7 +19,6 @@ export const UserNavbar = () => {
                 alt="Logo"
                 width={40}
                 height={40}
-                objectFit='cover'
               />
 
               <span>Himmanav Asset Management Technology </span>
@@ -246,6 +245,9 @@ export default function Homepage() {
           </div>
           
         </div>
+
+
+         <Pricing />
         
        {/* Why CRM */}
        <div className='why-crm-section'>
@@ -288,6 +290,9 @@ export default function Homepage() {
 
         </div>
        </div>
+
+
+         
 
 
         {/* Manage Everything Section */}
@@ -364,7 +369,7 @@ export default function Homepage() {
           </div>
         </div>
 
-        <Pricing />
+     
 
       </div>
     </div>
@@ -384,7 +389,6 @@ export const UserFooter = () => {
                   alt="Logo"
                   width={40}
                   height={40}
-                  objectFit='cover'
                 />
               </Link>
             </div>

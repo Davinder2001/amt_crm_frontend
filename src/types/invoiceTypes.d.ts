@@ -53,6 +53,7 @@ interface Invoice {
 
 interface InvoicesResponse {
   invoices: Invoice[];
+  pagination: Pagination;
 }
 interface Variant {
   variant_id: number;

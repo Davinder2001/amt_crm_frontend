@@ -1,23 +1,38 @@
+// File: app/dashboard/page.tsx
 "use client";
-import React, { useEffect } from 'react'
-import ListOverview from './components/ListOverview'
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import Footer from '../../_common/footer/footer';
+import React from 'react';
+import TotalRevenue from './components/TotalRevenue';
+import StoreStats from './components/StoreStats';
+// import IncomeExpense from './components/IncomeExpense';
+// import Employees from './components/Employees';
+import SaleItems from './components/SaleItems';
+import ListOverview from './components/ListOverview';
+// import UserActivity from './components/UserActivity';
+// import CustomerReview from './components/CustomerReview';
+// import TotalEarnings from './components/TotalEarnings';
 
 function Page() {
-  const { setTitle } = useBreadcrumb();
-
-  useEffect(() => {
-    setTitle('Overview'); // Update breadcrumb title
-  }, [setTitle]);
   return (
     <>
       <div className="dashboard-page">
         <ListOverview />
+        <div className="stat-revenue-container">
+          <TotalRevenue />
+        </div>
+        <div className="expenses-sale-container">
+          {/* <IncomeExpense /> */}
+          {/* <Employees /> */}
+          <StoreStats />
+          <SaleItems />
+        </div>
+        {/* <div className='earning-review-container'>
+          <UserActivity />
+          <CustomerReview />
+          <TotalEarnings />
+        </div> */}
       </div>
-      <Footer />
     </>
-  )
+  );
 }
 
-export default Page
+export default Page;

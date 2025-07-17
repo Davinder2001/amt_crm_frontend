@@ -3,15 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useGetTasksQuery,
-  useApproveHistoryMutation,
-  useRejectHistoryMutation,
-} from '@/slices';
+import { useGetTasksQuery, useApproveHistoryMutation, useRejectHistoryMutation, } from '@/slices';
 import { toast } from 'react-toastify';
-import { FaArrowLeft, FaCheck, FaTimes } from 'react-icons/fa';
-import Link from 'next/link';
-import { useCompany } from '@/utils/Company';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import Modal from '@/components/common/Modal';
 import LoadingState from '@/components/common/LoadingState';
@@ -21,9 +15,8 @@ import { saveAs } from 'file-saver';
 function TaskViewPage() {
   const { id } = useParams();
   const { setTitle } = useBreadcrumb();
-  const { companySlug } = useCompany();
 
-  const { data: tasks, isLoading: isTasksLoading } = useGetTasksQuery();
+  const { data, isLoading: isTasksLoading } = useGetTasksQuery({});
   const [approveHistory, { isLoading: isApproving }] = useApproveHistoryMutation();
   const [rejectHistory, { isLoading: isRejecting }] = useRejectHistoryMutation();
   const [openImage, setOpenImage] = useState<string | null>(null);
@@ -40,7 +33,7 @@ function TaskViewPage() {
     );
   }
 
-  const task = tasks?.data.find((task) => task.id.toString() === id);
+  const task = data?.tasks.find((task) => task.id.toString() === id);
 
   if (!task) {
     return <p className="no-task-message">No task found with ID: {id}</p>;
@@ -124,8 +117,8 @@ function TaskViewPage() {
   const statusClass =
     status === 'pending'
       ? 'status-badge pending'
-      : status === 'ended'
-        ? 'status-badge ended'
+      : status === 'submitted'
+        ? 'status-badge submitted'
         : 'status-badge default';
 
   const attachments = Array.isArray(task.attachments) ? task.attachments : [];
@@ -133,10 +126,6 @@ function TaskViewPage() {
   return (
     <div className={`task-view-outer ${attachments.length === 0 ? 'single-column' : ''}`}>
       <div className="task-view-wrapper">
-        <Link href={`/${companySlug}/tasks`} className="back-button">
-          <FaArrowLeft />
-        </Link>
-
         <div className="task-card">
           <div className="Status-wrapper">
             <strong>Status:</strong>
@@ -175,8 +164,8 @@ function TaskViewPage() {
               <p>{task.description}</p>
             </div>
           </div>
-
-          <div className="action-buttons">
+          {status === 'submitted'?
+        <div className="action-buttons">
             <button
               className="reject"
               onClick={handleReject}
@@ -195,7 +184,9 @@ function TaskViewPage() {
                 <FaCheck /> Approve
               </>}
             </button>
-          </div>
+          </div>:'' 
+        }
+          
         </div>
       </div>
 

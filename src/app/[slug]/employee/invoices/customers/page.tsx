@@ -1,43 +1,64 @@
 'use client';
-import { useFetchAllCustomersQuery } from '@/slices';
-import { useCompany } from '@/utils/Company';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { FaEye } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { FaPlus, FaUsers } from 'react-icons/fa';
+import { useFetchAllCustomersQuery } from '@/slices/customers/customerApi';
+import { useCompany } from '@/utils/Company';
+import ResponsiveTable from '@/components/common/ResponsiveTable';
+import EmptyState from '@/components/common/EmptyState';
+import LoadingState from '@/components/common/LoadingState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const CustomerList = () => {
-  const { data } = useFetchAllCustomersQuery();
+  const { data, isLoading, error } = useFetchAllCustomersQuery();
   const router = useRouter();
   const { companySlug } = useCompany();
 
+  const customers = data?.customers ?? [];
+  const noCustomers = !isLoading && !error && customers.length === 0;
+
+  const columns: { label: string; key: keyof typeof customers[0] }[] = [
+    { label: 'Name', key: 'name' },
+    { label: 'Email', key: 'email' },
+    { label: 'Phone Number', key: 'number' },
+  ];
+
   return (
-    <div>
-      <h1>All Customers</h1>
-      <table cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.customers?.map((customer) => (
-            <tr key={customer.id}>
-              <td>{customer.id}</td>
-              <td>{customer.name}</td>
-              <td>{customer.number}</td>
-              <td>
-                <button onClick={() => router.push(`/${companySlug}/employee/invoices/customers/${customer.id}`)}>
-                  <FaEye /> View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      {isLoading && <LoadingState />}
+
+      {error && (
+        <EmptyState
+          icon={<FaTriangleExclamation className='empty-state-icon' />}
+          title="Failed to load customers"
+          message="Something went wrong while fetching customer data."
+        />
+      )}
+
+      {noCustomers && (
+        <EmptyState
+          icon={<FaUsers className="empty-state-icon" />}
+          title="No Customers Found"
+          message="You haven't added any customers yet."
+          action={
+            <button
+              className="buttons"
+              onClick={() => router.push(`/${companySlug}/employee/invoices/customers/add`)}
+            >
+              <FaPlus /> Add Customer
+            </button>
+          }
+        />
+      )}
+
+      {customers.length > 0 && (
+        <ResponsiveTable
+          data={customers}
+          columns={columns}
+          onView={(id) => router.push(`/${companySlug}/employee/invoices/customers/${id}`)}
+        />
+      )}
+    </>
   );
 };
 

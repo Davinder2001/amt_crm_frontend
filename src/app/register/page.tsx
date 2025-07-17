@@ -55,6 +55,12 @@ const UserRegisterForm = () => {
     e.preventDefault();
 
     if (form.password !== form.password_confirmation) return toast.error("Passwords do not match");
+    if (!otpSent) {
+      return toast.error("Please request an OTP first");
+    }
+    if (!otp) {
+      return toast.error("Please enter the OTP");
+    }
 
     const formData = new FormData();
     formData.append("name", form.name);
@@ -102,7 +108,7 @@ const UserRegisterForm = () => {
                   <input
                     name="name"
                     type="text"
-                    placeholder="Enter your full name..."
+                    placeholder="John Doe"
                     value={form.name}
                     onChange={handleChange}
                     className="login-input"
@@ -118,7 +124,7 @@ const UserRegisterForm = () => {
                   <input
                     name="email"
                     type="email"
-                    placeholder="Enter your email..."
+                    placeholder="john.doe@example.com"
                     value={form.email}
                     onChange={handleChange}
                     className="login-input"
@@ -134,7 +140,7 @@ const UserRegisterForm = () => {
                   <input
                     name="number"
                     type="text"
-                    placeholder="Enter your mobile number..."
+                    placeholder="0123456789"
                     value={form.number}
                     onChange={handleChange}
                     maxLength={10}
@@ -160,7 +166,7 @@ const UserRegisterForm = () => {
                     <input
                       name="otp"
                       type="text"
-                      placeholder="Enter OTP..."
+                      placeholder="123456"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       className="login-input"
@@ -177,7 +183,7 @@ const UserRegisterForm = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    placeholder="Enter your password..."
+                    placeholder="mySecurePass123"
                     value={form.password}
                     onChange={handleChange}
                     className="password-input"
@@ -199,7 +205,7 @@ const UserRegisterForm = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="password_confirmation"
-                    placeholder="Confirm your password..."
+                    placeholder="mySecurePass123"
                     value={form.password_confirmation}
                     onChange={handleChange}
                     className="password-input"

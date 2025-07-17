@@ -1,6 +1,5 @@
 'use client';
-import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SettingNavigation from './components/settingNavigation';
 import StoreSettings from './components/Attributes';
 import Attributes from './components/Attributes';
@@ -11,12 +10,7 @@ import BankAccountList from './components/accounts/BankAccountList';
 import LeavesAndHolidays from './components/LeavesAndHolidays';
 
 const SettingsPage = () => {
-  const { setTitle } = useBreadcrumb();
   const [activeTab, setActiveTab] = useState('store-settings');
-
-  useEffect(() => {
-    setTitle('Settings');
-  }, [setTitle]);
 
   const renderContent = () => {
     switch (activeTab) {

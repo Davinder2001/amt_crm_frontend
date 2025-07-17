@@ -1,4 +1,3 @@
-
 interface Meta {
   [key: string]: string | number | boolean | object; // Allow for flexible meta data
 }
@@ -15,7 +14,6 @@ interface Company {
   verification_status: string;
   [key: string]: string | number; // Allow for additional fields
 }
-
 
 interface TransactionDetails {
   merchantOrderId: string;
@@ -119,63 +117,42 @@ interface SelectedCompanyResponse {
   selected_company: Profile;
 }
 
-
-interface BusinessCategory {
-  id: number;
-  name: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface PlanLimits {
-  employee_numbers: number;
-  items_number: number;
-  daily_tasks_number: number;
-  invoices_number: number;
-}
-
-type Limit = {
-  id: number;
-  variant_type: string;
-  employee_numbers: number;
-  items_number: number;
-  daily_tasks_number: number;
-  invoices_number: number;
-};
-
 interface PackagePlan {
   id?: number;
   name: string;
-  monthly_price: number;
   annual_price: number;
   three_years_price: number;
-  monthly_limits: PlanLimits;
-  annual_limits: PlanLimits;
-  three_years_limits: PlanLimits;
+  employee_limit: number;
+  package_type: 'general' | 'specific';
+  user_id: number | null;
+  task?: boolean;
+  chat?: boolean;
+  hr?: boolean;
+  details?: string[];
   business_categories: BusinessCategory[];
-  limits?: Limit[];
 }
 
 interface PackagePlanResponse {
   data: PackagePlan[];
 }
 
-interface SelectedPackage {
-  id?: number | null;
-  packageId: number;
-  limitId: number;
-  variantType: string;
+interface BusinessCategory {
+  id: number;
+  name?: string;
+  description?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
-// Upgrade payload sent to backend
-interface UpgradePackagePayload {
-  companyId: number;
-  package_id: number;
-  success: boolean;
-  redirect_url?: string;
-  merchantOrderId?: string;
-  message?: string;
-  transactionDetails?: TransactionDetails;
-  package_type: 'monthly' | 'annual';
 
+interface LoginSession {
+  token_id: number;
+  token_name: string;
+  created_at: string;
+  last_used_at: string | null;
+}
+
+interface LoginSessionsResponse {
+  total_logins: number;
+  sessions: LoginSession[];
 }

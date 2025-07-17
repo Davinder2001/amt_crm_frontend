@@ -2,14 +2,14 @@
 
 import React, { useMemo } from 'react';
 import { useGetAllQuotationsQuery, useGenerateQuotationPdfMutation, Quotation } from '@/slices';
-import { FaArrowLeft, FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
+import { FaDownload, FaFileInvoice, FaPlus } from 'react-icons/fa';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import Loader from '@/components/common/Loader';
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import EmptyState from '@/components/common/EmptyState';
-import Link from 'next/link';
 import TableToolbar from '@/components/common/TableToolbar';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 const AllQuotations = () => {
   const { data, isLoading, error } = useGetAllQuotationsQuery();
@@ -70,7 +70,7 @@ const AllQuotations = () => {
   if (error) {
     return (
       <EmptyState
-        icon="alert"
+        icon={<FaTriangleExclamation className='empty-state-icon' />}
         title="Failed to load quotations"
         message="Something went wrong while fetching quotations."
       />
@@ -98,9 +98,6 @@ const AllQuotations = () => {
 
   return (
     <div className="all-quotations-page">
-      <Link href={`/${companySlug}/invoices`} className='back-button'>
-        <FaArrowLeft size={20} color='#fff' />
-      </Link>
       <TableToolbar
         actions={[
           ...(quotations.length > 0

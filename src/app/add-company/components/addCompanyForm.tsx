@@ -1,13 +1,12 @@
 'use client';
 import React, { useState } from "react";
-import { useOrderNewCompanyMutation } from "@/slices";
+import { useOrderNewCompanyMutation } from "@/slices/company/companyApi";
 
 interface AddCompany {
   company_name: string;
   package_id: number;
-  limit_id: number;
-  variant_type: string;
   business_category_id: number | null;
+  subscription_type: string;
   company_logo: File | null;
   business_address: string;
   pin_code: string;
@@ -15,36 +14,34 @@ interface AddCompany {
   business_id: string;
   business_proof_front: File | null;
   business_proof_back: File | null;
+  company_signature: File | null;
 }
 
 interface AddCompanyFormProps {
   packageId: number;
-  limitId: number;
-  variantType: string;
   categoryId: number | null;
+  subscriptionType: string | null;
 }
 
-const Page: React.FC<AddCompanyFormProps> = ({
-  packageId,
-  limitId,
-  variantType,
-  categoryId
-}) => {
-  const [formData, setFormData] = useState<AddCompany>({
-    company_name: '',
-    package_id: packageId,
-    limit_id: limitId,
-    variant_type: variantType,
-    business_category_id: categoryId,
-    company_logo: null,
-    business_address: '',
-    pin_code: '',
-    business_proof_type: '',
-    business_id: '',
-    business_proof_front: null,
-    business_proof_back: null,
-  });
+const getDefaultFormData = (packageId: number, categoryId: number | null, subscriptionType: string | null): AddCompany => ({
+  company_name: '',
+  package_id: packageId,
+  business_category_id: categoryId,
+  subscription_type: subscriptionType ?? '',
+  company_logo: null,
+  business_address: '',
+  pin_code: '',
+  business_proof_type: '',
+  business_id: '',
+  business_proof_front: null,
+  business_proof_back: null,
+  company_signature: null,
+});
 
+const Page: React.FC<AddCompanyFormProps> = ({ packageId, categoryId, subscriptionType }) => {
+  const [formData, setFormData] = useState<AddCompany>(
+    getDefaultFormData(packageId, categoryId, subscriptionType)
+  );
   const [orderNewCompany, { isLoading }] = useOrderNewCompanyMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -70,9 +67,8 @@ const Page: React.FC<AddCompanyFormProps> = ({
       const payload = new FormData();
       payload.append('company_name', formData.company_name);
       payload.append('package_id', formData.package_id.toString());
-      payload.append('limit_id', formData.limit_id.toString());
-      payload.append('subscription_type', formData.variant_type);
       payload.append('business_category_id', formData.business_category_id.toString());
+      payload.append('subscription_type', formData.subscription_type);
       payload.append('business_address', formData.business_address);
       payload.append('pin_code', formData.pin_code);
       payload.append('business_proof_type', formData.business_proof_type);
@@ -80,6 +76,7 @@ const Page: React.FC<AddCompanyFormProps> = ({
       if (formData.company_logo) payload.append('company_logo', formData.company_logo);
       if (formData.business_proof_front) payload.append('business_proof_front', formData.business_proof_front);
       if (formData.business_proof_back) payload.append('business_proof_back', formData.business_proof_back);
+      if (formData.company_signature) payload.append('company_signature', formData.company_signature);
 
       const response = await orderNewCompany(payload).unwrap();
 
@@ -188,6 +185,22 @@ const Page: React.FC<AddCompanyFormProps> = ({
               />
               <span className="file-label">
                 {formData.business_proof_back ? formData.business_proof_back.name : 'Choose file...'}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Company Signature</label>
+            <div className="file-upload">
+              <input
+                type="file"
+                name="company_signature"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input"
+              />
+              <span className="file-label">
+                {formData.company_signature ? formData.company_signature.name : 'Choose file...'}
               </span>
             </div>
           </div>

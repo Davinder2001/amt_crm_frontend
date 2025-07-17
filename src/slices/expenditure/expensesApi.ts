@@ -5,8 +5,14 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
     overrideExisting: false,
     endpoints: (builder) => ({
         // Fetch all expenses
-        fetchExpenses: builder.query<ExpenseResponse, void>({
-            query: () => "expenses",
+        fetchExpenses: builder.query<ExpenseResponse, { page?: number; per_page?: number }>({
+            query: (params) => ({
+                url: "expenses",
+                params: {
+                    page: params.page,
+                    per_page: params.per_page
+                }
+            }),
             providesTags: ["Expenses"],
         }),
 
@@ -17,7 +23,7 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
         }),
 
         // Create expense
-        createExpense: builder.mutation<Expense, { formdata: ExpenseCreateRequest }>({
+        createExpense: builder.mutation<Expense, { formdata: FormData }>({
             query: ({ formdata }) => {
                 return {
                     url: 'expenses/store',
@@ -29,7 +35,7 @@ const expensesApi = expensesCreateApiSlice.injectEndpoints({
         }),
 
         // Update expense
-        updateExpense: builder.mutation<Expense, { id: number, formdata: ExpenseUpdateRequest }>({
+        updateExpense: builder.mutation<Expense, { id: number, formdata: FormData }>({
             query: ({ id, formdata }) => {
                 return {
                     url: `expenses/${id}/update`,

@@ -3,13 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import { useCompany } from '@/utils/Company';
-import { useGetCreditInvoiceByIdQuery } from '@/slices';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { useGetCreditInvoiceByIdQuery } from '@/slices/invoices/invoiceApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import TableToolbar from '@/components/common/TableToolbar';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 type CreditItem = {
   credit_id: number;
@@ -89,7 +88,7 @@ const ViewCredits: React.FC = () => {
 
   if (isLoading) return <LoadingState />;
   if (isError || !data?.customer) return <EmptyState
-    icon="alert"
+    icon={<FaTriangleExclamation className='empty-state-icon' />}
     title="Failed to fetching credit data."
     message="Something went wrong while fetching credit data."
   />;
@@ -98,10 +97,6 @@ const ViewCredits: React.FC = () => {
 
   return (
     <div className="credit-users-page">
-      <Link href={`/${companySlug}/invoices/credits`} className="back-button">
-        <FaArrowLeft size={20} color="#fff" />
-      </Link>
-
       <div className="customer-summary">
         <h2>{customer.name}</h2>
         <p><strong>Email:</strong> {customer.email}</p>

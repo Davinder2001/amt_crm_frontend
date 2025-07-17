@@ -2,14 +2,11 @@
 
 import React, { useEffect } from 'react';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
-import {
-  useFetchPendingCompaniesQuery,
-  useVerifyCompanyPaymentMutation,
-  useVerifyCompanyStatusMutation,
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchPendingCompaniesQuery, useVerifyCompanyPaymentMutation, useVerifyCompanyStatusMutation, } from '@/slices/superadminSlices/company/companyApi';
 import ResponsiveTable from '@/components/common/ResponsiveTable';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 
 const PendingCompaniesPage = () => {
@@ -68,7 +65,7 @@ const PendingCompaniesPage = () => {
   if (isLoading) return <LoadingState />;
   if (error) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Error loading companies."
       message="Something went wrong while loading companies."
     />);

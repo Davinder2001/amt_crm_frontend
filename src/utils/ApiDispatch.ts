@@ -27,7 +27,7 @@ import businesscategoryCreateApiSlice from '@/slices/superadminSlices/businessCa
 export const invalidateAllCompanyApis = (dispatch: AppDispatch) => {
     dispatch(authApiSlice.util.invalidateTags(['Auth']));
     dispatch(userApiSlice.util.invalidateTags(['Auth']));
-    dispatch(employeCreateApiSlice.util.invalidateTags(['Employe']));
+    dispatch(employeCreateApiSlice.util.invalidateTags(['Employee']));
     dispatch(storeApiSlice.util.invalidateTags(['Store']));
     dispatch(vendorApiSlice.util.invalidateTags(['Vendor']));
     dispatch(roleApiSlice.util.invalidateTags(['Auth']));

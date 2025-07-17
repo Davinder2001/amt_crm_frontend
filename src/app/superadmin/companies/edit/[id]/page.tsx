@@ -3,12 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useBreadcrumb } from '@/provider/BreadcrumbContext';
 import Image from 'next/image';
-import {
-  useFetchSingleCompanyQuery,
-  useUpdateCompanyMutation,
-} from '@/slices/superadminSlices/company/companyApi';
+import { useFetchSingleCompanyQuery, useUpdateCompanyMutation, } from '@/slices/superadminSlices/company/companyApi';
 import LoadingState from '@/components/common/LoadingState';
 import EmptyState from '@/components/common/EmptyState';
+import { FaTriangleExclamation } from 'react-icons/fa6';
 
 interface Company {
   id: number;
@@ -105,7 +103,7 @@ const EditCompanyPage = () => {
   if (isLoading) return <LoadingState />;
   if (error || !companyResponse?.data) return (
     <EmptyState
-      icon="alert"
+      icon={<FaTriangleExclamation className='empty-state-icon' />}
       title="Error loading companies."
       message="Something went wrong while loading companies."
     />);

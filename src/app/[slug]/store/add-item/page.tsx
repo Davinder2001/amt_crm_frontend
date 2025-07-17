@@ -4,8 +4,6 @@ import { useCreateStoreItemMutation, useFetchMeasuringUnitsQuery, useFetchTaxesQ
 import { useRouter } from 'next/navigation';
 import { useCompany } from '@/utils/Company';
 import { toast } from 'react-toastify';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
 import { IconButton, Tooltip } from '@mui/material';
 import useStickyWithOffset from '@/utils/StickyWithOffset';
 import { FiMinusCircle, FiPlusCircle } from 'react-icons/fi';
@@ -147,9 +145,6 @@ const AddItem: React.FC = () => {
       <div className="store-add-item">
         {/* Header + Tabs */}
         <div className="add-item-header store_column" ref={headerRef}>
-          <Link href={`/${companySlug}/store`} className="back-button">
-            <FaArrowLeft size={16} color="#fff" />
-          </Link>
           <h4 className='store_page_heading'>
             Add New Product
           </h4>
@@ -301,7 +296,7 @@ const AddItem: React.FC = () => {
             Cancel
           </button>
           <button type="submit" className="buttons" disabled={isCreating} style={{ cursor: isCreating ? 'not-allowed' : 'pointer' }}>
-            {isCreating ? 'Creating...' : 'Create Item'}
+            {isCreating ? 'Adding...' : 'Add Item'}
           </button>
         </div>
 

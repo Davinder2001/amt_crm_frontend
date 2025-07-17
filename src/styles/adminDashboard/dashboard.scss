@@ -8,7 +8,6 @@
     display: grid;
     grid-template-rows: auto auto;
     column-gap: 20px;
-    row-gap: 30px;
 
     .card {
         background-color: $white;
@@ -54,8 +53,8 @@
 
 /* ===== Revenue Container ===== */
 .stat-revenue-container {
-    grid-template-columns: 1fr 1.3fr;
-    margin-top: 20px;
+    // grid-template-columns: 1fr 1.3fr;
+    grid-template: 1fr;
 
     .total-revenue {
         .revenue-value {
@@ -96,7 +95,7 @@
     }
 
     .chart-placeholder {
-        height: 200px;
+        height: 250px;
         border-radius: $border-radius;
         display: flex;
         align-items: center;
@@ -109,7 +108,9 @@
 
 /* ===== Expenses & Sales Container ===== */
 .expenses-sale-container {
-    grid-template-columns: 1fr 0.6fr 0.6fr;
+    // grid-template-columns: 1fr 0.6fr 0.6fr;
+    grid-template-columns: 1fr 0.5fr;
+    margin-top: 20px;
 
     .income-expense {
         button {
@@ -198,12 +199,16 @@
             margin-top: 20px;
 
             .sale-item {
-                display: flex;
+                display: grid;
+                grid-template-columns: 1fr 1fr .2fr;
                 align-items: center;
                 margin-bottom: 1rem;
 
                 .label {
-                    width: 80px;
+                    width: 100%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     font-size: $font-size-small;
                     font-weight: $font-weight-medium;
                 }
@@ -351,7 +356,7 @@
 }
 
 .dashboard-container {
-    padding: 20px 0;
+    padding: 0px 0px 20px 0px;
     max-width: 1800px;
     margin: 0 auto;
     width: 100%;
@@ -359,7 +364,7 @@
 
 .overview-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
 
     .card {
@@ -369,11 +374,12 @@
         border: 1px solid $border-color;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         position: relative;
         overflow: hidden;
         cursor: pointer;
+        text-decoration: none;
 
         &:hover {
             transform: translateY(-5px);
@@ -382,13 +388,12 @@
 
             .icon-shell {
                 transform: scale(1.05);
-                background: linear-gradient(135deg, rgba(var(--primary-color), 0.1), rgba($orange-color, 0.1));
             }
         }
     }
 
     .icon-shell {
-        background-color: rgba(var(--primary-color), 0.08);
+        background-color: var(--primary-light-rgb);
         padding: 5px;
         border-radius: $border-radius;
         display: flex;
@@ -472,36 +477,77 @@
             transform: rotate(360deg);
         }
     }
+}
 
-    .card {
-        .icon-shell {
-            background-color: rgba(var(--primary-color), 0.1);
+// slaes styling start ...........................................................
 
-            svg {
+.sales-report-page {
+
+    /* Filter Controls */
+    .s-r-filter-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        padding: 10px 0px;
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 200px;
+
+
+            label {
+                font-weight: 600;
                 color: var(--primary-color);
-            }
-        }
-
-        .value-count {
-            color: var(--primary-color);
-        }
-
-        &[data-card-type] {
-            .icon-shell {
-                background-color: rgba(var(--primary-color), 0.1);
-
-                svg {
-                    color: var(--primary-color);
-                }
+                width: 100%;
             }
 
-            .value-count {
-                color: var(--primary-color);
+            select {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                gap: 20px;
+                padding: 5px;
+                border: 1px solid var(--primary-light);
+                border-radius: $border-radius;
+                background-color: $white;
+                width: 300px;
+                max-width: 100%;
             }
         }
     }
 
+    .sales-report-content {
+        h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+    }
 }
+
+
+@media (max-width: 768px) {
+    .sales-report-page {
+        .s-r-filter-controls .filter-group {
+            max-width: 100%;
+            width: 100%;
+
+            select {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* Header */
+
+// slaes styling end ...........................................................
+
 
 
 /* ===== Responsive Breakpoints (Separate Blocks) ===== */
@@ -592,7 +638,6 @@
                     height: 35px;
                     margin: 0;
                     padding: 0;
-                    background: var(--primary-light) !important;
                 }
 
                 .dash-card-content {
@@ -696,10 +741,12 @@
         border: none;
         border-bottom: 1px solid rgb(223, 240, 240);
         padding: 0px 0px 10px 0px;
+
         .avatar {
             font-size: 14px;
         }
-        .review-content .desc{
+
+        .review-content .desc {
             font-size: 12px;
         }
     }

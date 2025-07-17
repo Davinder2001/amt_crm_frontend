@@ -1,5 +1,10 @@
 import invoiceCreateApiSlice from "./hrCreateSlice";
 
+interface Employee {
+    id: number;
+    name: string;
+    // Add other employee fields if needed
+}
 
 interface AttendanceRecord {
     id: number;
@@ -17,13 +22,15 @@ interface dashboardSummary {
     total_employees: number;
     present_today: AttendanceRecord[];
     absent_today: number;
+    late_arrival: AttendanceRecord[];
+    early_departures: AttendanceRecord[];
+    time_off_today: AttendanceRecord[];
+    new_employees_this_month: number;
 }
 
 interface DsummaryResponse {
     summary: dashboardSummary;
-    early_departures: AttendanceRecord[];
-    monthly_leaves: AttendanceRecord[];
-    lateArrival: AttendanceRecord[];
+    summary_message: string;
 }
 
 const hrApi = invoiceCreateApiSlice.injectEndpoints({
@@ -33,7 +40,6 @@ const hrApi = invoiceCreateApiSlice.injectEndpoints({
             query: () => "hr/dashboard-summary",
             providesTags: ["Hr"],
         }),
-
     }),
 });
 

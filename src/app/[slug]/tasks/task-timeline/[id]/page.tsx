@@ -2,13 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  useViewTaskTimelineQuery,
-  useEndTaskMutation,
-  useSetReminderMutation,
-  useUpdateReminderMutation,
-  useViewReminderQuery, useFetchProfileQuery
-} from '@/slices';
+import { useViewTaskTimelineQuery, useEndTaskMutation, useSetReminderMutation, useUpdateReminderMutation, useViewReminderQuery, useFetchProfileQuery } from '@/slices';
 import { MdAccessTime } from 'react-icons/md';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton from 'react-loading-skeleton';
@@ -17,10 +11,11 @@ import { useCompany } from '@/utils/Company';
 import Link from 'next/link';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
-import SubmitTaskComponent from '../../submit-task/SubmitTaskComponent';
+import SubmitTaskComponent from '../../components/SubmitTaskComponent';
 import Modal from '@/components/common/Modal';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { FaBell, FaDownload, FaEdit, FaReply } from 'react-icons/fa';
 const ViewTimeline = () => {
   const params = useParams();
   const id = params?.id as string;
@@ -37,12 +32,11 @@ const ViewTimeline = () => {
   const user = userData?.user;
 
   const [reminderAt, setReminderAt] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [openImage, setOpenImage] = useState<string | null>(null);
   // inside your component
   const reminderInputRef = useRef<HTMLInputElement | null>(null);
-  const endDateInputRef = useRef<HTMLInputElement | null>(null);
+
   const handleDownload = (url: string) => {
     const link = document.createElement('a');
     link.href = url;
@@ -75,8 +69,6 @@ const ViewTimeline = () => {
       return;
     }
 
-    toast.info("Zipping all attachments...");
-
     await Promise.all(
       allAttachments.map(async (url, index) => {
         try {
@@ -104,12 +96,11 @@ const ViewTimeline = () => {
   useEffect(() => {
     if (reminderData?.reminder) {
       setReminderAt(reminderData.reminder.reminder_at?.slice(0, 16) || '');
-      setEndDate(reminderData.reminder.end_date?.slice(0, 16) || '');
     }
   }, [reminderData]);
 
   const handleReminderSubmit = async () => {
-    if (!reminderAt || !endDate) {
+    if (!reminderAt) {
       toast.error('Please provide both dates.');
       return;
     }
@@ -119,14 +110,12 @@ const ViewTimeline = () => {
         await updateReminder({
           taskId: Number(id),
           reminder_at: reminderAt,
-          end_date: endDate,
         }).unwrap();
         toast.success('Reminder updated.');
       } else {
         await setReminder({
           taskId: Number(id),
           reminder_at: reminderAt,
-          end_date: endDate,
         }).unwrap();
         toast.success('Reminder set.');
       }
@@ -240,25 +229,15 @@ const ViewTimeline = () => {
               </div>
             )}
 
-
             {openImage && (
-              <Modal isOpen={true} onClose={() => setOpenImage(null)} title="Image Preview">
-                <div style={{ textAlign: 'center' }} className='timeline-modal-wrapper'>
+              <Modal isOpen={true} onClose={() => setOpenImage(null)} title={<>Image Preview <FaDownload size={14} onClick={() => handleDownload(openImage)} /></>} width='800px'>
+                <div className='attachment-images-popup'>
                   <Image
                     src={openImage}
                     alt="Full Preview"
-                    width={600}
-                    height={400}
-                    style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                    width={1000}
+                    height={1000}
                   />
-                  <div className='timeline-dawnload-imaeg-btn-outer'>
-                    <button
-                      onClick={() => handleDownload(openImage)}
-                      className='buttons'
-                    >
-                      Download Image
-                    </button>
-                  </div>
                 </div>
               </Modal>
             )}
@@ -278,51 +257,47 @@ const ViewTimeline = () => {
             className="buttons"
             onClick={() => setShowSubmitTask(prev => !prev)}
           >
-            {showSubmitTask ? 'Cancel' : 'Create'}
+            <FaReply /> Follow Up
           </button>
-          <button onClick={() => setShowReminderForm((prev) => !prev)}>
-            {reminderData?.reminder ? '✏️ Edit Reminder' : '⏰ Set Reminder'}
+          <button onClick={() => setShowReminderForm((prev) => !prev)} className="buttons">
+            {reminderData?.reminder ? (
+              <>
+                <FaEdit /> Edit Reminder
+              </>
+            ) : (
+              <>
+                <FaBell /> Set Reminder
+              </>
+            )}
           </button>
         </div>
       </div>
 
       {showReminderForm && (
-        <div className="reminder-form" onClick={() => setShowReminderForm(false)}>
-          <div className="reminder-content" onClick={(e) => e.stopPropagation()}>
-            <h4>{reminderData?.reminder ? 'Update Reminder' : 'Set Reminder'}</h4>
+        <Modal
+          isOpen={showReminderForm}
+          onClose={() => setShowReminderForm(false)}
+          title={reminderData?.reminder ? 'Update Reminder' : 'Set Reminder'}
+          width="400px"
+        >
+          <label
+            onClick={() => reminderInputRef.current?.focus()}
+            style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
+          >
+            Reminder At:
+            <input
+              type="datetime-local"
+              value={reminderAt}
+              onChange={(e) => setReminderAt(e.target.value)}
+              ref={reminderInputRef}
+              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
+            />
+          </label>
 
-            <label
-              onClick={() => reminderInputRef.current?.focus()}
-              style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
-            >
-              Reminder At:
-              <input
-                type="datetime-local"
-                value={reminderAt}
-                onChange={(e) => setReminderAt(e.target.value)}
-                ref={reminderInputRef}
-                style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-              />
-            </label>
-
-            <label
-              onClick={() => endDateInputRef.current?.focus()}
-              style={{ cursor: 'pointer', display: 'block', marginBottom: '1rem' }}
-            >
-              End Date:
-              <input
-                type="datetime-local"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                ref={endDateInputRef}
-                style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-              />
-            </label>
-
-            <button type="button" onClick={handleReminderSubmit}>Submit</button>
-          </div>
-        </div>
+          <button type="button" onClick={handleReminderSubmit} className='buttons'>Submit</button>
+        </Modal>
       )}
+
       {isLoading ? (
         <div className="timeline-loading">
           {[...Array(3)].map((_, idx) => (
@@ -347,21 +322,24 @@ const ViewTimeline = () => {
       ) : histories.length > 0 ? (
         histories.map(renderTimelineItem)
       ) : (
-        <div className="submit-new-task" style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <div className="submit-new-task" style={{ textAlign: 'center', margin: '30px auto' }}>
           <p style={{ color: '#999' }}>🚫 No timeline history available yet.</p>
         </div>
       )}
 
       {showSubmitTask &&
-        <div className='timeline-submit-task-wrapper' onClick={() => setShowSubmitTask(false)}>
-          <div className="timeline-submit-task-inner" onClick={(e) => e.stopPropagation()}>
-            <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
-          </div>
-        </div>
+        <Modal
+          isOpen={showSubmitTask}
+          onClose={() => setShowSubmitTask(false)}
+          title={`Follow up ${id}`}
+          width="600px"
+        >
+          <SubmitTaskComponent onTaskSubmit={handleSubmitTaskComplete} taskId={Number(id)} />
+        </Modal>
       }
 
       <div className="action-buttons">
-        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/tasks/task-timeline`)}>Cancel</button>
+        <button type='button' className="button outline cancel-btn" onClick={() => router.push(`/${companySlug}/tasks`)}>Cancel</button>
         <ConfirmDialog
           isOpen={showConfirm}
           message="Are you sure you want to end this Task?"
@@ -375,7 +353,7 @@ const ViewTimeline = () => {
           onClick={() => setShowConfirm(true)}
           disabled={isEnding}
         >
-          {isEnding ? 'Ending Task...' : 'End Task'}
+          {isEnding ? 'Submiting Task...' : 'Submit Task'}
         </button>
       </div>
     </div>
